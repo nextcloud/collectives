@@ -4,6 +4,7 @@
  */
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { encodePath, join } from '@nextcloud/paths'
 import { generateRemoteUrl } from '@nextcloud/router'

@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcActionButton, NcAppNavigationItem, NcButton, NcDialog } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapState } from 'pinia'
@@ -160,6 +161,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		toggleTrash() {
 			this.open = !this.open
 		},

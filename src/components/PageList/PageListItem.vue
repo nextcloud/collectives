@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -331,6 +332,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(usePagesStore, [
 			'expand',
 			'setNewPageParentId',

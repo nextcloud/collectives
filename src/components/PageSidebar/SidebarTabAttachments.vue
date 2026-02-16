@@ -161,6 +161,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { formatFileSize } from '@nextcloud/files'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
@@ -301,6 +302,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(usePagesStore, [
 			'setAttachmentDeleted',
 			'setAttachmentUndeleted',

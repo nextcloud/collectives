@@ -17,6 +17,7 @@
 
 <script>
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { NcAppNavigationSettings, NcTextField } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import { useSettingsStore } from '../../stores/settings.js'
@@ -57,6 +58,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useSettingsStore, ['updateCollectivesFolder']),
 
 		async selectCollectivesFolder() {

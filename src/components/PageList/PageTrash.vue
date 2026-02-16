@@ -95,6 +95,7 @@
 <script>
 import { showSuccess } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { NcActionButton, NcActions, NcButton, NcDialog, NcEmptyContent } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -164,6 +165,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(usePagesStore, [
 			'deletePage',
 			'expandParents',

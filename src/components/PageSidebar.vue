@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -130,6 +131,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, [
 			'hide',
 			'setActiveSidebarTab',

@@ -151,6 +151,7 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcEmojiPicker, NcTextField } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import AlertCircleIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
@@ -268,6 +269,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, [
 			'load',
 			'done',

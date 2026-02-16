@@ -107,6 +107,7 @@
 <script>
 import { showError } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcEmojiPicker, NcLoadingIcon } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -226,6 +227,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, ['done']),
 
 		...mapActions(usePagesStore, [

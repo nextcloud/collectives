@@ -28,6 +28,7 @@
 
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
+import { t } from '@nextcloud/l10n'
 import { NcAppNavigationCaption } from '@nextcloud/vue'
 import { mapState } from 'pinia'
 import MemberItem from './MemberItem.vue'
@@ -100,6 +101,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		/**
 		 * @param {object} m1 First member
 		 * @param {string} m1.userId First member user ID

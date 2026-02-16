@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { NcEmptyContent, NcListItem } from '@nextcloud/vue'
 import { mapState } from 'pinia'
@@ -84,6 +85,10 @@ export default {
 		lastUpdate() {
 			return (page) => moment.unix(page.timestamp).fromNow()
 		},
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

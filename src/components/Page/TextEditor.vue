@@ -29,6 +29,7 @@
 <script>
 import { showError } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { useElementSize } from '@vueuse/core'
 import { mapActions, mapState } from 'pinia'
 import { ref, watch } from 'vue'
@@ -146,6 +147,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, ['load', 'done']),
 		...mapActions(useVersionsStore, ['getVersions']),
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),

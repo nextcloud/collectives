@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcAppNavigationCaption } from '@nextcloud/vue'
 import MemberItem from './MemberItem.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
@@ -137,6 +138,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		async onClick(item) {
 			this.$set(this.loadingItems, `${item.source}-${item.id}`, true)
 			await this.onClickSearched(item)

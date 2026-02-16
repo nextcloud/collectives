@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcButton } from '@nextcloud/vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import { useColor } from '../composables/useColor.js'
@@ -71,6 +72,10 @@ export default {
 				? `--page-tag-color: #${this.tag.color}`
 				: null
 		},
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

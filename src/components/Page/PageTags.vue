@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcPopover } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import PageTag from '../PageTag.vue'
@@ -106,6 +107,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useTagsStore, ['addFilterTagId']),
 
 		onSelectTag(tagId) {

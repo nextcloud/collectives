@@ -18,8 +18,6 @@ window.OCA.Collectives = {
 	vueRouter: router,
 }
 
-Vue.prototype.t = t
-Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 

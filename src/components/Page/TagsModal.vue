@@ -130,6 +130,7 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { n, t } from '@nextcloud/l10n'
 import { NcActionButton, NcActions, NcButton, NcCheckboxRadioSwitch, NcColorPicker, NcDialog, NcTextField } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import CircleIcon from 'vue-material-design-icons/Circle.vue'
@@ -214,6 +215,9 @@ export default {
 	},
 
 	methods: {
+		n,
+		t,
+
 		...mapActions(useRootStore, ['done', 'load']),
 		...mapActions(usePagesStore, ['addPageTag', 'removePageTag']),
 		...mapActions(useTagsStore, ['createTag', 'deleteTag', 'updateTag']),

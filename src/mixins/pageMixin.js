@@ -5,6 +5,7 @@
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'

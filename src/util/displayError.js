@@ -4,6 +4,7 @@
  */
 
 import { showError, showWarning } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import escapeHtml from 'escape-html'
 
 /**

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'pinia'
 import PageIcon from '../Icon/PageIcon.vue'
@@ -36,6 +37,10 @@ export default {
 				? t('collectives', 'Page not found: {page}', { page: this.pageParam })
 				: t('collectives', 'Page with ID {id} not found', { id: this.pageId })
 		},
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

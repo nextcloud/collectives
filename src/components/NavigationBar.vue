@@ -50,6 +50,7 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { NcAppNavigation, NcAppNavigationCaption, NcAppNavigationNew } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
@@ -123,6 +124,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCollectivesStore, [
 			'deleteCollective',
 			'restoreCollective',

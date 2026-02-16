@@ -22,8 +22,6 @@ const FilesCollectiveHeader = {
 
 	render(el, folder) {
 		el.id = 'files-collective-wrapper'
-		Vue.prototype.t = window.t
-		Vue.prototype.n = window.n
 		const collectivesFolder = loadState('collectives', 'user_folder', null)
 		const View = Vue.extend(FileListInfo)
 		vm = new View({

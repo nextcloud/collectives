@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
@@ -75,6 +76,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		setActive() {
 			this.active = this.collectivesFolder && this.collectivesFolder !== '/' && this.path.startsWith(this.collectivesFolder)
 		},

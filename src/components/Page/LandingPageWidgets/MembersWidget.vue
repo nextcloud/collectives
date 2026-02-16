@@ -51,6 +51,7 @@
 
 <script>
 import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { NcAvatar, NcButton } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -196,6 +197,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCirclesStore, ['getCircleMembers']),
 		...mapActions(useCollectivesStore, [
 			'setCollectiveUserSettingShowMembers',

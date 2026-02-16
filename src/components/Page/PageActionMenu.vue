@@ -156,6 +156,7 @@
 
 <script>
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActions, NcActionSeparator } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -321,6 +322,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, [
 			'setActiveSidebarTab',
 			'show',

@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { translate as t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
@@ -116,6 +116,7 @@ export default {
 
 	methods: {
 		t,
+
 		...mapActions(useSearchStore, [
 			'setSearchQuery',
 			'toggleMatchAll',

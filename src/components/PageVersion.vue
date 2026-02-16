@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -135,6 +136,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, ['done', 'hide', 'load']),
 		...mapActions(useVersionsStore, [
 			'restoreVersion',

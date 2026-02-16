@@ -48,6 +48,7 @@
 
 <script>
 import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
@@ -111,6 +112,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCollectivesStore, [
 			'patchCollectiveWithProperty',
 			'setCollectiveUserSettingShowRecentPages',

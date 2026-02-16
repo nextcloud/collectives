@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcDialog } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import MemberPicker from '../Member/MemberPicker.vue'
@@ -56,6 +57,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCirclesStore, ['getCircleMembers', 'addMemberToCircle']),
 
 		onClose() {
