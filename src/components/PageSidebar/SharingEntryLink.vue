@@ -205,20 +205,18 @@ import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import {
-	NcActionButton,
-	NcActionCheckbox,
-	NcActionInput,
-	NcActions,
-	NcActionText,
-	NcAvatar,
-	NcButton,
-	NcCheckboxRadioSwitch,
-	NcLoadingIcon,
-	NcPasswordField,
-} from '@nextcloud/vue'
 import { createFocusTrap } from 'focus-trap'
 import { mapActions, mapState } from 'pinia'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
+import NcActionInput from '@nextcloud/vue/components/NcActionInput'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionText from '@nextcloud/vue/components/NcActionText'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcPasswordField from '@nextcloud/vue/components/NcPasswordField'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'

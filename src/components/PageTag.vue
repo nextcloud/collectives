@@ -33,7 +33,7 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcButton } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import { useColor } from '../composables/useColor.js'
 

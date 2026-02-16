@@ -78,8 +78,11 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcEmptyContent, NcLoadingIcon, NcPopover } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcPopover from '@nextcloud/vue/components/NcPopover'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import SharingEntryLink from './SharingEntryLink.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'

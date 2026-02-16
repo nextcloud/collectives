@@ -16,8 +16,8 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import PageIcon from '../Icon/PageIcon.vue'
 import { useRootStore } from '../../stores/root.js'
 

@@ -48,7 +48,9 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcDialog, NcTextField } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 export default {

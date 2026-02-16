@@ -40,9 +40,11 @@
 <script>
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import { NcAppContentDetails, NcButton, NcPopover } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
+import NcAppContentDetails from '@nextcloud/vue/components/NcAppContentDetails'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcPopover from '@nextcloud/vue/components/NcPopover'
 import PageNotFound from './Page/PageNotFound.vue'
 import PageContainer from './PageContainer.vue'
 import PageVersion from './PageVersion.vue'

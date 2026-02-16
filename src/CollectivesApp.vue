@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import { NcContent } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcContent from '@nextcloud/vue/components/NcContent'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import NavigationBar from './components/NavigationBar.vue'
 import PageSidebar from './components/PageSidebar.vue'

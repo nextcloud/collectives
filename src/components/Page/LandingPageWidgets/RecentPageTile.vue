@@ -33,9 +33,9 @@
 
 <script>
 import moment from '@nextcloud/moment'
-import { NcAvatar } from '@nextcloud/vue'
 import { isDarkTheme } from '@nextcloud/vue/functions/isDarkTheme'
 import { mapState } from 'pinia'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import PageIcon from '../../Icon/PageIcon.vue'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'

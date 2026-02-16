@@ -65,8 +65,9 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 import Close from 'vue-material-design-icons/Close.vue'

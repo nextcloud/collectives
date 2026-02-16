@@ -59,9 +59,10 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
+import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
+import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'

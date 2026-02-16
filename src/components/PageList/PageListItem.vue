@@ -101,9 +101,10 @@
 <script>
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { NcActionButton, NcActions } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import MenuRightIcon from 'vue-material-design-icons/MenuRightOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import StarIconFilled from 'vue-material-design-icons/Star.vue'

@@ -20,7 +20,7 @@
 <script>
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { NcUserBubble } from '@nextcloud/vue'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
 export default {
 	name: 'LastUserBubble',

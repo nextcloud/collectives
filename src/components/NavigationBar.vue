@@ -51,8 +51,10 @@
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import { NcAppNavigation, NcAppNavigationCaption, NcAppNavigationNew } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
+import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
+import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectiveMembersModal from './Nav/CollectiveMembersModal.vue'

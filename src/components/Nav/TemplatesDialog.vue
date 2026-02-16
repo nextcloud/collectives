@@ -39,8 +39,10 @@
 <script>
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import SkeletonLoading from '../SkeletonLoading.vue'
 import TemplateListItem from './TemplateListItem.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'

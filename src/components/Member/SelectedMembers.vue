@@ -34,7 +34,7 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
-import { NcUserBubble } from '@nextcloud/vue'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 
 export default {

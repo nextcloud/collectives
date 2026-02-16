@@ -15,8 +15,8 @@
 
 <script lang="ts">
 import { t } from '@nextcloud/l10n'
-import { NcEmptyContent } from '@nextcloud/vue'
 import { defineComponent } from 'vue'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import CloudOffOutlineIcon from 'vue-material-design-icons/CloudOffOutline.vue'
 
 export default defineComponent({
@@ -27,8 +27,8 @@ export default defineComponent({
 		NcEmptyContent,
 	},
 
-	methods: {
-		t,
+	setup() {
+		return { t }
 	},
 })
 </script>

@@ -63,7 +63,7 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcAppNavigationCaption } from '@nextcloud/vue'
+import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
 import MemberItem from './MemberItem.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 

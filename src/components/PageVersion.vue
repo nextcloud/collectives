@@ -57,10 +57,12 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import { ref } from 'vue'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'

@@ -48,8 +48,9 @@
 <script>
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { NcEmptyContent, NcListItem } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcListItem from '@nextcloud/vue/components/NcListItem'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import { usePagesStore } from '../../stores/pages.js'
