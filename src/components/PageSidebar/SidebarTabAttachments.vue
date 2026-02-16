@@ -332,12 +332,12 @@ export default {
 			for (const file of files) {
 				try {
 					await this.uploadAttachment(file)
-					this.$refs.fileInput.value = ''
 				} catch (e) {
 					console.error('Failed to upload attachment', e)
 					showError(t('collectives', 'Failed to upload attachment {name}', { name: file.name }))
 				}
 			}
+			this.$refs.fileInput.value = ''
 		},
 
 		async onStartRename(attachment) {
