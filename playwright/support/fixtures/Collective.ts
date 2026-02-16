@@ -49,15 +49,15 @@ export class Collective {
 			? `${slug}-${id}`
 			: encodeURIComponent(name)
 		await this.page.goto(`/index.php/apps/collectives/${path}`)
-		await this.waitForLoad()
+		await this.waitForReaderContent()
 	}
 
 	/**
 	 * Wait for the collective landing page to finish loading.
 	 */
-	async waitForLoad() {
-		// Wait for the page content to be visible
-		await this.page.locator('.ProseMirror').waitFor({ state: 'visible' })
+	async waitForReaderContent() {
+		await this.page.locator('[data-cy-collectives="reader"] .ProseMirror')
+			.waitFor({ state: 'visible' })
 	}
 }
 
