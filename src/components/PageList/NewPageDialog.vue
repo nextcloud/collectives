@@ -33,6 +33,7 @@
 
 <script>
 import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { NcDialog } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import PageIcon from '../Icon/PageIcon.vue'
@@ -88,6 +89,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(usePagesStore, [
 			'setNewPageParentId',
 		]),

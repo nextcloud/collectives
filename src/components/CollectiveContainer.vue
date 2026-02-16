@@ -39,6 +39,7 @@
 
 <script>
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { NcAppContentDetails, NcButton, NcPopover } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -141,6 +142,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, ['show']),
 		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTagsStore, ['clearFilterTags']),

@@ -146,6 +146,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
@@ -319,6 +320,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(usePagesStore, ['getPagesForCollective']),
 
 		scrollToPage() {

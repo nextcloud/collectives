@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcEmptyContent, NcLoadingIcon, NcPopover } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
@@ -135,6 +136,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCollectivesStore, ['setMembersCollectiveId']),
 
 		openCollectiveMembers() {

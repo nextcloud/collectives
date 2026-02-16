@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import EyeOutlineIcon from 'vue-material-design-icons/EyeOutline.vue'
@@ -76,6 +77,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview']),
 
 		handleClick() {

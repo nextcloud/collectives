@@ -203,6 +203,7 @@
 <script>
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import {
 	NcActionButton,
@@ -413,6 +414,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useSharesStore, [
 			'createShare',
 			'deleteShare',

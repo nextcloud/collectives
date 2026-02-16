@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcButton } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
@@ -91,6 +92,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, ['show']),
 
 		toggleFavorites() {

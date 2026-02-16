@@ -38,6 +38,7 @@
 
 <script>
 import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import SkeletonLoading from '../SkeletonLoading.vue'
@@ -83,6 +84,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCollectivesStore, [
 			'setTemplatesCollectiveId',
 		]),

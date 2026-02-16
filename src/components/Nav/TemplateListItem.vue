@@ -94,6 +94,7 @@
 
 <script>
 import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { NcActionButton, NcActions, NcButton, NcEmojiPicker, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import { directive as ClickOutside } from 'v-click-outside'
@@ -155,6 +156,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useTemplatesStore, [
 			'renameTemplate',
 			'setTemplateEmoji',

@@ -118,6 +118,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { formatFileSize } from '@nextcloud/files'
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import { NcActionButton, NcActionLink, NcAvatar, NcDateTime, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
@@ -216,6 +217,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		async fetchDisplayName() {
 			this.versionAuthor = ''
 			if (!this.version.author) {

@@ -121,6 +121,7 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showInfo } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcDialog, NcEmojiPicker, NcEmptyContent, NcSelect, NcTextField } from '@nextcloud/vue'
 import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
@@ -272,6 +273,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCirclesStore, [
 			'getCircles',
 			'addMembersToCircle',

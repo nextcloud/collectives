@@ -80,6 +80,7 @@
 
 <script>
 import { showError, showUndo } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'

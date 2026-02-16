@@ -28,6 +28,7 @@
 <script>
 
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'pinia'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
@@ -70,6 +71,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		newCollective() {
 			emit('toggle-navigation', { open: true })
 			emit('open-new-collective-modal')

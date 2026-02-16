@@ -220,6 +220,7 @@
 
 <script>
 import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { NcActionButton, NcActions, NcAppContentList, NcAppNavigationCaption, NcButton, NcPopover, NcTextField } from '@nextcloud/vue'
 import { useElementSize } from '@vueuse/core'
 import debounce from 'debounce'
@@ -464,6 +465,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, ['show']),
 		...mapActions(useTagsStore, ['addFilterTagId', 'removeFilterTagId']),
 		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),

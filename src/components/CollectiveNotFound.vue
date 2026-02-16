@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'pinia'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
@@ -36,6 +37,10 @@ export default {
 				? t('collectives', 'Collective not found: {collective}', { collective: this.collectiveParam })
 				: t('collectives', 'Collective with ID {id} not found', { id: this.collectiveId })
 		},
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

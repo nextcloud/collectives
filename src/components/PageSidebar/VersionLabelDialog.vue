@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcButton, NcDialog, NcTextField } from '@nextcloud/vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
@@ -95,6 +96,10 @@ export default {
 				this.editedVersionLabel = this.versionLabel
 			},
 		},
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

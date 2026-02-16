@@ -90,6 +90,7 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { NcActionButton, NcActions, NcActionSeparator, NcAvatar, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions } from 'pinia'
 import AccountCogIcon from 'vue-material-design-icons/AccountCogOutline.vue'
@@ -246,6 +247,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useCirclesStore, [
 			'getCircleMembers',
 			'changeCircleMemberLevel',

@@ -33,6 +33,7 @@
 
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
+import { t } from '@nextcloud/l10n'
 import { NcUserBubble } from '@nextcloud/vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 
@@ -77,6 +78,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		deleteMember(member) {
 			this.$emit('delete-from-selection', member)
 		},

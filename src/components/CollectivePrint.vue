@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { NcEmptyContent } from '@nextcloud/vue'
 import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
@@ -124,6 +125,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(usePagesStore, ['getPages']),
 
 		ready(pageId) {

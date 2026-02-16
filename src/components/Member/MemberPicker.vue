@@ -57,6 +57,7 @@
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
 import { NcAppNavigationCaption, NcTextField } from '@nextcloud/vue'
 import debounce from 'debounce'
@@ -184,6 +185,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		clearSearch() {
 			this.searchQuery = ''
 			this.searchResults = []
