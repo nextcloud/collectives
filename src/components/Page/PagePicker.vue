@@ -147,8 +147,10 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'vue-material-design-icons/ArrowUp.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'

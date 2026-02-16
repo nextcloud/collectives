@@ -27,8 +27,9 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import EyeOutlineIcon from 'vue-material-design-icons/EyeOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { usePagesStore } from '../../stores/pages.js'

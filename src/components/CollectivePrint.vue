@@ -49,9 +49,9 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcEmptyContent } from '@nextcloud/vue'
 import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcProgressBar from '@nextcloud/vue/components/NcProgressBar'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import PagePrint from './PagePrint.vue'

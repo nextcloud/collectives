@@ -29,8 +29,8 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
-import { NcAppNavigationCaption } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
 import MemberItem from './MemberItem.vue'
 import MembersHint from './MembersHint.vue'
 import { useCirclesStore } from '../../stores/circles.js'

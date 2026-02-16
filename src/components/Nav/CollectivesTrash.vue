@@ -107,10 +107,13 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcActionButton, NcAppNavigationItem, NcButton, NcDialog } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapState } from 'pinia'
 import { directive as ClickOutside } from 'v-click-outside'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'

@@ -18,8 +18,9 @@
 <script>
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import { NcAppNavigationSettings, NcTextField } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcAppNavigationSettings from '@nextcloud/vue/components/NcAppNavigationSettings'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
 import { useSettingsStore } from '../../stores/settings.js'
 import displayError from '../../util/displayError.js'
 

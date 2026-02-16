@@ -34,8 +34,8 @@
 <script>
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import { NcDialog } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import PageIcon from '../Icon/PageIcon.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'

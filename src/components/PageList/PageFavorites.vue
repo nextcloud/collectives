@@ -48,8 +48,8 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcButton } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import StarIcon from 'vue-material-design-icons/StarOutline.vue'
 import PageListItem from './PageListItem.vue'

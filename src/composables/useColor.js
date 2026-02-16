@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { useIsDarkTheme } from '@nextcloud/vue'
+import { useIsDarkTheme } from '@nextcloud/vue/composables/useIsDarkTheme'
 import { computed } from 'vue'
 
 /**

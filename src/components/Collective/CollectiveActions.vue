@@ -82,8 +82,10 @@
 import { showError, showUndo } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionLink from '@nextcloud/vue/components/NcActionLink'
+import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
@@ -167,6 +169,8 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		...mapActions(useRootStore, ['setActiveSidebarTab', 'show']),
 		...mapActions(useCirclesStore, ['leaveCircle']),
 		...mapActions(useCollectivesStore, [

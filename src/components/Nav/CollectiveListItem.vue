@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import { NcAppNavigationItem } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
+import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'

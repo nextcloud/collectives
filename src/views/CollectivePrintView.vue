@@ -12,9 +12,9 @@
 </template>
 
 <script>
-
-import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import CollectivePrint from '../components/CollectivePrint.vue'
 import { useCollectivesStore } from '../stores/collectives.js'

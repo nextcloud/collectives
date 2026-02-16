@@ -29,8 +29,10 @@
 
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import { useNetworkState } from '../composables/useNetworkState.js'
 import { useCollectivesStore } from '../stores/collectives.js'

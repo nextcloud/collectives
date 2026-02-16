@@ -61,8 +61,9 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import OfflineContent from './OfflineContent.vue'

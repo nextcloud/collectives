@@ -25,8 +25,10 @@
 <script>
 
 import { listen } from '@nextcloud/notify_push'
-import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import CollectiveContainer from '../components/CollectiveContainer.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import PageList from '../components/PageList.vue'

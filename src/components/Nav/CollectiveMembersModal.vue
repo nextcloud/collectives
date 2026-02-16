@@ -21,8 +21,8 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcDialog } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import MemberPicker from '../Member/MemberPicker.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'

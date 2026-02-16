@@ -54,8 +54,8 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { NcPopover } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import NcPopover from '@nextcloud/vue/components/NcPopover'
 import PageTag from '../PageTag.vue'
 import { usePagesStore } from '../../stores/pages.js'
 import { useTagsStore } from '../../stores/tags.js'
