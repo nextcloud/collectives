@@ -232,7 +232,7 @@ export default {
 		},
 
 		onCompareVersion(version) {
-			OCA.Viewer.compare(this.currentVersion, this.versions.find((v) => v.source === version.source))
+			window.OCA.Viewer.compare(this.currentVersion, this.versions.find((v) => v.source === version.source))
 		},
 
 		async onRestoreVersion(version) {

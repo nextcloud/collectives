@@ -18,9 +18,6 @@ window.OCA.Collectives = {
 	vueRouter: router,
 }
 
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
-
 Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
 

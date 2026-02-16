@@ -369,11 +369,11 @@ export default {
 		},
 
 		isPasswordEnforced() {
-			return OC.appConfig.core.enforcePasswordForPublicLink === true
+			return window.OC.appConfig.core.enforcePasswordForPublicLink === true
 		},
 
 		isPasswordDefaultEnabled() {
-			return OC.appConfig.core.enableLinkPasswordByDefault === true
+			return window.OC.appConfig.core.enableLinkPasswordByDefault === true
 		},
 
 		isPasswordProtected: {

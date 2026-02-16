@@ -276,7 +276,7 @@ export default {
 			return function(attachment) {
 				return attachment.hasPreview
 					? this.attachmentPreview(attachment)
-					: OC.MimeType.getIconUrl(attachment.mimetype ?? 'undefined')
+					: window.OC.MimeType.getIconUrl(attachment.mimetype ?? 'undefined')
 			}
 		},
 

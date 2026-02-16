@@ -435,7 +435,7 @@ export default {
 		displayTrash() {
 			return this.currentCollectiveCanEdit
 				&& !this.currentCollectiveIsPageShare
-				&& ('files_trashbin' in this.OC.appswebroots)
+				&& ('files_trashbin' in window.OC.appswebroots)
 				&& !this.loading('collectives')
 		},
 	},

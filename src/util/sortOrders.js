@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const byName = (a, b) => a.name.localeCompare(b.name, OC.getLanguage(), { numeric: true })
-const byTitleAsc = (a, b) => a.title.localeCompare(b.title, OC.getLanguage(), { numeric: true })
+const byName = (a, b) => a.name.localeCompare(b.name, window.OC.getLanguage(), { numeric: true })
+const byTitleAsc = (a, b) => a.title.localeCompare(b.title, window.OC.getLanguage(), { numeric: true })
 const byTitleDesc = (a, b) => byTitleAsc(b, a)
 const byTimeAsc = (a, b) => b.timestamp - a.timestamp
 const byTimeDesc = (a, b) => byTimeAsc(b, a)

@@ -7,9 +7,6 @@ import Vue from 'vue'
 import { registerWidget } from '@nextcloud/vue/components/NcRichText'
 import PageReferenceWidget from './views/PageReferenceWidget.vue'
 
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
-
 registerWidget('collectives_page', (el, { richObjectType, richObject, accessible }) => {
 	const Widget = Vue.extend(PageReferenceWidget)
 	new Widget({

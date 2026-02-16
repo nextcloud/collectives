@@ -82,11 +82,11 @@ export default {
 			const appUrl = '/apps/collectives'
 			const linkUrl = new URL(this.richObject.link, window.location)
 			// Only consider rerouting if we're inside the collectives app and for links to collectives app
-			if (OCA.Collectives?.vueRouter
+			if (window.OCA.Collectives?.vueRouter
 				&& linkUrl.pathname.toString().startsWith(generateUrl(appUrl))) {
 				event.preventDefault()
 				const collectivesUrl = linkUrl.href.substring(linkUrl.href.indexOf(appUrl) + appUrl.length)
-				OCA.Collectives.vueRouter.push(collectivesUrl)
+				window.OCA.Collectives.vueRouter.push(collectivesUrl)
 			}
 		},
 	},

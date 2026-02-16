@@ -168,7 +168,7 @@ export default {
 		},
 
 		hasContactsApp() {
-			return 'contacts' in this.OC.appswebroots
+			return 'contacts' in window.OC.appswebroots
 		},
 
 		showTeamOverviewButton() {
