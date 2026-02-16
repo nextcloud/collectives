@@ -59,35 +59,38 @@ export default {
 	methods: {
 		...mapActions(useSettingsStore, ['updateCollectivesFolder']),
 
-		selectCollectivesFolder() {
+		async selectCollectivesFolder() {
 			const picker = getFilePickerBuilder(t('collectives', 'Select location for collectives'))
 				.setMultiSelect(false)
 				.addButton({
 					label: t('collectives', 'Choose'),
-					type: 'primary',
+					variant: 'primary',
 					callback: () => {},
 				})
 				.addMimeTypeFilter('httpd/unix-directory')
 				.allowDirectories()
 				.startAt(this.collectivesFolder)
 				.build()
-			picker.pick()
-				.then((path) => {
-					// const path = paths[0]
-					// No root folder, has to start with `/`, not allowed to end with `/`
-					if (path === '/'
-						|| !path.startsWith('/')
-						|| path.endsWith('/')) {
-						const error = t('collectives', 'Invalid path selected. Only folders on first level are supported.')
-						showError(error)
-						throw new Error(error)
-					}
+			const path = await picker.pick()
 
-					this.collectivesFolderLoading = true
-					this.updateCollectivesFolder(path)
-						.catch(displayError('Could not update collectives folder'))
-					this.collectivesFolderLoading = false
-				})
+			// No root folder, has to start with `/`, not allowed to end with `/`
+			if (path === '/'
+				|| !path.startsWith('/')
+				|| path.endsWith('/')) {
+				const error = t('collectives', 'Invalid path selected. Only folders on first level are supported.')
+				showError(error)
+				throw new Error(error)
+			}
+
+			this.collectivesFolderLoading = true
+			try {
+				await this.updateCollectivesFolder(path)
+			} catch (e) {
+				console.error('Error updating collectives folder: ', e)
+				displayError('Could not update collectives folder')(e)
+			} finally {
+				this.collectivesFolderLoading = false
+			}
 		},
 	},
 }
