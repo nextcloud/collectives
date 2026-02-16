@@ -50,7 +50,7 @@ describe('Collective', function() {
 		cy.get('.toast-undo')
 			.should('contain', 'You left collective Preexisting Collective')
 		cy.get('.toast-undo button')
-			.should('contain', 'Undo')
+			.contains('Undo')
 			.click()
 
 		cy.get('.app-navigation-entry')
