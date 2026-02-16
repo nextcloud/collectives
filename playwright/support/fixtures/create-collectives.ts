@@ -49,7 +49,7 @@ export const test = base.extend<CollectivesFixture>({
 
 		// Cleanup all collectives
 		for (const collective of createdCollectives) {
-			await user.deleteCollective({ id: collective.id })
+			await user.deleteCollective({ id: collective.data.id })
 		}
 	},
 	collective: async ({ collectives }, use) => {

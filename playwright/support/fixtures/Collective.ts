@@ -6,76 +6,37 @@
 import { type Page } from '@playwright/test'
 import { type User } from './User.ts'
 
+type CollectiveData = {
+	id: number
+	slug?: string
+	circleId: string
+	name: string
+	emoji?: string
+	pageMode: number
+	level: number
+	editPermissionLevel: number
+	sharePermissionLevel: number
+	canEdit: boolean
+	canShare: boolean
+	shareToken?: string
+	isPageShare: boolean
+	sharePageId?: number
+	shareEditable: boolean
+	userPageOrder: number
+	userShowMembers: boolean
+	userShowRecentPages: boolean
+	userFavoritePages: number[]
+	canLeave: boolean
+	trashTimestamp?: number
+}
+
 export class Collective {
-	public readonly id: number
-	public readonly slug?: string
-	public readonly circleId: string
-	public readonly name: string
-	public readonly emoji?: string
-	public readonly pageMode: number
-	public readonly level: number
-	public readonly editPermissionLevel: number
-	public readonly sharePermissionLevel: number
-	public readonly canEdit: boolean
-	public readonly canShare: boolean
-	public readonly shareToken?: string
-	public readonly isPageShare: boolean
-	public readonly sharePageId?: number
-	public readonly shareEditable: boolean
-	public readonly userPageOrder: number
-	public readonly userShowMembers: boolean
-	public readonly userShowRecentPages: boolean
-	public readonly userFavoritePages: number[]
-	public readonly canLeave: boolean
-	public readonly trashTimestamp?: number
+	public readonly data: CollectiveData
 	public readonly page: Page
 
-	constructor(data: {
-		id: number
-		slug?: string
-		circleId: string
-		name: string
-		emoji?: string
-		pageMode: number
-		level: number
-		editPermissionLevel: number
-		sharePermissionLevel: number
-		canEdit: boolean
-		canShare: boolean
-		shareToken?: string
-		isPageShare: boolean
-		sharePageId?: number
-		shareEditable: boolean
-		userPageOrder: number
-		userShowMembers: boolean
-		userShowRecentPages: boolean
-		userFavoritePages: number[]
-		canLeave: boolean
-		trashTimestamp?: number
-		page: Page
-	}) {
-		this.id = data.id
-		this.slug = data.slug
-		this.circleId = data.circleId
-		this.name = data.name
-		this.emoji = data.emoji
-		this.pageMode = data.pageMode
-		this.level = data.level
-		this.editPermissionLevel = data.editPermissionLevel
-		this.sharePermissionLevel = data.sharePermissionLevel
-		this.canEdit = data.canEdit
-		this.canShare = data.canShare
-		this.shareToken = data.shareToken
-		this.isPageShare = data.isPageShare
-		this.sharePageId = data.sharePageId
-		this.shareEditable = data.shareEditable
-		this.userPageOrder = data.userPageOrder
-		this.userShowMembers = data.userShowMembers
-		this.userShowRecentPages = data.userShowRecentPages
-		this.userFavoritePages = data.userFavoritePages
-		this.canLeave = data.canLeave
-		this.trashTimestamp = data.trashTimestamp
-		this.page = data.page
+	constructor(data: CollectiveData, page: Page) {
+		this.data = data
+		this.page = page
 	}
 
 	async openApp() {
@@ -83,9 +44,10 @@ export class Collective {
 	}
 
 	async openCollective() {
-		const path = this.slug
-			? `${this.slug}-${this.id}`
-			: encodeURIComponent(this.name)
+		const { slug, id, name } = this.data
+		const path = slug
+			? `${slug}-${id}`
+			: encodeURIComponent(name)
 		await this.page.goto(`/index.php/apps/collectives/${path}`)
 		await this.waitForLoad()
 	}
@@ -132,7 +94,7 @@ export async function createCollective({ name, emoji = '', user }: {
 		throw new Error(`Failed to create collective ${name}: ${response.status()} - ${response.statusText()}`)
 	}
 	const data = await response.json()
-	return new Collective({ ...data.ocs.data.collective, page: user.page })
+	return new Collective(data.ocs.data.collective, user.page)
 }
 
 /**
