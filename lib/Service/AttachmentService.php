@@ -191,7 +191,13 @@ class AttachmentService {
 
 		$trashItem = $this->trashBackend->getTrashItemByCollectiveAndId($this->userManager->get($userId), $collectiveId, $attachmentId);
 		if ($trashItem === null) {
-			throw new NotFoundException('Failed to restore attachment ' . $attachmentId . '. Not found in trash.');
+			throw new NotFoundException('Failed to restore attachment ' . $attachmentId . '. Not found in trash for page attachments.');
+		}
+
+		$attachmentsDirectory = $this->getAttachmentDirectory($pageFile);
+		$originalLocation = $trashItem->getOriginalLocation();
+		if ($attachmentsDirectory->getInternalPath() !== dirname($originalLocation)) {
+			throw new NotFoundException('Failed to restore attachment ' . $attachmentId . '. Not found in trash for page attachments.');
 		}
 
 		try {
