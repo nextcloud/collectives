@@ -17,11 +17,9 @@ export default createAppConfig(
 		config: {
 			build: {
 				rollupOptions: {
-					output: {
-						manualChunks: {
-							vendor: ['vue', 'vue-router'],
-						},
-					},
+					// Needed for Nextcloud >= 32. In 33 it got fixed
+					// with https://github.com/nextcloud/server/pull/56941
+					preserveEntrySignatures: 'strict',
 				},
 			},
 			css: {
