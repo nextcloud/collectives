@@ -180,7 +180,7 @@ export default {
 		},
 
 		setupBackgroundFetcher() {
-			if (OC.config.session_keepalive) {
+			if (window.OC.config.session_keepalive) {
 				console.debug('Started background fetcher as session_keepalive is enabled')
 				this.getPagesIntervalId = window.setInterval(
 					this.getAllPages.bind(this, false),

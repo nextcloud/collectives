@@ -3,12 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { expect, test } from 'vitest'
+import { beforeAll, expect, test } from 'vitest'
 import { byName, byOrder, byTimeAsc, byTimeDesc, byTitleAsc, byTitleDesc } from '../../util/sortOrders.js'
 
-global.OC = {
-	getLanguage: () => 'en',
-}
+beforeAll(() => {
+	// Mock window and window.OC
+	global.window = {
+		OC: { getLanguage: () => 'en' },
+	}
+})
 
 test('by name', () => {
 	const unsorted = [
@@ -86,7 +89,6 @@ test('by indices', () => {
 })
 
 test('missing indices', () => {
-	global.OC = { getLanguage: () => 'en' }
 	const one = { index: 0 }
 	const two = { index: 1 }
 	const other = { index: -1, title: 'asdf' }

@@ -101,7 +101,7 @@ export default {
 		},
 
 		onOpen(template) {
-			OCA.Viewer.open({
+			window.OCA.Viewer.open({
 				path: `/${this.templateFilePath(template)}`,
 				list: [],
 			})
