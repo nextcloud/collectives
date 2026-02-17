@@ -821,18 +821,20 @@ class PageService {
 		$oldParentId = $this->getParentPageId($file);
 		$parentId = $parentId ?: $oldParentId;
 
-		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true)) {
-			$file = $newFile;
+		$newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true);
+		if (!$newFile) {
+			return $pageInfo;
 		}
+
 		$slug = $this->slugger->slug($title ?: $pageInfo->getTitle())->toString();
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug, $pageInfo->getTags());
+			$this->updatePage($collectiveId, $newFile->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug, $pageInfo->getTags());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		$parentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
-		$pageInfo = $this->getPageByFile($file);
+		$parentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $newFile->getId(), $index, $userId);
+		$pageInfo = $this->getPageByFile($newFile);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
 		return $pageInfo;
 	}
@@ -850,28 +852,29 @@ class PageService {
 		$oldParentId = $this->getParentPageId($file);
 		$parentId = $parentId ?: $oldParentId;
 
-		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false)) {
-			$file = $newFile;
+		$newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false);
+		if (!$newFile) {
+			return $this->getPageByFile($file);
 		}
-		$slug = $title ? $this->slugger->slug($title)->toString() : null;
 
+		$slug = $title ? $this->slugger->slug($title)->toString() : null;
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, null, null, $slug);
+			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		$pageInfo = $this->getPageByFile($file);
+		$pageInfo = $this->getPageByFile($newFile);
 		if ($oldParentId !== $parentId) {
 			// Page got moved: remove from subpage order of old parent page, add to new
 			$oldParentPageInfo = $this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
-			$newParentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
+			$newParentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $newFile->getId(), $index, $userId);
 			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $oldParentPageInfo, $newParentPageInfo]]);
 		} else {
 			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		}
 
-		return $this->getPageByFile($file);
+		return $this->getPageByFile($newFile);
 	}
 
 	/**
@@ -889,17 +892,19 @@ class PageService {
 		$pageInfo = $this->getPageByFile($file);
 		$parentId = $parentId ?: self::getIndexPageFile($newCollectiveFolder)->getId();
 
-		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, true, $newCollectiveFolder)) {
-			$file = $newFile;
+		$newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, true, $newCollectiveFolder);
+		if (!$newFile) {
+			return;
 		}
+
 		try {
-			$this->updatePage($newCollectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth());
+			$this->updatePage($newCollectiveId, $newFile->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		$pageInfo = $this->getPageByFile($file);
-		$parentPageInfo = $this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+		$pageInfo = $this->getPageByFile($newFile);
+		$parentPageInfo = $this->addToSubpageOrder($newCollectiveId, $parentId, $newFile->getId(), $index, $userId);
 		$this->notifyPush(['collectiveId' => $newCollectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
 	}
 
@@ -918,19 +923,20 @@ class PageService {
 		$oldParentId = $this->getParentPageId($file);
 		$parentId = $parentId ?: self::getIndexPageFile($newCollectiveFolder)->getId();
 
-		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, false, $newCollectiveFolder)) {
-			$file = $newFile;
+		$newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, false, $newCollectiveFolder);
+		if (!$newFile) {
+			return;
 		}
 		try {
-			$this->updatePage($newCollectiveId, $file->getId(), $userId, null, null, null, '[]');
+			$this->updatePage($newCollectiveId, $newFile->getId(), $userId, null, null, null, '[]');
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
 		$oldParentPageInfo = $this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$oldParentPageInfo], 'removed' => [$id]]);
-		$pageInfo = $this->getPageByFile($file);
-		$newParentPageInfo = $this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+		$pageInfo = $this->getPageByFile($newFile);
+		$newParentPageInfo = $this->addToSubpageOrder($newCollectiveId, $parentId, $newFile->getId(), $index, $userId);
 		$this->notifyPush(['collectiveId' => $newCollectiveId, 'pages' => [$pageInfo, $newParentPageInfo]]);
 	}
 
