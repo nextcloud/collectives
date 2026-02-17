@@ -24,8 +24,6 @@ class CollectiveStorage extends Wrapper implements IConstructableStorage {
 	private readonly int $folderId;
 	private readonly ?ICacheEntry $rootEntry;
 	private readonly ?IUser $mountOwner;
-	/** @var ICache|null */
-	public $cache;
 
 	public function __construct($parameters) {
 		parent::__construct($parameters);
