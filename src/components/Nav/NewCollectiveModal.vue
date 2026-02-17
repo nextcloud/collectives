@@ -42,6 +42,7 @@
 				<NcButton
 					v-if="anyCircle && !pickCircle"
 					:title="t('collectives', 'Select an existing team')"
+					:aria-label="t('collectives', 'Select an existing team')"
 					variant="tertiary"
 					@click.stop.prevent="startSelectCircle">
 					<template #icon>
