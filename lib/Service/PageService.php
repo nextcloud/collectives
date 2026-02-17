@@ -739,6 +739,43 @@ class PageService {
 
 	/**
 	 * @throws NotFoundException
+	 */
+	private function copySubpagesMetadata(int $collectiveId, Folder $sourceFolder, Folder $targetFolder, bool $sameCollective, string $userId): void {
+		$sourceNodes = $sourceFolder->getDirectoryListing();
+		foreach ($sourceNodes as $sourceNode) {
+			if (str_starts_with($sourceNode->getName(), '.')) {
+				continue;
+			}
+
+			if ($sourceNode instanceof Folder) {
+				try {
+					$targetNode = $targetFolder->get($sourceNode->getName());
+					if ($targetNode instanceof Folder) {
+						$this->copySubpagesMetadata($collectiveId, $sourceNode, $targetNode, $sameCollective, $userId);
+					}
+				} catch (FilesNotFoundException) {
+					// Ignore if target node doesn't exist
+				}
+			} elseif ($sourceNode instanceof File && NodeHelper::isPage($sourceNode)) {
+				try {
+					$targetNode = $targetFolder->get($sourceNode->getName());
+					if ($targetNode instanceof File && NodeHelper::isPage($targetNode)) {
+						$sourcePageInfo = $this->getPageByFile($sourceNode);
+						if ($sameCollective) {
+							$this->updatePage($collectiveId, $targetNode->getId(), $userId, $sourcePageInfo->getEmoji(), $sourcePageInfo->isFullWidth(), $sourcePageInfo->getSlug(), $sourcePageInfo->getTags());
+						} else {
+							$this->updatePage($collectiveId, $targetNode->getId(), $userId, $sourcePageInfo->getEmoji(), $sourcePageInfo->isFullWidth(), $sourcePageInfo->getSlug(), '[]');
+						}
+					}
+				} catch (FilesNotFoundException) {
+					// Ignore if target node doesn't exist
+				}
+			}
+		}
+	}
+
+	/**
+	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	private function moveOrCopyPage(Folder $collectiveFolder, File $file, int $parentId, ?string $title, bool $copy, ?Folder $newCollectiveFolder = null): ?File {
@@ -826,6 +863,13 @@ class PageService {
 			return $pageInfo;
 		}
 
+		if (NodeHelper::isIndexPage($file)) {
+			// If copying an index page, also copy the subpages metadata
+			$sourceFolder = $file->getParent();
+			$targetFolder = $newFile->getParent();
+			$this->copySubpagesMetadata($collectiveId, $sourceFolder, $targetFolder, true, $userId);
+		}
+
 		$slug = $this->slugger->slug($title ?: $pageInfo->getTitle())->toString();
 		try {
 			$this->updatePage($collectiveId, $newFile->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug, $pageInfo->getTags());
@@ -895,6 +939,13 @@ class PageService {
 		$newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, true, $newCollectiveFolder);
 		if (!$newFile) {
 			return;
+		}
+
+		if (NodeHelper::isIndexPage($file)) {
+			// If copying an index page, also copy the subpages metadata
+			$sourceFolder = $file->getParent();
+			$targetFolder = $newFile->getParent();
+			$this->copySubpagesMetadata($newCollectiveId, $sourceFolder, $targetFolder, false, $userId);
 		}
 
 		try {
