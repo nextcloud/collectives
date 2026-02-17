@@ -240,6 +240,24 @@ class ImportService {
 		return $sanitizedHref;
 	}
 
+	/**
+	 * Dokuwiki2Markdown generates links with colons instead of paths
+	 * Converts `:topic:subtopic:page` to `topic/subtopic/page`
+	 * Converts `:media:topic:image.png?400` to `media/topic/image.png`
+	 */
+	private static function getDokuwikiHref(string $href): string {
+		// Remove leading ':' if existent
+		if (str_starts_with($href, ':')) {
+			$href = substr($href, 1);
+		}
+
+		// Remove query string (e.g. image size in attachments) if present
+		$href = preg_replace('/[?#].*$/', '', $href);
+
+		// Replace colons with directory separators to get the actual path
+		return str_replace(':', DIRECTORY_SEPARATOR, $href);
+	}
+
 	private function processLink(array $link, Collective $collective, IUser $user, int $parentId, string $filePath, string &$updatedContent, callable $progressCallback): int {
 		$href = $link['href'];
 		$sanitizedHref = self::sanitizeHref($href);
@@ -259,7 +277,9 @@ class ImportService {
 		}
 
 		// E.g. Dokuwiki2Markdown generates links where pages are separated with colons
-		$candidates[] = str_replace(':', DIRECTORY_SEPARATOR, $sanitizedHref);
+		if (str_contains($sanitizedHref, ':')) {
+			$candidates[] = self::getDokuwikiHref($sanitizedHref);
+		}
 
 		// Try to find target page
 		$targetPageInfo = null;
@@ -305,18 +325,7 @@ class ImportService {
 		$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . $sanitizedHref;
 
 		if (str_contains($sanitizedHref, ':')) {
-			// Dokuwiki2Markdown generates links where attachments are separated with colons
-
-			// Remove leading ':' if existent
-			if (str_starts_with($sanitizedHref, ':')) {
-				$sanitizedHref = substr($sanitizedHref, 1);
-			}
-
-			// Convert :directory:attachment.png?400 to directory/attachment.png
-			$dokuwikiPath = str_replace(':', DIRECTORY_SEPARATOR, $sanitizedHref);
-			// Remove query string (image size) if present
-			$dokuwikiPath = preg_replace('/[?#].*$/', '', $dokuwikiPath);
-
+			$dokuwikiPath = self::getDokuwikiHref($sanitizedHref);
 			$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $dokuwikiPath;
 			$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $dokuwikiPath;
 		}
