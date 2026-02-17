@@ -280,7 +280,15 @@ class ImportService {
 
 		// E.g. Dokuwiki2Markdown generates links where pages are separated with colons
 		if (str_contains($sanitizedHref, ':')) {
-			$candidates[] = self::getDokuwikiHref($sanitizedHref);
+			$dokuwikiPath = self::getDokuwikiHref($sanitizedHref);
+			$candidates[] = $dokuwikiPath;
+
+			// Add additional candidates by stripping leading path segments
+			// It's an attempt to allow processing links even if a subdirectory gets imported
+			$pathSegments = explode(DIRECTORY_SEPARATOR, $dokuwikiPath);
+			for ($i = 1; $i < count($pathSegments); $i++) {
+				$candidates[] = implode(DIRECTORY_SEPARATOR, array_slice($pathSegments, $i));
+			}
 		}
 
 		// Try to find target page
@@ -330,6 +338,15 @@ class ImportService {
 			$dokuwikiPath = self::getDokuwikiHref($sanitizedHref);
 			$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $dokuwikiPath;
 			$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $dokuwikiPath;
+
+			// Add additional candidates by stripping leading path segments
+			// It's an attempt to allow processing attachments even if a subdirectory gets imported
+			$pathSegments = explode(DIRECTORY_SEPARATOR, $dokuwikiPath);
+			for ($i = 1; $i < count($pathSegments); $i++) {
+				$pathPart = implode(DIRECTORY_SEPARATOR, array_slice($pathSegments, $i));
+				$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $pathPart;
+				$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $pathPart;
+			}
 		}
 
 		// Try to find linked attachment
