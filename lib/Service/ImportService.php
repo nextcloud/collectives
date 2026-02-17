@@ -152,6 +152,8 @@ class ImportService {
 			throw new NotFoundException('Failed to read file content');
 		}
 
+		$content = MarkdownHelper::processCallouts($content);
+
 		try {
 			if (strtolower($title) === 'readme' && $parentId === 0) {
 				// Special case: use parent directory name as title for README.md files
