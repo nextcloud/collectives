@@ -200,4 +200,25 @@ class MarkdownHelper {
 
 		return array_unique($pageIds, SORT_NUMERIC);
 	}
+
+	/**
+	 * Replace callout syntax `:!: <callout text>` with ours (`::: warning\n<callout text>\n\n:::`)
+	 */
+	public static function processCallouts(string $content): string {
+		$lines = explode("\n", $content);
+		$result = [];
+
+		foreach ($lines as &$line) {
+			if (preg_match('/^:!:\s+(.+)$/', $line, $matches)) {
+				$calloutText = trim($matches[1]);
+				$result[] = '::: warn';
+				$result[] = $calloutText;
+				$result[] = '';
+				$result[] = ':::';
+			} else {
+				$result[] = $line;
+			}
+		}
+		return implode("\n", $result);
+	}
 }
