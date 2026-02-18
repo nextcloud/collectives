@@ -75,10 +75,10 @@
 			<!-- pending actions -->
 			<NcActions
 				v-if="isPending"
+				v-model:open="open"
 				class="sharing-entry__pending_actions"
 				:aria-label="actionsTooltip"
 				menu-align="right"
-				:open.sync="open"
 				@close="onCancelPending">
 				<NcActionText>
 					<template #icon>
@@ -128,12 +128,12 @@
 			<!-- actions -->
 			<NcActions
 				v-else-if="!loading"
+				v-model:open="open"
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
 				menu-align="right"
 				:disabled="!networkOnline"
-				:title="offlineTitle"
-				:open.sync="open">
+				:title="offlineTitle">
 				<template v-if="share">
 					<NcActionButton class="new-share-link" @click.prevent.stop="onNewShare">
 						<template #icon>

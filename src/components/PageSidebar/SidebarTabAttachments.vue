@@ -154,7 +154,7 @@
 		<!-- rename dialog -->
 		<AttachmentRenameDialog
 			v-if="renamedAttachment"
-			:open.sync="showRenameAttachmentsForm"
+			v-model:open="showRenameAttachmentsForm"
 			:attachment-name="renamedAttachment.name"
 			@attachment-rename="onRename" />
 	</div>
