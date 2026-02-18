@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
 import { useCollectivesStore } from '../stores/collectives.js'
@@ -31,7 +31,7 @@ export function useReader(content) {
 	})
 
 	const showCurrentPageOutline = computed(() => {
-		return pagesStore.hasOutline(pagesStore.currentPage.id)
+		return pagesStore.hasOutline(pagesStore.currentPageId)
 	})
 
 	const attachmentCount = computed(() => {
@@ -94,7 +94,7 @@ export function useReader(content) {
 		const fileId = rootStore.editorApiFlags.includes(editorApiReaderFileId)
 			? readerPage.id
 			: null
-		reader.value = await window.OCA.Text.createEditor({
+		const readerInstance = await window.OCA.Text.createEditor({
 			el: readerEl.value,
 			fileId,
 			useSession: false,
@@ -124,6 +124,9 @@ export function useReader(content) {
 				pagesStore.setReaderEmbeddedAttachmentSrcs(attachmentSrcs)
 			},
 		})
+
+		// Use markRaw to prevent Vue 3 from proxying the Vue 2 editor instance
+		reader.value = markRaw(readerInstance)
 
 		if (!rootStore.loading('pageContent')) {
 			reader.value.setContent(content.value.trim())
