@@ -10,11 +10,11 @@
 		@closing="onClose">
 		<div class="modal-collective-members">
 			<MemberPicker
-				:show-current="true"
-				:circle-id="collective.circleId"
-				:current-user-is-admin="currentUserIsAdmin"
-				:current-members="circleMembersSorted(collective.circleId)"
-				:on-click-searched="onClickSearched" />
+				:showCurrent="true"
+				:circleId="collective.circleId"
+				:currentUserIsAdmin="currentUserIsAdmin"
+				:currentMembers="circleMembersSorted(collective.circleId)"
+				:onClickSearched="onClickSearched" />
 		</div>
 	</NcDialog>
 </template>

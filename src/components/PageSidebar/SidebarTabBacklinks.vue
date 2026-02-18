@@ -23,7 +23,7 @@
 						<PageIcon
 							v-else
 							:size="26"
-							fill-color="var(--color-main-background)"
+							fillColor="var(--color-main-background)"
 							class="item-icon item-icon__page" />
 					</template>
 					<template #subname>

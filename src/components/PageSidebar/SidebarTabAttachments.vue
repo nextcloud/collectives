@@ -30,7 +30,7 @@
 					:key="attachment.id"
 					:name="attachment.name"
 					:href="davUrl(attachment)"
-					:force-display-actions="true"
+					:forceDisplayActions="true"
 					class="attachment"
 					@click="clickAttachment(attachment, $event)">
 					<template #icon>
@@ -51,7 +51,7 @@
 					</template>
 					<template #actions>
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							@click="scrollTo(attachment)">
 							<template #icon>
 								<EyeIcon />
@@ -63,7 +63,7 @@
 							:download="attachment.name"
 							:class="{ 'action-link--disabled': !networkOnline }"
 							:title="offlineTitle"
-							:close-after-click="true">
+							:closeAfterClick="true">
 							<template #icon>
 								<DownloadIcon />
 							</template>
@@ -74,7 +74,7 @@
 							:href="filesUrl(attachment.id)"
 							:class="{ 'action-link--disabled': !networkOnline }"
 							:title="offlineTitle"
-							:close-after-click="true">
+							:closeAfterClick="true">
 							<template #icon>
 								<FolderIcon />
 							</template>
@@ -95,7 +95,7 @@
 					:key="attachment.id"
 					:name="attachment.name"
 					:href="davUrl(attachment)"
-					:force-display-actions="true"
+					:forceDisplayActions="true"
 					class="attachment"
 					@click="clickAttachment(attachment, $event)">
 					<template #icon>
@@ -116,7 +116,7 @@
 					</template>
 					<template #actions>
 						<NcActionButton
-							:close-after-click="true"
+							:closeAfterClick="true"
 							@click="restore(attachment)">
 							<template #icon>
 								<RestoreIcon />
@@ -126,7 +126,7 @@
 						<NcActionLink
 							:href="davUrl(attachment)"
 							:download="attachment.name"
-							:close-after-click="true">
+							:closeAfterClick="true">
 							<template #icon>
 								<DownloadIcon />
 							</template>
@@ -134,7 +134,7 @@
 						</NcActionLink>
 						<NcActionLink
 							:href="filesUrl(attachment.id)"
-							:close-after-click="true">
+							:closeAfterClick="true">
 							<template #icon>
 								<FolderIcon />
 							</template>
