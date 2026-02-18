@@ -53,7 +53,7 @@
 		</NcEmptyContent>
 		<VersionLabelDialog
 			v-if="editedVersion"
-			:open.sync="showVersionLabelForm"
+			v-model:open="showVersionLabelForm"
 			:version-label="editedVersion.label"
 			@label-update="onLabelUpdate" />
 	</div>
