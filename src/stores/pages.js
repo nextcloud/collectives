@@ -121,8 +121,8 @@ export const usePagesStore = defineStore('pages', {
 			}
 
 			const pageIds = []
-			if (rootStore.pageId) {
-				let pageId = rootStore.pageId
+			let pageId = rootStore.pageId || rootStore.fileIdQuery
+			if (pageId) {
 				do {
 					const page = state.pageById(pageId)
 					pageIds.unshift(page.id)
@@ -147,12 +147,10 @@ export const usePagesStore = defineStore('pages', {
 
 		currentPage(state) {
 			const rootStore = useRootStore()
-			if (rootStore.pageId) {
-				return state.pageById(rootStore.pageId)
-			} else if (rootStore.fileIdQuery) {
-				return state.pageById(Number(rootStore.fileIdQuery))
-			}
-			return state.pages.find((p) => (p.id === state.currentPageIds[state.currentPageIds.length - 1]))
+			const pageId = rootStore.pageId
+				|| rootStore.fileIdQuery
+				|| state.currentPageIds[state.currentPageIds.length - 1]
+			return state.pageById(pageId)
 		},
 
 		currentPageId(state) {
@@ -238,12 +236,6 @@ export const usePagesStore = defineStore('pages', {
 				? generateRemoteUrl(`webdav/${state.currentPageDavPath}`)
 						.replace('/remote.php', '/public.php')
 				: generateRemoteUrl(`dav/files/${state.currentPageDavPath}`)
-		},
-
-		currentFileIdPage(state) {
-			const rootStore = useRootStore()
-			const fileId = Number(rootStore.fileIdQuery)
-			return state.pages.find((p) => (p.id === fileId))
 		},
 
 		hasSubpages(state) {

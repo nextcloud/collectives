@@ -91,11 +91,9 @@ export default {
 		]),
 
 		...mapState(usePagesStore, [
-			'currentFileIdPage',
 			'currentPage',
 			'currentPagePath',
 			'isLandingPage',
-			'pagePath',
 			'pagesLoaded',
 		]),
 
@@ -123,12 +121,6 @@ export default {
 		'currentPage.id': function() {
 			this.selectVersion(null)
 			this.slugUrl()
-		},
-
-		notFound: function(current) {
-			if (current && this.currentFileIdPage) {
-				this.$router.replace(this.pagePath(this.currentFileIdPage) + document.location.hash)
-			}
 		},
 
 		networkOnline: function(val) {

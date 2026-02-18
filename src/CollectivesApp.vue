@@ -87,7 +87,7 @@ export default {
 				this.rootStore.pageParam = val.params.page
 				this.rootStore.pageId = val.params.pageId ? parseInt(val.params.pageId) : null
 				this.rootStore.shareTokenParam = val.params.token
-				this.rootStore.fileIdQuery = val.query.fileId
+				this.rootStore.fileIdQuery = val.query.fileId ? parseInt(val.query.fileId) : ''
 			},
 
 			immediate: true,
