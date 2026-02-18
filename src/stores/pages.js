@@ -145,16 +145,15 @@ export const usePagesStore = defineStore('pages', {
 			return pageIds
 		},
 
-		currentPage(state) {
+		currentPageId(state) {
 			const rootStore = useRootStore()
-			const pageId = rootStore.pageId
+			return rootStore.pageId
 				|| rootStore.fileIdQuery
 				|| state.currentPageIds[state.currentPageIds.length - 1]
-			return state.pageById(pageId)
 		},
 
-		currentPageId(state) {
-			return state.currentPage.id
+		currentPage(state) {
+			return state.pages.find((p) => (p.id === state.currentPageId))
 		},
 
 		pageById(state) {

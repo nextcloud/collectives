@@ -21,9 +21,9 @@ export default {
 		]),
 		...mapState(usePagesStore, [
 			'currentPage',
+			'currentPageId',
 			'newPageId',
 			'newPagePath',
-			'pageById',
 			'pagePath',
 			'pageTitle',
 			'pages',
@@ -121,13 +121,11 @@ export default {
 		 * @param {number} newIndex New index for pageId
 		 */
 		async move(oldParentId, newParentId, pageId, newIndex) {
-			const currentPageId = this.currentPage?.id
-
 			// Add page to subpageOrder of new parent first for instant UI feedback
 			this.addToSubpageOrder({ parentId: newParentId, pageId, newIndex })
 
 			// Move subpage to new parent
-			if (currentPageId === pageId) {
+			if (this.currentPageId === pageId) {
 				this.load('currentPage')
 			}
 			try {
@@ -141,8 +139,8 @@ export default {
 			}
 
 			// Redirect to new page path if currentPage got moved
-			if (currentPageId === pageId) {
-				this.$router.replace(this.pagePath(this.pageById(currentPageId)))
+			if (this.currentPageId === pageId) {
+				this.$router.replace(this.pagePath(this.currentPage))
 			}
 
 			// Remove page from subpageOrder of old parent last
@@ -185,7 +183,6 @@ export default {
 		 * @param {number} newIndex New index for pageId
 		 */
 		async moveToCollective(collectiveId, oldParentId, newParentId, pageId, newIndex) {
-			const currentPageId = this.currentPage?.id
 			const pageTitle = this.pageTitle(pageId)
 
 			// Move subpage to new collective
@@ -198,7 +195,7 @@ export default {
 			}
 
 			// Redirect to root page if currentPage got moved
-			if (currentPageId === pageId) {
+			if (this.currentPageId === pageId) {
 				this.$router.replace(this.currentCollectivePath)
 			}
 
@@ -215,8 +212,6 @@ export default {
 		 * @param {number} pageId ID of the page
 		 */
 		async deletePage(pageId) {
-			const currentPageId = this.currentPage?.id
-
 			try {
 				await this.trashPage({ pageId })
 			} catch (e) {
@@ -226,7 +221,7 @@ export default {
 			}
 
 			// Redirect to root page if currentPage got deleted
-			if (currentPageId === pageId) {
+			if (this.currentPageId === pageId) {
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 			}
 

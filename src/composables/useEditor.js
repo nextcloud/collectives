@@ -29,7 +29,7 @@ export function useEditor(davContent) {
 
 	const pageContent = computed(() => editorContent.value?.trim() || davContent.value)
 	const showCurrentPageOutline = computed(() => {
-		return pagesStore.hasOutline(pagesStore.currentPage.id)
+		return pagesStore.hasOutline(pagesStore.currentPageId)
 	})
 
 	const scrollToLocationHash = () => {

@@ -27,7 +27,7 @@ export function useReader(content) {
 	const pagesStore = usePagesStore()
 
 	const showCurrentPageOutline = computed(() => {
-		return pagesStore.hasOutline(pagesStore.currentPage.id)
+		return pagesStore.hasOutline(pagesStore.currentPageId)
 	})
 
 	const scrollToLocationHash = () => {

@@ -12,7 +12,7 @@
 		<PageTags v-if="tagsLoaded" :is-full-width="isFullWidth" />
 		<div class="page-scroll-container">
 			<LandingPageWidgets v-if="isLandingPage" :is-full-width="isFullWidth" />
-			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" :is-full-width="isFullWidth" />
+			<TextEditor :key="`text-editor-${currentPageId}`" ref="texteditor" :is-full-width="isFullWidth" />
 		</div>
 		<SearchDialog :show="shouldShowSearchDialog" />
 	</div>
@@ -65,6 +65,7 @@ export default {
 		...mapState(useTagsStore, ['tagsLoaded']),
 		...mapState(usePagesStore, [
 			'currentPage',
+			'currentPageId',
 			'isLandingPage',
 		]),
 
@@ -78,7 +79,7 @@ export default {
 	},
 
 	watch: {
-		'currentPage.id': function() {
+		currentPageId: function() {
 			this.setAttachmentsError(false)
 			this.setAttachmentsLoaded(false)
 			this.getAttachmentsForPage(true)

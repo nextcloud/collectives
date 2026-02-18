@@ -92,6 +92,7 @@ export default {
 
 		...mapState(usePagesStore, [
 			'currentPage',
+			'currentPageId',
 			'currentPagePath',
 			'isLandingPage',
 			'pagesLoaded',
@@ -118,7 +119,7 @@ export default {
 			}
 		},
 
-		'currentPage.id': function() {
+		currentPageId: function() {
 			this.selectVersion(null)
 			this.slugUrl()
 		},

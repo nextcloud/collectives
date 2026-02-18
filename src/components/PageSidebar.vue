@@ -39,7 +39,7 @@
 			<template #icon>
 				<ShareVariantIcon :size="20" />
 			</template>
-			<SidebarTabSharing v-if="showing('sidebar')" :page-id="currentPage.id" />
+			<SidebarTabSharing v-if="showing('sidebar')" :page-id="currentPageId" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
 			v-if="!isPublic && currentCollectiveCanEdit"
@@ -51,7 +51,7 @@
 			</template>
 			<SidebarTabVersions
 				v-if="showing('sidebar')"
-				:page-id="currentPage.id"
+				:page-id="currentPageId"
 				:page-timestamp="currentPage.timestamp" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
@@ -104,7 +104,7 @@ export default {
 			'currentCollectiveCanShare',
 		]),
 
-		...mapState(usePagesStore, ['currentPage', 'title']),
+		...mapState(usePagesStore, ['currentPage', 'currentPageId', 'title']),
 
 		active: {
 			get() {
