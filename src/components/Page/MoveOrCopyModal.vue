@@ -41,6 +41,10 @@ export default {
 		},
 	},
 
+	emits: [
+		'close',
+	],
+
 	data() {
 		return {
 			copying: false,

@@ -26,6 +26,7 @@
 <script>
 export default {
 	name: 'PagesTemplateIcon',
+
 	props: {
 		title: {
 			type: String,
@@ -42,5 +43,9 @@ export default {
 			default: 24,
 		},
 	},
+
+	emits: [
+		'click',
+	],
 }
 </script>

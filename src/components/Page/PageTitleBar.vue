@@ -81,7 +81,7 @@
 			:placeholder="t('collectives', 'Title')"
 			:disabled="!currentCollectiveCanEdit || !networkOnline"
 			@blur="onTitleBlur()"
-			@save="$emit('save-editor')"
+			@save="$emit('saveEditor')"
 			@submit="onSubmit()" />
 
 		<div class="titlebar-buttons" :class="{ 'titlebar-buttons_sidebar-toggle': !isMobile && !showing('sidebar') }">
@@ -148,6 +148,11 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: [
+		'focusEditor',
+		'saveEditor',
+	],
 
 	setup() {
 		const isMobile = useIsMobile()
@@ -286,7 +291,7 @@ export default {
 
 		async onSubmit() {
 			if (this.isTextEdit) {
-				this.$emit('focus-editor')
+				this.$emit('focusEditor')
 			} else {
 				await this.onTitleBlur()
 			}
