@@ -3,13 +3,10 @@ import { generateUrl } from '@nextcloud/router'
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import CollectivePrintView from './views/CollectivePrintView.vue'
 import CollectiveView from './views/CollectiveView.vue'
 import HomeView from './views/HomeView.vue'
-
-Vue.use(VueRouter)
 
 const routes = [
 	{
@@ -74,8 +71,7 @@ const routes = [
 	},
 ]
 
-export default new VueRouter({
-	mode: 'history',
-	base: generateUrl('/apps/collectives', ''),
+export default createRouter({
+	history: createWebHistory(generateUrl('/apps/collectives', '')),
 	routes,
 })
