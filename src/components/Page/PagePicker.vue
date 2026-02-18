@@ -214,8 +214,8 @@ export default {
 			'pageById',
 			'pageParents',
 			'pageParentsForCollective',
-			'pagesForCollective',
-			'sortedSubpagesForCollective',
+			'pages',
+			'sortedSubpages',
 			'visibleSubpages',
 		]),
 
@@ -234,7 +234,7 @@ export default {
 
 			return this.isCurrentCollective
 				? this.rootPage
-				: this.pagesForCollective(this.selectedCollective).find((p) => (p.parentId === 0))
+				: this.pages(this.selectedCollective).find((p) => (p.parentId === 0))
 		},
 
 		subpages() {
@@ -247,7 +247,7 @@ export default {
 			if (this.isCurrentCollective) {
 				pages = this.visibleSubpages(this.selectedPageId)
 			} else {
-				pages = this.sortedSubpagesForCollective(this.selectedCollective, this.selectedPageId)
+				pages = this.sortedSubpages(this.selectedCollective, this.selectedPageId)
 			}
 
 			// Add current page to top of subpages if not part of it yet
