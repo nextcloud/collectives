@@ -34,6 +34,9 @@ test.describe('Settings', () => {
 
 		await filesApp.open()
 		await filesApp.openFile(randomFolder)
+		if (!collectives[0] || !collectives[1]) {
+			throw new Error('Expected 2 collectives to be created')
+		}
 		await expect(filesApp.getFileListEntry(collectives[0].data.name)).toBeVisible()
 		await expect(filesApp.getFileListEntry(collectives[1].data.name)).toBeVisible()
 	})
