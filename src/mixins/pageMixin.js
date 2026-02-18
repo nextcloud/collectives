@@ -27,7 +27,7 @@ export default {
 			'pagePath',
 			'pageTitle',
 			'pages',
-			'currentSortedSubpages',
+			'currentSortedSubpagesByParentId',
 		]),
 	},
 
@@ -240,7 +240,7 @@ export default {
 		 * @param {number} newIndex New index for pageId
 		 */
 		async subpageOrderUpdate(parentId, pageId, newIndex) {
-			const subpageOrder = this.currentSortedSubpages(parentId)
+			const subpageOrder = this.currentSortedSubpagesByParentId.get(parentId)
 				.map((p) => p.id)
 			subpageOrder.splice(subpageOrder.findIndex((id) => id === pageId), 1)
 			subpageOrder.splice(newIndex, 0, pageId)
