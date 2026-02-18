@@ -41,7 +41,7 @@
 				:in-favorite-list="true"
 				:filtered-view="false"
 				:network-online="networkOnline"
-				@click.native="show('details')" />
+				@click="show('details')" />
 		</div>
 	</div>
 </template>
