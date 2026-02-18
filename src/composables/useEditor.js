@@ -4,7 +4,7 @@
  */
 
 import debounce from 'debounce'
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
@@ -29,7 +29,7 @@ export function useEditor(davContent) {
 
 	const pageContent = computed(() => editorContent.value?.trim() || davContent.value)
 	const showCurrentPageOutline = computed(() => {
-		return pagesStore.hasOutline(pagesStore.currentPage.id)
+		return pagesStore.hasOutline(pagesStore.currentPageId)
 	})
 
 	const scrollToLocationHash = () => {
@@ -104,7 +104,9 @@ export function useEditor(davContent) {
 			},
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
 		})
-		editor.value = await editorPromise
+
+		// Use markRaw to prevent Vue 3 from proxying the Vue 2 editor instance
+		editor.value = markRaw(await editorPromise)
 	}
 
 	return {
