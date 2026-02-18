@@ -51,28 +51,8 @@ describe('Page link preview handling', function() {
 			.should('have.length', 4)
 	})
 
-	let shareUrl
-
 	it('Share the collective', function() {
-		cy.visit({
-			url: '/apps/collectives',
-			onBeforeLoad(win) {
-				// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
-				if (!win.navigator.clipboard) {
-					win.navigator.clipboard = {
-						__proto__: {
-							writeText: () => {
-							},
-						},
-					}
-				}
-				// overwrite navigator.clipboard.writeText with cypress stub
-				cy.stub(win.navigator.clipboard, 'writeText', (text) => {
-					shareUrl = text
-				})
-					.as('clipBoardWriteText')
-			},
-		})
+		cy.stubClipboardAndVisit('/apps/collectives')
 		cy.openCollectiveMenu('Link Preview Testing')
 		cy.clickMenuButton('Share link')
 		cy.intercept('POST', '**/api/v1.0/collectives/*/shares').as('createShare')
@@ -88,12 +68,12 @@ describe('Page link preview handling', function() {
 		cy.wait('@updateShare')
 		cy.get('button.sharing-entry__copy')
 			.click()
-		cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+		cy.getClipboardText().as('shareUrl')
 	})
 
 	it('Public share: Shows previews in view and edit mode', function() {
 		cy.logout()
-		cy.visit(`${shareUrl}/Link Source`)
+		cy.visit(`${this.shareUrl}/Link Source`)
 
 		cy.getEditorContent()
 			.find('.widget-custom a.collective-page')

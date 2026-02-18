@@ -4,8 +4,6 @@
  */
 
 describe('Page share', function() {
-	let shareUrl
-
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Share me')
@@ -17,24 +15,7 @@ describe('Page share', function() {
 
 	it('Allows sharing a page', function() {
 		cy.loginAs('bob')
-		cy.visit({
-			url: '/apps/collectives',
-			onBeforeLoad(win) {
-				// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
-				if (!win.navigator.clipboard) {
-					win.navigator.clipboard = {
-						__proto__: {
-							writeText: () => {},
-						},
-					}
-				}
-				// overwrite navigator.clipboard.writeText with cypress stub
-				cy.stub(win.navigator.clipboard, 'writeText', (text) => {
-					shareUrl = text
-				})
-					.as('clipBoardWriteText')
-			},
-		})
+		cy.stubClipboardAndVisit('/apps/collectives')
 		cy.openCollective('Share me')
 		cy.openPage('Sharepage')
 		cy.get('button.app-sidebar__toggle').click()
@@ -49,11 +30,11 @@ describe('Page share', function() {
 		cy.get('button.sharing-entry__copy')
 			.click()
 		cy.get('.toast-success').should('contain', 'Link copied')
-		cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+		cy.getClipboardText().as('shareUrl')
 	})
 	it('Allows opening a shared (non-editable) page', function() {
 		cy.logout()
-		cy.visit(shareUrl)
+		cy.visit(this.shareUrl)
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Sharepage')
 		cy.get('button.titleform-button').should('not.exist')
 		cy.getReadOnlyEditor()
@@ -101,7 +82,7 @@ describe('Page share', function() {
 	})
 	it('Opening unshared page fails', function() {
 		cy.logout()
-		cy.visit({ url: shareUrl, failOnStatusCode: false })
+		cy.visit({ url: this.shareUrl, failOnStatusCode: false })
 		cy.get('.body-login-container').contains(/(File|Page|Share) not found/)
 	})
 })

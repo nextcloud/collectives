@@ -4,8 +4,6 @@
  */
 
 describe('Collective share', function() {
-	let shareUrl
-
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Share me')
@@ -13,24 +11,7 @@ describe('Collective share', function() {
 
 	it('Allows sharing a collective', function() {
 		cy.loginAs('bob')
-		cy.visit({
-			url: '/apps/collectives',
-			onBeforeLoad(win) {
-				// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
-				if (!win.navigator.clipboard) {
-					win.navigator.clipboard = {
-						__proto__: {
-							writeText: () => {},
-						},
-					}
-				}
-				// overwrite navigator.clipboard.writeText with cypress stub
-				cy.stub(win.navigator.clipboard, 'writeText', (text) => {
-					shareUrl = text
-				})
-					.as('clipBoardWriteText')
-			},
-		})
+		cy.stubClipboardAndVisit('apps/collectives')
 		cy.openCollectiveMenu('Share me')
 		cy.clickMenuButton('Share link')
 		cy.intercept('POST', '**/api/v1.0/collectives/*/shares').as('createShare')
@@ -43,11 +24,11 @@ describe('Collective share', function() {
 		cy.get('button.sharing-entry__copy')
 			.click()
 		cy.get('.toast-success').should('contain', 'Link copied')
-		cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+		cy.getClipboardText().as('shareUrl')
 	})
 	it('Allows opening a shared (non-editable) collective', function() {
 		cy.logout()
-		cy.visit(shareUrl)
+		cy.visit(this.shareUrl)
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Share me')
 		cy.get('button.titleform-button').should('not.exist')
 		cy.getReadOnlyEditor()
@@ -75,7 +56,7 @@ describe('Collective share', function() {
 	})
 	it('Allows opening and editing a shared (editable) collective', function() {
 		cy.logout()
-		cy.visit(shareUrl)
+		cy.visit(this.shareUrl)
 		// Do some handstands to ensure that new page with editor is loaded before we edit the title
 		cy.intercept('POST', '**/api/v1.0/p/collectives/*/pages/*').as('createPage')
 		cy.intercept('PUT', '**/apps/text/public/session/*/create').as('textCreateSession')
@@ -99,7 +80,7 @@ describe('Collective share', function() {
 	})
 	it('Allows using the page list filter', function() {
 		cy.logout()
-		cy.visit(shareUrl)
+		cy.visit(this.shareUrl)
 		cy.intercept('GET', '**/api/v1.0/p/collectives/*/search?**').as('searchCollective')
 		cy.get('input[name="pageFilter"]')
 			.type('page')
@@ -127,7 +108,7 @@ describe('Collective share', function() {
 	})
 	it('Opening unshared collective fails', function() {
 		cy.logout()
-		cy.visit({ url: shareUrl, failOnStatusCode: false })
+		cy.visit({ url: this.shareUrl, failOnStatusCode: false })
 		cy.get('.body-login-container').contains(/(File|Page|Share) not found/)
 	})
 })
