@@ -9,7 +9,7 @@
 		class="version"
 		:class="{ active: isSelected }"
 		:active="isSelected"
-		:force-display-actions="true"
+		:forceDisplayActions="true"
 		:actions-aria-label="t('collectives', 'Actions for versions from {versionHumanExplicitDate}', { versionHumanExplicitDate })"
 		@click="$emit('click')">
 		<!-- Icon -->
@@ -17,12 +17,12 @@
 			<NcLoadingIcon
 				v-if="isLoading"
 				:size="26"
-				fill-color="var(--color-main-background)"
+				fillColor="var(--color-main-background)"
 				class="version-icon version-icon__loading" />
 			<PageIcon
 				v-else
 				:size="26"
-				fill-color="var(--color-main-background)"
+				fillColor="var(--color-main-background)"
 				class="version-icon version-icon__page" />
 		</template>
 
@@ -43,9 +43,9 @@
 						class="avatar"
 						:user="version.author"
 						:size="20"
-						disable-menu
-						disable-tooltip
-						:hide-status="true" />
+						disableMenu
+						disableTooltip
+						:hideStatus="true" />
 					<div>{{ versionAuthor }}</div>
 				</div>
 			</div>
@@ -56,7 +56,7 @@
 			<div class="version-info version-info__subline">
 				<NcDateTime
 					class="version-info__date"
-					relative-time="short"
+					relativeTime="short"
 					:timestamp="version.mtime" />
 				<!-- separate dot to improve alignment -->
 				<span>•</span>
@@ -67,7 +67,7 @@
 		<!-- Actions -->
 		<template #actions>
 			<NcActionButton
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="$emit('start-label-update')">
 				<template #icon>
 					<PencilIcon :size="22" />
@@ -76,7 +76,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isCurrent"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="$emit('compare')">
 				<template #icon>
 					<FileCompareIcon :size="22" />
@@ -85,7 +85,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isCurrent && canEdit"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="$emit('restore')">
 				<template #icon>
 					<BackupRestoreIcon :size="22" />
@@ -94,7 +94,7 @@
 			</NcActionButton>
 			<NcActionLink
 				:href="version.source"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:download="version.source">
 				<template #icon>
 					<DownloadIcon :size="22" />
@@ -103,7 +103,7 @@
 			</NcActionLink>
 			<NcActionButton
 				v-if="!isCurrent && canEdit"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="$emit('delete')">
 				<template #icon>
 					<DeleteIcon :size="22" />
