@@ -33,7 +33,7 @@
 				{{ richObject.lastEdited }}
 				<NcUserBubble
 					:user="richObject.page.lastUserId"
-					:display-name="richObject.page.lastUserDisplayName" />
+					:displayName="richObject.page.lastUserDisplayName" />
 			</div>
 		</div>
 	</a>

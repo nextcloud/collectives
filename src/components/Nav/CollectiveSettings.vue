@@ -7,13 +7,13 @@
 	<NcAppSettingsDialog
 		v-model:open="showSettings"
 		:name="t('collectives', 'Collective settings')"
-		:show-navigation="true">
+		:showNavigation="true">
 		<NcAppSettingsSection id="name-and-emoji" :name="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
 				<NcEmojiPicker
-					:show-preview="true"
-					:allow-unselect="true"
-					:selected-emoji="collective.emoji"
+					:showPreview="true"
+					:allowUnselect="true"
+					:selectedEmoji="collective.emoji"
 					@select="updateEmoji"
 					@unselect="unselectEmoji">
 					<NcButton
@@ -32,12 +32,12 @@
 					v-model="newCollectiveName"
 					:label="t('collectives', 'Name of the collective')"
 					:error="isNameTooShort"
-					:show-trailing-button="!isNameTooShort"
-					trailing-button-icon="arrowEnd"
+					:showTrailingButton="!isNameTooShort"
+					trailingButtonIcon="arrowEnd"
 					class="collective-name-input"
 					@blur="renameCollective()"
 					@keypress.enter.prevent="renameCollective()"
-					@trailing-button-click="renameCollective()" />
+					@trailingButtonClick="renameCollective()" />
 			</div>
 			<div class="collective-name-error-placeholder">
 				<div v-if="getNameError" class="collective-name-error">

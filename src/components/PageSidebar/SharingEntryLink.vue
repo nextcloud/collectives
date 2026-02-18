@@ -7,8 +7,8 @@
 	<li class="sharing-entry sharing-entry__link">
 		<div class="sharing-entry__entry">
 			<NcAvatar
-				:is-no-user="true"
-				icon-class="avatar-link-share icon-public-white"
+				:isNoUser="true"
+				iconClass="avatar-link-share icon-public-white"
 				class="sharing-entry__avatar" />
 
 			<div class="sharing-entry__summary">
@@ -78,7 +78,7 @@
 				v-model:open="open"
 				class="sharing-entry__pending_actions"
 				:aria-label="actionsTooltip"
-				menu-align="right"
+				menuAlign="right"
 				@close="onCancelPending">
 				<NcActionText>
 					<template #icon>
@@ -105,7 +105,7 @@
 					v-model="pendingPassword"
 					autocomplete="new-password"
 					:error="passwordError"
-					:helper-text="errorPasswordLabel"
+					:helperText="errorPasswordLabel"
 					:required="isPasswordEnforced"
 					:minlength="passwordPolicy.minLength ?? 0"
 					:label="t('collectives', 'Password')"
@@ -131,7 +131,7 @@
 				v-model:open="open"
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
-				menu-align="right"
+				menuAlign="right"
 				:disabled="!networkOnline"
 				:title="offlineTitle">
 				<template v-if="share">
@@ -142,7 +142,7 @@
 						{{ t('collectives', 'Add another link') }}
 					</NcActionButton>
 
-					<NcActionButton class="new-share-link" :close-after-click="true" @click.prevent.stop="toggleSettings">
+					<NcActionButton class="new-share-link" :closeAfterClick="true" @click.prevent.stop="toggleSettings">
 						<template #icon>
 							<CogIcon :size="20" />
 						</template>
@@ -181,9 +181,9 @@
 			<NcPasswordField
 				v-if="isPasswordProtected"
 				autocomplete="new-password"
-				:model-value="hasUnsavedPassword ? share.newPassword : ''"
+				:modelValue="hasUnsavedPassword ? share.newPassword : ''"
 				:error="passwordError"
-				:helper-text="errorPasswordLabel"
+				:helperText="errorPasswordLabel"
 				:required="isPasswordEnforced"
 				:minlength="passwordPolicy.minLength ?? 0"
 				:label="t('collectives', 'Password')"
