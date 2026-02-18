@@ -255,6 +255,58 @@ export const usePagesStore = defineStore('pages', {
 			return state.favoritePages.length > 0
 		},
 
+		currentSortedSubpagesByParentId(state) {
+			// Group subpages by parentId
+			const subpagesByParent = new Map()
+			for (const page of state.currentPages) {
+				if (!subpagesByParent.has(page.parentId)) {
+					subpagesByParent.set(page.parentId, [])
+				}
+				subpagesByParent.get(page.parentId).push(page)
+			}
+
+			// Sort each group by subpageOrder
+			const sortedByParent = new Map()
+			for (const [parentId, subpages] of subpagesByParent) {
+				const parentPage = state.currentPages.find((p) => p.id === parentId)
+				const customOrder = parentPage?.subpageOrder || []
+				const sorted = subpages
+					// add the index from customOrder
+					.map((p) => ({ ...p, index: customOrder.indexOf(p.id) }))
+					// sort by user setting
+					.sort(state.sortOrder)
+				sortedByParent.set(parentId, sorted)
+			}
+			return sortedByParent
+		},
+
+		sortedSubpagesByParentId(state) {
+			return (collective) => {
+				// Group subpages by parentId
+				const subpagesByParent = new Map()
+				for (const page of state.pages(collective)) {
+					if (!subpagesByParent.has(page.parentId)) {
+						subpagesByParent.set(page.parentId, [])
+					}
+					subpagesByParent.get(page.parentId).push(page)
+				}
+
+				// Sort each group by subpageOrder
+				const sortedByParent = new Map()
+				for (const [parentId, subpages] of subpagesByParent) {
+					const parentPage = state.pages(collective).find((p) => p.id === parentId)
+					const customOrder = parentPage?.subpageOrder || []
+					const sorted = subpages
+						// add the index from customOrder
+						.map((p) => ({ ...p, index: customOrder.indexOf(p.id) }))
+						// sort by user setting
+						.sort(state.sortOrder)
+					sortedByParent.set(parentId, sorted)
+				}
+				return sortedByParent
+			}
+		},
+
 		sortedSubpages(state) {
 			return (collective, parentId, sortOrder = null) => {
 				const parentPage = state.pages(collective).find((p) => p.id === parentId)
@@ -270,8 +322,11 @@ export const usePagesStore = defineStore('pages', {
 
 		currentSortedSubpages(state) {
 			return (parentId, sortOrder) => {
-				const collectivesStore = useCollectivesStore()
-				return state.sortedSubpages(collectivesStore.currentCollective, parentId, sortOrder)
+				if (sortOrder) {
+					const collectivesStore = useCollectivesStore()
+					return state.sortedSubpages(collectivesStore.currentCollective, parentId, sortOrder)
+				}
+				return state.sortedSubpagesByParentId.get(parentid) || []
 			}
 		},
 
@@ -288,7 +343,7 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		visibleSubpages: (state) => (parentId) => {
-			return state.currentSortedSubpages(parentId)
+			return state.currentSortedSubpagesByParentId.get(parentId) || []
 		},
 
 		pagesTreeWalk: (state) => (parentId = 0) => {
