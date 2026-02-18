@@ -364,9 +364,11 @@ export default {
 		},
 
 		onNewPage() {
-			this.hasTemplates
-				? this.setNewPageParentId(this.pageId)
-				: this.newPage(this.pageId)
+			if (this.hasTemplates) {
+				this.setNewPageParentId(this.pageId)
+			} else {
+				this.newPage(this.pageId)
+			}
 		},
 
 		onDragstart(event) {
