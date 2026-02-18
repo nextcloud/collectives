@@ -96,6 +96,8 @@
 				:pageId="currentPage.id"
 				:parentId="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
+				:fileName="currentPage.fileName"
+				:davUrl="pageDavUrl(currentPage)"
 				:lastUserId="currentPage.lastUserId"
 				:lastUserDisplayName="currentPage.lastUserDisplayName"
 				:isLandingPage
@@ -181,6 +183,7 @@ export default {
 			'isIndexPage',
 			'isLandingPage',
 			'isTextEdit',
+			'pageDavUrl',
 		]),
 
 		titleChanged() {

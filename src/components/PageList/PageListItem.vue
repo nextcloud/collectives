@@ -78,6 +78,8 @@
 				:pageUrl="to"
 				:parentId
 				:timestamp
+				:fileName
+				:davUrl
 				:lastUserId
 				:lastUserDisplayName
 				:isLandingPage
@@ -159,6 +161,16 @@ export default {
 
 		timestamp: {
 			type: Number,
+			required: true,
+		},
+
+		fileName: {
+			type: String,
+			required: true,
+		},
+
+		davUrl: {
+			type: String,
 			required: true,
 		},
 

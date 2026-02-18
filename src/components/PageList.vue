@@ -118,6 +118,8 @@
 				:parentId="0"
 				:title="currentCollectiveIsPageShare ? rootPage.title : currentCollective.name"
 				:timestamp="rootPage.timestamp"
+				:fileName="rootPage.fileName"
+				:davUrl="pageDavUrl(rootPage)"
 				:lastUserId="rootPage.lastUserId"
 				:lastUserDisplayName="rootPage.lastUserDisplayName"
 				:emoji="currentCollectiveIsPageShare ? rootPage.emoji : currentCollective.emoji"
@@ -319,6 +321,7 @@ export default {
 			'visibleSubpages',
 			'sortByOrder',
 			'allPagesSorted',
+			'pageDavUrl',
 		]),
 
 		allPagesSortedCached() {
