@@ -338,17 +338,13 @@ export const usePagesStore = defineStore('pages', {
 					const collectivesStore = useCollectivesStore()
 					return state.sortedSubpages(collectivesStore.currentCollective, parentId, sortOrder)
 				}
-				return state.sortedSubpagesByParentId.get(parentid) || []
+				return state.currentSortedSubpagesByParentId.get(parentId) || []
 			}
-		},
-
-		visibleSubpages: (state) => (parentId) => {
-			return state.currentSortedSubpagesByParentId.get(parentId) || []
 		},
 
 		pagesTreeWalk: (state) => (parentId = 0) => {
 			const pages = []
-			for (const page of state.visibleSubpages(parentId)) {
+			for (const page of state.currentSortedSubpagesByParentId.get(parentId)) {
 				pages.push(page)
 				for (const subpage of state.pagesTreeWalk(page.id)) {
 					pages.push(subpage)
@@ -723,7 +719,7 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
-			const hasSubpages = this.visibleSubpages(pageId).length > 0
+			const hasSubpages = this.currentSortedSubpagesByParentId.get(pageId).length > 0
 
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
@@ -783,7 +779,7 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
-			const hasSubpages = this.visibleSubpages(pageId).length > 0
+			const hasSubpages = this.currentSortedSubpagesByParentId.get(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
 			removeFrom(this.allPages[this.currentCollectiveIndex], page)

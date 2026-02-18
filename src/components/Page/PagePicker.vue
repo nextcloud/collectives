@@ -216,7 +216,6 @@ export default {
 			'pageParents',
 			'pages',
 			'sortedSubpagesByParentId',
-			'visibleSubpages',
 		]),
 
 		isActionButtonsDisabled() {
@@ -245,7 +244,7 @@ export default {
 
 			let pages
 			if (this.isCurrentCollective) {
-				pages = this.visibleSubpages(this.selectedPageId)
+				pages = this.currentSortedSubpagesByParentId.get(this.selectedPageId) || []
 			} else {
 				pages = this.sortedSubpagesByParentId(this.selectedCollective).get(this.selectedPageId)
 			}

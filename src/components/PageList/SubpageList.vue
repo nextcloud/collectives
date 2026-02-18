@@ -87,7 +87,7 @@ export default {
 			'pagePath',
 			'currentPageIds',
 			'keptSortable',
-			'visibleSubpages',
+			'currentSortedSubpagesByParentId',
 			'isCollapsed',
 			'pageDavUrl',
 		]),
@@ -99,13 +99,13 @@ export default {
 
 		subpagesView() {
 			if (this.showSubpages) {
-				return this.visibleSubpages(this.page.id)
+				return this.currentSortedSubpagesByParentId.get(this.page.id)
 			}
 			return []
 		},
 
 		hasVisibleSubpages() {
-			return !!this.visibleSubpages(this.page.id).length
+			return !!this.currentSortedSubpagesByParentId.get(this.page.id)?.length
 		},
 
 		disableSorting() {
