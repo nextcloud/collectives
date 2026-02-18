@@ -141,7 +141,7 @@ export default {
 		subscribe('collectives:attachment:restore', this.restoreAttachment)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('collectives:attachment:restore', this.restoreAttachment)
 		this.textEditWatcher()
 	},

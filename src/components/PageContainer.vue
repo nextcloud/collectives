@@ -102,7 +102,7 @@ export default {
 		listen('notify_file', this.getAttachmentsForPage.bind(this))
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
 		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
 		unsubscribe('collectives:page-sidebar', this.toggleSidebar)

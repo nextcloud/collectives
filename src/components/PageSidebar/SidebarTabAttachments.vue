@@ -300,7 +300,7 @@ export default {
 		subscribe('text:image-node:delete', this.onDeleteImageNode)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
 		unsubscribe('text:image-node:delete', this.onDeleteImageNode)
 	},

@@ -224,7 +224,7 @@ export default {
 		subscribe('collectives:page:open-emoji-picker', this.openPageEmojiPicker)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('collectives:page:open-emoji-picker', this.openPageEmojiPicker)
 	},
 
