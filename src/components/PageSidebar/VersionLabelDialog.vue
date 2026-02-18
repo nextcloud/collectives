@@ -5,8 +5,8 @@
 
 <template>
 	<NcDialog
-		content-classes="version-label-modal"
-		is-form
+		contentClasses="version-label-modal"
+		isForm
 		:open="open"
 		size:normal
 		:name="t('collectives', 'Name this version')"

@@ -19,7 +19,7 @@
 		<NcDialog
 			v-model:open="showModal"
 			:name="t('collectives', 'Deleted pages')"
-			close-on-click-outside
+			:closeOnClickOutside="true"
 			class="dialog__page-trash"
 			size="large">
 			<div class="modal__content">
@@ -56,7 +56,7 @@
 										<div v-if="trashPage.emoji">
 											{{ trashPage.emoji }}
 										</div>
-										<PageIcon v-else :size="22" fill-color="var(--color-background-darker)" />
+										<PageIcon v-else :size="22" fillColor="var(--color-background-darker)" />
 									</div>
 									<div class="item-title">
 										{{ trashPage.title }}
@@ -72,9 +72,9 @@
 										</template>
 										{{ t('collectives', 'Restore') }}
 									</NcButton>
-									<NcActions :force-menu="true">
+									<NcActions :forceMenu="true">
 										<NcActionButton
-											:close-after-click="true"
+											:closeAfterClick="true"
 											:disabled="!networkOnline"
 											@click="onClickDelete(trashPage)">
 											<template #icon>
