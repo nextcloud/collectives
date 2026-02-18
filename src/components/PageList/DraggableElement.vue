@@ -4,17 +4,16 @@
 -->
 
 <template>
-	<draggable
-		:list="list"
-		:component-data="getComponentData()"
+	<VueDraggable
+		:modelValue="list"
 		:data-parent-id="parentId"
 		:disabled="disabled"
 		:group="{ name: 'page-list', pull: true, put: true }"
 		draggable=".page-list-drag-item"
 		filter=".page-list-nodrag-item"
 		:sort="allowSorting"
-		:revert-on-spill="revertOnSpill"
-		:fallback-tolerance="5"
+		:revertOnSpill="true"
+		:fallbackTolerance="5"
 		:animation="200"
 		:delay="500"
 		:delay-on-touch-only="true"
@@ -24,7 +23,8 @@
 		:empty-insert-threshold="4"
 		direction="vertical"
 		:set-data="setData"
-		:move="onMove"
+		@change="onChange"
+		@move="onMove"
 		@update="onUpdate"
 		@add="onAdd"
 		@end="onEnd">
@@ -32,12 +32,12 @@
 			<slot name="header" />
 		</template>
 		<slot />
-	</draggable>
+	</VueDraggable>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia'
-import draggable from 'vuedraggable'
+import { VueDraggable } from 'vue-draggable-plus'
 import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'
 
@@ -45,8 +45,7 @@ export default {
 	name: 'DraggableElement',
 
 	components: {
-		/* eslint-disable-next-line vue/component-options-name-casing */
-		draggable,
+		VueDraggable,
 	},
 
 	mixins: [
@@ -95,12 +94,6 @@ export default {
 				|| this.sortableActive
 				// Disable if disabled by parent component (e.g. in filtered view)
 				|| this.disableSorting
-		},
-
-		revertOnSpill() {
-			// TODO: revertOnSpill on nested sublists is broken with `sort: false`
-			//       see https://github.com/SortableJS/Sortable/issues/2177
-			return this.allowSorting
 		},
 	},
 
