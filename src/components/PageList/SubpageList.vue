@@ -86,6 +86,7 @@ export default {
 		...mapState(usePagesStore, [
 			'pagePath',
 			'currentPageIds',
+			'hasSubpages',
 			'keptSortable',
 			'currentSortedSubpagesByParentId',
 			'isCollapsed',
@@ -105,7 +106,7 @@ export default {
 		},
 
 		hasVisibleSubpages() {
-			return !!this.currentSortedSubpagesByParentId.get(this.page.id)?.length
+			return this.hasSubpages(this.page.id)
 		},
 
 		disableSorting() {
