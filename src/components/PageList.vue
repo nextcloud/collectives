@@ -128,7 +128,7 @@
 				:filtered-view="false"
 				:network-online="networkOnline"
 				class="page-list-root-page"
-				@click.native="show('details')" />
+				@click="show('details')" />
 
 			<!-- Sort order container (optional) -->
 			<div v-if="!sortedBy('byOrder')" class="sort-order-container">

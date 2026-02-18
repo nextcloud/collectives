@@ -5,7 +5,7 @@
 
 <template>
 	<div>
-		<NcActions :force-menu="true" @click.native.stop>
+		<NcActions :force-menu="true" @click.stop>
 			<!-- Collective actions: only displayed for landing page -->
 			<template v-if="isLandingPage">
 				<CollectiveActions :collective="currentCollective" :network-online="networkOnline" />
@@ -47,7 +47,7 @@
 				</NcActionCheckbox>
 				<NcActionButton
 					:close-after-click="true"
-					@click.native="toggleOutline(currentPage.id)">
+					@click="toggleOutline(currentPage.id)">
 					<template #icon>
 						<FormatListBulletedIcon :size="20" />
 					</template>
@@ -73,8 +73,7 @@
 			<NcActionButton
 				v-if="currentCollectiveCanShare && !isLandingPage"
 				:close-after-click="true"
-				@click.native="show('details')"
-				@click="openShareTab">
+				@click="show('details')">
 				<template #icon>
 					<ShareVariantIcon :size="20" />
 				</template>
@@ -86,7 +85,6 @@
 				v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				:disabled="!networkOnline"
-				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
 				<template #icon>
 					<EmoticonIcon :size="20" />
@@ -352,6 +350,7 @@ export default {
 		},
 
 		openShareTab() {
+			this.show('details')
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
 				this.$router.push(this.pageUrl)
 			}
@@ -362,6 +361,7 @@ export default {
 		},
 
 		gotoPageEmojiPicker() {
+			this.show('details')
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
 				this.$router.push(this.pageUrl)
 			}
