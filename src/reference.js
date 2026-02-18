@@ -3,17 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
+import { createApp } from 'vue'
 import { registerWidget } from '@nextcloud/vue/components/NcRichText'
 import PageReferenceWidget from './views/PageReferenceWidget.vue'
 
 registerWidget('collectives_page', (el, { richObjectType, richObject, accessible }) => {
-	const Widget = Vue.extend(PageReferenceWidget)
-	new Widget({
-		propsData: {
-			richObjectType,
-			richObject,
-			accessible,
-		},
-	}).$mount(el)
+	createApp(PageReferenceWidget, {
+		richObjectType,
+		richObject,
+		accessible,
+	}).mount(el)
 })
