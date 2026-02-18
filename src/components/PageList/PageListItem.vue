@@ -259,7 +259,7 @@ export default {
 			'highlightPageId',
 			'isDragoverTargetPage',
 			'pageParent',
-			'pageParents',
+			'currentPageParents',
 		]),
 
 		...mapState(useTemplatesStore, ['hasTemplates']),
@@ -322,7 +322,7 @@ export default {
 				// Ignore if inside favorite list
 				&& !this.inFavoriteList
 				// Ignore if dragged element is a parent of self
-				&& !this.pageParents(this.pageId).includes(this.draggedPageId)
+				&& !this.currentPageParents(this.pageId).includes(this.draggedPageId)
 		},
 
 		isDropTarget() {

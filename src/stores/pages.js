@@ -304,7 +304,7 @@ export const usePagesStore = defineStore('pages', {
 			return state.currentPages.find((p) => (p.id === pageId)).parentId
 		},
 
-		pageParentsForCollective(state) {
+		pageParents(state) {
 			return (collective, pageId) => {
 				const pages = []
 				while (pageId !== state.rootPage.id) {
@@ -319,10 +319,10 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		pageParents(state) {
+		currentPageParents(state) {
 			return (pageId) => {
 				const collectivesStore = useCollectivesStore()
-				return state.pageParentsForCollective(collectivesStore.currentCollective, pageId)
+				return state.pageParents(collectivesStore.currentCollective, pageId)
 			}
 		},
 
@@ -497,7 +497,7 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		expandParents(pageId) {
-			for (const page of this.pageParents(pageId)) {
+			for (const page of this.currentPageParents(pageId)) {
 				this.expand(page.id)
 			}
 		},

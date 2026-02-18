@@ -212,8 +212,8 @@ export default {
 		...mapState(usePagesStore, [
 			'rootPage',
 			'pageById',
+			'currentPageParents',
 			'pageParents',
-			'pageParentsForCollective',
 			'pages',
 			'sortedSubpages',
 			'visibleSubpages',
@@ -260,8 +260,8 @@ export default {
 
 		pageCrumbs() {
 			return this.isCurrentCollective
-				? this.pageParents(this.selectedPageId)
-				: this.pageParentsForCollective(this.selectedCollective, this.selectedPageId)
+				? this.currentPageParents(this.selectedPageId)
+				: this.pageParents(this.selectedCollective, this.selectedPageId)
 		},
 
 		collectivesCrumbString() {
