@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createPinia, PiniaVuePlugin } from 'pinia'
-import Vue from 'vue'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
 import CollectivesApp from './CollectivesApp.vue'
 import router from './router.js'
 import registerServiceWorker from './util/registerServiceWorker.ts'
@@ -18,15 +18,12 @@ window.OCA.Collectives = {
 	vueRouter: router,
 }
 
-Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
 
-const app = new Vue({
-	el: '#content',
-	router,
-	pinia,
-	render: (h) => h(CollectivesApp),
-})
+const app = createApp(CollectivesApp)
+app.use(pinia)
+app.use(router)
+app.mount('#content')
 
 // Expose the app during E2E tests
 if (window.Cypress) {
