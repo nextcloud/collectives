@@ -238,7 +238,7 @@ export default {
 		...mapActions(useRootStore, ['done']),
 
 		...mapActions(usePagesStore, [
-			'getPages',
+			'getCurrentPages',
 			'renamePage',
 		]),
 
@@ -280,7 +280,7 @@ export default {
 				await this.renamePage(this.newTitle)
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
-				this.getPages(false)
+				this.getCurrentPages(false)
 				await this.$router.replace(this.currentPagePath)
 			} catch (e) {
 				console.error(e)

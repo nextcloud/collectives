@@ -324,7 +324,7 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(usePagesStore, ['getPagesForCollective']),
+		...mapActions(usePagesStore, ['getPages']),
 
 		scrollToPage() {
 			// Scroll current page into view (important when listing parent page)
@@ -371,7 +371,7 @@ export default {
 		async onClickCollective(collective) {
 			this.selectedCollective = collective
 			if (!this.isCurrentCollective) {
-				await this.getPagesForCollective(this.selectedCollective)
+				await this.getPages(this.selectedCollective)
 			}
 			this.selectedPageId = this.selectedRootPage.id
 			// Reset reordered pages when changing collective

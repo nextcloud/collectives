@@ -528,7 +528,7 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {object} collective The collective
 		 * @param {boolean} setLoading Whether to set loading pagelist
 		 */
-		async getPagesForCollective(collective, setLoading = true) {
+		async getPages(collective, setLoading = true) {
 			const rootStore = useRootStore()
 			if (setLoading && this.pages(collective).length === 0) {
 				rootStore.load(`pagelist-${collective.id}`)
@@ -548,7 +548,7 @@ export const usePagesStore = defineStore('pages', {
 		 *
 		 * @param {boolean} setLoading Whether to set loading pagelist
 		 */
-		async getPages(setLoading = true) {
+		async getCurrentPages(setLoading = true) {
 			const rootStore = useRootStore()
 			if (setLoading && !this.pagesLoaded) {
 				rootStore.load('pagelist')
@@ -648,7 +648,7 @@ export const usePagesStore = defineStore('pages', {
 			try {
 				await api.copyPage(this.context, pageId, newParentId, index)
 				// Reload the page list to make new page appear
-				await this.getPages(false)
+				await this.getCurrentPages(false)
 			} finally {
 				rootStore.done('pagelist-nodrag')
 			}
@@ -692,7 +692,7 @@ export const usePagesStore = defineStore('pages', {
 
 			// Reload the page list if moved page had subpages (to get their updated paths)
 			if (hasSubpages) {
-				await this.getPages(false)
+				await this.getCurrentPages(false)
 			}
 		},
 
@@ -734,7 +734,7 @@ export const usePagesStore = defineStore('pages', {
 
 			// Reload the page list if moved page had subpages (to remove subpages as well)
 			if (hasSubpages) {
-				await this.getPages(false)
+				await this.getCurrentPages(false)
 			}
 		},
 

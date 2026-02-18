@@ -126,7 +126,7 @@ export default {
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(useTagsStore, ['getTags']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
-		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
+		...mapActions(usePagesStore, ['getCurrentPages', 'getTrashPages']),
 
 		initSession() {
 			if (this.listenPush) {
@@ -207,7 +207,7 @@ export default {
 			}
 
 			try {
-				await this.getPages(setLoading)
+				await this.getCurrentPages(setLoading)
 			} catch (e) {
 				displayError('Could not fetch collective pages')(e)
 				return

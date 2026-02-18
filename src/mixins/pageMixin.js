@@ -38,7 +38,7 @@ export default {
 			'addToSubpageOrder',
 			'deleteFromSubpageOrder',
 			'updateSubpageOrder',
-			'getPages',
+			'getCurrentPages',
 			'createPage',
 			'setPageEmoji',
 			'setPageSubpageOrder',
@@ -73,7 +73,7 @@ export default {
 			this.$nextTick(() => scrollToPage(this.newPageId))
 
 			// Parents location changes when the first subpage is created.
-			this.getPages(false)
+			this.getCurrentPages(false)
 		},
 
 		/**

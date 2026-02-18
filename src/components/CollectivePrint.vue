@@ -119,7 +119,7 @@ export default {
 	},
 
 	async mounted() {
-		await this.getPages()
+		await this.getCurrentPages()
 			.catch(displayError('Could not fetch pages'))
 		this.loadPages.total = this.pagesTreeWalk().length
 	},
@@ -127,7 +127,7 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(usePagesStore, ['getPages']),
+		...mapActions(usePagesStore, ['getCurrentPages']),
 
 		ready(pageId) {
 			if (this.waitingFor.indexOf(pageId) >= 0) {
