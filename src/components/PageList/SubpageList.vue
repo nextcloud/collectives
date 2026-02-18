@@ -20,7 +20,7 @@
 			:has-visible-subpages="hasVisibleSubpages"
 			:filtered-view="filteredView"
 			:network-online="networkOnline"
-			@click.native="show('details')" />
+			@click="show('details')" />
 		<div class="page-list-indent">
 			<DraggableElement
 				v-if="subpagesView.length > 0 || keptSortable(page.id)"
