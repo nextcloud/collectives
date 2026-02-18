@@ -23,6 +23,7 @@ const pinia = createPinia()
 const app = createApp(CollectivesApp)
 app.use(pinia)
 app.use(router)
+await router.isReady()
 app.mount('#content')
 
 // Expose the app during E2E tests
