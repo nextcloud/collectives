@@ -246,7 +246,7 @@ export const usePagesStore = defineStore('pages', {
 		favoritePages(state) {
 			const collectivesStore = useCollectivesStore()
 			const favoritePages = collectivesStore.currentCollective.userFavoritePages
-			return state.allPagesSorted(state.rootPage.id).filter((p) => favoritePages.includes(p.id))
+			return state.allCurrentSortedPages.filter((p) => favoritePages.includes(p.id))
 		},
 
 		hasFavoritePages(state) {
@@ -276,6 +276,20 @@ export const usePagesStore = defineStore('pages', {
 				sortedByParent.set(parentId, sorted)
 			}
 			return sortedByParent
+		},
+
+		allCurrentSortedPages(state) {
+			const result = []
+			const addPageWithSubpages = (pageId) => {
+				const subpages = state.currentSortedSubpagesByParentId.get(pageId) || []
+				for (const page of subpages) {
+					result.push(page)
+					addPageWithSubpages(page.id)
+				}
+			}
+			// Start from root page (parentId === 0)
+			addPageWithSubpages(0)
+			return result
 		},
 
 		sortedSubpagesByParentId(state) {
@@ -326,18 +340,6 @@ export const usePagesStore = defineStore('pages', {
 				}
 				return state.sortedSubpagesByParentId.get(parentid) || []
 			}
-		},
-
-		allPagesSorted(state) {
-			const allSubPagesSorted = (pageId) => {
-				const res = []
-				state.currentSortedSubpages(pageId).forEach((element) => {
-					res.push(element)
-					res.push(...allSubPagesSorted(element.id))
-				})
-				return res
-			}
-			return allSubPagesSorted
 		},
 
 		visibleSubpages: (state) => (parentId) => {

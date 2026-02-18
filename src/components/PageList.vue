@@ -322,18 +322,12 @@ export default {
 			'hasFavoritePages',
 			'visibleSubpages',
 			'sortByOrder',
-			'allPagesSorted',
+			'allCurrentSortedPages',
 			'pageDavUrl',
 		]),
 
-		allPagesSortedCached() {
-			return this.rootPage
-				? this.allPagesSorted(this.rootPage.id)
-				: []
-		},
-
 		filteredPages() {
-			return this.allPagesSortedCached
+			return this.allCurrentSortedPages
 				// Filter by page title search string
 				.filter((p) => p.title.toLowerCase().includes(this.filterString.toLowerCase()))
 				// Filter by page tags
