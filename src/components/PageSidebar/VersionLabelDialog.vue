@@ -11,7 +11,7 @@
 		size:normal
 		:name="t('collectives', 'Name this version')"
 		@update:open="$emit('update:open', $event)"
-		@submit="$emit('label-update', editedVersionLabel)">
+		@submit="$emit('labelUpdate', editedVersionLabel)">
 		<NcTextField
 			ref="labelInput"
 			v-model="editedVersionLabel"
@@ -29,7 +29,7 @@
 				variant="error"
 				type="reset"
 				:aria-label="t('collectives', 'Remove version name')"
-				@click="$emit('label-update', '')">
+				@click="$emit('labelUpdate', '')">
 				{{ t('collectives', 'Remove version name') }}
 			</NcButton>
 			<NcButton
@@ -74,6 +74,11 @@ export default {
 			default: '',
 		},
 	},
+
+	emits: [
+		'labelUpdate',
+		'update:open',
+	],
 
 	data() {
 		return {
