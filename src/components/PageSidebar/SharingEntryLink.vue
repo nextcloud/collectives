@@ -181,7 +181,7 @@
 			<NcPasswordField
 				v-if="isPasswordProtected"
 				autocomplete="new-password"
-				:modelValue="hasUnsavedPassword ? share.newPassword : ''"
+				:modelValue="hasUnsavedPassword ? newPassword : ''"
 				:error="passwordError"
 				:helperText="errorPasswordLabel"
 				:required="isPasswordEnforced"
@@ -289,6 +289,7 @@ export default {
 			isPending: false,
 			isPendingPasswordProtected: true,
 			pendingPassword: '',
+			newPassword: '',
 		}
 	},
 
@@ -376,23 +377,20 @@ export default {
 
 		isPasswordProtected: {
 			get() {
-				return !!this.share.password
+				return !!this.share.password || !!this.newPassword
 			},
 
 			async set(enabled) {
 				if (enabled) {
-					const password = await this.generatePassword()
-					this.share.password = password
-					this.share.newPassword = password
+					this.newPassword = await this.generatePassword()
 				} else {
-					this.share.password = ''
-					delete this.share['newPassword']
+					this.newPassword = ''
 				}
 			},
 		},
 
 		hasUnsavedPassword() {
-			return this.share.newPassword !== undefined
+			return !!this.newPassword
 		},
 
 		errorPasswordLabel() {
@@ -557,27 +555,26 @@ export default {
 
 		async onPasswordChange(password) {
 			this.passwordError = !(password.trim())
-			this.share.newPassword = password
+			this.newPassword = password
 		},
 
 		cancelSettings() {
-			if (this.hasUnsavedPassword) {
-				delete this.share['newPassword']
-			}
+			this.newPassword = ''
 			this.showSettings = false
 		},
 
 		async saveSettings() {
+			const share = { ...this.share }
 			if (this.isPasswordProtected) {
 				if (this.hasUnsavedPassword) {
-					this.share.password = this.share.newPassword
-					delete this.share['newPassword']
+					share.password = this.newPassword
+					this.newPassword = ''
 				}
 			} else {
-				this.share.password = ''
+				share.password = ''
 			}
 
-			await this.onUpdate(this.share)
+			await this.onUpdate(share)
 			this.showSettings = false
 		},
 
