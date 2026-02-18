@@ -176,6 +176,7 @@ export default {
 
 		...mapState(usePagesStore, [
 			'currentPage',
+			'currentPageId',
 			'currentPagePath',
 			'isIndexPage',
 			'isLandingPage',
@@ -204,7 +205,7 @@ export default {
 		},
 
 		emojiButtonIsLoading() {
-			return this.loading(`pageEmoji-${this.currentPage.id}`)
+			return this.loading(`pageEmoji-${this.currentPageId}`)
 		},
 
 		pageTitleIconSize() {
@@ -217,7 +218,7 @@ export default {
 			document.title = this.documentTitle
 		},
 
-		'currentPage.id': function() {
+		currentPageId: function() {
 			this.initTitleEntry()
 		},
 	},
@@ -259,7 +260,7 @@ export default {
 		},
 
 		async onSelectEmoji(emoji) {
-			await this.setEmoji(this.currentPage.id, emoji)
+			await this.setEmoji(this.currentPageId, emoji)
 		},
 
 		onUnselectEmoji() {
