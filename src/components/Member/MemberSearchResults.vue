@@ -141,11 +141,11 @@ export default {
 		t,
 
 		async onClick(item) {
-			this.$set(this.loadingItems, `${item.source}-${item.id}`, true)
+			this.loadingItems[`${item.source}-${item.id}`] = true
 			try {
 				await this.onClickSearched(item)
 			} finally {
-				this.$delete(this.loadingItems, `${item.source}-${item.id}`)
+				delete this.loadingItems[`${item.source}-${item.id}`]
 			}
 		},
 

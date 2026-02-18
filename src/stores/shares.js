@@ -5,7 +5,6 @@
 
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { set } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
@@ -40,13 +39,13 @@ export const useSharesStore = defineStore('shares', {
 			const rootStore = useRootStore()
 			rootStore.load('shares')
 			const response = await api.getShares(this.collectiveId)
-			set(this.allShares, this.collectiveId, response.data.ocs.data)
+			this.allShares[this.collectiveId] = response.data.ocs.data
 			rootStore.done('shares')
 		},
 
 		_addOrUpdateShareState(share) {
 			if (!this.allShares[this.collectiveId]) {
-				set(this.allShares, this.collectiveId, [])
+				this.allShares[this.collectiveId] = []
 			}
 			const idx = this.shares.findIndex((s) => s.id === share.id)
 			if (idx === -1) {

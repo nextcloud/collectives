@@ -373,14 +373,14 @@ export default {
 		},
 
 		addMember(member) {
-			this.$set(this.selectedMembers, `${member.source}-${member.id}`, member)
+			this.selectedMembers[`${member.source}-${member.id}`] = member
 		},
 
 		deleteMember(member) {
 			if (member.source === 'users' && member.id === this.currentUserId) {
 				return
 			}
-			this.$delete(this.selectedMembers, `${member.source}-${member.id}`, member)
+			delete this.selectedMembers[`${member.source}-${member.id}`]
 		},
 
 		onClickSearched(member) {

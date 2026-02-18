@@ -5,7 +5,6 @@
 
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { set } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { memberLevels } from '../constants.js'
 import randomEmoji from '../util/randomEmoji.js'
@@ -199,7 +198,7 @@ export const useCollectivesStore = defineStore('collectives', {
 			try {
 				if (rootStore.isPublic) {
 					const response = await api.getSharedCollective(rootStore.shareTokenParam)
-					set(this.publicCollectivesState, rootStore.shareTokenParam, response.data.ocs.data.collectives[0])
+					this.publicCollectivesState[rootStore.shareTokenParam] = response.data.ocs.data.collectives[0]
 				} else {
 					const response = await api.getCollectives()
 					this.collectivesState = response.data.ocs.data.collectives
