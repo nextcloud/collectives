@@ -12,6 +12,8 @@
 			:parent-id="page.parentId"
 			:title="page.title"
 			:timestamp="page.timestamp"
+			:file-name="page.fileName"
+			:dav-url="pageDavUrl(page)"
 			:last-user-id="page.lastUserId"
 			:last-user-display-name="page.lastUserDisplayName"
 			:emoji="page.emoji"
@@ -87,6 +89,7 @@ export default {
 			'keptSortable',
 			'visibleSubpages',
 			'isCollapsed',
+			'pageDavUrl',
 		]),
 
 		showSubpages() {

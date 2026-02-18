@@ -120,9 +120,9 @@
 
 			<!-- Download action: always displayed -->
 			<NcActionLink
-				:href="pageDavUrl(pageById(pageId))"
+				:href="davUrl"
 				:class="{ 'action-link--disabled': !networkOnline }"
-				:download="pageById(pageId).fileName"
+				:download="fileName"
 				:close-after-click="true">
 				<template #icon>
 					<DownloadIcon :size="20" />
@@ -233,6 +233,16 @@ export default {
 			required: true,
 		},
 
+		fileName: {
+			type: String,
+			required: true,
+		},
+
+		davUrl: {
+			type: String,
+			required: true,
+		},
+
 		lastUserDisplayName: {
 			type: String,
 			default: null,
@@ -284,8 +294,6 @@ export default {
 		...mapState(usePagesStore, [
 			'hasOutline',
 			'hasSubpages',
-			'pageById',
-			'pageDavUrl',
 		]),
 
 		displaySidebarAction() {

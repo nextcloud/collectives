@@ -124,7 +124,7 @@ export const usePagesStore = defineStore('pages', {
 			let pageId = rootStore.pageId || rootStore.fileIdQuery
 			if (pageId) {
 				do {
-					const page = state.pageById(pageId)
+					const page = state.pages.find((p) => (p.id === pageId))
 					pageIds.unshift(page.id)
 					pageId = page.parentId
 				} while (pageId)
