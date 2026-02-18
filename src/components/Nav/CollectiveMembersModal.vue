@@ -43,6 +43,10 @@ export default {
 		},
 	},
 
+	emits: [
+		'close',
+	],
+
 	computed: {
 		...mapState(useCirclesStore, ['circleMembersSorted']),
 		...mapState(useCollectivesStore, ['isCollectiveAdmin']),
