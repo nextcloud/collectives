@@ -6,7 +6,6 @@
 import { getLanguage } from '@nextcloud/l10n'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { set } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
@@ -74,13 +73,13 @@ export const useTagsStore = defineStore('tags', {
 		 */
 		async getTags() {
 			const response = await api.getTags(this.context)
-			set(this.allTags, this.collectiveId, response.data.ocs.data.tags)
-			set(this.allTagsLoaded, this.collectiveId, true)
+			this.allTags[this.collectiveId] = response.data.ocs.data.tags
+			this.allTagsLoaded[this.collectiveId] = true
 		},
 
 		_addOrUpdateTagState(tag) {
 			if (!this.allTags[this.collectiveId]) {
-				set(this.allTags, this.collectiveId, [])
+				this.allTags[this.collectiveId] = []
 			}
 			const idx = this.tags.findIndex((t) => t.id === tag.id)
 			if (idx === -1) {

@@ -382,11 +382,11 @@ export default {
 			async set(enabled) {
 				if (enabled) {
 					const password = await this.generatePassword()
-					this.$set(this.share, 'password', password)
-					this.$set(this.share, 'newPassword', password)
+					this.share.password = password
+					this.share.newPassword = password
 				} else {
-					this.$set(this.share, 'password', '')
-					this.$delete(this.share, 'newPassword')
+					this.share.password = ''
+					delete this.share['newPassword']
 				}
 			},
 		},
@@ -557,12 +557,12 @@ export default {
 
 		async onPasswordChange(password) {
 			this.passwordError = !(password.trim())
-			this.$set(this.share, 'newPassword', password)
+			this.share.newPassword = password
 		},
 
 		cancelSettings() {
 			if (this.hasUnsavedPassword) {
-				this.$delete(this.share, 'newPassword')
+				delete this.share['newPassword']
 			}
 			this.showSettings = false
 		},
@@ -570,11 +570,11 @@ export default {
 		async saveSettings() {
 			if (this.isPasswordProtected) {
 				if (this.hasUnsavedPassword) {
-					this.$set(this.share, 'password', this.share.newPassword)
-					this.$delete(this.share, 'newPassword')
+					this.share.password = this.share.newPassword
+					delete this.share['newPassword']
 				}
 			} else {
-				this.$set(this.share, 'password', '')
+				this.share.password = ''
 			}
 
 			await this.onUpdate(this.share)
