@@ -137,6 +137,11 @@ export default {
 		},
 	},
 
+	emits: [
+		'open',
+		'delete',
+	],
+
 	data() {
 		return {
 			renameTitle: null,
