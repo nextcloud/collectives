@@ -198,6 +198,12 @@ export default {
 		},
 	},
 
+	emits: [
+		'close',
+		'copy',
+		'move',
+	],
+
 	data() {
 		return {
 			selectedCollective: null,

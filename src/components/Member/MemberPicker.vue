@@ -141,6 +141,10 @@ export default {
 		},
 	},
 
+	emits: [
+		'deleteFromSelection',
+	],
+
 	data() {
 		return {
 			searchQuery: '',
@@ -226,7 +230,7 @@ export default {
 		},
 
 		deleteFromSelection(member) {
-			this.$emit('delete-from-selection', member)
+			this.$emit('deleteFromSelection', member)
 		},
 
 		onSearch(searchQuery) {

@@ -5,13 +5,13 @@
 
 <template>
 	<NcDialog
-		content-classes="attachment-rename-modal"
-		is-form
+		contentClasses="attachment-rename-modal"
+		isForm
 		:open="open"
 		size:normal
 		:name="t('collectives', 'Rename attachment')"
 		@update:open="$emit('update:open', $event)"
-		@submit="$emit('attachment-rename', editedAttachmentName)">
+		@submit="$emit('attachmentRename', editedAttachmentName)">
 		<NcTextField
 			ref="nameInput"
 			v-model="editedAttachmentName"
@@ -60,6 +60,11 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: [
+		'attachmentRename',
+		'update:open',
+	],
 
 	data() {
 		return {

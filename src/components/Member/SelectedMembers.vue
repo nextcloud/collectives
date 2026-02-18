@@ -59,6 +59,10 @@ export default {
 		},
 	},
 
+	emits: [
+		'deleteFromSelection',
+	],
+
 	computed: {
 		isCurrentUser() {
 			return (member) => member.source === 'users' && member.label === getCurrentUser().uid
@@ -81,7 +85,7 @@ export default {
 		t,
 
 		deleteMember(member) {
-			this.$emit('delete-from-selection', member)
+			this.$emit('deleteFromSelection', member)
 		},
 	},
 }

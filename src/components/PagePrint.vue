@@ -41,6 +41,11 @@ export default {
 		},
 	},
 
+	emits: [
+		'loading',
+		'ready',
+	],
+
 	setup() {
 		const content = ref('')
 		const { reader, readerEl, setupReader } = useReader(content)

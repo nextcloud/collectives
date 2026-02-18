@@ -143,6 +143,11 @@ export default {
 		},
 	},
 
+	emits: [
+		'deleteCollective',
+		'restoreCollective',
+	],
+
 	setup() {
 		const isMobile = useIsMobile()
 		return { isMobile }
@@ -175,11 +180,11 @@ export default {
 		},
 
 		restoreCollective(collective) {
-			this.$emit('restore-collective', collective)
+			this.$emit('restoreCollective', collective)
 		},
 
 		deleteCollective(collective, circle) {
-			this.$emit('delete-collective', collective, circle)
+			this.$emit('deleteCollective', collective, circle)
 			this.closeDeleteModal()
 		},
 
