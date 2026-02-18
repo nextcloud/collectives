@@ -116,7 +116,7 @@ export default {
 		this._setPollingInterval(this.pollIntervalBase)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.clearSession()
 		this.teardownBackgroundFetcher()
 	},

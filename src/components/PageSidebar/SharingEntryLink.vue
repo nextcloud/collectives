@@ -406,7 +406,7 @@ export default {
 		window.addEventListener('click', this.handleClickOutside)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// Remove the global click event listener to prevent memory leaks
 		window.removeEventListener('click', this.handleClickOutside)
 	},
