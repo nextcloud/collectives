@@ -719,7 +719,6 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
-			const hasSubpages = this.currentSortedSubpagesByParentId.get(pageId).length > 0
 
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
@@ -744,7 +743,7 @@ export const usePagesStore = defineStore('pages', {
 			}
 
 			// Reload the page list if moved page had subpages (to get their updated paths)
-			if (hasSubpages) {
+			if (this.hasSubpages(pageId)) {
 				await this.getCurrentPages(false)
 			}
 		},
@@ -779,14 +778,13 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
-			const hasSubpages = this.currentSortedSubpagesByParentId.get(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
 			removeFrom(this.allPages[this.currentCollectiveIndex], page)
 			rootStore.done('pagelist-nodrag')
 
 			// Reload the page list if moved page had subpages (to remove subpages as well)
-			if (hasSubpages) {
+			if (this.hasSubpages(pageId)) {
 				await this.getCurrentPages(false)
 			}
 		},
