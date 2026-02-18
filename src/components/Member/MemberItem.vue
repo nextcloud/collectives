@@ -178,6 +178,10 @@ export default {
 		},
 	},
 
+	emits: [
+		'click',
+	],
+
 	data() {
 		return {
 			showActionMenu: false,

@@ -158,6 +158,10 @@ export default {
 		NcTextField,
 	},
 
+	emits: [
+		'close',
+	],
+
 	data() {
 		return {
 			circle: null,

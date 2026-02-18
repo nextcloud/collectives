@@ -25,6 +25,7 @@
 <script>
 export default {
 	name: 'PageIcon',
+
 	props: {
 		title: {
 			type: String,
@@ -41,5 +42,9 @@ export default {
 			default: 24,
 		},
 	},
+
+	emits: [
+		'click',
+	],
 }
 </script>

@@ -68,7 +68,7 @@
 		<template #actions>
 			<NcActionButton
 				:closeAfterClick="true"
-				@click="$emit('start-label-update')">
+				@click="$emit('startLabelUpdate')">
 				<template #icon>
 					<PencilIcon :size="22" />
 				</template>
@@ -183,6 +183,14 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: [
+		'click',
+		'compare',
+		'delete',
+		'restore',
+		'startLabelUpdate',
+	],
 
 	data() {
 		return {

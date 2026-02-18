@@ -57,6 +57,11 @@ export default {
 		},
 	},
 
+	emits: [
+		'remove',
+		'select',
+	],
+
 	setup() {
 		const { hasContrastToBackground } = useColor()
 		return { hasContrastToBackground }
