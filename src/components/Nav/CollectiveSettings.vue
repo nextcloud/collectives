@@ -5,7 +5,7 @@
 
 <template>
 	<NcAppSettingsDialog
-		:open.sync="showSettings"
+		v-model:open="showSettings"
 		:name="t('collectives', 'Collective settings')"
 		:show-navigation="true">
 		<NcAppSettingsSection id="name-and-emoji" :name="t('collectives', 'Name and emoji')">

@@ -17,7 +17,7 @@
 			{{ t('collectives', 'Deleted pages') }}
 		</NcButton>
 		<NcDialog
-			:open.sync="showModal"
+			v-model:open="showModal"
 			:name="t('collectives', 'Deleted pages')"
 			class="dialog__page-trash"
 			size="large">

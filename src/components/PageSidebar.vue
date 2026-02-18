@@ -5,9 +5,9 @@
 
 <template>
 	<NcAppSidebar
+		v-model:active="active"
+		v-model:open="open"
 		:name="title"
-		:active.sync="active"
-		:open.sync="open"
 		:no-toggle="isMobile"
 		:toggle-classes="{
 			'page-sidebar-button': true,
