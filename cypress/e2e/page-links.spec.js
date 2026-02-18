@@ -4,7 +4,7 @@
  */
 
 const baseUrl = Cypress.env('baseUrl')
-let imageId, pdfId, textId, sourceUrl, shareUrl
+let imageId, pdfId, textId, sourceUrl
 let anotherCollectiveFirstPageId, anotherCollectiveId, linkTestingCollectiveId, linkTargetPageId
 
 describe('Page link handling', function() {
@@ -370,24 +370,7 @@ describe('Page link handling', function() {
 	})
 
 	it('Share the collective', function() {
-		cy.visit({
-			url: '/apps/collectives'
-			onBeforeLoad(win) {
-				// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
-				if (!win.navigator.clipboard) {
-					win.navigator.clipboard = {
-						__proto__: {
-							writeText: () => {},
-						},
-					}
-				}
-				// overwrite navigator.clipboard.writeText with cypress stub
-				cy.stub(win.navigator.clipboard, 'writeText', (text) => {
-					shareUrl = text
-				})
-					.as('clipBoardWriteText')
-			},
-		})
+		cy.stubClipboardAndVisit('/apps/collectives')
 		cy.openCollectiveMenu('Link Testing')
 		cy.clickMenuButton('Share link')
 		cy.intercept('POST', '**/api/v1.0/collectives/*/shares').as('createShare')
@@ -403,11 +386,11 @@ describe('Page link handling', function() {
 		cy.wait('@updateShare')
 		cy.get('button.sharing-entry__copy')
 			.click()
-		cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+		cy.getClipboardText().as('shareUrl')
 	})
 	it('Public share in preview mode: opens link with absolute path to page in this collective in same tab', function() {
 		cy.logout()
-		cy.visit(`${shareUrl}/Link Source`)
+		cy.visit(`${this.shareUrl}/Link Source`)
 		const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 		testLinkToSameTab(href, {
 			isPublic: true,
@@ -416,7 +399,7 @@ describe('Page link handling', function() {
 	})
 	it('Public share in edit mode: opens link with absolute path to page in this collective in same tab', function() {
 		cy.logout()
-		cy.visit(`${shareUrl}/Link Source`)
+		cy.visit(`${this.shareUrl}/Link Source`)
 		const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 		cy.switchToEditMode()
 		testLinkToSameTab(href, {
@@ -427,13 +410,13 @@ describe('Page link handling', function() {
 	})
 	it('Public share in preview mode: opens link to external website in new tab', function() {
 		cy.logout()
-		cy.visit(`${shareUrl}/Link Source`)
+		cy.visit(`${this.shareUrl}/Link Source`)
 		const href = 'https://github.com/'
 		testLinkToNewTab(href, { isPublic: true })
 	})
 	it('Public share in edit mode: opens link to external website in new tab', function() {
 		cy.logout()
-		cy.visit(`${shareUrl}/Link Source`)
+		cy.visit(`${this.shareUrl}/Link Source`)
 		const href = 'https://github.com/'
 		cy.switchToEditMode()
 		testLinkToNewTab(href, { edit: true, isPublic: true })

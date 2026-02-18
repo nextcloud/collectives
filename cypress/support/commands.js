@@ -419,3 +419,28 @@ Cypress.Commands.add('setAppConfig', (app, key, value) => {
 		},
 	})
 })
+
+Cypress.Commands.add('stubClipboardAndVisit', (url) => {
+	cy.visit({
+		url,
+		onBeforeLoad(win) {
+			// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
+			if (!win.navigator.clipboard) {
+				win.navigator.clipboard = {
+					__proto__: {
+						writeText: () => {},
+					},
+				}
+			}
+			// overwrite navigator.clipboard.writeText with cypress stub
+			cy.stub(win.navigator.clipboard, 'writeText')
+				.as('clipboardWriteText')
+		},
+	})
+})
+
+Cypress.Commands.add('getClipboardText', () => {
+	cy.get('@clipboardWriteText')
+		.should('have.been.called')
+		.its('lastCall.args[0]')
+})

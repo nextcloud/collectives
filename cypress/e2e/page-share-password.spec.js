@@ -4,8 +4,6 @@
  */
 
 describe('Page share with password protection', function() {
-	let shareUrl
-
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('SharePasswordCollective')
@@ -15,24 +13,7 @@ describe('Page share with password protection', function() {
 
 	it('Allows sharing a page', function() {
 		cy.loginAs('bob')
-		cy.visit({
-			url: '/apps/collectives',
-			onBeforeLoad(win) {
-				// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
-				if (!win.navigator.clipboard) {
-					win.navigator.clipboard = {
-						__proto__: {
-							writeText: () => {},
-						},
-					}
-				}
-				// overwrite navigator.clipboard.writeText with cypress stub
-				cy.stub(win.navigator.clipboard, 'writeText', (text) => {
-					shareUrl = text
-				})
-					.as('clipBoardWriteText')
-			},
-		})
+		cy.stubClipboardAndVisit('/apps/collectives')
 		cy.openCollective('SharePasswordCollective')
 		cy.openPage('Sharepage')
 		cy.get('button.app-sidebar__toggle').click()
@@ -47,7 +28,7 @@ describe('Page share with password protection', function() {
 		cy.get('button.sharing-entry__copy')
 			.click()
 		cy.get('.toast-success').should('contain', 'Link copied')
-		cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+		cy.getClipboardText().as('shareUrl')
 	})
 	it('Allows adding password protection to a page share', function() {
 		cy.loginAs('bob')
@@ -68,7 +49,7 @@ describe('Page share with password protection', function() {
 	})
 	it('Allows opening a password-protected shared (non-editable) page', function() {
 		cy.logout()
-		cy.visit(shareUrl)
+		cy.visit(this.shareUrl)
 		cy.get('input[type="password"]').type('password')
 		if (['stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
 			cy.get('#password-input-form input[type="submit"]').click()
