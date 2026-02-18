@@ -118,7 +118,7 @@ export default {
 			}
 		},
 
-		'currentPage.id': function() {
+		currentPage: function() {
 			this.selectVersion(null)
 			this.slugUrl()
 		},

@@ -314,7 +314,7 @@ export default {
 		...mapState(useTagsStore, ['sortedTags', 'filterTags']),
 		...mapState(usePagesStore, [
 			'rootPage',
-			'currentPage',
+			'currentPageId',
 			'newPageParentId',
 			'hasFavoritePages',
 			'visibleSubpages',
@@ -505,7 +505,7 @@ export default {
 					})
 			}
 			this.$nextTick(() => {
-				scrollToPage(this.currentPage.id)
+				scrollToPage(this.currentPageId)
 			})
 		},
 
