@@ -43,8 +43,8 @@
 		<!-- Action menu -->
 		<NcActions
 			v-else-if="currentUserIsAdmin && !isSearched && !isCurrentUser"
+			v-model:open="showActionMenu"
 			:force-menu="true"
-			:open.sync="showActionMenu"
 			class="member-row__actions">
 			<NcActionButton
 				v-if="!isAdmin"
