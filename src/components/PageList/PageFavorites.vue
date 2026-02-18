@@ -7,7 +7,7 @@
 	<div class="page-list-favorites">
 		<div class="app-content-list-item">
 			<div class="app-content-list-item-icon" @click="toggleFavorites">
-				<StarIcon :size="22" fill-color="var(--color-main-text)" />
+				<StarIcon :size="22" fillColor="var(--color-main-text)" />
 			</div>
 			<div class="app-content-list-item-line-one" @click="toggleFavorites">
 				{{ t('collectives', 'Favorites') }}
@@ -29,18 +29,18 @@
 				v-for="page in favoritePages"
 				:key="page.title"
 				:to="pagePath(page)"
-				:page-id="page.id"
-				:parent-id="page.parentId"
+				:pageId="page.id"
+				:parentId="page.parentId"
 				:title="page.title"
 				:timestamp="page.timestamp"
-				:last-user-id="page.lastUserId"
-				:last-user-display-name="page.lastUserDisplayName"
+				:lastUserId="page.lastUserId"
+				:lastUserDisplayName="page.lastUserDisplayName"
 				:emoji="page.emoji"
 				:level="2"
-				:can-edit="currentCollectiveCanEdit"
-				:in-favorite-list="true"
-				:filtered-view="false"
-				:network-online="networkOnline"
+				:canEdit="currentCollectiveCanEdit"
+				:inFavoriteList="true"
+				:filteredView="false"
+				:networkOnline="networkOnline"
 				@click="show('details')" />
 		</div>
 	</div>

@@ -34,19 +34,19 @@
 						ref="renameField"
 						v-model="renameName"
 						:placeholder="t('collectives', 'Tag name')"
-						:label-outside="true"
+						:labelOutside="true"
 						:autofocus="true"
 						:minlength="1"
 						:required="true"
-						trailing-button-icon="close"
-						:show-trailing-button="true"
+						trailingButtonIcon="close"
+						:showTrailingButton="true"
 						@keyup.enter.prevent.stop
 						@keyup.esc.prevent.stop="onStopRename"
-						@trailing-button-click="onStopRename" />
+						@trailingButtonClick="onStopRename" />
 				</form>
 				<NcCheckboxRadioSwitch
 					v-else
-					:model-value="isChecked(tag)"
+					:modelValue="isChecked(tag)"
 					:label="tag.name"
 					:loading="loading(`page-tag-${pageId}-${tag.id}`)"
 					:disabled="tag.deleted"
@@ -71,16 +71,16 @@
 					@submit="onSubmitColor(tag)">
 					<NcButton :aria-label="t('collectives', 'Change tag color')" variant="tertiary">
 						<template #icon>
-							<CircleIcon v-if="tag.color" :size="24" fill-color="var(--color-circle-icon)" />
-							<CircleOutlineIcon v-else :size="24" fill-color="var(--color-circle-icon" />
+							<CircleIcon v-if="tag.color" :size="24" fillColor="var(--color-circle-icon)" />
+							<CircleOutlineIcon v-else :size="24" fillColor="var(--color-circle-icon" />
 						</template>
 					</NcButton>
 				</NcColorPicker>
 
 				<!-- Actions menu -->
-				<NcActions :force-menu="true">
+				<NcActions :forceMenu="true">
 					<NcActionButton
-						:close-after-click="true"
+						:closeAfterClick="true"
 						@click="onInitRename(tag)">
 						<template #icon>
 							<PencilIcon :size="20" />
@@ -89,7 +89,7 @@
 					</NcActionButton>
 					<NcActionButton
 						v-if="!tag.deleted"
-						:close-after-click="true"
+						:closeAfterClick="true"
 						@click="onMarkDeleted(tag)">
 						<template #icon>
 							<DeleteIcon :size="20" />
@@ -98,7 +98,7 @@
 					</NcActionButton>
 					<NcActionButton
 						v-else
-						:close-after-click="true"
+						:closeAfterClick="true"
 						@click="onRestore(tag)">
 						<template #icon>
 							<RestoreIcon :size="20" />

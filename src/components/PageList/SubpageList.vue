@@ -8,32 +8,32 @@
 		<PageListItem
 			:key="page.title"
 			:to="pagePath(page)"
-			:page-id="page.id"
-			:parent-id="page.parentId"
+			:pageId="page.id"
+			:parentId="page.parentId"
 			:title="page.title"
 			:timestamp="page.timestamp"
-			:last-user-id="page.lastUserId"
-			:last-user-display-name="page.lastUserDisplayName"
+			:lastUserId="page.lastUserId"
+			:lastUserDisplayName="page.lastUserDisplayName"
 			:emoji="page.emoji"
 			:level="level"
-			:can-edit="currentCollectiveCanEdit"
-			:has-visible-subpages="hasVisibleSubpages"
-			:filtered-view="filteredView"
-			:network-online="networkOnline"
+			:canEdit="currentCollectiveCanEdit"
+			:hasVisibleSubpages="hasVisibleSubpages"
+			:filteredView="filteredView"
+			:networkOnline="networkOnline"
 			@click="show('details')" />
 		<div class="page-list-indent">
 			<DraggableElement
 				v-if="subpagesView.length > 0 || keptSortable(page.id)"
 				:list="subpagesView"
-				:parent-id="page.id"
-				:disable-sorting="disableSorting">
+				:parentId="page.id"
+				:disableSorting="disableSorting">
 				<SubpageList
 					v-for="subpage in subpagesView"
 					:key="subpage.id"
 					:data-page-id="subpage.id"
 					:page="subpage"
 					:level="level + 1"
-					:network-online="networkOnline"
+					:networkOnline="networkOnline"
 					class="page-list-drag-item" />
 			</DraggableElement>
 		</div>

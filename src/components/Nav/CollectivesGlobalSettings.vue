@@ -8,8 +8,8 @@
 		<NcTextField
 			name="userFolder"
 			:label="t('collectives', 'Collectives folder')"
-			:label-visible="true"
-			:model-value="userFolderValue"
+			:labelVisible="true"
+			:modelValue="userFolderValue"
 			:disabled="disabledPicker"
 			@click="selectCollectivesFolder" />
 	</NcAppNavigationSettings>

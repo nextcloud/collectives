@@ -10,7 +10,7 @@
 		@closing="onClose">
 		<div v-if="state === 0" class="modal-collective-wrapper">
 			<div class="modal-collective-name">
-				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
+				<NcEmojiPicker :showPreview="true" @select="updateEmoji">
 					<NcButton
 						variant="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
@@ -26,16 +26,16 @@
 					v-model="name"
 					class="collective-name"
 					:error="nameIsInvalid"
-					:show-trailing-button="name !== ''"
+					:showTrailingButton="name !== ''"
 					:label="t('collectives', 'Name of the collective')"
 					@keypress.enter.prevent="advanceToMembers"
-					@trailing-button-click="clearName" />
+					@trailingButtonClick="clearName" />
 				<NcSelect
 					v-else
 					ref="circleSelector"
 					v-model="circle"
 					class="circle-selector"
-					:append-to-body="false"
+					:appendToBody="false"
 					:options="circles"
 					:aria-label-combobox="t('collectives', 'Select an existing team')"
 					:placeholder="t('collectives', 'Select a team…')" />
@@ -78,13 +78,13 @@
 		<div v-else-if="state === 1" class="modal-collective-wrapper">
 			<div class="modal-collective-members">
 				<MemberPicker
-					:show-selection="true"
-					:search-without-query="true"
-					:current-user-is-admin="true"
-					:selected-members="selectedMembers"
-					:no-delete-members="noDeleteMembers"
-					:on-click-searched="onClickSearched"
-					@delete-from-selection="deleteMember" />
+					:showSelection="true"
+					:searchWithoutQuery="true"
+					:currentUserIsAdmin="true"
+					:selectedMembers="selectedMembers"
+					:noDeleteMembers="noDeleteMembers"
+					:onClickSearched="onClickSearched"
+					@deleteFromSelection="deleteMember" />
 			</div>
 		</div>
 

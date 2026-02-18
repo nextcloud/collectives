@@ -12,14 +12,14 @@
 			<MemberItem
 				v-for="item in addableUsers"
 				:key="generateKey(item)"
-				:circle-id="circleId"
-				:current-user-is-admin="true"
-				:user-id="item.id"
-				:display-name="item.label"
-				:user-type="circleUserType(item.source)"
-				:is-searched="true"
-				:is-selected="isSelected(item)"
-				:is-loading="isLoading(item)"
+				:circleId="circleId"
+				:currentUserIsAdmin="true"
+				:userId="item.id"
+				:displayName="item.label"
+				:userType="circleUserType(item.source)"
+				:isSearched="true"
+				:isSelected="isSelected(item)"
+				:isLoading="isLoading(item)"
 				@click="onClick(item)" />
 		</template>
 
@@ -30,14 +30,14 @@
 			<MemberItem
 				v-for="item in addableGroups"
 				:key="generateKey(item)"
-				:circle-id="circleId"
-				:current-user-is-admin="true"
-				:user-id="item.id"
-				:display-name="item.label"
-				:user-type="circleUserType(item.source)"
-				:is-searched="true"
-				:is-selected="isSelected(item)"
-				:is-loading="isLoading(item)"
+				:circleId="circleId"
+				:currentUserIsAdmin="true"
+				:userId="item.id"
+				:displayName="item.label"
+				:userType="circleUserType(item.source)"
+				:isSearched="true"
+				:isSelected="isSelected(item)"
+				:isLoading="isLoading(item)"
 				@click="onClick(item)" />
 		</template>
 
@@ -48,14 +48,14 @@
 			<MemberItem
 				v-for="item in addableCircles"
 				:key="generateKey(item)"
-				:circle-id="circleId"
-				:current-user-is-admin="true"
-				:user-id="item.id"
-				:display-name="item.label"
-				:user-type="circleUserType(item.source)"
-				:is-searched="true"
-				:is-selected="isSelected(item)"
-				:is-loading="isLoading(item)"
+				:circleId="circleId"
+				:currentUserIsAdmin="true"
+				:userId="item.id"
+				:displayName="item.label"
+				:userType="circleUserType(item.source)"
+				:isSearched="true"
+				:isSelected="isSelected(item)"
+				:isLoading="isLoading(item)"
 				@click="onClick(item)" />
 		</template>
 	</div>

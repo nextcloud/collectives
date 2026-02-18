@@ -17,11 +17,11 @@
 		<!-- Avatar -->
 		<NcAvatar
 			:user="userId"
-			:is-no-user="isNoUser"
-			:icon-class="iconClass"
-			:disable-menu="true"
-			:disable-tooltip="true"
-			:hide-status="true"
+			:isNoUser="isNoUser"
+			:iconClass="iconClass"
+			:disableMenu="true"
+			:disableTooltip="true"
+			:hideStatus="true"
 			:size="avatarSize" />
 
 		<!-- Data -->
@@ -44,11 +44,11 @@
 		<NcActions
 			v-else-if="currentUserIsAdmin && !isSearched && !isCurrentUser"
 			v-model:open="showActionMenu"
-			:force-menu="true"
+			:forceMenu="true"
 			class="member-row__actions">
 			<NcActionButton
 				v-if="!isAdmin"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="setMemberLevel(memberLevels.LEVEL_ADMIN)">
 				<template #icon>
 					<CrownIcon :size="20" />
@@ -57,7 +57,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isModerator"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="setMemberLevel(memberLevels.LEVEL_MODERATOR)">
 				<template #icon>
 					<AccountCogIcon :size="20" />
@@ -66,7 +66,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isMember"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="setMemberLevel(memberLevels.LEVEL_MEMBER)">
 				<template #icon>
 					<AccountIcon :size="20" />
@@ -75,7 +75,7 @@
 			</NcActionButton>
 			<NcActionSeparator />
 			<NcActionButton
-				:close-after-click="true"
+				:closeAfterClick="true"
 				class="critical"
 				@click="removeMember">
 				<template #icon>
