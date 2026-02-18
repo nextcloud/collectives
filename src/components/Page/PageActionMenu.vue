@@ -47,7 +47,7 @@
 				</NcActionCheckbox>
 				<NcActionButton
 					closeAfterClick
-					@click="toggleOutline(currentPage.id)">
+					@click="toggleOutline(currentPageId)">
 					<template #icon>
 						<FormatListBulletedIcon :size="20" />
 					</template>
@@ -301,7 +301,7 @@ export default {
 		},
 
 		toggleOutlineString() {
-			return this.hasOutline(this.currentPage.id)
+			return this.hasOutline(this.currentPageId)
 				? t('collectives', 'Hide outline')
 				: t('collectives', 'Show outline')
 		},
@@ -342,15 +342,15 @@ export default {
 		]),
 
 		onCheckFullWidthView() {
-			this.setFullWidthView({ pageId: this.currentPage.id, fullWidthView: true })
+			this.setFullWidthView({ pageId: this.currentPageId, fullWidthView: true })
 		},
 
 		onUncheckFullWidthView() {
-			this.setFullWidthView({ pageId: this.currentPage.id, fullWidthView: false })
+			this.setFullWidthView({ pageId: this.currentPageId, fullWidthView: false })
 		},
 
 		async openShareTab() {
-			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
+			if (this.pageUrl && (this.currentPageId !== this.pageId)) {
 				await this.$router.push(this.pageUrl)
 			}
 			this.show('details')
@@ -359,7 +359,7 @@ export default {
 		},
 
 		async gotoPageEmojiPicker() {
-			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
+			if (this.pageUrl && (this.currentPageId !== this.pageId)) {
 				await this.$router.push(this.pageUrl)
 			}
 			this.show('details')
