@@ -6,7 +6,7 @@
 <template>
 	<div v-if="active" class="filelist-collectives-wrapper">
 		<div class="infobox">
-			<InformationIcon fill-color="var(--color-primary-element)" />
+			<InformationIcon fillColor="var(--color-primary-element)" />
 
 			<div class="content">
 				{{ t('collectives', 'The content of this folder is best viewed in the Collectives app.') }}

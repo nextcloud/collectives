@@ -15,8 +15,8 @@
 		<NcPopover
 			v-if="!networkOnline"
 			:aria-label="t('collectives', 'Offline')"
-			:auto-hide="false"
-			no-focus-trap
+			:autoHide="false"
+			noFocusTrap
 			class="offline-indicator">
 			<template #trigger>
 				<NcButton

@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcContent app-name="collectives">
+	<NcContent appName="collectives">
 		<input
 			v-if="isPublic"
 			id="isPublic"

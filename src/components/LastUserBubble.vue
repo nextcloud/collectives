@@ -9,7 +9,7 @@
 			{{ t('collectives', 'Last changed by') }}
 		</template>
 		<NcUserBubble
-			:display-name="lastUserDisplayName"
+			:displayName="lastUserDisplayName"
 			:user="lastUserId" />
 		<span class="timestamp">
 			{{ lastUpdate }}

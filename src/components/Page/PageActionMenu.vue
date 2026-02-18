@@ -5,18 +5,18 @@
 
 <template>
 	<div>
-		<NcActions :force-menu="true" @click.stop>
+		<NcActions :forceMenu="true" @click.stop>
 			<!-- Collective actions: only displayed for landing page -->
 			<template v-if="isLandingPage">
-				<CollectiveActions :collective="currentCollective" :network-online="networkOnline" />
+				<CollectiveActions :collective="currentCollective" :networkOnline="networkOnline" />
 				<NcActionSeparator />
 			</template>
 
 			<!-- Last edited info -->
 			<PageActionLastUser
 				v-if="displayLastEditedInfo"
-				:last-user-id="lastUserId"
-				:last-user-display-name="lastUserDisplayName"
+				:lastUserId="lastUserId"
+				:lastUserDisplayName="lastUserDisplayName"
 				:timestamp="timestamp" />
 			<NcActionSeparator v-if="displayLastEditedInfo" />
 
@@ -25,7 +25,7 @@
 				<NcActionButton
 					:aria-label="t('collectives', 'Open page sidebar')"
 					aria-controls="app-sidebar-vue"
-					:close-after-click="true"
+					:closeAfterClick="true"
 					@click="toggle('sidebar')">
 					<template #icon>
 						<DockRightIcon :size="20" />
@@ -46,7 +46,7 @@
 					{{ t('collectives', 'Full width') }}
 				</NcActionCheckbox>
 				<NcActionButton
-					:close-after-click="true"
+					:closeAfterClick="true"
 					@click="toggleOutline(currentPage.id)">
 					<template #icon>
 						<FormatListBulletedIcon :size="20" />
@@ -59,7 +59,7 @@
 			<!-- Favor page action: not displayed for landing page -->
 			<NcActionButton
 				v-if="!isLandingPage"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:disabled="!networkOnline"
 				@click="toggleFavoritePage({ id: currentCollective.id, pageId })">
 				<template #icon>
@@ -72,7 +72,7 @@
 			<!-- Share page action: not displayed for landing page (already in collectives actions there) -->
 			<NcActionButton
 				v-if="currentCollectiveCanShare && !isLandingPage"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="show('details')">
 				<template #icon>
 					<ShareVariantIcon :size="20" />
@@ -83,7 +83,7 @@
 			<!-- Edit page emoji: not displayed for landing page -->
 			<NcActionButton
 				v-if="currentCollectiveCanEdit && !isLandingPage"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:disabled="!networkOnline"
 				@click="gotoPageEmojiPicker">
 				<template #icon>
@@ -95,7 +95,7 @@
 			<!-- Open tags modal: always displayed if has edit permissions -->
 			<NcActionButton
 				v-if="currentCollectiveCanEdit"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:disabled="!networkOnline"
 				@click="onOpenTagsModal">
 				<template #icon>
@@ -107,7 +107,7 @@
 			<!-- Move/copy page via modal: always displayed if has edit permissions -->
 			<NcActionButton
 				v-if="currentCollectiveCanEdit && !isLandingPage"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:disabled="!networkOnline"
 				@click="onOpenMoveOrCopyModal">
 				<template #icon>
@@ -121,7 +121,7 @@
 				:href="pageDavUrl(pageById(pageId))"
 				:class="{ 'action-link--disabled': !networkOnline }"
 				:download="pageById(pageId).fileName"
-				:close-after-click="true">
+				:closeAfterClick="true">
 				<template #icon>
 					<DownloadIcon :size="20" />
 				</template>
@@ -131,7 +131,7 @@
 			<!-- Delete page -->
 			<NcActionButton
 				v-if="displayDeleteAction"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:disabled="!networkOnline"
 				@click="deletePage(pageId)">
 				<template #icon>
@@ -142,12 +142,12 @@
 		</NcActions>
 		<MoveOrCopyModal
 			v-if="showMoveOrCopyModal"
-			:page-id="pageId"
-			:parent-id="parentId"
+			:pageId="pageId"
+			:parentId="parentId"
 			@close="onCloseMoveOrCopyModal" />
 		<TagsModal
 			v-if="showTagsModal"
-			:page-id="pageId"
+			:pageId="pageId"
 			@close="onCloseTagsModal" />
 	</div>
 </template>

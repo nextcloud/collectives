@@ -10,9 +10,9 @@
 			ref="memberSearch"
 			v-model="searchQuery"
 			type="text"
-			:show-trailing-button="hasSearchQuery"
+			:showTrailingButton="hasSearchQuery"
 			:label="t('collectives', 'Search accounts, groups, teams')"
-			@trailing-button-click="clearSearch"
+			@trailingButtonClick="clearSearch"
 			@update:modelValue="onSearch">
 			<MagnifyIcon :size="16" />
 		</NcTextField>
@@ -22,25 +22,25 @@
 			<SkeletonLoading v-if="showCurrentSkeleton" type="members-list" :count="3" />
 			<CurrentMembers
 				v-else-if="showCurrent"
-				:circle-id="circleId"
-				:current-members="currentMembers"
-				:search-query="searchQuery"
-				:current-user-is-admin="currentUserIsAdmin" />
+				:circleId="circleId"
+				:currentMembers="currentMembers"
+				:searchQuery="searchQuery"
+				:currentUserIsAdmin="currentUserIsAdmin" />
 
 			<!-- Selected members (optional) -->
 			<SelectedMembers
 				v-if="currentUserIsAdmin && !showCurrentSkeleton && showSelection"
-				:selected-members="selectedMembers"
-				:no-delete-members="noDeleteMembers"
-				@delete-from-selection="deleteFromSelection" />
+				:selectedMembers="selectedMembers"
+				:noDeleteMembers="noDeleteMembers"
+				@deleteFromSelection="deleteFromSelection" />
 
 			<!-- Searched and picked members -->
 			<MemberSearchResults
 				v-if="currentUserIsAdmin && !showCurrentSkeleton && hasSearchResults"
-				:circle-id="circleId"
-				:search-results="filteredSearchResults"
-				:selection-set="selectedMembers"
-				:on-click-searched="onClickSearched" />
+				:circleId="circleId"
+				:searchResults="filteredSearchResults"
+				:selectionSet="selectedMembers"
+				:onClickSearched="onClickSearched" />
 
 			<!-- No search results -->
 			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">

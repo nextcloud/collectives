@@ -14,8 +14,8 @@
 			:key="`member-${member.source}-${member.id}`"
 			:margin="0"
 			:size="22"
-			:display-name="member.label"
-			:avatar-image="selectedMemberAvatarImage(member)"
+			:displayName="member.label"
+			:avatarImage="selectedMemberAvatarImage(member)"
 			:primary="isCurrentUser(member)"
 			class="selected-member-bubble">
 			<template v-if="selectedMemberDeletable(member)" #title>
