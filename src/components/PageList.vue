@@ -318,9 +318,9 @@ export default {
 			'currentPageId',
 			'newPageParentId',
 			'hasFavoritePages',
-			'visibleSubpages',
 			'sortByOrder',
 			'allCurrentSortedPages',
+			'currentSortedSubpagesByParentId',
 			'pageDavUrl',
 		]),
 
@@ -360,7 +360,7 @@ export default {
 
 		subpages() {
 			if (this.rootPage) {
-				return this.visibleSubpages(this.rootPage.id)
+				return this.currentSortedSubpagesByParentId.get(this.rootPage.id)
 			} else {
 				return []
 			}
