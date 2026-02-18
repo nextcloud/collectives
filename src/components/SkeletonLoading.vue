@@ -6,8 +6,10 @@
 <template>
 	<div class="placeholder-main">
 		<!-- Placeholder animation -->
-		<template v-for="(suffix, gradientIndex) in ['-regular', '-reverse']">
-			<svg :key="'gradient' + suffix" :class="'placeholder-gradient placeholder-gradient' + suffix">
+		<template
+			v-for="(suffix, gradientIndex) in ['-regular', '-reverse']"
+			:key="'placeholder-' + suffix">
+			<svg :class="'placeholder-gradient placeholder-gradient' + suffix">
 				<defs>
 					<linearGradient :id="'placeholder-gradient-' + uniqueId + suffix">
 						<stop offset="0%" :stop-color="(gradientIndex === 0) ? colorPlaceholderLight : colorPlaceholderDark" />
@@ -16,7 +18,7 @@
 				</defs>
 			</svg>
 
-			<ul :key="'list' + suffix" :class="'placeholder-list placeholder-list' + suffix + ' placeholder-list-' + type">
+			<ul :class="'placeholder-list placeholder-list' + suffix + ' placeholder-list-' + type">
 				<li v-for="(width, index) in placeholderData" :key="'placeholder' + suffix + index">
 					<svg
 						v-if="type === 'items' || type === 'members-list'"
