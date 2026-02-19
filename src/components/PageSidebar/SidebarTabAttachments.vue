@@ -45,7 +45,7 @@
 					@change="onFilesSelected">
 
 				<!-- drag and drop notice -->
-				<div v-show="!hasAttachments || isDragover" class="upload-drop-area">
+				<div v-show="isDragover" class="upload-drop-area">
 					<TrayArrowDownIcon :size="24" />
 					<div class="upload-drop-area__title">
 						{{ t('collectives', 'Drag and drop files here to upload') }}
