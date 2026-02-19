@@ -43,20 +43,28 @@ export class Collective {
 		await this.page.goto('/index.php/apps/collectives')
 	}
 
-	async openCollective() {
+	async openCollective({ pageTitle }: { pageTitle?: string } = {}) {
 		const { slug, id, name } = this.data
-		const path = slug
+		const collectivePath = slug
 			? `${slug}-${id}`
 			: encodeURIComponent(name)
-		await this.page.goto(`/index.php/apps/collectives/${path}`)
+		let pagePath = ''
+		if (pageTitle) {
+			pagePath = `/${pageTitle}`
+		}
+		await this.page.goto(`/index.php/apps/collectives/${collectivePath}${pagePath}`)
 		await this.waitForReaderContent()
+	}
+
+	getReaderContent() {
+		return this.page.locator('[data-cy-collectives="reader"] .ProseMirror')
 	}
 
 	/**
 	 * Wait for the collective landing page to finish loading.
 	 */
 	async waitForReaderContent() {
-		await this.page.locator('[data-cy-collectives="reader"] .ProseMirror')
+		await this.getReaderContent()
 			.waitFor({ state: 'visible' })
 	}
 }

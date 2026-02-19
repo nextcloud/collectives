@@ -7,7 +7,10 @@ import { type Page } from '@playwright/test'
 import { createCollective, trashAndDeleteCollective } from './Collective.ts'
 
 export class User {
-	constructor(public readonly page: Page) {
+	constructor(
+		public readonly page: Page,
+		public readonly userId: string,
+	) {
 	}
 
 	get request() {
