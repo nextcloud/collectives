@@ -22,6 +22,7 @@ use OCA\Files_Versions\Versions\INeedSyncVersionBackend;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Files_Versions\Versions\IVersionsImporterBackend;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\Constants;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
@@ -392,7 +393,15 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
-		$versionEntity = $this->collectiveVersionMapper->findVersionForFileId($sourceFile->getId(), $revision);
+		try {
+			$versionEntity = $this->collectiveVersionMapper->findVersionForFileId($sourceFile->getId(), $revision);
+		} catch (DoesNotExistException $e) {
+			// The version entity can be missing when a file is written immediately
+			// after being copied (e.g. by the Text app's NodeCopiedListener clearing
+			// attachment IDs). Fall back to creation to stay consistent.
+			$this->createVersionEntity($sourceFile);
+			return;
+		}
 
 		if (isset($properties['timestamp'])) {
 			$versionEntity->setTimestamp($properties['timestamp']);
