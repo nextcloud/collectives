@@ -643,6 +643,20 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user sees emoji :emoji for page :page in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSeesPageEmoji(string $user, string $page, string $emoji, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/pages/' . $pageId);
+		$this->assertStatusCode(200);
+		$this->assertPageKeyValue($pageId, 'emoji', $emoji);
+	}
+
+	/**
 	 * @When user :user sets emoji for template :template to :emoji in :collective
 	 * @When user :user :fails to set emoji for template :template to :emoji in :collective
 	 *
