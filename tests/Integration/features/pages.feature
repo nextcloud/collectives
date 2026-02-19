@@ -42,6 +42,14 @@ Feature: pages
     Then user "jane" sees pagePath "firstpage/subpage3.md" in "BehatPagesCollective"
     And user "jane" sees pagePath "firstpage (3).md" in "BehatPagesCollective"
 
+  Scenario: Copy subpages metadata
+    When user "jane" creates page "copypage1" with parentPath "Readme.md" in "BehatPagesCollective"
+    And user "alice" creates page "subcopypage" with parentPath "copypage1.md" in "BehatPagesCollective"
+    When user "jane" sets emoji for page "subcopypage" to "🍏" in "BehatPagesCollective"
+    When user "jane" copies page "copypage1" to "copypage2" with parentPath "Readme.md" in "BehatPagesCollective"
+    When user "jane" trashes page "copypage1" in "BehatPagesCollective"
+    When user "jane" sees emoji "🍏" for page "subcopypage" in "BehatPagesCollective"
+
   Scenario: Fails to move/copy landingpage
     When user "jane" fails to move page "Landing page" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
     When user "jane" fails to copy page "Landing page" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
