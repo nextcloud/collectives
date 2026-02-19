@@ -80,6 +80,10 @@ describe('Page details', function() {
 				.click()
 		}
 
+		// TODO: Remove first selector once we only support nc33+
+		cy.get('.editor--toc, .editor__toc')
+			.should('not.exist')
+
 		// Switch back to preview mode
 		cy.switchToPreviewMode()
 			.contains('Second-Level Heading')
