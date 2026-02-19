@@ -740,7 +740,7 @@ class PageService {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function copySubpagesMetadata(int $collectiveId, Folder $sourceFolder, Folder $targetFolder, bool $sameCollective, string $userId): void {
+	private function copySubpagesMetadata(int $collectiveId, Folder $sourceFolder, Folder $targetFolder, bool $copyTags, string $userId): void {
 		$sourceNodes = $sourceFolder->getDirectoryListing();
 		foreach ($sourceNodes as $sourceNode) {
 			if (str_starts_with($sourceNode->getName(), '.')) {
@@ -751,7 +751,7 @@ class PageService {
 				try {
 					$targetNode = $targetFolder->get($sourceNode->getName());
 					if ($targetNode instanceof Folder) {
-						$this->copySubpagesMetadata($collectiveId, $sourceNode, $targetNode, $sameCollective, $userId);
+						$this->copySubpagesMetadata($collectiveId, $sourceNode, $targetNode, $copyTags, $userId);
 					}
 				} catch (FilesNotFoundException) {
 					// Ignore if target node doesn't exist
@@ -761,11 +761,8 @@ class PageService {
 					$targetNode = $targetFolder->get($sourceNode->getName());
 					if ($targetNode instanceof File && NodeHelper::isPage($targetNode)) {
 						$sourcePageInfo = $this->getPageByFile($sourceNode);
-						if ($sameCollective) {
-							$this->updatePage($collectiveId, $targetNode->getId(), $userId, $sourcePageInfo->getEmoji(), $sourcePageInfo->isFullWidth(), $sourcePageInfo->getSlug(), $sourcePageInfo->getTags());
-						} else {
-							$this->updatePage($collectiveId, $targetNode->getId(), $userId, $sourcePageInfo->getEmoji(), $sourcePageInfo->isFullWidth(), $sourcePageInfo->getSlug(), '[]');
-						}
+						$tags = $copyTags ? $sourcePageInfo->getTags() : '[]';
+						$this->updatePage($collectiveId, $targetNode->getId(), $userId, $sourcePageInfo->getEmoji(), $sourcePageInfo->isFullWidth(), $sourcePageInfo->getSlug(), $tags);
 					}
 				} catch (FilesNotFoundException) {
 					// Ignore if target node doesn't exist
