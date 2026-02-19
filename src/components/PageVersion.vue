@@ -20,7 +20,7 @@
 					v-else
 					class="emoji-picker-emoticon"
 					:size="pageTitleIconSize"
-					fill-color="var(--color-text-maxcontrast)" />
+					fillColor="var(--color-text-maxcontrast)" />
 			</div>
 
 			<PageTitle
@@ -38,7 +38,7 @@
 				{{ t('collectives', 'Restore') }}
 			</NcButton>
 			<NcActions>
-				<NcActionButton :close-after-click="true" @click="closeVersions">
+				<NcActionButton :closeAfterClick="true" @click="closeVersions">
 					<template #icon>
 						<DockRightIcon :size="20" />
 					</template>

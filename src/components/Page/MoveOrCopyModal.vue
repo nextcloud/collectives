@@ -5,10 +5,10 @@
 
 <template>
 	<PagePicker
-		:page-id="pageId"
-		:parent-id="parentId"
-		:is-copying="copying"
-		:is-moving="moving"
+		:pageId="pageId"
+		:parentId="parentId"
+		:isCopying="copying"
+		:isMoving="moving"
 		@copy="onCopy"
 		@move="onMove"
 		@close="onClose" />
@@ -40,6 +40,10 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: [
+		'close',
+	],
 
 	data() {
 		return {

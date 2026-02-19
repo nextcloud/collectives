@@ -13,5 +13,8 @@
 		"moduleResolution": "Bundler",
 		"lib": ["webworker"],
 		"allowImportingTsExtensions": true
-	}
+	},
+	"vueCompilerOptions": {
+		"target": 3.5
+	},
 }

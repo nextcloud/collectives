@@ -27,8 +27,8 @@
 						v-for="collective in sortedTrashCollectives"
 						:key="collective.circleId"
 						:name="collective.name"
-						:force-menu="true"
-						:force-display-actions="isMobile"
+						:forceMenu="true"
+						:forceDisplayActions="isMobile"
 						class="collectives_trash_list_item">
 						<template #icon>
 							<template v-if="collective.emoji">
@@ -40,7 +40,7 @@
 						</template>
 						<template #actions>
 							<NcActionButton
-								:close-after-click="true"
+								:closeAfterClick="true"
 								:disabled="!networkOnline"
 								@click="restoreCollective(collective)">
 								<template #icon>
@@ -49,7 +49,7 @@
 								{{ t('collectives', 'Restore') }}
 							</NcActionButton>
 							<NcActionButton
-								:close-after-click="true"
+								:closeAfterClick="true"
 								:disabled="!networkOnline"
 								@click="showDeleteModal(collective)">
 								<template #icon>
@@ -143,6 +143,11 @@ export default {
 		},
 	},
 
+	emits: [
+		'deleteCollective',
+		'restoreCollective',
+	],
+
 	setup() {
 		const isMobile = useIsMobile()
 		return { isMobile }
@@ -175,11 +180,11 @@ export default {
 		},
 
 		restoreCollective(collective) {
-			this.$emit('restore-collective', collective)
+			this.$emit('restoreCollective', collective)
 		},
 
 		deleteCollective(collective, circle) {
-			this.$emit('delete-collective', collective, circle)
+			this.$emit('deleteCollective', collective, circle)
 			this.closeDeleteModal()
 		},
 

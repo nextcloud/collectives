@@ -30,6 +30,7 @@
 <script>
 export default {
 	name: 'CollectivesIcon',
+
 	props: {
 		title: {
 			type: String,
@@ -46,5 +47,9 @@ export default {
 			default: 24,
 		},
 	},
+
+	emits: [
+		'click',
+	],
 }
 </script>

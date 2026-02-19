@@ -8,8 +8,8 @@
 		:key="collective.circleId"
 		:name="collective.name"
 		:to="collectivePath(collective)"
-		:force-menu="true"
-		:force-display-actions="isMobile"
+		:forceMenu="true"
+		:forceDisplayActions="isMobile"
 		class="collectives_list_item"
 		@click="onClick">
 		<template #icon>
@@ -23,7 +23,7 @@
 		<template #actions>
 			<CollectiveActions
 				:collective="collective"
-				:network-online="networkOnline" />
+				:networkOnline="networkOnline" />
 		</template>
 	</NcAppNavigationItem>
 </template>

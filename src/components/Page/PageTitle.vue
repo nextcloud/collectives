@@ -45,6 +45,13 @@ export default {
 		},
 	},
 
+	emits: [
+		'blur',
+		'input',
+		'save',
+		'submit',
+	],
+
 	setup() {
 		const isMobile = useIsMobile()
 		return { isMobile }

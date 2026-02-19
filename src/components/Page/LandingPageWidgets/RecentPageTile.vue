@@ -12,7 +12,7 @@
 			<div v-if="emoji" class="recent-page-tile__emoji">
 				{{ emoji }}
 			</div>
-			<PageIcon v-else :size="36" fill-color="var(--color-background-darker)" />
+			<PageIcon v-else :size="36" fillColor="var(--color-background-darker)" />
 		</div>
 		<div class="recent-page-tile__text">
 			<div class="recent-page-tile__title">
@@ -21,7 +21,7 @@
 			<div class="recent-page-tile__subtitle">
 				<NcAvatar
 					:user="page.lastUserId || ''"
-					:display-name="page.lastUserDisplayName || ''"
+					:displayName="page.lastUserDisplayName || ''"
 					:size="24" />
 				<span class="timestamp">
 					{{ lastUpdate }}

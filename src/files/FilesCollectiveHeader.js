@@ -4,10 +4,13 @@
  */
 
 import { loadState } from '@nextcloud/initial-state'
-import Vue from 'vue'
+import { createApp, reactive } from 'vue'
 import FileListInfo from '../views/FileListInfo.vue'
 
-let vm = null
+const props = reactive({
+	collectivesFolder: null,
+	path: null,
+})
 
 /**
  * @type {import('@nextcloud/files').IFileListHeader}
@@ -22,18 +25,13 @@ const FilesCollectiveHeader = {
 
 	render(el, folder) {
 		el.id = 'files-collective-wrapper'
-		const collectivesFolder = loadState('collectives', 'user_folder', null)
-		const View = Vue.extend(FileListInfo)
-		vm = new View({
-			propsData: {
-				collectivesFolder,
-				path: folder.path,
-			},
-		}).$mount(el)
+		props.collectivesFolder = loadState('collectives', 'user_folder', null)
+		props.path = folder.path
+		createApp(FileListInfo, props).mount(el)
 	},
 
 	updated(folder) {
-		vm.path = folder.path
+		props.path = folder.path
 	},
 }
 

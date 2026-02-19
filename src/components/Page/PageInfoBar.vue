@@ -13,10 +13,10 @@
 			@click="canEdit ? emitSidebar('versions') : undefined">
 			<div class="item-text">
 				<LastUserBubble
-					:last-user-id="currentPage.lastUserId"
-					:last-user-display-name="currentPage.lastUserDisplayName"
+					:lastUserId="currentPage.lastUserId"
+					:lastUserDisplayName="currentPage.lastUserDisplayName"
 					:timestamp="currentPage.timestamp"
-					:show-prefix-string="!isMobile" />
+					:showPrefixString="!isMobile" />
 			</div>
 		</component>
 		<template v-if="attachmentCount">

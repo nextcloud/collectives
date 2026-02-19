@@ -28,11 +28,11 @@
 					v-for="member in trimmedMembers"
 					:key="member.singleId"
 					:user="member.userId"
-					:display-name="member.displayName"
-					:is-no-user="isNoUser(member)"
-					:icon-class="iconClass(member)"
-					:disable-menu="true"
-					:tooltip-message="member.displayName"
+					:displayName="member.displayName"
+					:isNoUser="isNoUser(member)"
+					:iconClass="iconClass(member)"
+					:disableMenu="true"
+					:tooltipMessage="member.displayName"
 					:size="avatarSize" />
 				<NcButton
 					variant="tertiary"

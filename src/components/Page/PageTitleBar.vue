@@ -19,15 +19,15 @@
 			<div v-if="isLandingPage && currentCollective.emoji">
 				{{ currentCollective.emoji }}
 			</div>
-			<CollectivesIcon v-else-if="isLandingPage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
+			<CollectivesIcon v-else-if="isLandingPage" :size="pageTitleIconSize" fillColor="var(--color-text-maxcontrast)" />
 
 			<!-- Emoji picker if editable -->
 			<NcEmojiPicker
 				v-else-if="currentCollectiveCanEdit"
 				ref="page-emoji-picker"
-				:show-preview="true"
-				:allow-unselect="true"
-				:selected-emoji="currentPage.emoji"
+				:showPreview="true"
+				:allowUnselect="true"
+				:selectedEmoji="currentPage.emoji"
 				@select="onSelectEmoji"
 				@unselect="onUnselectEmoji">
 				<NcButton
@@ -42,7 +42,7 @@
 						<NcLoadingIcon
 							v-if="emojiButtonIsLoading"
 							:size="pageTitleIconSize"
-							fill-color="var(--color-text-maxcontrast)" />
+							fillColor="var(--color-text-maxcontrast)" />
 						<div v-else-if="currentPage.emoji">
 							{{ currentPage.emoji }}
 						</div>
@@ -50,7 +50,7 @@
 							v-else
 							class="emoji-picker-emoticon"
 							:size="pageTitleIconSize"
-							fill-color="var(--color-text-maxcontrast)" />
+							fillColor="var(--color-text-maxcontrast)" />
 					</template>
 				</NcButton>
 			</NcEmojiPicker>
@@ -64,7 +64,7 @@
 					v-else
 					class="emoji-picker-emoticon"
 					:size="pageTitleIconSize"
-					fill-color="var(--color-text-maxcontrast)" />
+					fillColor="var(--color-text-maxcontrast)" />
 			</template>
 		</div>
 
@@ -81,7 +81,7 @@
 			:placeholder="t('collectives', 'Title')"
 			:disabled="!currentCollectiveCanEdit || !networkOnline"
 			@blur="onTitleBlur()"
-			@save="$emit('save-editor')"
+			@save="$emit('saveEditor')"
 			@submit="onSubmit()" />
 
 		<div class="titlebar-buttons" :class="{ 'titlebar-buttons_sidebar-toggle': !isMobile && !showing('sidebar') }">
@@ -93,13 +93,13 @@
 
 			<!-- Actions menu -->
 			<PageActionMenu
-				:page-id="currentPage.id"
-				:parent-id="currentPage.parentId"
+				:pageId="currentPage.id"
+				:parentId="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
-				:last-user-id="currentPage.lastUserId"
-				:last-user-display-name="currentPage.lastUserDisplayName"
-				:is-landing-page="isLandingPage"
-				:network-online="networkOnline" />
+				:lastUserId="currentPage.lastUserId"
+				:lastUserDisplayName="currentPage.lastUserDisplayName"
+				:isLandingPage="isLandingPage"
+				:networkOnline="networkOnline" />
 		</div>
 	</div>
 </template>
@@ -148,6 +148,11 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: [
+		'focusEditor',
+		'saveEditor',
+	],
 
 	setup() {
 		const isMobile = useIsMobile()
@@ -224,7 +229,7 @@ export default {
 		subscribe('collectives:page:open-emoji-picker', this.openPageEmojiPicker)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('collectives:page:open-emoji-picker', this.openPageEmojiPicker)
 	},
 
@@ -286,7 +291,7 @@ export default {
 
 		async onSubmit() {
 			if (this.isTextEdit) {
-				this.$emit('focus-editor')
+				this.$emit('focusEditor')
 			} else {
 				await this.onTitleBlur()
 			}

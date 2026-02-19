@@ -5,7 +5,6 @@
 
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { set } from 'vue'
 import { editorApiReaderFileId, editorApiUpdateReadonlyBarProps } from '../constants.js'
 
 const STORE_PREFIX = 'collectives/pinia/root/'
@@ -49,12 +48,12 @@ export const useRootStore = defineStore('root', {
 	},
 
 	actions: {
-		load(aspect) { set(this.loadings, aspect, true) },
-		done(aspect) { set(this.loadings, aspect, false) },
+		load(aspect) { this.loadings[aspect] = true },
+		done(aspect) { this.loadings[aspect] = false },
 
-		show(aspect) { set(this.showings, aspect, true) },
-		hide(aspect) { set(this.showings, aspect, false) },
-		toggle(aspect) { set(this.showings, aspect, !this.showings[aspect]) },
+		show(aspect) { this.showings[aspect] = true },
+		hide(aspect) { this.showings[aspect] = false },
+		toggle(aspect) { this.showings[aspect] = !this.showings[aspect] },
 
 		setPrintView() { this.printView = true },
 		setActiveSidebarTab(id) { this.activeSidebarTab = id },
