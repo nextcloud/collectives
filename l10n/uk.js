@@ -248,7 +248,7 @@ OC.L10N.register(
     "View only" : "Лише перегляд",
     "Can edit" : "Може редагувати",
     "Cannot copy, please copy the link manually" : "Неможливо скопіювати, скопіюйте посилання вручну",
-    "Copy public link of {title} to clipboard" : "Скопіюйте публічне посилання {title} в буфер обміну",
+    "Copy public link of {title} to clipboard" : "Скопіюйте загальнодоступне посилання {title} до буфера обміну",
     "Actions for \"{title}\"" : "Дія для \"{title}\"",
     "Password field can't be empty" : "Потрібно зазначити пароль",
     "Page \"{name}\" has been shared" : "Сторінкою \"{name}\" поділилися",
