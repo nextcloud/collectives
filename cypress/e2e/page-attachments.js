@@ -145,12 +145,8 @@ describe('Page attachments', function() {
 
 		// Restore attachment
 		cy.get('.attachment-list-deleted')
-			.contains('.list-item', 'renamed.pdf')
-			.find('.action-item button')
+			.find('button[aria-label="Restore"]')
 			.click({ force: true })
-		cy.get('button.action-button')
-			.contains('Restore')
-			.click()
 
 		cy.get('.attachment-list-not-embedded').should('contain', 'renamed.pdf')
 		cy.get('.attachment-list-deleted').should('not.exist')

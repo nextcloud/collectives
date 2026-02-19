@@ -57,7 +57,7 @@
 				{{ t('collectives', 'Restore') }}
 			</NcActionButton>
 			<NcActionLink
-				:v-if="!isDeleted"
+				v-if="!isDeleted"
 				:href="davUrl"
 				:download="attachment.name"
 				:class="{ 'action-link--disabled': !networkOnline }"
