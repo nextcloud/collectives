@@ -13,13 +13,16 @@
 		@dragstart="onDragstart"
 		@click="onClick">
 		<template #icon>
-			<img
-				lazy="true"
-				:src="previewUrl"
-				alt=""
-				height="256"
-				width="256"
-				class="attachment__image">
+			<div class="icon-container">
+				<img
+					lazy="true"
+					:src="previewUrl"
+					alt=""
+					height="256"
+					width="256"
+					class="attachment__image">
+				<DeleteIcon v-if="isDeleted" :size="36" class="attachment__image-overlay" />
+			</div>
 		</template>
 		<template #subname>
 			<div class="attachment__info">
@@ -307,10 +310,29 @@ export default {
 		}
 	}
 
+	.icon-container {
+		position: relative;
+		display: flex;
+
+	}
+
 	&__image {
 		width: 3rem;
 		height: 3rem;
 		border: 1px solid var(--color-border);
+		border-radius: var(--border-radius-large);
+	}
+
+	&__image-overlay {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: var(--color-text-maxcontrast-background-blur);
+		background: var(--color-main-background-blur);
+
+		width: 100%;
+		height: 100%;
 		border-radius: var(--border-radius-large);
 	}
 
