@@ -22,6 +22,7 @@ OC.L10N.register(
     "Deleted" : "Delite",
     "Advanced settings" : "Configurationes avantiate",
     "Unshare" : "Cessa de compartir",
+    "Upload" : "Incargar",
     "No other versions available" : "Nulle altere versiones disponibile",
     "Attachments" : "Attachamentos",
     "Sharing" : "Compartente",

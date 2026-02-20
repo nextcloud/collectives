@@ -22,6 +22,7 @@ OC.L10N.register(
     "Deleted" : "Wedi dileu",
     "Add another link" : "Ychwanegu dolen arall",
     "Unshare" : "Dad-rannu",
+    "Upload" : "Llwytho i fyny",
     "Link copied" : "Dolen wedi'i gopïo",
     "Copied" : "Copïwyd",
     "View" : "Golwg",

@@ -16,6 +16,7 @@ OC.L10N.register(
     "Favorites" : "Favoriti",
     "Favorite" : "Favorit",
     "Unshare" : "Prestani  dijeliti",
+    "Upload" : "Učitaj",
     "No other versions available" : "Druge verzije su nedostupne",
     "Sharing" : "Dijeljenje",
     "Versions" : "Verzije",

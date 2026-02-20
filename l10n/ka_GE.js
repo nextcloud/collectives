@@ -29,6 +29,7 @@ OC.L10N.register(
     "Password" : "პაროლ",
     "Advanced settings" : "დამატებითი პარამეტრები",
     "Unshare" : "გაზიარების შეწყვეტა",
+    "Upload" : "ატვირთვა",
     "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები",
     "Please reload the page." : "გთხოვთ გადატვირთოთ გვერდი.",

@@ -26,6 +26,7 @@ OC.L10N.register(
     "Add another link" : "Añadir otro enlace",
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
+    "Upload" : "Cargar",
     "External shares" : "Compartir con el exterior",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",

@@ -30,6 +30,7 @@ OC.L10N.register(
     "Set password" : "Termeniñ ur ger-tremen",
     "Add another link" : "Implij ul liamm all",
     "Unshare" : "Na eskemm ken",
+    "Upload" : "Enporzhiañ",
     "No other versions available" : "Stumm all ebet kavet",
     "Sharing" : "Rannan",
     "Versions" : "Stumm",

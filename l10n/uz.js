@@ -33,6 +33,8 @@ OC.L10N.register(
     "Password" : "Password",
     "Create share" : "Tarqatish yaratish",
     "Unshare" : "Unshare",
+    "Upload" : "Yuklash",
+    "No attachments" : "Qo‘shimchalar yo‘q",
     "Attachments" : "Qo'shimchalar",
     "Sharing" : "Ulashish",
     "Versions" : "Versions",
