@@ -18,6 +18,7 @@ OC.L10N.register(
     "Favorite" : "Omiljene",
     "Deleted" : "Obrisano",
     "Unshare" : "Ukini deljenje",
+    "Upload" : "Otpremi",
     "Attachments" : "Prilozi",
     "Link copied" : "Veza iskopirana",
     "Please reload the page." : "Ponovo učitajte stranicu.",

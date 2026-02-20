@@ -27,6 +27,7 @@ OC.L10N.register(
     "Can edit" : "Puede editar",
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
+    "Upload" : "Cargar",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Please reload the page." : "Por favor vuelve a cargar la página.",

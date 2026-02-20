@@ -26,6 +26,7 @@ OC.L10N.register(
     "Password" : "нууц үг",
     "Advanced settings" : "Нарийвчилсан тохиргоо",
     "Unshare" : "Түгээлтийг зогсоох",
+    "Upload" : "байршуулах",
     "Attachments" : "Хавсралт",
     "Sharing" : "Түгээх",
     "Versions" : "Хувилбарууд",

@@ -34,6 +34,7 @@ OC.L10N.register(
     "Advanced settings" : "Altanivela agordo",
     "Unshare" : "Malkunhavigi",
     "Create a new share link" : "Krei novan kunhavan ligilon",
+    "Upload" : "Alŝuti",
     "No other versions available" : "Neniu alia versio disponeblas",
     "Current version" : "Nuna versio",
     "Attachments" : "Dosieraj aldonaĵoj",

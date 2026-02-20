@@ -22,6 +22,7 @@ OC.L10N.register(
     "Password" : "Açarsöz",
     "Add another link" : "Başga bir baglanyşyk goşuň",
     "Unshare" : "Paýlaşma",
+    "Upload" : "Ýüklemek",
     "Sharing" : "Paýlaşmak",
     "Link copied" : "Link-yň nusgasy alyndy"
 },

@@ -17,6 +17,7 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Deleted" : "បាន​លុប",
     "Unshare" : "លែង​ចែក​រំលែក",
+    "Upload" : "ផ្ទុក​ឡើង",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
     "Sharing" : "ការ​ចែក​រំលែក",
     "Versions" : "កំណែ",

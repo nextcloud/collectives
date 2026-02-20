@@ -23,6 +23,7 @@ OC.L10N.register(
     "Add another link" : "Legg til ei anna lenkje",
     "Advanced settings" : "Avanserte innstillingar",
     "Unshare" : "Fjern deling",
+    "Upload" : "Last opp",
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
     "Sharing" : "Deling",
     "Versions" : "Utgåver",

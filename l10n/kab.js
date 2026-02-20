@@ -30,6 +30,7 @@ OC.L10N.register(
     "Set password" : "Sbadu awal uffir",
     "Password" : "Awal n uɛeddi",
     "Add another link" : "Rnu aseɣwen-nniḍen",
+    "Upload" : "Sili",
     "You" : "Kemm·čč",
     "Attachments" : "Ticeqqufin",
     "Sharing" : "Beṭṭu",

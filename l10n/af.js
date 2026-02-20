@@ -21,6 +21,7 @@ OC.L10N.register(
     "Can edit" : "Kan redigeer",
     "Advanced settings" : "Gevorderde instellings",
     "Unshare" : "Ontdeel",
+    "Upload" : "Oplaai",
     "Versions" : "Weergawes",
     "Link copied" : "Skakel gekopieer",
     "Please reload the page." : "Herlaai asseblief die bladsy.",

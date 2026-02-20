@@ -30,6 +30,7 @@ OC.L10N.register(
     "Password" : "Fjalëkalimi",
     "Advanced settings" : "Rregullime të mëtejshme",
     "Unshare" : "Hiqe ndarjen",
+    "Upload" : "Ngarkoni",
     "No other versions available" : "Nuk ka versione të tjera të gatshme",
     "Attachments" : "Bashkangjitjet",
     "Sharing" : "Ndarje",

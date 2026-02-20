@@ -23,6 +23,7 @@ OC.L10N.register(
     "Password" : "Facal-faire",
     "Add another link" : "Cuir ceangal eile ris",
     "Unshare" : "Na co-roinn tuilleadh",
+    "Upload" : "Luchdaich suas",
     "Sharing" : "Co-roinneadh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh"
 },

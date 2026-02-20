@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add another link" : "Füügt en anere Link",
     "Advanced settings" : "Erweidert Astellungen",
     "Unshare" : "Net méi deelen",
+    "Upload" : "Eroplueden",
     "No other versions available" : "Keng aner Versiounen disponibel",
     "Sharing" : "Gedeelt",
     "Versions" : "Versiounen",

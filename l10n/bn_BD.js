@@ -19,6 +19,7 @@ OC.L10N.register(
     "Favorite" : "প্রিয়জন",
     "Deleted" : "মুছে ফেলা",
     "Unshare" : "ভাগাভাগি বাতিল ",
+    "Upload" : "আপলোড",
     "No other versions available" : "আর কোন সংষ্করণ প্রাপ্তব্য নয়",
     "Sharing" : "ভাগাভাগিরত",
     "Versions" : "সংষ্করন",

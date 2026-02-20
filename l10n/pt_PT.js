@@ -53,6 +53,8 @@ OC.L10N.register(
     "Add another link" : "Adicionar outra hiperligação",
     "Advanced settings" : "Definições avançadas",
     "Unshare" : "Cancelar partilha",
+    "Upload" : "Enviar",
+    "Drag and drop files here to upload" : "Arraste e largue os ficheiros aqui para carregar",
     "Share this collective with others outside your collective via public links. Anyone with the link can access the shared content." : "Partilhe este conteúdo coletivo com outras pessoas fora do seu grupo através de links públicos. Qualquer pessoa com o link poderá aceder ao conteúdo partilhado.",
     "Share this page with others outside your collective via public links. Anyone with the link can access the shared content." : "Partilhe esta página com outras pessoas fora do seu coletivo através de links públicos. Qualquer pessoa com o link poderá aceder ao conteúdo partilhado.",
     "External shares" : "Partilhas externas",

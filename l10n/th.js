@@ -35,6 +35,7 @@ OC.L10N.register(
     "Add another link" : "เพิ่มลิงก์อื่น",
     "Advanced settings" : "การตั้งค่าขั้นสูง",
     "Unshare" : "เลิกแชร์",
+    "Upload" : "อัปโหลด",
     "No other versions available" : "ไม่มีรุ่นอื่นที่ใช้งานได้",
     "Attachments" : "ไฟล์แนบ",
     "Sharing" : "แชร์ข้อมูล",
