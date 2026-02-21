@@ -4,6 +4,7 @@
  */
 
 import { type Page } from '@playwright/test'
+import { apiUrl } from './urls.ts'
 import { type User } from './User.ts'
 
 type CollectiveData = {
@@ -28,6 +29,12 @@ type CollectiveData = {
 	userFavoritePages: number[]
 	canLeave: boolean
 	trashTimestamp?: number
+}
+
+const ocsHeaders = {
+	'OCS-APIRequest': 'true',
+	Accept: 'application/json',
+	'Content-Type': 'application/json',
 }
 
 export class Collective {
@@ -83,15 +90,10 @@ export async function createCollective({ name, emoji = '', user }: {
 	emoji?: string
 	user: User
 }) {
-	const headers = {
-		Accept: 'application/json',
-		'Content-Type': 'application/json',
-		'OCS-APIRequest': 'true',
-	}
 	const response = await user.request.post(
-		'/ocs/v2.php/apps/collectives/api/v1.0/collectives',
+		apiUrl('v1.0', 'collectives'),
 		{
-			headers,
+			headers: ocsHeaders,
 			data: {
 				name,
 				emoji,
@@ -116,20 +118,17 @@ export async function trashAndDeleteCollective({ id, user }: {
 	id: number
 	user: User
 }) {
-	const headers = {
-		'OCS-APIRequest': 'true',
-	}
 	const trashResponse = await user.request.delete(
-		`/ocs/v2.php/apps/collectives/api/v1.0/collectives/${id}`,
-		{ headers },
+		apiUrl('v1.0', 'collectives', id),
+		{ headers: ocsHeaders },
 	)
 	if (!trashResponse.ok()) {
 		throw new Error(`Failed to trash collective: ${trashResponse.status()} - ${trashResponse.statusText()}`)
 	}
 	const deleteResponse = await user.request.delete(
-		`/ocs/v2.php/apps/collectives/api/v1.0/collectives/trash/${id}`,
+		apiUrl('v1.0', 'collectives', 'trash', id),
 		{
-			headers,
+			headers: ocsHeaders,
 			data: {
 				circle: true,
 			},
