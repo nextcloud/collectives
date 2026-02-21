@@ -40,7 +40,7 @@ const ip = await start()
 await waitOnNextcloud(ip)
 await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/circles.git', 'apps/circles'], { verbose: true })
 await runExec(['git', 'clone', '--depth=1', `--branch=${textBranch}`, 'https://github.com/nextcloud/text.git', 'apps/text'], { verbose: true })
-await configureNextcloud(['collectives', 'circles', 'text', 'viewer'])
+await configureNextcloud(['collectives', 'circles', 'files_lock', 'text', 'viewer'])
 
 // Idle to wait for shutdown
 while (true) {

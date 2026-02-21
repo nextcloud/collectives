@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { type Locator, type Page } from '@playwright/test'
+import type { Locator, Page } from '@playwright/test'
+
 import { expect } from '@playwright/test'
 
 export class EditorSection {
@@ -45,6 +46,24 @@ export class EditorSection {
 			.toHaveText(linkText)
 		// Click somewhere else to close the link bubble
 		await this.content
+			.click()
+	}
+
+	public async openLink({ linkText, type = 'collectivePage', pageTitle }: {
+		linkText: string
+		type?: 'collectivePage'
+		pageTitle?: string
+	}): Promise<void> {
+		const link = await this.getLinkBubble(linkText)
+		if (type === 'collectivePage') {
+			pageTitle = pageTitle || linkText
+			await expect(link
+				.locator('.collective-page .line'))
+				.toHaveText(pageTitle)
+		}
+
+		await link
+			.getByRole('link')
 			.click()
 	}
 }

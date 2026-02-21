@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { type Locator, type Page } from '@playwright/test'
+import type { Locator, Page } from '@playwright/test'
+
 import { expect } from '@playwright/test'
 
 type SidebarTab = 'Attachments' | 'Backlinks' | 'Sharing' | 'Versions'
