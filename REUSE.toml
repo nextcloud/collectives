@@ -12,21 +12,21 @@ SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = ["cypress/fixtures/**", "openapi.json", "tests/phpunit.xml", "tests/psalm-baseline.xml", "tests/Integration/features/fixtures/**", "vendor-bin/**"]
+path = ["cypress/fixtures/**", "openapi.json", "playwright/support/fixtures/files/**", "tests/phpunit.xml", "tests/psalm-baseline.xml", "tests/Integration/features/fixtures/**", "vendor-bin/**"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2020-2024 Nextcloud GmbH and Nextcloud contributors"
+SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
 path = ["docs/archetypes/default.md", "docs/content/**", "docs/static/images/**"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2020-2024 Nextcloud GmbH and Nextcloud contributors"
+SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
 path = ["l10n/**.js", "l10n/**.json", "skeleton/**.md"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2020-2024 Nextcloud GmbH and Nextcloud contributors"
+SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]

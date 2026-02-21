@@ -3,11 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { runOcc } from '@nextcloud/e2e-test-server/docker'
 import { type Collective } from './Collective.ts'
 import { test as base } from './random-user.ts'
 
+export interface CollectiveConfig {
+	name: string
+	emoji?: string // optional
+	markdownImportPath?: string // optional
+}
+
 export interface CollectivesFixture {
-	collectiveConfigs: Array<{ name: string, emoji?: string }>
+	collectiveConfigs: CollectiveConfig[]
 	collectives: Collective[]
 	collective: Collective
 }
@@ -43,6 +50,17 @@ export const test = base.extend<CollectivesFixture>({
 		for (const config of collectiveConfigs) {
 			const collective = await user.createCollective(config)
 			createdCollectives.push(collective)
+
+			// Import Markdown if path is provided
+			if (config.markdownImportPath) {
+				await runOcc([
+					'collectives:import:markdown',
+					`--collective-id=${collective.data.id}`,
+					`--user-id=${user.userId}`,
+					'--',
+					config.markdownImportPath,
+				])
+			}
 		}
 
 		await use(createdCollectives)
