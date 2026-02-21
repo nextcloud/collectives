@@ -220,6 +220,7 @@ OC.L10N.register(
     "Upload" : "إرفَع",
     "Drag and drop files here to upload" : "إسحب وأفلت الملفات هنا لرفعها",
     "Recently deleted" : "محذوفة مؤخّراً",
+    "No attachments" : "لا توجد مرفقات",
     "No backlinks available" : "لا توجد روابط خلفيّة backlinks مُتاحةٌ",
     "If other pages link to this one, they will be listed here." : "إذا كان هنالك صفحات أخرى مربوطة linked بهذه الصفحة، فستظهر قائمة بها هنا",
     "Collective members" : "أعضاء التجميعة",
