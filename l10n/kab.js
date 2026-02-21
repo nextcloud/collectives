@@ -35,6 +35,7 @@ OC.L10N.register(
     "Attachments" : "Ticeqqufin",
     "Sharing" : "Beṭṭu",
     "Link copied" : "Aseɣwen yettwanɣel",
+    "Copied" : "Yettwanɣel",
     "Done" : "Immed"
 },
 "nplurals=2; plural=(n != 1);");
