@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { type User as Account } from '@nextcloud/e2e-test-server'
+import type { User as Account } from '@nextcloud/e2e-test-server'
+
 import { createRandomUser, login } from '@nextcloud/e2e-test-server/playwright'
 import { test as base } from '@playwright/test'
 import { User } from './User.ts'

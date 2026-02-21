@@ -15,3 +15,16 @@ export function apiUrl(version: string, ...parts: (string | number)[]): string {
 		.join('/')
 	return `/ocs/v2.php/${path}`
 }
+
+/**
+ * Generate WebDAV URL for a user's file
+ *
+ * @param userId - userId of the file owner
+ * @param parts - URL parts to append - will be joined with `/`
+ */
+export function webdavUrl(userId: string, ...parts: (string | number)[]): string {
+	const path = parts
+		.map((part) => encodeURI(String(part)))
+		.join('/')
+	return `/remote.php/dav/files/${userId}/${path}`
+}
