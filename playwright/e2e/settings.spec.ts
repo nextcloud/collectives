@@ -26,7 +26,7 @@ test.describe('Settings', () => {
 		await collective.openApp()
 	})
 
-	test('Can change collectives folder', async ({ getFileListEntry, navigation, openFilesApp, openFile }) => {
+	test('Can change collectives folder', async ({ navigation, filesApp }) => {
 		const randomFolder = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
 		await navigation.setUserFolder(randomFolder)
 		await navigation.openCollectivesSettings()
@@ -34,9 +34,9 @@ test.describe('Settings', () => {
 		// Input field has new value after setting it
 		await expect(navigation.collectivesFolderInputEl).toHaveValue(`/${randomFolder}`)
 
-		await openFilesApp()
-		await openFile(randomFolder)
-		await expect(getFileListEntry(collectiveName1)).toBeVisible()
-		await expect(getFileListEntry(collectiveName2)).toBeVisible()
+		await filesApp.open()
+		await filesApp.openFile(randomFolder)
+		await expect(filesApp.getFileListEntry(collectiveName1)).toBeVisible()
+		await expect(filesApp.getFileListEntry(collectiveName2)).toBeVisible()
 	})
 })
