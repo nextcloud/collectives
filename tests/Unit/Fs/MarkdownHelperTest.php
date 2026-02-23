@@ -37,7 +37,7 @@ class MarkdownHelperTest extends TestCase {
 			['[link](https://example.org/?foo=3#fragment)', [['link', 'https://example.org/?foo=3#fragment', '']]],
 			['[link](#fragment)', [['link', '#fragment', '']]],
 
-			// With markdown marks in text
+			// With Markdown marks in text
 			['#Title\n\nLink: [*italic* **bold** link](https://example.org/)\n\nMore text...', [['italic bold link', 'https://example.org/', '']]],
 
 			// Multiple links
@@ -100,7 +100,7 @@ class MarkdownHelperTest extends TestCase {
 
 		$pageInfo = new PageInfo();
 		$pageInfo->setId(123);
-		$pageInfo->setCollectivePath('Collectives/' . $collective->getName());
+		$pageInfo->setCollectivePath('.Collectives/' . $collective->getName());
 		$pageInfo->setFilePath('page1/pageX');
 		$pageInfo->setFileName('subpage2.md');
 		$pageInfo->setTitle('subpage2');

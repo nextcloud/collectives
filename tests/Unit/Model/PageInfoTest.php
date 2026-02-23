@@ -22,8 +22,8 @@ class PageInfoTest extends TestCase {
 		$fileMTime = 0;
 		$fileSize = 100;
 		$fileName = 'name.md';
-		$fileMountPoint = '/files/user/Collectives/collective/';
-		$fileCollectivePath = 'Collectives/collective';
+		$fileMountPoint = '/files/user/.Collectives/collective/';
+		$fileCollectivePath = '.Collectives/collective';
 		$parentInternalPath = 'path/to/file';
 		$internalPath = $parentInternalPath . '/' . $fileName;
 		$userId = 'jane';
