@@ -56,5 +56,3 @@ Cypress.Commands.add('clickMenuButton', (title) => {
 
 const FILE_LIST_SELECTOR = '.files-fileList a, [data-cy-files-list-row] [data-cy-files-list-row-name-link]'
 Cypress.Commands.add('fileList', () => cy.get(FILE_LIST_SELECTOR))
-
-Cypress.Commands.add('openFile', (name) => cy.fileList().contains(name).click())
