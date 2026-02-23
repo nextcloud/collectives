@@ -204,7 +204,7 @@ class PageServiceTest extends TestCase {
 		$file->method('getMountPoint')
 			->willReturn($mountPoint);
 		$file->method('getInternalPath')
-			->willReturn('Collectives/testfolder/' . $fileName);
+			->willReturn('.Collectives/testfolder/' . $fileName);
 		$file->method('getMTime')
 			->willReturn(0);
 		$file->method('getSize')
@@ -228,7 +228,7 @@ class PageServiceTest extends TestCase {
 		$mountPoint = $this->getMockBuilder(MountPoint::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
+		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
 
 		$indexFile = $this->prepareFile('Readme.md', $folder, $mountPoint, 101);
 		$folder->method('get')
@@ -267,7 +267,7 @@ class PageServiceTest extends TestCase {
 		$subfolder->method('getMountPoint')
 			->willReturn($mountPoint);
 		$subfolder->method('getInternalPath')
-			->willReturn('Collectives/testfolder/' . $fileName);
+			->willReturn('.Collectives/testfolder/' . $fileName);
 		$subfolder->method('getMTime')
 			->willReturn(0);
 		$subfolder->method('getSize')
@@ -305,7 +305,7 @@ class PageServiceTest extends TestCase {
 			->willReturn('testfolder');
 
 		$mountPoint = $this->createMock(IMountPoint::class);
-		$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
+		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
 
 		$indexFile = $this->prepareFile('Readme.md', $folder, $mountPoint, 101);
 		$folder->method('get')
@@ -359,7 +359,7 @@ class PageServiceTest extends TestCase {
 		$mountPoint = $this->getMockBuilder(MountPoint::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
+		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
 
 		$folder = $this->createMock(Folder::class);
 		$folder->method('getParent')
@@ -380,7 +380,7 @@ class PageServiceTest extends TestCase {
 		$file1->method('getMountPoint')
 			->willReturn($mountPoint);
 		$file1->method('getInternalPath')
-			->willReturn('Collectives/testfolder/' . $file1Name);
+			->willReturn('.Collectives/testfolder/' . $file1Name);
 		$file1->method('getMTime')
 			->willReturn(0);
 		$file1->method('getSize')
@@ -407,7 +407,7 @@ class PageServiceTest extends TestCase {
 		$indexFile->method('getMountPoint')
 			->willReturn($mountPoint);
 		$indexFile->method('getInternalPath')
-			->willReturn('Collectives/testfolder/Readme.md');
+			->willReturn('.Collectives/testfolder/Readme.md');
 		$indexFile->method('getMTime')
 			->willReturn(0);
 		$indexFile->method('getSize')

@@ -37,7 +37,7 @@ class AttachmentServiceTest extends TestCase {
 			->with($this->attachmentFolderName)
 			->willReturn(true);
 		$this->parentFolder->method('getRelativePath')
-			->willReturn('/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
+			->willReturn('/.Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
 		$attachmentFolder = $this->createMock(Folder::class);
 		$attachmentFolder->method('getName')
 			->willReturn($this->attachmentFolderName);
@@ -45,7 +45,7 @@ class AttachmentServiceTest extends TestCase {
 		$attachmentFile->method('getId')
 			->willReturn(2);
 		$attachmentFile->method('getPath')
-			->willReturn('/' . $this->userId . '/files/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
+			->willReturn('/' . $this->userId . '/files/.Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
 		$attachmentFile->method('getParent')
 			->willReturn($attachmentFolder);
 		$attachmentFile->method('getInternalPath')
@@ -72,7 +72,7 @@ class AttachmentServiceTest extends TestCase {
 			'filesize' => null,
 			'mimetype' => '',
 			'timestamp' => null,
-			'path' => '/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
+			'path' => '/.Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
 			'internalPath' => '/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
 			'hasPreview' => false,
 			'src' => $this->attachmentFolderName . DIRECTORY_SEPARATOR . 'attachmentFile1',

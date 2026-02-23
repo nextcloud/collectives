@@ -36,7 +36,7 @@ class UserFolderHelperTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$this->collectivesUserFolder->method('getName')
-			->willReturn('Collectives');
+			->willReturn('.Collectives');
 
 		$this->userFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
@@ -83,7 +83,7 @@ class UserFolderHelperTest extends TestCase {
 
 		$this->l10n->method('t')
 			->willReturn('Collectif');
-		self::assertEquals('/Collectif', $this->helper->getUserFolderSetting('jane'));
+		self::assertEquals('/.Collectif', $this->helper->getUserFolderSetting('jane'));
 
 		$this->config->method('setUserValue')
 			->willThrowException(new PreConditionNotMetException(''));
