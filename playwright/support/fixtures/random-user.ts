@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { type User as Account } from '@nextcloud/e2e-test-server'
 import { createRandomUser, login } from '@nextcloud/e2e-test-server/playwright'
 import { test as base } from '@playwright/test'
 import { User } from './User.ts'
 
-type RandomUser = Awaited<ReturnType<typeof createRandomUser>>
-
 export interface UserFixture {
-	randomUser: RandomUser
+	account: Account
 	user: User
 }
 
@@ -19,24 +18,29 @@ export interface UserFixture {
  */
 export const test = base.extend<UserFixture>({
 	// eslint-disable-next-line no-empty-pattern
-	randomUser: async ({}, use) => {
-		const randomUser = await createRandomUser()
-		await use(randomUser)
+	account: async ({}, use) => {
+		const account = await createRandomUser()
+		await use(account)
 	},
-	page: async ({ browser, baseURL, randomUser }, use) => {
+	page: async ({ account, browser, baseURL }, use) => {
 		// Important: make sure we authenticate in a clean environment by unsetting storage state.
 		const page = await browser.newPage({
 			storageState: undefined,
 			baseURL,
 		})
 
-		await login(page.request, randomUser)
+		await login(page.request, account)
+		const tokenResponse = await page.request.get('./csrftoken', {
+			failOnStatusCode: true,
+		})
+		const { token } = (await tokenResponse.json()) as { token: string }
+		await page.context().setExtraHTTPHeaders({ requesttoken: token })
 
 		await use(page)
 		await page.close()
 	},
-	user: async ({ page, randomUser }, use) => {
-		const user = new User(page, randomUser.userId)
+	user: async ({ account, page }, use) => {
+		const user = new User(account, page)
 		await use(user)
 	},
 })

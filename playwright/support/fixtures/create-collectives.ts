@@ -56,7 +56,7 @@ export const test = base.extend<CollectivesFixture>({
 				await runOcc([
 					'collectives:import:markdown',
 					`--collective-id=${collective.data.id}`,
-					`--user-id=${user.userId}`,
+					`--user-id=${user.account.userId}`,
 					'--',
 					config.markdownImportPath,
 				])
