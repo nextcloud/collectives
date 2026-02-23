@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
         matrix:
-            server-branch: ['stable31', 'master']
+            server-branch: ['stable32', 'master']
             #shardIndex: [1, 2]
             #shardTotal: [2]
     steps:

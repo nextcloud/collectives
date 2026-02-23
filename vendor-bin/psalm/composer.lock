@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d22a493431723ba703e55dd6e20191c",
+    "content-hash": "fabfe15c27ea49714f1a8767156bbe91",
     "packages": [],
     "packages-dev": [
         {
@@ -1628,16 +1628,16 @@
         },
         {
             "name": "nextcloud/ocp",
-            "version": "dev-stable31",
+            "version": "dev-stable32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "59f2eb798ca7c3a0612436c2d9b576aae1475722"
+                "reference": "a9120e7cc3f74e21001ffb00c970d9a9f891ac9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/59f2eb798ca7c3a0612436c2d9b576aae1475722",
-                "reference": "59f2eb798ca7c3a0612436c2d9b576aae1475722",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/a9120e7cc3f74e21001ffb00c970d9a9f891ac9b",
+                "reference": "a9120e7cc3f74e21001ffb00c970d9a9f891ac9b",
                 "shasum": ""
             },
             "require": {
@@ -1650,7 +1650,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-stable31": "31.0.0-dev"
+                    "dev-stable32": "32.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1670,9 +1670,9 @@
             "description": "Composer package containing Nextcloud's public OCP API and the unstable NCU API",
             "support": {
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
-                "source": "https://github.com/nextcloud-deps/ocp/tree/stable31"
+                "source": "https://github.com/nextcloud-deps/ocp/tree/stable32"
             },
-            "time": "2026-01-09T00:57:53+00:00"
+            "time": "2026-02-20T01:07:07+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -3481,8 +3481,8 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
+    "platform": [],
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1.32"
     },
