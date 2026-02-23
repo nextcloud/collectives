@@ -51,7 +51,7 @@ describe('Page share with password protection', function() {
 		cy.logout()
 		cy.visit(this.shareUrl)
 		cy.get('input[type="password"]').type('password')
-		if (['stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
+		if (['stable32'].includes(Cypress.env('ncVersion'))) {
 			cy.get('#password-input-form input[type="submit"]').click()
 		} else {
 			cy.get('button').contains('Submit').click()
