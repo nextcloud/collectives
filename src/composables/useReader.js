@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { computed, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, defineCustomElement, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
 import { useCollectivesStore } from '../stores/collectives.js'
@@ -94,6 +94,16 @@ export function useReader(content) {
 		const fileId = rootStore.editorApiFlags.includes(editorApiReaderFileId)
 			? readerPage.id
 			: null
+
+		// Define PageInfoBar as custom web component
+		if (!window.customElements.get('page-info-bar')) {
+			const PageInfoBarCE = defineCustomElement({
+				...PageInfoBar,
+				styles: PageInfoBar.styles,
+			}, { shadowRoot: false })
+			customElements.define('page-info-bar', PageInfoBarCE)
+		}
+
 		const readerInstance = await window.OCA.Text.createEditor({
 			el: readerEl.value,
 			fileId,
@@ -103,16 +113,12 @@ export function useReader(content) {
 			readOnly: true,
 			shareToken: rootStore.shareTokenParam || null,
 			readonlyBar: {
-				component: PageInfoBar,
-				props: {
-					currentPage: readerPage,
-					canEdit: collectivesStore.currentCollectiveCanEdit,
-					attachmentCount,
-					backlinkCount,
-				},
+				component: 'page-info-bar',
+				props: {},
 			},
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
 			onLoaded: () => {
+				nextTick(updateReadonlyBarProps)
 				reader.value.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
 				reader.value.setShowOutline(showCurrentPageOutline.value)
 			},
@@ -138,15 +144,14 @@ export function useReader(content) {
 	 * Update properties of the PageInfoBar in the reader
 	 */
 	function updateReadonlyBarProps() {
-		// Update currentPage in PageInfoBar component through Text editorAPI
-		if (reader.value?.updateReadonlyBarProps) {
-			reader.value?.updateReadonlyBarProps({
-				currentPage: defaultReaderPage.value,
-				canEdit: collectivesStore.currentCollectiveCanEdit,
-				attachmentCount: attachmentCount.value,
-				backlinkCount: backlinkCount.value,
-			})
+		const el = readerEl.value?.querySelector('page-info-bar')
+		if (!el) {
+			return
 		}
+		el.currentPage = defaultReaderPage.value
+		el.canEdit = collectivesStore.currentCollectiveCanEdit
+		el.attachmentCount = attachmentCount.value
+		el.backlinkCount = backlinkCount.value
 	}
 
 	return {
