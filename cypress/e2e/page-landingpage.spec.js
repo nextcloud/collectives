@@ -116,7 +116,7 @@ describe('Page landing page', function() {
 		cy.get('.landing-page-widgets')
 			.should('not.be.visible')
 		cy.getReadOnlyEditor()
-			.find('.text-menubar')
+			.find('.infobar')
 			.should('be.visible')
 		cy.getReadOnlyEditor()
 			.find('h2')
