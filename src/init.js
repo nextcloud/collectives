@@ -5,7 +5,7 @@
 
 import { registerFileListHeader } from '@nextcloud/files'
 import { registerFileListHeaders as legacyRegisterFileListHeader } from '@nextcloud/files-legacy'
-import { FilesCollectiveHeader } from './files/FilesCollectiveHeader.js'
+import { FilesCollectiveHeader } from './files/FilesCollectiveHeader.ts'
 
 const version = Number.parseInt((window.OC?.config?.version ?? '0').split('.')[0])
 
