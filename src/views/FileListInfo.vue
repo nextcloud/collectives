@@ -25,10 +25,13 @@
 </template>
 
 <script>
+import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
+
+const collectivesFolder = loadState('collectives', 'user_folder', null)
 
 export default {
 	name: 'FileListInfo',
@@ -39,27 +42,25 @@ export default {
 	},
 
 	props: {
-		collectivesFolder: {
-			type: String,
-			required: true,
-		},
-
 		path: {
 			type: String,
 			required: true,
 		},
 	},
 
+	expose: ['setPath'],
+
 	data() {
 		return {
 			active: false,
+			internalPath: this.path,
 		}
 	},
 
 	computed: {
 		collectivesLink() {
-			const collectivesPath = this.path.startsWith(this.collectivesFolder)
-				? this.path.slice(this.collectivesFolder.length)
+			const collectivesPath = this.internalPath.startsWith(collectivesFolder)
+				? this.internalPath.slice(collectivesFolder.length)
 				: ''
 			return generateUrl('/apps/collectives' + collectivesPath)
 		},
@@ -67,6 +68,7 @@ export default {
 
 	watch: {
 		path: function() {
+			this.internalPath = this.path
 			this.setActive()
 		},
 	},
@@ -79,7 +81,15 @@ export default {
 		t,
 
 		setActive() {
-			this.active = this.collectivesFolder && this.collectivesFolder !== '/' && this.path.startsWith(this.collectivesFolder)
+			this.active = collectivesFolder && collectivesFolder !== '/' && this.internalPath.startsWith(collectivesFolder)
+		},
+
+		/**
+		 * @param {string} path - The new path
+		 */
+		setPath(path) {
+			this.internalPath = path
+			this.setActive()
 		},
 	},
 }
