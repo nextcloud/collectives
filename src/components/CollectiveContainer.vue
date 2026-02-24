@@ -84,7 +84,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading']),
+		...mapState(useRootStore, ['fileIdQuery', 'isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectivePath',
@@ -185,8 +185,12 @@ export default {
 				&& this.$route.path !== this.currentCollectivePath) {
 				this.$router.replace({ path: this.currentCollectivePath, hash: document.location.hash })
 			} else if (this.currentPage
-				&& this.$route.path !== this.currentPagePath) {
-				this.$router.replace({ path: this.currentPagePath, hash: document.location.hash })
+				&& this.$route.fullPath !== this.currentPagePath) {
+				this.$router.replace({
+					path: this.currentPagePath,
+					query: this.fileIdQuery ? { fileId: this.fileIdQuery } : {},
+					hash: document.location.hash,
+				})
 			}
 		},
 	},
