@@ -68,22 +68,26 @@ export default {
 	props: {
 		currentPage: {
 			type: Object,
-			required: true,
+			default: () => ({
+				lastUserId: 0,
+				lastUserDisplayName: '',
+				timestamp: 0,
+			}),
 		},
 
 		canEdit: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 
 		attachmentCount: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 
 		backlinkCount: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 	},
 
