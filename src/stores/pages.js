@@ -229,7 +229,7 @@ export const usePagesStore = defineStore('pages', {
 		pageDavUrl: (state) => (page) => {
 			const rootStore = useRootStore()
 			return rootStore.isPublic
-				? generateRemoteUrl(`webdav/${state.pageDavPath(page)}`)
+				? generateRemoteUrl(`dav/files/${rootStore.shareTokenParam}/${state.pageDavPath(page)}`)
 						.replace('/remote.php', '/public.php')
 				: generateRemoteUrl(`dav/files/${state.pageDavPath(page)}`)
 		},
@@ -237,7 +237,7 @@ export const usePagesStore = defineStore('pages', {
 		currentPageDavUrl(state) {
 			const rootStore = useRootStore()
 			return rootStore.isPublic
-				? generateRemoteUrl(`webdav/${state.currentPageDavPath}`)
+				? generateRemoteUrl(`dav/files/${rootStore.shareTokenParam}/${state.currentPageDavPath}`)
 						.replace('/remote.php', '/public.php')
 				: generateRemoteUrl(`dav/files/${state.currentPageDavPath}`)
 		},
