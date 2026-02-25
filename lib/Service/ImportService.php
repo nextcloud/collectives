@@ -74,8 +74,7 @@ class ImportService {
 	private function processDirectory(string $directory, ?PageInfo $parentPage): void {
 		// Verify directory exists and is readable
 		if (!is_readable($directory)) {
-			$message = sprintf('✗ Failed: %s - Directory not readable', $directory);
-			$this->progressReporter->writeError($message);
+			$this->progressReporter->writeError(sprintf('✗ Failed: %s - Directory not readable', $directory));
 			return;
 		}
 
@@ -96,11 +95,9 @@ class ImportService {
 				[$id, $title] = $this->processFile($directory, $item, $parentPage);
 				$this->fileMap[$path] = $id;
 				$this->count++;
-				$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $this->count, $path, $title, $id);
-				$this->progressReporter->writeInfo($message);
+				$this->progressReporter->writeInfo(sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $this->count, $path, $title, $id));
 			} catch (NotFoundException $e) {
-				$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
-				$this->progressReporter->writeError($message);
+				$this->progressReporter->writeError(sprintf('✗ Failed: %s - %s', $path, $e->getMessage()));
 			}
 		}
 
@@ -118,11 +115,9 @@ class ImportService {
 					[$id, $title] = $this->processFile($path, $readmeName, $parentPage, $item);
 					$this->fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
 					$this->count++;
-					$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $this->count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id);
-					$this->progressReporter->writeInfo($message);
+					$this->progressReporter->writeInfo(sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $this->count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id));
 				} catch (NotFoundException $e) {
-					$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
-					$this->progressReporter->writeError($message);
+					$this->progressReporter->writeError(sprintf('✗ Failed: %s - %s', $path, $e->getMessage()));
 					continue;
 				}
 				$indexPageInfo = $this->pageService->findByFileId($this->collective->getId(), $id, $this->user->getUID());
@@ -192,8 +187,7 @@ class ImportService {
 				$pageFile = $this->pageService->getPageFile($this->collective->getId(), $pageId, $this->user->getUID());
 				$content = $pageFile->getContent();
 			} catch (NotFoundException|NotPermittedException $e) {
-				$message = sprintf('✗ Failed: %s - Failed to read page content: %s', $filePath, $e->getMessage());
-				$this->progressReporter->writeError($message);
+				$this->progressReporter->writeError(sprintf('✗ Failed: %s - Failed to read page content: %s', $filePath, $e->getMessage()));
 				continue;
 			}
 
@@ -214,8 +208,7 @@ class ImportService {
 			$updateCount = $linkCount + $attachmentCount;
 			if ($updateCount > 0) {
 				NodeHelper::putContent($pageFile, $updatedContent);
-				$message = sprintf('🔗 %d links and attachments updated: %s', $updateCount, $filePath);
-				$this->progressReporter->writeInfo($message);
+				$this->progressReporter->writeInfo(sprintf('🔗 %d links and attachments updated: %s', $updateCount, $filePath));
 			}
 		}
 	}
@@ -302,8 +295,7 @@ class ImportService {
 		}
 
 		if ($targetPageInfo === null) {
-			$message = sprintf('✗ Failed: %s - Didn\'t find target page for link %s, not updated', $filePath, $href);
-			$this->progressReporter->writeErrorVerbose($message);
+			$this->progressReporter->writeErrorVerbose(sprintf('✗ Failed: %s - Didn\'t find target page for link %s, not updated', $filePath, $href));
 			return 0;
 		}
 
@@ -360,8 +352,7 @@ class ImportService {
 		}
 
 		if ($targetAttachment === null) {
-			$message = sprintf('✗ Failed: %s - Didn\'t find source file for attachment reference %s, not updated', $filePath, $url);
-			$this->progressReporter->writeErrorVerbose($message);
+			$this->progressReporter->writeErrorVerbose(sprintf('✗ Failed: %s - Didn\'t find source file for attachment reference %s, not updated', $filePath, $url));
 			return 0;
 		}
 
