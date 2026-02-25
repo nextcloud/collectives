@@ -22,10 +22,11 @@ class ImportService {
 		private PageService $pageService,
 		private AttachmentService $attachmentService,
 		private IMimeTypeDetector $mimeTypeDetector,
+		private IProgressReporter $progressReporter,
 	) {
 	}
 
-	public function importDirectory(string $directory, Collective $collective, int $parentId, IUser $user, ?callable $progressCallback = null): int {
+	public function importDirectory(string $directory, Collective $collective, int $parentId, IUser $user): int {
 		// Verify directory exists and is readable
 		if (!file_exists($directory) || !is_dir($directory) || !is_readable($directory)) {
 			throw new NotFoundException('Directory not accessible: ' . $directory);
@@ -38,32 +39,26 @@ class ImportService {
 			$parentPage = null;
 		}
 
-		if ($progressCallback === null) {
-			$progressCallback = function (string $status, string $message) {
-				// no-op
-			};
-		}
-
 		$fileMap = [];
 		$count = 0;
 		$memory = memory_get_usage();
-		$this->processDirectory($directory, $collective, $parentPage, $user, $fileMap, $count, $progressCallback);
+		$this->processDirectory($directory, $collective, $parentPage, $user, $fileMap, $count);
 		$message = sprintf('Memory usage after importing pages: %.2fMB (peak usage: %.2fMB)',
 			((float)memory_get_usage() - (float)$memory) / 1024.0 / 1024.0,
 			(float)memory_get_peak_usage() / 1024.0 / 1024.0);
-		$progressCallback('success_verbose', $message);
+		$this->progressReporter->writeInfoVerbose($message);
 		$memory = memory_get_usage();
 		if ($count === 0) {
 			throw new NotFoundException('No markdown files found in directory: ' . $directory);
 		}
 
 		// Third pass: rewrite relative links in all imported pages
-		$this->rewriteInternalLinksAndAttachments($collective, $user, $fileMap, $parentId, $directory, $progressCallback);
+		$this->rewriteInternalLinksAndAttachments($collective, $user, $fileMap, $parentId, $directory);
 		$message = sprintf('Memory usage after rewriting links and attachments: %.2fMB (+%.2fMb, peak usage: %.2fMB)',
 			(float)memory_get_usage() / 1024.0 / 1024.0,
 			((float)memory_get_usage() - (float)$memory) / 1024.0 / 1024.0,
 			(float)memory_get_peak_usage() / 1024.0 / 1024.0);
-		$progressCallback('success_verbose', $message);
+		$this->progressReporter->writeInfoVerbose($message);
 
 		return $count;
 	}
@@ -71,11 +66,11 @@ class ImportService {
 	/**
 	 * Recursively import Markdown files from directory
 	 */
-	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, array &$fileMap, int &$count, ?callable $progressCallback = null): void {
+	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, array &$fileMap, int &$count): void {
 		// Verify directory exists and is readable
 		if (!is_readable($directory)) {
 			$message = sprintf('✗ Failed: %s - Directory not readable', $directory);
-			$progressCallback('error', $message);
+			$this->progressReporter->writeError($message);
 			return;
 		}
 
@@ -97,10 +92,10 @@ class ImportService {
 				$fileMap[$path] = $id;
 				$count++;
 				$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path, $title, $id);
-				$progressCallback('success', $message);
+				$this->progressReporter->writeInfo($message);
 			} catch (NotFoundException $e) {
 				$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
-				$progressCallback('error', $message);
+				$this->progressReporter->writeError($message);
 			}
 		}
 
@@ -119,10 +114,10 @@ class ImportService {
 					$fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
 					$count++;
 					$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id);
-					$progressCallback('success', $message);
+					$this->progressReporter->writeInfo($message);
 				} catch (NotFoundException $e) {
 					$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
-					$progressCallback('error', $message);
+					$this->progressReporter->writeError($message);
 					continue;
 				}
 				$indexPageInfo = $this->pageService->findByFileId($collective->getId(), $id, $user->getUID());
@@ -130,7 +125,7 @@ class ImportService {
 				// Create new empty index page
 				$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
 			}
-			$this->processDirectory($path, $collective, $indexPageInfo, $user, $fileMap, $count, $progressCallback);
+			$this->processDirectory($path, $collective, $indexPageInfo, $user, $fileMap, $count);
 		}
 	}
 
@@ -186,14 +181,14 @@ class ImportService {
 	/**
 	 * Rewrite relative links in all imported pages to point to new page URLs
 	 */
-	private function rewriteInternalLinksAndAttachments(Collective $collective, IUser $user, array $fileMap, int $parentId, string $baseDirectory, callable $progressCallback): void {
+	private function rewriteInternalLinksAndAttachments(Collective $collective, IUser $user, array $fileMap, int $parentId, string $baseDirectory): void {
 		foreach ($fileMap as $filePath => $pageId) {
 			try {
 				$pageFile = $this->pageService->getPageFile($collective->getId(), $pageId, $user->getUID());
 				$content = $pageFile->getContent();
 			} catch (NotFoundException|NotPermittedException $e) {
 				$message = sprintf('✗ Failed: %s - Failed to read page content: %s', $filePath, $e->getMessage());
-				$progressCallback('error', $message);
+				$this->progressReporter->writeError($message);
 				continue;
 			}
 
@@ -202,20 +197,20 @@ class ImportService {
 			$links = MarkdownHelper::getLinksFromContent($content);
 			$linkCount = 0;
 			foreach ($links as $link) {
-				$linkCount += $this->processLink($link, $collective, $user, $parentId, $filePath, $updatedContent, $progressCallback);
+				$linkCount += $this->processLink($link, $collective, $user, $parentId, $filePath, $updatedContent);
 			}
 
 			$attachments = MarkdownHelper::getImageLinksFromContent($content);
 			$attachmentCount = 0;
 			foreach ($attachments as $attachment) {
-				$attachmentCount += $this->processAttachment($attachment, $collective, $user, $pageFile, $filePath, $baseDirectory, $updatedContent, $progressCallback);
+				$attachmentCount += $this->processAttachment($attachment, $collective, $user, $pageFile, $filePath, $baseDirectory, $updatedContent);
 			}
 
 			$updateCount = $linkCount + $attachmentCount;
 			if ($updateCount > 0) {
 				NodeHelper::putContent($pageFile, $updatedContent);
 				$message = sprintf('🔗 %d links and attachments updated: %s', $updateCount, $filePath);
-				$progressCallback('success', $message);
+				$this->progressReporter->writeInfo($message);
 			}
 		}
 	}
@@ -260,7 +255,7 @@ class ImportService {
 		return str_replace(':', DIRECTORY_SEPARATOR, $href);
 	}
 
-	private function processLink(array $link, Collective $collective, IUser $user, int $parentId, string $filePath, string &$updatedContent, callable $progressCallback): int {
+	private function processLink(array $link, Collective $collective, IUser $user, int $parentId, string $filePath, string &$updatedContent): int {
 		$href = $link['href'];
 		$sanitizedHref = self::sanitizeHref($href);
 		if ($sanitizedHref === null) {
@@ -303,7 +298,7 @@ class ImportService {
 
 		if ($targetPageInfo === null) {
 			$message = sprintf('✗ Failed: %s - Didn\'t find target page for link %s, not updated', $filePath, $href);
-			$progressCallback('error_verbose', $message);
+			$this->progressReporter->writeErrorVerbose($message);
 			return 0;
 		}
 
@@ -321,7 +316,7 @@ class ImportService {
 		return 1;
 	}
 
-	private function processAttachment(array $image, Collective $collective, IUser $user, File $pageFile, string $filePath, string $baseDirectory, string &$updatedContent, callable $progressCallback): int {
+	private function processAttachment(array $image, Collective $collective, IUser $user, File $pageFile, string $filePath, string $baseDirectory, string &$updatedContent): int {
 		$url = $image['url'];
 		if (!$url) {
 			return 0;
@@ -361,7 +356,7 @@ class ImportService {
 
 		if ($targetAttachment === null) {
 			$message = sprintf('✗ Failed: %s - Didn\'t find source file for attachment reference %s, not updated', $filePath, $url);
-			$progressCallback('error_verbose', $message);
+			$this->progressReporter->writeErrorVerbose($message);
 			return 0;
 		}
 
