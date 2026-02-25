@@ -21,7 +21,7 @@
 			</template>
 		</template>
 		<template #actions>
-			<CollectiveActions
+			<NcActionCollectiveActions
 				:collective="collective"
 				:networkOnline="networkOnline" />
 		</template>
@@ -32,7 +32,7 @@
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
-import CollectiveActions from '../Collective/CollectiveActions.vue'
+import NcActionCollectiveActions from '../Collective/NcActionCollectiveActions.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { useRootStore } from '../../stores/root.js'
@@ -42,7 +42,7 @@ export default {
 
 	components: {
 		NcAppNavigationItem,
-		CollectiveActions,
+		NcActionCollectiveActions,
 		CollectivesIcon,
 	},
 
