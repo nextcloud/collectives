@@ -85,7 +85,11 @@ class PublicStartController extends AuthPublicShareController {
 	}
 
 	protected function authSucceeded() {
-		$this->session->set(PublicAuth::DAV_AUTHENTICATED, $this->getShare()->getId());
+		$allowedShareIds = $this->session->get(PublicAuth::DAV_AUTHENTICATED);
+		if (!is_array($allowedShareIds)) {
+			$allowedShareIds = [];
+		}
+		$this->session->set(PublicAuth::DAV_AUTHENTICATED, array_merge($allowedShareIds, [$this->getShare()->getId()]));
 	}
 
 	#[PublicPage]
