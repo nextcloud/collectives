@@ -99,7 +99,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 
 export default {
-	name: 'CollectiveActions',
+	name: 'NcActionCollectiveActions',
 
 	components: {
 		AccountMultipleIcon,

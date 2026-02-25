@@ -20,7 +20,7 @@ import ClockIcon from 'vue-material-design-icons/ClockOutline.vue'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
-	name: 'PageActionLastUser',
+	name: 'NcActionLastUser',
 
 	components: {
 		ClockIcon,

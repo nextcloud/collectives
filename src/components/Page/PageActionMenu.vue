@@ -8,12 +8,12 @@
 		<NcActions :forceMenu="true" @click.stop>
 			<!-- Collective actions: only displayed for landing page -->
 			<template v-if="isLandingPage">
-				<CollectiveActions :collective="currentCollective" :networkOnline="networkOnline" />
+				<NcActionCollectiveActions :collective="currentCollective" :networkOnline="networkOnline" />
 				<NcActionSeparator />
 			</template>
 
 			<!-- Last edited info -->
-			<PageActionLastUser
+			<NcActionLastUser
 				v-if="displayLastEditedInfo"
 				:lastUserId="lastUserId"
 				:lastUserDisplayName="lastUserDisplayName"
@@ -172,9 +172,9 @@ import StarIcon from 'vue-material-design-icons/StarOutline.vue'
 import TagMultipleIcon from 'vue-material-design-icons/TagMultiple.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
-import CollectiveActions from '../Collective/CollectiveActions.vue'
 import MoveOrCopyModal from './MoveOrCopyModal.vue'
-import PageActionLastUser from './PageActionLastUser.vue'
+import NcActionCollectiveActions from '../Collective/NcActionCollectiveActions.vue'
+import NcActionLastUser from './NcActionLastUser.vue'
 import TagsModal from './TagsModal.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
@@ -185,7 +185,7 @@ export default {
 	name: 'PageActionMenu',
 
 	components: {
-		CollectiveActions,
+		NcActionCollectiveActions,
 		MoveOrCopyModal,
 		NcActions,
 		NcActionButton,
@@ -198,7 +198,7 @@ export default {
 		EmoticonIcon,
 		FormatListBulletedIcon,
 		OpenInNewIcon,
-		PageActionLastUser,
+		NcActionLastUser,
 		ShareVariantIcon,
 		StarIcon,
 		StarOffIcon,
