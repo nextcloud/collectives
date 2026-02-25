@@ -18,15 +18,24 @@ use OCP\Files\IMimeTypeDetector;
 use OCP\IUser;
 
 class ImportService {
+	private int $count = 0;
+	private array $fileMap = []; // Maps original file paths to new	page IDs
+
 	public function __construct(
-		private PageService $pageService,
-		private AttachmentService $attachmentService,
-		private IMimeTypeDetector $mimeTypeDetector,
-		private IProgressReporter $progressReporter,
+		private readonly PageService $pageService,
+		private readonly AttachmentService $attachmentService,
+		private readonly IMimeTypeDetector $mimeTypeDetector,
+		private readonly IProgressReporter $progressReporter,
+		private readonly Collective $collective,
+		private readonly IUser $user,
 	) {
 	}
 
-	public function importDirectory(string $directory, Collective $collective, int $parentId, IUser $user): int {
+	public function getCount(): int {
+		return $this->count;
+	}
+
+	public function importDirectory(string $directory, int $parentId): void {
 		// Verify directory exists and is readable
 		if (!file_exists($directory) || !is_dir($directory) || !is_readable($directory)) {
 			throw new NotFoundException('Directory not accessible: ' . $directory);
@@ -34,39 +43,35 @@ class ImportService {
 
 		if ($parentId !== 0) {
 			// Also verifies that the parentId page exists
-			$parentPage = $this->pageService->findByFileId($collective->getId(), $parentId, $user->getUID());
+			$parentPage = $this->pageService->findByFileId($this->collective->getId(), $parentId, $this->user->getUID());
 		} else {
 			$parentPage = null;
 		}
 
-		$fileMap = [];
-		$count = 0;
 		$memory = memory_get_usage();
-		$this->processDirectory($directory, $collective, $parentPage, $user, $fileMap, $count);
+		$this->processDirectory($directory, $parentPage);
 		$message = sprintf('Memory usage after importing pages: %.2fMB (peak usage: %.2fMB)',
 			((float)memory_get_usage() - (float)$memory) / 1024.0 / 1024.0,
 			(float)memory_get_peak_usage() / 1024.0 / 1024.0);
 		$this->progressReporter->writeInfoVerbose($message);
 		$memory = memory_get_usage();
-		if ($count === 0) {
+		if ($this->count === 0) {
 			throw new NotFoundException('No markdown files found in directory: ' . $directory);
 		}
 
 		// Third pass: rewrite relative links in all imported pages
-		$this->rewriteInternalLinksAndAttachments($collective, $user, $fileMap, $parentId, $directory);
+		$this->rewriteInternalLinksAndAttachments($parentId, $directory);
 		$message = sprintf('Memory usage after rewriting links and attachments: %.2fMB (+%.2fMb, peak usage: %.2fMB)',
 			(float)memory_get_usage() / 1024.0 / 1024.0,
 			((float)memory_get_usage() - (float)$memory) / 1024.0 / 1024.0,
 			(float)memory_get_peak_usage() / 1024.0 / 1024.0);
 		$this->progressReporter->writeInfoVerbose($message);
-
-		return $count;
 	}
 
 	/**
 	 * Recursively import Markdown files from directory
 	 */
-	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, array &$fileMap, int &$count): void {
+	private function processDirectory(string $directory, ?PageInfo $parentPage): void {
 		// Verify directory exists and is readable
 		if (!is_readable($directory)) {
 			$message = sprintf('✗ Failed: %s - Directory not readable', $directory);
@@ -88,10 +93,10 @@ class ImportService {
 			$path = $directory . DIRECTORY_SEPARATOR . $item;
 
 			try {
-				[$id, $title] = $this->processFile($directory, $item, $collective, $user, $parentPage);
-				$fileMap[$path] = $id;
-				$count++;
-				$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path, $title, $id);
+				[$id, $title] = $this->processFile($directory, $item, $parentPage);
+				$this->fileMap[$path] = $id;
+				$this->count++;
+				$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $this->count, $path, $title, $id);
 				$this->progressReporter->writeInfo($message);
 			} catch (NotFoundException $e) {
 				$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
@@ -110,26 +115,26 @@ class ImportService {
 			if ($readmeName !== null) {
 				// Create index page from readme.md if exists
 				try {
-					[$id, $title] = $this->processFile($path, $readmeName, $collective, $user, $parentPage, $item);
-					$fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
-					$count++;
-					$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id);
+					[$id, $title] = $this->processFile($path, $readmeName, $parentPage, $item);
+					$this->fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
+					$this->count++;
+					$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $this->count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id);
 					$this->progressReporter->writeInfo($message);
 				} catch (NotFoundException $e) {
 					$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
 					$this->progressReporter->writeError($message);
 					continue;
 				}
-				$indexPageInfo = $this->pageService->findByFileId($collective->getId(), $id, $user->getUID());
+				$indexPageInfo = $this->pageService->findByFileId($this->collective->getId(), $id, $this->user->getUID());
 			} else {
 				// Create new empty index page
-				$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
+				$indexPageInfo = $this->pageService->getOrCreate($this->collective->getId(), $parentId, $item, $this->user->getUID());
 			}
-			$this->processDirectory($path, $collective, $indexPageInfo, $user, $fileMap, $count);
+			$this->processDirectory($path, $indexPageInfo);
 		}
 	}
 
-	private function processFile(string $directory, string $item, Collective $collective, IUser $user, ?PageInfo $parentPage, ?string $title = null): array {
+	private function processFile(string $directory, string $item, ?PageInfo $parentPage, ?string $title = null): array {
 		$path = $directory . DIRECTORY_SEPARATOR . $item;
 		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
 		$title = $title ?? basename($path, '.md');
@@ -156,11 +161,11 @@ class ImportService {
 				$parentId = $parentPage !== null ? $parentPage->getParentId() : 0;
 			}
 			$pageInfo = $this->pageService->createBase(
-				$collective->getId(),
+				$this->collective->getId(),
 				$parentId,
 				$title,
 				null,
-				$user->getUID(),
+				$this->user->getUID(),
 				null,
 				$content,
 			);
@@ -181,10 +186,10 @@ class ImportService {
 	/**
 	 * Rewrite relative links in all imported pages to point to new page URLs
 	 */
-	private function rewriteInternalLinksAndAttachments(Collective $collective, IUser $user, array $fileMap, int $parentId, string $baseDirectory): void {
-		foreach ($fileMap as $filePath => $pageId) {
+	private function rewriteInternalLinksAndAttachments(int $parentId, string $baseDirectory): void {
+		foreach ($this->fileMap as $filePath => $pageId) {
 			try {
-				$pageFile = $this->pageService->getPageFile($collective->getId(), $pageId, $user->getUID());
+				$pageFile = $this->pageService->getPageFile($this->collective->getId(), $pageId, $this->user->getUID());
 				$content = $pageFile->getContent();
 			} catch (NotFoundException|NotPermittedException $e) {
 				$message = sprintf('✗ Failed: %s - Failed to read page content: %s', $filePath, $e->getMessage());
@@ -197,13 +202,13 @@ class ImportService {
 			$links = MarkdownHelper::getLinksFromContent($content);
 			$linkCount = 0;
 			foreach ($links as $link) {
-				$linkCount += $this->processLink($link, $collective, $user, $parentId, $filePath, $updatedContent);
+				$linkCount += $this->processLink($link, $parentId, $filePath, $updatedContent);
 			}
 
 			$attachments = MarkdownHelper::getImageLinksFromContent($content);
 			$attachmentCount = 0;
 			foreach ($attachments as $attachment) {
-				$attachmentCount += $this->processAttachment($attachment, $collective, $user, $pageFile, $filePath, $baseDirectory, $updatedContent);
+				$attachmentCount += $this->processAttachment($attachment, $pageFile, $filePath, $baseDirectory, $updatedContent);
 			}
 
 			$updateCount = $linkCount + $attachmentCount;
@@ -255,7 +260,7 @@ class ImportService {
 		return str_replace(':', DIRECTORY_SEPARATOR, $href);
 	}
 
-	private function processLink(array $link, Collective $collective, IUser $user, int $parentId, string $filePath, string &$updatedContent): int {
+	private function processLink(array $link, int $parentId, string $filePath, string &$updatedContent): int {
 		$href = $link['href'];
 		$sanitizedHref = self::sanitizeHref($href);
 		if ($sanitizedHref === null) {
@@ -290,7 +295,7 @@ class ImportService {
 		$targetPageInfo = null;
 		foreach ($candidates as $candidate) {
 			try {
-				$targetPageInfo = $this->pageService->findByPath($collective->getId(), $candidate, $user->getUID(), $parentId);
+				$targetPageInfo = $this->pageService->findByPath($this->collective->getId(), $candidate, $this->user->getUID(), $parentId);
 				break;
 			} catch (NotFoundException|NotPermittedException) {
 			}
@@ -302,7 +307,7 @@ class ImportService {
 			return 0;
 		}
 
-		$newHref = $this->pageService->getPageLink($collective->getUrlPath(), $targetPageInfo);
+		$newHref = $this->pageService->getPageLink($this->collective->getUrlPath(), $targetPageInfo);
 
 		// Preserve fragment if present
 		if (preg_match('/#(.+)$/', $href, $matches)) {
@@ -316,7 +321,7 @@ class ImportService {
 		return 1;
 	}
 
-	private function processAttachment(array $image, Collective $collective, IUser $user, File $pageFile, string $filePath, string $baseDirectory, string &$updatedContent): int {
+	private function processAttachment(array $image, File $pageFile, string $filePath, string $baseDirectory, string &$updatedContent): int {
 		$url = $image['url'];
 		if (!$url) {
 			return 0;

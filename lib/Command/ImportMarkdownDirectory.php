@@ -88,18 +88,20 @@ class ImportMarkdownDirectory extends Command {
 			$this->pageService,
 			$this->attachmentService,
 			$this->mimeTypeDetector,
-			$progressReporter
+			$progressReporter,
+			$collective,
+			$user,
 		);
 
 		try {
-			$count = $importService->importDirectory($directory, $collective, $parentId, $user);
+			$importService->importDirectory($directory, $parentId);
 		} catch (NotFoundException $e) {
 			$progressReporter->writeError($e->getMessage());
 			return 1;
 		}
 
 		$progressReporter->writeInfo('');
-		$progressReporter->writeInfo('Processed ' . $count . ' file(s) for collective "' . $collective->getName() . '" (ID: ' . $collectiveId . ').');
+		$progressReporter->writeInfo('Processed ' . $importService->getCount() . ' file(s) for collective "' . $collective->getName() . '" (ID: ' . $collectiveId . ').');
 
 		return 0;
 	}
