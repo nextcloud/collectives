@@ -61,6 +61,7 @@ export default {
 		},
 
 		title() {
+			// TRANSLATORS 'Preview' means to switch the editor from edit to read-only mode.
 			return this.isTextEdit ? t('collectives', 'Preview') : t('collectives', 'Edit')
 		},
 
