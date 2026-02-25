@@ -9,9 +9,13 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
 
+use OCA\Collectives\Service\AttachmentService;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\ImportService;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\ProgressReporter;
+use OCP\Files\IMimeTypeDetector;
 use OCP\IUserManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,9 +25,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportMarkdownDirectory extends Command {
 	public function __construct(
-		private ImportService $importService,
-		private CollectiveService $collectiveService,
-		private IUserManager $userManager,
+		private readonly CollectiveService $collectiveService,
+		private readonly IUserManager $userManager,
+		private readonly PageService $pageService,
+		private readonly AttachmentService $attachmentService,
+		private readonly IMimeTypeDetector $mimeTypeDetector,
 	) {
 		parent::__construct();
 	}
@@ -47,20 +53,22 @@ class ImportMarkdownDirectory extends Command {
 		$parentId = (int)$input->getOption('parent-id');
 		$verbose = (bool)$input->getOption('verbose');
 
+		$progressReporter = new ProgressReporter($output, $verbose);
+
 		if ($collectiveId === 0) {
-			$output->writeln('<error>Required option missing: --collective-id=COLLECTIVE_ID</error>');
+			$progressReporter->writeError('Required option missing: --collective-id=COLLECTIVE_ID');
 			return 1;
 		}
 
 		if ($userId === null) {
-			$output->writeln('<error>Required option missing: --user-id=USER_ID</error>');
+			$progressReporter->writeError('Required option missing: --user-id=USER_ID');
 			return 1;
 		}
 
 		// Verify user exists
 		$user = $this->userManager->get($userId);
 		if (!$user) {
-			$output->writeln('<error>User ' . $userId . ' not found</error>');
+			$progressReporter->writeError('User ' . $userId . ' not found');
 			return 1;
 		}
 
@@ -69,34 +77,29 @@ class ImportMarkdownDirectory extends Command {
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 		} catch (NotFoundException $e) {
 			if (str_starts_with($e->getMessage(), 'Circle not found')) {
-				$output->writeln('<error>Collective with ID ' . $collectiveId . ' not accessible for user ' . $userId . '.</error>');
+				$progressReporter->writeError('Collective with ID ' . $collectiveId . ' not accessible for user ' . $userId);
 			} else {
-				$output->writeln('<error>Collective with ID ' . $collectiveId . ' not found.</error>');
+				$progressReporter->writeError('Collective with ID ' . $collectiveId . ' not found');
 			}
 			return 1;
 		}
 
-		$progressCallback = function (string $status, string $message) use ($output, $verbose) {
-			if ($status === 'success') {
-				$output->writeln('<info>' . $message . '</info>');
-			} elseif ($verbose === true && $status === 'success_verbose') {
-				$output->writeln('<info>' . $message . '</info>');
-			} elseif ($status === 'error') {
-				$output->writeln('<error>' . $message . '</error>');
-			} elseif ($verbose === true && $status === 'error_verbose') {
-				$output->writeln('<error>' . $message . '</error>');
-			}
-		};
+		$importService = new ImportService(
+			$this->pageService,
+			$this->attachmentService,
+			$this->mimeTypeDetector,
+			$progressReporter
+		);
 
 		try {
-			$count = $this->importService->importDirectory($directory, $collective, $parentId, $user, $progressCallback);
+			$count = $importService->importDirectory($directory, $collective, $parentId, $user);
 		} catch (NotFoundException $e) {
-			$output->writeln('<error>' . $e->getMessage() . '</error>');
+			$progressReporter->writeError($e->getMessage());
 			return 1;
 		}
 
-		$output->writeln('');
-		$output->writeln('<info>Processed ' . $count . ' file(s) for collective "' . $collective->getName() . '" (ID: ' . $collectiveId . ').</info>');
+		$progressReporter->writeInfo('');
+		$progressReporter->writeInfo('Processed ' . $count . ' file(s) for collective "' . $collective->getName() . '" (ID: ' . $collectiveId . ').');
 
 		return 0;
 	}
