@@ -121,7 +121,7 @@ export default {
 		subscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		unsubscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
 	},
 
