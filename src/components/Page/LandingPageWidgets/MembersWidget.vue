@@ -193,7 +193,7 @@ export default {
 		window.addEventListener('resize', this.updateShowMembersCountDebounced)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		window.removeEventListener('resize', this.updateShowMembersCountDebounced)
 	},
 

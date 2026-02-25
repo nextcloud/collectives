@@ -250,7 +250,7 @@ export default {
 		subscribe('collectives:member-picker:scroll', this.closeMenu)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		unsubscribe('collectives:member-picker:scroll', this.closeMenu)
 	},
 

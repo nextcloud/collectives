@@ -163,7 +163,7 @@ export default {
 		this.$highlightTimeoutId = null
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		unsubscribe('collectives:page-list:page-trashed', this.onPageTrashed)
 		clearTimeout(this.$highlightTimeoutId)
 	},

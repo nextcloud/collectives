@@ -185,7 +185,7 @@ export default {
 		this.$refs.memberPickerList.addEventListener('scroll', this.onScrollDebounced)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		this.$refs.memberPickerList.removeEventListener('scroll', this.onScrollDebounced)
 	},
 
