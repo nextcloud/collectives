@@ -292,6 +292,7 @@ OC.L10N.register(
     "Not in page" : "Não na pagina",
     "Recently deleted" : "Recentemente excluídos",
     "Found in folder" : "Encontrado na pasta",
+    "Explanation for found in folder list" : "Explicação para a lista \"encontrado na pasta\"",
     "Files in the folder of the page." : "Arquivos na pasta da pagina.",
     "No attachments" : "Sem anexos",
     "No backlinks available" : "Nenhum backlink disponível",
