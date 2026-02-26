@@ -8,9 +8,9 @@
 		<div class="template-list-item-icon" @click.prevent.stop>
 			<NcEmojiPicker
 				:ref="`templateEmojiPicker-${template.id}`"
-				:show-preview="true"
-				:allow-unselect="true"
-				:selected-emoji="template.emoji"
+				:showPreview="true"
+				:allowUnselect="true"
+				:selectedEmoji="template.emoji"
 				@select="onSelectEmoji($event, template.id)"
 				@unselect="onUnselectEmoji(template.id)">
 				<NcButton
@@ -23,14 +23,14 @@
 						<NcLoadingIcon
 							v-if="isLoading(template.id)"
 							:size="20"
-							fill-color="var(--color-text-maxcontrast)" />
+							fillColor="var(--color-text-maxcontrast)" />
 						<div v-else-if="template.emoji">
 							{{ template.emoji }}
 						</div>
 						<PageTemplateIcon
 							v-else
 							:size="20"
-							fill-color="var(--color-text-maxcontrast)" />
+							fillColor="var(--color-text-maxcontrast)" />
 					</template>
 				</NcButton>
 			</NcEmojiPicker>
@@ -46,7 +46,7 @@
 					v-model="renameTitle"
 					v-click-outside="onRename"
 					:placeholder="t('collectives', 'Template title')"
-					:label-outside="true"
+					:labelOutside="true"
 					:autofocus="true"
 					:minlength="1"
 					:required="true"
@@ -62,9 +62,9 @@
 			</a>
 		</div>
 		<div class="template-action-buttons" @click.prevent.stop>
-			<NcActions :force-menu="true">
+			<NcActions :forceMenu="true">
 				<NcActionButton
-					:close-after-click="true"
+					:closeAfterClick="true"
 					@click="onInitRename(template)">
 					<template #icon>
 						<PencilIcon :size="20" />
@@ -72,7 +72,7 @@
 					{{ t('collectives', 'Rename') }}
 				</NcActionButton>
 				<NcActionButton
-					:close-after-click="true"
+					:closeAfterClick="true"
 					@click="onInitSelectEmoji(template.id)">
 					<template #icon>
 						<EmoticonIcon :size="20" />
@@ -80,7 +80,7 @@
 					{{ t('collectives', 'Select emoji') }}
 				</NcActionButton>
 				<NcActionButton
-					:close-after-click="true"
+					:closeAfterClick="true"
 					@click="$emit('delete', template)">
 					<template #icon>
 						<DeleteIcon :size="20" />
@@ -136,6 +136,11 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: [
+		'open',
+		'delete',
+	],
 
 	data() {
 		return {

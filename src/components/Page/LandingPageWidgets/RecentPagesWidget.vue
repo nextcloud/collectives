@@ -107,7 +107,7 @@ export default {
 		this.$refs.pageslider.addEventListener('scroll', this.updateButtonsDebounced)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		this.$refs.pageslider.removeEventListener('scroll', this.updateButtonsDebounced)
 	},
 

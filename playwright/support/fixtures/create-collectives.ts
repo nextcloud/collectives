@@ -53,6 +53,9 @@ export const test = base.extend<CollectivesFixture>({
 		}
 	},
 	collective: async ({ collectives }, use) => {
+		if (!collectives[0]) {
+			throw new Error('No collective available for the test')
+		}
 		await use(collectives[0])
 	},
 })

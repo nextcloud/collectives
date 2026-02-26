@@ -17,7 +17,7 @@
 			{{ t('collectives', 'Deleted pages') }}
 		</NcButton>
 		<NcDialog
-			:open.sync="showModal"
+			v-model:open="showModal"
 			:name="t('collectives', 'Deleted pages')"
 			class="dialog__page-trash"
 			size="large">
@@ -50,7 +50,7 @@
 										<div v-if="trashPage.emoji">
 											{{ trashPage.emoji }}
 										</div>
-										<PageIcon v-else :size="22" fill-color="var(--color-background-darker)" />
+										<PageIcon v-else :size="22" fillColor="var(--color-background-darker)" />
 									</div>
 									<div class="item-title">
 										{{ trashPage.title }}
@@ -66,9 +66,9 @@
 										</template>
 										{{ t('collectives', 'Restore') }}
 									</NcButton>
-									<NcActions :force-menu="true">
+									<NcActions :forceMenu="true">
 										<NcActionButton
-											:close-after-click="true"
+											:closeAfterClick="true"
 											:disabled="!networkOnline"
 											@click="onClickDelete(trashPage)">
 											<template #icon>
@@ -163,7 +163,7 @@ export default {
 		this.$highlightTimeoutId = null
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		unsubscribe('collectives:page-list:page-trashed', this.onPageTrashed)
 		clearTimeout(this.$highlightTimeoutId)
 	},

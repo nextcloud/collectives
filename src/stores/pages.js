@@ -7,7 +7,6 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { set } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { INDEX_PAGE, PAGE_SUFFIX, pageModes, TEMPLATE_PATH } from '../constants.js'
 import * as sortOrders from '../util/sortOrders.js'
@@ -489,22 +488,22 @@ export const usePagesStore = defineStore('pages', {
 			this.sortBy = order
 		},
 
-		setTextEdit() { set(this.textMode, this.currentPageId, pageModes.MODE_EDIT) },
-		setTextPreview() { set(this.textMode, this.currentPageId, pageModes.MODE_PREVIEW) },
+		setTextEdit() { this.textMode[this.currentPageId] = pageModes.MODE_EDIT },
+		setTextPreview() { this.textMode[this.currentPageId] = pageModes.MODE_PREVIEW },
 
 		toggleCollapsed(pageId) {
 			// Default to 'false' if unset
-			set(this.collapsed, pageId, this.collapsed[pageId] === undefined ? false : !this.collapsed[pageId])
+			this.collapsed[pageId] = this.collapsed[pageId] === undefined ? false : !this.collapsed[pageId]
 		},
-		collapse(pageId) { set(this.collapsed, pageId, true) },
-		expand(pageId) { set(this.collapsed, pageId, false) },
+		collapse(pageId) { this.collapsed[pageId] = true },
+		expand(pageId) { this.collapsed[pageId] = false },
 
 		toggleOutline(pageId) {
 			// Default to 'true' if unset
-			set(this.outline, pageId, this.outline[pageId] === undefined ? true : !this.outline[pageId])
+			this.outline[pageId] = this.outline[pageId] === undefined ? true : !this.outline[pageId]
 		},
 		setOutlineForCurrentPage(visible) {
-			set(this.outline, this.currentPageId, visible)
+			this.outline[this.currentPageId] = visible
 		},
 
 		expandParents(pageId) {
@@ -550,7 +549,7 @@ export const usePagesStore = defineStore('pages', {
 				shareTokenParam: null,
 			}
 			const response = await api.getPages(context)
-			set(this.allPages, this.indexForCollective(collective), response.data.ocs.data.pages)
+			this.allPages[this.indexForCollective(collective)] = response.data.ocs.data.pages
 			rootStore.done(`pagelist-${collective.id}`)
 		},
 
@@ -565,7 +564,7 @@ export const usePagesStore = defineStore('pages', {
 				rootStore.load('pagelist')
 			}
 			const response = await api.getPages(this.context)
-			set(this.allPages, this.collectiveIndex, response.data.ocs.data.pages)
+			this.allPages[this.collectiveIndex] = response.data.ocs.data.pages
 			rootStore.done('pagelist')
 		},
 
@@ -576,7 +575,7 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pageTrash')
 			const response = await api.getTrashPages(this.context)
-			set(this.allTrashPages, this.collectiveIndex, response.data.ocs.data.pages)
+			this.allTrashPages[this.collectiveIndex] = response.data.ocs.data.pages
 			rootStore.done('pageTrash')
 		},
 
@@ -972,11 +971,11 @@ export const usePagesStore = defineStore('pages', {
 		async getAttachments(page) {
 			const response = await api.getPageAttachments(this.context, page.id)
 			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
-				set(this.allAttachments, this.collectiveIndex, {})
+				this.allAttachments[this.collectiveIndex] = {}
 			}
-			set(this.allAttachments[this.collectiveIndex], page.id, response.data.ocs.data.attachments
+			this.allAttachments[this.collectiveIndex][page.id] = response.data.ocs.data.attachments
 				// Disregard deletedAttachments when updating attachments
-				.filter((a) => !this.deletedAttachments.map((a) => a.name).includes(a.name)))
+				.filter((a) => !this.deletedAttachments.map((a) => a.name).includes(a.name))
 			this.deletedAttachments = this.deletedAttachments
 				// Only keep deletedAttachments that still exist
 				.filter((a) => this.attachments.map((a) => a.name).includes(a.name))
@@ -988,10 +987,10 @@ export const usePagesStore = defineStore('pages', {
 
 			const response = await api.uploadAttachment(this.context, this.currentPageId, formData)
 			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
-				set(this.allAttachments, this.collectiveIndex, {})
+				this.allAttachments[this.collectiveIndex] = {}
 			}
 			if (!Array.isArray(this.allAttachments[this.collectiveIndex][this.currentPageId])) {
-				set(this.allAttachments[this.collectiveIndex], this.currentPageId, [])
+				this.allAttachments[this.collectiveIndex][this.currentPageId] = []
 			}
 			this.allAttachments[this.collectiveIndex][this.currentPageId].push(response.data.ocs.data.attachment)
 			return response.data.ocs.data.attachment

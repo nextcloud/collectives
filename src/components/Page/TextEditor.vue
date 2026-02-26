@@ -131,7 +131,7 @@ export default {
 		subscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 		unsubscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		unsubscribe('collectives:attachment:insert', this.insertAttachment)

@@ -14,8 +14,8 @@
 			:key="`member-${member.source}-${member.id}`"
 			:margin="0"
 			:size="22"
-			:display-name="member.label"
-			:avatar-image="selectedMemberAvatarImage(member)"
+			:displayName="member.label"
+			:avatarImage="selectedMemberAvatarImage(member)"
 			:primary="isCurrentUser(member)"
 			class="selected-member-bubble">
 			<template v-if="selectedMemberDeletable(member)" #title>
@@ -59,6 +59,10 @@ export default {
 		},
 	},
 
+	emits: [
+		'deleteFromSelection',
+	],
+
 	computed: {
 		isCurrentUser() {
 			return (member) => member.source === 'users' && member.label === getCurrentUser().uid
@@ -81,7 +85,7 @@ export default {
 		t,
 
 		deleteMember(member) {
-			this.$emit('delete-from-selection', member)
+			this.$emit('deleteFromSelection', member)
 		},
 	},
 }

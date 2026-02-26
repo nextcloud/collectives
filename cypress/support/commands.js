@@ -116,8 +116,12 @@ Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 Cypress.Commands.add('routeTo', (path) => {
 	Cypress.log()
 	cy.window(silent)
-		.its('app.$router', silent)
-		.invoke(silent, 'push', path)
+		.its('app', silent)
+		.then((app) => {
+			// Vue 3: router is on globalProperties
+			const router = app.$router ?? app.config.globalProperties.$router
+			return router.push(path)
+		})
 })
 
 Cypress.Commands.add(

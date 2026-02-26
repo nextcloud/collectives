@@ -11,15 +11,15 @@
 		<MemberItem
 			v-for="item in searchedMembers"
 			:key="item.singleId"
-			:circle-id="circleId"
-			:current-user-is-admin="currentUserIsAdmin"
-			:member-id="item.id"
-			:user-id="item.userId"
-			:display-name="item.displayName"
-			:user-type="circleMemberType(item)"
+			:circleId="circleId"
+			:currentUserIsAdmin="currentUserIsAdmin"
+			:memberId="item.id"
+			:userId="item.userId"
+			:displayName="item.displayName"
+			:userType="circleMemberType(item)"
 			:level="item.level"
-			:is-current-user="isCurrentUser(item)"
-			:is-searched="false" />
+			:isCurrentUser="isCurrentUser(item)"
+			:isSearched="false" />
 		<MembersHint
 			v-if="isSearching && searchedMembers.length === 0"
 			:hint="t('collectives', 'No search results')" />

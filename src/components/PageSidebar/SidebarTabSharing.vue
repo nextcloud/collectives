@@ -10,7 +10,7 @@
 			<div class="sharing-list-item">
 				<div class="sharing-list-item__header">
 					<h4>{{ t('collectives', 'Collective members') }}</h4>
-					<NcPopover popup-role="dialog" no-focus-trap>
+					<NcPopover popupRole="dialog" noFocusTrap>
 						<template #trigger>
 							<NcButton
 								class="hint-icon"
@@ -37,7 +37,7 @@
 			<div class="sharing-list-item">
 				<div class="sharing-list-item__header sharing-list-item__header--external">
 					<h4>{{ t('collectives', 'External shares') }}</h4>
-					<NcPopover popup-role="dialog" no-focus-trap>
+					<NcPopover popupRole="dialog" noFocusTrap>
 						<template #trigger>
 							<NcButton
 								class="hint-icon"

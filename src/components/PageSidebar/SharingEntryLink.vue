@@ -7,8 +7,8 @@
 	<li class="sharing-entry sharing-entry__link">
 		<div class="sharing-entry__entry">
 			<NcAvatar
-				:is-no-user="true"
-				icon-class="avatar-link-share icon-public-white"
+				:isNoUser="true"
+				iconClass="avatar-link-share icon-public-white"
 				class="sharing-entry__avatar" />
 
 			<div class="sharing-entry__summary">
@@ -75,10 +75,10 @@
 			<!-- pending actions -->
 			<NcActions
 				v-if="isPending"
+				v-model:open="open"
 				class="sharing-entry__pending_actions"
 				:aria-label="actionsTooltip"
-				menu-align="right"
-				:open.sync="open"
+				menuAlign="right"
 				@close="onCancelPending">
 				<NcActionText>
 					<template #icon>
@@ -105,7 +105,7 @@
 					v-model="pendingPassword"
 					autocomplete="new-password"
 					:error="passwordError"
-					:helper-text="errorPasswordLabel"
+					:helperText="errorPasswordLabel"
 					:required="isPasswordEnforced"
 					:minlength="passwordPolicy.minLength ?? 0"
 					:label="t('collectives', 'Password')"
@@ -128,12 +128,12 @@
 			<!-- actions -->
 			<NcActions
 				v-else-if="!loading"
+				v-model:open="open"
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
-				menu-align="right"
+				menuAlign="right"
 				:disabled="!networkOnline"
-				:title="offlineTitle"
-				:open.sync="open">
+				:title="offlineTitle">
 				<template v-if="share">
 					<NcActionButton class="new-share-link" @click.prevent.stop="onNewShare">
 						<template #icon>
@@ -142,7 +142,7 @@
 						{{ t('collectives', 'Add another link') }}
 					</NcActionButton>
 
-					<NcActionButton class="new-share-link" :close-after-click="true" @click.prevent.stop="toggleSettings">
+					<NcActionButton class="new-share-link" :closeAfterClick="true" @click.prevent.stop="toggleSettings">
 						<template #icon>
 							<CogIcon :size="20" />
 						</template>
@@ -181,9 +181,9 @@
 			<NcPasswordField
 				v-if="isPasswordProtected"
 				autocomplete="new-password"
-				:model-value="hasUnsavedPassword ? share.newPassword : ''"
+				:modelValue="hasUnsavedPassword ? newPassword : ''"
 				:error="passwordError"
-				:helper-text="errorPasswordLabel"
+				:helperText="errorPasswordLabel"
 				:required="isPasswordEnforced"
 				:minlength="passwordPolicy.minLength ?? 0"
 				:label="t('collectives', 'Password')"
@@ -289,6 +289,7 @@ export default {
 			isPending: false,
 			isPendingPasswordProtected: true,
 			pendingPassword: '',
+			newPassword: '',
 		}
 	},
 
@@ -376,23 +377,20 @@ export default {
 
 		isPasswordProtected: {
 			get() {
-				return !!this.share.password
+				return !!this.share.password || !!this.newPassword
 			},
 
 			async set(enabled) {
 				if (enabled) {
-					const password = await this.generatePassword()
-					this.$set(this.share, 'password', password)
-					this.$set(this.share, 'newPassword', password)
+					this.newPassword = await this.generatePassword()
 				} else {
-					this.$set(this.share, 'password', '')
-					this.$delete(this.share, 'newPassword')
+					this.newPassword = ''
 				}
 			},
 		},
 
 		hasUnsavedPassword() {
-			return this.share.newPassword !== undefined
+			return !!this.newPassword
 		},
 
 		errorPasswordLabel() {
@@ -406,7 +404,7 @@ export default {
 		window.addEventListener('click', this.handleClickOutside)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		// Remove the global click event listener to prevent memory leaks
 		window.removeEventListener('click', this.handleClickOutside)
 	},
@@ -557,27 +555,26 @@ export default {
 
 		async onPasswordChange(password) {
 			this.passwordError = !(password.trim())
-			this.$set(this.share, 'newPassword', password)
+			this.newPassword = password
 		},
 
 		cancelSettings() {
-			if (this.hasUnsavedPassword) {
-				this.$delete(this.share, 'newPassword')
-			}
+			this.newPassword = ''
 			this.showSettings = false
 		},
 
 		async saveSettings() {
+			const share = { ...this.share }
 			if (this.isPasswordProtected) {
 				if (this.hasUnsavedPassword) {
-					this.$set(this.share, 'password', this.share.newPassword)
-					this.$delete(this.share, 'newPassword')
+					share.password = this.newPassword
+					this.newPassword = ''
 				}
 			} else {
-				this.$set(this.share, 'password', '')
+				share.password = ''
 			}
 
-			await this.onUpdate(this.share)
+			await this.onUpdate(share)
 			this.showSettings = false
 		},
 

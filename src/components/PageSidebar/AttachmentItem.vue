@@ -7,7 +7,7 @@
 	<NcListItem
 		:name="attachment.name"
 		:href="davUrl"
-		:force-display-actions="true"
+		:forceDisplayActions="true"
 		class="attachment"
 		:class="{ mobile: isMobile }"
 		@dragstart="onDragstart"
@@ -34,7 +34,7 @@
 		<template #actions>
 			<NcActionButton
 				v-if="isEmbedded"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="scrollTo()">
 				<template #icon>
 					<EyeIcon />
@@ -43,7 +43,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isEmbedded && !isDeleted && !isInFolder && editorApiAttachments && isTextEdit && currentCollectiveCanEdit"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="onInsert">
 				<template #icon>
 					<FileDocumentPlusOutlineIcon />
@@ -52,7 +52,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="isDeleted && currentCollectiveCanEdit"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				@click="$emit('restore')">
 				<template #icon>
 					<RestoreIcon />
@@ -64,7 +64,7 @@
 				:href="davUrl"
 				:download="attachment.name"
 				:class="{ 'action-link--disabled': !networkOnline }"
-				:close-after-click="true">
+				:closeAfterClick="true">
 				<template #icon>
 					<DownloadIcon />
 				</template>
@@ -74,7 +74,7 @@
 				v-if="!isDeleted && !isPublic"
 				:href="filesUrl"
 				:class="{ 'action-link--disabled': !networkOnline }"
-				:close-after-click="true">
+				:closeAfterClick="true">
 				<template #icon>
 					<FolderIcon />
 				</template>
@@ -82,7 +82,7 @@
 			</NcActionLink>
 			<NcActionButton
 				v-if="!isDeleted && !isInFolder && currentCollectiveCanEdit"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:class="{ 'action-link--disabled': !networkOnline }"
 				@click="$emit('rename')">
 				<template #icon>
@@ -92,7 +92,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isDeleted && !isInFolder && currentCollectiveCanEdit"
-				:close-after-click="true"
+				:closeAfterClick="true"
 				:class="{ 'action-link--disabled': !networkOnline }"
 				@click="$emit('delete')">
 				<template #icon>
@@ -160,6 +160,12 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: [
+		'delete',
+		'rename',
+		'restore',
+	],
 
 	setup() {
 		const isMobile = useIsMobile()

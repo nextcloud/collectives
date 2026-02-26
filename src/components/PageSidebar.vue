@@ -5,11 +5,11 @@
 
 <template>
 	<NcAppSidebar
+		v-model:active="active"
+		v-model:open="open"
 		:name="title"
-		:active.sync="active"
-		:open.sync="open"
-		:no-toggle="isMobile"
-		:toggle-classes="{
+		:noToggle="isMobile"
+		:toggleClasses="{
 			'page-sidebar-button': true,
 		}"
 		@close="close">
@@ -39,7 +39,7 @@
 			<template #icon>
 				<ShareVariantIcon :size="20" />
 			</template>
-			<SidebarTabSharing v-if="showing('sidebar')" :page-id="currentPage.id" />
+			<SidebarTabSharing v-if="showing('sidebar')" :pageId="currentPage.id" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
 			v-if="!isPublic && currentCollectiveCanEdit"
@@ -51,8 +51,8 @@
 			</template>
 			<SidebarTabVersions
 				v-if="showing('sidebar')"
-				:page-id="currentPage.id"
-				:page-timestamp="currentPage.timestamp" />
+				:pageId="currentPage.id"
+				:pageTimestamp="currentPage.timestamp" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>

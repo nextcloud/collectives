@@ -6,13 +6,13 @@
 <template>
 	<div class="page-container">
 		<PageTitleBar
-			:is-full-width="isFullWidth"
-			@focus-editor="focusEditor"
-			@save-editor="saveEditor" />
-		<PageTags v-if="tagsLoaded" :is-full-width="isFullWidth" />
+			:isFullWidth="isFullWidth"
+			@focusEditor="focusEditor"
+			@saveEditor="saveEditor" />
+		<PageTags v-if="tagsLoaded" :isFullWidth="isFullWidth" />
 		<div class="page-scroll-container">
-			<LandingPageWidgets v-if="isLandingPage" :is-full-width="isFullWidth" />
-			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" :is-full-width="isFullWidth" />
+			<LandingPageWidgets v-if="isLandingPage" :isFullWidth="isFullWidth" />
+			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" :isFullWidth="isFullWidth" />
 		</div>
 		<SearchDialog :show="shouldShowSearchDialog" />
 	</div>
@@ -101,7 +101,7 @@ export default {
 		listen('notify_file', this.getAttachmentsForPage.bind(this))
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
 		unsubscribe('collectives:page-sidebar', this.toggleSidebar)
 	},

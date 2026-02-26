@@ -29,13 +29,13 @@
 					v-for="version in sortedVersions"
 					:key="version.mtime"
 					:version="version"
-					:is-current="isCurrent(version.mtime)"
-					:is-selected="isSelected(version.mtime)"
-					:is-first-version="version.mtime === initialVersionMtime"
-					:is-loading="loading(`version-${pageId}-${version.mtime}`)"
-					:can-edit="currentCollectiveCanEdit"
+					:isCurrent="isCurrent(version.mtime)"
+					:isSelected="isSelected(version.mtime)"
+					:isFirstVersion="version.mtime === initialVersionMtime"
+					:isLoading="loading(`version-${pageId}-${version.mtime}`)"
+					:canEdit="currentCollectiveCanEdit"
 					@click="onOpenVersion(version)"
-					@start-label-update="onStartLabelUpdate(version)"
+					@startLabelUpdate="onStartLabelUpdate(version)"
 					@compare="onCompareVersion(version)"
 					@restore="onRestoreVersion(version)"
 					@delete="onDeleteVersion(version)" />
@@ -55,9 +55,9 @@
 		<!-- label dialog -->
 		<VersionLabelDialog
 			v-if="editedVersion"
-			:open.sync="showVersionLabelForm"
-			:version-label="editedVersion.label"
-			@label-update="onLabelUpdate" />
+			v-model:open="showVersionLabelForm"
+			:versionLabel="editedVersion.label"
+			@labelUpdate="onLabelUpdate" />
 	</div>
 </template>
 

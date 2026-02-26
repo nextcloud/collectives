@@ -13,10 +13,10 @@
 			@click="canEdit ? emitSidebar('versions') : undefined">
 			<div class="item-text">
 				<LastUserBubble
-					:last-user-id="currentPage.lastUserId"
-					:last-user-display-name="currentPage.lastUserDisplayName"
+					:lastUserId="currentPage.lastUserId"
+					:lastUserDisplayName="currentPage.lastUserDisplayName"
 					:timestamp="currentPage.timestamp"
-					:show-prefix-string="!isMobile" />
+					:showPrefixString="!isMobile" />
 			</div>
 		</component>
 		<template v-if="attachmentCount">
@@ -68,22 +68,26 @@ export default {
 	props: {
 		currentPage: {
 			type: Object,
-			required: true,
+			default: () => ({
+				lastUserId: 0,
+				lastUserDisplayName: '',
+				timestamp: 0,
+			}),
 		},
 
 		canEdit: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 
 		attachmentCount: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 
 		backlinkCount: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 	},
 
