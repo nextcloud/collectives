@@ -56,52 +56,6 @@ namespace OC\Files\ObjectStore {
 	class NoopScanner {}
 }
 
-namespace Symfony\Component\Console\Helper {
-	use Symfony\Component\Console\Output\OutputInterface;
-	class Table {
-		public function __construct(OutputInterface $text) {}
-		public function setHeaders(array $header) {}
-		public function setRows(array $rows) {}
-		public function render() {}
-	}
-}
-
-namespace Symfony\Component\Console\Input {
-	class InputInterface {
-		public function getOption(string $key) {}
-		public function setOption(string $key, $value) {}
-		public function getArgument(string $key) {}
-	}
-	class InputArgument {
-		const REQUIRED = 0;
-		const OPTIONAL = 1;
-		const IS_ARRAY = 1;
-	}
-	class InputOption {
-		const VALUE_NONE = 1;
-		const VALUE_REQUIRED = 1;
-		const VALUE_OPTIONAL = 1;
-	}
-}
-
-namespace Symfony\Component\Console\Question {
-	class ConfirmationQuestion {
-		public function __construct(string $text, bool $default) {}
-	}
-}
-
-namespace Symfony\Component\Console\Output {
-	class OutputInterface {
-		public const VERBOSITY_VERBOSE = 1;
-		public function writeln(string $text, int $flat = 0) {}
-		public function write($messages, $newline = false, $options = 0) {}
-	}
-}
-
-namespace Symfony\Component\EventDispatcher {
-	class EventDispatcherInterface {}
-}
-
 namespace OC\Collaboration\Reference {
 	use OCP\Collaboration\Reference\IReferenceManager;
 
