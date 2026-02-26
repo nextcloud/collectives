@@ -66,11 +66,6 @@ class MigrateUserFolderSettings implements IRepairStep {
 			$newDefaultUserFolderPathL10n = DIRECTORY_SEPARATOR . '.' . $l10n->t('Collectives');
 
 			if ($userFolderPath === $oldDefaultUserFolderPathL10n) {
-				// new default localized user folder path, already migrated
-				return;
-			}
-
-			if ($userFolderPath === $oldDefaultUserFolderPathL10n) {
 				// Old default localized user folder path, update setting
 				$this->config->setUserValue($user->getUID(), 'collectives', 'user_folder', $newDefaultUserFolderPathL10n);
 				$output->advance();
