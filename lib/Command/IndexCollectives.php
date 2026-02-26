@@ -57,10 +57,10 @@ class IndexCollectives extends Command {
 				$output->writeln('<info>done</info>');
 			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				$output->writeln("<error>Failed to find team associated with collective with ID={$collective->getId()}</error>");
-				return 1;
+				continue;
 			} catch (FileSearchException) {
 				$output->writeln('<error>Failed to save the indices to the collectives folder.</error>');
-				return 1;
+				continue;
 			}
 		}
 
