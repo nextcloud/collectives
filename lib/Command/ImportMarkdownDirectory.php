@@ -51,9 +51,8 @@ class ImportMarkdownDirectory extends Command {
 		$directory = $input->getArgument('directory');
 		$userId = $input->getOption('user-id');
 		$parentId = (int)$input->getOption('parent-id');
-		$verbose = (bool)$input->getOption('verbose');
 
-		$progressReporter = new ProgressReporter($output, $verbose);
+		$progressReporter = new ProgressReporter($output, $output->isVerbose());
 
 		if ($collectiveId === 0) {
 			$progressReporter->writeError('Required option missing: --collective-id=COLLECTIVE_ID');
