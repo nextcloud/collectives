@@ -71,7 +71,7 @@
     "@nextcloud/vite-config": "^1.7.2",
     "@types/node": "^25.3.0",
     "@vue/tsconfig": "^0.5.1",
-    "cypress": "^15.10.0",
+    "cypress": "^15.11.0",
     "cypress-split": "^1.24.28",
     "eslint": "^9.39.3",
     "eslint-plugin-cypress": "^6.1.0",
