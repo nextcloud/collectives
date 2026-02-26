@@ -1,5 +1,35 @@
 # Changelog
 
+## 4.0.0 - 2026.02.26
+
+⚠️ Note: With this release, the Collectives folder in the Files app will be hidden by
+default. See [the documentation](https://nextcloud.github.io/collectives/usage/) if you
+still want to access it.
+
+### ✨New
+* 📂 Hide Collectives folder per default in Files app (#2095).
+* 📎 Enhanced attachments support in sidebar tab. Supports non-embedded attachments.
+* 📎 List folder attachments in sidebar tab.
+* 📥 Import Markdown files as pages and adjust relative links and attachment paths.
+* 🧹 Drop support for Nextcloud 31.
+
+### 🐛Fixes
+* 🐛 Setup filesystem if user folder was not found (#2264).
+* 💄 Add default value for text editor width (#2290).
+* 🚚 Copy metadata of subpages when copying a page.
+* 🔗 Fix missing page content in read-only shares in some cases (#2257).
+* 🐛 Catch error when adding members to collective. Thanks to @provokateurin.
+* 🐛 Scope trash node lookup to requested collective. Thanks to @benjaminfrueh.
+* 🔎 Continue full-text search indexing after one collective failed.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.6.1 - 2026.02.12
 
 ### 🐛Fixes
