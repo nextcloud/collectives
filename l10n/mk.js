@@ -42,7 +42,7 @@ OC.L10N.register(
     "Create public link" : "Креирај јавен линк",
     "Share link ({index})" : "Сподели линк ({index})",
     "View only" : "Само за гледање",
-    "Can edit" : "Може да се уредува",
+    "Can edit" : "Може да уредува",
     "Cannot copy, please copy the link manually" : "Неможе да се копира, копирајте го линкот рачно",
     "Actions for \"{title}\"" : "Акции за \"{title}\"",
     "Password field can't be empty" : "Полето за лозинка неможе да биде празно",
