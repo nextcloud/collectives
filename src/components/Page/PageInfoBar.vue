@@ -6,11 +6,11 @@
 <template>
 	<div class="text-menubar">
 		<component
-			:is="canEdit ? 'a' : 'div'"
+			:is="versionsLink ? 'a' : 'div'"
 			v-if="currentPage.lastUserId"
 			class="infobar-item infobar-lastupdate"
 			:title="versionsLinkTitle"
-			@click="canEdit ? emitSidebar('versions') : undefined">
+			@click="versionsLink ? emitSidebar('versions') : undefined">
 			<div class="item-text">
 				<LastUserBubble
 					:last-user-id="currentPage.lastUserId"
@@ -52,9 +52,11 @@
 import { emit } from '@nextcloud/event-bus'
 import { n, t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { mapState } from 'pinia'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import LastUserBubble from '../LastUserBubble.vue'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'PageInfoBar',
@@ -93,8 +95,14 @@ export default {
 	},
 
 	computed: {
+		...mapState(useRootStore, ['isPublic']),
+
+		versionsLink() {
+			return this.canEdit && !this.isPublic
+		},
+
 		versionsLinkTitle() {
-			return this.canEdit
+			return this.versionsLink
 				? t('collectives', 'Open version history')
 				: ''
 		},
