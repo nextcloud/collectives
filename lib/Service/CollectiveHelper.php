@@ -36,7 +36,16 @@ class CollectiveHelper {
 			$cid = $c->getCircleId();
 			$circle = $circles[$cid];
 			$c->setName($circle->getSanitizedName());
-			$c->setLevel($getLevel ? $circle->getInitiator()->getLevel(): 0);
+			$level = 0;
+			if ($circle->hasInitiator() === false) {
+				\OCP\Server::get(\Psr\Log\LoggerInterface::class)->error('CollectiveHelper: Circle initiator is null for circle ID ' . $circle->getSingleId(), [
+					'collectiveId' => $c->getId(),
+					'circleId' => $cid,
+				]);
+			} else {
+				$level = $circle->getInitiator()->getLevel();
+			}
+			$c->setLevel($getLevel ? $level: 0);
 			if ($getUserSettings) {
 				// TODO: merge queries for collective and user settings into one?
 				$settings = $this->collectiveUserSettingsMapper->findByCollectiveAndUser($c->getId(), $userId);
