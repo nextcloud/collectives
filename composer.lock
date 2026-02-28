@@ -1176,27 +1176,27 @@
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v5.0.0",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0"
+                "reference": "7ee319d9d96a043164571eab87db72071014d66b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
-                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/7ee319d9d96a043164571eab87db72071014d66b",
+                "reference": "7ee319d9d96a043164571eab87db72071014d66b",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-pdo": "*",
-                "php": "~7.1|^8",
+                "php": "~7.4 || ^8",
                 "predis/predis": "^2.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "7.*|8.*|9.*",
-                "symfony/var-dumper": "^4|^5.2"
+                "phpunit/phpunit": "7.* || 8.* || 9.*",
+                "symfony/var-dumper": "^4 || ^5.2"
             },
             "type": "library",
             "autoload": {
@@ -1234,7 +1234,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.2"
             },
             "funding": [
                 {
@@ -1242,7 +1242,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-15T20:07:13+00:00"
+            "time": "2025-08-25T14:33:45+00:00"
         }
     ],
     "packages-dev": [

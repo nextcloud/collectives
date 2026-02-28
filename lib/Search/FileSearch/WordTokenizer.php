@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch;
 
-use TeamTNT\TNTSearch\Support\ProductTokenizer;
+use TeamTNT\TNTSearch\Tokenizer\ProductTokenizer;
 
 /**
  * This tokenizer is based on the ProductTokenizer but strips away non-letters and non-numbers characters.
