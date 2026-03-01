@@ -73,6 +73,11 @@ export default {
 		WidgetHeading,
 	},
 
+		data() {
+			return {
+				updateButtonsDebounced: debounce(this.updateButtons, 50),
+				isMobile: window.innerWidth < 768,
+			}
 	data() {
 		return {
 			updateButtonsDebounced: debounce(this.updateButtons, 50),
@@ -91,6 +96,13 @@ export default {
 		},
 
 		showRecentPages() {
+			// Collapse by default on mobile
+			if (this.isMobile) {
+				return this.currentCollective.userShowRecentPages ?? false
+			}
+			return this.currentCollective.userShowRecentPages ?? true
+		},
+		showRecentPages() {
 			return this.currentCollective.userShowRecentPages ?? true
 		},
 
@@ -105,8 +117,19 @@ export default {
 			this.updateButtonsDebounced()
 		})
 		this.$refs.pageslider.addEventListener('scroll', this.updateButtonsDebounced)
+		window.addEventListener('resize', this.handleResize)
+	},
+	mounted() {
+		this.$nextTick(() => {
+			this.updateButtonsDebounced()
+		})
+		this.$refs.pageslider.addEventListener('scroll', this.updateButtonsDebounced)
 	},
 
+	unmounted() {
+		this.$refs.pageslider.removeEventListener('scroll', this.updateButtonsDebounced)
+		window.removeEventListener('resize', this.handleResize)
+	},
 	unmounted() {
 		this.$refs.pageslider.removeEventListener('scroll', this.updateButtonsDebounced)
 	},
@@ -114,6 +137,15 @@ export default {
 	methods: {
 		t,
 
+		...mapActions(useCollectivesStore, [
+			'patchCollectiveWithProperty',
+			'setCollectiveUserSettingShowRecentPages',
+		]),
+
+		handleResize() {
+			this.isMobile = window.innerWidth < 768
+		},
+	methods: {
 		...mapActions(useCollectivesStore, [
 			'patchCollectiveWithProperty',
 			'setCollectiveUserSettingShowRecentPages',
@@ -179,6 +211,57 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+.recent-pages-title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 0;
+
+	.toggle-icon {
+		display: flex;
+		padding: 0 8px;
+
+		.collapsed {
+			transition: transform var(--animation-slow);
+			transform: rotate(-90deg);
+		}
+	}
+}
+
+.recent-pages-widget-container {
+	position: relative;
+	padding-top: 12px;
+	max-height: 50vh;
+	overflow-y: auto;
+
+	.recent-pages-widget-pages {
+		display: flex;
+		flex-direction: row;
+		gap: 12px;
+
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		// Hide scrollbar
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+}
+
+.content-preview {
+	padding: 12px 0;
+	font-style: italic;
+	color: var(--color-text-maxcontrast);
+}
+
+@media (max-width: 767px) {
+	.recent-pages-widget-container {
+		max-height: 30vh;
+	}
+}
 <style lang="scss" scoped>
 .recent-pages-title {
 	display: flex;
