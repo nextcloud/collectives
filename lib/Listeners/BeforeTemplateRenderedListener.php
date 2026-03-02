@@ -19,6 +19,7 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\EventDispatcher\IEventListener;
+use OCP\Files\Template\ITemplateManager;
 use OCP\IUserSession;
 use OCP\Util;
 
@@ -29,6 +30,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		private UserFolderHelper $userFolderHelper,
 		private IEventDispatcher $eventDispatcher,
 		private IInitialState $initialState,
+		private ITemplateManager $templateManager,
 	) {
 	}
 
@@ -62,5 +64,6 @@ class BeforeTemplateRenderedListener implements IEventListener {
 
 		// Provide Collectives user folder as initial state
 		$this->initialState->provideInitialState('user_folder', $userFolder);
+		$this->initialState->provideInitialState('templates', $this->templateManager->listCreators());
 	}
 }
