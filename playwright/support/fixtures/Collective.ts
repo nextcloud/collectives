@@ -123,7 +123,7 @@ export class Collective {
 	 */
 	async createPage({ title, content = null, parentId = 0, user }: {
 		title: string
-		parentId: number
+		parentId?: number
 		content?: string | null
 		user: User
 	}) {
