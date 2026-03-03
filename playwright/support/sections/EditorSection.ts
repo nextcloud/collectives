@@ -37,9 +37,9 @@ export class EditorSection {
 		await this.getContent()
 			.getByRole('link', { name: linkText, exact: true })
 			.click()
-		await this.page.locator('.widget-custom')
+		await this.page.locator('.widgets--list')
 			.waitFor({ state: 'visible' })
-		return this.page.locator('.widget-custom')
+		return this.page.locator('.widgets--list')
 	}
 
 	public async hasCollectiveLink(linkText: string): Promise<void> {
