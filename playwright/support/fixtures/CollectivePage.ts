@@ -51,6 +51,23 @@ export class CollectivePage {
 	}
 
 	/**
+	 * Switch the page mode between edit and preview mode.
+	 *
+	 * @param edit whether to switch to edit or preview mode
+	 */
+	async switchMode(edit: boolean) {
+		if (await this.hasMode(edit)) {
+			return
+		}
+
+		const label = edit ? 'Edit' : 'Preview'
+		await this.page.locator('.edit-button')
+			.getByLabel(label)
+			.click()
+		await this.waitForContent(edit)
+	}
+
+	/**
 	 * Open the collective page in the browser.
 	 *
 	 * @param edit whether page is expected to open in edit mode
@@ -58,6 +75,15 @@ export class CollectivePage {
 	async open(edit: boolean = false) {
 		await this.page.goto(this.getPageUrl())
 		await this.waitForContent(edit)
+	}
+
+	/**
+	 * Check if the page is in edit/preview mode.
+	 *
+	 * @param edit whether page is expected to be in edit or preview mode
+	 */
+	async hasMode(edit: boolean = false) {
+		return await this.getContent(edit).isVisible()
 	}
 
 	/**

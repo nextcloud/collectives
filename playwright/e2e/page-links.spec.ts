@@ -130,6 +130,7 @@ type LinkTestCase = {
 	targetPage: CollectivePage
 	targetCollective: Collective
 	linkTestCaseData: LinkTestCaseData
+	editMode: boolean
 }
 
 async function testLinkOpensInSameTab({
@@ -141,6 +142,7 @@ async function testLinkOpensInSameTab({
 	targetPage,
 	targetCollective,
 	linkTestCaseData,
+	editMode,
 }: LinkTestCase) {
 	await sourcePage.setLinkContent({
 		linkText,
@@ -150,7 +152,9 @@ async function testLinkOpensInSameTab({
 
 	const pageTitle = linkTestCaseData.targetPageTitle ?? targetPage.data.title
 	await sourcePage.open()
-	await editor.openLink({
+	await sourcePage.switchMode(editMode)
+	editor.setMode(editMode)
+	await editor.openCollectiveLink({
 		linkText,
 		pageTitle,
 	})
@@ -161,53 +165,61 @@ async function testLinkOpensInSameTab({
 test.describe('Page links in preview mode', () => {
 	test.describe.configure({ mode: 'serial' })
 
-	for (const linkTestCaseData of sameCollectiveLinks) {
-		test(`Opens link to same collective with ${linkTestCaseData.description} in same tab`, async ({ baseURL, collective, editor, page, user }) => {
-			const sourcePage = collective.getPageByTitle('Link Source')
-			const targetPage = collective.getPageByTitle('Link Target')
+	for (const editMode of [false, true]) {
+		const modeLabel = editMode ? 'edit' : 'preview'
+		for (const linkTestCaseData of sameCollectiveLinks) {
+			test(`Opens link to same collective with ${linkTestCaseData.description} in same tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
+				const sourcePage = collective.getPageByTitle('Link Source')
+				const targetPage = collective.getPageByTitle('Link Target')
 
-			if (!baseURL) {
-				throw new Error('baseURL is not defined')
-			}
+				if (!baseURL) {
+					throw new Error('baseURL is not defined')
+				}
 
-			await testLinkOpensInSameTab({
-				baseURL,
-				page,
-				user,
-				editor,
-				sourcePage,
-				targetPage,
-				targetCollective: collective,
-				linkTestCaseData,
+				await testLinkOpensInSameTab({
+					baseURL,
+					page,
+					user,
+					editor,
+					sourcePage,
+					targetPage,
+					targetCollective: collective,
+					linkTestCaseData,
+					editMode,
+				})
 			})
-		})
+		}
 	}
 
-	for (const linkTestCaseData of otherCollectiveLinks) {
-		test(`Opens link to other collective with ${linkTestCaseData.description} in same tab`, async ({ baseURL, collective, editor, page, user }) => {
-			const sourcePage = collective.getPageByTitle('Link Source')
-			const targetCollective = await createCollective({
-				name: 'Target Collective',
-				user,
+	for (const editMode of [false, true]) {
+		const modeLabel = editMode ? 'edit' : 'preview'
+		for (const linkTestCaseData of otherCollectiveLinks) {
+			test(`Opens link to other collective with ${linkTestCaseData.description} in same tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
+				const sourcePage = collective.getPageByTitle('Link Source')
+				const targetCollective = await createCollective({
+					name: 'Target Collective',
+					user,
+				})
+				const targetPage = await targetCollective.createPage({ title: 'Landing page', content: '', user })
+
+				if (!baseURL) {
+					throw new Error('baseURL is not defined')
+				}
+
+				await testLinkOpensInSameTab({
+					baseURL,
+					page,
+					user,
+					editor,
+					sourcePage,
+					targetPage,
+					targetCollective,
+					linkTestCaseData,
+					editMode,
+				})
+
+				await trashAndDeleteCollective({ id: targetCollective.data.id, user })
 			})
-			const targetPage = await targetCollective.createPage({ title: 'Landing page', content: '', user })
-
-			if (!baseURL) {
-				throw new Error('baseURL is not defined')
-			}
-
-			await testLinkOpensInSameTab({
-				baseURL,
-				page,
-				user,
-				editor,
-				sourcePage,
-				targetPage,
-				targetCollective,
-				linkTestCaseData,
-			})
-
-			await trashAndDeleteCollective({ id: targetCollective.data.id, user })
-		})
+		}
 	}
 })

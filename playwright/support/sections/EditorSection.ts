@@ -8,31 +8,33 @@ import type { Locator, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 
 export class EditorSection {
-	public mode: 'reader' | 'editor'
+	public isEdit: boolean
 	public readonly editorContent: Locator
 	public readonly readerContent: Locator
-	public readonly content: Locator
 
 	constructor(public readonly page: Page) {
-		this.mode = 'reader'
+		this.isEdit = false
 		this.editorContent = this.page.locator('[data-cy-collectives="editor"] .ProseMirror')
 		this.readerContent = this.page.locator('[data-cy-collectives="reader"] .ProseMirror')
-		this.content = this.mode === 'reader' ? this.readerContent : this.editorContent
 	}
 
-	public setMode(mode: 'reader' | 'editor') {
-		this.mode = mode
+	public setMode(edit: boolean) {
+		this.isEdit = edit
+	}
+
+	public getContent() {
+		return this.isEdit ? this.editorContent : this.readerContent
 	}
 
 	public async hasImage(filename: string): Promise<void> {
 		const srcRegex = new RegExp(`imageFileName=${filename}`)
-		await expect(this.content
+		await expect(this.getContent()
 			.locator('img'))
 			.toHaveAttribute('src', srcRegex)
 	}
 
 	public async getLinkBubble(linkText: string): Promise<Locator> {
-		await this.content
+		await this.getContent()
 			.getByRole('link', { name: linkText, exact: true })
 			.click()
 		await this.page.locator('.widget-custom')
@@ -45,22 +47,28 @@ export class EditorSection {
 			.locator('.collective-page .line'))
 			.toHaveText(linkText)
 		// Click somewhere else to close the link bubble
-		await this.content
+		await this.getContent()
 			.click()
 	}
 
-	public async openLink({ linkText, type = 'collectivePage', pageTitle }: {
+	public async openLink({ linkText }: {
 		linkText: string
-		type?: 'collectivePage'
+	}): Promise<void> {
+		const link = await this.getLinkBubble(linkText)
+		await link
+			.getByRole('link')
+			.click()
+	}
+
+	public async openCollectiveLink({ linkText, pageTitle }: {
+		linkText: string
 		pageTitle?: string
 	}): Promise<void> {
 		const link = await this.getLinkBubble(linkText)
-		if (type === 'collectivePage') {
-			pageTitle = pageTitle || linkText
-			await expect(link
-				.locator('.collective-page .line'))
-				.toHaveText(pageTitle)
-		}
+		pageTitle = pageTitle || linkText
+		await expect(link
+			.locator('.collective-page .line'))
+			.toHaveText(pageTitle)
 
 		await link
 			.getByRole('link')
