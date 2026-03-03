@@ -126,7 +126,7 @@ export default {
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(useTagsStore, ['getTags']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
-		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
+		...mapActions(usePagesStore, ['getPages']),
 
 		initSession() {
 			if (this.listenPush) {
@@ -217,7 +217,6 @@ export default {
 			if (this.currentCollectiveCanEdit) {
 				if (!this.currentCollectiveIsPageShare) {
 					promises.push(this.getTemplates(setLoading))
-					promises.push(this.getTrashPages())
 				}
 			}
 
