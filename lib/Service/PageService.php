@@ -245,12 +245,7 @@ class PageService {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getTrashPageByFile(File $file, string $filename, string $timestamp): PageInfo {
-		try {
-			$page = $this->pageMapper->findByFileId($file->getId(), true);
-		} catch (InvalidPathException|FilesNotFoundException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
-		}
+	private function createTrashPageInfo(File $file, string $filename, string $timestamp, ?Page $page): PageInfo {
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
@@ -550,7 +545,9 @@ class PageService {
 		}
 
 		$trashNodes = $this->trashBackend->listTrashForCollective($this->userManager->get($userId), $collectiveId);
-		$trashPageInfos = [];
+
+		// Collect file data and file IDs
+		$fileData = [];
 		foreach ($trashNodes as $node) {
 			$pathParts = pathInfo($node->getName());
 			$filename = $pathParts['filename'];
@@ -570,7 +567,29 @@ class PageService {
 				continue;
 			}
 
-			$trashPageInfos[] = $this->getTrashPageByFile($node, $filename, $timestamp);
+			$fileData[$node->getId()] = [
+				'node' => $node,
+				'filename' => $filename,
+				'timestamp' => $timestamp
+			];
+		}
+
+		// Single query to get all pages by file IDs
+		$pagesByFileId = $this->pageMapper->findByFileIds(array_keys($fileData), true);
+
+		// Create trash page infos using the pre-loaded pages
+		$trashPageInfos = [];
+		foreach ($fileData as $fileId => $data) {
+			if (!isset($pagesByFileId[$fileId])) {
+				continue;
+			}
+
+			$trashPageInfos[] = $this->createTrashPageInfo(
+				$data['node'],
+				$data['filename'],
+				$data['timestamp'],
+				$pagesByFileId[$fileId],
+			);
 		}
 
 		return $trashPageInfos;

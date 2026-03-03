@@ -19,11 +19,17 @@
 		<NcDialog
 			:open.sync="showModal"
 			:name="t('collectives', 'Deleted pages')"
+			close-on-click-outside
 			class="dialog__page-trash"
 			size="large">
 			<div class="modal__content">
+				<NcEmptyContent v-if="loading('pageTrash')" :name="t('collectives', 'Loading…')">
+					<template #icon>
+						<NcLoadingIcon />
+					</template>
+				</NcEmptyContent>
 				<NcEmptyContent
-					v-if="!sortedTrashPages.length"
+					v-else-if="!sortedTrashPages.length"
 					class="modal__content_empty"
 					:description="t('collectives', 'No deleted pages.')">
 					<template #icon>
@@ -104,10 +110,12 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
@@ -119,6 +127,7 @@ export default {
 		NcButton,
 		NcDialog,
 		NcEmptyContent,
+		NcLoadingIcon,
 		DeleteIcon,
 		RestoreIcon,
 		PageIcon,
@@ -144,6 +153,7 @@ export default {
 
 	computed: {
 		...mapState(usePagesStore, ['sortedTrashPages']),
+		...mapState(useRootStore, ['loading']),
 
 		titleDate() {
 			return (timestamp) => {
@@ -175,11 +185,13 @@ export default {
 			'deletePage',
 			'expandParents',
 			'restorePage',
+			'getTrashPages',
 			'setHighlightAnimationPageId',
 		]),
 
 		openTrash() {
 			this.showModal = true
+			this.getTrashPages()
 		},
 
 		onClickRestore(trashPage) {
@@ -206,12 +218,12 @@ export default {
 			if (this.$highlightTimeoutId) {
 				// clear former timeout and remove class to allow re-highlighting the button
 				clearTimeout(this.$highlightTimeoutId)
-				this.$refs.pagetrashbutton.$el.classList.remove('highlight-animation')
+				this.$refs.pagetrashbutton?.$el.classList.remove('highlight-animation')
 			}
 			this.$nextTick(() => {
-				this.$refs.pagetrashbutton.$el.classList.add('highlight-animation')
+				this.$refs.pagetrashbutton?.$el.classList.add('highlight-animation')
 				this.$highlightTimeoutId = setTimeout(() => {
-					this.$refs.pagetrashbutton.$el.classList.remove('highlight-animation')
+					this.$refs.pagetrashbutton?.$el.classList.remove('highlight-animation')
 					this.$highlightTimeoutId = null
 				}, 5000)
 			})
