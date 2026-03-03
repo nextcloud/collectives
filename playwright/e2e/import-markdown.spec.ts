@@ -34,7 +34,7 @@ test.describe('Import Markdown', () => {
 	test('table renders', async ({ collective, editor }) => {
 		await collective.openCollective({ pageTitle: 'page1' })
 		await expect(collective.page).toHaveTitle(`page1 - ${collectiveName} - Collectives - Nextcloud`)
-		await expect(editor.content
+		await expect(editor.getContent()
 			.locator('table td:first-child'))
 			.toHaveText('cell1')
 	})
