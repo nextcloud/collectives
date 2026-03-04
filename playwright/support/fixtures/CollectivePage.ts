@@ -6,7 +6,7 @@
 import type { Page } from '@playwright/test'
 import type { User } from './User.ts'
 
-import { webdavUrl } from './urls.ts'
+import { webdavUrl } from '../helpers/urls.ts'
 
 type CollectivePageData = {
 	id: number
@@ -46,8 +46,10 @@ export class CollectivePage {
 			: encodeURIComponent(this.data.title)
 	}
 
-	getPageUrl() {
-		return `/index.php/apps/collectives/${this.collectiveUrlPart}/${this.getPageUrlPart()}`
+	getPageUrl(shareToken?: string) {
+		return shareToken
+			? `/index.php/apps/collectives/p/${shareToken}/${this.collectiveUrlPart}/${this.getPageUrlPart()}`
+			: `/index.php/apps/collectives/${this.collectiveUrlPart}/${this.getPageUrlPart()}`
 	}
 
 	/**
@@ -71,9 +73,10 @@ export class CollectivePage {
 	 * Open the collective page in the browser.
 	 *
 	 * @param edit whether page is expected to open in edit mode
+	 * @param shareToken optional share token to open the page via a share link
 	 */
-	async open(edit: boolean = false) {
-		await this.page.goto(this.getPageUrl())
+	async open(edit: boolean = false, shareToken?: string) {
+		await this.page.goto(this.getPageUrl(shareToken))
 		await this.waitForContent(edit)
 	}
 

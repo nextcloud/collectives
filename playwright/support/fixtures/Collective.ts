@@ -6,8 +6,9 @@
 import type { Page } from '@playwright/test'
 import type { User } from './User.ts'
 
+import { apiUrl, ocsHeaders } from '../helpers/urls.ts'
 import { CollectivePage } from './CollectivePage.ts'
-import { apiUrl } from './urls.ts'
+import { CollectiveShare } from './CollectiveShare.ts'
 
 type CollectiveData = {
 	id: number
@@ -31,12 +32,6 @@ type CollectiveData = {
 	userFavoritePages: number[]
 	canLeave: boolean
 	trashTimestamp?: number
-}
-
-const ocsHeaders = {
-	'OCS-APIRequest': 'true',
-	Accept: 'application/json',
-	'Content-Type': 'application/json',
 }
 
 export class Collective {
@@ -151,6 +146,24 @@ export class Collective {
 		}
 
 		return collectivePage
+	}
+
+	async createShare({ password = '', page }: {
+		password?: string
+		page: Page
+	}) {
+		const response = await page.request.post(
+			apiUrl('v1.0', 'collectives', this.data.id, 'shares'),
+			{
+				headers: ocsHeaders,
+				data: {
+					password,
+				},
+				failOnStatusCode: true,
+			},
+		)
+		const data = await response.json()
+		return new CollectiveShare(this.getCollectiveUrlPart(), data.ocs.data, page)
 	}
 }
 
