@@ -3,6 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+export const ocsHeaders = {
+	'OCS-APIRequest': 'true',
+	Accept: 'application/json',
+	'Content-Type': 'application/json',
+}
+
 /**
  * Generate OCS API URL for collectives
  * We cannot use apiURL() from the app as it relies on browser APIs (window)

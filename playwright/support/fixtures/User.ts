@@ -8,8 +8,8 @@ import type { Page } from '@playwright/test'
 
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { webdavUrl } from '../helpers/urls.ts'
 import { createCollective, trashAndDeleteCollective } from './Collective.ts'
-import { webdavUrl } from './urls.ts'
 
 export class User {
 	constructor(public readonly account: Account) {

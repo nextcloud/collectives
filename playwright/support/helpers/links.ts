@@ -13,6 +13,7 @@ import { expect } from '@playwright/test'
 
 export type GetUrlParameters = {
 	baseURL: string
+	shareToken?: string
 }
 
 export type GetCollectiveUrlParameters = GetUrlParameters & {
@@ -61,6 +62,7 @@ export type SameTabLinkTestCase = {
 	targetCollective?: Collective
 	linkData: SameTabLinkTestCaseData
 	editMode: boolean
+	shareToken?: string
 }
 
 export type NewTabLinkTestCase = {
@@ -73,6 +75,7 @@ export type NewTabLinkTestCase = {
 	targetCollective?: Collective
 	linkData: NewTabLinkTestCaseData
 	editMode: boolean
+	shareToken?: string
 }
 
 /**
@@ -105,7 +108,7 @@ export async function testLinkOpensInViewer({
 		page,
 	})
 
-	await sourcePage.open()
+	await sourcePage.open(false)
 	await sourcePage.switchMode(editMode)
 	editor.setMode(editMode)
 	await editor.openLink({ linkText })
@@ -139,6 +142,7 @@ export async function testLinkOpensInViewer({
  * @param options.targetCollective the target collective
  * @param options.linkData test case data
  * @param options.editMode whether to test in edit mode or preview mode
+ * @param options.shareToken share token if the page is a share
  */
 export async function testLinkOpensInSameTab({
 	baseURL,
@@ -150,6 +154,7 @@ export async function testLinkOpensInSameTab({
 	targetCollective,
 	linkData,
 	editMode,
+	shareToken,
 }: SameTabLinkTestCase) {
 	const linkText = 'Link Text'
 	if (!targetPage || !targetCollective) {
@@ -157,13 +162,13 @@ export async function testLinkOpensInSameTab({
 	}
 	await sourcePage.setLinkContent({
 		linkText,
-		linkUrl: linkData.getLinkUrl({ baseURL, collective: targetCollective, targetPage }),
+		linkUrl: linkData.getLinkUrl({ baseURL, collective: targetCollective, targetPage, shareToken }),
 		user,
 		page,
 	})
 
 	const pageTitle = linkData.targetPageTitle ?? targetPage.data.title
-	await sourcePage.open()
+	await sourcePage.open(false, shareToken)
 	await sourcePage.switchMode(editMode)
 	editor.setMode(editMode)
 	await editor.openCollectiveLink({
@@ -171,7 +176,7 @@ export async function testLinkOpensInSameTab({
 		pageTitle,
 	})
 
-	await expect(page).toHaveURL(linkData.getExpectedUrl({ baseURL, collective: targetCollective, targetPage }))
+	await expect(page).toHaveURL(linkData.getExpectedUrl({ baseURL, collective: targetCollective, targetPage, shareToken }))
 }
 
 /**
@@ -185,6 +190,7 @@ export async function testLinkOpensInSameTab({
  * @param options.sourcePage the source page
  * @param options.linkData test case data
  * @param options.editMode whether to test in edit mode or preview mode
+ * @param options.shareToken share token if the page is a share
  */
 export async function testLinkOpensInNewTab({
 	baseURL,
@@ -194,12 +200,13 @@ export async function testLinkOpensInNewTab({
 	sourcePage,
 	linkData,
 	editMode,
+	shareToken,
 }: NewTabLinkTestCase) {
 	const linkText = 'Link Text'
 
 	await sourcePage.setLinkContent({
 		linkText,
-		linkUrl: linkData.getLinkUrl({ baseURL }),
+		linkUrl: linkData.getLinkUrl({ baseURL, shareToken }),
 		user,
 		page,
 	})
