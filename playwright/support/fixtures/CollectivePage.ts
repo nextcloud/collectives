@@ -96,6 +96,10 @@ export class CollectivePage {
 		return this.page.locator(`[data-cy-collectives="${mode}"] .ProseMirror`)
 	}
 
+	getViewerContent() {
+		return this.page.locator('#viewer')
+	}
+
 	/**
 	 * Wait for the collective landing page to finish loading.
 	 *

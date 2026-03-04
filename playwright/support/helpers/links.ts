@@ -20,6 +20,14 @@ export type GetCollectiveUrlParameters = GetUrlParameters & {
 	targetPage: CollectivePage
 }
 
+export type ViewerLinkTestCaseData = {
+	description: string
+	getLinkUrl: (params: { fileId: number }) => string
+	fixtureName: string
+	mimetype: string
+	getPath: (params: { sourcePage: CollectivePage }) => string
+}
+
 export type SameTabLinkTestCaseData = {
 	description: string
 	targetPageTitle?: string
@@ -31,6 +39,16 @@ export type NewTabLinkTestCaseData = {
 	description: string
 	getLinkUrl: (params: GetUrlParameters) => string
 	getExpectedUrl: (params: GetUrlParameters) => string
+}
+
+export type ViewerLinkTestCase = {
+	page: Page
+	user: User
+	editor: EditorSection
+	sourcePage: CollectivePage
+	linkData: ViewerLinkTestCaseData
+	fileId: number
+	editMode: boolean
 }
 
 export type SameTabLinkTestCase = {
@@ -55,6 +73,57 @@ export type NewTabLinkTestCase = {
 	targetCollective?: Collective
 	linkData: NewTabLinkTestCaseData
 	editMode: boolean
+}
+
+/**
+ * Test that a link opens a file in Viewer.
+ *
+ * @param options the options
+ * @param options.page Playwright page object
+ * @param options.user user performing the action
+ * @param options.editor editor section object to interact with the editor
+ * @param options.sourcePage the source page
+ * @param options.linkData test case data
+ * @param options.fileId fileId of uploaded fixture file
+ * @param options.editMode whether to test in edit mode or preview mode
+ */
+export async function testLinkOpensInViewer({
+	page,
+	user,
+	editor,
+	sourcePage,
+	linkData,
+	fileId,
+	editMode,
+}: ViewerLinkTestCase) {
+	const linkText = 'Link Text'
+
+	await sourcePage.setLinkContent({
+		linkText,
+		linkUrl: linkData.getLinkUrl({ fileId }),
+		user,
+		page,
+	})
+
+	await sourcePage.open()
+	await sourcePage.switchMode(editMode)
+	editor.setMode(editMode)
+	await editor.openLink({ linkText })
+	await expect(sourcePage.getViewerContent()
+		.locator('.modal-header'))
+		.toContainText(linkData.fixtureName)
+
+	let selector = ''
+	if (linkData.mimetype.startsWith('image/')) {
+		selector = 'img'
+	} else if (linkData.mimetype.startsWith('text/')) {
+		selector = '[data-text-el="editor-container"]'
+	} else if (linkData.mimetype === 'application/pdf') {
+		selector = 'iframe'
+	}
+	await expect(sourcePage.getViewerContent()
+		.locator(selector))
+		.toBeVisible()
 }
 
 /**
