@@ -292,24 +292,8 @@ Cypress.Commands.add('seedPageContent', (pagePath, content) => {
 	cy.uploadContent(`.Collectives/${pagePath}`, content)
 })
 
-Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
-	Cypress.log()
-	// Get fixture
-	return cy.fixture(path, 'base64').then((data) => {
-		// convert the base64 string to a blob
-		const blob = Cypress.Blob.base64StringToBlob(data, mimeType)
-		const file = new File([blob], path, { type: mimeType })
-		return cy.uploadContent(remotePath + path, file, mimeType)
-			.then((response) => {
-				const ocFileId = response.headers['oc-fileid']
-				const fileId = parseInt(ocFileId.substring(0, ocFileId.indexOf('oc')))
-				return fileId
-			})
-	})
-})
-
 /**
- * Generic upload of content - used by seedPageContent and uploadPage
+ * Generic upload of content - used by seedPageContent
  */
 Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown') => {
 	// @nextcloud/axios automatic handling for request tokens does not work for webdav
