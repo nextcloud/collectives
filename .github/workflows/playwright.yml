@@ -17,8 +17,8 @@ jobs:
     strategy:
         matrix:
             server-branch: ['stable32', 'master']
-            #shardIndex: [1, 2]
-            #shardTotal: [2]
+            shardIndex: [1, 2, 3]
+            shardTotal: [3]
     steps:
       - name: Checkout app
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -58,8 +58,7 @@ jobs:
         run: npx playwright install chromium --only-shell
 
       - name: Run Playwright tests
-        #run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
-        run: npx playwright test
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         env:
           PLAYWRIGHT_NC_SERVER_BRANCH: ${{ matrix.server-branch }}
 
@@ -67,7 +66,6 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         if: ${{ !cancelled() }}
         with:
-          #name: playwright-report_${{ matrix.server-branch }}_shard${{ matrix.shardIndex }}
-          name: playwright-report_${{ matrix.server-branch }}
+          name: playwright-report_${{ matrix.server-branch }}_shard${{ matrix.shardIndex }}
           path: test-results/
           retention-days: 7
