@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { Page } from '@playwright/test'
-import type { Collective } from '../support/fixtures/Collective.ts'
-import type { CollectivePage } from '../support/fixtures/CollectivePage.ts'
-import type { User } from '../support/fixtures/User.ts'
-import type { EditorSection } from '../support/sections/EditorSection.ts'
+import type {
+	GetCollectiveUrlParameters,
+	SameTabLinkTestCaseData,
+} from '../support/helpers/links.ts'
 
-import { expect, mergeTests } from '@playwright/test'
+import { mergeTests } from '@playwright/test'
 import { createCollective, trashAndDeleteCollective } from '../support/fixtures/Collective.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as editorTest } from '../support/fixtures/editor.ts'
+import { testLinkOpensInSameTab } from '../support/helpers/links.ts'
 import { randomString } from '../support/helpers/randomString.ts'
 
 const collectiveTest = createCollectiveTest.extend({
@@ -30,32 +30,7 @@ const collectiveTest = createCollectiveTest.extend({
 
 const test = mergeTests(collectiveTest, editorTest)
 
-const linkText = 'Link Text'
-
-type GetUrlParameters = {
-	baseURL: string
-}
-
-type GetCollectiveUrlParameters = GetUrlParameters & {
-	collective: Collective
-	targetPage: CollectivePage
-}
-
-type SameTabLinkTestCaseData = {
-	description: string
-	targetPageTitle?: string
-	getLinkUrl: (params: GetCollectiveUrlParameters) => string
-	getExpectedUrl: (params: GetCollectiveUrlParameters) => string
-}
-
-type NewTabLinkTestCaseData = {
-	description: string
-	targetPageTitle?: string
-	getLinkUrl: (params: GetUrlParameters) => string
-	getExpectedUrl: (params: GetUrlParameters) => string
-}
-
-const sameCollectiveLinks: SameTabLinkTestCaseData[] = [
+const links: SameTabLinkTestCaseData[] = [
 	{
 		description: 'slugified collective path',
 		targetPageTitle: 'Landing page',
@@ -130,118 +105,11 @@ const otherCollectiveLinks: SameTabLinkTestCaseData[] = [
 	},
 ]
 
-const newTabLinks: NewTabLinkTestCaseData[] = [
-	{
-		description: 'other Nextcloud app path',
-		getLinkUrl: () => '/index.php/apps/files',
-		getExpectedUrl: ({ baseURL }: GetUrlParameters) => (new URL('/index.php/apps/files/files', baseURL)).href,
-	},
-	{
-		description: 'other Nextcloud app path URL',
-		getLinkUrl: ({ baseURL }: GetUrlParameters) => (new URL('/index.php/apps/files', baseURL)).href,
-		getExpectedUrl: ({ baseURL }: GetUrlParameters) => (new URL('/index.php/apps/files/files', baseURL)).href,
-	},
-	{
-		description: 'external website URL',
-		getLinkUrl: () => 'https://github.com/',
-		getExpectedUrl: () => 'https://github.com/',
-	},
-	{
-		description: 'foreign Collective URL',
-		getLinkUrl: () => 'https://github.com/index.php/apps/collectives/some-collective-123/some-page-456',
-		getExpectedUrl: () => 'https://github.com/index.php/apps/collectives/some-collective-123/some-page-456',
-	},
-]
-
-type SameTabLinkTestCase = {
-	baseURL: string
-	page: Page
-	user: User
-	editor: EditorSection
-	sourcePage: CollectivePage
-	targetPage?: CollectivePage
-	targetCollective?: Collective
-	linkTestCaseData: SameTabLinkTestCaseData
-	editMode: boolean
-}
-
-async function testLinkOpensInSameTab({
-	baseURL,
-	page,
-	user,
-	editor,
-	sourcePage,
-	targetPage,
-	targetCollective,
-	linkTestCaseData,
-	editMode,
-}: SameTabLinkTestCase) {
-	if (!targetPage || !targetCollective) {
-		throw new Error('targetPage and targetCollective must be defined for testing links opening in the same tab')
-	}
-	await sourcePage.setLinkContent({
-		linkText,
-		linkUrl: linkTestCaseData.getLinkUrl({ baseURL, collective: targetCollective, targetPage }),
-		user,
-		page,
-	})
-
-	const pageTitle = linkTestCaseData.targetPageTitle ?? targetPage.data.title
-	await sourcePage.open()
-	await sourcePage.switchMode(editMode)
-	editor.setMode(editMode)
-	await editor.openCollectiveLink({
-		linkText,
-		pageTitle,
-	})
-
-	await expect(page).toHaveURL(linkTestCaseData.getExpectedUrl({ baseURL, collective: targetCollective, targetPage }))
-}
-
-type NewTabLinkTestCase = {
-	baseURL: string
-	page: Page
-	user: User
-	editor: EditorSection
-	sourcePage: CollectivePage
-	targetPage?: CollectivePage
-	targetCollective?: Collective
-	linkTestCaseData: NewTabLinkTestCaseData
-	editMode: boolean
-}
-
-async function testLinkOpensInNewTab({
-	baseURL,
-	page,
-	user,
-	editor,
-	sourcePage,
-	linkTestCaseData,
-	editMode,
-}: NewTabLinkTestCase) {
-	await sourcePage.setLinkContent({
-		linkText,
-		linkUrl: linkTestCaseData.getLinkUrl({ baseURL }),
-		user,
-		page,
-	})
-
-	await sourcePage.open()
-	await sourcePage.switchMode(editMode)
-	editor.setMode(editMode)
-	const newTabPromise = page.waitForEvent('popup')
-	await editor.openLink({ linkText })
-	const newTab = await newTabPromise
-	await newTab.waitForLoadState()
-
-	await expect(newTab).toHaveURL(linkTestCaseData.getExpectedUrl({ baseURL }))
-}
-
 test.describe('Collectives links', () => {
 	for (const editMode of [false, true]) {
 		const modeLabel = editMode ? 'edit' : 'preview'
-		for (const linkTestCaseData of sameCollectiveLinks) {
-			test(`Opens link to same collective with ${linkTestCaseData.description} in same tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
+		for (const linkData of links) {
+			test(`Opens link to same collective with ${linkData.description} in same tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
 				const sourcePage = collective.getPageByTitle('Link Source')
 				const targetPage = collective.getPageByTitle('Link Target')
 
@@ -257,7 +125,7 @@ test.describe('Collectives links', () => {
 					sourcePage,
 					targetPage,
 					targetCollective: collective,
-					linkTestCaseData,
+					linkData,
 					editMode,
 				})
 			})
@@ -266,8 +134,8 @@ test.describe('Collectives links', () => {
 
 	for (const editMode of [false, true]) {
 		const modeLabel = editMode ? 'edit' : 'preview'
-		for (const linkTestCaseData of otherCollectiveLinks) {
-			test(`Opens link to other collective with ${linkTestCaseData.description} in same tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
+		for (const linkData of otherCollectiveLinks) {
+			test(`Opens link to other collective with ${linkData.description} in same tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
 				const sourcePage = collective.getPageByTitle('Link Source')
 				const targetCollective = await createCollective({
 					name: randomString(),
@@ -287,36 +155,11 @@ test.describe('Collectives links', () => {
 					sourcePage,
 					targetPage,
 					targetCollective,
-					linkTestCaseData,
+					linkData,
 					editMode,
 				})
 
 				await trashAndDeleteCollective({ id: targetCollective.data.id, page })
-			})
-		}
-	}
-})
-
-test.describe('External links', () => {
-	for (const editMode of [false, true]) {
-		const modeLabel = editMode ? 'edit' : 'preview'
-		for (const linkTestCaseData of newTabLinks) {
-			test(`Opens link with ${linkTestCaseData.description} in new tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
-				const sourcePage = collective.getPageByTitle('Link Source')
-
-				if (!baseURL) {
-					throw new Error('baseURL is not defined')
-				}
-
-				await testLinkOpensInNewTab({
-					baseURL,
-					page,
-					user,
-					editor,
-					sourcePage,
-					linkTestCaseData,
-					editMode,
-				})
 			})
 		}
 	}
