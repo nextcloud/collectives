@@ -120,17 +120,19 @@ export class Collective {
 	 * @param options.content content of the page (optional)
 	 * @param options.parentId ID of the parent page (optional, defaults to root page)
 	 * @param options.user user to authenticate the request with
+	 * @param options.page the Playwright page
 	 */
-	async createPage({ title, content = null, parentId = 0, user }: {
+	async createPage({ title, content = null, parentId = 0, user, page }: {
 		title: string
 		parentId?: number
 		content?: string | null
 		user: User
+		page: Page
 	}) {
 		if (parentId === 0) {
 			parentId = this.getRootPageId()
 		}
-		const response = await user.request.post(
+		const response = await page.request.post(
 			apiUrl('v1.0', 'collectives', this.data.id, 'pages', parentId),
 			{
 				headers: ocsHeaders,
@@ -142,10 +144,10 @@ export class Collective {
 			},
 		)
 		const data = await response.json()
-		const collectivePage = new CollectivePage(this.data.id, this.getCollectiveUrlPart(), data.ocs.data.page, user.page)
+		const collectivePage = new CollectivePage(this.data.id, this.getCollectiveUrlPart(), data.ocs.data.page, page)
 
 		if (content) {
-			await collectivePage.setContent({ content, user })
+			await collectivePage.setContent({ content, user, page })
 		}
 
 		return collectivePage
@@ -158,15 +160,15 @@ export class Collective {
  * @param options options for the collective
  * @param options.name Name of the collective
  * @param options.emoji Emoji of the collective (optional)
- * @param options.user User who creates the collective
+ * @param options.page the Playwright page
  * @return The created collective
  */
-export async function createCollective({ name, emoji = '', user }: {
+export async function createCollective({ name, emoji = '', page }: {
 	name: string
 	emoji?: string
-	user: User
+	page: Page
 }) {
-	const response = await user.request.post(
+	const response = await page.request.post(
 		apiUrl('v1.0', 'collectives'),
 		{
 			headers: ocsHeaders,
@@ -178,7 +180,7 @@ export async function createCollective({ name, emoji = '', user }: {
 		},
 	)
 	const data = await response.json()
-	return Collective.create(data.ocs.data.collective, user.page)
+	return Collective.create(data.ocs.data.collective, page)
 }
 
 /**
@@ -186,17 +188,17 @@ export async function createCollective({ name, emoji = '', user }: {
  *
  * @param options options for the collective
  * @param options.id ID of the collective
- * @param options.user User who trashes and deletes the collective
+ * @param options.page the Playwright page
  */
-export async function trashAndDeleteCollective({ id, user }: {
+export async function trashAndDeleteCollective({ id, page }: {
 	id: number
-	user: User
+	page: Page
 }) {
-	await user.request.delete(
+	await page.request.delete(
 		apiUrl('v1.0', 'collectives', id),
 		{ headers: ocsHeaders, failOnStatusCode: true },
 	)
-	await user.request.delete(
+	await page.request.delete(
 		apiUrl('v1.0', 'collectives', 'trash', id),
 		{
 			headers: ocsHeaders,

@@ -7,15 +7,13 @@ import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectivesTest } from '../support/fixtures/create-collectives.ts'
 import { test as filesAppTest } from '../support/fixtures/filesApp.ts'
 import { test as navigationTest } from '../support/fixtures/navigation.ts'
-
-const collectiveName1 = 'Test Collective 1'
-const collectiveName2 = 'Test Collective 2'
+import { randomString } from '../support/helpers/randomString.ts'
 
 const collectivesTest = createCollectivesTest.extend({
 	// eslint-disable-next-line no-empty-pattern
 	collectiveConfigs: async ({}, use) => use([
-		{ name: collectiveName1 },
-		{ name: collectiveName2 },
+		{ name: randomString() },
+		{ name: randomString() },
 	]),
 })
 
@@ -26,7 +24,7 @@ test.describe('Settings', () => {
 		await collective.openApp()
 	})
 
-	test('Can change collectives folder', async ({ navigation, filesApp }) => {
+	test('Can change collectives folder', async ({ collectives, navigation, filesApp }) => {
 		const randomFolder = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
 		await navigation.setUserFolder(randomFolder)
 		await navigation.openCollectivesSettings()
@@ -36,7 +34,7 @@ test.describe('Settings', () => {
 
 		await filesApp.open()
 		await filesApp.openFile(randomFolder)
-		await expect(filesApp.getFileListEntry(collectiveName1)).toBeVisible()
-		await expect(filesApp.getFileListEntry(collectiveName2)).toBeVisible()
+		await expect(filesApp.getFileListEntry(collectives[0].data.name)).toBeVisible()
+		await expect(filesApp.getFileListEntry(collectives[1].data.name)).toBeVisible()
 	})
 })

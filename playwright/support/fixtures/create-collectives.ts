@@ -6,6 +6,7 @@
 import type { Collective } from './Collective.ts'
 
 import { runOcc } from '@nextcloud/e2e-test-server/docker'
+import { randomString } from '../helpers/randomString.ts'
 import { test as base } from './random-user.ts'
 
 export interface CollectiveConfig {
@@ -46,15 +47,15 @@ export const test = base.extend<CollectivesFixture>({
 	// eslint-disable-next-line no-empty-pattern
 	collectiveConfigs: async ({}, use) => {
 		await use([
-			{ name: 'Test Collective 1', emoji: '🌟' },
+			{ name: randomString(), emoji: '🌟' },
 		])
 	},
-	collectives: async ({ collectiveConfigs, user }, use) => {
+	collectives: async ({ collectiveConfigs, user, page }, use) => {
 		const createdCollectives: Collective[] = []
 
 		// Create all collectives
 		for (const config of collectiveConfigs) {
-			const collective = await user.createCollective(config)
+			const collective = await user.createCollective(config, page)
 
 			// Import Markdown if path is provided
 			if (config.markdownImportPath) {
@@ -68,12 +69,13 @@ export const test = base.extend<CollectivesFixture>({
 			}
 
 			if (config.pages) {
-				for (const page of config.pages) {
+				for (const collectivePage of config.pages) {
 					const createdPage = await collective.createPage({
-						title: page.title,
-						parentId: page.parentId || 0,
-						content: page.content,
+						title: collectivePage.title,
+						parentId: collectivePage.parentId || 0,
+						content: collectivePage.content,
 						user,
+						page,
 					})
 					collective.collectivePages.push(createdPage)
 				}
@@ -86,7 +88,7 @@ export const test = base.extend<CollectivesFixture>({
 
 		// Cleanup all collectives
 		for (const collective of createdCollectives) {
-			await user.deleteCollective({ id: collective.data.id })
+			await user.deleteCollective({ id: collective.data.id }, page)
 		}
 	},
 	collective: async ({ collectives }, use) => {

@@ -10,8 +10,6 @@ import { defineConfig, devices } from '@playwright/test'
  */
 export default defineConfig({
 	testDir: './playwright',
-	// run tests in files in parallel
-	fullyParallel: true,
 	// ensure no `test.only` is left in the code causing false positives
 	forbidOnly: !!process.env.CI,
 	// retry on CI only
