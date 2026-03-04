@@ -41,7 +41,7 @@ test.describe('Import Markdown', () => {
 
 	test('internal links got rewritten and work', async ({ collective, editor }) => {
 		await collective.openCollective({ pageTitle: 'start' })
-		await editor.hasInternalLink('page1')
-		await editor.hasInternalLink('subpage1')
+		await editor.hasCollectiveLink('page1')
+		await editor.hasCollectiveLink('subpage1')
 	})
 })

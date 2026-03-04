@@ -42,7 +42,7 @@ export class EditorSection {
 		return this.page.locator('.widget-custom')
 	}
 
-	public async hasInternalLink(linkText: string): Promise<void> {
+	public async hasCollectiveLink(linkText: string): Promise<void> {
 		await expect((await this.getLinkBubble(linkText))
 			.locator('.collective-page .line'))
 			.toHaveText(linkText)
