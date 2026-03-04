@@ -9,21 +9,14 @@ import type { Page } from '@playwright/test'
 import { createCollective, trashAndDeleteCollective } from './Collective.ts'
 
 export class User {
-	constructor(
-		public readonly account: Account,
-		public readonly page: Page,
-	) {
+	constructor(public readonly account: Account) {
 	}
 
-	get request() {
-		return this.page.request
+	createCollective(options: { name: string, emoji?: string }, page: Page) {
+		return createCollective({ ...options, page })
 	}
 
-	createCollective(options: { name: string, emoji?: string }) {
-		return createCollective({ ...options, user: this })
-	}
-
-	deleteCollective(options: { id: number }) {
-		return trashAndDeleteCollective({ ...options, user: this })
+	deleteCollective(options: { id: number }, page: Page) {
+		return trashAndDeleteCollective({ ...options, page })
 	}
 }

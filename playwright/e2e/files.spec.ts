@@ -19,9 +19,9 @@ test.describe('Files app', () => {
 
 		await expect(filesApp.getFileListEntry('.Collectives')).toBeVisible()
 		await filesApp.openFile('.Collectives')
-		await expect(filesApp.getFileListEntry('Test Collective 1')).toBeVisible()
+		await expect(filesApp.getFileListEntry(collective.data.name)).toBeVisible()
 		await filesApp.hasCollectivesHeader()
-		await filesApp.openFile('Test Collective 1')
+		await filesApp.openFile(collective.data.name)
 		await expect(filesApp.getFileListEntry('Readme.md')).toBeVisible()
 		await filesApp.hasCollectivesHeader()
 	})

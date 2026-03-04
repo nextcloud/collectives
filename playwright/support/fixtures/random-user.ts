@@ -17,12 +17,12 @@ export interface UserFixture {
 /**
  * This test fixture ensures a new random user is created and used for the test (current page)
  */
-export const test = base.extend<UserFixture>({
+export const test = base.extend<object, UserFixture>({
 	// eslint-disable-next-line no-empty-pattern
-	account: async ({}, use) => {
+	account: [async ({}, use) => {
 		const account = await createRandomUser()
 		await use(account)
-	},
+	}, { scope: 'worker' }],
 	page: async ({ account, browser, baseURL }, use) => {
 		// Important: make sure we authenticate in a clean environment by unsetting storage state.
 		const page = await browser.newPage({
@@ -40,8 +40,8 @@ export const test = base.extend<UserFixture>({
 		await use(page)
 		await page.close()
 	},
-	user: async ({ account, page }, use) => {
-		const user = new User(account, page)
+	user: [async ({ account }, use) => {
+		const user = new User(account)
 		await use(user)
-	},
+	}, { scope: 'worker' }],
 })

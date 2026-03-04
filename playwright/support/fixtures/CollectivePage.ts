@@ -112,12 +112,14 @@ export class CollectivePage {
 	 * @param options the options
 	 * @param options.content the content to set
 	 * @param options.user the user to authenticate the request with
+	 * @param options.page the Playwright page
 	 */
-	async setContent({ content, user }: {
+	async setContent({ content, user, page }: {
 		content: string
 		user: User
+		page: Page
 	}) {
-		await user.request.put(
+		await page.request.put(
 			webdavUrl(user.account.userId, this.data.collectivePath, this.data.filePath, this.data.fileName),
 			{
 				headers: {
@@ -136,13 +138,15 @@ export class CollectivePage {
 	 * @param options.linkText the text of the link
 	 * @param options.linkUrl the URL of the link
 	 * @param options.user the user to authenticate the request with
+	 * @param options.page the Playwright page
 	 */
-	async setLinkContent({ linkText, linkUrl, user }: {
+	async setLinkContent({ linkText, linkUrl, user, page }: {
 		linkText: string
 		linkUrl: string
 		user: User
+		page: Page
 	}) {
 		const content = `## Link\n\n[${linkText}](${linkUrl})`
-		await this.setContent({ content, user })
+		await this.setContent({ content, user, page })
 	}
 }

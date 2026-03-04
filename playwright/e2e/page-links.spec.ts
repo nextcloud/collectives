@@ -13,14 +13,13 @@ import { expect, mergeTests } from '@playwright/test'
 import { createCollective, trashAndDeleteCollective } from '../support/fixtures/Collective.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as editorTest } from '../support/fixtures/editor.ts'
-
-const collectiveName = 'LinksCollective'
+import { randomString } from '../support/helpers/randomString.ts'
 
 const collectiveTest = createCollectiveTest.extend({
 	// eslint-disable-next-line no-empty-pattern
 	collectiveConfigs: async ({}, use) => use([
 		{
-			name: collectiveName,
+			name: randomString(),
 			pages: [
 				{ title: 'Link Target', content: 'Some content' },
 				{ title: 'Link Source' },
@@ -72,7 +71,7 @@ const sameCollectiveLinks: SameTabLinkTestCaseData[] = [
 	{
 		description: 'absolute collective path',
 		targetPageTitle: 'Landing page',
-		getLinkUrl: () => `/index.php/apps/collectives/${collectiveName}`,
+		getLinkUrl: ({ collective }) => `/index.php/apps/collectives/${collective.data.name}`,
 		getExpectedUrl: ({ baseURL, collective }: GetCollectiveUrlParameters) => (new URL(`/index.php/apps/collectives/${collective.data.slug}-${collective.data.id}`, baseURL)).href,
 	},
 	{
@@ -82,12 +81,12 @@ const sameCollectiveLinks: SameTabLinkTestCaseData[] = [
 	},
 	{
 		description: 'absolute page path',
-		getLinkUrl: ({ targetPage }: GetCollectiveUrlParameters) => `/index.php/apps/collectives/${collectiveName}/${encodeURIComponent(targetPage.data.title)}`,
+		getLinkUrl: ({ collective, targetPage }: GetCollectiveUrlParameters) => `/index.php/apps/collectives/${collective.data.name}/${encodeURIComponent(targetPage.data.title)}`,
 		getExpectedUrl: ({ baseURL, targetPage }: GetCollectiveUrlParameters) => (new URL(targetPage.getPageUrl(), baseURL)).href,
 	},
 	{
 		description: 'absolute page path URL',
-		getLinkUrl: ({ baseURL, targetPage }: GetCollectiveUrlParameters) => (new URL(`/index.php/apps/collectives/${collectiveName}/${encodeURIComponent(targetPage.data.title)})`, baseURL)).href,
+		getLinkUrl: ({ baseURL, collective, targetPage }: GetCollectiveUrlParameters) => (new URL(`/index.php/apps/collectives/${collective.data.name}/${encodeURIComponent(targetPage.data.title)})`, baseURL)).href,
 		getExpectedUrl: ({ baseURL, targetPage }: GetCollectiveUrlParameters) => (new URL(targetPage.getPageUrl(), baseURL)).href,
 	},
 	{
@@ -184,6 +183,7 @@ async function testLinkOpensInSameTab({
 		linkText,
 		linkUrl: linkTestCaseData.getLinkUrl({ baseURL, collective: targetCollective, targetPage }),
 		user,
+		page,
 	})
 
 	const pageTitle = linkTestCaseData.targetPageTitle ?? targetPage.data.title
@@ -223,6 +223,7 @@ async function testLinkOpensInNewTab({
 		linkText,
 		linkUrl: linkTestCaseData.getLinkUrl({ baseURL }),
 		user,
+		page,
 	})
 
 	await sourcePage.open()
@@ -230,15 +231,13 @@ async function testLinkOpensInNewTab({
 	editor.setMode(editMode)
 	const newTabPromise = page.waitForEvent('popup')
 	await editor.openLink({ linkText })
-	const newTab = await newTabPromise;
+	const newTab = await newTabPromise
 	await newTab.waitForLoadState()
 
 	await expect(newTab).toHaveURL(linkTestCaseData.getExpectedUrl({ baseURL }))
 }
 
 test.describe('Collectives links', () => {
-	test.describe.configure({ mode: 'serial' })
-
 	for (const editMode of [false, true]) {
 		const modeLabel = editMode ? 'edit' : 'preview'
 		for (const linkTestCaseData of sameCollectiveLinks) {
@@ -271,10 +270,10 @@ test.describe('Collectives links', () => {
 			test(`Opens link to other collective with ${linkTestCaseData.description} in same tab (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
 				const sourcePage = collective.getPageByTitle('Link Source')
 				const targetCollective = await createCollective({
-					name: 'Target Collective',
-					user,
+					name: randomString(),
+					page,
 				})
-				const targetPage = await targetCollective.createPage({ title: 'Landing page', content: '', user })
+				const targetPage = await targetCollective.createPage({ title: 'Landing page', content: '', user, page })
 
 				if (!baseURL) {
 					throw new Error('baseURL is not defined')
@@ -292,15 +291,13 @@ test.describe('Collectives links', () => {
 					editMode,
 				})
 
-				await trashAndDeleteCollective({ id: targetCollective.data.id, user })
+				await trashAndDeleteCollective({ id: targetCollective.data.id, page })
 			})
 		}
 	}
 })
 
 test.describe('External links', () => {
-	test.describe.configure({ mode: 'serial' })
-
 	for (const editMode of [false, true]) {
 		const modeLabel = editMode ? 'edit' : 'preview'
 		for (const linkTestCaseData of newTabLinks) {
