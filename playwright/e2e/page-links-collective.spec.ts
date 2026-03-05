@@ -61,7 +61,7 @@ const links: SameTabLinkTestCaseData[] = [
 	},
 	{
 		description: 'absolute page path URL',
-		getLinkUrl: ({ baseURL, collective, targetPage }: GetCollectiveUrlParameters) => (new URL(`/index.php/apps/collectives/${collective.data.name}/${encodeURIComponent(targetPage.data.title)})`, baseURL)).href,
+		getLinkUrl: ({ baseURL, collective, targetPage }: GetCollectiveUrlParameters) => (new URL(`/index.php/apps/collectives/${collective.data.name}/${encodeURIComponent(targetPage.data.title)}`, baseURL)).href,
 		getExpectedUrl: ({ baseURL, targetPage }: GetCollectiveUrlParameters) => (new URL(targetPage.getPageUrl(), baseURL)).href,
 	},
 	{
@@ -100,7 +100,7 @@ const otherCollectiveLinks: SameTabLinkTestCaseData[] = [
 	},
 	{
 		description: 'absolute page path URL',
-		getLinkUrl: ({ baseURL, collective, targetPage }: GetCollectiveUrlParameters) => (new URL(`/index.php/apps/collectives/${encodeURIComponent(collective.data.name)}/${encodeURIComponent(targetPage.data.title)}?fileId=${targetPage.data.id})`, baseURL)).href,
+		getLinkUrl: ({ baseURL, collective, targetPage }: GetCollectiveUrlParameters) => (new URL(`/index.php/apps/collectives/${encodeURIComponent(collective.data.name)}/${encodeURIComponent(targetPage.data.title)}?fileId=${targetPage.data.id}`, baseURL)).href,
 		getExpectedUrl: ({ baseURL, targetPage }: GetCollectiveUrlParameters) => (new URL(targetPage.getPageUrl(), baseURL)).href,
 	},
 ]

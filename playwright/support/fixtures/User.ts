@@ -50,7 +50,6 @@ export class User {
 	</d:propfind>`,
 			},
 		)
-		console.debug('PROPFIND response:', await response.text())
 		const fileId = (await response.text())
 			.match(/<oc:fileid>(\d+)<\/oc:fileid>/)?.[1]
 		if (!fileId) {
