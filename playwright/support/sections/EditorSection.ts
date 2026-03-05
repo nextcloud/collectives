@@ -9,21 +9,35 @@ import { expect } from '@playwright/test'
 
 export class EditorSection {
 	public isEdit: boolean
-	public readonly editorContent: Locator
-	public readonly readerContent: Locator
+	public readonly editor: Locator
+	public readonly reader: Locator
 
 	constructor(public readonly page: Page) {
 		this.isEdit = false
-		this.editorContent = this.page.locator('[data-cy-collectives="editor"] .ProseMirror')
-		this.readerContent = this.page.locator('[data-cy-collectives="reader"] .ProseMirror')
+		this.editor = this.page.locator('[data-cy-collectives="editor"]')
+		this.reader = this.page.locator('[data-cy-collectives="reader"]')
 	}
 
 	public setMode(edit: boolean) {
 		this.isEdit = edit
 	}
 
+	public getMenu(name: string): Locator {
+		return this.editor.getByRole('button', { name })
+	}
+
+	public getMenuItem(name: string): Locator {
+		return this.editor.getByRole('menuitem', { name })
+	}
+
+	public async clickMenu(menu: string, item: string): Promise<void> {
+		await this.getMenu(menu).click()
+		await this.getMenuItem(item).click()
+	}
+
 	public getContent() {
-		return this.isEdit ? this.editorContent : this.readerContent
+		return (this.isEdit ? this.editor : this.reader)
+			.locator('.ProseMirror')
 	}
 
 	public async hasImage(filename: string): Promise<void> {
