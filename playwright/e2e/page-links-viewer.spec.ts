@@ -28,14 +28,14 @@ const test = mergeTests(collectiveTest, editorTest)
 
 const links: ViewerLinkTestCaseData[] = [
 	{
-		description: 'absolute files app path to image file',
+		description: 'absolute files app path to markdown file',
 		getLinkUrl: ({ fileId }) => `/index.php/f/${fileId}`,
 		fixtureName: 'test.md',
 		mimetype: 'text/markdown',
 		getPath: () => '',
 	},
 	{
-		description: 'absolute files app path to text file',
+		description: 'absolute files app path to image file',
 		getLinkUrl: ({ fileId }) => `/index.php/f/${fileId}`,
 		fixtureName: 'test.png',
 		mimetype: 'image/png',
