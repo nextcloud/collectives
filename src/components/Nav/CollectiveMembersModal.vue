@@ -4,19 +4,25 @@
 -->
 
 <template>
-	<NcDialog
-		:name="t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false })"
+	<NcModal
 		size="normal"
-		@closing="onClose">
+		class="collective-members-modal"
+		@close="onClose">
 		<div class="modal-collective-members">
-			<a
-				v-if="showTeamLink"
-				class="team-link"
-				:href="teamUrl"
-				:title="t('collectives', 'Team overview')"
-				target="_blank">
-				<OpenInNewIcon :size="20" />
-			</a>
+			<h2 class="modal-collective-members__name">
+				<a
+					v-if="showTeamLink"
+					class="team-link"
+					:href="teamUrl"
+					:title="t('collectives', 'Go to team overview')"
+					target="_blank">
+					{{ t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false }) }}
+					<OpenInNewIcon :size="20" />
+				</a>
+				<template v-else>
+					{{ t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false }) }}
+				</template>
+			</h2>
 			<MemberPicker
 				:show-current="true"
 				:circle-id="collective.circleId"
@@ -24,14 +30,14 @@
 				:current-members="circleMembersSorted(collective.circleId)"
 				:on-click-searched="onClickSearched" />
 		</div>
-	</NcDialog>
+	</NcModal>
 </template>
 
 <script>
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
-import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcModal from '@nextcloud/vue/components/NcModal'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
@@ -44,7 +50,7 @@ export default {
 
 	components: {
 		MemberPicker,
-		NcDialog,
+		NcModal,
 		OpenInNewIcon,
 	},
 
@@ -107,30 +113,50 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:deep(.modal-container__content) {
-	position: relative;
+.collective-members-modal {
+	:deep(.modal-wrapper .modal-container) {
+		display: flex !important;
+		padding-block: 4px 0;
+		padding-inline: 12px;
+	}
+
+	:deep(.modal-wrapper .modal-container__content) {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
 }
 
 .modal-collective-members {
 	height: 550px;
 	max-height: 80vh;
-	padding-bottom: 12px;
+
+	&__name {
+		font-size: 21px;
+		text-align: center;
+		line-height: var(--default-clickable-area);
+		min-height: var(--default-clickable-area);
+		overflow-wrap: break-word;
+		margin-block: 0 12px;
+		margin-inline: 0;
+
+		&:hover .team-link,
+		&:hover .material-design-icon {
+			color: var(--color-primary-element);
+			transition: color var(--animation-quick) ease;
+		}
+	}
 }
 
 .team-link {
-	position: absolute;
-	top: 0;
-	right: 12px;
-	display: flex;
-	align-items: center;
-	height: var(--default-clickable-area);
-	color: var(--color-text-maxcontrast);
+	color: var(--color-main-text);
 	text-decoration: none;
 
-	&:hover,
-	&:focus-visible {
-		color: var(--color-primary-element);
-		transition: color var(--animation-quick) ease;
+	.material-design-icon {
+		display: inline;
+		vertical-align: middle;
+		color: var(--color-text-maxcontrast);
+		white-space: nowrap;
 	}
 
 	&:focus-visible {
