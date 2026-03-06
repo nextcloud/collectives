@@ -81,6 +81,36 @@ class PageMapper extends QBMapper {
 	}
 
 	/**
+	 * @param int[] $fileIds
+	 * @return array<int, Page> Indexed by file_id
+	 */
+	public function findByFileIds(array $fileIds, bool $trashed = false): array {
+		if (empty($fileIds)) {
+			return [];
+		}
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->tableName)
+			->where($qb->expr()->in('file_id',
+				$qb->createNamedParameter($fileIds, IQueryBuilder::PARAM_INT_ARRAY)));
+
+		if ($trashed) {
+			$qb->andWhere($qb->expr()->isNotNull('trash_timestamp'));
+		} else {
+			$qb->andWhere($qb->expr()->isNull('trash_timestamp'));
+		}
+
+		$pages = $this->findEntities($qb);
+		$pagesByFileId = [];
+		foreach ($pages as $page) {
+			$pagesByFileId[$page->getFileId()] = $page;
+		}
+
+		return $pagesByFileId;
+	}
+
+	/**
 	 * @return Page[]
 	 */
 	public function getAll(): array {
