@@ -4,11 +4,25 @@
 -->
 
 <template>
-	<NcDialog
-		:name="t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false })"
+	<NcModal
 		size="normal"
-		@closing="onClose">
+		class="collective-members-modal"
+		@close="onClose">
 		<div class="modal-collective-members">
+			<h2 class="modal-collective-members__name">
+				<a
+					v-if="showTeamLink"
+					class="team-link"
+					:href="teamUrl"
+					:title="t('collectives', 'Go to team overview')"
+					target="_blank">
+					{{ t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false }) }}
+					<OpenInNewIcon :size="20" />
+				</a>
+				<template v-else>
+					{{ t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false }) }}
+				</template>
+			</h2>
 			<MemberPicker
 				:show-current="true"
 				:circle-id="collective.circleId"
@@ -16,24 +30,28 @@
 				:current-members="circleMembersSorted(collective.circleId)"
 				:on-click-searched="onClickSearched" />
 		</div>
-	</NcDialog>
+	</NcModal>
 </template>
 
 <script>
 import { t } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
-import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcModal from '@nextcloud/vue/components/NcModal'
+import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'CollectiveMembersModal',
 
 	components: {
 		MemberPicker,
-		NcDialog,
+		NcModal,
+		OpenInNewIcon,
 	},
 
 	props: {
@@ -46,9 +64,22 @@ export default {
 	computed: {
 		...mapState(useCirclesStore, ['circleMembersSorted']),
 		...mapState(useCollectivesStore, ['isCollectiveAdmin']),
+		...mapState(useRootStore, ['isPublic']),
 
 		currentUserIsAdmin() {
 			return this.isCollectiveAdmin(this.collective)
+		},
+
+		teamUrl() {
+			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.collective.circleId })
+		},
+
+		hasContactsApp() {
+			return 'contacts' in window.OC.appswebroots
+		},
+
+		showTeamLink() {
+			return this.hasContactsApp && !this.isPublic
 		},
 	},
 
@@ -82,9 +113,55 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.collective-members-modal {
+	:deep(.modal-wrapper .modal-container) {
+		display: flex !important;
+		padding-block: 4px 0;
+		padding-inline: 12px;
+	}
+
+	:deep(.modal-wrapper .modal-container__content) {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+}
+
 .modal-collective-members {
 	height: 550px;
 	max-height: 80vh;
-	padding-bottom: 12px;
+
+	&__name {
+		font-size: 21px;
+		text-align: center;
+		line-height: var(--default-clickable-area);
+		min-height: var(--default-clickable-area);
+		overflow-wrap: break-word;
+		margin-block: 0 12px;
+		margin-inline: 0;
+
+		&:hover .team-link,
+		&:hover .material-design-icon {
+			color: var(--color-primary-element);
+			transition: color var(--animation-quick) ease;
+		}
+	}
+}
+
+.team-link {
+	color: var(--color-main-text);
+	text-decoration: none;
+
+	.material-design-icon {
+		display: inline;
+		vertical-align: middle;
+		color: var(--color-text-maxcontrast);
+		white-space: nowrap;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-main-text);
+		border-radius: var(--border-radius-small);
+	}
 }
 </style>
