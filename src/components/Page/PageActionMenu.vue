@@ -349,25 +349,21 @@ export default {
 			this.setFullWidthView({ pageId: this.currentPage.id, fullWidthView: false })
 		},
 
-		openShareTab() {
-			this.show('details')
+		async openShareTab() {
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
-				this.$router.push(this.pageUrl)
+				await this.$router.push(this.pageUrl)
 			}
-			this.$nextTick(() => {
-				this.show('sidebar')
-				this.setActiveSidebarTab('sharing')
-			})
+			this.show('details')
+			this.show('sidebar')
+			this.setActiveSidebarTab('sharing')
 		},
 
-		gotoPageEmojiPicker() {
-			this.show('details')
+		async gotoPageEmojiPicker() {
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
-				this.$router.push(this.pageUrl)
+				await this.$router.push(this.pageUrl)
 			}
-			this.$nextTick(() => {
-				emit('collectives:page:open-emoji-picker')
-			})
+			this.show('details')
+			emit('collectives:page:open-emoji-picker')
 		},
 
 		onOpenMoveOrCopyModal() {

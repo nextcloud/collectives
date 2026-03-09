@@ -315,8 +315,8 @@ export default {
 		},
 
 		// Create a new collective and navigate to it
-		onCreate() {
-			const updateCollective = () => {
+		async onCreate() {
+			const updateCollective = async () => {
 				if (this.updatedCollective && this.hasSelectedMembersWithoutSelf) {
 					const members = Object.values(this.selectedMembersWithoutSelf).map((entry) => ({
 						id: entry.id,
@@ -330,31 +330,29 @@ export default {
 				}
 
 				if (this.collectiveChanged) {
-					this.$router.push(this.updatedCollectivePath)
+					await this.$router.push(this.updatedCollectivePath)
 				}
 
 				this.onClose()
 			}
 
 			this.loading = true
-			this.newCollective({ name: this.newCollectiveName, emoji: this.emoji })
-				.then((message) => {
-					if (message) {
-						showInfo(message)
-					}
-					updateCollective()
-				})
-				.catch((e) => {
-					if (e.response?.status === 400) {
-						this.nameExists = this.newCollectiveName
-						this.state = 0
-					} else {
-						displayError('Could not create the collective')(e)
-					}
-				})
-				.finally(() => {
-					this.loading = false
-				})
+			try {
+				const message = await this.newCollective({ name: this.newCollectiveName, emoji: this.emoji })
+				if (message) {
+					showInfo(message)
+				}
+				await updateCollective()
+			} catch (e) {
+				if (e.response?.status === 400) {
+					this.nameExists = this.newCollectiveName
+					this.state = 0
+				} else {
+					displayError('Could not create the collective')(e)
+				}
+			} finally {
+				this.loading = false
+			}
 		},
 
 		startSelectCircle() {
