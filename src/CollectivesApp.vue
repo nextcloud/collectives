@@ -108,7 +108,6 @@ export default {
 		...mapActions(useSettingsStore, ['getCollectivesFolder']),
 		...mapActions(useCollectivesStore, [
 			'getCollectives',
-			'getTrashCollectives',
 		]),
 
 		async getCollectivesAndSettings() {
@@ -125,11 +124,8 @@ export default {
 			}
 
 			if (!this.isPublic) {
-				const promises = [this.getCollectivesFolder()]
-				promises.push(this.getTrashCollectives())
-
 				try {
-					await Promise.all(promises)
+					await this.getCollectivesFolder()
 				} catch (e) {
 					displayError('Could not fetch collective details')(e)
 				}

@@ -22,6 +22,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		collectivesState: useLocalStorage(STORE_PREFIX + 'collectives', []),
 		publicCollectivesState: useLocalStorage(STORE_PREFIX + 'publicCollectives', {}),
 		trashCollectives: useLocalStorage(STORE_PREFIX + 'trashCollectives', []),
+		trashCollectivesLoaded: false,
 		updatedCollective: undefined,
 		templatesCollectiveId: undefined,
 		membersCollectiveId: undefined,
@@ -210,14 +211,19 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		/**
-		 * Get list of all collectives in trash
+		 * Get a list of all collectives in trash
 		 */
 		async getTrashCollectives() {
+			if (this.trashCollectivesLoaded) {
+				return
+			}
+
 			const rootStore = useRootStore()
 			rootStore.load('collectiveTrash')
 			const response = await api.getTrashCollectives()
 			this.trashCollectives = response.data.ocs.data.collectives
 			rootStore.done('collectiveTrash')
+			this.trashCollectivesLoaded = true
 		},
 
 		_addOrUpdateCollectiveState(collective) {
