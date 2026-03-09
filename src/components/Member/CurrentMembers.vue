@@ -93,7 +93,7 @@ export default {
 		},
 
 		isCurrentUser() {
-			return function(item) {
+			return (item) => {
 				return item.userId === this.currentUser
 					|| item.singleId === item.circle.initiator.singleId
 			}
