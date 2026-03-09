@@ -101,15 +101,12 @@ export default {
 		...mapState(useCollectivesStore, [
 			'membersCollective',
 			'sortedCollectives',
-			'sortedTrashCollectives',
 			'templatesCollectiveId',
 		]),
 
 		displayTrash() {
 			return !this.isPublic
-				&& this.sortedTrashCollectives.length
 				&& !this.loading('collectives')
-				&& !this.loading('collectiveTrash')
 		},
 
 		showCollectiveMembersModal() {
