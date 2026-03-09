@@ -185,8 +185,8 @@ export default {
 			this.setTemplatesCollectiveId(this.collective.id)
 		},
 
-		openShareTab(collective) {
-			this.$router.push(`/${encodeURIComponent(collective.name)}`)
+		async openShareTab(collective) {
+			await this.$router.push(`/${encodeURIComponent(collective.name)}`)
 			this.show('sidebar')
 			this.setActiveSidebarTab('sharing')
 		},
