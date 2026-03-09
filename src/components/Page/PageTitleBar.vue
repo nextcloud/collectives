@@ -72,7 +72,7 @@
 		<PageTitle
 			v-if="isLandingPage"
 			ref="pageTitle"
-			:value="currentCollective.name"
+			:modelValue="currentCollective.name"
 			:disabled="true" />
 		<PageTitle
 			v-else
