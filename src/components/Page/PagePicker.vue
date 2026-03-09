@@ -82,7 +82,7 @@
 					:key="page.id">
 					<a
 						:class="{ self: page.id === pageId }"
-						:href="page.id === pageId ? false : '#'"
+						:href="page.id === pageId ? null : '#'"
 						class="picker-item"
 						@click="onClickPage(page)">
 						<div v-if="page.emoji" class="picker-icon">
