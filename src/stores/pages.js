@@ -914,7 +914,9 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.trashPage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
 			removeFrom(this.allPages[this.collectiveIndex], trashPage)
-			updateOrAddTo(this.allTrashPages[this.collectiveIndex], trashPage)
+			if (this.allTrashPages[this.collectiveIndex]) {
+				updateOrAddTo(this.allTrashPages[this.collectiveIndex], trashPage)
+			}
 		},
 
 		/**
