@@ -119,19 +119,19 @@ export default {
 		},
 
 		circleUserType() {
-			return function(source) {
+			return (source) => {
 				return circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[source]]
 			}
 		},
 
 		isSelected() {
-			return function(item) {
+			return (item) => {
 				return `${item.source}-${item.id}` in this.selectionSet
 			}
 		},
 
 		isLoading() {
-			return function(item) {
+			return (item) => {
 				return `${item.source}-${item.id}` in this.loadingItems
 			}
 		},
