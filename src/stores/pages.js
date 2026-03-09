@@ -24,7 +24,7 @@ export const usePagesStore = defineStore('pages', {
 		allTrashPages: useLocalStorage(STORE_PREFIX + 'allTrashPages', {}),
 		allAttachments: useLocalStorage(STORE_PREFIX + 'allAttachments', {}),
 		textMode: useLocalStorage(STORE_PREFIX + 'textMode', {}),
-		loadedTrashedPagesPerCollective: {},
+		trashPagesLoaded: false,
 		newPage: undefined,
 		newPageParentId: null,
 		sortBy: undefined,
@@ -574,7 +574,7 @@ export const usePagesStore = defineStore('pages', {
 		 * Get a list of all pages in trash
 		 */
 		async getTrashPages() {
-			if (this.loadedTrashedPagesPerCollective[this.collectiveIndex]) {
+			if (this.trashPagesLoaded) {
 				return
 			}
 
@@ -582,8 +582,12 @@ export const usePagesStore = defineStore('pages', {
 			rootStore.load('pageTrash')
 			const response = await api.getTrashPages(this.context)
 			set(this.allTrashPages, this.collectiveIndex, response.data.ocs.data.pages)
-			set(this.loadedTrashedPagesPerCollective, this.collectiveIndex, true)
+			this.setTrashPagesLoaded(true)
 			rootStore.done('pageTrash')
+		},
+
+		setTrashPagesLoaded(loaded) {
+			this.trashPagesLoaded = loaded
 		},
 
 		_updatePageState(page, collectiveIndex = this.collectiveIndex) {

@@ -115,6 +115,7 @@ export default {
 	watch: {
 		'currentCollective.id': function(val) {
 			this.clearFilterTags()
+			this.setTrashPagesLoaded(false)
 			if (val) {
 				this.initCollective({ closeNavDelay: true })
 			}
@@ -147,6 +148,7 @@ export default {
 		t,
 
 		...mapActions(useRootStore, ['show']),
+		...mapActions(usePagesStore, ['setTrashPagesLoaded']),
 		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
