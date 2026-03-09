@@ -358,9 +358,9 @@ export default {
 		/**
 		 * Trash a collective with the given name
 		 */
-		onTrashCollective() {
+		async onTrashCollective() {
 			if (this.collectiveId === this.collective.id) {
-				this.$router.push('/')
+				await this.$router.push('/')
 				emit('toggle-navigation', { open: true })
 			}
 			this.trashCollective(this.collective)

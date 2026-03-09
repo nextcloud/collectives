@@ -68,7 +68,7 @@ export default {
 				showError(t('collectives', 'Could not create the page'))
 			}
 
-			this.$router.push(this.newPagePath)
+			await this.$router.push(this.newPagePath)
 			this.expand(parentId)
 			this.$nextTick(() => scrollToPage(this.newPageId))
 
@@ -227,7 +227,7 @@ export default {
 
 			// Redirect to root page if currentPage got deleted
 			if (currentPageId === pageId) {
-				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
+				await this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 			}
 
 			emit('collectives:page-list:page-trashed')
