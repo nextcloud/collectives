@@ -4,6 +4,8 @@
  */
 
 describe('Page details', function() {
+	const env = {}
+
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Our Garden')
@@ -13,6 +15,10 @@ describe('Page details', function() {
 				cy.seedPageContent('Our Garden/Day 2.md', `A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our-Garden-${collectiveId}/Day-1-${pageId}).`)
 			})
 		cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
+
+		cy.env(['ncVersion']).then(({ ncVersion }) => {
+			env.ncVersion = ncVersion
+		})
 	})
 
 	beforeEach(function() {
@@ -24,7 +30,7 @@ describe('Page details', function() {
 
 	it('Allows to display/close TOC and switch page modes in between', function() {
 		// TODO: Remove once we only support nc33+
-		const tocSelector = ['stable32'].includes(Cypress.env('ncVersion'))
+		const tocSelector = ['stable32'].includes(env.ncVersion)
 			? '.editor--toc .editor--toc__item'
 			: '.editor__toc .toc-list__item'
 		cy.openPage('TableOfContents')
@@ -38,7 +44,7 @@ describe('Page details', function() {
 			.find(tocSelector)
 			.should('contain', 'Second-Level Heading')
 		// TODO Remove condition once we only support nc33+
-		if (!['stable32'].includes(Cypress.env('ncVersion'))) {
+		if (!['stable32'].includes(env.ncVersion)) {
 			cy.getReadOnlyEditor()
 				.find('.editor__toc .pin-outline-icon')
 				.click()
@@ -61,7 +67,7 @@ describe('Page details', function() {
 
 		cy.log('Close toc in edit mode')
 		// TODO Remove condition once we only support nc33+
-		if (['stable32'].includes(Cypress.env('ncVersion'))) {
+		if (['stable32'].includes(env.ncVersion)) {
 			cy.getEditor()
 				.find('.editor--outline__header .close-icon')
 				.click()

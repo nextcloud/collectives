@@ -9,7 +9,7 @@ import { generateOcsUrl } from '@nextcloud/router'
 import * as api from '../../src/apis/collectives/index.js'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
-Cypress.env('baseUrl', url)
+Cypress.expose('baseUrl', url)
 const silent = { log: false }
 
 // Prevent @nextcloud/router from reading window.location
@@ -94,7 +94,7 @@ Cypress.Commands.add('disableApp', (appName) => {
 
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 	const verb = value ? 'enable' : 'disable'
-	const url = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
+	const url = `${Cypress.expose('baseUrl')}/index.php/settings/apps/${verb}`
 	return axios.post(
 		url,
 		{ appIds: [appName] },
@@ -106,7 +106,7 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
  */
 Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	Cypress.log()
-	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/dashboard/api/v3/layout`
+	const url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/dashboard/api/v3/layout`
 	return axios.post(
 		url,
 		{ layout: [widgetName] },
@@ -299,7 +299,7 @@ Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown'
 	// @nextcloud/axios automatic handling for request tokens does not work for webdav
 	cy.request('/csrftoken').then(({ body }) => {
 		const requesttoken = body.token
-		const url = `${Cypress.env('baseUrl')}/remote.php/webdav/${path}`
+		const url = `${Cypress.expose('baseUrl')}/remote.php/webdav/${path}`
 		return axios.put(url, content, {
 			headers: {
 				requesttoken,
@@ -316,7 +316,7 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 	Cypress.log()
 	cy.circleFind(name)
 		.then(async (circle) => {
-			const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
+			const url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/circles/circles`
 			let circleId
 			if (!circle) {
 				const response = await axios.post(
@@ -363,7 +363,7 @@ Cypress.Commands.add(
 	{ prevSubject: true },
 	async ({ id }, userId, type = 1) => {
 		Cypress.log()
-		const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${id}/members`
+		const url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/circles/circles/${id}/members`
 		const response = await axios.post(
 			url,
 			{ userId, type },
@@ -378,7 +378,7 @@ Cypress.Commands.add(
 	{ prevSubject: true },
 	({ circleId, memberId }, level) => {
 		Cypress.log()
-		const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
+		const url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
 		return axios.put(
 			`${url}/${memberId}/level`,
 			{ level },
@@ -396,7 +396,7 @@ Cypress.Commands.add('testRetry', () => {
 
 Cypress.Commands.add('setAppConfig', (app, key, value) => {
 	Cypress.log()
-	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/provisioning_api/api/v1/config/apps/${app}/${key}`
+	const url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/provisioning_api/api/v1/config/apps/${app}/${key}`
 	return axios.post(url, { value }, {
 		headers: {
 			'OCS-APIRequest': true,
