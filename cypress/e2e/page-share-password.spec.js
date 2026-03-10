@@ -4,11 +4,17 @@
  */
 
 describe('Page share with password protection', function() {
+	const env = {}
+
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('SharePasswordCollective')
 			.seedPage('Sharepage', '', 'Readme.md')
 		cy.seedPageContent('SharePasswordCollective/Sharepage.md', '## Shared page')
+
+		cy.env(['ncVersion']).then(({ ncVersion }) => {
+			env.ncVersion = ncVersion
+		})
 	})
 
 	it('Allows sharing a page', function() {
@@ -51,7 +57,7 @@ describe('Page share with password protection', function() {
 		cy.logout()
 		cy.visit(this.shareUrl)
 		cy.get('input[type="password"]').type('password')
-		if (['stable32'].includes(Cypress.env('ncVersion'))) {
+		if (['stable32'].includes(env.ncVersion)) {
 			cy.get('#password-input-form input[type="submit"]').click()
 		} else {
 			cy.get('button').contains('Submit').click()

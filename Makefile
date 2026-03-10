@@ -126,11 +126,11 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/.**" \
 		--exclude="$(APP_NAME)/Makefile" \
 		--exclude="$(APP_NAME)/TODO*" \
-		--exclude="$(APP_NAME)/babel.config.js" \
+		--exclude="$(APP_NAME)/babel.config.cjs" \
 		--exclude="$(APP_NAME)/build" \
 		--exclude="$(APP_NAME)/composer.*" \
 		--exclude="$(APP_NAME)/cypress" \
-		--exclude="$(APP_NAME)/cypress.config.js" \
+		--exclude="$(APP_NAME)/cypress.config.ts" \
 		--exclude="$(APP_NAME)/docs" \
 		--exclude="$(APP_NAME)/eslint.config.*" \
 		--exclude="$(APP_NAME)/jsconfig.json" \
@@ -141,7 +141,7 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/rector.php" \
 		--exclude="$(APP_NAME)/renovate.json" \
 		--exclude="$(APP_NAME)/src" \
-		--exclude="$(APP_NAME)/stylelint.config.js" \
+		--exclude="$(APP_NAME)/stylelint.config.cjs" \
 		--exclude="$(APP_NAME)/tests" \
 		--exclude="$(APP_NAME)/tsconfig.json" \
 		--exclude="$(APP_NAME)/vendor-bin" \

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const baseUrl = Cypress.env('baseUrl')
+const baseUrl = Cypress.expose('baseUrl')
 
 describe('Page link preview handling', function() {
 	before(function() {
