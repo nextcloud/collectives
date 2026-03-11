@@ -83,7 +83,7 @@ OC.L10N.register(
     "Permissions" : "Rechten",
     "Allow editing for" : "Bewerken toestaan voor",
     "Admins only" : "Alleen beheerders",
-    "Admins and moderators" : "Beheerders en moderatoren",
+    "Admins and moderators" : "Beheerders en moderators",
     "All members" : "Alle leden",
     "Allow sharing for" : "Delen toestaan voor",
     "Page settings" : "Pagina instellingen",
