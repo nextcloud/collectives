@@ -7,12 +7,12 @@
 	<NcAppSettingsDialog
 		v-model:open="showSettings"
 		:name="t('collectives', 'Collective settings')"
-		:showNavigation="true">
+		showNavigation>
 		<NcAppSettingsSection id="name-and-emoji" :name="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
 				<NcEmojiPicker
-					:showPreview="true"
-					:allowUnselect="true"
+					showPreview
+					allowUnselect
 					:selectedEmoji="collective.emoji"
 					@select="updateEmoji"
 					@unselect="unselectEmoji">
@@ -36,7 +36,7 @@
 					trailingButtonIcon="arrowEnd"
 					class="collective-name-input"
 					@blur="renameCollective()"
-					@keypress.enter.prevent="renameCollective()"
+					@keydown.enter.prevent="renameCollective()"
 					@trailingButtonClick="renameCollective()" />
 			</div>
 			<div class="collective-name-error-placeholder">

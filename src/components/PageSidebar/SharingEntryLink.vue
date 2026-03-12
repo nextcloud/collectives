@@ -7,13 +7,13 @@
 	<li class="sharing-entry sharing-entry__link">
 		<div class="sharing-entry__entry">
 			<NcAvatar
-				:isNoUser="true"
+				isNoUser
 				iconClass="avatar-link-share icon-public-white"
 				class="sharing-entry__avatar" />
 
 			<div class="sharing-entry__summary">
 				<div class="sharing-entry__desc">
-					<span class="sharing-entry__title" :title="title">
+					<span class="sharing-entry__title" :title>
 						{{ title }}
 					</span>
 					<div
@@ -142,7 +142,7 @@
 						{{ t('collectives', 'Add another link') }}
 					</NcActionButton>
 
-					<NcActionButton class="new-share-link" :closeAfterClick="true" @click.prevent.stop="toggleSettings">
+					<NcActionButton class="new-share-link" closeAfterClick @click.prevent.stop="toggleSettings">
 						<template #icon>
 							<CogIcon :size="20" />
 						</template>

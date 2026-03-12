@@ -7,7 +7,7 @@
 	<div>
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
-			:closeAfterClick="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="openCollectiveMembers()">
 			<template #icon>
@@ -17,7 +17,7 @@
 		</NcActionButton>
 		<NcActionButton
 			v-if="collectiveCanShare(collective)"
-			:closeAfterClick="true"
+			closeAfterClick
 			@click="openShareTab(collective)">
 			{{ t('collectives', 'Share link') }}
 			<template #icon>
@@ -27,7 +27,7 @@
 		<NcActionSeparator v-if="isCollectiveAdmin(collective) || collectiveCanShare(collective)" />
 		<NcActionButton
 			v-if="!isPublic && collective.canEdit"
-			:closeAfterClick="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="openTemplates()">
 			<template #icon>
@@ -36,7 +36,7 @@
 			{{ t('collectives', 'Manage templates') }}
 		</NcActionButton>
 		<NcActionLink
-			:closeAfterClick="true"
+			closeAfterClick
 			:href="printLink"
 			:class="{ 'action-link--disabled': !networkOnline }"
 			target="_blank">
@@ -47,7 +47,7 @@
 		</NcActionLink>
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
-			:closeAfterClick="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="openCollectiveSettings()">
 			<template #icon>
@@ -57,7 +57,7 @@
 		</NcActionButton>
 		<NcActionButton
 			v-if="!isPublic && collective.canLeave !== false"
-			:closeAfterClick="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
@@ -67,7 +67,7 @@
 		</NcActionButton>
 		<NcActionButton
 			v-if="collectiveExtraAction"
-			:closeAfterClick="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="collectiveExtraAction.click()">
 			{{ collectiveExtraAction.title }}

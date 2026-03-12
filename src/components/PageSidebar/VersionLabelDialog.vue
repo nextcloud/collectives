@@ -7,7 +7,7 @@
 	<NcDialog
 		contentClasses="version-label-modal"
 		isForm
-		:open="open"
+		:open
 		size:normal
 		:name="t('collectives', 'Name this version')"
 		@update:open="$emit('update:open', $event)"

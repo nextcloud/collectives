@@ -28,7 +28,7 @@
 				<VersionEntry
 					v-for="version in sortedVersions"
 					:key="version.mtime"
-					:version="version"
+					:version
 					:isCurrent="isCurrent(version.mtime)"
 					:isSelected="isSelected(version.mtime)"
 					:isFirstVersion="version.mtime === initialVersionMtime"

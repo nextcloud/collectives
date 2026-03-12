@@ -13,7 +13,7 @@
 			<NcTextField
 				v-model="input"
 				:label="t('collectives', 'Search or create tag')"
-				@keyup.enter.prevent.stop="onNewTag">
+				@keydown.enter.prevent.stop="onNewTag">
 				<TagIcon :size="20" />
 			</NcTextField>
 		</div>
@@ -34,14 +34,13 @@
 						ref="renameField"
 						v-model="renameName"
 						:placeholder="t('collectives', 'Tag name')"
-						:labelOutside="true"
-						:autofocus="true"
+						labelOutside
+						autofocus
 						:minlength="1"
-						:required="true"
+						required
 						trailingButtonIcon="close"
-						:showTrailingButton="true"
-						@keyup.enter.prevent.stop
-						@keyup.esc.prevent.stop="onStopRename"
+						showTrailingButton
+						@keydown.esc.prevent.stop="onStopRename"
 						@trailingButtonClick="onStopRename" />
 				</form>
 				<NcCheckboxRadioSwitch
@@ -78,9 +77,9 @@
 				</NcColorPicker>
 
 				<!-- Actions menu -->
-				<NcActions :forceMenu="true">
+				<NcActions forceMenu>
 					<NcActionButton
-						:closeAfterClick="true"
+						closeAfterClick
 						@click="onInitRename(tag)">
 						<template #icon>
 							<PencilIcon :size="20" />
@@ -89,7 +88,7 @@
 					</NcActionButton>
 					<NcActionButton
 						v-if="!tag.deleted"
-						:closeAfterClick="true"
+						closeAfterClick
 						@click="onMarkDeleted(tag)">
 						<template #icon>
 							<DeleteIcon :size="20" />
@@ -98,7 +97,7 @@
 					</NcActionButton>
 					<NcActionButton
 						v-else
-						:closeAfterClick="true"
+						closeAfterClick
 						@click="onRestore(tag)">
 						<template #icon>
 							<RestoreIcon :size="20" />

@@ -11,7 +11,7 @@
 			:aria-label="description"
 			class="titleform-button"
 			:class="{ mobile: mobile }"
-			:variant="variant"
+			:variant
 			@click="handleClick()">
 			<template #icon>
 				<NcLoadingIcon

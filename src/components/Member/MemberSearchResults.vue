@@ -12,12 +12,12 @@
 			<MemberItem
 				v-for="item in addableUsers"
 				:key="generateKey(item)"
-				:circleId="circleId"
-				:currentUserIsAdmin="true"
+				:circleId
+				currentUserIsAdmin
 				:userId="item.id"
 				:displayName="item.label"
 				:userType="circleUserType(item.source)"
-				:isSearched="true"
+				isSearched
 				:isSelected="isSelected(item)"
 				:isLoading="isLoading(item)"
 				@click="onClick(item)" />
@@ -30,12 +30,12 @@
 			<MemberItem
 				v-for="item in addableGroups"
 				:key="generateKey(item)"
-				:circleId="circleId"
-				:currentUserIsAdmin="true"
+				:circleId
+				currentUserIsAdmin
 				:userId="item.id"
 				:displayName="item.label"
 				:userType="circleUserType(item.source)"
-				:isSearched="true"
+				isSearched
 				:isSelected="isSelected(item)"
 				:isLoading="isLoading(item)"
 				@click="onClick(item)" />
@@ -48,12 +48,12 @@
 			<MemberItem
 				v-for="item in addableCircles"
 				:key="generateKey(item)"
-				:circleId="circleId"
-				:currentUserIsAdmin="true"
+				:circleId
+				currentUserIsAdmin
 				:userId="item.id"
 				:displayName="item.label"
 				:userType="circleUserType(item.source)"
-				:isSearched="true"
+				isSearched
 				:isSelected="isSelected(item)"
 				:isLoading="isLoading(item)"
 				@click="onClick(item)" />

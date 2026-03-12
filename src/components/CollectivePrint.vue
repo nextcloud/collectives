@@ -40,7 +40,7 @@
 		</NcEmptyContent>
 		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
 			<PagePrint
-				:page="page"
+				:page
 				@loading="waitingFor.push(page.id)"
 				@ready="ready(page.id)" />
 		</div>

@@ -6,13 +6,13 @@
 <template>
 	<div class="page-container">
 		<PageTitleBar
-			:isFullWidth="isFullWidth"
+			:isFullWidth
 			@focusEditor="focusEditor"
 			@saveEditor="saveEditor" />
-		<PageTags v-if="tagsLoaded" :isFullWidth="isFullWidth" />
+		<PageTags v-if="tagsLoaded" :isFullWidth />
 		<div class="page-scroll-container">
-			<LandingPageWidgets v-if="isLandingPage" :isFullWidth="isFullWidth" />
-			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" :isFullWidth="isFullWidth" />
+			<LandingPageWidgets v-if="isLandingPage" :isFullWidth />
+			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" :isFullWidth />
 		</div>
 		<SearchDialog :show="shouldShowSearchDialog" />
 	</div>

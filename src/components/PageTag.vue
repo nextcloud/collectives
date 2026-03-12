@@ -10,7 +10,7 @@
 			color: tag.color,
 			'enough-contrast': enoughContrast,
 		}"
-		:style="style">
+		:style>
 		<a
 			href="#"
 			@keydown.enter.prevent.stop="$emit('select')"

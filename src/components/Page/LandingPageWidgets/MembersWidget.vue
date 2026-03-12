@@ -31,7 +31,7 @@
 					:displayName="member.displayName"
 					:isNoUser="isNoUser(member)"
 					:iconClass="iconClass(member)"
-					:disableMenu="true"
+					disableMenu
 					:tooltipMessage="member.displayName"
 					:size="avatarSize" />
 				<NcButton

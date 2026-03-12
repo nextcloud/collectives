@@ -39,7 +39,7 @@
 								v-for="tag in filterStringTags"
 								ref="filterStringTag"
 								:key="tag.id"
-								:tag="tag"
+								:tag
 								@select="onSelectFilterTag(tag.id)" />
 						</ul>
 					</div>
@@ -59,7 +59,7 @@
 				<NcActionButton
 					class="toggle-button"
 					:class="{ selected: sortedBy('byOrder') }"
-					:closeAfterClick="true"
+					closeAfterClick
 					@click="sortPagesAndScroll('byOrder')">
 					<template #icon>
 						<SortAscendingIcon :size="20" />
@@ -69,7 +69,7 @@
 				<NcActionButton
 					class="toggle-button"
 					:class="{ selected: sortedBy('byTimeAsc') || sortedBy('byTimeDesc') }"
-					:closeAfterClick="true"
+					closeAfterClick
 					@click="sortedBy('byTimeAsc') ? sortPagesAndScroll('byTimeDesc') : sortPagesAndScroll('byTimeAsc')">
 					<template #icon>
 						<SortClockAscendingIcon v-if="!sortedBy('byTimeAsc')" :size="20" />
@@ -80,7 +80,7 @@
 				<NcActionButton
 					class="toggle-button"
 					:class="{ selected: sortedBy('byTitleAsc') || sortedBy('byTitleDesc') }"
-					:closeAfterClick="true"
+					closeAfterClick
 					@click="sortedBy('byTitleAsc') ? sortPagesAndScroll('byTitleDesc') : sortPagesAndScroll('byTitleAsc')">
 					<template #icon>
 						<SortAlphabeticalAscendingIcon v-if="!sortedBy('byTitleAsc')" :size="20" />
@@ -97,8 +97,8 @@
 				<PageTag
 					v-for="tag in filterTags"
 					:key="tag.id"
-					:tag="tag"
-					:canRemove="true"
+					:tag
+					canRemove
 					@remove="removeFilterTagId(tag.id)" />
 			</ul>
 		</div>
@@ -123,10 +123,9 @@
 				:emoji="currentCollectiveIsPageShare ? rootPage.emoji : currentCollective.emoji"
 				:level="0"
 				:canEdit="currentCollectiveCanEdit"
-				:isRootPage="true"
+				isRootPage
 				:isLandingPage="!currentCollectiveIsPageShare"
-				:filteredView="false"
-				:networkOnline="networkOnline"
+				:networkOnline
 				class="page-list-root-page"
 				@click="show('details')" />
 
@@ -149,7 +148,7 @@
 			</div>
 
 			<!-- Favorites -->
-			<PageFavorites v-if="showFavorites" :networkOnline="networkOnline" />
+			<PageFavorites v-if="showFavorites" :networkOnline />
 
 			<!-- Filtered view page list -->
 			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
@@ -159,15 +158,15 @@
 					v-slot="{ item }"
 					ref="filteredScroller"
 					:items="filteredPages"
-					:itemSize="itemSize"
+					:itemSize
 					keyField="id">
 					<SubpageList
 						:key="item.id"
 						:data-page-id="item.id"
 						:page="item"
 						:level="1"
-						:filteredView="true"
-						:networkOnline="networkOnline"
+						filteredView
+						:networkOnline
 						class="page-list-drag-item" />
 				</RecycleScroller>
 				<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
@@ -176,15 +175,15 @@
 					v-slot="{ item }"
 					ref="contentFilteredScroller"
 					:items="contentFilteredPages"
-					:itemSize="itemSize"
+					:itemSize
 					keyField="id">
 					<SubpageList
 						:key="item.id"
 						:data-page-id="item.id"
 						:page="item"
 						:level="1"
-						:filteredView="true"
-						:networkOnline="networkOnline"
+						filteredView
+						:networkOnline
 						class="page-list-drag-item" />
 				</RecycleScroller>
 				<div v-if="loadingContentFilteredPages" class="scrollload">
@@ -203,16 +202,15 @@
 					v-for="page in subpages"
 					:key="page.id"
 					:data-page-id="page.id"
-					:page="page"
+					:page
 					:level="1"
-					:filteredView="false"
-					:networkOnline="networkOnline"
+					:networkOnline
 					class="page-list-drag-item" />
 			</DraggableElement>
 		</div>
 
 		<!-- Page trash -->
-		<PageTrash v-if="displayTrash" :networkOnline="networkOnline" />
+		<PageTrash v-if="displayTrash" :networkOnline />
 
 		<NewPageDialog v-if="newPageParentId" />
 	</NcAppContentList>

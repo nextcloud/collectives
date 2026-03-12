@@ -10,7 +10,7 @@
 		@closing="onClose">
 		<div v-if="state === 0" class="modal-collective-wrapper">
 			<div class="modal-collective-name">
-				<NcEmojiPicker :showPreview="true" @select="updateEmoji">
+				<NcEmojiPicker showPreview @select="updateEmoji">
 					<NcButton
 						variant="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
@@ -28,7 +28,7 @@
 					:error="nameIsInvalid"
 					:showTrailingButton="name !== ''"
 					:label="t('collectives', 'Name of the collective')"
-					@keypress.enter.prevent="advanceToMembers"
+					@keydown.enter.prevent="advanceToMembers"
 					@trailingButtonClick="clearName" />
 				<NcSelect
 					v-else
@@ -78,12 +78,12 @@
 		<div v-else-if="state === 1" class="modal-collective-wrapper">
 			<div class="modal-collective-members">
 				<MemberPicker
-					:showSelection="true"
-					:searchWithoutQuery="true"
-					:currentUserIsAdmin="true"
-					:selectedMembers="selectedMembers"
-					:noDeleteMembers="noDeleteMembers"
-					:onClickSearched="onClickSearched"
+					showSelection
+					searchWithoutQuery
+					currentUserIsAdmin
+					:selectedMembers
+					:noDeleteMembers
+					:onClickSearched
 					@deleteFromSelection="deleteMember" />
 			</div>
 		</div>
