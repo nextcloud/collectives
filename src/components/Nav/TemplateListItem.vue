@@ -8,8 +8,8 @@
 		<div class="template-list-item-icon" @click.prevent.stop>
 			<NcEmojiPicker
 				:ref="`templateEmojiPicker-${template.id}`"
-				:showPreview="true"
-				:allowUnselect="true"
+				showPreview
+				allowUnselect
 				:selectedEmoji="template.emoji"
 				@select="onSelectEmoji($event, template.id)"
 				@unselect="onUnselectEmoji(template.id)">
@@ -46,12 +46,11 @@
 					v-model="renameTitle"
 					v-click-outside="onRename"
 					:placeholder="t('collectives', 'Template title')"
-					:labelOutside="true"
-					:autofocus="true"
+					labelOutside
+					autofocus
 					:minlength="1"
-					:required="true"
-					@keyup.enter.prevent.stop
-					@keyup.esc.prevent.stop="onStopRename" />
+					required
+					@keydown.esc.prevent.stop="onStopRename" />
 			</form>
 			<a
 				v-else
@@ -62,9 +61,9 @@
 			</a>
 		</div>
 		<div class="template-action-buttons" @click.prevent.stop>
-			<NcActions :forceMenu="true">
+			<NcActions forceMenu>
 				<NcActionButton
-					:closeAfterClick="true"
+					closeAfterClick
 					@click="onInitRename(template)">
 					<template #icon>
 						<PencilIcon :size="20" />
@@ -72,7 +71,7 @@
 					{{ t('collectives', 'Rename') }}
 				</NcActionButton>
 				<NcActionButton
-					:closeAfterClick="true"
+					closeAfterClick
 					@click="onInitSelectEmoji(template.id)">
 					<template #icon>
 						<EmoticonIcon :size="20" />
@@ -80,7 +79,7 @@
 					{{ t('collectives', 'Select emoji') }}
 				</NcActionButton>
 				<NcActionButton
-					:closeAfterClick="true"
+					closeAfterClick
 					@click="$emit('delete', template)">
 					<template #icon>
 						<DeleteIcon :size="20" />

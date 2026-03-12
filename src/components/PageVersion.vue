@@ -25,8 +25,8 @@
 
 			<PageTitle
 				class="title title-version"
-				:value="versionTitle"
-				:disabled="true" />
+				:modelValue="versionTitle"
+				disabled />
 			<NcButton
 				:title="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
@@ -38,7 +38,7 @@
 				{{ t('collectives', 'Restore') }}
 			</NcButton>
 			<NcActions>
-				<NcActionButton :closeAfterClick="true" @click="closeVersions">
+				<NcActionButton closeAfterClick @click="closeVersions">
 					<template #icon>
 						<DockRightIcon :size="20" />
 					</template>

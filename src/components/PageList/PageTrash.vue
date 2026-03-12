@@ -19,7 +19,7 @@
 		<NcDialog
 			v-model:open="showModal"
 			:name="t('collectives', 'Deleted pages')"
-			:closeOnClickOutside="true"
+			closeOnClickOutside
 			class="dialog__page-trash"
 			size="large">
 			<div class="modal__content">
@@ -72,9 +72,9 @@
 										</template>
 										{{ t('collectives', 'Restore') }}
 									</NcButton>
-									<NcActions :forceMenu="true">
+									<NcActions forceMenu>
 										<NcActionButton
-											:closeAfterClick="true"
+											closeAfterClick
 											:disabled="!networkOnline"
 											@click="onClickDelete(trashPage)">
 											<template #icon>

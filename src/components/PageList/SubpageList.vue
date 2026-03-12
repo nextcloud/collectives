@@ -15,25 +15,25 @@
 			:lastUserId="page.lastUserId"
 			:lastUserDisplayName="page.lastUserDisplayName"
 			:emoji="page.emoji"
-			:level="level"
+			:level
 			:canEdit="currentCollectiveCanEdit"
-			:hasVisibleSubpages="hasVisibleSubpages"
-			:filteredView="filteredView"
-			:networkOnline="networkOnline"
+			:hasVisibleSubpages
+			:filteredView
+			:networkOnline
 			@click="show('details')" />
 		<div class="page-list-indent">
 			<DraggableElement
 				v-if="subpagesView.length > 0 || keptSortable(page.id)"
 				:list="subpagesView"
 				:parentId="page.id"
-				:disableSorting="disableSorting">
+				:disableSorting>
 				<SubpageList
 					v-for="subpage in subpagesView"
 					:key="subpage.id"
 					:data-page-id="subpage.id"
 					:page="subpage"
 					:level="level + 1"
-					:networkOnline="networkOnline"
+					:networkOnline
 					class="page-list-drag-item" />
 			</DraggableElement>
 		</div>

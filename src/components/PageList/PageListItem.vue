@@ -26,7 +26,7 @@
 		<div
 			class="app-content-list-item-icon"
 			:tabindex="isCollapsible ? '0' : null"
-			@keyup.enter="toggleCollapsedOrRoute"
+			@keydown.enter="toggleCollapsedOrRoute"
 			@click="toggleCollapsedOrRoute">
 			<slot name="icon">
 				<template v-if="emoji">
@@ -60,7 +60,7 @@
 			</template>
 		</div>
 		<router-link
-			:to="to"
+			:to
 			draggable="false"
 			class="app-content-list-item-link">
 			<div
@@ -74,15 +74,15 @@
 		<div class="page-list-item-actions">
 			<PageActionMenu
 				v-if="canEdit || isLandingPage"
-				:pageId="pageId"
+				:pageId
 				:pageUrl="to"
-				:parentId="parentId"
-				:timestamp="timestamp"
-				:lastUserId="lastUserId"
-				:lastUserDisplayName="lastUserDisplayName"
-				:isLandingPage="isLandingPage"
-				:inPageList="true"
-				:networkOnline="networkOnline" />
+				:parentId
+				:timestamp
+				:lastUserId
+				:lastUserDisplayName
+				:isLandingPage
+				inPageList
+				:networkOnline />
 			<NcActions v-if="canEdit">
 				<NcActionButton
 					class="action-button-add"
@@ -209,7 +209,7 @@ export default {
 
 		filteredView: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 
 		networkOnline: {

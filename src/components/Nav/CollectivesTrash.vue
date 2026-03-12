@@ -27,7 +27,7 @@
 						v-for="collective in sortedTrashCollectives"
 						:key="collective.circleId"
 						:name="collective.name"
-						:forceMenu="true"
+						forceMenu
 						:forceDisplayActions="isMobile"
 						class="collectives_trash_list_item">
 						<template #icon>
@@ -40,7 +40,7 @@
 						</template>
 						<template #actions>
 							<NcActionButton
-								:closeAfterClick="true"
+								closeAfterClick
 								:disabled="!networkOnline"
 								@click="restoreCollective(collective)">
 								<template #icon>
@@ -49,7 +49,7 @@
 								{{ t('collectives', 'Restore') }}
 							</NcActionButton>
 							<NcActionButton
-								:closeAfterClick="true"
+								closeAfterClick
 								:disabled="!networkOnline"
 								@click="showDeleteModal(collective)">
 								<template #icon>
@@ -77,7 +77,7 @@
 				<NcButton
 					variant="error"
 					:aria-label="t('collectives', 'Delete only collective')"
-					:wide="true"
+					wide
 					@click="deleteCollective(modalCollective, false)">
 					{{ t('collectives', 'Only collective') }}
 				</NcButton>
@@ -85,7 +85,7 @@
 					v-if="isCollectiveOwner(modalCollective)"
 					variant="error"
 					:aria-label="t('collectives', 'Delete collective and team')"
-					:wide="true"
+					wide
 					@click="deleteCollective(modalCollective, true)">
 					{{ t('collectives', 'Collective and team') }}
 				</NcButton>
@@ -94,10 +94,10 @@
 					variant="primary"
 					disabled
 					:title="t('collectives', 'Only team owners can delete a team')"
-					:wide="true">
+					wide>
 					{{ t('collectives', 'Collective and team') }}
 				</NcButton>
-				<NcButton :aria-label="t('collectives', 'Cancel')" :wide="true" @click="closeDeleteModal">
+				<NcButton :aria-label="t('collectives', 'Cancel')" wide @click="closeDeleteModal">
 					{{ t('collectives', 'Cancel') }}
 				</NcButton>
 			</template>

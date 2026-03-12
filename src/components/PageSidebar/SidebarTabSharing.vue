@@ -69,7 +69,7 @@
 						v-else
 						:key="share.id"
 						:index="index + 1"
-						:share="share" />
+						:share />
 				</ul>
 			</div>
 		</div>

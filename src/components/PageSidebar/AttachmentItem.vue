@@ -7,7 +7,7 @@
 	<NcListItem
 		:name="attachment.name"
 		:href="davUrl"
-		:forceDisplayActions="true"
+		forceDisplayActions
 		class="attachment"
 		:class="{ mobile: isMobile }"
 		@dragstart="onDragstart"
@@ -34,7 +34,7 @@
 		<template #actions>
 			<NcActionButton
 				v-if="isEmbedded"
-				:closeAfterClick="true"
+				closeAfterClick
 				@click="scrollTo()">
 				<template #icon>
 					<EyeIcon />
@@ -43,7 +43,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isEmbedded && !isDeleted && !isInFolder && editorApiAttachments && isTextEdit && currentCollectiveCanEdit"
-				:closeAfterClick="true"
+				closeAfterClick
 				@click="onInsert">
 				<template #icon>
 					<FileDocumentPlusOutlineIcon />
@@ -52,7 +52,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="isDeleted && currentCollectiveCanEdit"
-				:closeAfterClick="true"
+				closeAfterClick
 				@click="$emit('restore')">
 				<template #icon>
 					<RestoreIcon />
@@ -64,7 +64,7 @@
 				:href="davUrl"
 				:download="attachment.name"
 				:class="{ 'action-link--disabled': !networkOnline }"
-				:closeAfterClick="true">
+				closeAfterClick>
 				<template #icon>
 					<DownloadIcon />
 				</template>
@@ -74,7 +74,7 @@
 				v-if="!isDeleted && !isPublic"
 				:href="filesUrl"
 				:class="{ 'action-link--disabled': !networkOnline }"
-				:closeAfterClick="true">
+				closeAfterClick>
 				<template #icon>
 					<FolderIcon />
 				</template>
@@ -82,7 +82,7 @@
 			</NcActionLink>
 			<NcActionButton
 				v-if="!isDeleted && !isInFolder && currentCollectiveCanEdit"
-				:closeAfterClick="true"
+				closeAfterClick
 				:class="{ 'action-link--disabled': !networkOnline }"
 				@click="$emit('rename')">
 				<template #icon>
@@ -92,7 +92,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isDeleted && !isInFolder && currentCollectiveCanEdit"
-				:closeAfterClick="true"
+				closeAfterClick
 				:class="{ 'action-link--disabled': !networkOnline }"
 				@click="$emit('delete')">
 				<template #icon>

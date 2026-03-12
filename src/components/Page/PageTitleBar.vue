@@ -25,8 +25,8 @@
 			<NcEmojiPicker
 				v-else-if="currentCollectiveCanEdit"
 				ref="page-emoji-picker"
-				:showPreview="true"
-				:allowUnselect="true"
+				showPreview
+				allowUnselect
 				:selectedEmoji="currentPage.emoji"
 				@select="onSelectEmoji"
 				@unselect="onUnselectEmoji">
@@ -73,7 +73,7 @@
 			v-if="isLandingPage"
 			ref="pageTitle"
 			:modelValue="currentCollective.name"
-			:disabled="true" />
+			disabled />
 		<PageTitle
 			v-else
 			ref="pageTitle"
@@ -98,8 +98,8 @@
 				:timestamp="currentPage.timestamp"
 				:lastUserId="currentPage.lastUserId"
 				:lastUserDisplayName="currentPage.lastUserDisplayName"
-				:isLandingPage="isLandingPage"
-				:networkOnline="networkOnline" />
+				:isLandingPage
+				:networkOnline />
 		</div>
 	</div>
 </template>
