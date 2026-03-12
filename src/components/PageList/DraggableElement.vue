@@ -7,22 +7,22 @@
 	<VueDraggable
 		:modelValue="list"
 		:data-parent-id="parentId"
-		:disabled="disabled"
+		:disabled
 		:group="{ name: 'page-list', pull: true, put: true }"
 		draggable=".page-list-drag-item"
 		filter=".page-list-nodrag-item"
 		:sort="allowSorting"
-		:revertOnSpill="true"
+		revertOnSpill
 		:fallbackTolerance="5"
 		:animation="200"
 		:delay="500"
-		:delayOnTouchOnly="true"
+		delayOnTouchOnly
 		:touchStartThreshold="3"
-		:invertSwap="true"
+		invertSwap
 		:swapThreshold="0.65"
 		:emptyInsertThreshold="4"
 		direction="vertical"
-		:setData="setData"
+		:setData
 		@change="onChange"
 		@move="onMove"
 		@update="onUpdate"

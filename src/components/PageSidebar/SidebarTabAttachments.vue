@@ -67,8 +67,8 @@
 						<AttachmentItem
 							v-for="attachment in embeddedAttachments"
 							:key="attachment.id"
-							:attachment="attachment"
-							:isEmbedded="true"
+							:attachment
+							isEmbedded
 							@rename="onStartRename(attachment)"
 							@delete="onDelete(attachment)" />
 					</ul>
@@ -86,7 +86,7 @@
 						<AttachmentItem
 							v-for="attachment in notEmbeddedAttachments"
 							:key="attachment.id"
-							:attachment="attachment"
+							:attachment
 							@rename="onStartRename(attachment)"
 							@delete="onDelete(attachment)" />
 					</ul>
@@ -102,8 +102,8 @@
 						<AttachmentItem
 							v-for="attachment in deletedAttachments"
 							:key="attachment.id"
-							:attachment="attachment"
-							:isDeleted="true"
+							:attachment
+							isDeleted
 							@restore="onRestore(attachment)" />
 					</ul>
 				</div>
@@ -135,7 +135,7 @@
 						<AttachmentItem
 							v-for="attachment in folderAttachments"
 							:key="attachment.id"
-							:attachment="attachment" />
+							:attachment />
 					</ul>
 				</div>
 			</div>

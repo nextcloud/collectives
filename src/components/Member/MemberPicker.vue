@@ -22,25 +22,25 @@
 			<SkeletonLoading v-if="showCurrentSkeleton" type="members-list" :count="3" />
 			<CurrentMembers
 				v-else-if="showCurrent"
-				:circleId="circleId"
-				:currentMembers="currentMembers"
-				:searchQuery="searchQuery"
-				:currentUserIsAdmin="currentUserIsAdmin" />
+				:circleId
+				:currentMembers
+				:searchQuery
+				:currentUserIsAdmin />
 
 			<!-- Selected members (optional) -->
 			<SelectedMembers
 				v-if="currentUserIsAdmin && !showCurrentSkeleton && showSelection"
-				:selectedMembers="selectedMembers"
-				:noDeleteMembers="noDeleteMembers"
+				:selectedMembers
+				:noDeleteMembers
 				@deleteFromSelection="deleteFromSelection" />
 
 			<!-- Searched and picked members -->
 			<MemberSearchResults
 				v-if="currentUserIsAdmin && !showCurrentSkeleton && hasSearchResults"
-				:circleId="circleId"
+				:circleId
 				:searchResults="filteredSearchResults"
 				:selectionSet="selectedMembers"
-				:onClickSearched="onClickSearched" />
+				:onClickSearched />
 
 			<!-- No search results -->
 			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">

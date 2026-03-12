@@ -15,8 +15,8 @@
 				v-for="collective in sortedCollectives"
 				v-show="!collective.deleted"
 				:key="collective.id"
-				:collective="collective"
-				:networkOnline="networkOnline" />
+				:collective
+				:networkOnline />
 			<li>
 				<NcAppNavigationNew
 					v-if="!isPublic"
@@ -34,10 +34,10 @@
 		<template #footer>
 			<CollectivesTrash
 				v-if="displayTrash"
-				:networkOnline="networkOnline"
+				:networkOnline
 				@restoreCollective="onRestoreCollective"
 				@deleteCollective="onDeleteCollective" />
-			<CollectivesGlobalSettings v-if="!isPublic" :networkOnline="networkOnline" />
+			<CollectivesGlobalSettings v-if="!isPublic" :networkOnline />
 		</template>
 		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
 		<CollectiveMembersModal

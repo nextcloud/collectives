@@ -7,7 +7,7 @@
 	<NcDialog
 		contentClasses="attachment-rename-modal"
 		isForm
-		:open="open"
+		:open
 		size:normal
 		:name="t('collectives', 'Rename attachment')"
 		@update:open="$emit('update:open', $event)"

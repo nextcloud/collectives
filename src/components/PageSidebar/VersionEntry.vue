@@ -9,7 +9,7 @@
 		class="version"
 		:class="{ active: isSelected }"
 		:active="isSelected"
-		:forceDisplayActions="true"
+		forceDisplayActions
 		:actions-aria-label="t('collectives', 'Actions for versions from {versionHumanExplicitDate}', { versionHumanExplicitDate })"
 		@click="$emit('click')">
 		<!-- Icon -->
@@ -45,7 +45,7 @@
 						:size="20"
 						disableMenu
 						disableTooltip
-						:hideStatus="true" />
+						hideStatus />
 					<div>{{ versionAuthor }}</div>
 				</div>
 			</div>
@@ -67,7 +67,7 @@
 		<!-- Actions -->
 		<template #actions>
 			<NcActionButton
-				:closeAfterClick="true"
+				closeAfterClick
 				@click="$emit('startLabelUpdate')">
 				<template #icon>
 					<PencilIcon :size="22" />
@@ -76,7 +76,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isCurrent"
-				:closeAfterClick="true"
+				closeAfterClick
 				@click="$emit('compare')">
 				<template #icon>
 					<FileCompareIcon :size="22" />
@@ -85,7 +85,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isCurrent && canEdit"
-				:closeAfterClick="true"
+				closeAfterClick
 				@click="$emit('restore')">
 				<template #icon>
 					<BackupRestoreIcon :size="22" />
@@ -94,7 +94,7 @@
 			</NcActionButton>
 			<NcActionLink
 				:href="version.source"
-				:closeAfterClick="true"
+				closeAfterClick
 				:download="version.source">
 				<template #icon>
 					<DownloadIcon :size="22" />
@@ -103,7 +103,7 @@
 			</NcActionLink>
 			<NcActionButton
 				v-if="!isCurrent && canEdit"
-				:closeAfterClick="true"
+				closeAfterClick
 				@click="$emit('delete')">
 				<template #icon>
 					<DeleteIcon :size="22" />

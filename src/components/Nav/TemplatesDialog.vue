@@ -16,7 +16,7 @@
 			<TemplateListItem
 				v-for="(template, index) in rootTemplates"
 				:key="`template-page-${index}`"
-				:template="template"
+				:template
 				@delete="onDelete(template.id)"
 				@open="onOpen(template)" />
 		</ul>

@@ -38,9 +38,8 @@
 				:emoji="page.emoji"
 				:level="2"
 				:canEdit="currentCollectiveCanEdit"
-				:inFavoriteList="true"
-				:filteredView="false"
-				:networkOnline="networkOnline"
+				inFavoriteList
+				:networkOnline
 				@click="show('details')" />
 		</div>
 	</div>

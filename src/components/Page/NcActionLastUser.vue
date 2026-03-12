@@ -8,9 +8,9 @@
 		<button class="action-button action-button--user-bubble" type="button">
 			<ClockIcon :size="20" />
 			<LastUserBubble
-				:lastUserId="lastUserId"
-				:lastUserDisplayName="lastUserDisplayName"
-				:timestamp="timestamp" />
+				:lastUserId
+				:lastUserDisplayName
+				:timestamp />
 		</button>
 	</li>
 </template>
