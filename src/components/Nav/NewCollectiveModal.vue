@@ -10,7 +10,7 @@
 		@closing="onClose">
 		<div v-if="state === 0" class="modal-collective-wrapper">
 			<div class="modal-collective-name">
-				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
+				<NcEmojiPicker showPreview @select="updateEmoji">
 					<NcButton
 						variant="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
@@ -26,16 +26,16 @@
 					v-model="name"
 					class="collective-name"
 					:error="nameIsInvalid"
-					:show-trailing-button="name !== ''"
+					:showTrailingButton="name !== ''"
 					:label="t('collectives', 'Name of the collective')"
-					@keypress.enter.prevent="advanceToMembers"
-					@trailing-button-click="clearName" />
+					@keydown.enter.prevent="advanceToMembers"
+					@trailingButtonClick="clearName" />
 				<NcSelect
 					v-else
 					ref="circleSelector"
 					v-model="circle"
 					class="circle-selector"
-					:append-to-body="false"
+					:appendToBody="false"
 					:options="circles"
 					:aria-label-combobox="t('collectives', 'Select an existing team')"
 					:placeholder="t('collectives', 'Select a team…')" />
@@ -78,13 +78,13 @@
 		<div v-else-if="state === 1" class="modal-collective-wrapper">
 			<div class="modal-collective-members">
 				<MemberPicker
-					:show-selection="true"
-					:search-without-query="true"
-					:current-user-is-admin="true"
-					:selected-members="selectedMembers"
-					:no-delete-members="noDeleteMembers"
-					:on-click-searched="onClickSearched"
-					@delete-from-selection="deleteMember" />
+					showSelection
+					searchWithoutQuery
+					currentUserIsAdmin
+					:selectedMembers
+					:noDeleteMembers
+					:onClickSearched
+					@deleteFromSelection="deleteMember" />
 			</div>
 		</div>
 
@@ -157,6 +157,10 @@ export default {
 		NcSelect,
 		NcTextField,
 	},
+
+	emits: [
+		'close',
+	],
 
 	data() {
 		return {
@@ -311,8 +315,8 @@ export default {
 		},
 
 		// Create a new collective and navigate to it
-		onCreate() {
-			const updateCollective = () => {
+		async onCreate() {
+			const updateCollective = async () => {
 				if (this.updatedCollective && this.hasSelectedMembersWithoutSelf) {
 					const members = Object.values(this.selectedMembersWithoutSelf).map((entry) => ({
 						id: entry.id,
@@ -326,31 +330,29 @@ export default {
 				}
 
 				if (this.collectiveChanged) {
-					this.$router.push(this.updatedCollectivePath)
+					await this.$router.push(this.updatedCollectivePath)
 				}
 
 				this.onClose()
 			}
 
 			this.loading = true
-			this.newCollective({ name: this.newCollectiveName, emoji: this.emoji })
-				.then((message) => {
-					if (message) {
-						showInfo(message)
-					}
-					updateCollective()
-				})
-				.catch((e) => {
-					if (e.response?.status === 400) {
-						this.nameExists = this.newCollectiveName
-						this.state = 0
-					} else {
-						displayError('Could not create the collective')(e)
-					}
-				})
-				.finally(() => {
-					this.loading = false
-				})
+			try {
+				const message = await this.newCollective({ name: this.newCollectiveName, emoji: this.emoji })
+				if (message) {
+					showInfo(message)
+				}
+				await updateCollective()
+			} catch (e) {
+				if (e.response?.status === 400) {
+					this.nameExists = this.newCollectiveName
+					this.state = 0
+				} else {
+					displayError('Could not create the collective')(e)
+				}
+			} finally {
+				this.loading = false
+			}
 		},
 
 		startSelectCircle() {
@@ -373,14 +375,14 @@ export default {
 		},
 
 		addMember(member) {
-			this.$set(this.selectedMembers, `${member.source}-${member.id}`, member)
+			this.selectedMembers[`${member.source}-${member.id}`] = member
 		},
 
 		deleteMember(member) {
 			if (member.source === 'users' && member.id === this.currentUserId) {
 				return
 			}
-			this.$delete(this.selectedMembers, `${member.source}-${member.id}`, member)
+			delete this.selectedMembers[`${member.source}-${member.id}`]
 		},
 
 		onClickSearched(member) {

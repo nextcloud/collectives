@@ -6,22 +6,22 @@
 <template>
 	<li
 		class="member-row"
-		:tabindex="tabindex"
+		:tabindex
 		:role="ariaRole"
 		:class="{
 			clickable: isClickable,
 			selected: isSelected,
 		}"
 		@click="onClick"
-		@keyup.enter="onClick">
+		@keydown.enter="onClick">
 		<!-- Avatar -->
 		<NcAvatar
 			:user="userId"
-			:is-no-user="isNoUser"
-			:icon-class="iconClass"
-			:disable-menu="true"
-			:disable-tooltip="true"
-			:hide-status="true"
+			:isNoUser
+			:iconClass
+			disableMenu
+			disableTooltip
+			hideStatus
 			:size="avatarSize" />
 
 		<!-- Data -->
@@ -43,12 +43,12 @@
 		<!-- Action menu -->
 		<NcActions
 			v-else-if="currentUserIsAdmin && !isSearched && !isCurrentUser"
-			:force-menu="true"
-			:open.sync="showActionMenu"
+			v-model:open="showActionMenu"
+			forceMenu
 			class="member-row__actions">
 			<NcActionButton
 				v-if="!isAdmin"
-				:close-after-click="true"
+				closeAfterClick
 				@click="setMemberLevel(memberLevels.LEVEL_ADMIN)">
 				<template #icon>
 					<CrownIcon :size="20" />
@@ -57,7 +57,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isModerator"
-				:close-after-click="true"
+				closeAfterClick
 				@click="setMemberLevel(memberLevels.LEVEL_MODERATOR)">
 				<template #icon>
 					<AccountCogIcon :size="20" />
@@ -66,7 +66,7 @@
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isMember"
-				:close-after-click="true"
+				closeAfterClick
 				@click="setMemberLevel(memberLevels.LEVEL_MEMBER)">
 				<template #icon>
 					<AccountIcon :size="20" />
@@ -75,7 +75,7 @@
 			</NcActionButton>
 			<NcActionSeparator />
 			<NcActionButton
-				:close-after-click="true"
+				closeAfterClick
 				class="critical"
 				@click="removeMember">
 				<template #icon>
@@ -164,7 +164,7 @@ export default {
 
 		isSearched: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 
 		isSelected: {
@@ -177,6 +177,10 @@ export default {
 			default: false,
 		},
 	},
+
+	emits: [
+		'click',
+	],
 
 	data() {
 		return {
@@ -246,7 +250,7 @@ export default {
 		subscribe('collectives:member-picker:scroll', this.closeMenu)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		unsubscribe('collectives:member-picker:scroll', this.closeMenu)
 	},
 

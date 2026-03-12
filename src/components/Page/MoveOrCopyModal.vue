@@ -5,10 +5,10 @@
 
 <template>
 	<PagePicker
-		:page-id="pageId"
-		:parent-id="parentId"
-		:is-copying="copying"
-		:is-moving="moving"
+		:pageId
+		:parentId
+		:isCopying
+		:isMoving
 		@copy="onCopy"
 		@move="onMove"
 		@close="onClose" />
@@ -41,10 +41,14 @@ export default {
 		},
 	},
 
+	emits: [
+		'close',
+	],
+
 	data() {
 		return {
-			copying: false,
-			moving: false,
+			isCopying: false,
+			isMoving: false,
 		}
 	},
 
@@ -60,7 +64,7 @@ export default {
 		 * @param {number} object.newIndex new order index of page
 		 */
 		async onCopy({ collectiveId, parentId, newIndex }) {
-			this.copying = true
+			this.isCopying = true
 
 			if (collectiveId !== this.currentCollective.id) {
 				this.copyToCollective(collectiveId, this.parentId, parentId, this.pageId, newIndex)
@@ -68,7 +72,7 @@ export default {
 				this.copy(this.parentId, parentId, this.pageId, newIndex)
 			}
 
-			this.copying = false
+			this.isCopying = false
 			this.$emit('close')
 		},
 
@@ -79,7 +83,7 @@ export default {
 		 * @param {number} object.newIndex new order index of page
 		 */
 		async onMove({ collectiveId, parentId, newIndex }) {
-			this.moving = true
+			this.isMoving = true
 
 			if (collectiveId !== this.currentCollective.id) {
 				this.moveToCollective(collectiveId, this.parentId, parentId, this.pageId, newIndex)
@@ -90,7 +94,7 @@ export default {
 				this.subpageOrderUpdate(this.parentId, this.pageId, newIndex)
 			}
 
-			this.moving = false
+			this.isMoving = false
 			this.$emit('close')
 		},
 	},

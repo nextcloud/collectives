@@ -20,13 +20,13 @@
 					v-else
 					class="emoji-picker-emoticon"
 					:size="pageTitleIconSize"
-					fill-color="var(--color-text-maxcontrast)" />
+					fillColor="var(--color-text-maxcontrast)" />
 			</div>
 
 			<PageTitle
 				class="title title-version"
-				:value="versionTitle"
-				:disabled="true" />
+				:modelValue="versionTitle"
+				disabled />
 			<NcButton
 				:title="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
@@ -38,7 +38,7 @@
 				{{ t('collectives', 'Restore') }}
 			</NcButton>
 			<NcActions>
-				<NcActionButton :close-after-click="true" @click="closeVersions">
+				<NcActionButton closeAfterClick @click="closeVersions">
 					<template #icon>
 						<DockRightIcon :size="20" />
 					</template>

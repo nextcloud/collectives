@@ -8,9 +8,9 @@
 		<button class="action-button action-button--user-bubble" type="button">
 			<ClockIcon :size="20" />
 			<LastUserBubble
-				:last-user-id="lastUserId"
-				:last-user-display-name="lastUserDisplayName"
-				:timestamp="timestamp" />
+				:lastUserId
+				:lastUserDisplayName
+				:timestamp />
 		</button>
 	</li>
 </template>
@@ -20,7 +20,7 @@ import ClockIcon from 'vue-material-design-icons/ClockOutline.vue'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
-	name: 'PageActionLastUser',
+	name: 'NcActionLastUser',
 
 	components: {
 		ClockIcon,

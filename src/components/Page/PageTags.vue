@@ -20,10 +20,10 @@
 				v-for="tag in pageTagsVisible"
 				:key="tag.id"
 				:title="pageTagTitle"
-				:tag="tag"
+				:tag
 				@select="onSelectTag(tag.id)" />
 
-			<NcPopover v-if="pageTagsInvisible.length > 0" popup-role="listbox" no-focus-trap>
+			<NcPopover v-if="pageTagsInvisible.length > 0" popupRole="listbox" noFocusTrap>
 				<template #trigger="{ attrs }">
 					<PageTag
 						v-bind="attrs"
@@ -42,7 +42,7 @@
 								v-for="tag in pageTagsInvisible"
 								:key="tag.id"
 								:title="pageTagTitle"
-								:tag="tag"
+								:tag
 								@select="onSelectTag(tag.id)" />
 						</ul>
 					</div>

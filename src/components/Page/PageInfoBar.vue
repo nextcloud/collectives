@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="text-menubar">
+	<div class="infobar">
 		<component
 			:is="versionsLink ? 'a' : 'div'"
 			v-if="currentPage.lastUserId"
@@ -13,10 +13,10 @@
 			@click="versionsLink ? emitSidebar('versions') : undefined">
 			<div class="item-text">
 				<LastUserBubble
-					:last-user-id="currentPage.lastUserId"
-					:last-user-display-name="currentPage.lastUserDisplayName"
+					:lastUserId="currentPage.lastUserId"
+					:lastUserDisplayName="currentPage.lastUserDisplayName"
 					:timestamp="currentPage.timestamp"
-					:show-prefix-string="!isMobile" />
+					:showPrefixString="!isMobile" />
 			</div>
 		</component>
 		<template v-if="attachmentCount">
@@ -70,22 +70,26 @@ export default {
 	props: {
 		currentPage: {
 			type: Object,
-			required: true,
+			default: () => ({
+				lastUserId: 0,
+				lastUserDisplayName: '',
+				timestamp: 0,
+			}),
 		},
 
 		canEdit: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 
 		attachmentCount: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 
 		backlinkCount: {
 			type: Number,
-			required: true,
+			default: 0,
 		},
 	},
 
@@ -137,8 +141,9 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.text-menubar {
+<style lang="scss">
+// Gets injected as custom web component
+page-info-bar {
 	// Copied from `.text-menubar` in text app
 	--background-blur: blur(10px);
 	position: sticky;
@@ -150,9 +155,15 @@ export default {
 	backdrop-filter: var(--background-blur);
 	height: var(--default-clickable-area);
 	border-bottom: 1px solid var(--color-border);
-	padding-block: var(--default-grid-baseline);
-	display: flex;
 	margin-inline: calc((100% - var(--text-editor-max-width, var(--text-editor-max-width-default))) / 2);
+}
+</style>
+
+<style scoped lang="scss">
+.infobar {
+	width: 100%;
+	display: flex;
+	padding-block: var(--default-grid-baseline);
 	align-items: center;
 
 	overflow: hidden;

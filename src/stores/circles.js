@@ -7,7 +7,6 @@ import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { set } from 'vue'
 import { circlesMemberTypes } from '../constants.js'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
@@ -129,7 +128,7 @@ export const useCirclesStore = defineStore('circles', {
 		 */
 		async getCircleMembers(circleId) {
 			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true`))
-			set(this.circlesMembers, circleId, response.data.ocs.data)
+			this.circlesMembers[circleId] = response.data.ocs.data
 		},
 
 		/**

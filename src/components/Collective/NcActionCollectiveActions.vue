@@ -7,7 +7,7 @@
 	<div>
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
-			:close-after-click="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="openCollectiveMembers()">
 			<template #icon>
@@ -17,7 +17,7 @@
 		</NcActionButton>
 		<NcActionButton
 			v-if="collectiveCanShare(collective)"
-			:close-after-click="true"
+			closeAfterClick
 			@click="openShareTab(collective)">
 			{{ t('collectives', 'Share link') }}
 			<template #icon>
@@ -27,7 +27,7 @@
 		<NcActionSeparator v-if="isCollectiveAdmin(collective) || collectiveCanShare(collective)" />
 		<NcActionButton
 			v-if="!isPublic && collective.canEdit"
-			:close-after-click="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="openTemplates()">
 			<template #icon>
@@ -36,7 +36,7 @@
 			{{ t('collectives', 'Manage templates') }}
 		</NcActionButton>
 		<NcActionLink
-			:close-after-click="true"
+			closeAfterClick
 			:href="printLink"
 			:class="{ 'action-link--disabled': !networkOnline }"
 			target="_blank">
@@ -47,7 +47,7 @@
 		</NcActionLink>
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
-			:close-after-click="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="openCollectiveSettings()">
 			<template #icon>
@@ -57,7 +57,7 @@
 		</NcActionButton>
 		<NcActionButton
 			v-if="!isPublic && collective.canLeave !== false"
-			:close-after-click="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
@@ -67,7 +67,7 @@
 		</NcActionButton>
 		<NcActionButton
 			v-if="collectiveExtraAction"
-			:close-after-click="true"
+			closeAfterClick
 			:disabled="!networkOnline"
 			@click="collectiveExtraAction.click()">
 			{{ collectiveExtraAction.title }}
@@ -99,7 +99,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 
 export default {
-	name: 'CollectiveActions',
+	name: 'NcActionCollectiveActions',
 
 	components: {
 		AccountMultipleIcon,
@@ -185,8 +185,8 @@ export default {
 			this.setTemplatesCollectiveId(this.collective.id)
 		},
 
-		openShareTab(collective) {
-			this.$router.push(`/${encodeURIComponent(collective.name)}`)
+		async openShareTab(collective) {
+			await this.$router.push(`/${encodeURIComponent(collective.name)}`)
 			this.show('sidebar')
 			this.setActiveSidebarTab('sharing')
 		},

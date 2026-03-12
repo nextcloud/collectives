@@ -9,15 +9,15 @@
 			<input
 				ref="title"
 				type="text"
-				v-bind="{ value }"
+				:value="modelValue"
 				class="title"
 				:class="{ mobile: isMobile }"
 				:disabled="disabled"
-				:title="titleIfTruncated(value)"
+				:title="titleIfTruncated(modelValue)"
 				:placeholder="placeholder"
-				@input="$emit('input', $event.target.value)"
+				@input="$emit('update:modelValue', $event.target.value)"
 				@keydown.stop="onKeyDown"
-				@blur="$emit('blur')">
+				@blur="onBlur">
 		</h2>
 	</form>
 </template>
@@ -29,7 +29,7 @@ export default {
 	name: 'PageTitle',
 
 	props: {
-		value: {
+		modelValue: {
 			type: String,
 			required: true,
 		},
@@ -44,6 +44,13 @@ export default {
 			default: '',
 		},
 	},
+
+	emits: [
+		'blur',
+		'update:modelValue',
+		'save',
+		'submit',
+	],
 
 	setup() {
 		const isMobile = useIsMobile()
@@ -63,7 +70,7 @@ export default {
 	},
 
 	watch: {
-		value() {
+		modelValue() {
 			this.$nextTick(() => {
 				this.titleIsTruncated = this.$refs.title.scrollWidth > this.$refs.title.clientWidth
 			})
@@ -79,6 +86,12 @@ export default {
 			if ((event.ctrlKey || event.metaKey) && event.key === 's') {
 				this.$emit('save')
 				event.preventDefault()
+			}
+		},
+
+		onBlur() {
+			if (this.$.isMounted) {
+				this.$emit('blur')
 			}
 		},
 	},

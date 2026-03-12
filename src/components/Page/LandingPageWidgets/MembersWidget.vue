@@ -28,11 +28,11 @@
 					v-for="member in trimmedMembers"
 					:key="member.singleId"
 					:user="member.userId"
-					:display-name="member.displayName"
-					:is-no-user="isNoUser(member)"
-					:icon-class="iconClass(member)"
-					:disable-menu="true"
-					:tooltip-message="member.displayName"
+					:displayName="member.displayName"
+					:isNoUser="isNoUser(member)"
+					:iconClass="iconClass(member)"
+					disableMenu
+					:tooltipMessage="member.displayName"
 					:size="avatarSize" />
 				<NcButton
 					variant="tertiary"
@@ -133,7 +133,7 @@ export default {
 		},
 
 		isNoUser() {
-			return function(member) {
+			return (member) => {
 				return this.circleMemberType(member) !== circlesMemberTypes.TYPE_USER
 			}
 		},
@@ -143,7 +143,7 @@ export default {
 		},
 
 		iconClass() {
-			return function(member) {
+			return (member) => {
 				return this.isNoUser(member) ? 'icon-group-white' : null
 			}
 		},
@@ -193,7 +193,7 @@ export default {
 		window.addEventListener('resize', this.updateShowMembersCountDebounced)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		window.removeEventListener('resize', this.updateShowMembersCountDebounced)
 	},
 

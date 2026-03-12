@@ -26,7 +26,7 @@
 		<div
 			class="app-content-list-item-icon"
 			:tabindex="isCollapsible ? '0' : null"
-			@keyup.enter="toggleCollapsedOrRoute"
+			@keydown.enter="toggleCollapsedOrRoute"
 			@click="toggleCollapsedOrRoute">
 			<slot name="icon">
 				<template v-if="emoji">
@@ -35,17 +35,17 @@
 					</div>
 				</template>
 				<template v-else-if="isLandingPage">
-					<CollectivesIcon :size="22" fill-color="var(--color-main-text)" />
+					<CollectivesIcon :size="22" fillColor="var(--color-main-text)" />
 				</template>
 				<template v-else>
-					<PageIcon :size="22" fill-color="var(--color-background-darker)" />
+					<PageIcon :size="22" fillColor="var(--color-background-darker)" />
 				</template>
 			</slot>
 			<template v-if="isCollapsible">
 				<MenuRightIcon
 					v-show="!filteredView"
 					:size="18"
-					fill-color="var(--color-main-text)"
+					fillColor="var(--color-main-text)"
 					:title="t('collectives', 'Expand subpage list')"
 					class="item-icon-badge"
 					:class="isCollapsed(pageId) ? 'collapsed' : 'expanded'" />
@@ -54,13 +54,13 @@
 				<StarIconFilled
 					v-show="!filteredView"
 					:size="18"
-					fill-color="var(--color-favorite)"
+					fillColor="var(--color-favorite)"
 					:title="t('collectives', 'Favorite')"
 					class="item-icon-favorite" />
 			</template>
 		</div>
 		<router-link
-			:to="to"
+			:to
 			draggable="false"
 			class="app-content-list-item-link">
 			<div
@@ -74,22 +74,22 @@
 		<div class="page-list-item-actions">
 			<PageActionMenu
 				v-if="canEdit || isLandingPage"
-				:page-id="pageId"
-				:page-url="to"
-				:parent-id="parentId"
-				:timestamp="timestamp"
-				:last-user-id="lastUserId"
-				:last-user-display-name="lastUserDisplayName"
-				:is-landing-page="isLandingPage"
-				:in-page-list="true"
-				:network-online="networkOnline" />
+				:pageId
+				:pageUrl="to"
+				:parentId
+				:timestamp
+				:lastUserId
+				:lastUserDisplayName
+				:isLandingPage
+				inPageList
+				:networkOnline />
 			<NcActions v-if="canEdit">
 				<NcActionButton
 					class="action-button-add"
 					:disabled="!networkOnline || loading(`template-list-${templatesCollectiveId}`)"
 					@click="onNewPage">
 					<template #icon>
-						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
+						<PlusIcon :size="20" fillColor="var(--color-main-text)" />
 					</template>
 					{{ addPageString }}
 				</NcActionButton>
@@ -209,7 +209,7 @@ export default {
 
 		filteredView: {
 			type: Boolean,
-			required: true,
+			default: false,
 		},
 
 		networkOnline: {
@@ -364,9 +364,11 @@ export default {
 		},
 
 		onNewPage() {
-			this.hasTemplates
-				? this.setNewPageParentId(this.pageId)
-				: this.newPage(this.pageId)
+			if (this.hasTemplates) {
+				this.setNewPageParentId(this.pageId)
+			} else {
+				this.newPage(this.pageId)
+			}
 		},
 
 		onDragstart(event) {

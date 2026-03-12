@@ -22,7 +22,7 @@
 				<RecentPageTile
 					v-for="page in trimmedRecentPages"
 					:key="page.id"
-					:page="page" />
+					:page />
 			</div>
 			<div class="recent-pages-widget-buttons">
 				<button
@@ -30,7 +30,7 @@
 					class="button-slide button-slide__left hidden"
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideLeft"
-					@keypress.enter.prevent="slideLeft">
+					@keydown.enter.prevent="slideLeft">
 					<ChevronLeftIcon :size="44" />
 				</button>
 				<button
@@ -38,7 +38,7 @@
 					class="button-slide button-slide__right hidden"
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideRight"
-					@keypress.enter.prevent="slideRight">
+					@keydown.enter.prevent="slideRight">
 					<ChevronRightIcon :size="44" />
 				</button>
 			</div>
@@ -107,7 +107,7 @@ export default {
 		this.$refs.pageslider.addEventListener('scroll', this.updateButtonsDebounced)
 	},
 
-	unmounted() {
+	beforeUnmount() {
 		this.$refs.pageslider.removeEventListener('scroll', this.updateButtonsDebounced)
 	},
 

@@ -82,7 +82,7 @@
 					:key="page.id">
 					<a
 						:class="{ self: page.id === pageId }"
-						:href="page.id === pageId ? false : '#'"
+						:href="page.id === pageId ? null : '#'"
 						class="picker-item"
 						@click="onClickPage(page)">
 						<div v-if="page.emoji" class="picker-icon">
@@ -92,7 +92,7 @@
 							v-else
 							class="picker-icon"
 							:size="20"
-							fill-color="var(--color-background-darker)" />
+							fillColor="var(--color-background-darker)" />
 						<div class="picker-title">
 							{{ page.title }}
 						</div>
@@ -197,6 +197,12 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: [
+		'close',
+		'copy',
+		'move',
+	],
 
 	data() {
 		return {
@@ -317,7 +323,7 @@ export default {
 		window.addEventListener('keydown', this.handleKeyDown, true)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener('keydown', this.handleKeyDown, true)
 	},
 

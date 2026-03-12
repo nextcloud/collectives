@@ -67,8 +67,8 @@
 						<AttachmentItem
 							v-for="attachment in embeddedAttachments"
 							:key="attachment.id"
-							:attachment="attachment"
-							:is-embedded="true"
+							:attachment
+							isEmbedded
 							@rename="onStartRename(attachment)"
 							@delete="onDelete(attachment)" />
 					</ul>
@@ -86,7 +86,7 @@
 						<AttachmentItem
 							v-for="attachment in notEmbeddedAttachments"
 							:key="attachment.id"
-							:attachment="attachment"
+							:attachment
 							@rename="onStartRename(attachment)"
 							@delete="onDelete(attachment)" />
 					</ul>
@@ -102,8 +102,8 @@
 						<AttachmentItem
 							v-for="attachment in deletedAttachments"
 							:key="attachment.id"
-							:attachment="attachment"
-							:is-deleted="true"
+							:attachment
+							isDeleted
 							@restore="onRestore(attachment)" />
 					</ul>
 				</div>
@@ -114,7 +114,7 @@
 						<div>
 							{{ t('collectives', 'Found in folder') }}
 						</div>
-						<NcPopover popover-role="dialog" no-focus-trap>
+						<NcPopover popoverRole="dialog" noFocusTrap>
 							<template #trigger>
 								<NcButton
 									class="hint-icon"
@@ -135,7 +135,7 @@
 						<AttachmentItem
 							v-for="attachment in folderAttachments"
 							:key="attachment.id"
-							:attachment="attachment" />
+							:attachment />
 					</ul>
 				</div>
 			</div>
@@ -154,9 +154,9 @@
 		<!-- rename dialog -->
 		<AttachmentRenameDialog
 			v-if="renamedAttachment"
-			:open.sync="showRenameAttachmentsForm"
-			:attachment-name="renamedAttachment.name"
-			@attachment-rename="onRename" />
+			v-model:open="showRenameAttachmentsForm"
+			:attachmentName="renamedAttachment.name"
+			@attachmentRename="onRename" />
 	</div>
 </template>
 

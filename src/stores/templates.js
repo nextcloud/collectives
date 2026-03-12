@@ -5,7 +5,6 @@
 
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { set } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { INDEX_PAGE, PAGE_SUFFIX, TEMPLATE_PAGE, TEMPLATE_PATH } from '../constants.js'
 import { byTitleAsc } from '../util/sortOrders.js'
@@ -79,7 +78,7 @@ export const useTemplatesStore = defineStore('templates', {
 	actions: {
 		_updateTemplatePage(template) {
 			if (this.allTemplates[this.collectiveId] === undefined) {
-				set(this.allTemplates, this.collectiveId, [])
+				this.allTemplates[this.collectiveId] = []
 			}
 			updateOrAddTo(this.allTemplates[this.collectiveId], template)
 		},
@@ -97,8 +96,8 @@ export const useTemplatesStore = defineStore('templates', {
 			}
 			try {
 				const response = await api.getTemplates(this.context)
-				set(this.allTemplates, collectiveId, response.data.ocs.data.templates)
-				set(this.allTemplatesLoaded, collectiveId, true)
+				this.allTemplates[collectiveId] = response.data.ocs.data.templates
+				this.allTemplatesLoaded[collectiveId] = true
 			} finally {
 				rootStore.done(`template-list-${collectiveId}`)
 			}
