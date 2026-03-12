@@ -1,5 +1,29 @@
 # Changelog
 
+## 4.1.0 - 2026.03.12
+
+This relese brings support to create new files (e.g. an office document or a
+whiteboard) from the "Insert attachment" menu. This feature will only be
+available after upgrading to the upcoming Nextcloud 32 and 33 server maintenance
+releases though, that get published on 26. March.
+
+### ✨New
+* ➕ Provide create file templates for Text attachments menu.
+
+### 🐛Fixes
+* 🔗 Don't link from PageInfoBar to versions in shares. Thansk to @pymnh.
+* 🐛 Add error handling for missing versions entity. Thanks to @solracsf.
+* 🗑️ Lazy-load page trash. Thanks to @Koc.
+* 🐛 Catch Circle::getInitiator exceptions during mountpoint setup.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.0.0 - 2026.02.26
 
 ⚠️ Note: With this release, the Collectives folder in the Files app will be hidden by
