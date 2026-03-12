@@ -9,141 +9,114 @@
 		:name="t('collectives', 'Collective settings')"
 		showNavigation>
 		<NcAppSettingsSection id="name-and-emoji" :name="t('collectives', 'Name and emoji')">
-			<div class="collective-name">
-				<NcEmojiPicker
-					showPreview
-					allowUnselect
-					:selectedEmoji="collective.emoji"
-					@select="updateEmoji"
-					@unselect="unselectEmoji">
-					<NcButton
-						variant="tertiary"
-						:aria-label="t('collectives', 'Select emoji for collective')"
-						:class="{ loading: loading('updateCollectiveEmoji') || loading('renameCollective') }"
-						class="button-emoji"
-						@click.prevent>
-						{{ collective.emoji }}
-						<template v-if="!collective.emoji" #icon>
-							<Emoticon :size="20" />
-						</template>
-					</NcButton>
-				</NcEmojiPicker>
-				<NcTextField
-					v-model="newCollectiveName"
-					:label="t('collectives', 'Name of the collective')"
-					:error="isNameTooShort"
-					:showTrailingButton="!isNameTooShort"
-					trailingButtonIcon="arrowEnd"
-					class="collective-name-input"
-					@blur="renameCollective()"
-					@keydown.enter.prevent="renameCollective()"
-					@trailingButtonClick="renameCollective()" />
-			</div>
-			<div class="collective-name-error-placeholder">
-				<div v-if="getNameError" class="collective-name-error">
-					<AlertCircleIcon :size="16" />
-					<label for="collective-name" class="modal-collective-name-error-label">
-						{{ getNameError }}
-					</label>
+			<NcFormGroup :label="t('collectives', 'Name and emoji')" hideLabel>
+				<div class="collective-name-and-emoji">
+					<NcEmojiPicker
+						showPreview
+						allowUnselect
+						:selectedEmoji="collective.emoji"
+						@select="updateEmoji"
+						@unselect="unselectEmoji">
+						<NcButton
+							variant="tertiary"
+							:aria-label="t('collectives', 'Select emoji for collective')"
+							:class="{ loading: loading('updateCollectiveEmoji') || loading('renameCollective') }"
+							class="button-emoji"
+							@click.prevent>
+							{{ collective.emoji }}
+							<template v-if="!collective.emoji" #icon>
+								<Emoticon :size="20" />
+							</template>
+						</NcButton>
+					</NcEmojiPicker>
+					<NcTextField
+						v-model="newCollectiveName"
+						:label="t('collectives', 'Name of the collective')"
+						:error="isNameTooShort"
+						:showTrailingButton="!isNameTooShort"
+						trailingButtonIcon="arrowEnd"
+						class="collective-name-input"
+						@blur="renameCollective()"
+						@keydown.enter.prevent="renameCollective()"
+						@trailingButtonClick="renameCollective()" />
 				</div>
-			</div>
+				<div class="collective-name-error-placeholder">
+					<div v-if="getNameError" class="collective-name-error">
+						<AlertCircleIcon :size="16" />
+						<label for="collective-name" class="modal-collective-name-error-label">
+							{{ getNameError }}
+						</label>
+					</div>
+				</div>
+			</NcFormGroup>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="permissions" :name="t('collectives', 'Permissions')">
-			<div class="subsection-header">
-				{{ t('collectives', 'Allow editing for') }}
-			</div>
+			<NcRadioGroup v-model="editPermissions" :label="t('collectives', 'Allow editing for')" class="edit-permissions">
+				<NcRadioGroupButton :label="t('collectives', 'Admins only')" :value="String(memberLevels.LEVEL_ADMIN)">
+					<template #icon>
+						<CrownIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'Admins and moderators')" :value="String(memberLevels.LEVEL_MODERATOR)">
+					<template #icon>
+						<AccountCogIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'All members')" :value="String(memberLevels.LEVEL_MEMBER)">
+					<template #icon>
+						<AccountIcon />
+					</template>
+				</NcRadioGroupButton>
+			</NcRadioGroup>
 
-			<div class="permissions-input-edit">
-				<NcCheckboxRadioSwitch
-					v-model="editPermissions"
-					:value="String(memberLevels.LEVEL_ADMIN)"
-					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_ADMIN))"
-					name="edit_admins"
-					type="radio">
-					{{ t('collectives', 'Admins only') }}
-				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch
-					v-model="editPermissions"
-					:value="String(memberLevels.LEVEL_MODERATOR)"
-					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MODERATOR))"
-					name="edit_moderators"
-					type="radio">
-					{{ t('collectives', 'Admins and moderators') }}
-				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch
-					v-model="editPermissions"
-					:value="String(memberLevels.LEVEL_MEMBER)"
-					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MEMBER))"
-					name="edit_members"
-					type="radio">
-					{{ t('collectives', 'All members') }}
-				</NcCheckboxRadioSwitch>
-			</div>
-
-			<div class="subsection-header subsection-header__second">
-				{{ t('collectives', 'Allow sharing for') }}
-			</div>
-
-			<div class="permissions-input-share">
-				<NcCheckboxRadioSwitch
-					v-model="sharePermissions"
-					:value="String(memberLevels.LEVEL_ADMIN)"
-					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_ADMIN))"
-					name="share_admins"
-					type="radio">
-					{{ t('collectives', 'Admins only') }}
-				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch
-					v-model="sharePermissions"
-					:value="String(memberLevels.LEVEL_MODERATOR)"
-					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MODERATOR))"
-					name="share_moderators"
-					type="radio">
-					{{ t('collectives', 'Admins and moderators') }}
-				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch
-					v-model="sharePermissions"
-					:value="String(memberLevels.LEVEL_MEMBER)"
-					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MEMBER))"
-					name="share_members"
-					type="radio">
-					{{ t('collectives', 'All members') }}
-				</NcCheckboxRadioSwitch>
-			</div>
+			<NcRadioGroup v-model="sharePermissions" :label="t('collectives', 'Allow sharing for')" class="share-permissions">
+				<NcRadioGroupButton :label="t('collectives', 'Admins only')" :value="String(memberLevels.LEVEL_ADMIN)">
+					<template #icon>
+						<CrownIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'Admins and moderators')" :value="String(memberLevels.LEVEL_MODERATOR)">
+					<template #icon>
+						<AccountCogIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'All members')" :value="String(memberLevels.LEVEL_MEMBER)">
+					<template #icon>
+						<AccountIcon />
+					</template>
+				</NcRadioGroupButton>
+			</NcRadioGroup>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="page-settings" :name="t('collectives', 'Page settings')">
-			<div class="subsection-header">
-				{{ t('collectives', 'Default page mode') }}
-			</div>
-
-			<div class="edit-mode">
-				<NcCheckboxRadioSwitch
-					v-model="pageMode"
-					:value="String(pageModes.MODE_PREVIEW)"
-					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_PREVIEW))"
-					name="page_mode_preview"
-					type="radio">
-					{{ t('collectives', 'Preview') }}
-				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch
-					v-model="pageMode"
-					:value="String(pageModes.MODE_EDIT)"
-					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_EDIT))"
-					name="page_mode_edit"
-					type="radio">
-					{{ t('collectives', 'Edit') }}
-				</NcCheckboxRadioSwitch>
-			</div>
+			<NcRadioGroup v-model="pageMode" :label="t('collectives', 'Default Page Mode')" class="page-mode">
+				<NcRadioGroupButton :label="t('collectives', 'Preview')" :value="String(pageModes.MODE_PREVIEW)">
+					<template #icon>
+						<EyeIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'Edit')" :value="String(pageModes.MODE_EDIT)">
+					<template #icon>
+						<PencilIcon />
+					</template>
+				</NcRadioGroupButton>
+			</NcRadioGroup>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="danger-zone" :name="t('collectives', 'Danger zone')">
-			<div>
-				<NcButton variant="error" :aria-label="t('collectives', 'Delete collective')" @click="onTrashCollective()">
+			<NcFormGroup
+				:label="t('collectives', 'Delete collective')"
+				hideLabel
+				:description="t('collectives', 'Deleted collectives can be restored from the collectives trash.')">
+				<NcButton
+					variant="error"
+					wide
+					:aria-label="t('collectives', 'Delete collective')"
+					@click="onTrashCollective()">
 					{{ t('collectives', 'Delete collective') }}
 				</NcButton>
-			</div>
+			</NcFormGroup>
 		</NcAppSettingsSection>
 	</NcAppSettingsDialog>
 </template>
@@ -156,11 +129,18 @@ import { mapActions, mapState } from 'pinia'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import NcButton from '@nextcloud/vue/components/NcButton'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcEmojiPicker from '@nextcloud/vue/components/NcEmojiPicker'
+import NcFormGroup from '@nextcloud/vue/components/NcFormGroup'
+import NcRadioGroup from '@nextcloud/vue/components/NcRadioGroup'
+import NcRadioGroupButton from '@nextcloud/vue/components/NcRadioGroupButton'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
+import AccountCogIcon from 'vue-material-design-icons/AccountCogOutline.vue'
+import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
 import AlertCircleIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import CrownIcon from 'vue-material-design-icons/CrownOutline.vue'
 import Emoticon from 'vue-material-design-icons/EmoticonOutline.vue'
+import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { memberLevels, pageModes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
@@ -171,14 +151,21 @@ export default {
 	name: 'CollectiveSettings',
 
 	components: {
+		AccountCogIcon,
+		AccountIcon,
 		AlertCircleIcon,
+		CrownIcon,
 		NcAppSettingsDialog,
 		NcAppSettingsSection,
 		NcButton,
-		NcCheckboxRadioSwitch,
 		NcEmojiPicker,
+		NcFormGroup,
+		NcRadioGroup,
+		NcRadioGroupButton,
 		NcTextField,
 		Emoticon,
+		EyeIcon,
+		PencilIcon,
 	},
 
 	props: {
@@ -379,38 +366,20 @@ button.button-emoji {
 	font-size: 1.2em;
 }
 
-.collective-name {
+.collective-name-and-emoji {
 	display: flex;
-	gap: 4px;
+	flex-direction: row;
 	align-items: center;
-	height: calc(var(--default-clickable-area) + 12px);
-
-	.collective-name-input {
-		display: grid;
-		align-items: center;
-		padding-block-end: 6px;
-	}
 }
 
 .collective-name-error-placeholder {
-	min-height: 24px;
+	min-height: 22px;
 }
 
 .collective-name-error {
 	display: flex;
+	gap: var(--default-grid-baseline);
 	// Emoji button + input field padding
-	padding-left: calc(57px + 12px);
-
-	&-label {
-		padding-left: 4px;
-	}
-}
-
-.subsection-header {
-	font-weight: bold;
-	margin-bottom: 12px;
-	&__second {
-		margin-top: 12px;
-	}
+	padding-inline-start: calc(var(--default-clickable-area) + var(--input-padding-start));
 }
 </style>

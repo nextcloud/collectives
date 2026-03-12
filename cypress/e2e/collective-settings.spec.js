@@ -39,7 +39,7 @@ describe('Collective settings', function() {
 	it('Allows to rename the collective', function() {
 		cy.openCollectiveMenu('Change me')
 		cy.clickMenuButton('Settings')
-		cy.get('div.collective-name input[type="text"]').type(' now{enter}')
+		cy.get('div.collective-name-and-emoji input[type="text"]').type(' now{enter}')
 		cy.reload()
 		cy.get('.collectives_list_item')
 			.should('contain', 'Change me now')
@@ -48,7 +48,7 @@ describe('Collective settings', function() {
 	it('Allows to change editing permissions', function() {
 		cy.openCollectiveMenu('Change me')
 		cy.clickMenuButton('Settings')
-		cy.get('.permissions-input-edit').contains('Admins only')
+		cy.get('.edit-permissions').contains('Admins only')
 			.click()
 		cy.get('div.toast-success').should('contain', 'Editing permissions updated')
 	})
@@ -56,7 +56,7 @@ describe('Collective settings', function() {
 	it('Allows to change sharing permissions', function() {
 		cy.openCollectiveMenu('Change me')
 		cy.clickMenuButton('Settings')
-		cy.get('.permissions-input-share').contains('Admins only')
+		cy.get('.share-permissions').contains('Admins only')
 			.click()
 		cy.get('div.toast-success').should('contain', 'Sharing permissions updated')
 	})
@@ -64,10 +64,7 @@ describe('Collective settings', function() {
 	it('Allows to change page mode', function() {
 		cy.openCollectiveMenu('Change me')
 		cy.clickMenuButton('Settings')
-		cy.get('a.navigation-list__link')
-			.contains('Page settings')
-			.click()
-		cy.get('.edit-mode').contains('Edit')
+		cy.get('.page-mode').contains('Edit')
 			.click()
 		cy.get('div.toast-success').should('contain', 'Default page mode updated')
 	})
@@ -76,6 +73,6 @@ describe('Collective settings', function() {
 		cy.openCollective('Change me')
 		cy.openPageMenu('Change me')
 		cy.clickMenuButton('Settings')
-		cy.get('div.permissions-input-edit')
+		cy.get('.edit-permissions')
 	})
 })
