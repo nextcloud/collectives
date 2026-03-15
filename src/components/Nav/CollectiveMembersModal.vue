@@ -10,18 +10,15 @@
 		@close="onClose">
 		<div class="modal-collective-members">
 			<h2 class="modal-collective-members__name">
+				{{ t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false }) }}
 				<a
 					v-if="showTeamLink"
 					class="team-link"
 					:href="teamUrl"
 					:title="t('collectives', 'Go to team overview')"
 					target="_blank">
-					{{ t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false }) }}
 					<OpenInNewIcon :size="20" />
 				</a>
-				<template v-else>
-					{{ t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false }) }}
-				</template>
 			</h2>
 			<MemberPicker
 				:show-current="true"
@@ -131,6 +128,7 @@ export default {
 	height: 550px;
 	max-height: 80vh;
 
+	// Rules are mostly copied from NcDialog:
 	&__name {
 		font-size: 21px;
 		text-align: center;
@@ -138,7 +136,7 @@ export default {
 		min-height: var(--default-clickable-area);
 		overflow-wrap: break-word;
 		margin-block: 0 12px;
-		margin-inline: 0;
+		padding-inline: var(--default-clickable-area);
 
 		&:hover .team-link,
 		&:hover .material-design-icon {
@@ -150,13 +148,11 @@ export default {
 
 .team-link {
 	color: var(--color-main-text);
-	text-decoration: none;
 
 	.material-design-icon {
 		display: inline;
 		vertical-align: middle;
 		color: var(--color-text-maxcontrast);
-		white-space: nowrap;
 	}
 
 	&:focus-visible {
