@@ -4,64 +4,93 @@
 -->
 
 <template>
-	<div
-		id="collectives-trash"
-		v-click-outside="closeTrash"
-		:class="{ open }">
-		<div id="collectives-trash__header">
-			<NcButton
-				variant="tertiary"
-				:aria-label="t('collectives', 'Deleted collectives')"
-				class="collectives-trash-button"
-				@click="toggleTrash">
-				<template #icon>
-					<DeleteIcon class="collectives-trash-button__icon" :size="20" />
-				</template>
-				{{ t('collectives', 'Deleted collectives') }}
-			</NcButton>
-		</div>
-		<transition name="slide-up">
-			<div v-show="open" id="collectives-trash__content">
-				<ul class="app-navigation__list">
-					<NcAppNavigationItem
-						v-for="collective in sortedTrashCollectives"
-						:key="collective.circleId"
-						:name="collective.name"
-						:force-menu="true"
-						:force-display-actions="isMobile"
-						class="collectives_trash_list_item">
-						<template #icon>
-							<template v-if="collective.emoji">
-								{{ collective.emoji }}
-							</template>
-							<template v-else>
-								<CollectivesIcon :size="20" />
-							</template>
-						</template>
-						<template #actions>
-							<NcActionButton
-								:close-after-click="true"
-								:disabled="!networkOnline"
-								@click="restoreCollective(collective)">
-								<template #icon>
-									<RestoreIcon :size="20" />
-								</template>
-								{{ t('collectives', 'Restore') }}
-							</NcActionButton>
-							<NcActionButton
-								:close-after-click="true"
-								:disabled="!networkOnline"
-								@click="showDeleteModal(collective)">
-								<template #icon>
-									<DeleteIcon :size="20" />
-								</template>
-								{{ t('collectives', 'Delete permanently') }}
-							</NcActionButton>
-						</template>
-					</NcAppNavigationItem>
-				</ul>
+	<div id="collectives-trash">
+		<NcButton
+			variant="tertiary"
+			:aria-label="t('collectives', 'Deleted collectives')"
+			class="collectives-trash-button"
+			@click="openTrash">
+			<template #icon>
+				<DeleteIcon class="collectives-trash-button__icon" :size="20" />
+			</template>
+			{{ t('collectives', 'Deleted collectives') }}
+		</NcButton>
+		<NcDialog
+			:open.sync="showModal"
+			:name="t('collectives', 'Deleted collectives')"
+			close-on-click-outside
+			class="dialog__collectives-trash"
+			size="large">
+			<div class="modal__content">
+				<NcEmptyContent v-if="loading('collectiveTrash')" :name="t('collectives', 'Loading…')">
+					<template #icon>
+						<NcLoadingIcon />
+					</template>
+				</NcEmptyContent>
+				<NcEmptyContent
+					v-else-if="!sortedTrashCollectives.length"
+					:description="t('collectives', 'No deleted collectives.')">
+					<template #icon>
+						<DeleteIcon :size="20" />
+					</template>
+				</NcEmptyContent>
+				<table v-else>
+					<thead>
+						<tr>
+							<th class="header-title">
+								{{ t('collectives', 'Name') }}
+							</th>
+							<th />
+							<th v-if="showDeletedColumn" class="header-timestamp">
+								{{ t('collectives', 'Deleted') }}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="collective in sortedTrashCollectives" :key="collective.id">
+							<td class="item">
+								<div class="item-icon">
+									<div v-if="collective.emoji">
+										{{ collective.emoji }}
+									</div>
+									<CollectivesIcon v-else :size="22" />
+								</div>
+								<div class="item-title">
+									{{ collective.name }}
+								</div>
+							</td>
+							<td class="actions">
+								<NcButton
+									:aria-label="t('collectives', 'Restore collective')"
+									:disabled="!networkOnline"
+									@click="restoreCollective(collective)">
+									<template #icon>
+										<RestoreIcon :size="20" />
+									</template>
+									{{ t('collectives', 'Restore') }}
+								</NcButton>
+								<NcActions :force-menu="true">
+									<NcActionButton
+										:close-after-click="true"
+										:disabled="!networkOnline"
+										@click="showDeleteModal(collective)">
+										<template #icon>
+											<DeleteIcon :size="20" />
+										</template>
+										{{ t('collectives', 'Delete permanently') }}
+									</NcActionButton>
+								</NcActions>
+							</td>
+							<td v-if="showDeletedColumn" class="timestamp">
+								<span :title="titleDate(collective.trashTimestamp)">
+									{{ formattedDate(collective.trashTimestamp) }}
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
-		</transition>
+		</NcDialog>
 
 		<NcDialog
 			v-if="deleteModal"
@@ -106,33 +135,35 @@
 </template>
 
 <script>
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { mapState } from 'pinia'
-import { directive as ClickOutside } from 'v-click-outside'
+import { mapActions, mapState } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'CollectivesTrash',
 
-	directives: {
-		ClickOutside,
-	},
-
 	components: {
+		NcActions,
 		NcActionButton,
-		NcAppNavigationItem,
 		NcButton,
 		CollectivesIcon,
 		DeleteIcon,
 		NcDialog,
+		NcEmptyContent,
+		NcLoadingIcon,
 		RestoreIcon,
 	},
 
@@ -150,28 +181,50 @@ export default {
 
 	data() {
 		return {
-			open: false,
+			showModal: false,
 			deleteModal: false,
 			modalCollective: null,
 		}
 	},
 
 	computed: {
+		...mapState(useRootStore, ['loading']),
 		...mapState(useCollectivesStore, [
 			'isCollectiveOwner',
 			'sortedTrashCollectives',
 		]),
+
+		showDeletedColumn() {
+			return !this.isMobile && this.sortedTrashCollectives.some((collective) => collective.trashTimestamp)
+		},
+
+		titleDate() {
+			return (timestamp) => timestamp ? moment.unix(timestamp).format('LLL') : ''
+		},
+
+		formattedDate() {
+			return (timestamp) => timestamp ? moment.unix(timestamp).fromNow() : ''
+		},
+	},
+
+	mounted() {
+		subscribe('collectives:navigation:collective-trashed', this.onCollectiveTrashed)
+		this.$highlightTimeoutId = null
+	},
+
+	unmounted() {
+		unsubscribe('collectives:navigation:collective-trashed', this.onCollectiveTrashed)
+		clearTimeout(this.$highlightTimeoutId)
 	},
 
 	methods: {
 		t,
 
-		toggleTrash() {
-			this.open = !this.open
-		},
+		...mapActions(useCollectivesStore, ['getTrashCollectives']),
 
-		closeTrash() {
-			this.open = false
+		openTrash() {
+			this.showModal = true
+			this.getTrashCollectives()
 		},
 
 		restoreCollective(collective) {
@@ -199,87 +252,96 @@ export default {
 <style lang="scss" scoped>
 #collectives-trash {
 	margin-top: auto;
-	padding: 3px;
+	padding: 0 2px 4px 4px;
 
-	&__header {
-		box-sizing: border-box;
-		margin: 0 3px 3px 3px;
-		padding-top: calc(var(--default-grid-baseline, 4px) * 2);
+	.collectives-trash-button {
+		width: calc(100% - 3px);
+		padding: 0;
 
-		.collectives-trash-button {
-			display: flex;
-			flex: 1 1 0;
-			height: var(--default-clickable-area);
-			width: 100%;
-			padding: 0;
-			margin: 0;
-			background-color: var(--color-main-background);
-			box-shadow: none;
-			border: 0;
-			border-radius: var(--border-radius-element, var(--border-radius-large));
-			// text-align: left;
-			// font-weight: normal;
-			// font-size: 100%;
-			color: var(--color-main-text);
-			padding-right: 14px;
-			line-height: var(--default-clickable-area);
-
-			:deep(.button-vue__wrapper) {
-				width: 100%;
-				justify-content: start;
-			}
-
-			&:hover,
-			&:focus {
-				background-color: var(--color-background-hover);
-			}
-
-			&__icon {
-				width: var(--default-clickable-area);
-				height: var(--default-clickable-area);
-				min-width: var(--default-clickable-area);
-			}
-
-			:deep(.button-vue__text) {
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				font-weight: normal;
-			}
+		&.highlight-animation {
+			animation: highlight-animation 5s 1;
 		}
-	}
 
-	&__content {
-		display: block;
-		padding: 10px;
-		/* Restrict height of trash an make scrollable */
-		max-height: 300px;
-		overflow-y: auto;
-		box-sizing: border-box;
-	}
+		:deep(.button-vue__wrapper) {
+			justify-content: start;
+		}
 
-	.slide-up-leave-active,
-	.slide-up-enter-active {
-		transition-duration: var(--animation-slow);
-		transition-property: max-height, padding;
-		overflow-y: hidden !important;
-	}
+		:deep(.button-vue__icon) {
+			margin-left: -2px;
+		}
 
-	.slide-up-enter,
-	.slide-up-leave-to {
-		max-height: 0 !important;
-		padding: 0 10px !important;
+		:deep(.button-vue__text) {
+			margin-left: -2px;
+			font-weight: normal;
+		}
 	}
 }
 
 :deep(.modal-wrapper--small) {
 	.modal-container {
-		width: 600px;
+		width: 400px;
 	}
 }
 
 .modal__content {
 	margin: 15px;
+}
+
+table {
+	width: 100%;
+}
+
+tr {
+	display: flex;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid var(--color-border);
+	}
+}
+
+th, td {
+	display: flex;
+	height: var(--default-clickable-area);
+	align-items: center;
+	margin: 0 14px;
+	padding: 2px 0;
+}
+
+th {
+	color: var(--color-text-maxcontrast);
+
+	&.header-title {
+		padding-left: var(--default-clickable-area);
+		flex: 1 1 auto;
+	}
+
+	&.header-timestamp {
+		width: 110px;
+	}
+}
+
+td {
+	&.item {
+		flex: 1 1 auto;
+
+		.item-icon {
+			display: flex;
+			justify-content: center;
+			width: var(--default-clickable-area);
+		}
+
+		.item-title {
+			white-space: normal;
+		}
+	}
+
+	&.actions {
+		gap: 4px;
+	}
+
+	&.timestamp {
+		width: 110px;
+	}
 }
 
 :deep(.dialog__actions) {
