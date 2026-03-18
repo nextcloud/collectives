@@ -234,10 +234,15 @@ export default {
 .collectives-text-container {
 	display: flex;
 	flex-direction: column;
+	flex-grow: 1;
 
 	// Give editor some minimum scroll height on empty/short content
 	// Important on landing page when landing page widgets cover full height
 	min-height: 50vh;
+}
+
+[data-collectives-el="reader"], [data-collectives-el="editor"] {
+	flex-grow: 1;
 }
 
 [data-collectives-el="reader"] {

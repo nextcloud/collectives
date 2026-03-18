@@ -26,6 +26,25 @@ test.describe('Page content', () => {
 		await runOcc(['app:disable', 'whiteboard'])
 	})
 
+	test('editor container grows vertically', async ({ user, page, collective, editor }) => {
+		const collectivePage = await collective.createPage({ title: 'Page', user, page })
+		await collectivePage.open(true)
+
+		editor.setMode(true)
+		await expect(editor.getContent()).toBeVisible()
+		await expect(editor.menubar).toBeVisible()
+
+		const containerBox = (await page.locator('.page-scroll-container').boundingBox())!
+		const menubarBox = (await editor.menubar.boundingBox())!
+		const contentBox = (await editor.getContent().boundingBox())!
+		const suggestionsContainerBox = (await editor.suggestionsContainer.boundingBox())!
+
+		const expectedContentHeight = containerBox.height - menubarBox.height - suggestionsContainerBox.height
+
+		// Allow up to 2px tolerance for borders etc.
+		expect(Math.abs(expectedContentHeight - contentBox.height)).toBeLessThan(2)
+	})
+
 	test('link to page from link menu', async ({ user, page, collective, editor }) => {
 		const sourcePage = await collective.createPage({ title: 'Source page', user, page })
 		const targetPage = await collective.createPage({ title: 'Target page', user, page })
