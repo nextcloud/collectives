@@ -11,11 +11,15 @@ export class EditorSection {
 	public isEdit: boolean
 	public readonly editor: Locator
 	public readonly reader: Locator
+	public readonly menubar: Locator
+	public readonly suggestionsContainer: Locator
 
 	constructor(public readonly page: Page) {
 		this.isEdit = false
 		this.editor = this.page.locator('[data-cy-collectives="editor"]')
 		this.reader = this.page.locator('[data-cy-collectives="reader"]')
+		this.menubar = this.editor.getByRole('region')
+		this.suggestionsContainer = this.page.locator('.container-suggestions')
 	}
 
 	public setMode(edit: boolean) {
