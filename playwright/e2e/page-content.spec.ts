@@ -25,4 +25,22 @@ test.describe('Page content', () => {
 
 		await runOcc(['app:disable', 'whiteboard'])
 	})
+
+	test('link to page from link menu', async ({ user, page, collective, editor }) => {
+		const sourcePage = await collective.createPage({ title: 'Source page', user, page })
+		const targetPage = await collective.createPage({ title: 'Target page', user, page })
+		await sourcePage.open(true)
+
+		editor.setMode(true)
+		await editor.clickMenu('Insert link', 'Link to page')
+		await editor.smartPickerSearch.pressSequentially('Target page')
+
+		await editor.smartPicker.locator('.search-result').filter({ hasText: 'Target page' }).click()
+
+		const pageWidget = editor.getContent().locator('.widget-custom a.collective-page')
+
+		await expect(pageWidget).toBeVisible()
+		const origin = new URL(page.url()).origin
+		await expect(pageWidget).toHaveAttribute('href', origin + targetPage.getPageUrl())
+	})
 })
