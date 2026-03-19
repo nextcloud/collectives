@@ -8,6 +8,7 @@ import { generateOcsUrl } from '@nextcloud/router'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { circlesMemberTypes } from '../constants.js'
+import { sortMembersByLevelAndType } from '../util/circles.ts'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
 
@@ -34,47 +35,30 @@ export const useCirclesStore = defineStore('circles', {
 				})
 		},
 
-		circleMembers: (state) => (circleId) => state.circlesMembers[circleId] || [],
-
-		circleMemberType: () => (member) => {
-			// If the user type is a circle, this could originate from multiple sources
-			// Copied from Contacts app src/models/member.ts get userType()
-			return member.userType !== circlesMemberTypes.TYPE_CIRCLE
-				? member.userType
-				: member.basedOn.source
+		currentCircleMembers: (state) => {
+			const collectivesStore = useCollectivesStore()
+			const currentCircleId = collectivesStore.currentCollective?.circleId
+			return state.circlesMembers[currentCircleId]
 		},
 
+		circleMembers: (state) => (circleId) => state.circlesMembers[circleId] || [],
+
+		currentCircleMembersSorted: (state) => state.currentCircleMembers.slice().sort(sortMembersByLevelAndType),
+
 		circleMembersSorted: (state) => (circleId) => {
-			/**
-			 * @param {object} m1 First member
-			 * @param {string} m1.userId First member user ID
-			 * @param {string} m1.displayName First member display name
-			 * @param {number} m1.level First member level
-			 * @param {number} m1.userType First member user type
-			 * @param {object} m2 Second member
-			 * @param {string} m2.userId Second member user ID
-			 * @param {string} m2.displayName Second member display name
-			 * @param {number} m2.level Second member level
-			 * @param {number} m2.userType Second member user type
-			 */
-			function sortMembersByLevelAndType(m1, m2) {
-				// Sort by level (admin > moderator > member)
-				if (m1.level !== m2.level) {
-					return m1.level < m2.level
-				}
-
-				// Sort by user type (user > group > circle)
-				if (state.circleMemberType(m1) !== state.circleMemberType(m2)) {
-					return state.circleMemberType(m1) > state.circleMemberType(m2)
-				}
-
-				// Sort by display name
-				return m1.displayName.localeCompare(m2.displayName)
-			}
-
 			return state.circleMembers(circleId)
 				.slice()
 				.sort(sortMembersByLevelAndType)
+		},
+
+		currentCircleUserMembersSorted: (state) => {
+			const users = {}
+			for (const member of state.currentCircleMembersSorted) {
+				if (member.userType === circlesMemberTypes.TYPE_USER) {
+					users[member.userId] = member.displayName
+				}
+			}
+			return users
 		},
 	},
 

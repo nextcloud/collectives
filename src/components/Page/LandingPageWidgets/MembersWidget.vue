@@ -67,6 +67,7 @@ import { circlesMemberTypes } from '../../../constants.js'
 import { useCirclesStore } from '../../../stores/circles.js'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
+import { circleMemberType } from '../../../util/circles.ts'
 
 export default {
 	name: 'MembersWidget',
@@ -97,7 +98,6 @@ export default {
 		...mapState(useCirclesStore, [
 			'circleMembers',
 			'circleMembersSorted',
-			'circleMemberType',
 		]),
 
 		...mapState(useCollectivesStore, [
@@ -134,7 +134,7 @@ export default {
 
 		isNoUser() {
 			return (member) => {
-				return this.circleMemberType(member) !== circlesMemberTypes.TYPE_USER
+				return circleMemberType(member) !== circlesMemberTypes.TYPE_USER
 			}
 		},
 
@@ -185,10 +185,6 @@ export default {
 		},
 	},
 
-	beforeMount() {
-		this.getCircleMembers(this.currentCollective.circleId)
-	},
-
 	mounted() {
 		window.addEventListener('resize', this.updateShowMembersCountDebounced)
 	},
@@ -200,7 +196,6 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(useCirclesStore, ['getCircleMembers']),
 		...mapActions(useCollectivesStore, [
 			'setCollectiveUserSettingShowMembers',
 			'setMembersCollectiveId',

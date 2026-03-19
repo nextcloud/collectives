@@ -8,7 +8,7 @@ export const TEMPLATE_PAGE = 'Template'
 export const PAGE_SUFFIX = '.md'
 export const TEMPLATE_PATH = '.templates'
 
-// Circle lember levels
+// Circle member levels
 export const memberLevels = {
 	LEVEL_MEMBER: 1,
 	LEVEL_MODERATOR: 4,
