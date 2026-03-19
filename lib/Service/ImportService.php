@@ -323,6 +323,12 @@ class ImportService {
 			return 0;
 		}
 
+		$realBaseDirectory = realpath($baseDirectory);
+		if ($realBaseDirectory === false) {
+			return 0;
+		}
+		$realSiblingMediaDirectory = realpath(dirname($realBaseDirectory) . DIRECTORY_SEPARATOR . 'media');
+
 		$candidates = [];
 		$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . $sanitizedHref;
 
@@ -346,6 +352,13 @@ class ImportService {
 		foreach ($candidates as $candidate) {
 			$realPath = realpath($candidate);
 			if ($realPath && is_file($realPath) && is_readable($realPath)) {
+				$withinBaseDirectory = str_starts_with($realPath, $realBaseDirectory . DIRECTORY_SEPARATOR);
+				$withinSiblingMediaDirectory = $realSiblingMediaDirectory !== false
+					&& str_starts_with($realPath, $realSiblingMediaDirectory . DIRECTORY_SEPARATOR);
+
+				if (!$withinBaseDirectory || !$withinSiblingMediaDirectory) {
+					$this->progressReporter->writeErrorVerbose(sprintf('✗ Blocked: %s - Attachment path escapes import directory: %s', $filePath, $realPath));
+				}
 				$targetAttachment = $realPath;
 				break;
 			}
