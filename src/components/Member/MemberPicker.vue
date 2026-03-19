@@ -60,7 +60,6 @@ import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateOcsUrl } from '@nextcloud/router'
 import debounce from 'debounce'
-import { mapState } from 'pinia'
 import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
@@ -71,7 +70,7 @@ import MembersHint from './MembersHint.vue'
 import SelectedMembers from './SelectedMembers.vue'
 import { popCtrlF, pushCtrlF } from '../../composables/useKeymap.ts'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
-import { useCirclesStore } from '../../stores/circles.js'
+import { circleMemberType } from '../../util/circles.ts'
 
 export default {
 	name: 'MemberPicker',
@@ -157,8 +156,6 @@ export default {
 	},
 
 	computed: {
-		...mapState(useCirclesStore, ['circleMemberType']),
-
 		hasSearchQuery() {
 			return this.searchQuery !== ''
 		},
@@ -228,7 +225,7 @@ export default {
 		filterSearchResults(item) {
 			return !this.currentMembers.find((m) => {
 				return (item.source === 'circlesx' && item.id === this.circleId)
-					|| (this.circleMemberType(m) === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
+					|| (circleMemberType(m) === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
 						&& m.displayName === item.label)
 			})
 		},

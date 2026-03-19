@@ -34,6 +34,7 @@ import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import PageList from '../components/PageList.vue'
 import { useNetworkState } from '../composables/useNetworkState.ts'
 import { sessionUpdateInterval } from '../constants.js'
+import { useCirclesStore } from '../stores/circles.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
@@ -123,6 +124,7 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['hide']),
+		...mapActions(useCirclesStore, ['getCircleMembers']),
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(useTagsStore, ['getTags']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
@@ -218,6 +220,7 @@ export default {
 				if (!this.currentCollectiveIsPageShare) {
 					promises.push(this.getTemplates(setLoading))
 				}
+				promises.push(this.getCircleMembers(this.currentCollective.circleId))
 			}
 
 			try {
