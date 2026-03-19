@@ -15,6 +15,12 @@ export default createAppConfig(
 	},
 	{
 		config: {
+			optimizeDeps: {
+				// @nextcloud/dialogs ships its own Vue 3 but @vitejs/plugin-vue2
+				// sets a bare 'vue' alias that esbuild cannot resolve during dev
+				// dependency optimization. Excluding it avoids the conflict.
+				exclude: ['@nextcloud/dialogs'],
+			},
 			build: {
 				rollupOptions: {
 					// Needed for Nextcloud >= 32. In 33 it got fixed
