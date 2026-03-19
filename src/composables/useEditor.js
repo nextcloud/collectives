@@ -5,6 +5,7 @@
 
 import debounce from 'debounce'
 import { computed, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { useCirclesStore } from '../stores/circles.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
@@ -23,6 +24,7 @@ export function useEditor(davContent) {
 	let editorPromise = null
 	const updateCounter = ref(0)
 	const rootStore = useRootStore()
+	const circlesStore = useCirclesStore()
 	const searchStore = useSearchStore()
 	const collectivesStore = useCollectivesStore()
 	const pagesStore = usePagesStore()
@@ -101,6 +103,12 @@ export function useEditor(davContent) {
 			},
 			onAttachmentsUpdated({ attachmentSrcs }) {
 				pagesStore.setEditorEmbeddedAttachmentSrcs(attachmentSrcs)
+			},
+			onMentionSearch(query) {
+				const users = circlesStore.currentCircleUserMembersSorted
+				const lowerQuery = query.toLowerCase().trim()
+				console.debug('members for mention search', users)
+				return Object.fromEntries(Object.entries(users).filter(([key, value]) => key.toLowerCase().includes(lowerQuery) || value.toLowerCase().includes(lowerQuery)))
 			},
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
 		})
