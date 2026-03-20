@@ -240,7 +240,8 @@ export default {
 /* Format page title in PageContainer.vue and PageVersion.vue */
 .page-title {
 	position: relative;
-	z-index: 10022;
+	// Display above text menubar, but below dialogs and calendar event popover
+	z-index: 5;
 	padding: 0 8px;
 }
 

@@ -150,7 +150,8 @@ page-info-bar {
 	top: 0;
 	bottom: var(--default-grid-baseline);
 	width: var(--text-editor-max-width, var(--text-editor-max-width-default));
-	z-index: 10021;
+	// Display above link previews and tables, but below dialogs and calendar event popover
+	z-index: 4;
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
 	border-bottom: 1px solid var(--color-border);
