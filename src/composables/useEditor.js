@@ -3,8 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
-import { computed, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, defineCustomElement, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { getLinkWithPicker } from '@nextcloud/vue/components/NcRichText'
+import PageIcon from '../components/Icon/PageIcon.vue'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
@@ -81,6 +84,21 @@ export function useEditor(davContent) {
 			return
 		}
 
+		// Define PageIcon as custom web component
+		if (!window.customElements.get('page-icon')) {
+			const PageIconCE = defineCustomElement({
+				...PageIcon,
+				props: {
+					...PageIcon.props,
+					size: {
+						type: Number,
+						default: 20,
+					},
+				},
+			}, { shadowRoot: false })
+			customElements.define('page-icon', PageIconCE)
+		}
+
 		editorPromise = window.OCA.Text.createEditor({
 			el: editorEl.value,
 			fileId: page.id,
@@ -88,6 +106,13 @@ export function useEditor(davContent) {
 			readOnly: false,
 			shareToken: rootStore.shareTokenParam || null,
 			autofocus: false,
+			menubarLinkCustomAction: {
+				label: t('collectives', 'Link to page'),
+				icon: 'page-icon',
+				action: () => {
+					return getLinkWithPicker('collectives-ref-pages', false)
+				},
+			},
 			onCreate: ({ markdown }) => {
 				updateEditorContentDebounced(markdown)
 			},

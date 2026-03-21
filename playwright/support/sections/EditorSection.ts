@@ -11,11 +11,15 @@ export class EditorSection {
 	public isEdit: boolean
 	public readonly editor: Locator
 	public readonly reader: Locator
+	public readonly smartPicker: Locator
+	public readonly smartPickerSearch: Locator
 
 	constructor(public readonly page: Page) {
 		this.isEdit = false
 		this.editor = this.page.locator('[data-cy-collectives="editor"]')
 		this.reader = this.page.locator('[data-cy-collectives="reader"]')
+		this.smartPicker = this.page.getByRole('dialog')
+		this.smartPickerSearch = this.smartPicker.getByPlaceholder('Search', { exact: true })
 	}
 
 	public setMode(edit: boolean) {
