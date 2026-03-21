@@ -28,11 +28,10 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
-import { mapState } from 'pinia'
 import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
 import MemberItem from './MemberItem.vue'
 import MembersHint from './MembersHint.vue'
-import { useCirclesStore } from '../../stores/circles.js'
+import { circleMemberType } from '../../util/circles.ts'
 
 export default {
 	name: 'CurrentMembers',
@@ -66,8 +65,6 @@ export default {
 	},
 
 	computed: {
-		...mapState(useCirclesStore, ['circleMemberType']),
-
 		isSearching() {
 			return this.searchQuery !== ''
 		},
@@ -101,6 +98,8 @@ export default {
 
 	methods: {
 		t,
+
+		circleMemberType,
 
 		/**
 		 * @param {object} m1 First member
