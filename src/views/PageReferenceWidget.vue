@@ -4,8 +4,31 @@
 -->
 
 <template>
+	<!-- handle inaccessible pages -->
 	<a
-		v-if="richObject"
+		v-if="richObject && notFound"
+		:href="richObject.link"
+		target="_blank"
+		class="collective-page not-found"
+		@click="clickLink">
+		<div class="collective-page--image">
+			<PageIcon
+				:size="50" />
+		</div>
+		<div class="collective-page--info">
+			<div>
+				<strong>
+					{{ t('collectives', 'Page not found') }}
+				</strong>
+			</div>
+			<div class="description">
+				{{ t('collectives', 'The page does not exist or you are not allowed to view it.') }}
+			</div>
+		</div>
+	</a>
+	<!-- handle accessible pages -->
+	<a
+		v-else-if="richObject"
 		:href="richObject.link"
 		target="_blank"
 		class="collective-page"
@@ -21,7 +44,7 @@
 				:size="50" />
 		</div>
 		<div class="collective-page--info">
-			<div class="line">
+			<div>
 				<strong>
 					{{ richObject.page.title }}
 				</strong>
@@ -40,9 +63,12 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { mapState } from 'pinia'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import PageIcon from '../components/Icon/PageIcon.vue'
+import { useRootStore } from '../stores/root.js'
 
 export default {
 	name: 'PageReferenceWidget',
@@ -72,17 +98,27 @@ export default {
 	},
 
 	computed: {
+		...mapState(useRootStore, ['isPublic']),
+
 		emoji() {
-			return this.richObject.page.emoji
+			return this.richObject.page?.emoji
+		},
+
+		notFound() {
+			return this.accessible === false
 		},
 	},
 
 	methods: {
+		t,
+
 		clickLink(event) {
 			const appUrl = '/apps/collectives'
 			const linkUrl = new URL(this.richObject.link, window.location)
-			// Only consider rerouting if we're inside the collectives app and for links to collectives app
+			// Only consider rerouting if we're inside the collectives app excluding public shares) and for links to
+			// collectives app.
 			if (window.OCA.Collectives?.vueRouter
+				&& !this.isPublic
 				&& linkUrl.pathname.toString().startsWith(generateUrl(appUrl))) {
 				event.preventDefault()
 				const collectivesUrl = linkUrl.href.substring(linkUrl.href.indexOf(appUrl) + appUrl.length)
@@ -111,6 +147,13 @@ export default {
 			align-items: center;
 			height: 50px;
 			font-size: 50px;
+		}
+	}
+
+	&.not-found {
+		.description,
+		.collective-page--image {
+			color: var(--color-text-maxcontrast) !important
 		}
 	}
 
