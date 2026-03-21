@@ -46,14 +46,14 @@ export const usePagesStore = defineStore('pages', {
 			return collectivesStore.currentCollective.id
 		},
 
-		collectiveIndex(state) {
+		currentCollectiveIndex(state) {
 			const rootStore = useRootStore()
 			return rootStore.isPublic
 				? `share_${rootStore.shareTokenParam}`
 				: state.collectiveId
 		},
 
-		indexForCollective() {
+		collectiveIndex() {
 			return (collective) => {
 				const rootStore = useRootStore()
 				return rootStore.isPublic
@@ -71,23 +71,23 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		pagesForCollective: (state) => {
-			return (collective) => state.allPages[state.indexForCollective(collective)] || []
+		pages: (state) => {
+			return (collective) => state.allPages[state.collectiveIndex(collective)] || []
 		},
 
-		pages: (state) => {
-			return state.allPages[state.collectiveIndex] || []
+		currentPages: (state) => {
+			return state.allPages[state.currentCollectiveIndex] || []
 		},
-		trashPages: (state) => {
-			return state.allTrashPages[state.collectiveIndex] || []
+		currentTrashPages: (state) => {
+			return state.allTrashPages[state.currentCollectiveIndex] || []
 		},
 
 		attachments: (state) => {
-			return state.allAttachments[state.collectiveIndex]?.[state.currentPageId] || []
+			return state.allAttachments[state.currentCollectiveIndex]?.[state.currentPageId] || []
 		},
 
 		pagesLoaded: (state) => {
-			return state.pages.length > 0
+			return state.currentPages.length > 0
 		},
 
 		isLandingPage: (state) => {
@@ -110,8 +110,8 @@ export const usePagesStore = defineStore('pages', {
 		rootPage(state) {
 			const collectivesStore = useCollectivesStore()
 			return collectivesStore.currentCollectiveIsPageShare
-				? state.pages[0]
-				: state.pages.find((p) => (p.parentId === 0))
+				? state.currentPages[0]
+				: state.currentPages.find((p) => (p.parentId === 0))
 		},
 
 		currentPageIds(state) {
@@ -123,10 +123,10 @@ export const usePagesStore = defineStore('pages', {
 			}
 
 			const pageIds = []
-			if (rootStore.pageId) {
-				let pageId = rootStore.pageId
+			let pageId = rootStore.pageId || rootStore.fileIdQuery
+			if (pageId) {
 				do {
-					const page = state.pageById(pageId)
+					const page = state.currentPages.find((p) => (p.id === pageId))
 					pageIds.unshift(page.id)
 					pageId = page.parentId
 				} while (pageId)
@@ -137,7 +137,7 @@ export const usePagesStore = defineStore('pages', {
 			const parts = rootStore.pageParam.split('/').filter(Boolean)
 			let page = state.rootPage
 			for (const i in parts) {
-				page = state.pages.find((p) => (p.parentId === page.id && p.title === parts[i]))
+				page = state.currentPages.find((p) => (p.parentId === page.id && p.title === parts[i]))
 				if (page) {
 					pageIds.push(page.id)
 				} else {
@@ -147,23 +147,20 @@ export const usePagesStore = defineStore('pages', {
 			return pageIds
 		},
 
-		currentPage(state) {
+		currentPageId(state) {
 			const rootStore = useRootStore()
-			if (rootStore.pageId) {
-				return state.pageById(rootStore.pageId)
-			} else if (rootStore.fileIdQuery) {
-				return state.pageById(Number(rootStore.fileIdQuery))
-			}
-			return state.pages.find((p) => (p.id === state.currentPageIds[state.currentPageIds.length - 1]))
+			return rootStore.pageId
+				|| rootStore.fileIdQuery
+				|| state.currentPageIds[state.currentPageIds.length - 1]
 		},
 
-		currentPageId(state) {
-			return state.currentPage.id
+		currentPage(state) {
+			return state.currentPages.find((p) => (p.id === state.currentPageId))
 		},
 
 		pageById(state) {
 			return (pageId) => {
-				return state.pages.find((p) => p.id === pageId)
+				return state.currentPages.find((p) => p.id === pageId)
 			}
 		},
 
@@ -242,33 +239,93 @@ export const usePagesStore = defineStore('pages', {
 				: generateRemoteUrl(`dav/files/${state.currentPageDavPath}`)
 		},
 
-		currentFileIdPage(state) {
-			const rootStore = useRootStore()
-			const fileId = Number(rootStore.fileIdQuery)
-			return state.pages.find((p) => (p.id === fileId))
-		},
-
 		hasSubpages(state) {
 			return (pageId) => {
-				return state.pages.filter((p) => p.parentId === pageId).length > 0
+				return state.currentPages.filter((p) => p.parentId === pageId).length > 0
 			}
 		},
 
 		favoritePages(state) {
 			const collectivesStore = useCollectivesStore()
 			const favoritePages = collectivesStore.currentCollective.userFavoritePages
-			return state.allPagesSorted(state.rootPage.id).filter((p) => favoritePages.includes(p.id))
+			return state.allCurrentSortedPages.filter((p) => favoritePages.includes(p.id))
 		},
 
 		hasFavoritePages(state) {
 			return state.favoritePages.length > 0
 		},
 
-		sortedSubpagesForCollective(state) {
-			return (collective, parentId, sortOrder = null) => {
-				const parentPage = state.pagesForCollective(collective).find((p) => p.id === parentId)
+		currentSortedSubpagesByParentId(state) {
+			// Group subpages by parentId
+			const subpagesByParent = new Map()
+			for (const page of state.currentPages) {
+				if (!subpagesByParent.has(page.parentId)) {
+					subpagesByParent.set(page.parentId, [])
+				}
+				subpagesByParent.get(page.parentId).push(page)
+			}
+
+			// Sort each group by subpageOrder
+			const sortedByParent = new Map()
+			for (const [parentId, subpages] of subpagesByParent) {
+				const parentPage = state.currentPages.find((p) => p.id === parentId)
 				const customOrder = parentPage?.subpageOrder || []
-				return state.pagesForCollective(collective)
+				const sorted = subpages
+					// add the index from customOrder
+					.map((p) => ({ ...p, index: customOrder.indexOf(p.id) }))
+					// sort by user setting
+					.sort(state.sortOrder)
+				sortedByParent.set(parentId, sorted)
+			}
+			return sortedByParent
+		},
+
+		allCurrentSortedPages(state) {
+			const result = []
+			const addPageWithSubpages = (pageId) => {
+				const subpages = state.currentSortedSubpagesByParentId.get(pageId) || []
+				for (const page of subpages) {
+					result.push(page)
+					addPageWithSubpages(page.id)
+				}
+			}
+			// Start from root page (parentId === 0)
+			addPageWithSubpages(0)
+			return result
+		},
+
+		sortedSubpagesByParentId(state) {
+			return (collective) => {
+				// Group subpages by parentId
+				const subpagesByParent = new Map()
+				for (const page of state.pages(collective)) {
+					if (!subpagesByParent.has(page.parentId)) {
+						subpagesByParent.set(page.parentId, [])
+					}
+					subpagesByParent.get(page.parentId).push(page)
+				}
+
+				// Sort each group by subpageOrder
+				const sortedByParent = new Map()
+				for (const [parentId, subpages] of subpagesByParent) {
+					const parentPage = state.pages(collective).find((p) => p.id === parentId)
+					const customOrder = parentPage?.subpageOrder || []
+					const sorted = subpages
+						// add the index from customOrder
+						.map((p) => ({ ...p, index: customOrder.indexOf(p.id) }))
+						// sort by user setting
+						.sort(state.sortOrder)
+					sortedByParent.set(parentId, sorted)
+				}
+				return sortedByParent
+			}
+		},
+
+		sortedSubpages(state) {
+			return (collective, parentId, sortOrder = null) => {
+				const parentPage = state.pages(collective).find((p) => p.id === parentId)
+				const customOrder = parentPage?.subpageOrder || []
+				return state.pages(collective)
 					.filter((p) => p.parentId === parentId)
 					// add the index from customOrder
 					.map((p) => ({ ...p, index: customOrder.indexOf(p.id) }))
@@ -277,32 +334,19 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		sortedSubpages(state) {
+		currentSortedSubpages(state) {
 			return (parentId, sortOrder) => {
-				const collectivesStore = useCollectivesStore()
-				return state.sortedSubpagesForCollective(collectivesStore.currentCollective, parentId, sortOrder)
+				if (sortOrder) {
+					const collectivesStore = useCollectivesStore()
+					return state.sortedSubpages(collectivesStore.currentCollective, parentId, sortOrder)
+				}
+				return state.currentSortedSubpagesByParentId.get(parentId) || []
 			}
-		},
-
-		allPagesSorted(state) {
-			const allSubPagesSorted = (pageId) => {
-				const res = []
-				state.sortedSubpages(pageId).forEach((element) => {
-					res.push(element)
-					res.push(...allSubPagesSorted(element.id))
-				})
-				return res
-			}
-			return allSubPagesSorted
-		},
-
-		visibleSubpages: (state) => (parentId) => {
-			return state.sortedSubpages(parentId)
 		},
 
 		pagesTreeWalk: (state) => (parentId = 0) => {
 			const pages = []
-			for (const page of state.visibleSubpages(parentId)) {
+			for (const page of state.currentSortedSubpagesByParentId.get(parentId)) {
 				pages.push(page)
 				for (const subpage of state.pagesTreeWalk(page.id)) {
 					pages.push(subpage)
@@ -312,14 +356,14 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		pageParent: (state) => (pageId) => {
-			return state.pages.find((p) => (p.id === pageId)).parentId
+			return state.currentPages.find((p) => (p.id === pageId)).parentId
 		},
 
-		pageParentsForCollective(state) {
+		pageParents(state) {
 			return (collective, pageId) => {
 				const pages = []
 				while (pageId !== state.rootPage.id) {
-					const page = state.pagesForCollective(collective).find((p) => (p.id === pageId))
+					const page = state.pages(collective).find((p) => (p.id === pageId))
 					if (!page) {
 						break
 					}
@@ -330,10 +374,10 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		pageParents(state) {
+		currentPageParents(state) {
 			return (pageId) => {
 				const collectivesStore = useCollectivesStore()
-				return state.pageParentsForCollective(collectivesStore.currentCollective, pageId)
+				return state.pageParents(collectivesStore.currentCollective, pageId)
 			}
 		},
 
@@ -373,7 +417,7 @@ export const usePagesStore = defineStore('pages', {
 		pageTitle(state) {
 			const rootStore = useRootStore()
 			return (pageId) => {
-				const page = state.pages.find((p) => p.id === pageId)
+				const page = state.currentPages.find((p) => p.id === pageId)
 				return (page.parentId === 0) ? rootStore.collectiveParam : page.title
 			}
 		},
@@ -393,11 +437,11 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		keptSortable(state) {
-			return (pageId) => state.pages.find((p) => p.id === pageId)?.keepSortable
+			return (pageId) => state.currentPages.find((p) => p.id === pageId)?.keepSortable
 		},
 
 		subpageOrder(state) {
-			return (pageId) => state.pages.find((p) => p.id === pageId).subpageOrder
+			return (pageId) => state.currentPages.find((p) => p.id === pageId).subpageOrder
 		},
 
 		subpageOrderIndex(state) {
@@ -408,11 +452,11 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		sortedTrashPages(state) {
-			return state.trashPages.sort((a, b) => b.trashTimestamp - a.trashTimestamp)
+			return state.currentTrashPages.sort((a, b) => b.trashTimestamp - a.trashTimestamp)
 		},
 
 		recentPages(state) {
-			return state.pages
+			return state.currentPages
 				.slice()
 				.sort(sortOrders.byTimeAsc)
 		},
@@ -429,7 +473,7 @@ export const usePagesStore = defineStore('pages', {
 
 		backlinks(state) {
 			return (pageId) => {
-				return state.pages.filter((p) => p.linkedPageIds.includes(pageId))
+				return state.currentPages.filter((p) => p.linkedPageIds.includes(pageId))
 			}
 		},
 
@@ -444,8 +488,8 @@ export const usePagesStore = defineStore('pages', {
 
 	actions: {
 		updateSubpageOrder({ parentId, subpageOrder }) {
-			if (this.allPages[this.collectiveIndex].find((p) => p.id === parentId)) {
-				this.allPages[this.collectiveIndex].find((p) => p.id === parentId).subpageOrder = subpageOrder
+			if (this.allPages[this.currentCollectiveIndex].find((p) => p.id === parentId)) {
+				this.allPages[this.currentCollectiveIndex].find((p) => p.id === parentId).subpageOrder = subpageOrder
 			}
 		},
 
@@ -454,7 +498,7 @@ export const usePagesStore = defineStore('pages', {
 		 * If no index is provided, add to the beginning of the list.
 		 *
 		 * Build subpageOrder of parent page to maintain the displayed order. If no subpageOrder
-		 * was stored before or it missed pages, pages would jump around otherwise.
+		 * was stored before, or it missed pages, pages would jump around otherwise.
 		 *
 		 * @param {object} object parameters object
 		 * @param {number} object.parentId ID of the parent page
@@ -463,7 +507,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		addToSubpageOrder({ parentId, pageId, newIndex = 0 }) {
 			// Get current subpage order of parentId
-			const subpageOrder = this.sortedSubpages(parentId, 'byOrder')
+			const subpageOrder = this.currentSortedSubpages(parentId, 'byOrder')
 				.map((p) => p.id)
 				.filter((id) => (id !== pageId))
 
@@ -481,7 +525,7 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {number} object.pageId ID of the page to remove
 		 */
 		deleteFromSubpageOrder({ parentId, pageId }) {
-			const parentPage = this.allPages[this.collectiveIndex].find((p) => (p.id === parentId))
+			const parentPage = this.allPages[this.currentCollectiveIndex].find((p) => (p.id === parentId))
 			this.updateSubpageOrder({ parentId, subpageOrder: parentPage.subpageOrder.filter((id) => (id !== pageId)) })
 		},
 
@@ -508,7 +552,7 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		expandParents(pageId) {
-			for (const page of this.pageParents(pageId)) {
+			for (const page of this.currentPageParents(pageId)) {
 				this.expand(page.id)
 			}
 		},
@@ -539,9 +583,9 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {object} collective The collective
 		 * @param {boolean} setLoading Whether to set loading pagelist
 		 */
-		async getPagesForCollective(collective, setLoading = true) {
+		async getPages(collective, setLoading = true) {
 			const rootStore = useRootStore()
-			if (setLoading && this.pagesForCollective(collective).length === 0) {
+			if (setLoading && this.pages(collective).length === 0) {
 				rootStore.load(`pagelist-${collective.id}`)
 			}
 			const context = {
@@ -550,7 +594,7 @@ export const usePagesStore = defineStore('pages', {
 				shareTokenParam: null,
 			}
 			const response = await api.getPages(context)
-			this.allPages[this.indexForCollective(collective)] = response.data.ocs.data.pages
+			this.allPages[this.collectiveIndex(collective)] = response.data.ocs.data.pages
 			rootStore.done(`pagelist-${collective.id}`)
 		},
 
@@ -559,13 +603,13 @@ export const usePagesStore = defineStore('pages', {
 		 *
 		 * @param {boolean} setLoading Whether to set loading pagelist
 		 */
-		async getPages(setLoading = true) {
+		async getCurrentPages(setLoading = true) {
 			const rootStore = useRootStore()
 			if (setLoading && !this.pagesLoaded) {
 				rootStore.load('pagelist')
 			}
 			const response = await api.getPages(this.context)
-			this.allPages[this.collectiveIndex] = response.data.ocs.data.pages
+			this.allPages[this.currentCollectiveIndex] = response.data.ocs.data.pages
 			rootStore.done('pagelist')
 		},
 
@@ -580,7 +624,7 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pageTrash')
 			const response = await api.getTrashPages(this.context)
-			this.allTrashPages[this.collectiveIndex] = response.data.ocs.data.pages
+			this.allTrashPages[this.currentCollectiveIndex] = response.data.ocs.data.pages
 			this.setTrashPagesLoaded(true)
 			rootStore.done('pageTrash')
 		},
@@ -589,10 +633,10 @@ export const usePagesStore = defineStore('pages', {
 			this.trashPagesLoaded = loaded
 		},
 
-		_updatePageState(page, collectiveIndex = this.collectiveIndex) {
-			const index = this.allPages[collectiveIndex].findIndex((p) => p.id === page.id)
+		_updatePageState(page, currentCollectiveIndex = this.currentCollectiveIndex) {
+			const index = this.allPages[currentCollectiveIndex].findIndex((p) => p.id === page.id)
 			if (index > -1) {
-				this.allPages[collectiveIndex].splice(index, 1, page)
+				this.allPages[currentCollectiveIndex].splice(index, 1, page)
 			}
 		},
 
@@ -621,7 +665,7 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.createPage(this.context, page)
 			// Add new page to the beginning of pages array
 			const newPage = response.data.ocs.data.page
-			updateOrAddTo(this.allPages[this.collectiveIndex], newPage)
+			updateOrAddTo(this.allPages[this.currentCollectiveIndex], newPage)
 			this.addToSubpageOrder({ parentId: newPage.parentId, pageId: newPage.id })
 			this.newPage = response.data.ocs.data.page
 		},
@@ -655,7 +699,7 @@ export const usePagesStore = defineStore('pages', {
 		async copyPage({ newParentId, pageId, index }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
-			const page = { ...this.allPages[this.collectiveIndex].find((p) => p.id === pageId) }
+			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
 
 			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
 			const oldParentId = page.parentId
@@ -668,7 +712,7 @@ export const usePagesStore = defineStore('pages', {
 			try {
 				await api.copyPage(this.context, pageId, newParentId, index)
 				// Reload the page list to make new page appear
-				await this.getPages(false)
+				await this.getCurrentPages(false)
 			} finally {
 				rootStore.done('pagelist-nodrag')
 			}
@@ -685,15 +729,14 @@ export const usePagesStore = defineStore('pages', {
 		async movePage({ newParentId, pageId, index }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
-			const page = { ...this.allPages[this.collectiveIndex].find((p) => p.id === pageId) }
-			const hasSubpages = this.visibleSubpages(pageId).length > 0
+			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
 
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
 
 			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
 			const oldParentId = page.parentId
-			this.allPages[this.collectiveIndex].find((p) => p.id === oldParentId).keepSortable = true
+			this.allPages[this.currentCollectiveIndex].find((p) => p.id === oldParentId).keepSortable = true
 
 			// Update page in store first to avoid page order jumping around
 			page.parentId = newParentId
@@ -706,13 +749,13 @@ export const usePagesStore = defineStore('pages', {
 				this._updatePageState(pageClone)
 				throw e
 			} finally {
-				delete this.allPages[this.collectiveIndex].find((p) => p.id === oldParentId).keepSortable
+				delete this.allPages[this.currentCollectiveIndex].find((p) => p.id === oldParentId).keepSortable
 				rootStore.done('pagelist-nodrag')
 			}
 
 			// Reload the page list if moved page had subpages (to get their updated paths)
-			if (hasSubpages) {
-				await this.getPages(false)
+			if (this.hasSubpages(pageId)) {
+				await this.getCurrentPages(false)
 			}
 		},
 
@@ -745,16 +788,15 @@ export const usePagesStore = defineStore('pages', {
 		async movePageToCollective({ collectiveId, newParentId, pageId, index }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
-			const page = { ...this.allPages[this.collectiveIndex].find((p) => p.id === pageId) }
-			const hasSubpages = this.visibleSubpages(pageId).length > 0
+			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
-			removeFrom(this.allPages[this.collectiveIndex], page)
+			removeFrom(this.allPages[this.currentCollectiveIndex], page)
 			rootStore.done('pagelist-nodrag')
 
 			// Reload the page list if moved page had subpages (to remove subpages as well)
-			if (hasSubpages) {
-				await this.getPages(false)
+			if (this.hasSubpages(pageId)) {
+				await this.getCurrentPages(false)
 			}
 		},
 
@@ -798,7 +840,7 @@ export const usePagesStore = defineStore('pages', {
 		async setPageSubpageOrder({ pageId, subpageOrder }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist-nodrag')
-			const page = { ...this.allPages[this.collectiveIndex].find((p) => p.id === pageId) }
+			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
 
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
@@ -831,7 +873,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async addPageTag({ pageId }, tagId) {
 			const rootStore = useRootStore()
-			const page = { ...this.allPages[this.collectiveIndex].find((p) => p.id === pageId) }
+			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
 
 			if (page.tags?.includes(tagId)) {
 				return
@@ -871,7 +913,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async removePageTag({ pageId }, tagId) {
 			const rootStore = useRootStore()
-			const page = { ...this.allPages[this.collectiveIndex].find((p) => p.id === pageId) }
+			const page = { ...this.allPages[this.currentCollectiveIndex].find((p) => p.id === pageId) }
 
 			const tagIndex = page.tags?.indexOf(tagId)
 			if (tagIndex === null || tagIndex === -1) {
@@ -912,9 +954,9 @@ export const usePagesStore = defineStore('pages', {
 		async trashPage({ pageId }) {
 			const response = await api.trashPage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
-			removeFrom(this.allPages[this.collectiveIndex], trashPage)
-			if (this.allTrashPages[this.collectiveIndex]) {
-				updateOrAddTo(this.allTrashPages[this.collectiveIndex], trashPage)
+			removeFrom(this.allPages[this.currentCollectiveIndex], trashPage)
+			if (this.allTrashPages[this.currentCollectiveIndex]) {
+				updateOrAddTo(this.allTrashPages[this.currentCollectiveIndex], trashPage)
 			}
 		},
 
@@ -927,8 +969,8 @@ export const usePagesStore = defineStore('pages', {
 		async restorePage({ pageId }) {
 			const response = await api.restorePage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
-			updateOrAddTo(this.allPages[this.collectiveIndex], trashPage)
-			removeFrom(this.allTrashPages[this.collectiveIndex], trashPage)
+			updateOrAddTo(this.allPages[this.currentCollectiveIndex], trashPage)
+			removeFrom(this.allTrashPages[this.currentCollectiveIndex], trashPage)
 		},
 
 		/**
@@ -939,7 +981,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async deletePage({ pageId }) {
 			await api.deletePage(this.context, pageId)
-			removeFrom(this.allTrashPages[this.collectiveIndex], { id: pageId })
+			removeFrom(this.allTrashPages[this.currentCollectiveIndex], { id: pageId })
 		},
 
 		/**
@@ -962,16 +1004,16 @@ export const usePagesStore = defineStore('pages', {
 				}
 				if (page.trashTimestamp) {
 					// pages should not be updated in the trash - but better be safe than sorry.
-					updateOrAddTo(this.allTrashPages[this.collectiveIndex], page)
-					removeFrom(this.allPages[this.collectiveIndex], page)
+					updateOrAddTo(this.allTrashPages[this.currentCollectiveIndex], page)
+					removeFrom(this.allPages[this.currentCollectiveIndex], page)
 				} else {
-					updateOrAddTo(this.allPages[this.collectiveIndex], page)
-					removeFrom(this.allTrashPages[this.collectiveIndex], page)
+					updateOrAddTo(this.allPages[this.currentCollectiveIndex], page)
+					removeFrom(this.allTrashPages[this.currentCollectiveIndex], page)
 				}
 			}
 			for (const id of (removed || [])) {
-				removeFrom(this.allTrashPages[this.collectiveIndex], { id })
-				removeFrom(this.allPages[this.collectiveIndex], { id })
+				removeFrom(this.allTrashPages[this.currentCollectiveIndex], { id })
+				removeFrom(this.allPages[this.currentCollectiveIndex], { id })
 			}
 		},
 
@@ -982,10 +1024,10 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async getAttachments(page) {
 			const response = await api.getPageAttachments(this.context, page.id)
-			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
-				this.allAttachments[this.collectiveIndex] = {}
+			if (typeof this.allAttachments[this.currentCollectiveIndex] !== 'object') {
+				this.allAttachments[this.currentCollectiveIndex] = {}
 			}
-			this.allAttachments[this.collectiveIndex][page.id] = response.data.ocs.data.attachments
+			this.allAttachments[this.currentCollectiveIndex][page.id] = response.data.ocs.data.attachments
 				// Disregard deletedAttachments when updating attachments
 				.filter((a) => !this.deletedAttachments.map((a) => a.name).includes(a.name))
 			this.deletedAttachments = this.deletedAttachments
@@ -998,13 +1040,13 @@ export const usePagesStore = defineStore('pages', {
 			formData.append('file', file)
 
 			const response = await api.uploadAttachment(this.context, this.currentPageId, formData)
-			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
-				this.allAttachments[this.collectiveIndex] = {}
+			if (typeof this.allAttachments[this.currentCollectiveIndex] !== 'object') {
+				this.allAttachments[this.currentCollectiveIndex] = {}
 			}
-			if (!Array.isArray(this.allAttachments[this.collectiveIndex][this.currentPageId])) {
-				this.allAttachments[this.collectiveIndex][this.currentPageId] = []
+			if (!Array.isArray(this.allAttachments[this.currentCollectiveIndex][this.currentPageId])) {
+				this.allAttachments[this.currentCollectiveIndex][this.currentPageId] = []
 			}
-			this.allAttachments[this.collectiveIndex][this.currentPageId].push(response.data.ocs.data.attachment)
+			this.allAttachments[this.currentCollectiveIndex][this.currentPageId].push(response.data.ocs.data.attachment)
 			return response.data.ocs.data.attachment
 		},
 
@@ -1017,7 +1059,7 @@ export const usePagesStore = defineStore('pages', {
 		async renameAttachment(attachmentId, name) {
 			const response = await api.renameAttachment(this.context, this.currentPageId, attachmentId, name)
 			const index = this.attachments.findIndex((a) => a.id === attachmentId)
-			this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1, response.data.ocs.data.attachment)
+			this.allAttachments[this.currentCollectiveIndex][this.currentPageId].splice(index, 1, response.data.ocs.data.attachment)
 			return response.data.ocs.data.attachment
 		},
 
@@ -1044,7 +1086,7 @@ export const usePagesStore = defineStore('pages', {
 		setAttachmentDeleted(attachmentId) {
 			const index = this.attachments.findIndex((a) => a.id === attachmentId)
 			if (index !== -1) {
-				const [attachment] = this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1)
+				const [attachment] = this.allAttachments[this.currentCollectiveIndex][this.currentPageId].splice(index, 1)
 				this.deletedAttachments.push(attachment)
 			}
 		},

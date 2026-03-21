@@ -104,6 +104,7 @@ export default {
 		...mapState(useVersionsStore, ['selectedVersion']),
 		...mapState(usePagesStore, [
 			'currentPage',
+			'currentPageId',
 			'title',
 		]),
 
@@ -120,7 +121,7 @@ export default {
 		},
 
 		contentLoaded() {
-			return !!this.content || !this.loading(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
+			return !!this.content || !this.loading(`version-${this.currentPageId}-${this.selectedVersion.mtime}`)
 		},
 	},
 
@@ -159,9 +160,9 @@ export default {
 		},
 
 		async getPageContent() {
-			this.load(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
+			this.load(`version-${this.currentPageId}-${this.selectedVersion.mtime}`)
 			this.content = await this.fetchPageContent(this.selectedVersion.url)
-			this.done(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
+			this.done(`version-${this.currentPageId}-${this.selectedVersion.mtime}`)
 		},
 	},
 }

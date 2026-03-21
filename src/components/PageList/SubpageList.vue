@@ -12,6 +12,8 @@
 			:parentId="page.parentId"
 			:title="page.title"
 			:timestamp="page.timestamp"
+			:fileName="page.fileName"
+			:davUrl="pageDavUrl(page)"
 			:lastUserId="page.lastUserId"
 			:lastUserDisplayName="page.lastUserDisplayName"
 			:emoji="page.emoji"
@@ -84,9 +86,11 @@ export default {
 		...mapState(usePagesStore, [
 			'pagePath',
 			'currentPageIds',
+			'hasSubpages',
 			'keptSortable',
-			'visibleSubpages',
+			'currentSortedSubpagesByParentId',
 			'isCollapsed',
+			'pageDavUrl',
 		]),
 
 		showSubpages() {
@@ -96,13 +100,13 @@ export default {
 
 		subpagesView() {
 			if (this.showSubpages) {
-				return this.visibleSubpages(this.page.id)
+				return this.currentSortedSubpagesByParentId.get(this.page.id)
 			}
 			return []
 		},
 
 		hasVisibleSubpages() {
-			return !!this.visibleSubpages(this.page.id).length
+			return this.hasSubpages(this.page.id)
 		},
 
 		disableSorting() {

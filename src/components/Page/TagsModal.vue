@@ -192,11 +192,11 @@ export default {
 
 	computed: {
 		...mapState(useRootStore, ['loading']),
-		...mapState(usePagesStore, ['pages']),
+		...mapState(usePagesStore, ['currentPages', 'pageById']),
 		...mapState(useTagsStore, ['sortedTags']),
 
 		page() {
-			return this.pages.find((p) => p.id === this.pageId)
+			return this.pageById(this.pageId)
 		},
 
 		decoratedTags() {
@@ -214,7 +214,7 @@ export default {
 		},
 
 		countTagPages() {
-			return (tagId) => this.pages.filter((p) => p.tags.includes(tagId)).length
+			return (tagId) => this.currentPages.filter((p) => p.tags.includes(tagId)).length
 		},
 
 		showCreateTag() {

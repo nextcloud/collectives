@@ -36,10 +36,10 @@ export default {
 
 	computed: {
 		...mapState(useRootStore, ['isPublic']),
-		...mapState(usePagesStore, ['pages']),
+		...mapState(usePagesStore, ['currentPages']),
 
 		showRecentPages() {
-			return this.pages.length > 3
+			return this.currentPages.length > 3
 		},
 	},
 }
