@@ -225,15 +225,29 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		$collectiveId = $pageReferenceInfo['collectiveId'] ?? null;
 		$collectiveName = $pageReferenceInfo['collectiveName'];
 
+		// Prepare empty reference object to return if we cannot resolve
+		$notFoundReference = new Reference($referenceText);
+		$notFoundReference->setAccessible(false);
+		$notFoundReference->setUrl($referenceText);
+		$notFoundReference->setRichObject(
+			type: self::RICH_OBJECT_TYPE,
+			richObject: [
+				'link' => $referenceText,
+			]
+		);
+
 		if ($public && !$sharingToken) {
-			// fallback to opengraph for public lookups without share token
-			return $this->linkReferenceProvider->resolveReference($referenceText);
+			// fallback to empty page for public lookups without share token
+			return $notFoundReference;
 		}
 		try {
 			$collective = $this->getCollective($collectiveId, $collectiveName, $sharingToken);
 			$page = $this->getPage($collective, $pageReferenceInfo, $public);
+		} catch (NotFoundException) {
+			// fallback to empty page
+			return $notFoundReference;
 		} catch (Exception|Throwable) {
-			// fallback to opengraph if it matches, but somehow we can't resolve
+			// Unexpected error — fall back to opengraph
 			return $this->linkReferenceProvider->resolveReference($referenceText);
 		}
 
