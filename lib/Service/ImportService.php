@@ -356,8 +356,9 @@ class ImportService {
 				$withinSiblingMediaDirectory = $realSiblingMediaDirectory !== false
 					&& str_starts_with($realPath, $realSiblingMediaDirectory . DIRECTORY_SEPARATOR);
 
-				if (!$withinBaseDirectory || !$withinSiblingMediaDirectory) {
+				if (!$withinBaseDirectory && !$withinSiblingMediaDirectory) {
 					$this->progressReporter->writeErrorVerbose(sprintf('✗ Blocked: %s - Attachment path escapes import directory: %s', $filePath, $realPath));
+					return 0;
 				}
 				$targetAttachment = $realPath;
 				break;
