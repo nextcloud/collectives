@@ -4,8 +4,24 @@
 -->
 
 <template>
+	<!-- handle inaccessible pages -->
 	<a
-		v-if="richObject"
+		v-if="richObject && notFound"
+		:href="richObject.link"
+		target="_blank"
+		class="collective-page"
+		@click="clickLink">
+		<NcEmptyContent
+			:name="t('collectives', 'Cannot preview page')"
+			:description="t('collectives', 'This page does not exist or you are not allowed to view it.')">
+			<template #icon>
+				<PageIcon />
+			</template>
+		</NcEmptyContent>
+	</a>
+	<!-- handle accessible pages -->
+	<a
+		v-else-if="richObject"
 		:href="richObject.link"
 		target="_blank"
 		class="collective-page"
@@ -40,14 +56,19 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { mapState } from 'pinia'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import PageIcon from '../components/Icon/PageIcon.vue'
+import { useRootStore } from '../stores/root.js'
 
 export default {
 	name: 'PageReferenceWidget',
 
 	components: {
+		NcEmptyContent,
 		PageIcon,
 		NcUserBubble,
 	},
@@ -72,17 +93,27 @@ export default {
 	},
 
 	computed: {
+		...mapState(useRootStore, ['isPublic']),
+
 		emoji() {
-			return this.richObject.page.emoji
+			return this.richObject.page?.emoji
+		},
+
+		notFound() {
+			return this.accessible === false
 		},
 	},
 
 	methods: {
+		t,
+
 		clickLink(event) {
 			const appUrl = '/apps/collectives'
 			const linkUrl = new URL(this.richObject.link, window.location)
-			// Only consider rerouting if we're inside the collectives app and for links to collectives app
+			// Only consider rerouting if we're inside the collectives app and for links to collectives app.
+			// Do not reroute if on a public share page
 			if (window.OCA.Collectives?.vueRouter
+				&& !this.isPublic
 				&& linkUrl.pathname.toString().startsWith(generateUrl(appUrl))) {
 				event.preventDefault()
 				const collectivesUrl = linkUrl.href.substring(linkUrl.href.indexOf(appUrl) + appUrl.length)
