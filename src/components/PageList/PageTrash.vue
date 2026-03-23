@@ -236,11 +236,7 @@ export default {
 @use '../../css/animation';
 
 .page-trash {
-	position: sticky;
-	bottom: 0;
-	width: 100%;
 	margin-top: auto;
-	background-color: var(--color-main-background);
 	padding: 0 2px 4px 4px;
 
 	.page-trash-button {
@@ -267,7 +263,7 @@ export default {
 }
 
 .modal__content {
-	margin-bottom: 12px;
+	margin: calc(var(--default-grid-baseline) * 4);
 }
 
 table {
@@ -276,6 +272,7 @@ table {
 
 tr {
 	display: flex;
+	padding-block: var(--default-grid-baseline);
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color-border);
@@ -316,7 +313,6 @@ td {
 		.item-title {
 			white-space: normal;
 		}
-
 	}
 
 	&.actions {

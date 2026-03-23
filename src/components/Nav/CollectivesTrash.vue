@@ -296,14 +296,8 @@ export default {
 	}
 }
 
-:deep(.modal-wrapper--small) {
-	.modal-container {
-		width: 400px;
-	}
-}
-
 .modal__content {
-	margin: 15px;
+	margin: calc(var(--default-grid-baseline) * 4);
 }
 
 table {
@@ -312,6 +306,7 @@ table {
 
 tr {
 	display: flex;
+	padding-block: var(--default-grid-baseline);
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color-border);
