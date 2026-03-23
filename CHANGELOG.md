@@ -1,8 +1,32 @@
 # Changelog
 
+## 4.2.0 - 2026.03.25
+
+### ✨New
+* 🚀 Frontend migrated to Vue 3.
+
+### 🐛Fixes
+* 🔗 Add "Link to page" as first link action in Text menubar. (#2332)
+* 🔗 Bring back link to team overview. Thanks to @pymnh.
+* 💄 Make sure editor grows vertically and takes all available space.
+* 🗑️ Overhaul collectives trash to be more performant and user-friendly. Thanks to @Koc.
+* 🐛 Prevent path traversal via attachment path.
+* 🔎 Focus page filter on Ctrl-F. (#2303, #2317)
+* 🐛 Handle rename errors gracefully when mounting Collectives folder. (#2264, 2324)
+* 🚀 Improve frontend performance for collectives with many pages. (#XXX)
+* 🔗 Better previews for links to inaccessible pages. Thanks @pymnh.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.1.0 - 2026.03.12
 
-This relese brings support to create new files (e.g. an office document or a
+This release brings support to create new files (e.g. an office document or a
 whiteboard) from the "Insert attachment" menu. This feature will only be
 available after upgrading to the upcoming Nextcloud 32 and 33 server maintenance
 releases though, that get published on 26. March.
@@ -11,7 +35,7 @@ releases though, that get published on 26. March.
 * ➕ Provide create file templates for Text attachments menu.
 
 ### 🐛Fixes
-* 🔗 Don't link from PageInfoBar to versions in shares. Thansk to @pymnh.
+* 🔗 Don't link from PageInfoBar to versions in shares. Thanks to @pymnh.
 * 🐛 Add error handling for missing versions entity. Thanks to @solracsf.
 * 🗑️ Lazy-load page trash. Thanks to @Koc.
 * 🐛 Catch Circle::getInitiator exceptions during mountpoint setup.
