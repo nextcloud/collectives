@@ -23,6 +23,7 @@ OC.L10N.register(
     "Back" : "חזרה",
     "Delete" : "מחיקה",
     "Rename" : "שינוי שם",
+    "Templates" : "תבניות",
     "Manage tags" : "ניהול תגיות",
     "Move or copy" : "העברה או העתקה",
     "Download" : "הורדה",
