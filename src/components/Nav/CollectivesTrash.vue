@@ -41,7 +41,7 @@
 								{{ t('collectives', 'Name') }}
 							</th>
 							<th />
-							<th v-if="showDeletedColumn" class="header-timestamp">
+							<th v-if="!isMobile" class="header-timestamp">
 								{{ t('collectives', 'Deleted') }}
 							</th>
 						</tr>
@@ -81,7 +81,7 @@
 									</NcActionButton>
 								</NcActions>
 							</td>
-							<td v-if="showDeletedColumn" class="timestamp">
+							<td v-if="!isMobile" class="timestamp">
 								<span :title="titleDate(collective.trashTimestamp)">
 									{{ formattedDate(collective.trashTimestamp) }}
 								</span>
@@ -198,10 +198,6 @@ export default {
 			'isCollectiveOwner',
 			'sortedTrashCollectives',
 		]),
-
-		showDeletedColumn() {
-			return !this.isMobile && this.sortedTrashCollectives.some((collective) => collective.trashTimestamp)
-		},
 
 		titleDate() {
 			return (timestamp) => timestamp ? moment.unix(timestamp).format('LLL') : ''
