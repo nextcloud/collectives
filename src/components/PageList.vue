@@ -245,7 +245,6 @@ import PageTrash from './PageList/PageTrash.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import PageTag from './PageTag.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
-import { popCtrlF, pushCtrlF } from '../composables/useKeymap.ts'
 import { useNetworkState } from '../composables/useNetworkState.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
@@ -467,14 +466,6 @@ export default {
 		filterStringTags(val) {
 			this.showTagSelection = val && val.length > 0
 		},
-	},
-
-	mounted() {
-		pushCtrlF(this.$refs.pageFilter)
-	},
-
-	beforeUnmount() {
-		popCtrlF(this.$refs.pageFilter)
 	},
 
 	methods: {
