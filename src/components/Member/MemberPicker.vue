@@ -69,7 +69,6 @@ import CurrentMembers from './CurrentMembers.vue'
 import MemberSearchResults from './MemberSearchResults.vue'
 import MembersHint from './MembersHint.vue'
 import SelectedMembers from './SelectedMembers.vue'
-import { popCtrlF, pushCtrlF } from '../../composables/useKeymap.ts'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 
@@ -184,13 +183,10 @@ export default {
 			this.fetchSearchResultsDebounced()
 		}
 		this.$refs.memberPickerList.addEventListener('scroll', this.onScrollDebounced)
-
-		pushCtrlF(this.$refs.memberSearch)
 	},
 
 	beforeUnmount() {
 		this.$refs.memberPickerList.removeEventListener('scroll', this.onScrollDebounced)
-		popCtrlF(this.$refs.memberSearch)
 	},
 
 	methods: {
