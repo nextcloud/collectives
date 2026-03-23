@@ -227,6 +227,7 @@ export default {
 		return {
 			pageTitleIsTruncated: false,
 			isHighlightedTarget: false,
+			dragoverTimer: null,
 		}
 	},
 
@@ -391,6 +392,7 @@ export default {
 		},
 
 		onDragend() {
+			clearTimeout(this.dragoverTimer)
 			this.isHighlightedTarget = false
 			this.setDragoverTargetPage(false)
 			this.setDraggedPageId(null)
@@ -398,22 +400,27 @@ export default {
 
 		onDragover() {
 			if (this.isPotentialDropTarget) {
-				this.isHighlightedTarget = true
-				this.setDragoverTargetPage(true)
+				clearTimeout(this.dragoverTimer)
+				this.dragoverTimer = setTimeout(() => {
+					this.isHighlightedTarget = true
+					this.setDragoverTargetPage(true)
+				}, 20)
 			}
 		},
 
 		onDragleave() {
+			clearTimeout(this.dragoverTimer)
 			this.isHighlightedTarget = false
 			this.setDragoverTargetPage(false)
 		},
 
 		onDrop() {
 			if (this.isDropTarget
-				// Ingore if self is direct parent of dragged element
+				// Ignore if self is direct parent of dragged element
 				&& this.pageParent(this.draggedPageId) !== this.pageId) {
 				this.move(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
 			}
+			clearTimeout(this.dragoverTimer)
 			this.isHighlightedTarget = false
 			this.setDragoverTargetPage(false)
 			this.setDraggedPageId(null)
