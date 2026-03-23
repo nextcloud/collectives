@@ -18,7 +18,7 @@ describe('Collectives trash', function() {
 			.click()
 		cy.get('#collectives-trash')
 			.click()
-		cy.get('.collectives_trash_list_item')
+		cy.get('.dialog tr')
 			.should('contain', 'Delete me')
 	})
 	it('Allows restoring the collective from trash', function() {
@@ -27,7 +27,7 @@ describe('Collectives trash', function() {
 		cy.get('#collectives-trash')
 			.click()
 		cy.openTrashedCollectiveMenu('Delete me')
-		cy.clickMenuButton('Restore')
+		cy.get('button').contains('Restore').click()
 		cy.get('.collectives_list_item')
 			.should('contain', 'Delete me')
 	})
@@ -44,10 +44,8 @@ describe('Collectives trash', function() {
 			.click()
 		cy.get('#collectives-trash')
 			.click()
-		cy.get('.collectives_trash_list_item')
+		cy.get('.dialog tr')
 			.should('contain', 'Delete me')
-		cy.get('#collectives-trash')
-			.click()
 
 		// Delete permanently
 		cy.openTrashedCollectiveMenu('Delete me')
@@ -55,6 +53,7 @@ describe('Collectives trash', function() {
 		cy.get('button')
 			.contains('Collective and team')
 			.click()
-		cy.get('#app-navigation-vue #collectives-trash').should('not.exist')
+		cy.get('.dialog tr')
+			.should('not.exist')
 	})
 })
