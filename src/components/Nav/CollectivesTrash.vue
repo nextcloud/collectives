@@ -6,6 +6,7 @@
 <template>
 	<div id="collectives-trash">
 		<NcButton
+			ref="collectiveTrashButton"
 			variant="tertiary"
 			:aria-label="t('collectives', 'Deleted collectives')"
 			class="collectives-trash-button"
@@ -246,11 +247,28 @@ export default {
 			this.modalCollective = null
 			this.deleteModal = false
 		},
+
+		onCollectiveTrashed() {
+			if (this.$highlightTimeoutId) {
+				// clear former timeout and remove class to allow re-highlighting the button
+				clearTimeout(this.$highlightTimeoutId)
+				this.$refs.collectiveTrashButton?.$el.classList.remove('highlight-animation')
+			}
+			this.$nextTick(() => {
+				this.$refs.collectiveTrashButton?.$el.classList.add('highlight-animation')
+				this.$highlightTimeoutId = setTimeout(() => {
+					this.$refs.collectiveTrashButton?.$el.classList.remove('highlight-animation')
+					this.$highlightTimeoutId = null
+				}, 5000)
+			})
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
+@use '../../css/animation';
+
 #collectives-trash {
 	margin-top: auto;
 	padding: 0 2px 4px 4px;

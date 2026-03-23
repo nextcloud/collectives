@@ -350,11 +350,14 @@ export default {
 				await this.$router.push('/')
 				emit('toggle-navigation', { open: true })
 			}
-			this.trashCollective(this.collective)
-				.catch(displayError('Could not move the collective to trash'))
-				.finally(() => {
-					this.setSettingsCollectiveId(null)
-				})
+			try {
+				await this.trashCollective(this.collective)
+				emit('collectives:navigation:collective-trashed')
+			} catch (e) {
+				displayError('Could not move the collective to trash')(e)
+			} finally {
+				this.setSettingsCollectiveId(null)
+			}
 		},
 	},
 }
