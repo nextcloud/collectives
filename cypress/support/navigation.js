@@ -41,8 +41,8 @@ Cypress.Commands.add('openCollectiveMenu', (collectiveName) => {
 
 Cypress.Commands.add('openTrashedCollectiveMenu', (collectiveName) => {
 	Cypress.log()
-	cy.get('.collectives_trash_list_item')
-		.contains('li', collectiveName)
+	cy.get('.dialog')
+		.contains('tr', collectiveName)
 		.find('.action-item__menutoggle')
 		.click({ force: true })
 })
