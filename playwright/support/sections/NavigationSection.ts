@@ -34,6 +34,19 @@ export class NavigationSection {
 		await expect(this.el).not.toBeVisible()
 	}
 
+	public getCollectiveItem(collectiveName: string): Locator {
+		return this.el.getByRole('listitem')
+			.filter({ has: this.page.getByRole('link', { name: collectiveName }) })
+	}
+
+	public async clickCollectiveMenu(collectiveName: string, action: string): Promise<void> {
+		const collectiveItem = this.getCollectiveItem(collectiveName)
+		await collectiveItem.getByRole('button', { name: 'Actions' })
+			.click({ force: true })
+		await this.page.getByRole('button', { name: action, exact: true })
+			.click()
+	}
+
 	public async openCollectivesSettings(): Promise<void> {
 		await this.collectivesSettingsButton.click()
 	}
