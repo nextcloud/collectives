@@ -254,10 +254,26 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		pageIndices(state) {
+			return ({ id, parentId }) => {
+				if (parentId === 0) {
+					return [] // root page
+				}
+				const parent = state.pages.find((p) => (p.id === parentId))
+				const idx = parent.subpageOrder.indexOf(id)
+				// Pages that are not in the sort order go to the end.
+				const sortable = idx === -1 ? Number.MAX_SAFE_INTEGER : idx
+				return [sortable, ...state.pageIndices(parent)]
+			}
+		},
+
 		favoritePages(state) {
 			const collectivesStore = useCollectivesStore()
-			const favoritePages = collectivesStore.currentCollective.userFavoritePages
-			return state.allPagesSorted(state.rootPage.id).filter((p) => favoritePages.includes(p.id))
+			return collectivesStore.currentCollective.userFavoritePages
+				.map((id) => state.pages.find((p) => p.id === id))
+				.map((page) => ({ page, indices: state.pageIndices(page) }))
+				.sort(sortOrders.byIndices)
+				.map(({ page }) => page)
 		},
 
 		hasFavoritePages(state) {
