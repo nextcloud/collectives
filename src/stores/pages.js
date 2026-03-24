@@ -245,6 +245,8 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		// Get the indices in the tree leading up to the given page.
+		// For example: Third child of the first page will return [0, 2].
 		pageIndices(state) {
 			return ({ id, parentId }) => {
 				if (parentId === 0) {
@@ -252,7 +254,7 @@ export const usePagesStore = defineStore('pages', {
 				}
 				const parent = state.pages.find((p) => (p.id === parentId))
 				const idx = parent.subpageOrder.indexOf(id)
-				return [idx, ...state.pageIndices(parent)]
+				return [...state.pageIndices(parent), idx]
 			}
 		},
 
