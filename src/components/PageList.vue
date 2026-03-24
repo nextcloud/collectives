@@ -118,6 +118,8 @@
 				:parentId="0"
 				:title="currentCollectiveIsPageShare ? rootPage.title : currentCollective.name"
 				:timestamp="rootPage.timestamp"
+				:fileName="rootPage.fileName"
+				:davUrl="pageDavUrl(rootPage)"
 				:lastUserId="rootPage.lastUserId"
 				:lastUserDisplayName="rootPage.lastUserDisplayName"
 				:emoji="currentCollectiveIsPageShare ? rootPage.emoji : currentCollective.emoji"
@@ -313,22 +315,17 @@ export default {
 		...mapState(useTagsStore, ['sortedTags', 'filterTags']),
 		...mapState(usePagesStore, [
 			'rootPage',
-			'currentPage',
+			'currentPageId',
 			'newPageParentId',
 			'hasFavoritePages',
-			'visibleSubpages',
 			'sortByOrder',
-			'allPagesSorted',
+			'allCurrentSortedPages',
+			'currentSortedSubpagesByParentId',
+			'pageDavUrl',
 		]),
 
-		allPagesSortedCached() {
-			return this.rootPage
-				? this.allPagesSorted(this.rootPage.id)
-				: []
-		},
-
 		filteredPages() {
-			return this.allPagesSortedCached
+			return this.allCurrentSortedPages
 				// Filter by page title search string
 				.filter((p) => p.title.toLowerCase().includes(this.filterString.toLowerCase()))
 				// Filter by page tags
@@ -363,7 +360,7 @@ export default {
 
 		subpages() {
 			if (this.rootPage) {
-				return this.visibleSubpages(this.rootPage.id)
+				return this.currentSortedSubpagesByParentId.get(this.rootPage.id)
 			} else {
 				return []
 			}
@@ -496,7 +493,7 @@ export default {
 					})
 			}
 			this.$nextTick(() => {
-				scrollToPage(this.currentPage.id)
+				scrollToPage(this.currentPageId)
 			})
 		},
 

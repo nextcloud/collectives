@@ -78,6 +78,8 @@
 				:pageUrl="to"
 				:parentId
 				:timestamp
+				:fileName
+				:davUrl
 				:lastUserId
 				:lastUserDisplayName
 				:isLandingPage
@@ -159,6 +161,16 @@ export default {
 
 		timestamp: {
 			type: Number,
+			required: true,
+		},
+
+		fileName: {
+			type: String,
+			required: true,
+		},
+
+		davUrl: {
+			type: String,
 			required: true,
 		},
 
@@ -247,7 +259,7 @@ export default {
 			'highlightPageId',
 			'isDragoverTargetPage',
 			'pageParent',
-			'pageParents',
+			'currentPageParents',
 		]),
 
 		...mapState(useTemplatesStore, ['hasTemplates']),
@@ -310,7 +322,7 @@ export default {
 				// Ignore if inside favorite list
 				&& !this.inFavoriteList
 				// Ignore if dragged element is a parent of self
-				&& !this.pageParents(this.pageId).includes(this.draggedPageId)
+				&& !this.currentPageParents(this.pageId).includes(this.draggedPageId)
 		},
 
 		isDropTarget() {

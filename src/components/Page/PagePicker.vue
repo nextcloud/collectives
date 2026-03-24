@@ -218,11 +218,10 @@ export default {
 		...mapState(usePagesStore, [
 			'rootPage',
 			'pageById',
+			'currentPageParents',
 			'pageParents',
-			'pageParentsForCollective',
-			'pagesForCollective',
-			'sortedSubpagesForCollective',
-			'visibleSubpages',
+			'pages',
+			'sortedSubpagesByParentId',
 		]),
 
 		isActionButtonsDisabled() {
@@ -240,7 +239,7 @@ export default {
 
 			return this.isCurrentCollective
 				? this.rootPage
-				: this.pagesForCollective(this.selectedCollective).find((p) => (p.parentId === 0))
+				: this.pages(this.selectedCollective).find((p) => (p.parentId === 0))
 		},
 
 		subpages() {
@@ -251,9 +250,9 @@ export default {
 
 			let pages
 			if (this.isCurrentCollective) {
-				pages = this.visibleSubpages(this.selectedPageId)
+				pages = this.currentSortedSubpagesByParentId.get(this.selectedPageId) || []
 			} else {
-				pages = this.sortedSubpagesForCollective(this.selectedCollective, this.selectedPageId)
+				pages = this.sortedSubpagesByParentId(this.selectedCollective).get(this.selectedPageId)
 			}
 
 			// Add current page to top of subpages if not part of it yet
@@ -266,8 +265,8 @@ export default {
 
 		pageCrumbs() {
 			return this.isCurrentCollective
-				? this.pageParents(this.selectedPageId)
-				: this.pageParentsForCollective(this.selectedCollective, this.selectedPageId)
+				? this.currentPageParents(this.selectedPageId)
+				: this.pageParents(this.selectedCollective, this.selectedPageId)
 		},
 
 		collectivesCrumbString() {
@@ -330,7 +329,7 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(usePagesStore, ['getPagesForCollective']),
+		...mapActions(usePagesStore, ['getPages']),
 
 		scrollToPage() {
 			// Scroll current page into view (important when listing parent page)
@@ -377,7 +376,7 @@ export default {
 		async onClickCollective(collective) {
 			this.selectedCollective = collective
 			if (!this.isCurrentCollective) {
-				await this.getPagesForCollective(this.selectedCollective)
+				await this.getPages(this.selectedCollective)
 			}
 			this.selectedPageId = this.selectedRootPage.id
 			// Reset reordered pages when changing collective

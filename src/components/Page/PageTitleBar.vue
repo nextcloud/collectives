@@ -96,6 +96,8 @@
 				:pageId="currentPage.id"
 				:parentId="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
+				:fileName="currentPage.fileName"
+				:davUrl="pageDavUrl(currentPage)"
 				:lastUserId="currentPage.lastUserId"
 				:lastUserDisplayName="currentPage.lastUserDisplayName"
 				:isLandingPage
@@ -176,10 +178,12 @@ export default {
 
 		...mapState(usePagesStore, [
 			'currentPage',
+			'currentPageId',
 			'currentPagePath',
 			'isIndexPage',
 			'isLandingPage',
 			'isTextEdit',
+			'pageDavUrl',
 		]),
 
 		titleChanged() {
@@ -204,7 +208,7 @@ export default {
 		},
 
 		emojiButtonIsLoading() {
-			return this.loading(`pageEmoji-${this.currentPage.id}`)
+			return this.loading(`pageEmoji-${this.currentPageId}`)
 		},
 
 		pageTitleIconSize() {
@@ -217,7 +221,7 @@ export default {
 			document.title = this.documentTitle
 		},
 
-		'currentPage.id': function() {
+		currentPageId: function() {
 			this.initTitleEntry()
 		},
 	},
@@ -239,7 +243,7 @@ export default {
 		...mapActions(useRootStore, ['done']),
 
 		...mapActions(usePagesStore, [
-			'getPages',
+			'getCurrentPages',
 			'renamePage',
 		]),
 
@@ -259,7 +263,7 @@ export default {
 		},
 
 		async onSelectEmoji(emoji) {
-			await this.setEmoji(this.currentPage.id, emoji)
+			await this.setEmoji(this.currentPageId, emoji)
 		},
 
 		onUnselectEmoji() {
@@ -281,7 +285,7 @@ export default {
 				await this.renamePage(this.newTitle)
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
-				this.getPages(false)
+				this.getCurrentPages(false)
 				await this.$router.replace(this.currentPagePath)
 			} catch (e) {
 				console.error(e)

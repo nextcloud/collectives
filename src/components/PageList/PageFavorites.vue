@@ -33,6 +33,8 @@
 				:parentId="page.parentId"
 				:title="page.title"
 				:timestamp="page.timestamp"
+				:fileName="page.fileName"
+				:davUrl="pageDavUrl(page)"
 				:lastUserId="page.lastUserId"
 				:lastUserDisplayName="page.lastUserDisplayName"
 				:emoji="page.emoji"
@@ -86,6 +88,7 @@ export default {
 
 		...mapState(usePagesStore, [
 			'favoritePages',
+			'pageDavUrl',
 			'pagePath',
 		]),
 	},
