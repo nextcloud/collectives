@@ -5,6 +5,7 @@ OC.L10N.register(
     "Settings" : "ಆಯ್ಕೆ",
     "Edit" : "ಸಂಪಾದಿಸು",
     "Choose" : "﻿ಆಯ್ಕೆ",
+    "Name" : "﻿ಹೆಸರು",
     "Restore" : "ಮರುಸ್ಥಾಪಿಸು",
     "Cancel" : "﻿ರದ್ದು",
     "Create" : "ಸೃಷ್ಟಿಸಿ",

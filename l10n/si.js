@@ -7,6 +7,7 @@ OC.L10N.register(
     "Preview" : "පෙරදසුන",
     "Edit" : "සංස්කරණය",
     "Choose" : "තෝරන්න",
+    "Name" : "නම",
     "Restore" : "ප්‍රතිෂ්ථාපනය",
     "Cancel" : "අවලංගු",
     "Create" : "සාදන්න",
