@@ -10,6 +10,22 @@ const byTimeAsc = (a, b) => b.timestamp - a.timestamp
 const byTimeDesc = (a, b) => byTimeAsc(b, a)
 
 /**
+ * Sort according to the arrays in object.indices
+ *
+ * @param {object} a first sortable object
+ * @param {object} b second sortable object
+ */
+function byIndices(a, b) {
+	if (a.indices > b.indices) {
+		return 1
+	}
+	if (a.indices < b.indices) {
+		return -1
+	}
+	return 0
+}
+
+/**
  *
  * @param {object} a first sortable object
  * @param {object} b second sortable object
@@ -37,6 +53,7 @@ const pageOrdersByNumber = Object.entries(pageOrders)
 	.reduce((obj, [a, b]) => ({ ...obj, [b]: a }), {})
 
 export {
+	byIndices,
 	byName,
 	byOrder,
 	byTimeAsc,
