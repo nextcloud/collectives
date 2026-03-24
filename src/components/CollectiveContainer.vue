@@ -83,7 +83,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['fileIdQuery', 'isPublic', 'loading']),
+		...mapState(useRootStore, ['isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectivePath',
@@ -181,7 +181,6 @@ export default {
 				&& this.$route.fullPath !== this.currentPagePath) {
 				this.$router.replace({
 					path: this.currentPagePath,
-					query: this.fileIdQuery ? { fileId: this.fileIdQuery } : {},
 					hash: document.location.hash,
 				})
 			}
