@@ -102,13 +102,17 @@ class MountProvider implements IMountProvider {
 
 		$mounts = [];
 
-		try {
-			// Get user folder setting to determine user mount point path
-			$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
+		// Get user folder setting to determine user mount point path
+		$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
 
+		try {
 			// Delete or rename existing node to avoid conflicts
 			$this->resolveNameConflict($user, trim($userFolderSetting, '/'));
+		} catch (\Exception $e) {
+			$this->log($e);
+		}
 
+		try {
 			// Create the collectives root mount point with empty storage
 			// The empty storage ensures only mount points exist here, no actual files
 			$userMountPoint = '/' . $user->getUID() . '/files' . $userFolderSetting;
