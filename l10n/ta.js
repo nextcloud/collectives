@@ -8,6 +8,7 @@ OC.L10N.register(
     "Remove" : "அகற்றுக",
     "Edit" : "தொகுக்க",
     "Choose" : "தெரிவுசெய்க ",
+    "Name" : "பெயர்",
     "Restore" : "மீட்டெடு",
     "Delete permanently" : "நிரந்தரமாக நீக்கவும்",
     "Cancel" : "ரத்து செய்",
