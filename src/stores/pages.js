@@ -377,10 +377,10 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		pageTitle(state) {
-			const rootStore = useRootStore()
+			const collectivesStore = useCollectivesStore()
 			return (pageId) => {
 				const page = state.pageById(pageId)
-				return (page.parentId === 0) ? rootStore.collectiveParam : page.title
+				return (page.parentId === 0) ? collectivesStore.currentCollective.name : page.title
 			}
 		},
 
