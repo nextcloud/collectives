@@ -318,22 +318,18 @@ export default {
 			'newPageParentId',
 			'hasFavoritePages',
 			'visibleSubpages',
+			'pages',
 			'sortByOrder',
-			'allPagesSorted',
+			'sortPages',
 		]),
 
-		allPagesSortedCached() {
-			return this.rootPage
-				? this.allPagesSorted(this.rootPage.id)
-				: []
-		},
-
+		// Filter by page title search string and page tags and exclude root page
 		filteredPages() {
-			return this.allPagesSortedCached
-				// Filter by page title search string
+			const found = this.pages
 				.filter((p) => p.title.toLowerCase().includes(this.filterString.toLowerCase()))
-				// Filter by page tags
 				.filter((p) => this.filterTags.every((t) => p.tags.includes(t.id)))
+				.filter((p) => p.parentId !== 0)
+			return this.sortPages(found)
 		},
 
 		filterStringTagPart() {
