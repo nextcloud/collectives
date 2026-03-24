@@ -451,7 +451,7 @@ class PageController extends OCSController {
 			$results = $this->indexedSearchService->searchCollective($collective, $searchString, 100);
 			$pages = [];
 			foreach ($results as $value) {
-				$pages[] = $this->service->find($collectiveId, $value['id'], $uid);
+				$pages[] = $this->service->find($collectiveId, $value['file_id'], $uid);
 			}
 			return $pages;
 		}, $this->logger);
