@@ -261,16 +261,19 @@ export const usePagesStore = defineStore('pages', {
 				}
 				const parent = state.pages.find((p) => (p.id === parentId))
 				const idx = parent.subpageOrder.indexOf(id)
-				// Pages that are not in the sort order go to the end.
-				const sortable = idx === -1 ? Number.MAX_SAFE_INTEGER : idx
-				return [sortable, ...state.pageIndices(parent)]
+				return [idx, ...state.pageIndices(parent)]
 			}
 		},
 
 		favoritePages(state) {
 			const collectivesStore = useCollectivesStore()
-			return collectivesStore.currentCollective.userFavoritePages
+			const pages = collectivesStore.currentCollective.userFavoritePages
 				.map((id) => state.pages.find((p) => p.id === id))
+			return state.sortPages(pages)
+		},
+
+		sortPages(state) {
+			return (pages) => pages
 				.map((page) => ({ page, indices: state.pageIndices(page) }))
 				.sort(sortOrders.byIndices)
 				.map(({ page }) => page)
@@ -298,18 +301,6 @@ export const usePagesStore = defineStore('pages', {
 				const collectivesStore = useCollectivesStore()
 				return state.sortedSubpagesForCollective(collectivesStore.currentCollective, parentId, sortOrder)
 			}
-		},
-
-		allPagesSorted(state) {
-			const allSubPagesSorted = (pageId) => {
-				const res = []
-				state.sortedSubpages(pageId).forEach((element) => {
-					res.push(element)
-					res.push(...allSubPagesSorted(element.id))
-				})
-				return res
-			}
-			return allSubPagesSorted
 		},
 
 		visibleSubpages: (state) => (parentId) => {

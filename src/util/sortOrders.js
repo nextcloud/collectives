@@ -16,10 +16,13 @@ const byTimeDesc = (a, b) => byTimeAsc(b, a)
  * @param {object} b second sortable object
  */
 function byIndices(a, b) {
-	if (a.indices > b.indices) {
+	// Pages that are not in the sort order go to the end.
+	const sortA = a.indices.map((i) => i === -1 ? Number.MAX_SAFE_INTEGER : i)
+	const sortB = b.indices.map((i) => i === -1 ? Number.MAX_SAFE_INTEGER : i)
+	if (sortA > sortB) {
 		return 1
 	}
-	if (a.indices < b.indices) {
+	if (sortA < sortB) {
 		return -1
 	}
 	return 0
