@@ -66,7 +66,7 @@ export class EditorSection {
 
 	public async hasCollectiveLink(linkText: string): Promise<void> {
 		await expect((await this.getLinkBubble(linkText))
-			.locator('.collective-page .line'))
+			.locator('.collective-page .title'))
 			.toHaveText(linkText)
 		// Click somewhere else to close the link bubble
 		await this.getContent()
@@ -89,7 +89,7 @@ export class EditorSection {
 		const link = await this.getLinkBubble(linkText)
 		pageTitle = pageTitle || linkText
 		await expect(link
-			.locator('.collective-page .line'))
+			.locator('.collective-page .title'))
 			.toHaveText(pageTitle)
 
 		await link
