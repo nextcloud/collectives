@@ -9,14 +9,13 @@
 		v-if="richObject && notFound"
 		:href="richObject.link"
 		target="_blank"
-		class="collective-page not-found"
-		@click="clickLink">
+		class="collective-page not-found">
 		<div class="collective-page--image">
 			<PageIcon
 				:size="50" />
 		</div>
 		<div class="collective-page--info">
-			<div>
+			<div class="title">
 				<strong>
 					{{ t('collectives', 'Page not found') }}
 				</strong>
@@ -44,7 +43,7 @@
 				:size="50" />
 		</div>
 		<div class="collective-page--info">
-			<div>
+			<div class="title">
 				<strong>
 					{{ richObject.page.title }}
 				</strong>
@@ -65,10 +64,8 @@
 <script>
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
-import { mapState } from 'pinia'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import PageIcon from '../components/Icon/PageIcon.vue'
-import { useRootStore } from '../stores/root.js'
 
 export default {
 	name: 'PageReferenceWidget',
@@ -98,8 +95,6 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic']),
-
 		emoji() {
 			return this.richObject.page?.emoji
 		},
@@ -115,10 +110,8 @@ export default {
 		clickLink(event) {
 			const appUrl = '/apps/collectives'
 			const linkUrl = new URL(this.richObject.link, window.location)
-			// Only consider rerouting if we're inside the collectives app excluding public shares) and for links to
-			// collectives app.
+			// Only consider rerouting if we're inside the collectives app and for links to collectives app
 			if (window.OCA.Collectives?.vueRouter
-				&& !this.isPublic
 				&& linkUrl.pathname.toString().startsWith(generateUrl(appUrl))) {
 				event.preventDefault()
 				const collectivesUrl = linkUrl.href.substring(linkUrl.href.indexOf(appUrl) + appUrl.length)
