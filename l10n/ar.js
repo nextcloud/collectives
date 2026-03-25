@@ -95,6 +95,7 @@ OC.L10N.register(
     "Collectives settings" : "إعدادات التجميعات",
     "Collectives folder" : "مجلد التجميعات",
     "Deleted collectives" : "تجميعات محذوفة",
+    "Name" : "الاسم",
     "Deleted" : "تمّ حذفه",
     "Restore" : "استعادة ",
     "Delete permanently" : "حذف بشكل دائم",

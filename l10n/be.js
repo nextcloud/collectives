@@ -23,6 +23,7 @@ OC.L10N.register(
     "Edit" : "Рэдагаваць",
     "Danger zone" : "Небяспечная зона",
     "Choose" : "Выбраць",
+    "Name" : "Назва",
     "Deleted" : "Выдалены",
     "Restore" : "Аднавіць",
     "Delete permanently" : "Выдаліць назаўжды",

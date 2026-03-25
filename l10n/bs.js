@@ -6,6 +6,7 @@ OC.L10N.register(
     "Members" : "Članovi",
     "Edit" : "Izmjeni",
     "Choose" : "Izaberite",
+    "Name" : "Ime",
     "Restore" : "Obnovi",
     "Cancel" : "Otkaži",
     "Create" : "Ustvari",
