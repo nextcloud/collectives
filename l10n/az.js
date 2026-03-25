@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Quraşdırmalar",
     "Edit" : "Dəyişiklik et",
     "Choose" : "Seç",
+    "Name" : "Ad",
     "Deleted" : "Silinib",
     "Restore" : "Geri qaytar",
     "Delete permanently" : "Həmişəlik sil",

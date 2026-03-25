@@ -12,6 +12,7 @@ OC.L10N.register(
     "Preview" : "Ragwell",
     "Edit" : "Cheñch",
     "Choose" : "Dibab",
+    "Name" : "Anv",
     "Deleted" : "Dilamet",
     "Restore" : "Adkrouiñ",
     "Delete permanently" : "Lamet da viken",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "সেটিংস",
     "Edit" : "সম্পাদনা",
     "Choose" : "বেছে নিন",
+    "Name" : "নাম",
     "Deleted" : "মুছে ফেলা",
     "Restore" : "ফিরিয়ে দাও",
     "Cancel" : "বাতির",

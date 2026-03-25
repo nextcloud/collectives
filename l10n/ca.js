@@ -86,6 +86,7 @@ OC.L10N.register(
     "Invalid path selected. Only folders on first level are supported." : "El camí seleccionat no és vàlid. Només s'admeten les carpetes del primer nivell.",
     "Collectives settings" : "Paràmetres de col·lectius",
     "Deleted collectives" : "Suprimir Col·lectius",
+    "Name" : "Nom",
     "Deleted" : "Suprimit",
     "Restore" : "Restablir",
     "Delete permanently" : "Suprimir permanentment",

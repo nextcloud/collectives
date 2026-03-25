@@ -53,6 +53,7 @@ OC.L10N.register(
     "Choose" : "Escoyer",
     "Collectives settings" : "Configuración de Coleutivu",
     "Deleted collectives" : "Desaniciar los coleutivos",
+    "Name" : "Nome",
     "Deleted" : "Desanicióse",
     "Restore" : "Restaurar",
     "Delete permanently" : "Desaniciar permanentemente",

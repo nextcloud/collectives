@@ -66,6 +66,7 @@ OC.L10N.register(
     "Invalid path selected. Only folders on first level are supported." : "Избран е невалиден път. Поддържат се само папки на първо ниво.",
     "Collectives settings" : "Настройки на колективи",
     "Deleted collectives" : "Изтрити колективи",
+    "Name" : "Име",
     "Deleted" : "Изтрито",
     "Restore" : "Възстановяне",
     "Delete permanently" : "Изтрий завинаги",
