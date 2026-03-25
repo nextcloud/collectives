@@ -268,6 +268,7 @@ export const usePagesStore = defineStore('pages', {
 			const collectivesStore = useCollectivesStore()
 			const pages = collectivesStore.currentCollective.userFavoritePages
 				.map((id) => state.pageById(id))
+				.filter(Boolean) // filter out undefined
 			return state.sortPages(pages)
 		},
 
