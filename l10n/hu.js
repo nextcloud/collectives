@@ -193,6 +193,7 @@ OC.L10N.register(
     "Open in Collectives" : "Megnyitás a Kollektívákban",
     "Come, organize and build shared knowledge!" : "Jöjjön, szervezze és építse a közös tudásbázist!",
     "Create new collective" : "Új kollektíva létrehozása",
+    "Page not found" : "Az oldal nem található",
     "Link copied" : "Hivatkozás másolva",
     "Could not copy link to the clipboard:" : "A hivatkozást nem sikerült a vágólapra másolni:",
     "Could not create the page" : "Az oldalt nem sikerült létrehozni",

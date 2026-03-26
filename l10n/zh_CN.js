@@ -221,6 +221,7 @@ OC.L10N.register(
     "Open in Collectives" : "在知识库中打开",
     "Come, organize and build shared knowledge!" : "来吧，组织和建立共享的知识库！",
     "Create new collective" : "创建新知识库",
+    "Page not found" : "未找到页面",
     "Link copied" : "已复制链接",
     "Could not copy link to the clipboard:" : "无法将链接复制到剪贴板：",
     "Could not create the page" : "无法创建页面",

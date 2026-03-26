@@ -316,6 +316,7 @@ OC.L10N.register(
     "Open in Collectives" : "Otwórz w Kolektywach",
     "Come, organize and build shared knowledge!" : "Przyjdź, uporządkuj i buduj wspólną wiedzę!",
     "Create new collective" : "Utwórz nowy kolektyw",
+    "Page not found" : "Nie znaleziono strony",
     "Link copied" : "Link skopiowany",
     "Could not copy link to the clipboard:" : "Nie można skopiować łącza do schowka:",
     "New page" : "Nowa strona",

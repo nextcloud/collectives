@@ -90,6 +90,7 @@ OC.L10N.register(
     "Sharing" : "Абагульванне",
     "Versions" : "Версіі",
     "Remove tag" : "Выдаліць тэг",
+    "Page not found" : "Старонка не знойдзена",
     "Link copied" : "Спасылка скапіявана",
     "New page" : "Новая старонка",
     "Page deleted" : "Старонка выдалена",

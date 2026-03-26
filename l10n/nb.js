@@ -246,6 +246,7 @@ OC.L10N.register(
     "Open in Collectives" : "Åpne i Collectives",
     "Come, organize and build shared knowledge!" : "Ta del, organiser, og bygg delt kunnskap.",
     "Create new collective" : "Opprett nytt kollektiv",
+    "Page not found" : "Siden ble ikke funnet",
     "Link copied" : "Lenke kopiert",
     "Could not copy link to the clipboard:" : "Kunne ikke kopiere koblingen til utklippstavlen:",
     "New page" : "Ny side",

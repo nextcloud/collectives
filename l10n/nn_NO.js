@@ -28,6 +28,7 @@ OC.L10N.register(
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
     "Sharing" : "Deling",
     "Versions" : "Utgåver",
+    "Page not found" : "Fann ikkje sida",
     "Link copied" : "Lenkje kopiert",
     "Please reload the page." : "Ver venleg og last sida på nytt.",
     "Failed to revert {page} to revision {timestamp}." : "Klarte ikkje å tilbakestilla {page} til utgåva {timestamp}.",

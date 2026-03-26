@@ -41,6 +41,7 @@ OC.L10N.register(
     "Attachments" : "Adjuntos",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
+    "Page not found" : "Página no encontrada",
     "Link copied" : "Link copiado",
     "Please reload the page." : "Favor de volver a cargar la página.",
     "Copied" : "Copiado",

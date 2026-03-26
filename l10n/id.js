@@ -85,6 +85,7 @@ OC.L10N.register(
     "Sharing" : "Berbagi",
     "Versions" : "Versi",
     "Restore this version" : "Pulihkan versi ini",
+    "Page not found" : "Halaman tidak ditemukan",
     "Link copied" : "Link tersalin",
     "Please reload the page." : "Silakan muat ulang halaman.",
     "Copied" : "Tersalin",

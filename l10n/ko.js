@@ -87,6 +87,7 @@ OC.L10N.register(
     "Attachments" : "첨부파일",
     "Sharing" : "공유",
     "Versions" : "버전",
+    "Page not found" : "페이지를 찾을 수 없음",
     "Link copied" : "링크 복사됨",
     "Please reload the page." : "페이지를 새로 고치십시오.",
     "Copied" : "복사됨",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "Attachments" : "ไฟล์แนบ",
     "Sharing" : "แชร์ข้อมูล",
     "Versions" : "รุ่น",
+    "Page not found" : "ไม่พบหน้า",
     "Link copied" : "คัดลอกลิงก์แล้ว",
     "Please reload the page." : "โปรดโหลดหน้าเว็บใหม่",
     "View" : "มุมมอง",

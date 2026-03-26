@@ -33,6 +33,7 @@ OC.L10N.register(
     "Upload" : "ატვირთვა",
     "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები",
+    "Page not found" : "გვერდი არაა ნაპოვნი",
     "Please reload the page." : "გთხოვთ გადატვირთოთ გვერდი.",
     "Failed to revert {page} to revision {timestamp}." : "ფაილის {page} დაბრუნება რევიზიაზე {timestamp} ვერ ხერხდება.",
     "Done" : "დასრულებულია"

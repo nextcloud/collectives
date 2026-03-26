@@ -50,6 +50,7 @@ OC.L10N.register(
     "You" : "Vos",
     "Sharing" : "Partiment",
     "Versions" : "Versions",
+    "Page not found" : "Pagina pas trobada",
     "Link copied" : "Ligam copiat",
     "Please reload the page." : "Volgatz recargar la pagina.",
     "Copied" : "Copiat",

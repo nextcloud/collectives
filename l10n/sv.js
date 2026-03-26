@@ -312,6 +312,7 @@ OC.L10N.register(
     "Open in Collectives" : "Öppna i Collectives",
     "Come, organize and build shared knowledge!" : "Kom, organisera och bygg delad kunskap!",
     "Create new collective" : "Skapa nytt collective",
+    "Page not found" : "Sidan hittades inte",
     "Link copied" : "Länken har kopierats",
     "Could not copy link to the clipboard:" : "Kunde inte kopiera länken till urklipp:",
     "New page" : "Ny sida",

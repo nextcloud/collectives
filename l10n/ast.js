@@ -144,6 +144,7 @@ OC.L10N.register(
     "Open in Collectives" : "Abrir en Coleutivu",
     "Come, organize and build shared knowledge!" : "¡Ven, organiza y atropa'l conocimientu compartíu!",
     "Create new collective" : "Crear un colecionable",
+    "Page not found" : "Nun s'atopó la páxina",
     "Link copied" : "Copióse l'enllaz",
     "Could not copy link to the clipboard:" : "Nun se pudo copiar l'enllaz nel cartafueyu:",
     "Could not create the page" : "Nun se pudo crear la páxina",

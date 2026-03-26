@@ -36,6 +36,7 @@ OC.L10N.register(
     "You" : "Kemm·čč",
     "Attachments" : "Ticeqqufin",
     "Sharing" : "Beṭṭu",
+    "Page not found" : "Ulac asebter",
     "Link copied" : "Aseɣwen yettwanɣel",
     "Copied" : "Yettwanɣel",
     "Done" : "Immed"

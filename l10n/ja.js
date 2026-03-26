@@ -158,6 +158,7 @@ OC.L10N.register(
     "Restore this version" : "このバージョンを戻す",
     "Come, organize and build shared knowledge!" : "皆で寄ってたかって知識を共有しましょう！",
     "Create new collective" : "新しいコレクティブの作成",
+    "Page not found" : "ページが見つかりません",
     "Link copied" : "リンクをコピーしました",
     "Could not copy link to the clipboard:" : "クリップボードにリンクをコピーできませんでした:",
     "Could not create the page" : "ページを作成できません",

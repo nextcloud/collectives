@@ -238,6 +238,7 @@ OC.L10N.register(
     "Open in Collectives" : "Open in Collectives",
     "Come, organize and build shared knowledge!" : "Come, organize and build shared knowledge!",
     "Create new collective" : "Create new collective",
+    "Page not found" : "صفحه پیدا نشد",
     "Link copied" : "پیوند رونوشت شد",
     "Could not copy link to the clipboard:" : "Could not copy link to the clipboard:",
     "New page" : "برگه جدید",

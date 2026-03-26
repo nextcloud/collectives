@@ -160,6 +160,7 @@ OC.L10N.register(
     "Open in Collectives" : "Odpri v Zbirki",
     "Come, organize and build shared knowledge!" : "No, začnite izgrajevati skupno vsebino!",
     "Create new collective" : "Ustvari novo zbirko",
+    "Page not found" : "Strani ni mogoče najti",
     "Link copied" : "Povezava je kopirana",
     "Could not copy link to the clipboard:" : "Povezave ni mogoče kopirati v odložišče:",
     "Could not create the page" : "Strani ni mogoče ustvariti",

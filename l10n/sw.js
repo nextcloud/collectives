@@ -316,6 +316,7 @@ OC.L10N.register(
     "Open in Collectives" : "Fungua katika Makundi",
     "Come, organize and build shared knowledge!" : "Njoo, panga na jenga maarifa ya pamoja!",
     "Create new collective" : "Unda kikundi kipya",
+    "Page not found" : "Ukurasa haupatikani",
     "Link copied" : "Kiungo kimenakiliwa",
     "Could not copy link to the clipboard:" : "Haikuweza kunakili kiungo kwenye ubao wa kunakili:",
     "New page" : "Ukurasa mpya",

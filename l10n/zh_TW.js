@@ -338,6 +338,7 @@ OC.L10N.register(
     "Open in Collectives" : "在知識庫中開啟",
     "Come, organize and build shared knowledge!" : "快來整理與建構共享知識吧！",
     "Create new collective" : "建立新知識庫",
+    "Page not found" : "找不到頁面",
     "Link to page" : "至頁面的連結",
     "Link copied" : "已複製連結",
     "Could not copy link to the clipboard:" : "無法複製連結至剪貼簿：",

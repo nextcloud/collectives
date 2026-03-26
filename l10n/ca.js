@@ -221,6 +221,7 @@ OC.L10N.register(
     "Open in Collectives" : "Obert en Col·lectius",
     "Come, organize and build shared knowledge!" : "Vine, organitza i crea coneixement compartit!",
     "Create new collective" : "Creació d'un nou Col·lectiu",
+    "Page not found" : "No s'ha trobat la pàgina",
     "Link copied" : "S'ha copiat l'enllaç",
     "Could not copy link to the clipboard:" : "No s'ha pogut copiar l'enllaç al porta-retalls:",
     "Could not create the page" : "No s'ha pogut crear la pàgina",

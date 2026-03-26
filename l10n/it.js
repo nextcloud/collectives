@@ -159,6 +159,7 @@ OC.L10N.register(
     "Open in Collectives" : "Apri in Collettivi",
     "Come, organize and build shared knowledge!" : "Entra, organizza e costruisci la conoscenza condivisa!",
     "Create new collective" : "Crea un nuovo collettivo",
+    "Page not found" : "Pagina non trovata",
     "Link copied" : "Collegamento copiato",
     "Could not copy link to the clipboard:" : "Impossibile copiare negli appunti il collegamento:",
     "Could not create the page" : "Non è stato possibile creare la pagina",

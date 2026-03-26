@@ -80,6 +80,7 @@ OC.L10N.register(
     "Attachments" : "Viðhengi",
     "Sharing" : "Deiling",
     "Versions" : "Útgáfur",
+    "Page not found" : "Síða fannst ekki",
     "Link copied" : "Tengill afritaður",
     "Please reload the page." : "Þú ættir að hlaða síðunni aftur inn.",
     "Copied" : "Afritað",

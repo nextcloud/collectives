@@ -36,6 +36,7 @@ OC.L10N.register(
     "Attachments" : "Bashkangjitjet",
     "Sharing" : "Ndarje",
     "Versions" : "Versione",
+    "Page not found" : "Faqja nuk u gjet ",
     "Link copied" : "Linku u kopjua",
     "Please reload the page." : "Ju lutemi, ringarkoni faqen.",
     "Copied" : "Kopjuar",

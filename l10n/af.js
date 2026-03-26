@@ -23,6 +23,7 @@ OC.L10N.register(
     "Unshare" : "Ontdeel",
     "Upload" : "Oplaai",
     "Versions" : "Weergawes",
+    "Page not found" : "Blad nie gevind nie",
     "Link copied" : "Skakel gekopieer",
     "Please reload the page." : "Herlaai asseblief die bladsy.",
     "Copied" : "Gekopieer",

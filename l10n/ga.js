@@ -336,6 +336,7 @@ OC.L10N.register(
     "Open in Collectives" : "Oscail i Collectives",
     "Come, organize and build shared knowledge!" : "Tar, eagraigh agus tóg eolas roinnte!",
     "Create new collective" : "Cruthaigh comhchoiteann nua",
+    "Page not found" : "Ní bhfuarthas an leathanach",
     "Link copied" : "Cóipeáladh an nasc",
     "Could not copy link to the clipboard:" : "Níorbh fhéidir nasc chuig an ngearrthaisce a chóipeáil:",
     "New page" : "Leathanach nua",

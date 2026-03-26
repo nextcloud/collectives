@@ -71,6 +71,7 @@ OC.L10N.register(
     "Attachments" : "Đính kèm",
     "Sharing" : "Đang chia sẽ",
     "Versions" : "Phiên bản",
+    "Page not found" : "Trang không tìm thấy",
     "Link copied" : "Đã sao chép liên kết",
     "Please reload the page." : "Vui lòng tải lại trang.",
     "Copied" : "Đã sao chép",

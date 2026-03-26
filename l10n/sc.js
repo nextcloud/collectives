@@ -64,6 +64,7 @@ OC.L10N.register(
     "Attachments" : "Alligongiados",
     "Sharing" : "Cumpartzende",
     "Versions" : "Versiones",
+    "Page not found" : "Pàgina no agatada",
     "Link copied" : "Ligòngiu copiadu",
     "Please reload the page." : "Torra a carrigare sa pàgina.",
     "Copied" : "Copiadu",

@@ -303,6 +303,7 @@ OC.L10N.register(
     "Open in Collectives" : "Ouvrir dans Collectives",
     "Come, organize and build shared knowledge!" : "Venez, organisez et développez des connaissances partagées !",
     "Create new collective" : "Créer un nouveau collectif",
+    "Page not found" : "Page non trouvée",
     "Link copied" : "Lien copié",
     "Could not copy link to the clipboard:" : "Impossible de copier le lien dans le presse-papiers :",
     "New page" : "Nouvelle page",
