@@ -24,6 +24,7 @@ OC.L10N.register(
     "Add another link" : "Ychwanegu dolen arall",
     "Unshare" : "Dad-rannu",
     "Upload" : "Llwytho i fyny",
+    "Page not found" : "Heb ganfod y dudalen",
     "Link copied" : "Dolen wedi'i gopïo",
     "Copied" : "Copïwyd",
     "View" : "Golwg",

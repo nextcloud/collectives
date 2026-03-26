@@ -50,6 +50,7 @@ OC.L10N.register(
     "Attachments" : "Atașamente ",
     "Sharing" : "Partajare",
     "Versions" : "Versiuni",
+    "Page not found" : "Pagina nu a fost găsită",
     "Link copied" : "Link copiat",
     "Please reload the page." : "Te rugăm să reîncarci pagina.",
     "Copied" : "Copiat",

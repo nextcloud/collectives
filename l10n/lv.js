@@ -60,6 +60,7 @@ OC.L10N.register(
     "Attachments" : "Pielikumi",
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",
+    "Page not found" : "Lapa nav atrasta",
     "Link copied" : "Saite nokopēta",
     "Please reload the page." : "Lūgums pārlādēt lapu",
     "Copied" : "Nokopēts",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "Attachments" : "Dosieraj aldonaĵoj",
     "Sharing" : "Kunhavigo",
     "Versions" : "Versioj",
+    "Page not found" : "Paĝo ne trovita",
     "Link copied" : "Ligilo kopiita",
     "Please reload the page." : "Bonvolu reŝargi la paĝon.",
     "Copied" : "Kopiita",

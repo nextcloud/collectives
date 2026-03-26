@@ -328,6 +328,7 @@ OC.L10N.register(
     "Open in Collectives" : "Collectives-д нээх",
     "Come, organize and build shared knowledge!" : "Ирээд, зохион байгуулж хамтарсан мэдлэг бүтээ!",
     "Create new collective" : "Шинэ коллектив үүсгэх",
+    "Page not found" : "Хуудас олдсонгүй",
     "Link copied" : "Холбоос хуулагдсан",
     "Could not copy link to the clipboard:" : "Холбоосыг санах ойд хуулж чадсангүй:",
     "New page" : "Шинэ хуудас",

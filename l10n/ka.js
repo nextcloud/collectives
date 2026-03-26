@@ -73,6 +73,7 @@ OC.L10N.register(
     "Attachments" : "Attachments",
     "Sharing" : "Sharing",
     "Versions" : "Versions",
+    "Page not found" : "Page not found",
     "Link copied" : "Link copied",
     "Please reload the page." : "Please reload the page.",
     "Copied" : "Copied",

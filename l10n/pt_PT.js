@@ -66,6 +66,7 @@ OC.L10N.register(
     "Attachments" : "Anexos",
     "Sharing" : "Partilha",
     "Versions" : "Versões",
+    "Page not found" : "Página não encontrada",
     "Link copied" : "Hiperligação copiada",
     "Please reload the page." : "Por favor, recarregue a página.",
     "Copied" : "Copiado",

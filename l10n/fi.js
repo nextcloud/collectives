@@ -80,6 +80,7 @@ OC.L10N.register(
     "Sharing" : "Jakaminen",
     "Versions" : "Versiot",
     "Restore this version" : "Palauta tämä versio",
+    "Page not found" : "Sivua ei löytynyt",
     "Link copied" : "Linkki kopioitu",
     "Please reload the page." : "Päivitä sivu.",
     "Copied" : "Kopioitu",

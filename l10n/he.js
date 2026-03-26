@@ -53,6 +53,7 @@ OC.L10N.register(
     "Attachments" : "קבצים מצורפים",
     "Sharing" : "שיתוף",
     "Versions" : "גרסאות",
+    "Page not found" : "העמוד לא נמצא",
     "Link copied" : "הקישור הועתק",
     "Please reload the page." : "יש להעלות מחדש דף זה.",
     "Copied" : "הועתק",

@@ -86,6 +86,7 @@ OC.L10N.register(
     "Sharing" : "Dijeljenje",
     "Versions" : "Inačice",
     "Restore this version" : "Vrati ovu verziju",
+    "Page not found" : "Stranica nije pronađena",
     "Link copied" : "Poveznica je kopirana",
     "Please reload the page." : "Ponovno učitajte stranicu.",
     "Copied" : "Kopirano",

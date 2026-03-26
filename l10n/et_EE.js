@@ -319,6 +319,7 @@ OC.L10N.register(
     "Open in Collectives" : "Ava Vabaühenduste rakenduses",
     "Come, organize and build shared knowledge!" : "Tule, korralda ja jaga ühist teaberuumi!",
     "Create new collective" : "Loo uus vabaühendus",
+    "Page not found" : "Lehekülge ei leidu",
     "Link copied" : "Link on kopeeritud",
     "Could not copy link to the clipboard:" : "Lingi kopeerimine lõikelauale ei õnnestunud:",
     "New page" : "Uus leht",

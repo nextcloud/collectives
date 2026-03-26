@@ -333,6 +333,7 @@ OC.L10N.register(
     "Open in Collectives" : "Abrir en Colectivos",
     "Come, organize and build shared knowledge!" : "Veña, organice e cree coñecementos compartidos!",
     "Create new collective" : "Crear un novo colectivo",
+    "Page not found" : "Non se atopou a páxina",
     "Link copied" : "Ligazón copiada",
     "Could not copy link to the clipboard:" : "Non foi posíbel copiar a ligazón no portapapeis:",
     "New page" : "Nova páxina",

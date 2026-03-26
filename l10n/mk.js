@@ -80,6 +80,7 @@ OC.L10N.register(
     "Attachments" : "Прилози",
     "Sharing" : "Споделување",
     "Versions" : "Верзии",
+    "Page not found" : "Страницата не е пронајдена",
     "Link copied" : "Линкот е копиран",
     "Please reload the page." : "Превчитајте ја страницата.",
     "Copied" : "Копирано",

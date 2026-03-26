@@ -305,6 +305,7 @@ OC.L10N.register(
     "Open in Collectives" : "Отвори у Колективима",
     "Come, organize and build shared knowledge!" : "Дођите, организујте и изградите заједничко знаљње!",
     "Create new collective" : "Креирај нови колектив",
+    "Page not found" : "Страна није нађена",
     "Link copied" : "Веза ископирана",
     "Could not copy link to the clipboard:" : "Линк није могао да се копира у клипборд:",
     "New page" : "Нова страница",

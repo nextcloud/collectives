@@ -91,6 +91,7 @@ OC.L10N.register(
     "Attachments" : "Attachments",
     "Sharing" : "ການແບ່ງປັນ",
     "Versions" : "Versions",
+    "Page not found" : "ບໍ່ພົບຫນ້າ",
     "Link copied" : "ສຳເນົາລິງ",
     "Please reload the page." : "ກະລຸນາໂຫຼດຫນ້າເພດອີກ.",
     "Copied" : "Copied",

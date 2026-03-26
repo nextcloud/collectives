@@ -39,6 +39,7 @@ OC.L10N.register(
     "Attachments" : "Qo'shimchalar",
     "Sharing" : "Ulashish",
     "Versions" : "Versions",
+    "Page not found" : "Sahifa topilmadi",
     "Link copied" : "Havola nusxalandi",
     "Please reload the page." : "Iltimos, sahifani qayta yuklang.",
     "View" : "Ko'rish",
