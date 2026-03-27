@@ -339,6 +339,7 @@ OC.L10N.register(
     "Come, organize and build shared knowledge!" : "Kommt vorbei, organisiert euch und teilt euer Wissen!",
     "Create new collective" : "Ein neues Kollektiv erstellen",
     "Page not found" : "Seite nicht gefunden",
+    "The page does not exist or you are not allowed to view it." : "Die Seite existiert nicht oder du bist nicht berechtigt, diese anzusehen.",
     "Link to page" : "Link zur Seite",
     "Link copied" : "Link kopiert",
     "Could not copy link to the clipboard:" : "Link in die Zwischenablage kopieren fehlgeschlagen:",

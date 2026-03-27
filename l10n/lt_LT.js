@@ -36,7 +36,7 @@ OC.L10N.register(
     "Name" : "Pavadinimas",
     "Deleted" : "Ištrinta",
     "Restore" : "Atkurti",
-    "Delete permanently" : "Ištrinti negrįžtamai",
+    "Delete permanently" : "Ištrinti visam laikui",
     "Cancel" : "Atsisakyti",
     "Create" : "Sukurti",
     "Go back" : "Grįžti",
@@ -122,6 +122,7 @@ OC.L10N.register(
     "Hide templates" : "Slėpti šablonus",
     "Show templates" : "Rodyti šablonus",
     "Sort by title" : "Rikiuoti pagal pavadinimą",
+    "_%n byte_::_%n bytes_" : ["%n baitas","%n baitai","%n baitų","%n baitų"],
     "Link copied to the clipboard." : "Nuoroda nukopijuota į iškarpinę.",
     "New Page" : "Naujas puslapis"
 },
