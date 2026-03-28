@@ -15,6 +15,7 @@ OC.L10N.register(
     "Add teams" : "Dodaj timove",
     "Add emoji" : "Dodaj emoji",
     "Permissions" : "Dopuštenja",
+    "Preview" : "Pretpregled",
     "Edit" : "Uredi",
     "Danger zone" : "Zona opasnosti",
     "Choose" : "Odaberite",
