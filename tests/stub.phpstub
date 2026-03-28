@@ -892,7 +892,6 @@ namespace OCA\Files_Trashbin {
 namespace OCA\Files_Trashbin\Trash {
 	interface ITrashBackend {}
 
-	use OCP\Files\Cache\ICacheEntry;
 	use OCP\Files\FileInfo;
 	interface ITrashItem extends FileInfo {
 	}
@@ -931,10 +930,10 @@ namespace OCA\Files_Trashbin\Trash {
 		public function getTitle(): string {}
 		public function getCreationTime(): int {}
 		public function getUploadTime(): int {}
+		public function getLastActivity(): int {}
 		public function getParentId(): int {}
 		public function getDeletedBy(): ?IUser {}
 		public function getMetadata(): array {}
-		public function getData(): ICacheEntry {}
 	}
 }
 
