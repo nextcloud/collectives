@@ -11,6 +11,10 @@
 	--text-editor-max-width: calc(100% - 2 * 40px);
 }
 
+.text-menubar {
+	z-index: 9000 !important;
+}
+
 .sheet-view {
 	&.landing-page-widgets,
 	.page-heading-skeleton,
@@ -34,7 +38,7 @@
 	border-radius: var(--border-radius-large);
 	box-shadow: 0 1px 10px var(--color-box-shadow);
 	background-color: var(--color-main-background);
-	z-index: 10021;
+	z-index: 9000;
 }
 
 @media print {
