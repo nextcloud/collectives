@@ -13,6 +13,7 @@ OC.L10N.register(
     "Permissions" : "Heimildir",
     "Preview" : "Forskoðun",
     "Edit" : "Breyta",
+    "Danger zone" : "Hættusvæði",
     "Choose" : "Velja",
     "Name" : "Heiti",
     "Deleted" : "Eytt",

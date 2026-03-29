@@ -99,7 +99,7 @@ OC.L10N.register(
     "Delete collective" : "Kollektiv löschen",
     "Deleted collectives can be restored from the collectives trash." : "Gelöschte Kollektive können aus dem Papierkorb wiederhergestellt werden.",
     "Create a collective first" : "Erstellen Sie erst ein neues Kollektiv",
-    "Select location for collectives" : "Wählen Sie den Ort für Kollektive",
+    "Select location for collectives" : "Den Speicherort für Kollektive auswählen",
     "Choose" : "Auswählen",
     "Invalid path selected. Only folders on first level are supported." : "Der ausgewählte Ort ist ungültig. Nur Ordner auf oberster Ebene sind möglich.",
     "Collectives settings" : "Kollektiv-Einstellungen",
