@@ -26,7 +26,7 @@
 					:aria-label="t('collectives', 'Open page sidebar')"
 					aria-controls="app-sidebar-vue"
 					closeAfterClick
-					@click="toggle('sidebar')">
+					@click="toggleSidebar()">
 					<template #icon>
 						<DockRightIcon :size="20" />
 					</template>
@@ -270,7 +270,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['showing']),
+		...mapState(useRootStore, ['showingSidebar']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
@@ -287,7 +287,7 @@ export default {
 		]),
 
 		displaySidebarAction() {
-			return this.isMobile && !this.inPageList && !this.showing('sidebar')
+			return this.isMobile && !this.inPageList && !this.showingSidebar
 		},
 
 		displayLastEditedInfo() {
@@ -329,7 +329,8 @@ export default {
 		...mapActions(useRootStore, [
 			'setActiveSidebarTab',
 			'show',
-			'toggle',
+			'showSidebar',
+			'toggleSidebar',
 		]),
 
 		...mapActions(useCollectivesStore, [
@@ -354,7 +355,7 @@ export default {
 				await this.$router.push(this.pageUrl)
 			}
 			this.show('details')
-			this.show('sidebar')
+			this.showSidebar()
 			this.setActiveSidebarTab('sharing')
 		},
 

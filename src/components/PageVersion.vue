@@ -141,7 +141,7 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(useRootStore, ['done', 'hide', 'load']),
+		...mapActions(useRootStore, ['done', 'hideSidebar', 'load']),
 		...mapActions(useVersionsStore, [
 			'restoreVersion',
 			'selectVersion',
@@ -149,7 +149,7 @@ export default {
 
 		closeVersions() {
 			this.selectVersion(null)
-			this.hide('sidebar')
+			this.hideSidebar()
 		},
 
 		/**

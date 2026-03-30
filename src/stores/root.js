@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { useLocalStorage } from '@vueuse/core'
+import { useSessionStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { editorApiAttachments, editorApiReaderFileId, editorApiUpdateReadonlyBarProps } from '../constants.js'
 
@@ -11,10 +11,11 @@ const STORE_PREFIX = 'collectives/pinia/root/'
 
 export const useRootStore = defineStore('root', {
 	state: () => ({
-		showings: useLocalStorage(STORE_PREFIX + 'showings', {}),
+		showings: {},
 		loadings: {},
 		printView: false,
-		activeSidebarTab: useLocalStorage(STORE_PREFIX + 'activeSidebarTab', 'attachments'),
+		showingSidebar: useSessionStorage(STORE_PREFIX + 'showingSidebar', false),
+		activeSidebarTab: useSessionStorage(STORE_PREFIX + 'activeSidebarTab', 'attachments'),
 		collectiveParam: '',
 		collectiveId: null,
 		pageParam: '',
@@ -57,6 +58,10 @@ export const useRootStore = defineStore('root', {
 		show(aspect) { this.showings[aspect] = true },
 		hide(aspect) { this.showings[aspect] = false },
 		toggle(aspect) { this.showings[aspect] = !this.showings[aspect] },
+
+		showSidebar() { this.showingSidebar = true },
+		hideSidebar() { this.showingSidebar = false },
+		toggleSidebar() { this.showingSidebar = !this.showingSidebar },
 
 		setPrintView() { this.printView = true },
 		setActiveSidebarTab(id) { this.activeSidebarTab = id },

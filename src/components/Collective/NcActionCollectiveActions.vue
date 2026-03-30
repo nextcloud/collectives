@@ -171,7 +171,7 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(useRootStore, ['setActiveSidebarTab', 'show']),
+		...mapActions(useRootStore, ['setActiveSidebarTab', 'showSidebar']),
 		...mapActions(useCirclesStore, ['leaveCircle']),
 		...mapActions(useCollectivesStore, [
 			'markCollectiveDeleted',
@@ -187,7 +187,7 @@ export default {
 
 		async openShareTab(collective) {
 			await this.$router.push(`/${encodeURIComponent(collective.name)}`)
-			this.show('sidebar')
+			this.showSidebar()
 			this.setActiveSidebarTab('sharing')
 		},
 

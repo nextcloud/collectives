@@ -20,7 +20,7 @@
 			<template #icon>
 				<PaperclipIcon :size="20" />
 			</template>
-			<SidebarTabAttachments v-if="showing('sidebar')" />
+			<SidebarTabAttachments v-if="showingSidebar" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
 			id="backlinks"
@@ -29,7 +29,7 @@
 			<template #icon>
 				<ArrowBottomLeftIcon :size="20" />
 			</template>
-			<SidebarTabBacklinks v-if="showing('sidebar')" :page="currentPage" />
+			<SidebarTabBacklinks v-if="showingSidebar" :page="currentPage" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
 			v-if="!isPublic && currentCollectiveCanShare"
@@ -39,7 +39,7 @@
 			<template #icon>
 				<ShareVariantIcon :size="20" />
 			</template>
-			<SidebarTabSharing v-if="showing('sidebar')" :pageId="currentPageId" />
+			<SidebarTabSharing v-if="showingSidebar" :pageId="currentPageId" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
 			v-if="!isPublic && currentCollectiveCanEdit"
@@ -50,7 +50,7 @@
 				<BackupRestoreIcon :size="20" />
 			</template>
 			<SidebarTabVersions
-				v-if="showing('sidebar')"
+				v-if="showingSidebar"
 				:pageId="currentPageId"
 				:pageTimestamp="currentPage.timestamp" />
 		</NcAppSidebarTab>
@@ -98,7 +98,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['activeSidebarTab', 'isPublic', 'showing']),
+		...mapState(useRootStore, ['activeSidebarTab', 'isPublic', 'showingSidebar']),
 		...mapState(useCollectivesStore, [
 			'currentCollectiveCanEdit',
 			'currentCollectiveCanShare',
@@ -118,14 +118,14 @@ export default {
 
 		open: {
 			get() {
-				return this.showing('sidebar') || false
+				return this.showingSidebar || false
 			},
 
 			set(value) {
 				if (value === true) {
-					this.show('sidebar')
+					this.showSidebar()
 				} else {
-					this.hide('sidebar')
+					this.hideSidebar()
 				}
 			},
 		},
@@ -135,9 +135,9 @@ export default {
 		t,
 
 		...mapActions(useRootStore, [
-			'hide',
+			'hideSidebar',
 			'setActiveSidebarTab',
-			'show',
+			'showSidebar',
 		]),
 
 		...mapActions(useVersionsStore, ['selectVersion']),
@@ -147,7 +147,7 @@ export default {
 		 */
 		close() {
 			this.selectVersion(null)
-			this.hide('sidebar')
+			this.hideSidebar()
 		},
 	},
 }
