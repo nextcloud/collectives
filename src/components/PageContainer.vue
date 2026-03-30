@@ -109,9 +109,9 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, [
-			'hide',
+			'hideSidebar',
 			'setActiveSidebarTab',
-			'show',
+			'showSidebar',
 		]),
 
 		...mapActions(usePagesStore, [
@@ -158,9 +158,9 @@ export default {
 
 		toggleSidebar({ open, tab }) {
 			if (open) {
-				this.show('sidebar')
+				this.showSidebar()
 			} else {
-				this.hide('sidebar')
+				this.hideSidebar()
 			}
 			this.setActiveSidebarTab(tab)
 		},

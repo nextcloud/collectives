@@ -84,7 +84,7 @@
 			@save="$emit('saveEditor')"
 			@submit="onSubmit()" />
 
-		<div class="titlebar-buttons" :class="{ 'titlebar-buttons_sidebar-toggle': !isMobile && !showing('sidebar') }">
+		<div class="titlebar-buttons" :class="{ 'titlebar-buttons_sidebar-toggle': !isMobile && !showingSidebar }">
 			<!-- Edit button if editable -->
 			<EditButton
 				v-if="currentCollectiveCanEdit"
@@ -167,7 +167,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['loading', 'showing']),
+		...mapState(useRootStore, ['loading', 'showingSidebar']),
 
 		...mapState(useCollectivesStore, [
 			'currentCollective',
