@@ -62,6 +62,7 @@ OC.L10N.register(
     "Clear search" : "Išvalyti paiešką",
     "Search or create tag" : "Ieškoti ar sukurti žymą",
     "Tag name" : "Žymos pavadinimas",
+    "Change tag color" : "Keisti žymos spalvą",
     "Create new tag" : "Sukurti naują žymą",
     "Error saving the document. Please try again." : "Klaida įrašant dokumentą. Bandykite dar kartą.",
     "Favorites" : "Mėgstami",
