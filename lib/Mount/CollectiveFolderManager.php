@@ -42,12 +42,12 @@ class CollectiveFolderManager {
 	private ?Folder $collectivesRootFolder = null;
 
 	public function __construct(
-		private IRootFolder $rootFolder,
-		private IDBConnection $connection,
-		private IConfig $config,
-		private IUserSession $userSession,
-		private IRequest $request,
-		private IFactory $l10nFactory,
+		private readonly IRootFolder $rootFolder,
+		private readonly IDBConnection $connection,
+		private readonly IConfig $config,
+		private readonly IUserSession $userSession,
+		private readonly IRequest $request,
+		private readonly IFactory $l10nFactory,
 	) {
 	}
 

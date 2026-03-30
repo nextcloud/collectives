@@ -10,11 +10,6 @@
       <code><![CDATA[IEventListener]]></code>
     </MissingTemplateParam>
   </file>
-  <file src="lib/Mount/CollectiveFolderManager.php">
-    <InvalidArgument>
-      <code><![CDATA[$maskedStorage]]></code>
-    </InvalidArgument>
-  </file>
   <file src="lib/Service/PageService.php">
     <UndefinedClass>
       <code><![CDATA[$this->pushQueue]]></code>
