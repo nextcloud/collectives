@@ -15,6 +15,7 @@ use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper;
+use OCP\App\IAppManager;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
@@ -40,6 +41,7 @@ class CollectiveFolderManager {
 	private ?string $rootPath = null;
 	private ?int $rootFolderId = null;
 	private ?Folder $collectivesRootFolder = null;
+	private readonly bool $enableEncryption;
 
 	public function __construct(
 		private readonly IRootFolder $rootFolder,
@@ -48,7 +50,9 @@ class CollectiveFolderManager {
 		private readonly IUserSession $userSession,
 		private readonly IRequest $request,
 		private readonly IFactory $l10nFactory,
+		public readonly IAppManager $appManager,
 	) {
+		$this->enableEncryption = $appManager->isEnabledForAnyone('encryption');
 	}
 
 	private function getAppdataPath(): string {
@@ -140,10 +144,9 @@ class CollectiveFolderManager {
 			$cacheEntry['permissions'] &= $permissions;
 		}
 
-		$baseStorage = new Jail([
-			'storage' => $storage,
-			'root' => $rootPath
-		]);
+		$baseStorage = $this->enableEncryption
+			? new CollectiveEncryptionJail(['storage' => $storage, 'root' => $rootPath])
+			: new Jail(['storage' => $storage, 'root' => $rootPath]);
 		$collectiveStorage = new CollectiveStorage([
 			'storage' => $baseStorage,
 			'folder_id' => $id,
