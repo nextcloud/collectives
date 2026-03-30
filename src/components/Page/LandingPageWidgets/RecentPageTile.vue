@@ -22,6 +22,7 @@
 				<NcAvatar
 					:user="page.lastUserId || ''"
 					:displayName="page.lastUserDisplayName || ''"
+					disableMenu
 					:size="24" />
 				<span class="timestamp">
 					{{ lastUpdate }}
