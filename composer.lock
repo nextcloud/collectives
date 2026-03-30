@@ -428,26 +428,27 @@
         },
         {
             "name": "predis/predis",
-            "version": "v2.4.0",
+            "version": "v3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "f49e13ee3a2a825631562aa0223ac922ec5d058b"
+                "reference": "2033429520d8997a7815a2485f56abe6d2d0e075"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/f49e13ee3a2a825631562aa0223ac922ec5d058b",
-                "reference": "f49e13ee3a2a825631562aa0223ac922ec5d058b",
+                "url": "https://api.github.com/repos/predis/predis/zipball/2033429520d8997a7815a2485f56abe6d2d0e075",
+                "reference": "2033429520d8997a7815a2485f56abe6d2d0e075",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0"
+                "php": "^7.2 || ^8.0",
+                "psr/http-message": "^1.0|^2.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.3",
                 "phpstan/phpstan": "^1.9",
                 "phpunit/phpcov": "^6.0 || ^8.0",
-                "phpunit/phpunit": "^8.0 || ^9.4"
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
             },
             "suggest": {
                 "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
@@ -478,7 +479,7 @@
             ],
             "support": {
                 "issues": "https://github.com/predis/predis/issues",
-                "source": "https://github.com/predis/predis/tree/v2.4.0"
+                "source": "https://github.com/predis/predis/tree/v3.4.2"
             },
             "funding": [
                 {
@@ -486,7 +487,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-30T15:16:02+00:00"
+            "time": "2026-03-09T20:33:04+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -537,6 +538,59 @@
                 "source": "https://github.com/php-fig/event-dispatcher/tree/1.0.0"
             },
             "time": "2019-01-08T18:20:26+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/2.0"
+            },
+            "time": "2023-04-04T09:54:51+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -1178,27 +1232,27 @@
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v5.0.0",
+            "version": "v5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0"
+                "reference": "7488ca8c856919b7b65ceb4162964a5189dd5bb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
-                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/7488ca8c856919b7b65ceb4162964a5189dd5bb2",
+                "reference": "7488ca8c856919b7b65ceb4162964a5189dd5bb2",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-pdo": "*",
-                "php": "~7.1|^8",
-                "predis/predis": "^2.2"
+                "php": "~7.4 || ^8",
+                "predis/predis": "^2.2 || ^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "7.*|8.*|9.*",
-                "symfony/var-dumper": "^4|^5.2"
+                "phpunit/phpunit": "7.* || 8.* || 9.*",
+                "symfony/var-dumper": "^4 || ^5.2"
             },
             "type": "library",
             "autoload": {
@@ -1236,7 +1290,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.3"
             },
             "funding": [
                 {
@@ -1244,7 +1298,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-15T20:07:13+00:00"
+            "time": "2025-12-11T09:41:57+00:00"
         }
     ],
     "packages-dev": [
@@ -1789,59 +1843,6 @@
                 "source": "https://github.com/php-fig/http-factory"
             },
             "time": "2024-04-15T12:06:14+00:00"
-        },
-        {
-            "name": "psr/http-message",
-            "version": "2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/http-message.git",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Message\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for HTTP messages",
-            "homepage": "https://github.com/php-fig/http-message",
-            "keywords": [
-                "http",
-                "http-message",
-                "psr",
-                "psr-7",
-                "request",
-                "response"
-            ],
-            "support": {
-                "source": "https://github.com/php-fig/http-message/tree/2.0"
-            },
-            "time": "2023-04-04T09:54:51+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
