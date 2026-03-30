@@ -40,7 +40,7 @@ describe('Page attachments', function() {
 			.should('be.visible')
 
 		// Open attachment list
-		cy.get('button.app-sidebar__toggle').click()
+		cy.get('button.page-sidebar-button').click()
 
 		cy.get('.attachment-list-embedded').should('contain', 'test.png')
 		cy.get('.attachment-list-not-embedded').should('not.exist')
@@ -55,7 +55,7 @@ describe('Page attachments', function() {
 		cy.switchToEditMode()
 
 		// Open attachment list
-		cy.get('button.app-sidebar__toggle').click()
+		cy.get('button.page-sidebar-button').click()
 
 		cy.get('.attachment-list-embedded').should('contain', 'test.png')
 		cy.get('.attachment-list-not-embedded').should('not.exist')
@@ -93,7 +93,7 @@ describe('Page attachments', function() {
 		cy.openPage('Page1')
 
 		// Open attachment list
-		cy.get('button.app-sidebar__toggle').click()
+		cy.get('button.page-sidebar-button').click()
 
 		// Upload new attachment
 		cy.intercept({ method: 'POST', url: '**/collectives/*/pages/*/attachments' }).as('attachmentUpload')

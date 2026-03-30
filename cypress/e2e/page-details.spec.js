@@ -114,7 +114,7 @@ describe('Page details', function() {
 		cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
 		cy.openPage('Day 1')
 		cy.wait('@textCreateSession')
-		cy.get('button.app-sidebar__toggle').click()
+		cy.get('button.page-sidebar-button').click()
 		cy.get('#tab-button-backlinks').click()
 		cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 	})

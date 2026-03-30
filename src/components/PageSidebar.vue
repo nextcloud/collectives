@@ -8,10 +8,7 @@
 		v-model:active="active"
 		v-model:open="open"
 		:name="title"
-		:noToggle="isMobile"
-		:toggleClasses="{
-			'page-sidebar-button': true,
-		}"
+		noToggle
 		@close="close">
 		<NcAppSidebarTab
 			id="attachments"
@@ -59,7 +56,6 @@
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
@@ -92,11 +88,6 @@ export default {
 		SidebarTabVersions,
 	},
 
-	setup() {
-		const isMobile = useIsMobile()
-		return { isMobile }
-	},
-
 	computed: {
 		...mapState(useRootStore, ['activeSidebarTab', 'isPublic', 'showingSidebar']),
 		...mapState(useCollectivesStore, [
@@ -118,7 +109,7 @@ export default {
 
 		open: {
 			get() {
-				return this.showingSidebar || false
+				return this.showingSidebar
 			},
 
 			set(value) {

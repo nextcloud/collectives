@@ -244,11 +244,6 @@ export default {
 	padding: 0 8px;
 }
 
-// Align sidebar toggle
-.app-sidebar__toggle {
-	inset-block-start: 7px !important;
-}
-
 @media print {
 	/* Don't print splitpane list and splitter panes */
 	div.splitpanes__pane-list, div.splitpanes__splitter {
@@ -256,7 +251,7 @@ export default {
 	}
 
 	/* Don't print page list, list toggle and page sidebar toggle */
-	#app-sidebar-vue, .app-navigation, .app-sidebar__toggle {
+	#app-sidebar-vue, .app-navigation, .page-sidebar-button {
 		display: none !important;
 	}
 

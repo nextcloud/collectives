@@ -26,7 +26,7 @@ describe('Page versions', function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives/Versions Collective/Page')
 
-		cy.get('button.app-sidebar__toggle').click()
+		cy.get('button.page-sidebar-button').click()
 		cy.get('#tab-button-versions').click()
 	})
 

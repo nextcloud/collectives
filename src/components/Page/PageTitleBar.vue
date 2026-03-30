@@ -84,7 +84,7 @@
 			@save="$emit('saveEditor')"
 			@submit="onSubmit()" />
 
-		<div class="titlebar-buttons" :class="{ 'titlebar-buttons_sidebar-toggle': !isMobile && !showingSidebar }">
+		<div class="titlebar-buttons">
 			<!-- Edit button if editable -->
 			<EditButton
 				v-if="currentCollectiveCanEdit"
@@ -100,6 +100,17 @@
 				:lastUserDisplayName="currentPage.lastUserDisplayName"
 				:isLandingPage
 				:networkOnline />
+
+			<NcButton
+				v-if="!isMobile && !showingSidebar"
+				:aria-label="t('collectives', 'Open sidebar')"
+				class="page-sidebar-button"
+				variant="tertiary"
+				@click="toggleSidebar()">
+				<template #icon>
+					<DockRightIcon :size="20" />
+				</template>
+			</NcButton>
 		</div>
 	</div>
 </template>
@@ -113,6 +124,7 @@ import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmojiPicker from '@nextcloud/vue/components/NcEmojiPicker'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import EditButton from './EditButton.vue'
@@ -129,6 +141,7 @@ export default {
 
 	components: {
 		CollectivesIcon,
+		DockRightIcon,
 		EditButton,
 		EmoticonIcon,
 		NcButton,
@@ -237,7 +250,7 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(useRootStore, ['done']),
+		...mapActions(useRootStore, ['done', 'toggleSidebar']),
 
 		...mapActions(usePagesStore, [
 			'getPages',
@@ -334,10 +347,6 @@ export default {
 	display: flex;
 	gap: 4px;
 	align-items: center;
-
-	&_sidebar-toggle {
-		margin-right: calc(var(--default-clickable-area) + 2px);
-	}
 }
 </style>
 
