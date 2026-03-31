@@ -10,12 +10,14 @@ declare(strict_types=1);
 namespace OCA\Collectives\Fs;
 
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Mount\CollectiveStorage;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\GenericFileException;
 use OCP\Files\InvalidPathException;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
@@ -254,15 +256,14 @@ class NodeHelper {
 
 	/**
 	 * Extract collective_id from path like "appdata_<instanceid>/collectives/<collective_id>/..."
-	 * Only processes collective pages (not trashed, not versions)
+	 * Only processes collective pages (not versions)
 	 */
 	public static function extractCollectiveIdFromPath(string $path): ?int {
-		// fixme: cover all possible cases with unit test
 		$parts = explode('/', $path);
-		if (!str_starts_with($parts[0], 'appdata_')) {
+		if (!isset($parts[0]) || !str_starts_with($parts[0], 'appdata_')) {
 			return null;
 		}
-		if ($parts[1] !== 'collectives') {
+		if (!isset($parts[1]) || $parts[1] !== 'collectives') {
 			return null;
 		}
 
@@ -275,5 +276,22 @@ class NodeHelper {
 		}
 
 		return (int)$collectiveId;
+	}
+
+	/**
+	 * Get collective ID from node if it is a markdown file belonging to a CollectiveStorage
+	 */
+	public static function getCollectiveIdFromNode(Node $node): ?int {
+		if (!($node instanceof File) || !self::isPage($node)) {
+			return null;
+		}
+
+		$storage = $node->getStorage();
+		if (!$storage->instanceOfStorage(CollectiveStorage::class)) {
+			return null;
+		}
+
+		/** @var CollectiveStorage $storage */
+		return $storage->getFolderId();
 	}
 }

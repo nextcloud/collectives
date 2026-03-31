@@ -11,17 +11,16 @@ namespace OCA\Collectives\Listeners;
 
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Service\PageService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeRenamedEvent;
-use OCP\Files\File;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 /** @template-implements IEventListener<Event|NodeRenamedEvent> */
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
-		private PageMapper $pageMapper,
-		private SluggerInterface $slugger,
+		private readonly PageService $pageService,
+		private readonly PageMapper $pageMapper,
 	) {
 	}
 
@@ -29,20 +28,24 @@ class NodeRenamedListener implements IEventListener {
 		if (!($event instanceof NodeRenamedEvent)) {
 			return;
 		}
-		$source = $event->getSource();
+
+		if ($this->pageService->isFromCollectives()) {
+			return;
+		}
+
 		$target = $event->getTarget();
-
-		if (!($source instanceof File && $target instanceof File)) {
+		$targetCollectiveId = NodeHelper::getCollectiveIdFromNode($target);
+		if ($targetCollectiveId === null) {
+			$this->pageMapper->trashByFileId($target->getId());
 			return;
 		}
 
-		$page = $this->pageMapper->findByFileId($target->getId());
-		if ($page === null) {
-			return;
+		// File moved into a collective or between collectives - update collectiveId
+		$source = $event->getSource();
+		$title = null;
+		if ($source->getName() !== $target->getName()) {
+			$title = NodeHelper::getTitleFromFile($target);
 		}
-
-		$title = NodeHelper::getTitleFromFile($target);
-		$page->setSlug($this->slugger->slug($title)->toString());
-		$this->pageMapper->update($page);
+		$this->pageService->updatePage($targetCollectiveId, $target->getId(), null, null, null, $title);
 	}
 }

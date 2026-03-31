@@ -31,8 +31,8 @@ class Version030401Date20250331000000 extends SimpleMigrationStep {
 				$changed = true;
 			}
 
-			if (!$table->hasIndex('collectives_pages_collective_id_index')) {
-				$table->addIndex(['collective_id'], 'collectives_pages_collective_id_index');
+			if (!$table->hasIndex('collectives_pages_c_id_idx')) {
+				$table->addIndex(['collective_id'], 'collectives_pages_c_id_idx');
 				$changed = true;
 			}
 

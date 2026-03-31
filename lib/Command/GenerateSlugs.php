@@ -12,10 +12,12 @@ namespace OCA\Collectives\Command;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CircleHelper;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IDBConnection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -98,7 +100,7 @@ class GenerateSlugs extends Command {
 		while ($rowCollective = $resultCollectives->fetch()) {
 			try {
 				$circle = $this->circleHelper->getCircle($rowCollective['circle_unique_id'], null, true);
-				$pageInfos = $this->pageService->findAll($rowCollective['id'], $circle->getOwner()->getUserId());
+				$pageInfos = $this->findAllPages((int)$rowCollective['id'], $circle->getOwner()->getUserId());
 			} catch (NotFoundException|NotPermittedException) {
 				// Ignore exceptions from CircleManager (e.g. due to cruft collective without circle)
 				continue;
@@ -120,5 +122,19 @@ class GenerateSlugs extends Command {
 		}
 
 		$resultCollectives->closeCursor();
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function findAllPages(int $collectiveId, string $userId): array {
+		$folder = $this->pageService->getCollectiveFolder($collectiveId, $userId);
+		try {
+			return $this->pageService->getPagesFromFolder($collectiveId, $folder, $userId, true, true);
+		} catch (FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
 	}
 }
