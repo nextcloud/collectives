@@ -46,6 +46,8 @@ OC.L10N.register(
     "Templates" : "Šablonai",
     "Show members" : "Rodyti narius",
     "Show all members of the collective" : "Rodyti visus kolektyvo narius",
+    "Hide outline" : "Slėpti kontūrą",
+    "Show outline" : "Rodyti kontūrą",
     "Remove from favorites" : "Šalinti iš svarbiausių",
     "Delete page" : "Ištrinti puslapį",
     "Manage tags" : "Tvarkyti žymas",
