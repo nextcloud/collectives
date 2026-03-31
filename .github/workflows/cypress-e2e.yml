@@ -252,7 +252,7 @@ jobs:
         env:
           PHP_CLI_SERVER_WORKERS: 3
 
-      - name: Add Nextcloud users and a collective for full-text search
+      - name: Add Nextcloud users
         run: |
           for user in alice bob jane john; do \
           OC_PASS="$user" ./occ user:add --password-from-env "$user"; \
@@ -261,8 +261,6 @@ jobs:
           for user in bob jane; do \
           OC_PASS="$user" ./occ group:adduser "Bobs Group" "$user"; \
           done
-          ./occ collectives:create SearchTest --owner=bob
-          ./occ collectives:index
 
       - name: Register index for cypress-split
         env:
