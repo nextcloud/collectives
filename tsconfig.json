@@ -5,7 +5,7 @@
 
 {
 	"extends": "@vue/tsconfig",
-	"include": ["src/**.ts", "*.ts", "playwright/**/*.ts"],
+	"include": ["src/**.ts", "*.ts", "src/**.vue", "playwright/**/*.ts"],
 	"compilerOptions": {
 		"allowJs": true,
 		"target": "ESNext",

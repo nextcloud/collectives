@@ -75,6 +75,9 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<command>OCA\Collectives\Command\PageTrashCleanup</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
 	</commands>
+	<settings>
+		<admin>OCA\Collectives\Settings\Admin</admin>
+	</settings>
 	<navigations>
 		<navigation>
 			<name>Collectives</name>

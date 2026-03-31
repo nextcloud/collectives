@@ -4,11 +4,12 @@
  */
 
 import { createAppConfig } from '@nextcloud/vite-config'
-import { VitePWA } from 'vite-plugin-pwa'
 import { join, resolve } from 'path'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default createAppConfig(
 	{
+		'settings-admin': resolve(join('src', 'settings-admin.ts')),
 		init: resolve(join('src', 'init.js')),
 		main: resolve(join('src', 'main.js')),
 		reference: resolve(join('src', 'reference.js')),
@@ -55,8 +56,8 @@ export default createAppConfig(
 							},
 						],
 						globPatterns: [
-							 "../css/*.css",
-							 "*.mjs",
+							'../css/*.css',
+							'*.mjs',
 						],
 						maximumFileSizeToCacheInBytes: 5242880,
 					},
