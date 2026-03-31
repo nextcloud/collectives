@@ -36,7 +36,6 @@ use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\SetupChecks\CirclesAppIsEnableCheck;
-use OCA\Collectives\SetupChecks\PDOSQLiteDriverIsEnableCheck;
 use OCA\Collectives\Team\CollectiveTeamResourceProvider;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\Collectives\Trash\PageTrashManager;
@@ -146,8 +145,6 @@ class Application extends App implements IBootstrap {
 		}
 
 		if (interface_exists(ISetupCheck::class) && method_exists($context, 'registerSetupCheck')) {
-			/** @psalm-suppress MissingDependency */
-			$context->registerSetupCheck(PDOSQLiteDriverIsEnableCheck::class);
 			/** @psalm-suppress MissingDependency */
 			$context->registerSetupCheck(CirclesAppIsEnableCheck::class);
 		}

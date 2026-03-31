@@ -26,10 +26,6 @@ organize together. Come and gather in collectives to build shared knowledge.
 In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Teams«** and **»Collectives«** apps and enable them.
 
-## Requirements
-
-For full-text search to work the sqlite and pdo PHP extensions must be installed.
-
 ## Documentation and help
 
 Take a look at our [online documentation](https://nextcloud.github.io/collectives/).
