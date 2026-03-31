@@ -37,8 +37,7 @@ users will not see collectives with the "everyone" group as member. The group me
 be synced once in the circles app: `occ circles:sync --groups`
 
 This only needs to be done once. New users that got created after the app was enabled will see
-the collectives straight away
-.
+the collectives straight away.
 
 ## Collectives and guest users
 
@@ -47,13 +46,6 @@ app) to access collectives, add the Collectives and Teams apps to the list
 of enabled apps for guest users in admin settings.
 
 Please note that this enables guest users to create new collectives.
-
-## Searching Collectives
-
-To enable searching of collectives from the unified Nextcloud search, make sure the `ext-pdo` and `ext-pdo_sqlite` PHP extensions are installed and the Nextcloud cronjob is running. The index of collectives page contents should update with every cronjob run.
-
-Tip: On Ubuntu 22.04, the relevant package to install is `phpXX-sqlite3` - with the XX being replaced with your PHP version. E.g. ` php8.1-sqlite3` for PHP 8.1.
-
 
 ## Public shares
 
