@@ -153,14 +153,15 @@ page-info-bar {
 	z-index: 10021;
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
-	height: var(--default-clickable-area);
 	border-bottom: 1px solid var(--color-border);
+	padding-block: var(--default-grid-baseline);
 	margin-inline: calc((100% - var(--text-editor-max-width, var(--text-editor-max-width-default))) / 2);
 }
 </style>
 
 <style scoped lang="scss">
 .infobar {
+	height: var(--default-clickable-area);
 	width: 100%;
 	display: flex;
 	padding-block: var(--default-grid-baseline);

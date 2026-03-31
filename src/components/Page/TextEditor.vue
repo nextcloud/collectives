@@ -242,6 +242,7 @@ export default {
 }
 
 [data-collectives-el="reader"], [data-collectives-el="editor"] {
+	display: flex;
 	flex-grow: 1;
 }
 
