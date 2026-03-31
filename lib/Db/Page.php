@@ -17,6 +17,8 @@ use OCP\DB\Types;
 /**
  * @method int getId()
  * @method void setId(int $value)
+ * @method int getCollectiveId()
+ * @method void setCollectiveId(int $value)
  * @method int getFileId()
  * @method void setFileId(int $value)
  * @method string getSlug()
@@ -36,6 +38,7 @@ use OCP\DB\Types;
  */
 class Page extends Entity implements JsonSerializable {
 	protected ?int $fileId = null;
+	protected ?int $collectiveId = null;
 	protected ?string $slug = null;
 	protected ?string $lastUserId = null;
 	protected ?string $emoji = null;
@@ -51,6 +54,7 @@ class Page extends Entity implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
+			'collectiveId' => $this->collectiveId,
 			'fileId' => $this->fileId,
 			'slug' => $this->slug,
 			'lastUserId' => $this->lastUserId,

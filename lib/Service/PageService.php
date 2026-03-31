@@ -295,6 +295,7 @@ class PageService {
 	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null, ?string $slug = null, ?string $tags = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
+		$page->setCollectiveId($collectiveId);
 		$page->setLastUserId($userId);
 		if ($emoji !== null) {
 			$page->setEmoji($emoji);

@@ -251,4 +251,29 @@ class NodeHelper {
 
 		return 0;
 	}
+
+	/**
+	 * Extract collective_id from path like "appdata_<instanceid>/collectives/<collective_id>/..."
+	 * Only processes collective pages (not trashed, not versions)
+	 */
+	public static function extractCollectiveIdFromPath(string $path): ?int {
+		// fixme: cover all possible cases with unit test
+		$parts = explode('/', $path);
+		if (!str_starts_with($parts[0], 'appdata_')) {
+			return null;
+		}
+		if ($parts[1] !== 'collectives') {
+			return null;
+		}
+
+		$collectiveId = $parts[2] ?? null;
+		if ($collectiveId === 'trash') {
+			$collectiveId = $parts[3] ?? null;
+		}
+		if (!is_numeric($collectiveId)) {
+			return null;
+		}
+
+		return (int)$collectiveId;
+	}
 }
