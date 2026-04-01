@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<PagePicker
+	<PageBrowser
 		:pageId
 		:parentId
 		:isCopying
@@ -15,14 +15,14 @@
 </template>
 
 <script>
-import PagePicker from './PagePicker.vue'
+import PageBrowser from './PageBrowser.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 
 export default {
 	name: 'MoveOrCopyModal',
 
 	components: {
-		PagePicker,
+		PageBrowser,
 	},
 
 	mixins: [
