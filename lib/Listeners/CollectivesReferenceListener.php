@@ -16,9 +16,6 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Util;
 
 class CollectivesReferenceListener implements IEventListener {
-	public function __construct() {
-	}
-
 	public function handle(Event $event): void {
 		if (!$event instanceof RenderReferenceEvent) {
 			return;
