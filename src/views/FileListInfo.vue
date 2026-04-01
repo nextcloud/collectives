@@ -59,9 +59,13 @@ export default {
 
 	computed: {
 		collectivesLink() {
-			const collectivesPath = this.internalPath.startsWith(collectivesFolder)
+			let collectivesPath = this.internalPath.startsWith(collectivesFolder)
 				? this.internalPath.slice(collectivesFolder.length)
 				: ''
+
+			// strip `/.attachments.<fileId>` suffix if present
+			collectivesPath = collectivesPath.replace(/\/\.attachments\.\d+$/, '')
+
 			return generateUrl('/apps/collectives' + collectivesPath)
 		},
 	},
