@@ -15,31 +15,34 @@ use Wamania\Snowball\Stemmer\Stemmer as WamaniaStemmer;
 use Wamania\Snowball\StemmerFactory;
 
 class Stemmer {
-	private ?WamaniaStemmer $stemmer = null;
-	private bool $stemmingEnabled = true;
+	/** @var array<string, WamaniaStemmer|null> */
+	private array $stemmers = [];
 
 	public function __construct(
 		private IConfig $config,
 	) {
 	}
 
-	public function stem(string $word): string {
-		if ($this->stemmer === null && $this->stemmingEnabled) {
-			$language = $this->config->getSystemValue('default_language', 'en');
+	private function getStemmer(string $language): ?WamaniaStemmer {
+		if (!array_key_exists($language, $this->stemmers)) {
 			try {
-				$this->stemmer = StemmerFactory::create($language);
+				$this->stemmers[$language] = StemmerFactory::create($language);
 			} catch (NotFoundException) {
-				$this->stemmingEnabled = false;
-				return $word;
+				$this->stemmers[$language] = null;
 			}
 		}
+		return $this->stemmers[$language];
+	}
 
-		if (!$this->stemmingEnabled) {
+	public function stem(string $word, ?string $language = null): string {
+		$language ??= $this->config->getSystemValue('default_language', 'en');
+		$stemmer = $this->getStemmer($language);
+		if ($stemmer === null) {
 			return $word;
 		}
 
 		try {
-			return $this->stemmer->stem($word);
+			return $stemmer->stem($word);
 		} catch (\Exception) {
 			return $word;
 		}

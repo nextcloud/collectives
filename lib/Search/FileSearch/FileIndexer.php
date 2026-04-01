@@ -13,6 +13,7 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Search\FileSearch\Db\SearchDocMapper;
 use OCA\Collectives\Search\FileSearch\Db\SearchFileMapper;
 use OCA\Collectives\Search\FileSearch\Db\SearchWordMapper;
+use OCA\Collectives\Search\FileSearch\LanguageDetector\LanguageDetector;
 use OCA\Collectives\Search\FileSearch\Stemmer\Stemmer;
 use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 use OCP\Files\File;
@@ -20,12 +21,15 @@ use OCP\Files\Folder;
 use OCP\Files\NotFoundException;
 
 class FileIndexer {
+	private const LANGUAGE_DETECTION_LIMIT = 2000;
+
 	public function __construct(
 		private SearchWordMapper $wordMapper,
 		private SearchDocMapper $docMapper,
 		private SearchFileMapper $fileMapper,
 		private WordTokenizer $tokenizer,
 		private Stemmer $stemmer,
+		private LanguageDetector $languageDetector,
 	) {
 	}
 
@@ -68,11 +72,12 @@ class FileIndexer {
 			return;
 		}
 
+		$language = $this->languageDetector->detect(mb_substr($content, 0, self::LANGUAGE_DETECTION_LIMIT));
 		$tokens = $this->tokenizer->tokenize($content);
 
 		$stems = [];
 		foreach ($tokens as $token) {
-			$stems[] = $this->stemmer->stem($token);
+			$stems[] = $this->stemmer->stem($token, $language);
 		}
 
 		$terms = array_count_values($stems);
@@ -89,7 +94,7 @@ class FileIndexer {
 		}
 
 		try {
-			$this->fileMapper->insertFile($circleUniqueId, $file->getId(), $file->getInternalPath(), $file->getMTime());
+			$this->fileMapper->insertFile($circleUniqueId, $file->getId(), $file->getInternalPath(), $file->getMTime(), $language);
 		} catch (\Exception) {
 		}
 	}
