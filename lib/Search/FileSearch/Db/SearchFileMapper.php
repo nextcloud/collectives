@@ -25,12 +25,13 @@ class SearchFileMapper extends QBMapper {
 		parent::__construct($db, 'collectives_s_files', SearchFile::class);
 	}
 
-	public function insertFile(string $circleUniqueId, int $fileId, string $path, int $mtime): SearchFile {
+	public function insertFile(string $circleUniqueId, int $fileId, string $path, int $mtime, ?string $language = null): SearchFile {
 		$file = new SearchFile();
 		$file->setCircleUniqueId($circleUniqueId);
 		$file->setFileId($fileId);
 		$file->setPath($path);
 		$file->setMtime($mtime);
+		$file->setLanguage($language);
 		return $this->insert($file);
 	}
 
@@ -59,6 +60,20 @@ class SearchFileMapper extends QBMapper {
 		$result->closeCursor();
 
 		return $mtime ? (int)$mtime : null;
+	}
+
+	public function getLanguagesByCircle(string $circleUniqueId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->selectDistinct('language')
+			->from($this->tableName)
+			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->andWhere($qb->expr()->isNotNull('language'));
+
+		$result = $qb->executeQuery();
+		$languages = $result->fetchAll(\PDO::FETCH_COLUMN);
+		$result->closeCursor();
+
+		return $languages;
 	}
 
 	public function deleteByCircle(string $circleUniqueId): void {

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Search\FileSearch;
 
 use OCA\Collectives\Search\FileSearch\Db\SearchDocMapper;
+use OCA\Collectives\Search\FileSearch\Db\SearchFileMapper;
 use OCA\Collectives\Search\FileSearch\Db\SearchWordMapper;
 use OCA\Collectives\Search\FileSearch\Stemmer\Stemmer;
 use OCA\Collectives\Search\FileSearch\Tokenizer\ClauseTokenizer;
@@ -23,17 +24,22 @@ class FileSearcher {
 	public function __construct(
 		private SearchWordMapper $wordMapper,
 		private SearchDocMapper $docMapper,
+		private SearchFileMapper $fileMapper,
 		private WordTokenizer $tokenizer,
+		private ClauseTokenizer $clauseTokenizer,
 		private Stemmer $stemmer,
 	) {
 	}
 
 	public function search(string $circleId, string $query, int $limit = self::DEFAULT_LIMIT): array {
 		$tokens = $this->tokenizer->tokenize($query);
+		$languages = $this->fileMapper->getLanguagesByCircle($circleId) ?: [null];
 
 		$stems = [];
 		foreach ($tokens as $token) {
-			$stems[] = $this->stemmer->stem($token);
+			foreach ($languages as $language) {
+				$stems[] = $this->stemmer->stem($token, $language);
+			}
 		}
 		$stems = array_unique($stems);
 
@@ -51,6 +57,8 @@ class FileSearcher {
 			}
 		}
 
+		$wordIds = array_unique($wordIds);
+
 		if (empty($wordIds)) {
 			return [];
 		}
@@ -59,8 +67,7 @@ class FileSearcher {
 	}
 
 	public function rankByBigrams(string $query, array $files): array {
-		$clauseTokenizer = new ClauseTokenizer();
-		$phrases = $clauseTokenizer->tokenize($query);
+		$phrases = $this->clauseTokenizer->tokenize($query);
 
 		if (empty($phrases)) {
 			return $files;
@@ -68,7 +75,12 @@ class FileSearcher {
 
 		$scored = [];
 		foreach ($files as $file) {
-			$content = mb_strtolower($file->getContent());
+			try {
+				$content = mb_strtolower($file->getContent());
+			} catch (\Exception) {
+				continue;
+			}
+
 			$score = 0;
 
 			foreach ($phrases as $phrase) {

@@ -22,10 +22,13 @@ use OCP\AppFramework\Db\Entity;
  * @method void setPath(string $value)
  * @method string getMtime()
  * @method void setMtime(int $value)
+ * @method string getLanguage()
+ * @method void setLanguage(string $value)
  */
 class SearchFile extends Entity {
 	protected ?string $circleUniqueId = null;
 	protected ?int $fileId = null;
 	protected ?string $path = null;
 	protected ?int $mtime = null;
+	protected ?string $language = null;
 }
