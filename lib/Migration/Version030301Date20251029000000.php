@@ -100,6 +100,11 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => 0,
 			]);
+			$table->addColumn('language', Types::STRING, [
+				'notnull' => false,
+				'length' => 10,
+				'default' => null,
+			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['file_id'], 's_files_file_id');
