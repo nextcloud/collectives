@@ -3,6 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+// Collective.php jsonSerialize()
+export interface Collective {
+	id: number
+	slug: string | null
+	circleId: string
+	emoji: string | null
+	trashTimestamp: number | null
+	pageMode: number
+	name: string
+	level: number
+	editPermissionLevel: number
+	sharePermissionLevel: number
+	canEdit: boolean
+	canShare: boolean
+	shareToken: string | null
+	isPageShare: boolean
+	sharePageId: number | null
+	shareEditable: boolean
+	userPageOrder: number
+	userShowMembers: boolean
+	userShowRecentPages: boolean
+	userFavoritePages: number[]
+	canLeave: boolean
+}
+
 // PageInfo.php jsonSerialize()
 export interface PageInfo {
 	id: number
