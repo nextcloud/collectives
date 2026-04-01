@@ -12,73 +12,53 @@
 		<BreadCrumbs
 			:selectedCollective
 			:pageCrumbs
+			:rootPage
 			@clickCollectivesList="onClickCollectivesList"
 			@clickCollectiveHome="onClickCollectiveHome"
-			@onClickPage="onClickPage" />
-		<div class="browser-list">
+			@clickPage="onClickPage" />
+		<div class="page-list">
 			<ul v-if="!selectedCollective">
-				<li
+				<ListItem
 					v-for="collective in collectives"
-					:id="`browser-collective-${collective.id}`"
-					:key="collective.id">
-					<a href="#" class="browser-item" @click="onClickCollective(collective)">
-						<div v-if="collective.emoji" class="browser-icon">
-							{{ collective.emoji }}
-						</div>
-						<CollectivesIcon
-							v-else
-							class="browser-icon"
-							:size="20" />
-						<div class="browser-title">
-							{{ collective.name }}
-						</div>
-					</a>
-				</li>
+					:id="collective.id"
+					:key="collective.id"
+					:emoji="collective.emoji"
+					:title="collective.name"
+					type="collective"
+					@click="onClickCollective(collective)" />
 			</ul>
 			<SkeletonLoading v-else-if="loading(`pagelist-${selectedCollective.id}`)" type="items" />
 			<ul v-else-if="subpages.length > 0">
-				<li
+				<ListItem
 					v-for="(page, index) in subpages"
-					:id="`browser-page-${page.id}`"
-					:key="page.id">
-					<a
-						:class="{ self: page.id === pageId }"
-						:href="page.id === pageId ? null : '#'"
-						class="browser-item"
-						@click="onClickPage(page)">
-						<div v-if="page.emoji" class="browser-icon">
-							{{ page.emoji }}
-						</div>
-						<PageIcon
-							v-else
-							class="browser-icon"
-							:size="20"
-							fillColor="var(--color-background-darker)" />
-						<div class="browser-title">
-							{{ page.title }}
-						</div>
-						<div v-if="page.id === pageId" class="browser-move-buttons">
-							<NcButton
-								:disabled="index === 0"
-								:aria-label="t('collectives', 'Move page up')"
-								variant="tertiary"
-								@click="onClickUp">
-								<template #icon>
-									<ArrowUpIcon :size="20" />
-								</template>
-							</NcButton>
-							<NcButton
-								:disabled="index === (subpages.length - 1)"
-								:aria-label="t('collectives', 'Move page down')"
-								variant="tertiary"
-								@click="onClickDown">
-								<template #icon>
-									<ArrowDownIcon :size="20" />
-								</template>
-							</NcButton>
-						</div>
-					</a>
-				</li>
+					:id="page.id"
+					:key="page.id"
+					:emoji="page.emoji"
+					:title="page.title"
+					type="page"
+					:currentId="pageId"
+					@click="onClickPage(page)">
+					<template #currentActions>
+						<NcButton
+							:disabled="index === 0"
+							:aria-label="t('collectives', 'Move page up')"
+							variant="tertiary"
+							@click="onClickUp">
+							<template #icon>
+								<ArrowUpIcon :size="20" />
+							</template>
+						</NcButton>
+						<NcButton
+							:disabled="index === (subpages.length - 1)"
+							:aria-label="t('collectives', 'Move page down')"
+							variant="tertiary"
+							@click="onClickDown">
+							<template #icon>
+								<ArrowDownIcon :size="20" />
+							</template>
+						</NcButton>
+					</template>
+				</ListItem>
 			</ul>
 		</div>
 		<template #actions>
@@ -114,10 +94,9 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'vue-material-design-icons/ArrowUp.vue'
-import CollectivesIcon from '../Icon/CollectivesIcon.vue'
-import PageIcon from '../Icon/PageIcon.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
 import BreadCrumbs from './PageBrowser/BreadCrumbs.vue'
+import ListItem from './PageBrowser/ListItem.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -128,12 +107,11 @@ export default {
 	components: {
 		ArrowDownIcon,
 		ArrowUpIcon,
-		CollectivesIcon,
+		BreadCrumbs,
+		ListItem,
 		NcButton,
 		NcDialog,
 		NcLoadingIcon,
-		BreadCrumbs,
-		PageIcon,
 		SkeletonLoading,
 	},
 
@@ -205,6 +183,10 @@ export default {
 		},
 
 		subpages() {
+			if (!this.selectedCollective) {
+				return []
+			}
+
 			// If we have reordered pages, return those for visual feedback
 			if (this.reorderedSubpages) {
 				return this.reorderedSubpages
@@ -226,6 +208,10 @@ export default {
 		},
 
 		pageCrumbs() {
+			if (!this.selectedCollective) {
+				return []
+			}
+
 			return this.isCurrentCollective
 				? this.pageParents(this.selectedPageId)
 				: this.pageParentsForCollective(this.selectedCollective, this.selectedPageId)
@@ -272,7 +258,7 @@ export default {
 		scrollToPage() {
 			// Scroll current page into view (important when listing parent page)
 			this.$nextTick(() => {
-				document.getElementById(`browser-page-${this.pageId}`).scrollIntoView({ block: 'center' })
+				document.getElementById(`page-browser-page-${this.pageId}`).scrollIntoView({ block: 'center' })
 			})
 		},
 
@@ -294,7 +280,7 @@ export default {
 
 			// Scroll current page into view
 			this.$nextTick(() => {
-				document.getElementById(`browser-page-${this.pageId}`).scrollIntoView({ block: 'center' })
+				document.getElementById(`page-browser-page-${this.pageId}`).scrollIntoView({ block: 'center' })
 			})
 		},
 
@@ -388,60 +374,11 @@ export default {
 	flex-direction: column;
 }
 
-.browser-list {
+.page-list {
 	display: inline-block;
 	width: 100%;
 	height: calc(100% - 34px - 8px - 6px);
 	overflow-y: auto;
 	flex: 1;
-
-	li a {
-		display: flex;
-		height: var(--default-clickable-area);
-		border-radius: var(--border-radius-element, var(--border-radius-large));
-		margin: 4px 0;
-
-		&:not(:last-child) {
-			border-bottom: 1px solid var(--color-border);
-		}
-
-		&:hover, &:focus, &:active {
-			background-color: var(--color-background-hover);
-		}
-
-		// Element of the page that is to be copied/moved
-		&.self {
-			background-color: var(--color-primary-element-light);
-		}
-	}
-
-	li a.self {
-		cursor: default;
-
-		.browser-icon, .browser-title {
-			cursor: default;
-		}
-	}
-
-	.browser-icon {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: var(--default-clickable-area);
-	}
-
-	.browser-title {
-		flex: 1;
-		align-content: center;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-
-	.browser-move-buttons {
-		display: flex;
-		align-items: center;
-		padding: 0 12px;
-	}
 }
 </style>

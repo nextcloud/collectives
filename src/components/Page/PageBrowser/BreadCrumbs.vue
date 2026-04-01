@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import type { PropType } from 'vue'
-import type { PageInfo } from '../../../types.ts'
+import type { Collective, PageInfo } from '../../../types.ts'
 
 import { t } from '@nextcloud/l10n'
 import { defineComponent } from 'vue'
@@ -72,13 +72,18 @@ export default defineComponent({
 
 	props: {
 		selectedCollective: {
-			type: Object,
-			required: true,
+			type: Object as PropType<Collective | null>,
+			default: null,
 		},
 
 		pageCrumbs: {
 			type: Array as PropType<PageInfo[]>,
 			required: true,
+		},
+
+		rootPage: {
+			type: Object as PropType<PageInfo>,
+			default: null,
 		},
 	},
 
@@ -96,21 +101,21 @@ export default defineComponent({
 		},
 
 		collectiveBreadcrumbAriaLabel() {
-			return this.selectedCollective.isPageShare
-				? t('collectives', 'Breadcrumb for page {name}', { name: this.rootPage.title })
-				: t('collectives', 'Breadcrumb for collective {name}', { name: this.selectedCollective.name })
+			return this.selectedCollective?.isPageShare
+				? t('collectives', 'Breadcrumb for page {name}', { name: this.rootPage?.title })
+				: t('collectives', 'Breadcrumb for collective {name}', { name: this.selectedCollective?.name || '' })
 		},
 
 		collectiveBreadcrumbEmoji() {
-			return this.selectedCollective.isPageShare
-				? this.rootPage.emoji
-				: this.selectedCollective.emoji
+			return this.selectedCollective?.isPageShare
+				? this.rootPage?.emoji
+				: this.selectedCollective?.emoji
 		},
 
 		collectiveBreadcrumbTitle() {
-			return this.selectedCollective.isPageShare
-				? this.rootPage.title
-				: this.selectedCollective.name
+			return this.selectedCollective?.isPageShare
+				? this.rootPage?.title
+				: this.selectedCollective?.name
 		},
 	},
 
