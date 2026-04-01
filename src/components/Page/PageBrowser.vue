@@ -7,7 +7,7 @@
 	<NcDialog
 		:name="t('collectives', 'Copy or move page')"
 		size="normal"
-		class="page-picker"
+		class="page-browser"
 		@closing="onClose">
 		<span class="crumbs">
 			<div v-if="!selectedCollective || !selectedCollective.isPageShare" class="crumbs-home">
@@ -54,21 +54,21 @@
 				</div>
 			</template>
 		</span>
-		<div class="picker-list">
+		<div class="browser-list">
 			<ul v-if="!selectedCollective">
 				<li
 					v-for="collective in collectives"
-					:id="`picker-collective-${collective.id}`"
+					:id="`browser-collective-${collective.id}`"
 					:key="collective.id">
-					<a href="#" class="picker-item" @click="onClickCollective(collective)">
-						<div v-if="collective.emoji" class="picker-icon">
+					<a href="#" class="browser-item" @click="onClickCollective(collective)">
+						<div v-if="collective.emoji" class="browser-icon">
 							{{ collective.emoji }}
 						</div>
 						<CollectivesIcon
 							v-else
-							class="picker-icon"
+							class="browser-icon"
 							:size="20" />
-						<div class="picker-title">
+						<div class="browser-title">
 							{{ collective.name }}
 						</div>
 					</a>
@@ -78,25 +78,25 @@
 			<ul v-else-if="subpages.length > 0">
 				<li
 					v-for="(page, index) in subpages"
-					:id="`picker-page-${page.id}`"
+					:id="`browser-page-${page.id}`"
 					:key="page.id">
 					<a
 						:class="{ self: page.id === pageId }"
 						:href="page.id === pageId ? null : '#'"
-						class="picker-item"
+						class="browser-item"
 						@click="onClickPage(page)">
-						<div v-if="page.emoji" class="picker-icon">
+						<div v-if="page.emoji" class="browser-icon">
 							{{ page.emoji }}
 						</div>
 						<PageIcon
 							v-else
-							class="picker-icon"
+							class="browser-icon"
 							:size="20"
 							fillColor="var(--color-background-darker)" />
-						<div class="picker-title">
+						<div class="browser-title">
 							{{ page.title }}
 						</div>
-						<div v-if="page.id === pageId" class="picker-move-buttons">
+						<div v-if="page.id === pageId" class="browser-move-buttons">
 							<NcButton
 								:disabled="index === 0"
 								:aria-label="t('collectives', 'Move page up')"
@@ -162,7 +162,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 
 export default {
-	name: 'PagePicker',
+	name: 'PageBrowser',
 
 	components: {
 		ArrowDownIcon,
@@ -335,7 +335,7 @@ export default {
 		scrollToPage() {
 			// Scroll current page into view (important when listing parent page)
 			this.$nextTick(() => {
-				document.getElementById(`picker-page-${this.pageId}`).scrollIntoView({ block: 'center' })
+				document.getElementById(`browser-page-${this.pageId}`).scrollIntoView({ block: 'center' })
 			})
 		},
 
@@ -357,7 +357,7 @@ export default {
 
 			// Scroll current page into view
 			this.$nextTick(() => {
-				document.getElementById(`picker-page-${this.pageId}`).scrollIntoView({ block: 'center' })
+				document.getElementById(`browser-page-${this.pageId}`).scrollIntoView({ block: 'center' })
 			})
 		},
 
@@ -446,7 +446,7 @@ export default {
 	max-height: 500px !important;
 }
 
-.page-picker {
+.page-browser {
 	display: flex;
 	flex-direction: column;
 }
@@ -497,7 +497,7 @@ export default {
 	}
 }
 
-.picker-list {
+.browser-list {
 	display: inline-block;
 	width: 100%;
 	height: calc(100% - 34px - 8px - 6px);
@@ -527,19 +527,19 @@ export default {
 	li a.self {
 		cursor: default;
 
-		.picker-icon, .picker-title {
+		.browser-icon, .browser-title {
 			cursor: default;
 		}
 	}
 
-	.picker-icon {
+	.browser-icon {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		width: var(--default-clickable-area);
 	}
 
-	.picker-title {
+	.browser-title {
 		flex: 1;
 		align-content: center;
 		overflow: hidden;
@@ -547,7 +547,7 @@ export default {
 		text-overflow: ellipsis;
 	}
 
-	.picker-move-buttons {
+	.browser-move-buttons {
 		display: flex;
 		align-items: center;
 		padding: 0 12px;
