@@ -82,11 +82,10 @@ class SearchWordMapper extends QBMapper {
 
 		$hitCountParam = $qb->createNamedParameter($hitCount, IQueryBuilder::PARAM_INT);
 		$qb->update($this->tableName)
-			->set('num_hits', $qb->createFunction("num_hits - $hitCountParam"))
-			->set('num_files', $qb->createFunction('num_files - 1'))
+			->set('num_hits', $qb->func()->greatest($qb->createFunction("num_hits - $hitCountParam"), $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->set('num_files', $qb->func()->greatest($qb->createFunction('num_files - 1'), $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
-			->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($wordId)))
-			->andWhere($qb->expr()->gte('num_hits', $hitCountParam));
+			->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($wordId)));
 		$qb->executeStatement();
 
 		$this->deleteOrphanedWords($circleUniqueId);

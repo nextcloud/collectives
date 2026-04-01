@@ -26,7 +26,6 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 			$table->addColumn('id', Types::BIGINT, [
 				'notnull' => true,
 				'autoincrement' => true,
-				'unsigned' => true,
 			]);
 			$table->addColumn('circle_unique_id', Types::STRING, [
 				'notnull' => true,
@@ -39,12 +38,10 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 			$table->addColumn('num_hits', Types::INTEGER, [
 				'notnull' => true,
 				'default' => 0,
-				'unsigned' => true,
 			]);
 			$table->addColumn('num_files', Types::INTEGER, [
 				'notnull' => true,
 				'default' => 0,
-				'unsigned' => true,
 			]);
 
 			$table->setPrimaryKey(['id']);
@@ -58,7 +55,6 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 			$table->addColumn('id', Types::BIGINT, [
 				'notnull' => true,
 				'autoincrement' => true,
-				'unsigned' => true,
 			]);
 			$table->addColumn('circle_unique_id', Types::STRING, [
 				'notnull' => true,
@@ -66,16 +62,13 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('word_id', Types::BIGINT, [
 				'notnull' => true,
-				'unsigned' => true,
 			]);
 			$table->addColumn('file_id', Types::BIGINT, [
 				'notnull' => true,
-				'unsigned' => true,
 			]);
 			$table->addColumn('hit_count', Types::INTEGER, [
 				'notnull' => true,
 				'default' => 0,
-				'unsigned' => true,
 			]);
 
 			$table->setPrimaryKey(['id']);
@@ -91,7 +84,6 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 			$table->addColumn('id', Types::BIGINT, [
 				'notnull' => true,
 				'autoincrement' => true,
-				'unsigned' => true,
 			]);
 			$table->addColumn('circle_unique_id', Types::STRING, [
 				'notnull' => true,
@@ -99,7 +91,6 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('file_id', Types::BIGINT, [
 				'notnull' => true,
-				'unsigned' => true,
 			]);
 			$table->addColumn('path', Types::STRING, [
 				'notnull' => true,
@@ -108,7 +99,6 @@ class Version030301Date20251029000000 extends SimpleMigrationStep {
 			$table->addColumn('mtime', Types::INTEGER, [
 				'notnull' => true,
 				'default' => 0,
-				'unsigned' => true,
 			]);
 
 			$table->setPrimaryKey(['id']);
