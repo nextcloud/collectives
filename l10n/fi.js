@@ -38,6 +38,7 @@ OC.L10N.register(
     "Move or copy" : "Siirrä tai kopioi",
     "Download" : "Lataa",
     "Title" : "Nimeke",
+    "Open sidebar" : "Avaa sivupalkki",
     "Clear search" : "Tyhjennä haku",
     "Tag name" : "Tunnisteen nimi",
     "Favorites" : "Suosikit",

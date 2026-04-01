@@ -122,6 +122,7 @@ OC.L10N.register(
     "Could not rename the page" : "Nem sikerült az oldal átnevezése",
     "Select emoji for page" : "Válasszon emodzsit az oldalhoz",
     "Title" : "Cím",
+    "Open sidebar" : "Oldalsáv megnyitása",
     "Clear search" : "Keresés törlése",
     "Search or create tag" : "Címke keresése vagy létrehozása",
     "Tag name" : "Címke név",

@@ -30,6 +30,7 @@ OC.L10N.register(
     "Move or copy" : "העברה או העתקה",
     "Download" : "הורדה",
     "Title" : "תפקיד",
+    "Open sidebar" : "פתיחת סרגל הצד",
     "Favorites" : "מועדפים",
     "Favorite" : "סימון כמועדף",
     "Sort order" : "סידור",

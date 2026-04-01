@@ -87,6 +87,7 @@ OC.L10N.register(
     "Select a page from the list or create a new one." : "リストか新規に作成してページを選択してください。",
     "Could not rename the page" : "ページ名を変更できません",
     "Title" : "タイトル",
+    "Open sidebar" : "サイドバーを開く",
     "Clear search" : "検索をクリア",
     "Search or create tag" : "タグを検索または作成する",
     "Tag name" : "タグの名前",

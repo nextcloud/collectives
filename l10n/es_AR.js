@@ -26,6 +26,7 @@ OC.L10N.register(
     "Move or copy" : "Mover o Copiar",
     "Download" : "Descargar",
     "Title" : "Título",
+    "Open sidebar" : "Abrir barra lateral",
     "Favorites" : "Favoritos",
     "Favorite" : "Favorito",
     "Share link ({index})" : "Compartir link ({index})",

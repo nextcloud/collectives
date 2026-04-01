@@ -153,6 +153,7 @@ OC.L10N.register(
     "Could not rename the page" : "Could not rename the page",
     "Select emoji for page" : "Select emoji for page",
     "Title" : "عنوان",
+    "Open sidebar" : "باز کردن نوار کناری",
     "Clear search" : "پاک کردن جستجو",
     "Find previous match" : "پیدا کردن یافته پیشین",
     "Find previous" : "یافتن پیشین",

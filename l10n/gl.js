@@ -187,6 +187,7 @@ OC.L10N.register(
     "Could not rename the page" : "Non foi posíbel cambiar o nome da páxina",
     "Select emoji for page" : "Seleccione o «emoji» para a páxina",
     "Title" : "Título",
+    "Open sidebar" : "Abrir a barra lateral",
     "Clear search" : "Limpar a busca",
     "Find previous match" : "Atopar a coincidencia anterior",
     "Find previous" : "Atopar a anterior",

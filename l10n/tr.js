@@ -190,6 +190,7 @@ OC.L10N.register(
     "Could not rename the page" : "Sayfa yeniden adlandırılamadı",
     "Select emoji for page" : "Sayfa için bir emoji seçin",
     "Title" : "Başlık",
+    "Open sidebar" : "Kenar çubuğunu aç",
     "Clear search" : "Aramayı temizle",
     "Find previous match" : "Önceki eşleşmeyi görüntüle",
     "Find previous" : "Öncekini bul",

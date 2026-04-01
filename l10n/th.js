@@ -26,6 +26,7 @@ OC.L10N.register(
     "Move or copy" : "ย้ายหรือคัดลอก",
     "Download" : "ดาวน์โหลด",
     "Title" : "ชื่อเรื่อง",
+    "Open sidebar" : "เปิดแถบด้านข้าง",
     "Clear search" : "ล้างการค้นหา",
     "Favorites" : "รายการโปรด",
     "Favorite" : "รายการโปรด",

@@ -24,6 +24,7 @@ OC.L10N.register(
     "Move or copy" : "Smutti neɣ nɣel",
     "Download" : "Sider",
     "Title" : "Azwel",
+    "Open sidebar" : "Ldi-d afeggag adisan",
     "Clear search" : "Sfeḍ anadi",
     "Favorites" : "Imenyafen",
     "Favorite" : "Menyif",

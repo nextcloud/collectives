@@ -192,6 +192,7 @@ OC.L10N.register(
     "Could not rename the page" : "無法重新命名頁面",
     "Select emoji for page" : "選取頁面的表情符號",
     "Title" : "標題",
+    "Open sidebar" : "開啟側邊欄",
     "Clear search" : "清除搜尋",
     "Find previous match" : "尋找上一個符合的項目",
     "Find previous" : "尋找上一個",

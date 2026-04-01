@@ -32,6 +32,7 @@ OC.L10N.register(
     "Move or copy" : "Mover o copiar",
     "Download" : "Descargar",
     "Title" : "Título",
+    "Open sidebar" : "Abrir barra lateral",
     "Clear search" : "Limpiar búsqueda",
     "Tag name" : "Nombre de la etiqueta",
     "Favorites" : "Favoritos",

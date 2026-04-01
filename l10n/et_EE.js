@@ -192,6 +192,7 @@ OC.L10N.register(
     "Could not rename the page" : "Lehe nime muutmine ei õnnestunud",
     "Select emoji for page" : "Vali lehe jaoks emoji",
     "Title" : "Pealkiri",
+    "Open sidebar" : "Ava külgriba",
     "Clear search" : "Tühjenda otsing",
     "Find previous match" : "Leia eelmine otsinguvaste",
     "Find previous" : "Leia eelmine",

@@ -17,6 +17,7 @@ OC.L10N.register(
     "Rename" : "Thoir ainm ùr air",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Download" : "Luchdaich a-nuas",
+    "Open sidebar" : "Fosgail am bàr-taoibh",
     "Favorites" : "Annsachdan",
     "Favorite" : "Annsachd",
     "Share link ({index})" : "Ceangal co-roinnidh ({index})",

@@ -44,6 +44,7 @@ OC.L10N.register(
     "Download" : "ດາວໂຫລດ",
     "_%n attachment_::_%n attachments_" : ["%n attachments"],
     "Title" : "ຫົວຂໍ້",
+    "Open sidebar" : "ເປີດແຖບດ້ານຂ້າງ",
     "Clear search" : "Clear search",
     "Search or create tag" : "Search or create tag",
     "Tag name" : "Tag name",

@@ -172,6 +172,7 @@ OC.L10N.register(
     "Could not rename the page" : "Kan de naam van de pagina niet wijzigen",
     "Select emoji for page" : "Selecteer emoji voor pagina",
     "Title" : "Titel",
+    "Open sidebar" : "Open zijbalk",
     "Clear search" : "Wis zoekvak",
     "Find previous match" : "Vind vorige match",
     "Find previous" : "Vind vorige",

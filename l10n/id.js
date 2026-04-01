@@ -36,6 +36,7 @@ OC.L10N.register(
     "Download" : "Unduh",
     "_%n attachment_::_%n attachments_" : ["%n lampiran"],
     "Title" : "Judul",
+    "Open sidebar" : "Buka sidebar",
     "Clear search" : "Hapus pencarian",
     "Search or create tag" : "Cari atau buat tag",
     "Tag name" : "Nama tag",

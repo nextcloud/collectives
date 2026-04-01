@@ -89,6 +89,7 @@ OC.L10N.register(
     "Could not rename the page" : "Не удалось переименовать страницу",
     "Select emoji for page" : "Выберите эмодзи для страницы",
     "Title" : "Название",
+    "Open sidebar" : "Открыть боковую панель",
     "Clear search" : "Очистить поиск",
     "Search or create tag" : "Найти или создать тег",
     "Tag name" : "Название метки",

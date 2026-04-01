@@ -181,6 +181,7 @@ OC.L10N.register(
     "Could not rename the page" : "Stránku sa nepodarilo premenovať",
     "Select emoji for page" : "Vyberte emotikonu pre stránku",
     "Title" : "Názov",
+    "Open sidebar" : "Otvoriť bočný panel",
     "Clear search" : "Vymazať hľadanie",
     "Find previous match" : "Nájsť predchádzajúci výsledok",
     "Find previous" : "Nájsť predchádzajúce",

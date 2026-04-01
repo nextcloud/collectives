@@ -98,6 +98,7 @@ OC.L10N.register(
     "Could not rename the page" : "No se pudo cambiar el nombre de la página",
     "Select emoji for page" : "Seleccionar emoji para la página",
     "Title" : "Título",
+    "Open sidebar" : "Abrir barra lateral",
     "Favorites" : "Favoritos",
     "Add a page" : "Añadir una página",
     "Add a subpage" : "Añadir una subpágina",

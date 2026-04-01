@@ -38,6 +38,7 @@ OC.L10N.register(
     "Move or copy" : "Mover ou copiar",
     "Download" : "Transferir",
     "Title" : "Título",
+    "Open sidebar" : "Abrir barra lateral",
     "Clear search" : "Limpar pesquisa",
     "_Deleted %n tag_::_Deleted %n tags_" : ["Etiqueta %n excluída","Etiquetas %n excluídas","Etiquetas %n excluídas"],
     "Favorites" : "Favoritos",

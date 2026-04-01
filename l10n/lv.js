@@ -35,6 +35,7 @@ OC.L10N.register(
     "Download" : "Lejupielādēt",
     "Could not rename the page" : "Lapu nevarēja pārdēvēt",
     "Title" : "Amats",
+    "Open sidebar" : "Atvērt sānjoslu",
     "Clear search" : "Notīrīt meklēšanu",
     "Favorites" : "Izlases vienumi",
     "Favorite" : "Izlasē",
