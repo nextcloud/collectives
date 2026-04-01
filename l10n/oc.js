@@ -33,6 +33,7 @@ OC.L10N.register(
     "Move or copy" : "Desplaçar o copiar",
     "Download" : "Telecargar",
     "Title" : "Títol",
+    "Open sidebar" : "Dobrir lo panèl lateral",
     "Favorites" : "Favorits",
     "Favorite" : "Prefetit",
     "Share link ({index})" : "Ligam de partatge ({index})",

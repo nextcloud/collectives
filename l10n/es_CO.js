@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add to favorites" : "Agregar a favoritos",
     "Move or copy" : "Mover o copiar",
     "Title" : "Título",
+    "Open sidebar" : "Abrir barra lateral",
     "Favorites" : "Favoritos",
     "Can edit" : "Puede editar",
     "Add another link" : "Añadir otro enlace",

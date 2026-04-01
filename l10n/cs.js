@@ -190,6 +190,7 @@ OC.L10N.register(
     "Could not rename the page" : "Stránku se nedaří přejmenovat",
     "Select emoji for page" : "Vyberte emotikonu pro stránku",
     "Title" : "Nadpis",
+    "Open sidebar" : "Otevřít postranní panel",
     "Clear search" : "Vyčistit hledání",
     "Find previous match" : "Najít předchozí shodu",
     "Find previous" : "Najít předchozí",

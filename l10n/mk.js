@@ -31,6 +31,7 @@ OC.L10N.register(
     "Move or copy" : "Премести или копирај",
     "Download" : "Преземи",
     "Title" : "Наслов",
+    "Open sidebar" : "Отвори странична лента",
     "Clear search" : "Исчисти пребарување",
     "Updated tag {name}" : "Ажурирана ознака {name}",
     "Search or create tag" : "Барај или креирај ознака",

@@ -178,6 +178,7 @@ OC.L10N.register(
     "Could not rename the page" : "Δεν ήταν δυνατή η μετονομασία της σελίδας",
     "Select emoji for page" : "Επιλογή emoji για τη σελίδα",
     "Title" : "Τίτλος",
+    "Open sidebar" : "Άνοιγμα πλευρικής στήλης",
     "Clear search" : "Εκκαθάριση αναζήτησης",
     "Find previous match" : "Εύρεση προηγούμενης αντιστοιχίας",
     "Find previous" : "Εύρεση προηγούμενης",

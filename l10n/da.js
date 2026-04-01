@@ -152,6 +152,7 @@ OC.L10N.register(
     "Could not rename the page" : "Siden kunne ikke omdøbes",
     "Select emoji for page" : "Vælg emoji til side",
     "Title" : "Titel",
+    "Open sidebar" : "Åbn sidebjælke",
     "Clear search" : "Ryd søgning",
     "Find previous match" : "Find forrige match",
     "Find previous" : "Find forrige",

@@ -181,6 +181,7 @@ OC.L10N.register(
     "Could not rename the page" : "بۇ بەتنىڭ نامىنى ئۆزگەرتەلمىدى",
     "Select emoji for page" : "بەت ئۈچۈن emoji نى تاللاڭ",
     "Title" : "ماۋزۇ",
+    "Open sidebar" : "يان بالداقنى ئېچىڭ",
     "Clear search" : "ئىزدەشنى تازىلاش",
     "Find previous match" : "ئالدىنقى مۇسابىقىنى تېپىڭ",
     "Find previous" : "ئالدىنقىسىنى تېپىڭ",

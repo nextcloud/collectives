@@ -19,6 +19,7 @@ OC.L10N.register(
     "Rename" : "Ailenwi",
     "Download" : "Llwytho i lawr",
     "Title" : "Teitl",
+    "Open sidebar" : "Agor y bar ochr",
     "Favorites" : "Ffefrynnau",
     "Favorite" : "Ffefryn",
     "Add another link" : "Ychwanegu dolen arall",

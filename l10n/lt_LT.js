@@ -61,6 +61,7 @@ OC.L10N.register(
     "Copy or move page" : "Kopijuoti ar perkelti puslapį",
     "Could not rename the page" : "Nepavyko pervadinti puslapio",
     "Title" : "Pavadinimas",
+    "Open sidebar" : "Atverti šoninę juostą",
     "Clear search" : "Išvalyti paiešką",
     "Search or create tag" : "Ieškoti ar sukurti žymą",
     "Tag name" : "Žymos pavadinimas",

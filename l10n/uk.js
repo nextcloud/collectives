@@ -191,6 +191,7 @@ OC.L10N.register(
     "Could not rename the page" : "Не вдалося перейменувати сторінку",
     "Select emoji for page" : "Виберіть емодзі для сторінки",
     "Title" : "Назва",
+    "Open sidebar" : "Показати бічну панель",
     "Clear search" : "Очистити пошук",
     "Find previous match" : "Знайти попередній збіг",
     "Find previous" : "Знайти попередні",

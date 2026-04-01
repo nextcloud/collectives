@@ -183,6 +183,7 @@ OC.L10N.register(
     "Could not rename the page" : "Хуудасны нэрийг өөрчилж чадсангүй",
     "Select emoji for page" : "Хуудсанд эможи сонгох",
     "Title" : "–¶–æ–ª/–ê–ª–±–∞–Ω —Ç—É—à–∞–∞–ª",
+    "Open sidebar" : "Хажуу самбар нээх",
     "Clear search" : "Хайлт арилгах",
     "Find previous match" : "Өмнөх таарахыг олох",
     "Find previous" : "Өмнөхийг олох",

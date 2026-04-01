@@ -25,6 +25,7 @@ OC.L10N.register(
     "Move or copy" : "Movi aŭ kopii",
     "Download" : "Elŝuti",
     "Title" : "Titolo",
+    "Open sidebar" : "Malfermi flankopanelon",
     "Favorites" : "Plej ŝatataj",
     "Favorite" : "Pliŝatati",
     "Can edit" : "Povas redakti",

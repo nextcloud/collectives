@@ -31,6 +31,7 @@ OC.L10N.register(
     "Move or copy" : "Mută sau copiază",
     "Download" : "Descărcare",
     "Title" : "Titlu",
+    "Open sidebar" : "Deschide bara laterală",
     "Favorites" : "Favorite",
     "Favorite" : "Favorit",
     "Show in Files" : "Arată în Fișiere",

@@ -25,6 +25,7 @@ OC.L10N.register(
     "Add to favorites" : "U shtua te të parapëlqyerat",
     "Download" : "Shkarko",
     "Title" : "Titulli",
+    "Open sidebar" : "Hapni sidebar-in",
     "Favorites" : "Favorites",
     "Favorite" : "E parapëlqyer",
     "Can edit" : "Mund të editojë",

@@ -35,6 +35,7 @@ OC.L10N.register(
     "Download" : "Iscàrriga",
     "Copy or move page" : "Tràmuda o còpia sa pàgina",
     "Title" : "Tìtulu",
+    "Open sidebar" : "Aberi s'istanca laterale",
     "Favorites" : "Preferidos",
     "Favorite" : "Preferidu",
     "Show in Files" : "Mustra in Archìvios",

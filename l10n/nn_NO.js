@@ -19,6 +19,7 @@ OC.L10N.register(
     "Add to favorites" : "Legg til i favorittar",
     "Download" : "Last ned",
     "Title" : "Tittel",
+    "Open sidebar" : "Opne sidestolpe",
     "Favorites" : "Favorittar",
     "Favorite" : "Favoritt",
     "Add another link" : "Legg til ei anna lenkje",

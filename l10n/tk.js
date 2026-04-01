@@ -16,6 +16,7 @@ OC.L10N.register(
     "Rename" : "Adyny üýtgetmek",
     "Add to favorites" : "Saýlananlara goşuň",
     "Download" : "Göçürip almak",
+    "Open sidebar" : "Gapdal paneli açyň",
     "Favorites" : "Halanýanlar",
     "Favorite" : "Halaýan",
     "Share link ({index})" : "({index})Baglanyşyk paýlaş",

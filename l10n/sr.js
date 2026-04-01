@@ -178,6 +178,7 @@ OC.L10N.register(
     "Could not rename the page" : "Назив странице није могао да се промени",
     "Select emoji for page" : "Изаберите емођи за страницу",
     "Title" : "Звање",
+    "Open sidebar" : "Отвори бочну траку",
     "Clear search" : "Обриши претрагу",
     "Find previous match" : "Пронађи претходно подударање",
     "Find previous" : "Пронађи претходно",

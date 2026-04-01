@@ -100,6 +100,7 @@ OC.L10N.register(
     "Could not rename the page" : "Strani ni mogoče preimenovati.",
     "Select emoji for page" : "Izbor izrazne ikone za spletno stran",
     "Title" : "Naslov",
+    "Open sidebar" : "Odpri bočno okno",
     "Clear search" : "Počisti iskanje",
     "Tag name" : "Ime oznake",
     "Favorites" : "Priljubljeno",

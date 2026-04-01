@@ -16,6 +16,7 @@ OC.L10N.register(
     "Delete" : "Obriši",
     "Rename" : "Preimenuj",
     "Title" : "Naslov",
+    "Open sidebar" : "Otvori bočnu traku",
     "Favorites" : "Omiljene",
     "Favorite" : "Omiljene",
     "Unshare" : "Ukini deljenje",

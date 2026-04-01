@@ -184,6 +184,7 @@ OC.L10N.register(
     "Could not rename the page" : "Nie można zmienić nazwy strony",
     "Select emoji for page" : "Wybierz emotikon dla strony",
     "Title" : "Tytuł",
+    "Open sidebar" : "Otwórz pasek boczny",
     "Clear search" : "Wyczyść wyszukiwanie",
     "Find previous match" : "Znajdź poprzednie dopasowanie",
     "Find previous" : "Znajdź poprzednie",

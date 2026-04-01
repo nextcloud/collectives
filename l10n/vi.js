@@ -33,6 +33,7 @@ OC.L10N.register(
     "Move or copy" : "Di chuyển hoặc sao chép",
     "Download" : "Tải xuống",
     "Title" : "Tiêu đề",
+    "Open sidebar" : "Mở thanh bên",
     "Favorites" : "Ưa thích",
     "Favorite" : "Ưa thích",
     "Show in Files" : "Hiển thị trong Files",

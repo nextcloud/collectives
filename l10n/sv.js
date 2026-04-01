@@ -180,6 +180,7 @@ OC.L10N.register(
     "Could not rename the page" : "Kunde inte byta namn på sidan",
     "Select emoji for page" : "Välj emoji för sidan",
     "Title" : "Titel",
+    "Open sidebar" : "Öppna sidofältet",
     "Clear search" : "Rensa sökning",
     "Find previous match" : "Hitta föregående träff",
     "Find previous" : "Hitta föregående",

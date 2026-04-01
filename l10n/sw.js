@@ -184,6 +184,7 @@ OC.L10N.register(
     "Could not rename the page" : "Haikuweza kubadilisha jina la ukurasa",
     "Select emoji for page" : "Chagua emoji kwa ukurasa",
     "Title" : "Kichwa cha habari",
+    "Open sidebar" : "Fungua upau wa pembeni",
     "Clear search" : "Futa utafutaji",
     "Find previous match" : "Tafuta mechi iliyopita",
     "Find previous" : "Tafuta iliyopita",

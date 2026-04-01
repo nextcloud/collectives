@@ -39,6 +39,7 @@ OC.L10N.register(
     "Download" : "Preuzmi",
     "_%n attachment_::_%n attachments_" : ["%n privitak","%n privitka","%n privitaka"],
     "Title" : "Naslov",
+    "Open sidebar" : "Otvori bočnu traku",
     "Clear search" : "Izbriši pretragu",
     "Search or create tag" : "Traži ili stvori oznaku",
     "Tag name" : "Naziv oznake",

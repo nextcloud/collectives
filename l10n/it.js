@@ -91,6 +91,7 @@ OC.L10N.register(
     "Could not rename the page" : "Impossibile rinominare la pagina",
     "Select emoji for page" : "Seleziona una emoji per la pagina",
     "Title" : "Titolo",
+    "Open sidebar" : "Apri la barra laterale",
     "Clear search" : "Svuota ricerca",
     "Search or create tag" : "Cerca o crea tag",
     "Tag name" : "Nome etichetta",

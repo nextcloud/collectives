@@ -154,6 +154,7 @@ OC.L10N.register(
     "Could not rename the page" : "Kunne ikke gi siden nytt navn",
     "Select emoji for page" : "Velg emoji for siden",
     "Title" : "Navn",
+    "Open sidebar" : "Åpne sidepanel",
     "Clear search" : "Tøm søk",
     "Find previous match" : "Finn forrige treff",
     "Find previous" : "Finn forrige",

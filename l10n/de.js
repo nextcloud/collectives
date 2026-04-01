@@ -192,6 +192,7 @@ OC.L10N.register(
     "Could not rename the page" : "Umbenennen der Seite fehlgeschlagen",
     "Select emoji for page" : "Emoji für Seite auswählen",
     "Title" : "Titel",
+    "Open sidebar" : "Seitenleiste öffnen",
     "Clear search" : "Suche löschen",
     "Find previous match" : "Vorherige Übereinstimmung suchen",
     "Find previous" : "Vorherige Übereinstimmung",

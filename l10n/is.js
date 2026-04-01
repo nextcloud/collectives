@@ -34,6 +34,7 @@ OC.L10N.register(
     "Move or copy" : "Færa eða afrita",
     "Download" : "Sækja",
     "Title" : "Titill",
+    "Open sidebar" : "Opna hliðarspjald",
     "Clear search" : "Hreinsa leit",
     "Search or create tag" : "Leita eða búa til merki",
     "Tag name" : "Heiti merkis",

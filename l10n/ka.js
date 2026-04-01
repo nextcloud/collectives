@@ -33,6 +33,7 @@ OC.L10N.register(
     "Add to favorites" : "Add to favorites",
     "Move or copy" : "Move or copy",
     "Download" : "Download",
+    "Open sidebar" : "Open sidebar",
     "Clear search" : "წაშალე ძიების ისტორია",
     "Tag name" : "Tag name",
     "Favorites" : "Favorites",

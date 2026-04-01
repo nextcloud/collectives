@@ -192,6 +192,7 @@ OC.L10N.register(
     "Could not rename the page" : "Níorbh fhéidir an leathanach a athainmniú",
     "Select emoji for page" : "Roghnaigh emoji don leathanach",
     "Title" : "Teideal",
+    "Open sidebar" : "Oscail barra taoibh",
     "Clear search" : "Glan cuardach",
     "Find previous match" : "Faigh an cluiche roimhe seo",
     "Find previous" : "Faigh roimhe seo",
