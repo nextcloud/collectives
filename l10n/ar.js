@@ -154,6 +154,7 @@ OC.L10N.register(
     "Could not rename the page" : "تعذّرت إعادة تسمية الصفحة",
     "Select emoji for page" : "إختر الرمز التعبيري emoji للصفحة",
     "Title" : "العنوان",
+    "Open sidebar" : "فتح الشريط الجانبي",
     "Clear search" : "مَحوُ البحث",
     "Find previous match" : "إيجاد المطابقة السابقة",
     "Find previous" : "إيجاد السابق",
