@@ -139,6 +139,7 @@ OC.L10N.register(
     "Could not rename the page" : "No s'ha pogut canviar el nom de la pàgina",
     "Select emoji for page" : "Seleccioneu emoji per a la pàgina",
     "Title" : "Títol",
+    "Open sidebar" : "Obre la barra lateral",
     "Clear search" : "Neteja la cerca",
     "Search or create tag" : "Cerca o crea una etiqueta",
     "Tag name" : "Nom de l'etiqueta",

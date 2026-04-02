@@ -17,6 +17,7 @@ OC.L10N.register(
     "Move or copy" : "Kopieer of skuif",
     "Download" : "Laai af",
     "Title" : "Titel",
+    "Open sidebar" : "Open kantbalk",
     "Favorites" : "Gunstelinge",
     "Can edit" : "Kan redigeer",
     "Advanced settings" : "Gevorderde instellings",

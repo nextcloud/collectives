@@ -25,6 +25,7 @@ OC.L10N.register(
     "Move or copy" : "Dilec'hiañ pe eilañ",
     "Download" : "Pellgargañ",
     "Title" : "Titl",
+    "Open sidebar" : "Digeriñ ar varrenn-gostez",
     "Favorites" : "Penndibaboù",
     "Favorite" : "Penndibab",
     "Can edit" : "Posuple eo embann",

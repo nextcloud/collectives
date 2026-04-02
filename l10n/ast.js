@@ -89,6 +89,7 @@ OC.L10N.register(
     "Copy or move page" : "Copiar o mover la páxina",
     "Could not rename the page" : "Nun se pudo renomar la páxina",
     "Title" : "Tñitulu",
+    "Open sidebar" : "Abrir la barra llateral",
     "Tag name" : "Nome de la etiqueta",
     "Error saving the document. Please try again." : "Hebo un error al guardar el documentu. Volvi tentalo.",
     "Favorites" : "Favoritos",

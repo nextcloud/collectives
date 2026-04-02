@@ -98,6 +98,7 @@ OC.L10N.register(
     "Could not rename the page" : "Страницата не можа да се преименува",
     "Select emoji for page" : "Избор на емотикони за страница",
     "Title" : "Заглавие",
+    "Open sidebar" : "Отвори страничното меню",
     "Clear search" : "Изчисти търсенето",
     "Favorites" : "Любими",
     "Add a page" : "Добавяне на страница",
