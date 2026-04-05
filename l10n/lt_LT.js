@@ -91,6 +91,7 @@ OC.L10N.register(
     "Update share" : "Atnaujinti viešinį",
     "Upload" : "Įkelti",
     "Drag and drop files here to upload" : "Tempkite failus čia norėdami išsiųsti",
+    "No attachments" : "Priedų nėra",
     "External shares" : "Išoriniai bendrinimai",
     "External shares explanation" : "Išorinių bendrinimų paaiškinimas",
     "No other versions available" : "Nėra kitų prieinamų versijų",
