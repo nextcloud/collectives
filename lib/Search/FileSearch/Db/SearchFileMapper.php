@@ -1,0 +1,93 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+namespace OCA\Collectives\Search\FileSearch\Db;
+
+use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
+
+/**
+ * @method SearchFile insert(SearchFile $file)
+ * @method SearchFile update(SearchFile $file)
+ * @method SearchFile delete(SearchFile $file)
+ * @method SearchFile findEntity(IQueryBuilder $query)
+ * @template-extends QBMapper<SearchFile>
+ */
+class SearchFileMapper extends QBMapper {
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, 'collectives_s_files', SearchFile::class);
+	}
+
+	public function insertFile(string $circleUniqueId, int $fileId, string $path, int $mtime, ?string $language = null): SearchFile {
+		$file = new SearchFile();
+		$file->setCircleUniqueId($circleUniqueId);
+		$file->setFileId($fileId);
+		$file->setPath($path);
+		$file->setMtime($mtime);
+		$file->setLanguage($language);
+		return $this->insert($file);
+	}
+
+	public function findByCircleAndFileId(string $circleUniqueId, int $fileId): ?SearchFile {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->tableName)
+			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->andWhere($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)));
+
+		try {
+			return $this->findEntity($qb);
+		} catch (\Exception) {
+			return null;
+		}
+	}
+
+	public function getMaxMtimeByCircle(string $circleUniqueId): ?int {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select($qb->func()->max('mtime'))
+			->from($this->tableName)
+			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)));
+
+		$result = $qb->executeQuery();
+		$mtime = $result->fetchOne();
+		$result->closeCursor();
+
+		return $mtime ? (int)$mtime : null;
+	}
+
+	public function getLanguagesByCircle(string $circleUniqueId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->selectDistinct('language')
+			->from($this->tableName)
+			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->andWhere($qb->expr()->isNotNull('language'));
+
+		$result = $qb->executeQuery();
+		$languages = $result->fetchAll(\PDO::FETCH_COLUMN);
+		$result->closeCursor();
+
+		return $languages;
+	}
+
+	public function deleteByCircle(string $circleUniqueId): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete($this->tableName)
+			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)));
+		$qb->executeStatement();
+	}
+
+	public function deleteByCircleAndFileId(string $circleUniqueId, int $fileId): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete($this->tableName)
+			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->andWhere($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)));
+		$qb->executeStatement();
+	}
+}
