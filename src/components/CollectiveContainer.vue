@@ -240,7 +240,7 @@ export default {
 /* Format page title in PageContainer.vue and PageVersion.vue */
 .page-title {
 	position: relative;
-	z-index: 10022;
+	z-index: 9001;
 	padding: 0 8px;
 }
 
