@@ -136,6 +136,7 @@ class PublicPageTrashController extends CollectivesPublicOCSController {
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function index(): DataResponse {
 		$pageInfos = $this->handleErrorResponse(function (): array {
+			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$pageInfos = $this->service->findAllTrash($collectiveId, $owner);
