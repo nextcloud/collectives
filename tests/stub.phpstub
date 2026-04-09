@@ -901,7 +901,6 @@ namespace OCA\Files_Trashbin\Trash {
 		public function getOriginalLocation(): string {}
 		public function getDeletedTime(): int {}
 		public function getTrashPath(): string {}
-		public function getTrashPath(): string {}
 		public function getUser(): IUser {}
 		public function getEtag() {}
 		public function getSize($includeMounts = true) {}
