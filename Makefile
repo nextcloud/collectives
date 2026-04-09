@@ -58,7 +58,7 @@ composer-install-no-dev: composer
 
 # Clean build artifacts
 clean:
-	rm -rf js/*
+	rm -rf js/* css/*.chunk.css css/collectives-*.css
 	rm -rf $(RELEASE_DIR)/$(APP_NAME)
 
 # Also remove build tools and dependencies
