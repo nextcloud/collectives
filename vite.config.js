@@ -9,10 +9,11 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default createAppConfig(
 	{
-		'settings-admin': resolve(join('src', 'settings-admin.ts')),
+		icons: resolve(join('src', 'icons.css')),
 		init: resolve(join('src', 'init.js')),
 		main: resolve(join('src', 'main.js')),
 		reference: resolve(join('src', 'reference.js')),
+		'settings-admin': resolve(join('src', 'settings-admin.ts')),
 	},
 	{
 		config: {
@@ -61,9 +62,12 @@ export default createAppConfig(
 						],
 						maximumFileSizeToCacheInBytes: 5242880,
 					},
-				})
+				}),
 			],
 		},
 		createEmptyCSSEntryPoints: true,
+		emptyOutputDirectory: {
+			additionalDirectories: ['css'],
+		},
 	},
 )
