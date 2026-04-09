@@ -15,8 +15,8 @@
     "lint:fix": "tsc && eslint --ext .js,.ts,.vue src cypress playwright --fix",
     "serve": "vite --mode development serve",
     "start:nextcloud": "node playwright/start-nextcloud-server.js",
-    "stylelint": "stylelint css/collectives.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
-    "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix",
+    "stylelint": "stylelint src/*.css src/**/*.scss src/*.vue src/**/*.vue",
+    "stylelint:fix": "stylelint src/*.css src/**/*.scss src/**/*.vue --fix",
     "test": "vitest run",
     "watch": "vite --mode development build --watch"
   },

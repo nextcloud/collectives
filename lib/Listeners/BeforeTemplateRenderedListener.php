@@ -44,7 +44,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 
 		$userFolder = '';
 		if ($event->isLoggedIn()) {
-			Util::addStyle('collectives', 'collectives');
+			Util::addStyle(Application::APP_NAME, Application::APP_NAME . '-icons');
 
 			// Get Collectives user folder for users
 			$userId = $this->userSession->getUser()?->getUID();
