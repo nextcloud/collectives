@@ -39,4 +39,8 @@ class CollectivePageTrashItem extends TrashItem {
 	public function getTitle(): string {
 		return $this->getCollectiveMountPoint() . '/' . $this->getOriginalLocation();
 	}
+
+	public function getLastActivity(): int {
+		return parent::getLastActivity();
+	}
 }
