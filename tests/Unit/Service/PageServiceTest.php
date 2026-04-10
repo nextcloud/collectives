@@ -13,6 +13,7 @@ use OC\App\AppManager;
 use OC\Files\Mount\MountPoint;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\FileCacheMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
@@ -56,6 +57,8 @@ class PageServiceTest extends TestCase {
 			->getMock();
 		$this->pageMapper->method('findByFileId')
 			->willReturn(null);
+
+		$fileCacheMapper = $this->createMock(FileCacheMapper::class);
 
 		$this->nodeHelper = $this->getMockBuilder(NodeHelper::class)
 			->disableOriginalConstructor()
@@ -103,6 +106,7 @@ class PageServiceTest extends TestCase {
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
+			$fileCacheMapper,
 			$this->nodeHelper,
 			$this->collectiveService,
 			$userFolderHelper,

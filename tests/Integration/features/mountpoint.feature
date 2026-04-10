@@ -98,3 +98,11 @@ Feature: mountpoint
 
   Scenario: Trash and delete collective and team
     Then user "jane" trashes and deletes collective "BehatMountPoint"
+
+  # fixme: cover scenarios - created file -> page created with collective id
+  #  deleted file -> page deleted
+  #  copied file to same collective -> collective id set, slug generated
+  #  copied file to another collective -> collecvive id set
+  #  moved file to another collective -> update collective id
+  #  moved file to another collective with renaming -> update collective id and slug
+  #  moved out of collective -> delete page

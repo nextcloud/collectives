@@ -11,13 +11,16 @@ namespace OCA\Collectives\Service;
 
 use Exception;
 use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\FileCacheMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Model\FileInfo;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\NotifyPush\Queue\IQueue;
 use OCP\App\IAppManager;
@@ -39,13 +42,15 @@ class PageService {
 	private ?IQueue $pushQueue = null;
 	private ?Collective $collective = null;
 	private ?PageTrashBackend $trashBackend = null;
-	private ?array $allPageInfos = null;
+	private bool $fromCollectives = false;
 
 	public function __construct(
 		private readonly IAppManager $appManager,
 		private readonly PageMapper $pageMapper,
+		private readonly FileCacheMapper $fileCacheMapper,
 		private readonly NodeHelper $nodeHelper,
 		private readonly CollectiveServiceBase $collectiveService,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
 		private readonly UserFolderHelper $userFolderHelper,
 		private readonly IUserManager $userManager,
 		ContainerInterface $container,
@@ -58,6 +63,20 @@ class PageService {
 			$this->pushQueue = $container->get(IQueue::class);
 		} catch (Exception) {
 		}
+	}
+
+	/**
+	 * Check if the current operation originates from Collectives
+	 */
+	public function isFromCollectives(): bool {
+		return $this->fromCollectives;
+	}
+
+	/**
+	 * Set flag to indicate that the operation originates from Collectives
+	 */
+	public function setFromCollectives(bool $value): void {
+		$this->fromCollectives = $value;
 	}
 
 	private function initTrashBackend(): void {
@@ -292,23 +311,30 @@ class PageService {
 		}
 	}
 
-	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null, ?string $slug = null, ?string $tags = null): void {
+	public function updatePage(int $collectiveId, int $fileId, ?string $userId = null, ?string $emoji = null, ?bool $fullWidth = null, ?string $title = null, ?string $tags = null, ?string $slug = null): Page {
 		$page = new Page();
 		$page->setFileId($fileId);
-		$page->setLastUserId($userId);
+		$page->setCollectiveId($collectiveId);
+		if ($userId !== null) {
+			$page->setLastUserId($userId);
+		}
 		if ($emoji !== null) {
 			$page->setEmoji($emoji);
 		}
 		if ($fullWidth !== null) {
 			$page->setFullWidth($fullWidth);
 		}
-		if ($slug !== null) {
+		if ($title !== null) {
+			$page->setSlug($this->slugger->slug($title)->toString());
+		} elseif ($slug !== null) {
 			$page->setSlug($slug);
 		}
 		if ($tags !== null) {
 			$page->setTags($tags);
 		}
 		$this->pageMapper->updateOrInsert($page);
+
+		return $page;
 	}
 
 	/**
@@ -342,10 +368,13 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title, ?string $content = null): PageInfo {
+		$this->setFromCollectives(true);
 		try {
 			$newFile = $folder->newFile($filename . PageInfo::SUFFIX, $content);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
+		} finally {
+			$this->setFromCollectives(false);
 		}
 
 		$pageInfo = new PageInfo();
@@ -354,9 +383,8 @@ class PageService {
 				$this->getParentPageId($newFile),
 				$userId,
 				$this->userManager->getDisplayName($userId));
-			$slug = $title ? $this->slugger->slug($title)->toString() : null;
-			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
-			$pageInfo->setSlug($slug);
+			$page = $this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $title);
+			$pageInfo->setSlug($page->getSlug());
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -373,12 +401,15 @@ class PageService {
 			return $folder;
 		}
 
+		$this->setFromCollectives(true);
 		try {
 			$folderName = NodeHelper::generateFilename($folder, basename($file->getName(), PageInfo::SUFFIX));
 			$subFolder = $folder->newFolder($folderName);
 			$file->move($subFolder->getPath() . '/' . PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 		} catch (InvalidPathException|FilesNotFoundException|FilesNotPermittedException|LockedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
+		} finally {
+			$this->setFromCollectives(false);
 		}
 		return $subFolder;
 	}
@@ -493,6 +524,7 @@ class PageService {
 		return array_merge([$indexPage], $folderPageInfos, $subPageInfos);
 	}
 
+	// fixme: provide faster version findChildrenV2 that uses non-recursive single-query loading
 	/**
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -514,21 +546,110 @@ class PageService {
 	}
 
 	/**
+	 * Get all pages for a collective using non-recursive single-query loading
+	 */
+	public function getPagesForCollectiveId(int $collectiveId, Folder $folder, string $userId): array {
+		$collectiveFolderPath = $this->collectiveFolderManager->getRootPath() . '/' . $collectiveId;
+
+		// Get collectivePath from mount point (e.g. ".Collectives/my collective")
+		$mountParts = explode('/', $folder->getMountPoint()->getMountPoint(), 4);
+		$collectiveMountPath = (count($mountParts) >= 4) ? rtrim($mountParts[3], '/') : null;
+
+		// Load all pages for this collective in a single query
+		$pages = $this->pageMapper->findByCollectiveId($collectiveId);
+		if (empty($pages)) {
+			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId, PageInfo::INDEX_PAGE_TITLE);
+			return [$indexPage];
+		}
+
+		$fileIds = array_map(static fn (Page $page) => $page->getFileId(), $pages);
+		$pageIds = array_map(static fn (Page $page) => $page->getId(), $pages);
+		$fileInfos = $this->fileCacheMapper->findByFileIds($fileIds);
+		$linkedPageIdsPerPageId = $this->pageLinkMapper->findByPageIds($pageIds);
+
+		// Build path-to-fileId index for parent lookup
+		$indexPageByPath = [];
+		foreach ($fileInfos as $fileInfo) {
+			if ($fileInfo->isIndexPage()) {
+				$indexPageByPath[dirname($fileInfo->path)] = $fileInfo->fileId;
+			}
+		}
+
+		// Build PageInfo objects
+		$pageInfos = [];
+		foreach ($pages as $page) {
+			$fileId = $page->getFileId();
+			if (!isset($fileInfos[$fileId])) {
+				continue;
+			}
+
+			$fileInfo = $fileInfos[$fileId];
+			if ($fileInfo->isInHiddenFolder($collectiveFolderPath)) {
+				continue;
+			}
+
+			$parentId = $this->calculateParentId($fileInfo, $indexPageByPath, $collectiveFolderPath);
+
+			$pageInfo = PageInfo::fromFileInfo(
+				$fileInfo,
+				$parentId,
+				$fileInfo->getRelativePath($collectiveFolderPath),
+				$page->getLastUserId(),
+				$page->getLastUserId() ? $this->userManager->getDisplayName($page->getLastUserId()) : null,
+				$page->getEmoji(),
+				$page->getSubpageOrder(),
+				$page->getFullWidth(),
+				$page->getSlug(),
+				$page->getTags(),
+				$linkedPageIdsPerPageId[$page->getId()] ?? []
+			);
+
+			if ($collectiveMountPath !== null) {
+				$pageInfo->setCollectivePath($collectiveMountPath);
+			}
+
+			$pageInfos[] = $pageInfo;
+		}
+
+		return $pageInfos;
+	}
+
+
+	/**
+	 * Calculate parent page ID for a file using path-based lookup
+	 *
+	 * @param FileInfo $fileInfo
+	 * @param array<string, int> $indexPageByPath Map of folder path => index page fileId
+	 * @param string $collectiveFolderPath Collective folder filecache path
+	 * @return int
+	 */
+	private function calculateParentId(FileInfo $fileInfo, array $indexPageByPath, string $collectiveFolderPath): int {
+		$fileDir = dirname($fileInfo->path);
+
+		if ($fileInfo->isIndexPage()) {
+			// Landing page (index page in collective root) has parent 0
+			if ($fileDir === $collectiveFolderPath) {
+				return 0;
+			}
+
+			// For other index pages, parent is the index page of the grandparent folder
+			$grandparentDir = dirname($fileDir);
+			return $indexPageByPath[$grandparentDir] ?? 0;
+		}
+
+		// For regular pages, parent is the index page in the same folder
+		return $indexPageByPath[$fileDir] ?? 0;
+	}
+
+	/**
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function findAll(int $collectiveId, string $userId): array {
-		if ($this->allPageInfos === null || $this->collective->getId() !== $collectiveId) {
-			$folder = $this->getCollectiveFolder($collectiveId, $userId);
-			try {
-				$this->allPageInfos = $this->getPagesFromFolder($collectiveId, $folder, $userId, true, true);
-			} catch (FilesNotFoundException $e) {
-				throw new NotFoundException($e->getMessage(), 0, $e);
-			}
-		}
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 
-		return $this->allPageInfos;
+		return $this->getPagesForCollectiveId($collectiveId, $folder, $userId);
 	}
 
 	/**
@@ -823,7 +944,7 @@ class PageService {
 					if ($targetNode instanceof File && NodeHelper::isPage($targetNode)) {
 						$sourcePageInfo = $this->getPageByFile($sourceNode);
 						$tags = $copyTags ? $sourcePageInfo->getTags() : '[]';
-						$this->updatePage($collectiveId, $targetNode->getId(), $userId, $sourcePageInfo->getEmoji(), $sourcePageInfo->isFullWidth(), $sourcePageInfo->getSlug(), $tags);
+						$this->updatePage($collectiveId, $targetNode->getId(), $userId, $sourcePageInfo->getEmoji(), $sourcePageInfo->isFullWidth(), null, $tags, $sourcePageInfo->getSlug());
 					}
 				} catch (FilesNotFoundException) {
 					// Ignore if target node doesn't exist
@@ -881,6 +1002,7 @@ class PageService {
 			return null;
 		}
 
+		$this->setFromCollectives(true);
 		try {
 			if ($copy) {
 				$newNode = $node->copy($newFolder->getPath() . '/' . $newFileName . $suffix);
@@ -891,6 +1013,8 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
+		} finally {
+			$this->setFromCollectives(false);
 		}
 
 		if ($newNode instanceof Folder) {
@@ -929,9 +1053,8 @@ class PageService {
 		}
 
 		$newPageInfo = $this->getPageByFile($newFile);
-		$slug = $this->slugger->slug($title ?: $newPageInfo->getTitle())->toString();
 		try {
-			$this->updatePage($collectiveId, $newFile->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug, $pageInfo->getTags());
+			$this->updatePage($collectiveId, $newFile->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $title ?: $newPageInfo->getTitle(), $pageInfo->getTags());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -961,9 +1084,8 @@ class PageService {
 		}
 
 		$newPageInfo = $this->getPageByFile($newFile);
-		$slug = $this->slugger->slug($newPageInfo->getTitle())->toString();
 		try {
-			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
+			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $newPageInfo->getTitle());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -1009,9 +1131,8 @@ class PageService {
 		}
 
 		$newPageInfo = $this->getPageByFile($newFile);
-		$slug = $this->slugger->slug($newPageInfo->getTitle())->toString();
 		try {
-			$this->updatePage($newCollectiveId, $newFile->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug, '[]');
+			$this->updatePage($newCollectiveId, $newFile->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $newPageInfo->getTitle(), '[]');
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -1042,9 +1163,8 @@ class PageService {
 		}
 
 		$newPageInfo = $this->getPageByFile($newFile);
-		$slug = $this->slugger->slug($newPageInfo->getTitle())->toString();
 		try {
-			$this->updatePage($newCollectiveId, $newFile->getId(), $userId, null, null, $slug, '[]');
+			$this->updatePage($newCollectiveId, $newFile->getId(), $userId, null, null, $newPageInfo->getTitle(), '[]');
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -1206,6 +1326,7 @@ class PageService {
 		$pageInfo = $this->getPageByFile($file);
 		$parentId = $this->getParentPageId($file);
 
+		$this->setFromCollectives(true);
 		try {
 			if (NodeHelper::isIndexPage($file)) {
 				// Delete folder if it's an index page without subpages
@@ -1218,6 +1339,8 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
+		} finally {
+			$this->setFromCollectives(false);
 		}
 
 		$this->initTrashBackend();

@@ -216,6 +216,68 @@ class PageInfo implements JsonSerializable {
 		];
 	}
 
+	public static function fromFileInfo(
+		FileInfo $fileInfo,
+		int $parentId,
+		string $filePath,
+		?string $lastUserId = null,
+		?string $lastUserDisplayName = null,
+		?string $emoji = null,
+		?string $subpageOrder = null,
+		?bool $fullWidth = false,
+		?string $slug = null,
+		?string $tags = null,
+		?array $linkedPageIds = null,
+	): self {
+		$pageInfo = new self();
+		$pageInfo->setId($fileInfo->fileId);
+		$pageInfo->setTimestamp($fileInfo->mtime);
+		$pageInfo->setSize($fileInfo->size);
+		$pageInfo->setFileName($fileInfo->name);
+		$pageInfo->setFilePath($filePath);
+
+		// Set folder name as title for all index pages except the collective landing page
+		if ($fileInfo->isIndexPage()) {
+			if ($parentId === 0) {
+				// Landing page
+				$pageInfo->setTitle(Server::get(IFactory::class)->get('collectives')->t('Landing page'));
+			} else {
+				// Index page - use parent folder name as title
+				$pageInfo->setTitle(basename($filePath));
+			}
+		} else {
+			$pageInfo->setTitle($fileInfo->getTitle());
+		}
+
+		if ($lastUserId !== null) {
+			$pageInfo->setLastUserId($lastUserId);
+		}
+		if ($lastUserDisplayName !== null) {
+			$pageInfo->setLastUserDisplayName($lastUserDisplayName);
+		}
+		if ($emoji !== null) {
+			$pageInfo->setEmoji($emoji);
+		}
+		if ($fullWidth !== null) {
+			$pageInfo->setFullWidth($fullWidth);
+		}
+		if ($subpageOrder !== null) {
+			$pageInfo->setSubpageOrder($subpageOrder);
+		}
+		if ($slug !== null) {
+			$pageInfo->setSlug($slug);
+		}
+		if ($tags !== null) {
+			$pageInfo->setTags($tags);
+		}
+		if ($linkedPageIds !== null) {
+			$pageInfo->setLinkedPageIds($linkedPageIds);
+		}
+		$pageInfo->setParentId($parentId);
+
+		return $pageInfo;
+	}
+
 	/**
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
