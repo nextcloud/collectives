@@ -4,6 +4,7 @@
  */
 
 import { createAppConfig } from '@nextcloud/vite-config'
+import { readdirSync, rmSync, existsSync } from 'node:fs'
 import { join, resolve } from 'path'
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -29,6 +30,20 @@ export default createAppConfig(
 				},
 			},
 			plugins: [
+				// Remove stale hashed CSS build artifacts before each build so they don't accumulate.
+				// Only removes *.chunk.css and collectives-*.css (entry CSS), not collectives.css (static).
+				{
+					name: 'clean-css-artifacts',
+					buildStart() {
+						const cssDir = resolve('css')
+						if (!existsSync(cssDir)) return
+						for (const file of readdirSync(cssDir)) {
+							if (file.endsWith('.chunk.css') || (file.startsWith('collectives-') && file.endsWith('.css'))) {
+								rmSync(join(cssDir, file))
+							}
+						}
+					},
+				},
 				VitePWA({
 					// Don't generate a manifest file. It's provided by the theming app already
 					manifest: false,
