@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { heyApiPlugin } from '@hey-api/vite-plugin';
 import { createAppConfig } from '@nextcloud/vite-config'
 import { VitePWA } from 'vite-plugin-pwa'
 import { join, resolve } from 'path'
@@ -60,7 +61,13 @@ export default createAppConfig(
 						],
 						maximumFileSizeToCacheInBytes: 5242880,
 					},
-				})
+				}),
+				heyApiPlugin({
+					config: {
+						input: 'openapi.json',
+						output: 'src/client',
+					},
+				}),
 			],
 		},
 		createEmptyCSSEntryPoints: true,
