@@ -233,6 +233,9 @@ class PublicPageController extends CollectivesPublicOCSController {
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $parentId, $owner);
+				if ($templateId) {
+					$this->checkPageShareAccess($collectiveId, $sharePageId, $templateId, $owner);
+				}
 			}
 			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $templateId, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
