@@ -6,7 +6,7 @@
     "Landing page" : "Startseite",
     "Welcome %s" : "Hallo %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Seiten mit dem ➕ in der Seitenliste hinzufügen! Um die Reihenfolge zu ändern können die Seiten verschoben werden. Wenn Seiten in den Editor gezogen werden, wird ein 🔗-Link erstellt.",
-    "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "`✏️ Bearbeiten` drücken, um diesen Text zu ändern und sich wie zu Hause zu fühlen! Mehrere Personen können gemeinsam bearbeiten. Weitere Informationen in der [Dokumentation] (https://nextcloud.github.io/collectives/) oder fragen in [der Community] (https://help.nextcloud.com/tag/collectives-app).",
+    "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "`✏️ Bearbeiten` drücken, um diesen Text zu ändern und sich wie zu Hause zu fühlen! Mehrere Personen können gemeinsam bearbeiten. Weitere Informationen in der [Dokumentation](https://nextcloud.github.io/collectives/) oder fragen in [der Community](https://help.nextcloud.com/tag/collectives-app).",
     "Collective pages" : "Kollektiv-Seiten",
     "In collective %1$s" : "In Kollektiv %1$s",
     "Last edition %1$s" : "Letzte Version %1$s",
