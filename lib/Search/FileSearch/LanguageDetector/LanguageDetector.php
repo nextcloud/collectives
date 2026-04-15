@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch\LanguageDetector;
 
-use OCA\Collectives\Vendor\LanguageDetection\Language;
+use LanguageDetection\Language;
 
 class LanguageDetector {
 	public function detect(string $text): ?string {
