@@ -1443,6 +1443,24 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When anonymous fails to create page :page with parentPath :parentPath from template :template in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousFailsToCreatePublicPagePageFromTemplate(string $page, string $parentPath, string $template, string $pageShare, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$templateId = $this->templateIdByName($collectiveId, $template);
+
+		$formData = new TableNode([['title', $page], ['templateId', $templateId]]);
+		$this->sendOcsCollectivesRequest('POST', 'p/collectives/' . $token . '/pages/' . $parentId, $formData, null, [], false);
+		$this->assertStatusCode(403);
+	}
+
+	/**
 	 * @When anonymous moves page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
 	 * @When anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
 	 *

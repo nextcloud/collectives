@@ -51,6 +51,11 @@ Feature: publicPageShare
   Scenario: Fail to trash page in editable shared page
     Then anonymous fails to trash page "subpage" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
 
+  Scenario: Fail to create page from template in editable shared page
+    When user "jane" creates template "newtemplate" in "BehatPublicPageCollective"
+    Then anonymous fails to create page "anotherpage" with parentPath "sharefolderpage/Readme.md" from template "newtemplate" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
+
+
   Scenario: Fail to create page in editable shared page if share owner misses editing permissions
     When user "jane" sets "share" level in collective "BehatPublicPageCollective" to "Member"
     And user "john" creates public page share for page "sharefolderpage" in "BehatPublicPageCollective"
