@@ -25,5 +25,8 @@ Feature: templates
     When user "jane" deletes template "newtemplate2" from "BehatTemplatesCollective"
     Then user "jane" fails to see templateName "newtemplate2" in "BehatTemplatesCollective"
 
+  Scenario: Creating page from non-template fails
+    Then user "jane" fails to create page "anotherpage2" with parentPath "Readme.md" using page "anotherpage" as template in "BehatTemplatesCollective"
+
   Scenario: Trash and delete collective and team
     Then user "jane" trashes and deletes collective "BehatTemplatesCollective"

@@ -172,6 +172,22 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user fails to create page :page with parentPath :parentPath using page :sourcePage as template in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userFailsToCreateFromNonTemplate(string $user, string $page, string $parentPath, string $sourcePage, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$sourcePageId = $this->pageIdByName($collectiveId, $sourcePage);
+
+		$formData = new TableNode([['title', $page], ['templateId', $sourcePageId]]);
+		$this->sendOcsCollectivesRequest('POST', 'collectives/' . $collectiveId . '/pages/' . $parentId, $formData);
+		$this->assertStatusCode(404);
+	}
+
+	/**
 	 * @When user :user creates template :template in :collective
 	 * @When user :user :fails to create template :template in :collective
 	 *
