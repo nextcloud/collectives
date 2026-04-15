@@ -62,4 +62,20 @@ test.describe('Page content', () => {
 		const origin = new URL(page.url()).origin
 		await expect(pageWidget).toHaveAttribute('href', origin + targetPage.getPageUrl())
 	})
+
+	test('mentioning lists collective members first', async ({ user, page, collective, editor }) => {
+		const extraMemberIds = []
+		for (let i = 0; i < 2; i++) {
+			const member = await collective.addMember()
+			extraMemberIds.push(member.userId)
+		}
+		const collectivePage = await collective.createPage({ title: 'Page', user, page })
+		await collectivePage.open(true)
+
+		editor.setMode(true)
+		await editor.getContent().fill('@')
+		for (const userId of [user.account.userId, ...extraMemberIds]) {
+			await expect(editor.getMentionSuggestions()).toContainText(userId)
+		}
+	})
 })

@@ -34,3 +34,15 @@ export function webdavUrl(userId: string, ...parts: (string | number)[]): string
 		.join('/')
 	return `/remote.php/dav/files/${userId}/${path}`
 }
+
+/**
+ * Generate Circles OCS API URL
+ *
+ * @param parts - URL parts to append - will be joined with `/`
+ */
+export function circlesApiUrl(...parts: (string | number)[]): string {
+	const path = parts
+		.map((part) => encodeURI(String(part)))
+		.join('/')
+	return `/ocs/v2.php/apps/circles/circles/${path}`
+}

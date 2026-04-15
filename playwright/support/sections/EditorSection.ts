@@ -96,4 +96,8 @@ export class EditorSection {
 			.getByRole('link')
 			.click()
 	}
+
+	public getMentionSuggestions(): Locator {
+		return this.page.getByRole('tooltip').locator('.suggestion-list')
+	}
 }
