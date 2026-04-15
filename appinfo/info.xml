@@ -74,6 +74,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<command>OCA\Collectives\Command\IndexCollectives</command>
 		<command>OCA\Collectives\Command\PageTrashCleanup</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
+		<command>OCA\Collectives\Command\RepairUserFolderEncryptionKeys</command>
 	</commands>
 	<settings>
 		<admin>OCA\Collectives\Settings\Admin</admin>
