@@ -19,7 +19,7 @@ class Stemmer {
 	private array $stemmers = [];
 
 	public function __construct(
-		private IConfig $config,
+		private readonly IConfig $config,
 	) {
 	}
 

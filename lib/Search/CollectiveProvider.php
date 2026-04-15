@@ -25,11 +25,11 @@ use OCP\Search\SearchResultEntry;
 
 class CollectiveProvider implements IProvider {
 	public function __construct(
-		private IL10N $l10n,
-		private IURLGenerator $urlGenerator,
-		private CollectiveHelper $collectiveHelper,
-		private CollectiveService $collectiveService,
-		private IAppManager $appManager,
+		private readonly IL10N $l10n,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly CollectiveHelper $collectiveHelper,
+		private readonly CollectiveService $collectiveService,
+		private readonly IAppManager $appManager,
 	) {
 	}
 
