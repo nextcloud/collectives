@@ -153,6 +153,23 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
+	private function isInTemplateFolder(int $collectiveId, int $pageId, string $userId): bool {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		try {
+			$templateFolder = $collectiveFolder->get(TemplateService::TEMPLATE_FOLDER);
+		} catch (FilesNotFoundException) {
+			return false;
+		}
+
+		return ($templateFolder instanceof Folder)
+			&& $templateFolder->getFirstNodeById($pageId) !== null;
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
 	private function getChildPageIds(int $collectiveId, File $file, string $userId): array {
 		if (!NodeHelper::isIndexPage($file)) {
 			return [];
@@ -706,9 +723,14 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $defaultTitle ?: self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		return $templateId
-			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
-			: $this->newPage($collectiveId, $folder, $filename, $userId, $title, $content);
+		if ($templateId) {
+			if (!$this->isInTemplateFolder($collectiveId, $templateId, $userId)) {
+				throw new NotFoundException('Template ' . $templateId . ' not found in collective ' . $collectiveId);
+			}
+			return $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId);
+		}
+
+		return $this->newPage($collectiveId, $folder, $filename, $userId, $title, $content);
 	}
 
 	/**

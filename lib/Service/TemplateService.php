@@ -16,7 +16,7 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 
 class TemplateService {
-	private const TEMPLATE_FOLDER = '.templates';
+	public const TEMPLATE_FOLDER = '.templates';
 	private const TEMPLATE_INDEX_CONTENT = '## This folder contains template files for the collective';
 	private const DEFAULT_TEMPLATE_TITLE = 'New Template';
 
