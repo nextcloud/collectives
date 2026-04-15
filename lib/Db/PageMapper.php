@@ -113,6 +113,26 @@ class PageMapper extends QBMapper {
 	/**
 	 * @return Page[]
 	 */
+	public function findByCollectiveId(int $collectiveId, bool $trashed = false): array {
+		$qb = $this->db->getQueryBuilder();
+		$andX = [
+			$qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)),
+		];
+		// fixme: change index to use timestamp as well?
+		if ($trashed) {
+			$andX[] = $qb->expr()->isNotNull('trash_timestamp');
+		} else {
+			$andX[] = $qb->expr()->isNull('trash_timestamp');
+		}
+		$qb->select('*')
+			->from($this->tableName)
+			->where($qb->expr()->andX(...$andX));
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @return Page[]
+	 */
 	public function getAll(): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')

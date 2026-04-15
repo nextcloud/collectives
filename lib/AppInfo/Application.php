@@ -23,6 +23,7 @@ use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
 use OCA\Collectives\Listeners\CircleEditingEventListener;
 use OCA\Collectives\Listeners\CollectivesReferenceListener;
+use OCA\Collectives\Listeners\NodeDeletedListener;
 use OCA\Collectives\Listeners\NodeRenamedListener;
 use OCA\Collectives\Listeners\NodeWrittenListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
@@ -52,6 +53,7 @@ use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Events\Node\NodeDeletedEvent;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\Files\IMimeTypeLoader;
@@ -75,6 +77,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		require_once(__DIR__ . '/../../vendor/autoload.php');
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+		$context->registerEventListener(NodeDeletedEvent::class, NodeDeletedListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
 		$context->registerEventListener(NodeWrittenEvent::class, NodeWrittenListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);

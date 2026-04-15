@@ -244,6 +244,7 @@ class CollectiveService extends CollectiveServiceBase {
 
 			$page = new Page();
 			$page->setFileId($file->getId());
+			$page->setCollectiveId($collective->getId());
 			$page->setLastUserId($userId);
 			$this->pageMapper->updateOrInsert($page);
 		} catch (FilesNotFoundException|InvalidPathException $e) {

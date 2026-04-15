@@ -233,4 +233,32 @@ class NodeHelperTest extends TestCase {
 		self::assertEquals(1, NodeHelper::folderHasSubPage($parentFolder, 'File2'));
 		self::assertEquals(2, NodeHelper::folderHasSubPage($folder, 'subfolder'));
 	}
+
+	public function extractCollectiveIdFromPathProvider(): \Generator {
+		yield 'normal collective page' => ['appdata_abc123/collectives/42/page.md', 42];
+		yield 'collective page in subfolder' => ['appdata_xyz/collectives/123/subfolder/page.md', 123];
+		yield 'collective index page' => ['appdata_test/collectives/1/Readme.md', 1];
+		yield 'trashed collective page' => ['appdata_abc123/collectives/trash/99/page.md', 99];
+		yield 'trashed page in subfolder' => ['appdata_xyz/collectives/trash/456/deleted.md', 456];
+		yield 'non-appdata files path' => ['files/user/docs/page.md', null];
+		yield 'non-appdata groupfolders path' => ['__groupfolders/1/page.md', null];
+		yield 'appdata but non-collectives files' => ['appdata_abc123/files/42/page.md', null];
+		yield 'appdata but non-collectives preview' => ['appdata_abc123/preview/42/page.md', null];
+		yield 'missing collective ID (trailing slash)' => ['appdata_abc123/collectives/', null];
+		yield 'missing collective ID (no trailing slash)' => ['appdata_abc123/collectives', null];
+		yield 'trash missing ID (trailing slash)' => ['appdata_abc123/collectives/trash/', null];
+		yield 'trash missing ID (no trailing slash)' => ['appdata_abc123/collectives/trash', null];
+		yield 'non-numeric collective ID (abc)' => ['appdata_abc123/collectives/abc/page.md', null];
+		yield 'non-numeric collective ID (12_34)' => ['appdata_abc123/collectives/12_34/page.md', null];
+		yield 'non-numeric trash ID' => ['appdata_abc123/collectives/trash/abc/page.md', null];
+		yield 'empty path' => ['', null];
+		yield 'appdata only without rest' => ['appdata_only', null];
+	}
+
+	/**
+	 * @dataProvider extractCollectiveIdFromPathProvider
+	 */
+	public function testExtractCollectiveIdFromPath(string $path, ?int $expected): void {
+		self::assertEquals($expected, NodeHelper::extractCollectiveIdFromPath($path));
+	}
 }

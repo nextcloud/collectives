@@ -26,7 +26,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Teams«** and **»Collectives«** apps and enable them.
 
 	]]></description>
-	<version>4.2.0</version>
+	<version>4.2.1</version>
 	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
@@ -59,6 +59,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 	<repair-steps>
 		<post-migration>
 			<step>OCA\Collectives\Migration\MigrateTemplates</step>
+			<step>OCA\Collectives\Migration\PopulatePageCollectiveId</step>
 		</post-migration>
 		<live-migration>
 			<step>OCA\Collectives\Migration\GenerateSlugs</step>
