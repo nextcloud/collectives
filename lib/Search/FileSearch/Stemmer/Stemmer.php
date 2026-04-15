@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch\Stemmer;
 
-use OCA\Collectives\Vendor\Wamania\Snowball\NotFoundException;
-use OCA\Collectives\Vendor\Wamania\Snowball\Stemmer\Stemmer as WamaniaStemmer;
-use OCA\Collectives\Vendor\Wamania\Snowball\StemmerFactory;
 use OCP\IConfig;
+use Wamania\Snowball\NotFoundException;
+use Wamania\Snowball\Stemmer\Stemmer as WamaniaStemmer;
+use Wamania\Snowball\StemmerFactory;
 
 class Stemmer {
 	/** @var array<string, WamaniaStemmer|null> */

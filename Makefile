@@ -144,7 +144,6 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/stylelint.config.cjs" \
 		--exclude="$(APP_NAME)/tests" \
 		--exclude="$(APP_NAME)/tsconfig.json" \
-		--exclude="$(APP_NAME)/vendor/.scoped" \
 		--exclude="$(APP_NAME)/vendor-bin" \
 		--exclude="$(APP_NAME)/vite.*" \
 		$(PROJECT_DIR) $(RELEASE_DIR)/
