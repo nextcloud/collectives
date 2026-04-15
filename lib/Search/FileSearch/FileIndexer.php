@@ -24,12 +24,12 @@ class FileIndexer {
 	private const LANGUAGE_DETECTION_LIMIT = 2000;
 
 	public function __construct(
-		private SearchWordMapper $wordMapper,
-		private SearchDocMapper $docMapper,
-		private SearchFileMapper $fileMapper,
-		private WordTokenizer $tokenizer,
-		private Stemmer $stemmer,
-		private LanguageDetector $languageDetector,
+		private readonly SearchWordMapper $wordMapper,
+		private readonly SearchDocMapper $docMapper,
+		private readonly SearchFileMapper $fileMapper,
+		private readonly WordTokenizer $tokenizer,
+		private readonly Stemmer $stemmer,
+		private readonly LanguageDetector $languageDetector,
 	) {
 	}
 

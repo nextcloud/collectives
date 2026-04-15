@@ -22,12 +22,12 @@ class FileSearcher {
 	private const FUZZY_MAX_DISTANCE = 1;
 
 	public function __construct(
-		private SearchWordMapper $wordMapper,
-		private SearchDocMapper $docMapper,
-		private SearchFileMapper $fileMapper,
-		private WordTokenizer $tokenizer,
-		private ClauseTokenizer $clauseTokenizer,
-		private Stemmer $stemmer,
+		private readonly SearchWordMapper $wordMapper,
+		private readonly SearchDocMapper $docMapper,
+		private readonly SearchFileMapper $fileMapper,
+		private readonly WordTokenizer $tokenizer,
+		private readonly ClauseTokenizer $clauseTokenizer,
+		private readonly Stemmer $stemmer,
 	) {
 	}
 

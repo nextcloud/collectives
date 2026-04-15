@@ -28,12 +28,12 @@ use OCP\Search\SearchResultEntry;
 
 class PageProvider implements IProvider {
 	public function __construct(
-		private IL10N $l10n,
-		private IURLGenerator $urlGenerator,
-		private CollectiveHelper $collectiveHelper,
-		private CollectiveService $collectiveService,
-		private PageService $pageService,
-		private IAppManager $appManager,
+		private readonly IL10N $l10n,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly CollectiveHelper $collectiveHelper,
+		private readonly CollectiveService $collectiveService,
+		private readonly PageService $pageService,
+		private readonly IAppManager $appManager,
 	) {
 	}
 

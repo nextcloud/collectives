@@ -31,14 +31,14 @@ use Psr\Log\LoggerInterface;
 
 class PageContentProvider implements IProvider {
 	public function __construct(
-		private IL10N $l10n,
-		private IURLGenerator $urlGenerator,
-		private CollectiveHelper $collectiveHelper,
-		private CollectiveService $collectiveService,
-		private PageService $pageService,
-		private SearchService $indexedSearchService,
-		private LoggerInterface $logger,
-		private IAppManager $appManager,
+		private readonly IL10N $l10n,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly CollectiveHelper $collectiveHelper,
+		private readonly CollectiveService $collectiveService,
+		private readonly PageService $pageService,
+		private readonly SearchService $indexedSearchService,
+		private readonly LoggerInterface $logger,
+		private readonly IAppManager $appManager,
 	) {
 	}
 
