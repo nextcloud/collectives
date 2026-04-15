@@ -3,10 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { User as Account } from '@nextcloud/e2e-test-server'
 import type { Page } from '@playwright/test'
 import type { User } from './User.ts'
 
-import { apiUrl, ocsHeaders } from '../helpers/urls.ts'
+import { createRandomUser } from '@nextcloud/e2e-test-server/playwright'
+import { apiUrl, circlesApiUrl, ocsHeaders } from '../helpers/urls.ts'
 import { CollectivePage } from './CollectivePage.ts'
 import { CollectiveShare } from './CollectiveShare.ts'
 
@@ -38,6 +40,7 @@ export class Collective {
 	public readonly data: CollectiveData
 	public collectivePages: CollectivePage[] = []
 	public readonly page: Page
+	public extraMembers: Account[] = []
 
 	constructor(data: CollectiveData, page: Page) {
 		this.data = data
@@ -164,6 +167,23 @@ export class Collective {
 		)
 		const data = await response.json()
 		return new CollectiveShare(this.getCollectiveUrlPart(), data.ocs.data, page)
+	}
+
+	async addMember(): Promise<Account> {
+		const account = await createRandomUser()
+		await this.page.request.post(
+			circlesApiUrl(this.data.circleId, 'members'),
+			{
+				headers: ocsHeaders,
+				data: {
+					userId: account.userId,
+					type: 1,
+				},
+				failOnStatusCode: true,
+			},
+		)
+		this.extraMembers.push(account)
+		return account
 	}
 }
 
