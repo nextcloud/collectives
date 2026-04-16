@@ -34,13 +34,17 @@
 
 			<div class="page-list">
 				<ul v-if="pages.length > 0">
-					<ListItem
+					<PagePreview
 						v-for="page in pages"
-						:id="page.id"
 						:key="page.id"
-						:emoji="page.emoji"
+						link="x"
 						:title="page.title"
-						type="page"
+						description="test"
+						:emoji="page.emoji!"
+						lastEdited="xyz"
+						:lastUserId="page.lastUserId!"
+						:lastUserDisplayName="page.lastUserDisplayName!"
+						:small="true"
 						@click="onClickPage(page)" />
 				</ul>
 				<NcEmptyContent
@@ -87,7 +91,7 @@ import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
 import FilterCheckOutlineIcon from 'vue-material-design-icons/FilterCheckOutline.vue'
 import FilterOutlineIcon from 'vue-material-design-icons/FilterOutline.vue'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
-import ListItem from '../components/Page/PageBrowser/ListItem.vue'
+import PagePreview from '../components/PagePreview.vue'
 import { searchPages } from '../apis/collectives/index.js'
 import { byTimeAsc } from '../util/sortOrders.js'
 
@@ -99,7 +103,6 @@ export default defineComponent({
 		CollectivesIcon,
 		FilterCheckOutlineIcon,
 		FilterOutlineIcon,
-		ListItem,
 		NcActionCheckbox,
 		NcActions,
 		NcActionText,
@@ -107,6 +110,7 @@ export default defineComponent({
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcTextField,
+		PagePreview,
 	},
 
 	emits: [
