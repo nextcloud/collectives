@@ -17,10 +17,10 @@
 					@trailingButtonClick="query = ''" />
 				<NcActions v-if="collectiveId">
 					<template #icon>
-						<FilterOutlineIcon :size="20" />
+						<FilterCheckOutlineIcon v-if="filterCollective" :size="20" />
+						<FilterOutlineIcon v-else :size="20" />
 					</template>
-					<NcActionCheckbox
-						v-model="filterCollective">
+					<NcActionCheckbox v-model="filterCollective">
 						{{ t('collectives', 'Limit to current collective') }}
 					</NcActionCheckbox>
 					<NcActionText>
@@ -44,7 +44,7 @@
 						@click="onClickPage(page)" />
 				</ul>
 				<NcEmptyContent
-					v-else-if="allRecentPagesLoading"
+					v-else-if="searchedPagesLoading"
 					:description="t('collectives', 'Loading pages')">
 					<template #icon>
 						<NcLoadingIcon />
@@ -74,6 +74,7 @@ import type { PageInfo } from '../types.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import debounce from 'debounce'
 import { defineComponent } from 'vue'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -83,9 +84,11 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
+import FilterCheckOutlineIcon from 'vue-material-design-icons/FilterCheckOutline.vue'
 import FilterOutlineIcon from 'vue-material-design-icons/FilterOutline.vue'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import ListItem from '../components/Page/PageBrowser/ListItem.vue'
+import { searchPages } from '../apis/collectives/index.js'
 import { byTimeAsc } from '../util/sortOrders.js'
 
 export default defineComponent({
@@ -94,6 +97,7 @@ export default defineComponent({
 	components: {
 		AlertOutlineIcon,
 		CollectivesIcon,
+		FilterCheckOutlineIcon,
 		FilterOutlineIcon,
 		ListItem,
 		NcActionCheckbox,
@@ -118,12 +122,13 @@ export default defineComponent({
 			collectiveId: null,
 			filterCollective: false,
 			currentPages: [] as PageInfo[],
-			allRecentPages: [] as PageInfo[],
-			allRecentPagesLoading: false,
+			searchedPages: [] as PageInfo[],
+			searchedPagesLoading: false,
 			rootPage: null as PageInfo | null,
 			selectedPageId: null as number | null,
 			isLoadingPages: false,
 			query: '',
+			debouncedGetSearchedPages: debounce(this.getSearchedPages, 300),
 		}
 	},
 
@@ -140,14 +145,21 @@ export default defineComponent({
 		pages() {
 			return this.filterCollective
 				? this.currentRecentPages.slice(0, 10)
-				: this.allRecentPages.slice(0, 10)
+				: this.searchedPages.slice(0, 10)
 		},
 	},
 
 	watch: {
+		query() {
+			if (!this.filterCollective) {
+				this.searchedPages = []
+				this.debouncedGetSearchedPages()
+			}
+		},
+
 		filterCollective(newValue) {
-			if (!newValue && this.allRecentPages.length === 0) {
-				this.getAllRecentPages()
+			if (!newValue) {
+				this.getSearchedPages()
 			}
 		},
 	},
@@ -163,7 +175,7 @@ export default defineComponent({
 			}
 		} else {
 			// TODO: only do if not in public share
-			this.getAllRecentPages()
+			this.getSearchedPages()
 		}
 		// TODO: doesn't work
 		this.$refs.searchInput.focus()
@@ -189,15 +201,13 @@ export default defineComponent({
 			}
 		},
 
-		getAllRecentPages() {
-			this.allRecentPagesLoading = true
+		async getSearchedPages() {
+			this.searchedPagesLoading = true
 			try {
-				// TODO: get recent pages
-				setTimeout(() => {
-					this.allRecentPagesLoading = false
-				}, 2000)
+				const response = await searchPages(this.query)
+				this.searchedPages = response.data.ocs.data.pages
 			} finally {
-				// this.allRecentPagesLoading = false
+				this.searchedPagesLoading = false
 			}
 		},
 	},
@@ -237,6 +247,7 @@ export default defineComponent({
 .searchbar {
 	display: flex;
 	align-items: center;
+	gap: var(--default-grid-baseline);
 }
 
 .page-list {
