@@ -11,7 +11,7 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
-		"lib": ["webworker"],
+		"lib": ["DOM", "webworker"],
 		"allowImportingTsExtensions": true
 	}
 }
