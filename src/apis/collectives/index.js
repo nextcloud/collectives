@@ -6,6 +6,7 @@
 export * from './urls.js'
 export * from './collectives.js'
 export * from './pages.js'
+export * from './search.ts'
 export * from './sessions.js'
 export * from './settings.js'
 export * from './shares.js'
