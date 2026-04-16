@@ -11,8 +11,8 @@ export default createAppConfig(
 	{
 		icons: resolve(join('src', 'icons.css')),
 		init: resolve(join('src', 'init.js')),
-		main: resolve(join('src', 'main.js')),
-		reference: resolve(join('src', 'reference.js')),
+		main: resolve(join('src', 'main.ts')),
+		reference: resolve(join('src', 'reference.ts')),
 		'settings-admin': resolve(join('src', 'settings-admin.ts')),
 	},
 	{
