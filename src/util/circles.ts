@@ -31,7 +31,7 @@ export function circleMemberType(member: CircleMember): number {
 	// Copied from Contacts app src/models/member.ts get userType()
 	return member.userType !== circlesMemberTypes.TYPE_CIRCLE
 		? member.userType
-		: member.basedOn.source
+		: member.basedOn!.source
 }
 
 /**

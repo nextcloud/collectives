@@ -9,6 +9,7 @@
 		<div class="modal-inner">
 			<div class="searchbar">
 				<NcTextField
+					ref="searchInput"
 					v-model="query"
 					:label="t('collectives', 'Search pages…')"
 					:showTrailingButton="!!query"
@@ -32,7 +33,6 @@
 			</div>
 
 			<div class="page-list">
-				<!-- TODO skeleton loading? -->
 				<ul v-if="pages.length > 0">
 					<ListItem
 						v-for="page in pages"
@@ -165,6 +165,8 @@ export default defineComponent({
 			// TODO: only do if not in public share
 			this.getAllRecentPages()
 		}
+		// TODO: doesn't work
+		this.$refs.searchInput.focus()
 	},
 
 	methods: {
