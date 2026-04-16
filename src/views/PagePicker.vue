@@ -5,37 +5,37 @@
 
 <template>
 	<div class="modal-scroller">
-		<h2>{{ t('collectives', 'Collectives pages') }}</h2>
+		<h2>{{ t('collectives', 'Add link to page') }}</h2>
 		<div class="modal-inner">
-			<NcTextField
-				v-model="query"
-				:label="t('collectives', 'Search pages…')"
-				:showTrailingButton="!!query"
-				:trailingButtonLabel="t('collectives', 'Clear search')"
-				@trailingButtonClick="query = ''" />
+			<div class="searchbar">
+				<NcTextField
+					v-model="query"
+					:label="t('collectives', 'Search pages…')"
+					:showTrailingButton="!!query"
+					:trailingButtonLabel="t('collectives', 'Clear search')"
+					@trailingButtonClick="query = ''" />
+				<NcActions v-if="collectiveId">
+					<template #icon>
+						<FilterOutlineIcon :size="20" />
+					</template>
+					<NcActionCheckbox
+						v-model="filterCollective">
+						{{ t('collectives', 'Limit to current collective') }}
+					</NcActionCheckbox>
+					<NcActionText>
+						<template #icon>
+							<AlertOutlineIcon :size="20" />
+						</template>
+						{{ t('collectives', 'Links to pages from other collectives might not be accessible to everyone in this collective.') }}
+					</NcActionText>
+				</NcActions>
+			</div>
 
-			<BreadCrumbs
-				:selectedCollective
-				:pageCrumbs
-				:rootPage
-				@clickCollectivesList="onClickCollectivesList"
-				@clickCollectiveHome="onClickCollectiveHome"
-				@clickPage="onClickPage" />
 			<div class="page-list">
-				<ul v-if="!selectedCollective">
-					<ListItem
-						v-for="collective in collectives"
-						:id="collective.id"
-						:key="collective.id"
-						:emoji="collective.emoji"
-						:title="collective.name"
-						type="collective"
-						@click="onClickCollective(collective)" />
-				</ul>
 				<!-- TODO skeleton loading? -->
-				<ul v-else-if="subpages.length > 0">
+				<ul v-if="pages.length > 0">
 					<ListItem
-						v-for="page in subpages"
+						v-for="page in pages"
 						:id="page.id"
 						:key="page.id"
 						:emoji="page.emoji"
@@ -43,14 +43,21 @@
 						type="page"
 						@click="onClickPage(page)" />
 				</ul>
+				<NcEmptyContent
+					v-else-if="allRecentPagesLoading"
+					:description="t('collectives', 'Loading pages')">
+					<template #icon>
+						<NcLoadingIcon />
+					</template>
+				</NcEmptyContent>
+				<NcEmptyContent v-else :description="t('collectives', 'No pages to link')">
+					<template #icon>
+						<CollectivesIcon />
+					</template>
+				</NcEmptyContent>
 			</div>
 
 			<!-- TODO
-			<NcEmptyContent>
-				<template #icon>
-					<CollectivesIcon />
-				</template>
-			</NcEmptyContent>
 			-->
 
 			<div class="modal-buttons">
@@ -63,34 +70,43 @@
 </template>
 
 <script lang="ts">
-import type { Collective, PageInfo } from '../types.ts'
+import type { PageInfo } from '../types.ts'
 
 import { t } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
 import { defineComponent } from 'vue'
+import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionText from '@nextcloud/vue/components/NcActionText'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
+import AlertOutlineIcon from 'vue-material-design-icons/AlertOutline.vue'
+import FilterOutlineIcon from 'vue-material-design-icons/FilterOutline.vue'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
-import BreadCrumbs from '../components/Page/PageBrowser/BreadCrumbs.vue'
 import ListItem from '../components/Page/PageBrowser/ListItem.vue'
-import { getCollectives, getPages } from '../apis/collectives/index.js'
-import { byOrder } from '../util/sortOrders.js'
+import { byTimeAsc } from '../util/sortOrders.js'
 
 export default defineComponent({
 	name: 'PagePicker',
 
 	components: {
-		ListItem,
-		BreadCrumbs,
+		AlertOutlineIcon,
 		CollectivesIcon,
+		FilterOutlineIcon,
+		ListItem,
+		NcActionCheckbox,
+		NcActions,
+		NcActionText,
 		NcButton,
 		NcEmptyContent,
+		NcLoadingIcon,
 		NcTextField,
 	},
 
 	emits: [
 		'cancel',
-		'submit',
 	],
 
 	setup() {
@@ -99,48 +115,55 @@ export default defineComponent({
 
 	data() {
 		return {
-			collectives: [] as Collective[],
-			selectedCollective: null as Collective | null,
-			allPages: [] as PageInfo[],
+			collectiveId: null,
+			filterCollective: false,
+			currentPages: [] as PageInfo[],
+			allRecentPages: [] as PageInfo[],
+			allRecentPagesLoading: false,
 			rootPage: null as PageInfo | null,
 			selectedPageId: null as number | null,
-			isLoadingCollectives: false,
 			isLoadingPages: false,
 			query: '',
 		}
 	},
 
 	computed: {
-		pageCrumbs(): PageInfo[] {
-			if (!this.selectedCollective) {
-				return []
-			}
-
-			// TODO
-			return []
+		currentRecentPages() {
+			const recentPages = this.currentPages
+				.slice()
+				.sort(byTimeAsc)
+			return this.query
+				? recentPages.filter((p) => p.title.toLocaleLowerCase().includes(this.query.toLowerCase()))
+				: recentPages
 		},
 
-		subpages(): PageInfo[] {
-			if (!this.selectedPageId) {
-				return []
+		pages() {
+			return this.filterCollective
+				? this.currentRecentPages.slice(0, 10)
+				: this.allRecentPages.slice(0, 10)
+		},
+	},
+
+	watch: {
+		filterCollective(newValue) {
+			if (!newValue && this.allRecentPages.length === 0) {
+				this.getAllRecentPages()
 			}
-			const parentPage = this.allPages.find((page) => page.id === this.selectedPageId)
-			const customOrder = parentPage?.subpageOrder || []
-			return this.allPages
-				.filter((p) => p.parentId = this.selectedPageId)
-				.map((p) => ({ ...p, index: customOrder.indexOf(p.id) }))
-				.sort(byOrder)
-			return []
 		},
 	},
 
 	async mounted() {
-		this.isLoadingCollectives = true
-		try {
-			const response = await getCollectives()
-			this.collectives = response.data.ocs.data.collectives
-		} finally {
-			this.isLoadingCollectives = false
+		this.collectiveId = window.OCA?.Collectives?.currentCollectiveId
+		if (this.collectiveId) {
+			this.filterCollective = true
+			const raw = localStorage.getItem('collectives/pinia/pages/allPages')
+			if (raw) {
+				const allPagesMap = JSON.parse(raw)
+				this.currentPages = allPagesMap[this.collectiveId] ?? []
+			}
+		} else {
+			// TODO: only do if not in public share
+			this.getAllRecentPages()
 		}
 	},
 
@@ -149,38 +172,31 @@ export default defineComponent({
 			this.$emit('cancel')
 		},
 
-		async onClickCollective(collective: Collective) {
-			this.selectedCollective = collective
-			this.selectedPageId = null
-			this.allPages = []
-			this.rootPage = null
-			this.isLoadingPages = true
-			try {
-				// TODO public
-				const context = { isPublic: false, collectiveId: collective.id, shareTokenparam: null }
-				const response = await getPages(context)
-				this.allPages = response.data.ocs.data.pages
-				this.rootPage = this.allPages[0]
-				this.selectedPageId = this.rootPage.id ?? null
-			} finally {
-				this.isLoadingPages = false
+		onClickPage(page: PageInfo) {
+			if (window.OCA.Collectives?.currentCollectivePath) {
+				const pageLink = window.location.origin
+					+ generateUrl('/apps/collectives')
+					+ window.OCA.Collectives.currentCollectivePath
+					+ '/' + page.slug + '-' + page.id
+				this.$el.dispatchEvent(new CustomEvent('submit', {
+					bubbles: true,
+					detail: pageLink,
+				}))
+			} else {
+				console.error('Cannot generate page link from outside Collectives app')
 			}
 		},
 
-		onClickCollectivesList() {
-			this.selectedCollective = null
-			this.allPages = []
-			this.rootPage = null
-			this.selectedPageId = null
-			this.query = ''
-		},
-
-		onClickCollectiveHome() {
-			// TODO
-		},
-
-		onClickPage(page: PageInfo) {
-			// TODO
+		getAllRecentPages() {
+			this.allRecentPagesLoading = true
+			try {
+				// TODO: get recent pages
+				setTimeout(() => {
+					this.allRecentPagesLoading = false
+				}, 2000)
+			} finally {
+				// this.allRecentPagesLoading = false
+			}
 		},
 	},
 })
@@ -196,7 +212,7 @@ export default defineComponent({
 
 	h2 {
 		display: flex;
-		margin: 12px 0 20px;
+		margin-top: 12px;
 	}
 }
 
@@ -205,7 +221,7 @@ export default defineComponent({
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	min-height: 400px;
+	height: 500px;
 	padding: calc(var(--default-grid-baseline) * 3);
 }
 
@@ -214,6 +230,11 @@ export default defineComponent({
 	justify-content: flex-end;
 	position: sticky;
 	bottom: 0;
+}
+
+.searchbar {
+	display: flex;
+	align-items: center;
 }
 
 .page-list {

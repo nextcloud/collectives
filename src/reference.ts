@@ -7,7 +7,11 @@ import type { App } from 'vue'
 
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-import { registerCustomPickerElement, registerWidget } from '@nextcloud/vue/components/NcRichText'
+import {
+	NcCustomPickerRenderResult,
+	registerCustomPickerElement,
+	registerWidget,
+} from '@nextcloud/vue/components/NcRichText'
 import PagePicker from './views/PagePicker.vue'
 import PageReferenceWidget from './views/PageReferenceWidget.vue'
 
@@ -24,7 +28,7 @@ registerCustomPickerElement('collectives-ref-pages', (el, { providerId, accessib
 	const app = createApp(PagePicker, { providerId, accessible })
 	app.use(pinia)
 	app.mount(el)
-	return app
+	return new NcCustomPickerRenderResult(el, app)
 }, (el, renderResult) => {
 	(renderResult.object as App)?.unmount()
 }, 'normal')
