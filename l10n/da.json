@@ -17,8 +17,6 @@
     "Teams App Enabled" : "Teams app aktiveret",
     "Teams app is enabled" : "Teams app er aktiveret",
     "The teams app is not enabled, but is required for Collectives to work." : "App'en Teams er ikke aktiveret, men er krævet for at Kollektiver virker.",
-    "PDO SQLite driver" : "PDO SQLite driver",
-    "PDO SQLite driver is enabled, full text search of page content is available." : "PDO SQLite driver er aktiveret, fuld tekstsøgning for sideindhold er tilgængelig.",
     "A place for activist and community projects to build shared knowledge" : "Et sted for aktivist- og samfundsprojekter til at opbygge fælles viden",
     "Extra action" : "Ekstra handling",
     "Could not leave the collective. {errorMessage}" : "Kunne ikke forlade dette kollektiv. {errorMessage}",

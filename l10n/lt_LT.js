@@ -8,7 +8,6 @@ OC.L10N.register(
     "Collectives - Pages" : "Kolektyvai – Puslapiai",
     "You are not allowed to share %s" : "Jums neleidžiama bendrinti %s",
     "You are not allowed to edit %s" : "Jums neleidžiama taisyti %s",
-    "PDO SQLite driver" : "PDO SQLite tvarkyklė",
     "Could not leave the collective. {errorMessage}" : "Nepavyko išeiti iš kolektyvo. {errorMessage}",
     "Share link" : "Viešinio nuoroda",
     "Export or print" : "Eksportuoti ar spausdinti",
