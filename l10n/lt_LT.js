@@ -48,6 +48,7 @@ OC.L10N.register(
     "Hide outline" : "Slėpti kontūrą",
     "Show outline" : "Rodyti kontūrą",
     "Remove from favorites" : "Šalinti iš svarbiausių",
+    "Add to favorites" : "Pridėti į mėgstamus",
     "Delete page" : "Ištrinti puslapį",
     "Manage tags" : "Tvarkyti žymas",
     "Move or copy" : "Perkelti ar kopijuoti",
