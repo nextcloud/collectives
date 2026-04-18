@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { heyApiPlugin } from '@hey-api/vite-plugin';
+import { heyApiPlugin } from '@hey-api/vite-plugin'
 import { createAppConfig } from '@nextcloud/vite-config'
 import { join, resolve } from 'path'
 import { VitePWA } from 'vite-plugin-pwa'
@@ -67,7 +67,11 @@ export default createAppConfig(
 				heyApiPlugin({
 					config: {
 						input: 'openapi.json',
-						output: 'src/client',
+						output: {
+							module: { extension: '.ts' },
+							path: 'src/client',
+							postProcess: ['eslint'],
+						},
 						plugins: ['@hey-api/client-axios'],
 					},
 				}),

@@ -4,8 +4,8 @@
  */
 
 import axios from '@nextcloud/axios'
-import { collectiveIndex } from '../../client'
-import { createClient } from '../../client/client/client.gen'
+import { createClient } from '../../client/client/client.gen.ts'
+import { collectiveIndex } from '../../client/index.ts'
 
 const client = createClient({ axios })
 const headers = { 'OCS-APIRequest': true }
