@@ -68,6 +68,7 @@ export default createAppConfig(
 					config: {
 						input: 'openapi.json',
 						output: 'src/client',
+						plugins: ['@hey-api/client-axios'],
 					},
 				}),
 			],
