@@ -150,7 +150,7 @@ export default {
 		},
 
 		generateKey(item) {
-			let key = ''
+			let key
 			if (item.source) {
 				// Search result candidate
 				key = 'search#' + item.source + '#' + item.id
