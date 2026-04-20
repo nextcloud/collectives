@@ -92,7 +92,7 @@ import FilterCheckOutlineIcon from 'vue-material-design-icons/FilterCheckOutline
 import FilterOutlineIcon from 'vue-material-design-icons/FilterOutline.vue'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import PagePreview from '../components/PagePreview.vue'
-import { searchPages } from '../apis/collectives/index.js'
+import { getRecentPages, searchPages } from '../apis/collectives/index.js'
 import { byTimeAsc } from '../util/sortOrders.js'
 
 export default defineComponent({
@@ -208,8 +208,15 @@ export default defineComponent({
 		async getSearchedPages() {
 			this.searchedPagesLoading = true
 			try {
-				const response = await searchPages(this.query)
-				this.searchedPages = response.data.ocs.data.pages
+				if (this.query === '') {
+					// Get recent pages when query is empty
+					const response = await getRecentPages()
+					this.searchedPages = response.data.ocs.data.pages
+				} else {
+					// Search pages when query is not empty
+					const response = await searchPages(this.query)
+					this.searchedPages = response.data.ocs.data.pages
+				}
 			} finally {
 				this.searchedPagesLoading = false
 			}
