@@ -21,5 +21,5 @@ export function searchPages(query: string) {
  * Get recent pages across collectives
  */
 export function getRecentPages() {
-	return axios.get(apiUrl('v1.0', 'collectives', 'searc', 'recent'))
+	return axios.get(apiUrl('v1.0', 'collectives', 'search', 'recent'))
 }

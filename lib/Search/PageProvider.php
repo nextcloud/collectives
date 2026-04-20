@@ -70,7 +70,7 @@ class PageProvider implements IProvider {
 			$pageInfos = $this->pageService->findByString($collective->getId(), $query->getTerm(), $user->getUID());
 			/** @var PageInfo $pageInfo */
 			foreach ($pageInfos as $pageInfo) {
-				$descriptionSuffix = $pageInfo->getFilePath()
+				$descriptionSuffix = $pageInfo->getFilePathString()
 					? ' - ' . $pageInfo->getFilePathString()
 					: '';
 				$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])

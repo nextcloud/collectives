@@ -106,7 +106,7 @@ class PageContentProvider implements IProvider {
 				continue;
 			}
 
-			$descriptionSuffix = $pageInfo->getFilePath()
+			$descriptionSuffix = $pageInfo->getFilePathString()
 				? ' - ' . $pageInfo->getFilePathString()
 				: ' - ' . $pageInfo->getTitle();
 			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
