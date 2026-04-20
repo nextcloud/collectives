@@ -68,7 +68,9 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 
 		// Pages search API
-		['name' => 'search#search', 'url' => '/api/v{apiVersion}/collectives/search', 'verb' => 'GET',
+		['name' => 'search#searchPages', 'url' => '/api/v{apiVersion}/collectives/search', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'search#getRecentPages', 'url' => '/api/v{apiVersion}/collectives/search/recent', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
 		['name' => 'page#contentSearch', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/search', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],

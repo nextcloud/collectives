@@ -11,6 +11,7 @@ namespace Unit\Service;
 
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\RecentPagesService;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\IRootFolder;
@@ -23,12 +24,14 @@ use PHPUnit\Framework\TestCase;
 
 class RecentPagesServiceTest extends TestCase {
 	private CollectiveService $collectiveService;
+	private PageService $pageService;
 	private RecentPagesService $service;
 	private IUser $user;
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->collectiveService = $this->createMock(CollectiveService::class);
+		$this->pageService = $this->createMock(PageService::class);
 		$dbc = $this->createMock(IDBConnection::class);
 		$config = $this->createMock(IConfig::class);
 		$mimeTypeLoader = $this->createMock(IMimeTypeLoader::class);
@@ -38,6 +41,7 @@ class RecentPagesServiceTest extends TestCase {
 
 		$this->service = new RecentPagesService(
 			$this->collectiveService,
+			$this->pageService,
 			$dbc,
 			$config,
 			$mimeTypeLoader,
