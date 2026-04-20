@@ -37,14 +37,13 @@
 					<PagePreview
 						v-for="page in pages"
 						:key="page.id"
-						link="x"
 						:title="page.title"
-						description="test"
+						:description="description(page)"
 						:emoji="page.emoji!"
-						lastEdited="xyz"
 						:lastUserId="page.lastUserId!"
 						:lastUserDisplayName="page.lastUserDisplayName!"
 						:small="true"
+						class="page-preview-item"
 						@click="onClickPage(page)" />
 				</ul>
 				<NcEmptyContent
@@ -205,6 +204,17 @@ export default defineComponent({
 			}
 		},
 
+		description(page: PageInfo) {
+			const collectiveName = this.filterCollective
+				? window.OCA.Collectives?.currentCollectiveName || ''
+				: page.collectiveName
+
+			const collectiveAndPagePath = page.filePathString
+				? collectiveName + ' - ' + page.filePathString
+				: collectiveName
+			return t('collectives', 'In collective {path}', { path: collectiveAndPagePath })
+		},
+
 		async getSearchedPages() {
 			this.searchedPagesLoading = true
 			try {
@@ -242,6 +252,7 @@ export default defineComponent({
 .modal-inner {
 	box-sizing: border-box;
 	display: flex;
+	gap: calc(3 * var(--default-grid-baseline));
 	flex-direction: column;
 	width: 100%;
 	height: 500px;
@@ -267,5 +278,18 @@ export default defineComponent({
 	height: calc(100% - 34px - 8px - 6px);
 	overflow-y: auto;
 	flex: 1;
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: var(--default-grid-baseline);
+	}
+}
+
+.page-preview-item {
+	border: 2px solid var(--color-border);
+	border-radius: var(--border-radius-container);
+	margin-inline-end: calc(3 * var(--default-grid-baseline));
+	width: unset;
 }
 </style>

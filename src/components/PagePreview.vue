@@ -9,6 +9,7 @@
 		target="_blank"
 		class="collective-page"
 		:class="{ 'not-found': notFound }"
+		:style="pageStyle"
 		@click="clickLink">
 		<div class="collective-page--image">
 			<span
@@ -73,7 +74,7 @@ export default defineComponent({
 
 		link: {
 			type: String,
-			required: true,
+			default: null,
 		},
 
 		title: {
@@ -117,6 +118,13 @@ export default defineComponent({
 			return this.small ? 34 : 50
 		},
 
+		pageStyle() {
+			const paddingInline = this.small ? 8 : 12
+			return {
+				'padding-inline': `${paddingInline}px !important`,
+			}
+		},
+
 		emojiStyle() {
 			return {
 				height: `${this.iconSize}px`,
@@ -129,7 +137,7 @@ export default defineComponent({
 		t,
 
 		clickLink(event: Event) {
-			if (this.notFound) {
+			if (this.notFound || !this.link) {
 				return false
 			}
 
@@ -152,7 +160,7 @@ export default defineComponent({
 .collective-page {
 	width: 100%;
 	white-space: normal;
-	padding: 12px !important;
+	padding-block: 12px !important;
 	display: flex;
 	text-decoration: unset !important;
 	color: var(--color-main-text) !important;

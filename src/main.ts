@@ -32,8 +32,12 @@ const rootStore = useRootStore(pinia)
 const collectivesStore = useCollectivesStore(pinia)
 
 watch(() => rootStore.collectiveId, (id) => {
+	const collective = collectivesStore.currentCollective
 	window.OCA.Collectives.currentCollectiveId = id
-	window.OCA.Collectives.currentCollectivePath = collectivesStore.currentCollectivePath
+	window.OCA.Collectives.currentCollectiveName = collective.emoji
+		? collective.emoji + ' ' + collective.name
+		: collective.name
+	window.OCA.Collectives.currentCollectivePath = collective.currentCollectivePath
 }, { immediate: true })
 
 // Expose the app during Cypress tests
