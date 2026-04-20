@@ -62,7 +62,11 @@ class SearchController extends OCSController {
 			$pages = [];
 			foreach ($collectives as $collective) {
 				// Todo add limit
-				array_push($pages, ...$this->pageService->findByString($collective->getId(), $query, $uid));
+				$collectivePages = $this->pageService->findByString($collective->getId(), $query, $uid);
+				foreach ($collectivePages as $pageInfo) {
+					$pageInfo->setCollectiveName($collective->getName());
+				}
+				array_push($pages, ...$collectivePages);
 			}
 			return array_slice($pages, 0, $limit);
 		}, $this->logger);
