@@ -46,6 +46,7 @@ export interface PageInfo {
 	filePath: string
 	filePathString: string
 	collectivePath: string | null
+	collectiveName: string | null
 	parentId: number
 	shareToken: string | null
 	linkedPageIds: number[]
