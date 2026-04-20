@@ -150,7 +150,11 @@ class PageInfo implements JsonSerializable {
 	}
 
 	public function getFilePathString(): string {
-		return str_replace(DIRECTORY_SEPARATOR, ' - ', $this->getFilePath());
+		$dirPath = dirname($this->getFilePath());
+		if (!$dirPath || $dirPath === DIRECTORY_SEPARATOR || $dirPath === '.') {
+			return '';
+		}
+		return str_replace(DIRECTORY_SEPARATOR, ' - ', $dirPath);
 	}
 
 	public function setFilePath(string $filePath): void {
