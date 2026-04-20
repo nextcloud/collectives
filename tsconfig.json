@@ -12,6 +12,7 @@
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
 		"lib": ["webworker"],
-		"allowImportingTsExtensions": true
+		"allowImportingTsExtensions": true,
+		"rewriteRelativeImportExtensions": true,
 	}
 }
