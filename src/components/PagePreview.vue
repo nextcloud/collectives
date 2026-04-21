@@ -11,7 +11,7 @@
 		:class="{ 'not-found': notFound }"
 		:style="pageStyle"
 		@click="clickLink">
-		<div class="collective-page--image">
+		<div class="collective-page--image" :style="imageStyle">
 			<span
 				v-if="emoji"
 				class="page-emoji"
@@ -125,10 +125,16 @@ export default defineComponent({
 			}
 		},
 
+		imageStyle() {
+			return {
+				width: `${this.iconSize}px`,
+			}
+		},
+
 		emojiStyle() {
 			return {
+				'font-size': `calc(${this.iconSize}px * 0.8)`,
 				height: `${this.iconSize}px`,
-				width: `${this.iconSize}px`,
 			}
 		},
 	},
@@ -169,6 +175,8 @@ export default defineComponent({
 		margin-inline-end: 12px;
 		display: flex;
 		align-items: center;
+		justify-content: center;
+
 		.page-emoji {
 			display: flex;
 			align-items: center;
