@@ -205,13 +205,13 @@ export default defineComponent({
 		},
 
 		description(page: PageInfo) {
-			const collectiveName = this.filterCollective
-				? window.OCA.Collectives?.currentCollectiveName || ''
-				: page.collectiveName
+			const collectiveNameWithEmoji = this.filterCollective
+				? window.OCA.Collectives?.currentCollectiveNameWithEmoji || ''
+				: page.collectiveNameWithEmoji
 
 			const collectiveAndPagePath = page.filePathString
-				? collectiveName + ' - ' + page.filePathString
-				: collectiveName
+				? collectiveNameWithEmoji + ' - ' + page.filePathString
+				: collectiveNameWithEmoji
 			return t('collectives', 'In collective {path}', { path: collectiveAndPagePath })
 		},
 
