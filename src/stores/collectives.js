@@ -5,6 +5,7 @@
 
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
+import { getCollectives } from '../apis/collectives/getCollectives.ts'
 import * as api from '../apis/collectives/index.js'
 import { memberLevels } from '../constants.js'
 import randomEmoji from '../util/randomEmoji.js'
@@ -201,7 +202,7 @@ export const useCollectivesStore = defineStore('collectives', {
 					const response = await api.getSharedCollective(rootStore.shareTokenParam)
 					this.publicCollectivesState[rootStore.shareTokenParam] = response.data.ocs.data.collectives[0]
 				} else {
-					const response = await api.getCollectives()
+					const response = await getCollectives()
 					this.collectivesState = response.data.ocs.data.collectives
 				}
 			} finally {
