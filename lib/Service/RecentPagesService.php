@@ -125,11 +125,12 @@ class RecentPagesService {
 	 * @throws MissingDependencyException
 	 * @throws Exception
 	 */
-	public function forUserAsPageInfo(string $userId, int $limit = 10): array {
+	public function forUserAsPageInfo(string $userId, ?string $query, int $limit = 10): array {
 		$queryData = $this->getRecentPagesQuery(
 			$userId,
-			$limit * 2, // Get more results to account for potential errors
-			['p.file_id', 'f.path']
+			$limit * 3, // Get more results to account for title filtering and permission issues
+			['p.file_id', 'f.path', 'f.name'],
+			$query,
 		);
 
 		if ($queryData === null) {
@@ -140,6 +141,10 @@ class RecentPagesService {
 		$collectivesMap = $queryData['collectivesMap'];
 
 		$pages = [];
+		if ($query) {
+			$landingPageTranslation = strtolower($this->l10n->t('Landing page'));
+			$queryLower = strtolower($query);
+		}
 		while ($row = $r->fetch()) {
 			if (count($pages) >= $limit) {
 				break;
@@ -150,9 +155,35 @@ class RecentPagesService {
 				continue;
 			}
 
+			if ($query) {
+				// Extract title based on page type
+				$filename = $row['name'];
+				$path = $row['path'];
+
+				// Determine title
+				$splitPath = explode('/', $row['path'], 4);
+				$internalPath = isset($splitPath[3]) ? dirname($splitPath[3]) : '.';
+
+				if ($filename !== PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) {
+					// Regular page - title is filename without extension
+					$title = basename($filename, PageInfo::SUFFIX);
+				} elseif ($internalPath === '' || $internalPath === '.') {
+					// Landing page - title is "Landing page" (localized)
+					$title = $this->l10n->t('Landing page');
+				} else {
+					// Index page - title is folder name
+					$title = basename($internalPath);
+				}
+
+				// Check if title matches query (additional filter since DB only checks filename)
+				if (stripos($title, $query) === false) {
+					continue;
+				}
+			}
+
 			try {
 				$pageInfo = $this->pageService->find($collectiveId, (int)$row['file_id'], $userId);
-				$pageInfo->setCollectiveNameWithEmoji(CollectiveHelper::getCollectiveNameWithEmoji($collectivesMap[$collectiveId]->getName()));
+				$pageInfo->setCollectiveNameWithEmoji(CollectiveHelper::getCollectiveNameWithEmoji($collectivesMap[$collectiveId]));
 				$pages[] = $pageInfo;
 			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				// Skip pages that can't be accessed
@@ -170,7 +201,7 @@ class RecentPagesService {
 	 * @return array{result: \OCP\DB\IResult, collectivesMap: array, appData: string}|null
 	 * @throws Exception
 	 */
-	private function getRecentPagesQuery(string $userId, int $limit, array $selectFields): ?array {
+	private function getRecentPagesQuery(string $userId, int $limit, array $selectFields, ?string $query = null): ?array {
 		try {
 			$collectives = $this->collectiveService->getCollectives($userId);
 		} catch (NotFoundException|NotPermittedException) {
@@ -200,7 +231,17 @@ class RecentPagesService {
 			->innerJoin('p', 'filecache', 'f', $qb->expr()->eq('f.fileid', 'p.file_id'))
 			->where($qb->expr()->eq('f.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->orX(...$expressions))
-			->andWhere($qb->expr()->eq('f.mimetype', $qb->createNamedParameter($mimeTypeMd, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('f.mimetype', $qb->createNamedParameter($mimeTypeMd, IQueryBuilder::PARAM_INT)));
+		if ($query) {
+			$searchPattern = '%' . $query . '%';
+			$qb->andWhere(
+				$qb->expr()->like(
+					$qb->func()->lower('f.name'),
+					$qb->func()->lower($qb->createNamedParameter($searchPattern))
+				)
+			);
+		}
+		$qb
 			->orderBy('f.mtime', 'DESC')
 			->setMaxResults($limit);
 
@@ -221,5 +262,4 @@ class RecentPagesService {
 
 		return 'appdata_' . $instanceId;
 	}
-
 }
