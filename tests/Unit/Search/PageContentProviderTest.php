@@ -13,7 +13,6 @@ use OC\Search\SearchQuery;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Service\CollectiveHelper;
-use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
 use OCP\App\IAppManager;
@@ -43,7 +42,6 @@ class PageContentProviderTest extends TestCase {
 		$collectiveHelper = $this->createMock(CollectiveHelper::class);
 		$collectiveHelper->method('getCollectivesForUser')
 			->willReturn([$collective]);
-		$collectiveService = $this->createMock(CollectiveService::class);
 		/** @var Folder&MockObject $folder */
 		$folder = $this->createMock(Folder::class);
 		$folder->method('getFirstNodeById')
@@ -67,7 +65,6 @@ class PageContentProviderTest extends TestCase {
 			$l10n,
 			$urlGenerator,
 			$collectiveHelper,
-			$collectiveService,
 			$pageService,
 			$indexedSearchService,
 			$logger,

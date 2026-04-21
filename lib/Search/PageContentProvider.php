@@ -15,7 +15,6 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 use OCA\Collectives\Service\CollectiveHelper;
-use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
 use OCP\App\IAppManager;
@@ -35,7 +34,6 @@ class PageContentProvider implements IProvider {
 		private readonly IL10N $l10n,
 		private readonly IURLGenerator $urlGenerator,
 		private readonly CollectiveHelper $collectiveHelper,
-		private readonly CollectiveService $collectiveService,
 		private readonly PageService $pageService,
 		private readonly SearchService $indexedSearchService,
 		private readonly LoggerInterface $logger,
@@ -108,8 +106,8 @@ class PageContentProvider implements IProvider {
 
 			$descriptionSuffix = $pageInfo->getFilePathString()
 				? ' - ' . $pageInfo->getFilePathString()
-				: ' - ' . $pageInfo->getTitle();
-			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
+				: '';
+			$description = $this->l10n->t('In collective %1$s', [CollectiveHelper::getCollectiveNameWithEmoji($collective)])
 				. $descriptionSuffix;
 
 			$content = $page->getContent();

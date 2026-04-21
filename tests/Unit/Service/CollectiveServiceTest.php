@@ -112,12 +112,11 @@ class CollectiveServiceTest extends TestCase {
 		$name = 'collective';
 		$emoji = '⭐';
 		$collective = new Collective();
-		$collective = new Collective($collective);
 		$collective->setName($name);
-		$this->assertEquals($name, $this->service->getCollectiveNameWithEmoji($collective));
+		$this->assertEquals($name, CollectiveHelper::getCollectiveNameWithEmoji($collective));
 
 		$collective->setEmoji($emoji);
-		$this->assertEquals($emoji . ' ' . $name, $this->service->getCollectiveNameWithEmoji($collective));
+		$this->assertEquals($emoji . ' ' . $name, CollectiveHelper::getCollectiveNameWithEmoji($collective));
 	}
 
 	public function testCreateWithEmptyName(): void {
