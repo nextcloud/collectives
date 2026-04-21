@@ -15,7 +15,7 @@
 					:showTrailingButton="!!query"
 					:trailingButtonLabel="t('collectives', 'Clear search')"
 					@trailingButtonClick="query = ''" />
-				<NcActions v-if="collectiveId">
+				<NcActions v-if="!isPublic && collectiveId">
 					<template #icon>
 						<FilterCheckOutlineIcon v-if="filterCollective" :size="20" />
 						<FilterOutlineIcon v-else :size="20" />
@@ -60,9 +60,6 @@
 				</NcEmptyContent>
 			</div>
 
-			<!-- TODO
-			-->
-
 			<div class="modal-buttons">
 				<NcButton @click="close">
 					{{ t('collectives', 'Cancel') }}
@@ -77,6 +74,7 @@ import type { PageInfo } from '../types.ts'
 
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
+import { isPublicShare } from '@nextcloud/sharing/public'
 import debounce from 'debounce'
 import { defineComponent } from 'vue'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
@@ -117,7 +115,8 @@ export default defineComponent({
 	],
 
 	setup() {
-		return { t }
+		const isPublic = isPublicShare()
+		return { isPublic, t }
 	},
 
 	data() {
@@ -177,8 +176,9 @@ export default defineComponent({
 				this.currentPages = allPagesMap[this.collectiveId] ?? []
 			}
 		} else {
-			// TODO: only do if not in public share
-			this.getSearchedPages()
+			if (!this.isPublic) {
+				this.getSearchedPages()
+			}
 		}
 		// TODO: doesn't work
 		this.$refs.searchInput.focus()
