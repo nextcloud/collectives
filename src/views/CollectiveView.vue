@@ -220,7 +220,9 @@ export default {
 				if (!this.currentCollectiveIsPageShare) {
 					promises.push(this.getTemplates(setLoading))
 				}
-				promises.push(this.getCircleMembers(this.currentCollective.circleId))
+				if (!this.isPublic) {
+					promises.push(this.getCircleMembers(this.currentCollective.circleId))
+				}
 			}
 
 			try {
