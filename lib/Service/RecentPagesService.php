@@ -23,6 +23,7 @@ use OCP\IUser;
 use RuntimeException;
 
 class RecentPagesService {
+	private ?string $landingPageTranslation = null;
 
 	public function __construct(
 		protected CollectiveService $collectiveService,
@@ -141,10 +142,6 @@ class RecentPagesService {
 		$collectivesMap = $queryData['collectivesMap'];
 
 		$pages = [];
-		if ($query) {
-			$landingPageTranslation = strtolower($this->l10n->t('Landing page'));
-			$queryLower = strtolower($query);
-		}
 		while ($row = $r->fetch()) {
 			if (count($pages) >= $limit) {
 				break;
@@ -169,7 +166,7 @@ class RecentPagesService {
 					$title = basename($filename, PageInfo::SUFFIX);
 				} elseif ($internalPath === '' || $internalPath === '.') {
 					// Landing page - title is "Landing page" (localized)
-					$title = $this->l10n->t('Landing page');
+					$title = $this->getLandingPageTranslation();
 				} else {
 					// Index page - title is folder name
 					$title = basename($internalPath);
@@ -233,13 +230,26 @@ class RecentPagesService {
 			->andWhere($qb->expr()->orX(...$expressions))
 			->andWhere($qb->expr()->eq('f.mimetype', $qb->createNamedParameter($mimeTypeMd, IQueryBuilder::PARAM_INT)));
 		if ($query) {
-			$searchPattern = '%' . $query . '%';
-			$qb->andWhere(
-				$qb->expr()->like(
-					$qb->func()->lower('f.name'),
-					$qb->func()->lower($qb->createNamedParameter($searchPattern))
-				)
-			);
+			$escapedQuery = $this->dbc->escapeLikeParameter(strtolower($query));
+			$nameSearchPattern = '%' . $escapedQuery . '%';
+			$pathSearchPattern = $appData . '/collectives/%' . $escapedQuery . '%';
+
+			$searchConditions = [
+				// Search in filename
+				$qb->expr()->like($qb->func()->lower('f.name'), $qb->createNamedParameter($nameSearchPattern)),
+				// Search in path (for index pages)
+				$qb->expr()->like($qb->func()->lower('f.path'), $qb->createNamedParameter($pathSearchPattern)),
+			];
+
+			if (stripos($this->getLandingPageTranslation(), strtolower($query)) !== false) {
+				// Searching for landing page, also match root Readme.md files
+				foreach ($collectives as $collective) {
+					$landingPagePath = sprintf($appData . '/collectives/%d/%s', $collective->getId(), PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
+					$searchConditions[] = $qb->expr()->eq('f.path', $qb->createNamedParameter($landingPagePath));
+				}
+			}
+
+			$qb->andWhere($qb->expr()->orX(...$searchConditions));
 		}
 		$qb
 			->orderBy('f.mtime', 'DESC')
@@ -261,5 +271,13 @@ class RecentPagesService {
 		}
 
 		return 'appdata_' . $instanceId;
+	}
+
+	private function getLandingPageTranslation(): string {
+		if (!$this->landingPageTranslation) {
+			$this->landingPageTranslation = $this->l10n->t('Landing page');
+		}
+
+		return $this->landingPageTranslation;
 	}
 }
