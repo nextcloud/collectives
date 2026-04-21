@@ -100,7 +100,7 @@ class RecentPagesService {
 			// not returning a PageInfo instance because it would be either incomplete or too expensive to build completely
 			$recentPage = new RecentPage();
 			$recentPage
-				->setCollectiveName(CollectiveHelper::getCollectiveNameWithEmoji($collectivesMap[$collectiveId]))
+				->setCollectiveNameWithEmoji(CollectiveHelper::getCollectiveNameWithEmoji($collectivesMap[$collectiveId]))
 				->setTitle($title)
 				->setPagePath($pagePath)
 				->setPageUrl($url)
@@ -152,7 +152,7 @@ class RecentPagesService {
 
 			try {
 				$pageInfo = $this->pageService->find($collectiveId, (int)$row['file_id'], $userId);
-				$pageInfo->setCollectiveName($collectivesMap[$collectiveId]->getName());
+				$pageInfo->setCollectiveNameWithEmoji(CollectiveHelper::getCollectiveNameWithEmoji($collectivesMap[$collectiveId]->getName()));
 				$pages[] = $pageInfo;
 			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				// Skip pages that can't be accessed

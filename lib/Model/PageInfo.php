@@ -39,7 +39,7 @@ class PageInfo implements JsonSerializable {
 	private int $parentId;
 	private ?string $shareToken = null;
 	private array $linkedPageIds = [];
-	private ?string $collectiveName = null;
+	private ?string $collectiveNameWithEmoji = null;
 
 	public function getId(): int {
 		return $this->id;
@@ -193,12 +193,12 @@ class PageInfo implements JsonSerializable {
 		$this->linkedPageIds = $linkedPageIds;
 	}
 
-	public function getCollectiveName(): ?string {
-		return $this->collectiveName;
+	public function getCollectiveNameWithEmoji(): ?string {
+		return $this->collectiveNameWithEmoji;
 	}
 
-	public function setCollectiveName(string $collectiveName): void {
-		$this->collectiveName = $collectiveName;
+	public function setCollectiveNameWithEmoji(string $collectiveNameWithEmoji): void {
+		$this->collectiveNameWithEmoji = $collectiveNameWithEmoji;
 	}
 
 	public function getUrlPath(): string {
@@ -223,7 +223,7 @@ class PageInfo implements JsonSerializable {
 			'filePath' => $this->filePath,
 			'filePathString' => $this->getFilePathString(),
 			'collectivePath' => $this->collectivePath,
-			'collectiveName' => $this->collectiveName,
+			'collectiveNameWithEmoji' => $this->collectiveNameWithEmoji,
 			'parentId' => $this->parentId,
 			'shareToken' => $this->shareToken,
 			'linkedPageIds' => $this->linkedPageIds,
