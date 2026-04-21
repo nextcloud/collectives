@@ -7,19 +7,12 @@ import axios from '@nextcloud/axios'
 import { apiUrl } from './urls.js'
 
 /**
- * Search pages across collectives
+ * Search recent pages across collectives
  *
  * @param query - the search query
  */
-export function searchPages(query: string) {
-	return axios.get(apiUrl('v1.0', 'collectives', 'search'), {
+export function searchRecentPages(query: string) {
+	return axios.get(apiUrl('v1.0', 'collectives', 'search', 'recent'), {
 		params: { query },
 	})
-}
-
-/**
- * Get recent pages across collectives
- */
-export function getRecentPages() {
-	return axios.get(apiUrl('v1.0', 'collectives', 'search', 'recent'))
 }
