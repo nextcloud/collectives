@@ -159,13 +159,6 @@ class CollectiveService extends CollectiveServiceBase {
 		return $collective;
 	}
 
-	public function getCollectiveNameWithEmoji(Collective $collective): string {
-		$emoji = $collective->getEmoji();
-		return $emoji
-			? $emoji . ' ' . $collective->getName()
-			: $collective->getName();
-	}
-
 	/**
 	 * @throws CircleExistsException
 	 * @throws MissingDependencyException
@@ -229,7 +222,7 @@ class CollectiveService extends CollectiveServiceBase {
 
 		// Create folder for collective and optionally copy default landing page
 		try {
-			$name = $this->getCollectiveNameWithEmoji($collective);
+			$name = CollectiveHelper::getCollectiveNameWithEmoji($collective);
 			$collectiveFolder = $this->collectiveFolderManager->initializeFolder($collective->getId(), $userLang, $name);
 		} catch (InvalidPathException|FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);

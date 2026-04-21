@@ -16,6 +16,7 @@ use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
@@ -267,7 +268,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		$descriptionSuffix = $page->getFilePathString()
 			? ' - ' . $page->getFilePathString()
 			: '';
-		$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
+		$description = $this->l10n->t('In collective %1$s', [CollectiveHelper::getCollectiveNameWithEmoji($collective)])
 			. $descriptionSuffix;
 		$reference->setDescription($description);
 		$pageReferenceInfo['description'] = $description;

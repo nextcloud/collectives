@@ -66,7 +66,7 @@ class SearchController extends OCSController {
 				// Todo add limit
 				$collectivePages = $this->pageService->findByString($collective->getId(), $query, $uid);
 				foreach ($collectivePages as $pageInfo) {
-					$pageInfo->setCollectiveName($collective->getName());
+					$pageInfo->setCollectiveName(CollectiveHelper::getCollectiveNameWithEmoji($collective));
 				}
 				array_push($pages, ...$collectivePages);
 			}

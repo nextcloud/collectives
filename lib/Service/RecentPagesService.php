@@ -100,7 +100,7 @@ class RecentPagesService {
 			// not returning a PageInfo instance because it would be either incomplete or too expensive to build completely
 			$recentPage = new RecentPage();
 			$recentPage
-				->setCollectiveName($this->collectiveService->getCollectiveNameWithEmoji($collectivesMap[$collectiveId]))
+				->setCollectiveName(CollectiveHelper::getCollectiveNameWithEmoji($collectivesMap[$collectiveId]))
 				->setTitle($title)
 				->setPagePath($pagePath)
 				->setPageUrl($url)

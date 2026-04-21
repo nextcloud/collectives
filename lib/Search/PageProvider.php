@@ -12,7 +12,6 @@ namespace OCA\Collectives\Search;
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveHelper;
-use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -31,7 +30,6 @@ class PageProvider implements IProvider {
 		private readonly IL10N $l10n,
 		private readonly IURLGenerator $urlGenerator,
 		private readonly CollectiveHelper $collectiveHelper,
-		private readonly CollectiveService $collectiveService,
 		private readonly PageService $pageService,
 		private readonly IAppManager $appManager,
 	) {
@@ -73,7 +71,7 @@ class PageProvider implements IProvider {
 				$descriptionSuffix = $pageInfo->getFilePathString()
 					? ' - ' . $pageInfo->getFilePathString()
 					: '';
-				$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
+				$description = $this->l10n->t('In collective %1$s', [CollectiveHelper::getCollectiveNameWithEmoji($collective)])
 					. $descriptionSuffix;
 				$pageSearchResults[] = new SearchResultEntry(
 					$this->urlGenerator->getAbsoluteURL(

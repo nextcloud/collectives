@@ -77,4 +77,11 @@ class CollectiveHelper {
 		}
 		return $collectives;
 	}
+
+	public static function getCollectiveNameWithEmoji(Collective $collective): string {
+		$emoji = $collective->getEmoji();
+		return $emoji
+			? $emoji . ' ' . $collective->getName()
+			: $collective->getName();
+	}
 }
