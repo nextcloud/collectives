@@ -2710,4 +2710,99 @@ class FeatureContext implements Context {
 			Assert::assertNotContains($attachment, $pageAttachments);
 		}
 	}
+
+	/**
+	 * @When user :user waits for :seconds seconds
+	 */
+	public function userWaitsForSeconds(string $user, int $seconds): void {
+		sleep($seconds);
+	}
+
+	/**
+	 * @When user :user searches recent pages with query :query
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSearchesRecentPages(string $user, string $query): void {
+		$this->setCurrentUser($user);
+		$this->sendOcsCollectivesRequest('GET', 'collectives/search/recent?query=' . urlencode($query));
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @When user :user searches recent pages with query :query and limit :limit
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSearchesRecentPagesWithLimit(string $user, string $query, int $limit): void {
+		$this->setCurrentUser($user);
+		$this->sendOcsCollectivesRequest('GET', 'collectives/search/recent?query=' . urlencode($query) . '&limit=' . $limit);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @Then user :user sees :count search results
+	 */
+	public function userSeesSearchResultCount(string $user, int $count): void {
+		$this->setCurrentUser($user);
+		$jsonBody = $this->getJson();
+		Assert::assertCount($count, $jsonBody['ocs']['data']['pages'], "Expected $count search results but got " . count($jsonBody['ocs']['data']['pages']));
+	}
+
+	/**
+	 * @Then user :user sees page :title in search results
+	 */
+	public function userSeesPageInResults(string $user, string $title): void {
+		$this->setCurrentUser($user);
+		$this->assertPageInSearchResults($title, false);
+	}
+
+	/**
+	 * @Then user :user doesn't see page :title in search results
+	 */
+	public function userDoesntSeePageInResults(string $user, string $title): void {
+		$this->setCurrentUser($user);
+		$this->assertPageInSearchResults($title, true);
+	}
+
+	/**
+	 * @Then the first search result is page :title
+	 */
+	public function firstResultIsPage(string $title): void {
+		$jsonBody = $this->getJson();
+		Assert::assertGreaterThan(0, count($jsonBody['ocs']['data']['pages']), 'No search results found');
+		Assert::assertEquals($title, $jsonBody['ocs']['data']['pages'][0]['title'], 'First result does not match expected page title');
+	}
+
+	private function assertPageInSearchResults(string $title, bool $revert = false): void {
+		$jsonBody = $this->getJson();
+		$found = false;
+		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
+			if ($page['title'] === $title) {
+				$found = true;
+				break;
+			}
+		}
+		if ($revert) {
+			Assert::assertFalse($found, "Page '$title' found in search results but shouldn't be");
+		} else {
+			Assert::assertTrue($found, "Page '$title' not found in search results");
+		}
+	}
+
+	/**
+	 * @Then user :user sees page :title with collectiveName :collective in search results
+	 */
+	public function userSeesPageWithCollectiveName(string $user, string $title, string $collective): void {
+		$this->setCurrentUser($user);
+		$jsonBody = $this->getJson();
+		$found = false;
+		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
+			if ($page['title'] === $title && $page['collectiveNameWithEmoji'] === $collective) {
+				$found = true;
+				break;
+			}
+		}
+		Assert::assertTrue($found, "Page '$title' with collectiveName '$collective' not found in results");
+	}
 }
