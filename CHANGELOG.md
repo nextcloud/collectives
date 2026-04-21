@@ -1,5 +1,34 @@
 # Changelog
 
+## 4.3.0 - 2026.04.21
+
+This release brings a reworked full-text search implementation. E.g. search
+results should be more accurate now.
+
+### ✨New
+* 🔎 New doctrine-based full-text search backend.
+* ⚙️ Allow to set default Collectives user folder via admin settings.
+* 💬 List collective members first when mentioning a user.
+
+### 🐛Fixes
+* 💄 Disable three-dots-menu in recent pages user avatar.
+* 💄 Make PageInfoBar pixel-perfect with Text menubar again.
+* 🐛 Don't persist page list display state.
+* 🐛 Use custom page sidebar toggle button.
+* 💄 Fix editor menubar to not overlay embedded calendar popup. Thanks @Koc.
+* 🐛 Don't ship stale CSS artifacts in release tarball.
+* 🐛 Validate template access when creating pages.
+* 🐛 Don't allow to access page trash in read-only shares.
+* 🐛 Don't try to fetch circle members in public shares.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.2.0 - 2026.03.25
 
 ### ✨New
