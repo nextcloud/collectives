@@ -8,17 +8,24 @@
 		<NcAppNavigationCaption
 			v-if="isSearching"
 			:name="t('collectives', 'Members')" />
-		<MemberItem
-			v-for="item in searchedMembers"
-			:key="item.singleId"
-			:circleId
-			:currentUserIsAdmin
-			:memberId="item.id"
-			:userId="item.userId"
-			:displayName="item.displayName"
-			:userType="circleMemberType(item)"
-			:level="item.level"
-			:isCurrentUser="isCurrentUser(item)" />
+		<RecycleScroller
+			v-if="searchedMembers.length > 0"
+			class="scroller"
+			:items="searchedMembers"
+			:itemSize="56"
+			keyField="singleId">
+			<template #default="{ item }">
+				<MemberItem
+					:circleId
+					:currentUserIsAdmin
+					:memberId="item.id"
+					:userId="item.userId"
+					:displayName="item.displayName"
+					:userType="circleMemberType(item)"
+					:level="item.level"
+					:isCurrentUser="isCurrentUser(item)" />
+			</template>
+		</RecycleScroller>
 		<MembersHint
 			v-if="isSearching && searchedMembers.length === 0"
 			:hint="t('collectives', 'No search results')" />
@@ -28,10 +35,13 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
+import { RecycleScroller } from 'vue-virtual-scroller'
 import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
 import MemberItem from './MemberItem.vue'
 import MembersHint from './MembersHint.vue'
 import { circleMemberType } from '../../util/circles.ts'
+
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default {
 	name: 'CurrentMembers',
@@ -40,6 +50,7 @@ export default {
 		MembersHint,
 		MemberItem,
 		NcAppNavigationCaption,
+		RecycleScroller,
 	},
 
 	props: {
@@ -118,3 +129,11 @@ export default {
 	},
 }
 </script>
+
+<style scoped lang="scss">
+.current-members {
+	.scroller {
+		height: 224px;
+	}
+}
+</style>
