@@ -22,6 +22,8 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * Get collectives
  *
+ * Get all active (i.e. not trashed) collectives for the current user
+ *
  * @param options
  */
 export function collectiveIndex<ThrowOnError extends boolean = false>(options: Options<CollectiveIndexData, ThrowOnError>) {

@@ -57,6 +57,8 @@ class CollectiveController extends OCSController {
 	/**
 	 * Get collectives
 	 *
+	 * Get all active (i.e. not trashed) collectives for the current user
+	 *
 	 * @return DataResponse<Http::STATUS_OK, array{collectives: list<CollectivesCollective>}, array{}>
 	 * @throws OCSNotFoundException Something not found
 	 * @throws OCSForbiddenException Not permitted
