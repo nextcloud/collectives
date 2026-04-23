@@ -1911,14 +1911,40 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-	public function webdavNodeExists(string $user, string $path, ?string $fail = null): void {
+	public function webdavNodeAccess(string $user, string $path, ?string $fail = null): void {
 		$this->setCurrentUser($user);
-		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . trim($path, '/'), null, null, ['Depth' => 0]);
+		$filePath = '/dav/files/' . $user . '/' . trim($path, '/');
+		$this->sendRemoteRequest('PROPFIND', $filePath, null, null, ['Depth' => 0]);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(404);
 		} else {
 			$this->assertStatusCode(207);
 		}
+	}
+
+	/**
+	 * @When user :user sees webdav node :path with content :content
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavNodeContent(string $user, string $path, ?string $content = null, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$filePath = '/dav/files/' . $user . '/' . trim($path, '/');
+		$this->sendRemoteRequest('GET', $filePath);
+		$this->assertStatusCode(200);
+		Assert::assertEquals($this->response->getBody()->getContents(), $content);
+	}
+
+	/**
+	 * @When user :user sets content :content for webdav node :path
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavSetContent(string $user, string $path, ?string $content = null, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$filePath = '/dav/files/' . $user . '/' . trim($path, '/');
+		$this->sendRemoteRequest('PUT', $filePath, $content);
+		$this->assertStatusCode(204);
 	}
 
 	/**
