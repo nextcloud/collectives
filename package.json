@@ -72,7 +72,7 @@
     "cypress-split": "^1.24.31",
     "eslint": "^10.2.1",
     "eslint-plugin-cypress": "^6.3.1",
-    "vite": "^7.3.2",
+    "vite": "^8.0.10",
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.1.4",
     "wait-on": "^9.0.5"
