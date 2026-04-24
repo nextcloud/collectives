@@ -186,6 +186,7 @@ export default {
 	},
 
 	mounted() {
+		this.updateShowMembersCountDebounced()
 		window.addEventListener('resize', this.updateShowMembersCountDebounced)
 	},
 
