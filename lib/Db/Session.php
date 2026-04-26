@@ -34,7 +34,6 @@ class Session extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'userId' => $this->userId,
-			'token' => $this->token,
 			'collectiveId' => $this->collectiveId,
 			'lastContact' => $this->lastContact,
 		];
