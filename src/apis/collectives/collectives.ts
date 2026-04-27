@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import axios from '@nextcloud/axios'
-import { createClient } from '../../client/client/client.gen.ts'
 import {
 	type CollectiveCreateData,
 	type CollectiveUpdateData,
@@ -21,16 +19,7 @@ import {
 	trashIndex,
 	trashRestore,
 } from '../../client/index.ts'
-
-const client = createClient({ axios })
-const headers = { 'OCS-APIRequest': true }
-const path = Object.freeze({ apiVersion: '1.0' })
-const defaultOptions = Object.freeze({
-	client,
-	headers,
-	path,
-	throwOnError: true,
-})
+import { defaultOptions, path } from './defaultOptions.ts'
 
 /**
  * Get all active (i.e. not trashed) collectives for the current user
