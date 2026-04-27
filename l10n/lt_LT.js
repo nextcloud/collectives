@@ -21,6 +21,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "Atliekant paiešką, įvyko klaida",
     "Loading…" : "Įkeliama…",
     "Add groups" : "Pridėti grupes",
+    "Add teams" : "Pridėti komandas",
     "Remove {name}" : "Šalinti {name}",
     "Add emoji" : "Pridėti šypsenėlę",
     "Collective settings" : "Kolektyvo nustatymai",
