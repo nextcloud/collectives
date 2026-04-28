@@ -95,9 +95,15 @@ Cypress.Commands.add('disableApp', (appName) => {
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 	const verb = value ? 'enable' : 'disable'
 	const url = `${Cypress.expose('baseUrl')}/index.php/settings/apps/${verb}`
+
+	const headers = {}
+	if (verb === 'enable') {
+		headers.Authorization = `Basic ${btoa('admin:admin')}`
+	}
 	return axios.post(
 		url,
 		{ appIds: [appName] },
+		{ headers },
 	)
 })
 
