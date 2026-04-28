@@ -58,7 +58,7 @@ class IndexCollectives extends TimedJob {
 		try {
 			$folder = $this->collectiveFolderManager->getRootFolder()->get((string)$collective->getId());
 			$folderMtime = $folder->getMTime();
-			$maxIndexedMtime = $this->fileMapper->getMaxMtimeByCircle($collective->getCircleId());
+			$maxIndexedMtime = $this->fileMapper->getMaxMtimeByCollective($collective->getId());
 
 			return $maxIndexedMtime === null || $folderMtime > $maxIndexedMtime;
 		} catch (NotFoundException|InvalidPathException) {

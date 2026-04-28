@@ -36,11 +36,11 @@ class SearchService {
 			throw new FileSearchException('Collectives search service could not find folder for collective.', 0, $e);
 		}
 
-		$this->indexer->indexFolder($collectiveFolder, $collective->getCircleId(), $incremental);
+		$this->indexer->indexFolder($collectiveFolder, $collective->getId(), $incremental);
 	}
 
-	public function searchCollective(Collective $collective, string $query, int $maxResults = 15): array {
-		return $this->searcher->search($collective->getCircleId(), $query, $maxResults);
+	public function searchCollective(Collective $collective, string $query): array {
+		return $this->searcher->search($collective->getId(), $query);
 	}
 
 	public function rankByBigrams(string $query, array $files): array {

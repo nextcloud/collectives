@@ -14,8 +14,8 @@ use OCP\AppFramework\Db\Entity;
 /**
  * @method int getId()
  * @method void setId(int $value)
- * @method string getCircleUniqueId()
- * @method void setCircleUniqueId(string $value)
+ * @method int getCollectiveId()
+ * @method void setCollectiveId(int $value)
  * @method int getFileId()
  * @method void setFileId(int $value)
  * @method string getPath()
@@ -26,7 +26,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setLanguage(string $value)
  */
 class SearchFile extends Entity {
-	protected ?string $circleUniqueId = null;
+	protected ?int $collectiveId = null;
 	protected ?int $fileId = null;
 	protected ?string $path = null;
 	protected ?int $mtime = null;

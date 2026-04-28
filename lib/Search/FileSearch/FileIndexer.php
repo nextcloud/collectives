@@ -33,36 +33,36 @@ class FileIndexer {
 	) {
 	}
 
-	public function indexFolder(Folder $folder, string $circleUniqueId, bool $incremental = false): void {
+	public function indexFolder(Folder $folder, int $collectiveId, bool $incremental = false): void {
 
 		if (!$incremental) {
-			$this->deleteIndexByCircle($circleUniqueId);
+			$this->deleteIndexByCollective($collectiveId);
 		}
 
 		$files = $this->getDirectoryFiles($folder, true);
 
 		foreach ($files as $file) {
-			$this->indexFile($file, $circleUniqueId, $incremental);
+			$this->indexFile($file, $collectiveId, $incremental);
 		}
 	}
 
-	private function deleteIndexByCircle(string $circleUniqueId): void {
-		$this->wordMapper->deleteByCircle($circleUniqueId);
-		$this->docMapper->deleteByCircle($circleUniqueId);
-		$this->fileMapper->deleteByCircle($circleUniqueId);
+	private function deleteIndexByCollective(int $collectiveId): void {
+		$this->wordMapper->deleteByCollective($collectiveId);
+		$this->docMapper->deleteByCollective($collectiveId);
+		$this->fileMapper->deleteByCollective($collectiveId);
 	}
 
-	private function indexFile(File $file, string $circleUniqueId, bool $incremental): void {
+	private function indexFile(File $file, int $collectiveId, bool $incremental): void {
 
 		if ($incremental) {
-			$existingFile = $this->fileMapper->findByCircleAndFileId($circleUniqueId, $file->getId());
+			$existingFile = $this->fileMapper->findByCollectiveAndFileId($collectiveId, $file->getId());
 
 			if ($existingFile && $existingFile->getMtime() >= $file->getMTime()) {
 				return;
 			}
 
 			if ($existingFile) {
-				$this->deleteFileFromIndex($circleUniqueId, $file->getId());
+				$this->deleteFileFromIndex($collectiveId, $file->getId());
 			}
 		}
 
@@ -73,28 +73,30 @@ class FileIndexer {
 		}
 
 		$language = $this->languageDetector->detect(mb_substr($content, 0, self::LANGUAGE_DETECTION_LIMIT));
-		$tokens = $this->tokenizer->tokenize($content);
+		$tokens = $this->tokenizer->tokenize($content, $language);
 
-		$stems = [];
+		$termCounts = [];
+		$termStems = [];
 		foreach ($tokens as $token) {
-			$stems[] = $this->stemmer->stem($token, $language);
+			$term = mb_substr($token, 0, 50);
+			$termCounts[$term] = ($termCounts[$term] ?? 0) + 1;
+			$termStems[$term] = $this->stemmer->stem($token, $language);
 		}
 
-		$terms = array_count_values($stems);
-		unset($content, $tokens, $stems);
+		unset($content, $tokens);
 
-		foreach ($terms as $term => $hitCount) {
+		foreach ($termCounts as $term => $hitCount) {
 			try {
-				$term = mb_substr((string)$term, 0, 50);
-				$word = $this->wordMapper->upsert($circleUniqueId, $term, $hitCount, 1);
-				$this->docMapper->insertDoc($circleUniqueId, $word->getId(), $file->getId(), $hitCount);
+				/** @psalm-suppress RedundantCast */
+				$word = $this->wordMapper->upsert($collectiveId, (string)$term, $termStems[$term], $hitCount, 1);
+				$this->docMapper->insertDoc($collectiveId, $word->getId(), $file->getId(), $hitCount);
 			} catch (\Exception) {
 				continue;
 			}
 		}
 
 		try {
-			$this->fileMapper->insertFile($circleUniqueId, $file->getId(), $file->getInternalPath(), $file->getMTime(), $language);
+			$this->fileMapper->insertFile($collectiveId, $file->getId(), $file->getInternalPath(), $file->getMTime(), $language);
 		} catch (\Exception) {
 		}
 	}
@@ -117,20 +119,25 @@ class FileIndexer {
 				continue;
 			}
 
+			if (str_starts_with($node->getParent()->getName(), '.attachments.')
+				|| $node->getParent()->getName() === '.templates') {
+				continue;
+			}
+
 			$files[] = $node;
 		}
 
 		return array_merge($files, ...$filesRecursive);
 	}
 
-	private function deleteFileFromIndex(string $circleUniqueId, int $fileId): void {
-		$docs = $this->docMapper->findByCircleAndFileId($circleUniqueId, $fileId);
+	private function deleteFileFromIndex(int $collectiveId, int $fileId): void {
+		$docs = $this->docMapper->findByCollectiveAndFileId($collectiveId, $fileId);
 
 		foreach ($docs as $doc) {
-			$this->wordMapper->decrementCounts($circleUniqueId, $doc->getWordId(), $doc->getHitCount());
+			$this->wordMapper->decrementCounts($collectiveId, $doc->getWordId(), $doc->getHitCount());
 			$this->docMapper->delete($doc);
 		}
 
-		$this->fileMapper->deleteByCircleAndFileId($circleUniqueId, $fileId);
+		$this->fileMapper->deleteByCollectiveAndFileId($collectiveId, $fileId);
 	}
 }

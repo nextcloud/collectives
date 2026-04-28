@@ -653,7 +653,7 @@ class PublicPageController extends CollectivesPublicOCSController {
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$collective = $this->collectiveService->getCollective($collectiveId, $owner);
-			$results = $this->indexedSearchService->searchCollective($collective, $searchString, 100);
+			$results = $this->indexedSearchService->searchCollective($collective, $searchString);
 			$pages = [];
 			foreach ($results as $value) {
 				if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {

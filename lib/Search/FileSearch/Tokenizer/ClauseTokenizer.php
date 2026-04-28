@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace OCA\Collectives\Search\FileSearch\Tokenizer;
 
 class ClauseTokenizer extends WordTokenizer {
-	public function tokenize($text, array $stopwords = []): array {
-		$words = parent::tokenize($text, $stopwords);
+	public function tokenize($text, ?string $language = null): array {
+		$words = parent::tokenize($text, $language);
 
 		$tokens = [];
 		$lastWord = '';

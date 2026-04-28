@@ -17,9 +17,9 @@ use OCA\Collectives\Search\FileSearch\Tokenizer\ClauseTokenizer;
 use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 
 class FileSearcher {
-	private const DEFAULT_LIMIT = 15;
+	private const SEARCH_LIMIT = 50;
 	private const FUZZY_PREFIX_LENGTH = 3;
-	private const FUZZY_MAX_DISTANCE = 1;
+	public const FUZZY_MAX_DISTANCE = 1;
 
 	public function __construct(
 		private readonly SearchWordMapper $wordMapper,
@@ -31,39 +31,82 @@ class FileSearcher {
 	) {
 	}
 
-	public function search(string $circleId, string $query, int $limit = self::DEFAULT_LIMIT): array {
-		$tokens = $this->tokenizer->tokenize($query);
-		$languages = $this->fileMapper->getLanguagesByCircle($circleId) ?: [null];
+	private function mergeResults(array $results, array $newResults): array {
+		$existingFileIds = array_column($results, 'file_id');
+		foreach ($newResults as $result) {
+			if (!in_array($result['file_id'], $existingFileIds)) {
+				$results[] = $result;
+			}
+		}
+		return $results;
+	}
 
-		$stems = [];
+	public function search(int $collectiveId, string $query): array {
+		$tokens = $this->tokenizer->tokenize($query);
+		if (empty($tokens)) {
+			return [];
+		}
+
+		// step 1: exact match on term
+		$exactWordIds = [];
+		foreach ($tokens as $token) {
+			$exactWord = $this->wordMapper->findByCollectiveAndTerm($collectiveId, $token);
+			if ($exactWord !== null) {
+				$exactWordIds[] = $exactWord->getId();
+			}
+		}
+
+		$results = !empty($exactWordIds)
+			? $this->docMapper->findDocumentsByWords($collectiveId, $exactWordIds, self::SEARCH_LIMIT)
+			: [];
+
+		$remainingLimit = self::SEARCH_LIMIT - count($results);
+		if ($remainingLimit <= 0) {
+			return $results;
+		}
+
+		// step 2: prefix match on term
+		$prefixWordIds = [];
+		foreach ($tokens as $token) {
+			$prefixWords = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $token, $remainingLimit);
+			foreach ($prefixWords as $word) {
+				if (!in_array($word->getId(), $exactWordIds)) {
+					$prefixWordIds[] = $word->getId();
+				}
+			}
+		}
+
+		$prefixWordIds = array_unique($prefixWordIds);
+		$prefixResults = !empty($prefixWordIds)
+			? $this->docMapper->findDocumentsByWords($collectiveId, $prefixWordIds, $remainingLimit)
+			: [];
+		$results = $this->mergeResults($results, $prefixResults);
+
+		$remainingLimit = self::SEARCH_LIMIT - count($results);
+		if ($remainingLimit <= 0) {
+			return $results;
+		}
+
+		// step 3: stem match with fuzzy fallback
+		$languages = $this->fileMapper->getLanguagesByCollective($collectiveId) ?: [null];
+		$stemWordIds = [];
 		foreach ($tokens as $token) {
 			foreach ($languages as $language) {
-				$stems[] = $this->stemmer->stem($token, $language);
-			}
-		}
-		$stems = array_unique($stems);
-
-		if (empty($stems)) {
-			return [];
-		}
-
-		$wordIds = [];
-		foreach ($stems as $stem) {
-			$word = $this->wordMapper->findByCircleAndTerm($circleId, $stem);
-			$words = $word ? [$word] : $this->fuzzySearchWord($circleId, $stem);
-
-			foreach ($words as $word) {
-				$wordIds[] = $word->getId();
+				$stem = $this->stemmer->stem($token, $language);
+				$stemWords = $this->wordMapper->findByCollectiveAndStem($collectiveId, $stem)
+					?: $this->fuzzySearchWord($collectiveId, $token);
+				foreach ($stemWords as $word) {
+					$stemWordIds[] = $word->getId();
+				}
 			}
 		}
 
-		$wordIds = array_unique($wordIds);
+		$stemWordIds = array_unique($stemWordIds);
+		$stemResults = !empty($stemWordIds)
+			? $this->docMapper->findDocumentsByWords($collectiveId, $stemWordIds, $remainingLimit)
+			: [];
 
-		if (empty($wordIds)) {
-			return [];
-		}
-
-		return $this->docMapper->findDocumentsByWords($circleId, $wordIds, $limit);
+		return $this->mergeResults($results, $stemResults);
 	}
 
 	public function rankByBigrams(string $query, array $files): array {
@@ -99,13 +142,13 @@ class FileSearcher {
 		return array_map(fn ($item) => $item['file'], $scored);
 	}
 
-	private function fuzzySearchWord(string $circleId, string $term): array {
+	private function fuzzySearchWord(int $collectiveId, string $term): array {
 		if (mb_strlen($term) < self::FUZZY_PREFIX_LENGTH) {
 			return [];
 		}
 
 		$prefix = mb_substr($term, 0, self::FUZZY_PREFIX_LENGTH);
-		$candidates = $this->wordMapper->findByCircleAndPrefix($circleId, $prefix);
+		$candidates = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $prefix, self::SEARCH_LIMIT);
 
 		$matches = [];
 		foreach ($candidates as $candidate) {
