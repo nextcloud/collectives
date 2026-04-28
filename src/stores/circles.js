@@ -43,12 +43,11 @@ export const useCirclesStore = defineStore('circles', {
 
 		circleMembers: (state) => (circleId) => state.circlesMembers[circleId] || [],
 
-		currentCircleMembersSorted: (state) => state.currentCircleMembers.slice().sort(sortMembersByLevelAndType),
+		currentCircleMembersSorted: (state) => state.currentCircleMembers.toSorted(sortMembersByLevelAndType),
 
 		circleMembersSorted: (state) => (circleId) => {
 			return state.circleMembers(circleId)
-				.slice()
-				.sort(sortMembersByLevelAndType)
+				.toSorted(sortMembersByLevelAndType)
 		},
 
 		currentCircleUserMembersSorted: (state) => {

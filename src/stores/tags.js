@@ -40,7 +40,7 @@ export const useTagsStore = defineStore('tags', {
 
 		sortedTags(state) {
 			return state.tags
-				.sort((a, b) => a.name.localeCompare(b.name, getLanguage(), { ignorePunctuation: true }))
+				.toSorted((a, b) => a.name.localeCompare(b.name, getLanguage(), { ignorePunctuation: true }))
 		},
 
 		tagsLoaded: (state) => {

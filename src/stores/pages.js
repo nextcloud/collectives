@@ -275,7 +275,7 @@ export const usePagesStore = defineStore('pages', {
 		sortPages(state) {
 			return (pages) => pages
 				.map((page) => ({ page, indices: state.pageIndices(page) }))
-				.sort(sortOrders.byIndices)
+				.toSorted(sortOrders.byIndices)
 				.map(({ page }) => page)
 		},
 
@@ -292,7 +292,7 @@ export const usePagesStore = defineStore('pages', {
 					// add the index from customOrder
 					.map((p) => ({ ...p, index: customOrder.indexOf(p.id) }))
 					// sort by given order, fall back to user setting
-					.sort(sortOrders[sortOrder] || state.sortOrder)
+					.toSorted(sortOrders[sortOrder] || state.sortOrder)
 			}
 		},
 
@@ -415,13 +415,12 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		sortedTrashPages(state) {
-			return state.trashPages.sort((a, b) => b.trashTimestamp - a.trashTimestamp)
+			return state.trashPages.toSorted((a, b) => b.trashTimestamp - a.trashTimestamp)
 		},
 
 		recentPages(state) {
 			return state.pages
-				.slice()
-				.sort(sortOrders.byTimeAsc)
+				.toSorted(sortOrders.byTimeAsc)
 		},
 
 		recentPagesUserIds(state) {

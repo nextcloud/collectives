@@ -44,11 +44,11 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		sortedCollectives(state) {
-			return state.collectives.sort(byName)
+			return state.collectives.toSorted(byName)
 		},
 
 		sortedTrashCollectives(state) {
-			return state.trashCollectives.sort(byName)
+			return state.trashCollectives.toSorted(byName)
 		},
 
 		currentCollective(state) {

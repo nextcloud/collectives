@@ -129,7 +129,7 @@ export default {
 		},
 
 		sortedVersions() {
-			return [...this.versions].sort((a, b) => {
+			return this.versions.toSorted((a, b) => {
 				if (a.mtime === this.pageMtime) {
 					return -1
 				} else if (b.mtime === this.pageMtime) {
