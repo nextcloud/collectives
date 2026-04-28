@@ -71,8 +71,7 @@ export default {
 
 		sortedMembers() {
 			return this.currentMembers
-				.slice()
-				.sort(this.sortCurrentUserFirst)
+				.toSorted(this.sortCurrentUserFirst)
 		},
 
 		searchedMembers() {

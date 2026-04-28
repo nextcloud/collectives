@@ -119,8 +119,7 @@ export default {
 
 		sortedMembers() {
 			return this.circleMembersSorted(this.currentCollective.circleId)
-				.slice()
-				.sort(this.sortLastActiveFirst)
+				.toSorted(this.sortLastActiveFirst)
 		},
 
 		trimmedMembers() {

@@ -45,7 +45,7 @@ export const useTemplatesStore = defineStore('templates', {
 		},
 
 		sortedTemplates() {
-			return this.templates.sort(byTitleAsc)
+			return this.templates.toSorted(byTitleAsc)
 		},
 
 		hasTemplates() {

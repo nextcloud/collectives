@@ -344,7 +344,7 @@ export default {
 				// Ignore already selected tags
 				.filter((t) => !this.filterTags.some((ft) => ft.id === t.id))
 				.filter((t) => t.name.toLowerCase().includes(this.filterStringTagPart))
-				.sort((t1, t2) => {
+				.toSorted((t1, t2) => {
 					if (t1.name.toLowerCase().startsWith(this.filterStringTagPart)) {
 						return -1
 					} else if (t2.name.toLowerCase().startsWith(this.filterStringTagPart)) {

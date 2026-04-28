@@ -247,7 +247,7 @@ export default {
 			return [...this.attachments]
 				.filter((a) => a.type === 'text')
 				// Sort attachments chronologically, most recent first
-				.sort((a, b) => a.timestamp < b.timestamp)
+				.toSorted((a, b) => a.timestamp < b.timestamp)
 		},
 
 		embeddedAttachments() {
@@ -259,10 +259,10 @@ export default {
 		},
 
 		folderAttachments() {
-			return [...this.attachments]
+			return this.attachments
 				.filter((a) => a.type === 'folder')
 				// Sort attachments chronologically, most recent first
-				.sort((a, b) => a.timestamp < b.timestamp)
+				.toSorted((a, b) => a.timestamp < b.timestamp)
 		},
 
 		hasAttachments() {
