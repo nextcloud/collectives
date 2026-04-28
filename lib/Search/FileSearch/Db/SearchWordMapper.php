@@ -27,8 +27,8 @@ class SearchWordMapper extends QBMapper {
 		parent::__construct($db, 'collectives_s_words', SearchWord::class);
 	}
 
-	public function upsert(string $circleUniqueId, string $term, int $numHits, int $numFiles): SearchWord {
-		$word = $this->findByCircleAndTerm($circleUniqueId, $term);
+	public function upsert(int $collectiveId, string $term, string $stem, int $numHits, int $numFiles): SearchWord {
+		$word = $this->findByCollectiveAndTerm($collectiveId, $term);
 
 		if ($word !== null) {
 			$word->setNumHits($word->getNumHits() + $numHits);
@@ -37,25 +37,26 @@ class SearchWordMapper extends QBMapper {
 		}
 
 		$word = new SearchWord();
-		$word->setCircleUniqueId($circleUniqueId);
+		$word->setCollectiveId($collectiveId);
 		$word->setTerm($term);
+		$word->setStem($stem);
 		$word->setNumHits($numHits);
 		$word->setNumFiles($numFiles);
 		return $this->insert($word);
 	}
 
-	public function deleteByCircle(string $circleUniqueId): void {
+	public function deleteByCollective(int $collectiveId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)));
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)));
 		$qb->executeStatement();
 	}
 
-	public function findByCircleAndTerm(string $circleUniqueId, string $term): ?SearchWord {
+	public function findByCollectiveAndTerm(int $collectiveId, string $term): ?SearchWord {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
 			->andWhere($qb->expr()->eq('term', $qb->createNamedParameter($term)));
 
 		try {
@@ -65,11 +66,21 @@ class SearchWordMapper extends QBMapper {
 		}
 	}
 
-	public function findByCircleAndPrefix(string $circleUniqueId, string $prefix, int $limit = 20): array {
+	public function findByCollectiveAndStem(int $collectiveId, string $stem): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
+			->andWhere($qb->expr()->eq('stem', $qb->createNamedParameter($stem)));
+
+		return $this->findEntities($qb);
+	}
+
+	public function findByCollectiveAndPrefix(int $collectiveId, string $prefix, int $limit): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->tableName)
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
 			->andWhere($qb->expr()->like('term', $qb->createNamedParameter($prefix . '%')))
 			->orderBy('num_hits', 'DESC')
 			->setMaxResults($limit);
@@ -77,24 +88,24 @@ class SearchWordMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function decrementCounts(string $circleUniqueId, string $wordId, int $hitCount): void {
+	public function decrementCounts(int $collectiveId, string $wordId, int $hitCount): void {
 		$qb = $this->db->getQueryBuilder();
 
 		$hitCountParam = $qb->createNamedParameter($hitCount, IQueryBuilder::PARAM_INT);
 		$qb->update($this->tableName)
 			->set('num_hits', $qb->func()->greatest($qb->createFunction("num_hits - $hitCountParam"), $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->set('num_files', $qb->func()->greatest($qb->createFunction('num_files - 1'), $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
 			->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($wordId)));
 		$qb->executeStatement();
 
-		$this->deleteOrphanedWords($circleUniqueId);
+		$this->deleteOrphanedWords($collectiveId);
 	}
 
-	private function deleteOrphanedWords(string $circleUniqueId): void {
+	private function deleteOrphanedWords(int $collectiveId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
 			->andWhere($qb->expr()->orX(
 				$qb->expr()->lte('num_hits', $qb->createNamedParameter(0)),
 				$qb->expr()->lte('num_files', $qb->createNamedParameter(0))

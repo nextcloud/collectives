@@ -9,15 +9,17 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch\Tokenizer;
 
-class WordTokenizer {
+class WordTokenizer extends AbstractTokenizer {
 	private const MIN_LENGTH = 2;
 	private const MAX_LENGTH = 50;
 	private const PATTERN = '/[^\p{L}\p{N}\p{Pc}\p{Pd}@]+/u';
 
-	public function tokenize(string $text, array $stopwords = []): array {
+	public function tokenize(string $text, ?string $language = null): array {
+		$text = self::normalize($text);
 		$text = mb_strtolower($text);
 		$words = preg_split(self::PATTERN, $text, -1, PREG_SPLIT_NO_EMPTY);
 
+		$stopwords = $language !== null ? $this->getStopWords($language) : [];
 		$words = array_diff($words, $stopwords);
 
 		return array_filter($words, function ($word) {

@@ -14,8 +14,8 @@ use OCP\AppFramework\Db\Entity;
 /**
  * @method int getId()
  * @method void setId(int $value)
- * @method string getCircleUniqueId()
- * @method void setCircleUniqueId(string $value)
+ * @method int getCollectiveId()
+ * @method void setCollectiveId(int $value)
  * @method int getWordId()
  * @method void setWordId(int $value)
  * @method int getFileId()
@@ -24,7 +24,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setHitCount(int $value)
  */
 class SearchDoc extends Entity {
-	protected ?string $circleUniqueId = null;
+	protected ?int $collectiveId = null;
 	protected ?string $wordId = null;
 	protected ?int $fileId = null;
 	protected ?int $hitCount = null;

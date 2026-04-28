@@ -25,9 +25,9 @@ class SearchFileMapper extends QBMapper {
 		parent::__construct($db, 'collectives_s_files', SearchFile::class);
 	}
 
-	public function insertFile(string $circleUniqueId, int $fileId, string $path, int $mtime, ?string $language = null): SearchFile {
+	public function insertFile(int $collectiveId, int $fileId, string $path, int $mtime, ?string $language = null): SearchFile {
 		$file = new SearchFile();
-		$file->setCircleUniqueId($circleUniqueId);
+		$file->setCollectiveId($collectiveId);
 		$file->setFileId($fileId);
 		$file->setPath($path);
 		$file->setMtime($mtime);
@@ -35,11 +35,11 @@ class SearchFileMapper extends QBMapper {
 		return $this->insert($file);
 	}
 
-	public function findByCircleAndFileId(string $circleUniqueId, int $fileId): ?SearchFile {
+	public function findByCollectiveAndFileId(int $collectiveId, int $fileId): ?SearchFile {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
 			->andWhere($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)));
 
 		try {
@@ -49,11 +49,11 @@ class SearchFileMapper extends QBMapper {
 		}
 	}
 
-	public function getMaxMtimeByCircle(string $circleUniqueId): ?int {
+	public function getMaxMtimeByCollective(int $collectiveId): ?int {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select($qb->func()->max('mtime'))
 			->from($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)));
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)));
 
 		$result = $qb->executeQuery();
 		$mtime = $result->fetchOne();
@@ -62,11 +62,11 @@ class SearchFileMapper extends QBMapper {
 		return $mtime ? (int)$mtime : null;
 	}
 
-	public function getLanguagesByCircle(string $circleUniqueId): array {
+	public function getLanguagesByCollective(int $collectiveId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->selectDistinct('language')
 			->from($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
 			->andWhere($qb->expr()->isNotNull('language'));
 
 		$result = $qb->executeQuery();
@@ -76,17 +76,17 @@ class SearchFileMapper extends QBMapper {
 		return $languages;
 	}
 
-	public function deleteByCircle(string $circleUniqueId): void {
+	public function deleteByCollective(int $collectiveId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)));
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)));
 		$qb->executeStatement();
 	}
 
-	public function deleteByCircleAndFileId(string $circleUniqueId, int $fileId): void {
+	public function deleteByCollectiveAndFileId(int $collectiveId, int $fileId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->tableName)
-			->where($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId)))
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)))
 			->andWhere($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId)));
 		$qb->executeStatement();
 	}

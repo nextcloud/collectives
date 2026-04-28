@@ -13,6 +13,7 @@ use Exception;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
+use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
@@ -88,11 +89,13 @@ class PageContentProvider implements IProvider {
 					continue;
 				}
 
-				$pages[$fileId] = $fileEntry;
+				$pages[$fileId] = ['file' => $fileEntry, 'matched_term' => $fileData['matched_term']];
 				$collectiveMap[$fileId] = $collective;
 			}
 		}
 
+		$pageData = $pages;
+		$pages = array_map(fn ($p) => $p['file'], $pages);
 		$pages = $this->indexedSearchService->rankByBigrams($query->getTerm(), $pages);
 
 		$pageSearchResults = [];
@@ -105,14 +108,19 @@ class PageContentProvider implements IProvider {
 
 			$descriptionSuffix = $pageInfo->getFilePath()
 				? ' - ' . $pageInfo->getFilePathString()
-				: '';
+				: ' - ' . $pageInfo->getTitle();
 			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
 				. $descriptionSuffix;
 
 			$content = $page->getContent();
+			$normalizedContent = WordTokenizer::normalize($content);
+
+			$pos = mb_stripos($normalizedContent, $pageData[$page->getId()]['matched_term'] ?? $query->getTerm());
+			$pos = $pos !== false ? $pos : 0;
+
 			$pageSearchResults[] = new SearchResultEntry(
 				'',
-				mb_substr($content, mb_stripos($content, $query->getTerm()), 200),
+				mb_substr($normalizedContent, $pos, 200),
 				$description,
 				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getUrlPath(), $pageInfo),
 				'icon-collectives-page'
