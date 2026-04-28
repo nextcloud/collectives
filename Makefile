@@ -124,6 +124,7 @@ build: node-modules build-js-production composer-install-no-dev
 	mkdir -p $(RELEASE_DIR)
 	rsync -a --delete --delete-excluded \
 		--exclude="$(APP_NAME)/.**" \
+		--exclude="$(APP_NAME)/AGENTS.md" \
 		--exclude="$(APP_NAME)/Makefile" \
 		--exclude="$(APP_NAME)/TODO*" \
 		--exclude="$(APP_NAME)/babel.config.cjs" \
