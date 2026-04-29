@@ -51,6 +51,7 @@ class UserFolderHelper {
 			/** @var Folder $userCollectivesFolder */
 			$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
 		} catch (NotFoundException) {
+			// TODO: Replace with ISetupManager::setupForUser() once Nextcloud <= 33 is no longer supported
 			OC_Util::setupFS($userId);
 			/** @var Folder $userCollectivesFolder */
 			$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
