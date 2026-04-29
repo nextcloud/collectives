@@ -35,7 +35,7 @@ describe('Collective name conflicts', function() {
 		cy.visit('apps/collectives')
 		cy.get('button').contains('New collective').click()
 		cy.get('button span.teams-icon').click()
-		// cy.get('.circle-selector ul').should('not.contain', 'Foreign')
+		cy.get('.circle-selector').click()
 		cy.get('.circle-selector li [title*=History]').click()
 		cy.get('button').contains('Add members').click()
 		cy.get('button').contains('Create').click()
