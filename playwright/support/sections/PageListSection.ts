@@ -10,14 +10,20 @@ import { expect } from '@playwright/test'
 export class PageListSection {
 	public readonly el: Locator
 	public readonly pageListItems: Locator
+	public readonly filter: Locator
+	public readonly filterTagSelect: Locator
+	public readonly activeFilterTags: Locator
 
 	constructor(public readonly page: Page) {
 		this.el = this.page.locator('.app-content-list')
 		this.pageListItems = this.el.locator('.app-content-list-item')
+		this.filter = this.el.getByRole('textbox', { name: 'Search pages' })
+		this.filterTagSelect = this.page.locator('.page-filter-tag-select')
+		this.activeFilterTags = this.el.locator('.page-filter-tags')
 	}
 
 	public getPageItem(title: string): Locator {
-		return this.pageListItems.filter({ hasText: title })
+		return this.pageListItems.filter({ hasText: title, visible: true })
 	}
 
 	public async expectPageListOrder(titles: string[]): Promise<void> {

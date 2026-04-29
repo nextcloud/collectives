@@ -151,6 +151,37 @@ export class Collective {
 		return collectivePage
 	}
 
+	async createTag({ name, color = '', page }: {
+		name: string
+		color?: string
+		page: Page
+	}) {
+		const response = await page.request.post(
+			apiUrl('v1.0', 'collectives', this.data.id, 'tags'),
+			{
+				headers: ocsHeaders,
+				data: { name, color },
+				failOnStatusCode: true,
+			},
+		)
+		const data = await response.json()
+		return data.ocs.data.tag
+	}
+
+	async addTagToPage({ pageId, tagId, page }: {
+		pageId: number
+		tagId: number
+		page: Page
+	}) {
+		await page.request.put(
+			apiUrl('v1.0', 'collectives', this.data.id, 'pages', pageId, 'tags', tagId),
+			{
+				headers: ocsHeaders,
+				failOnStatusCode: true,
+			},
+		)
+	}
+
 	async createShare({ password = '', page }: {
 		password?: string
 		page: Page
