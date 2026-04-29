@@ -70,6 +70,7 @@
     "@vue/tsconfig": "^0.9.1",
     "cypress": "^15.14.1",
     "cypress-split": "^1.24.31",
+    "cypress-vite": "^1.8.0",
     "eslint": "^10.2.1",
     "eslint-plugin-cypress": "^6.4.0",
     "vite": "^7.3.2",

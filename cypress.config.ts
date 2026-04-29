@@ -5,12 +5,14 @@
 
 import { defineConfig } from 'cypress'
 import cypressSplit from 'cypress-split'
+import vitePreprocessor from 'cypress-vite'
 
 export default defineConfig({
 	viewportWidth: 1280,
 	viewportHeight: 900,
 	e2e: {
 		setupNodeEvents(on, config) {
+			on('file:preprocessor', vitePreprocessor({ configFile: false }))
 			cypressSplit(on, config)
 			return config
 		},
@@ -24,7 +26,7 @@ export default defineConfig({
 		// do not retry in `cypress open`
 		openMode: 0,
 	},
-	numTestsKeptInMemory: 5,
+	numTestsKeptInMemory: 0,
 	allowCypressEnv: false,
 	experimentalMemoryManagement: true,
 	experimentalFastVisibility: true,
