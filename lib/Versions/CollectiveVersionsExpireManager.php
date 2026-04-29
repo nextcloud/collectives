@@ -11,20 +11,18 @@ namespace OCA\Collectives\Versions;
 
 use OC\Files\View;
 use OC\Hooks\BasicEmitter;
-use OC\User\User;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
-use OCP\IUser;
+use OCP\IUserManager;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
@@ -39,7 +37,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		private readonly IDBConnection $connection,
 		private readonly CollectiveMapper $collectiveMapper,
 		private readonly ITimeFactory $timeFactory,
-		private readonly IEventDispatcher $dispatcher,
+		private readonly IUserManager $userManager,
 	) {
 		try {
 			$this->versionsBackend = $appContainer->get(VersionsBackend::class);
@@ -100,8 +98,8 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
-		/** @var IUser $dummyUser */
-		$dummyUser = new User('', null, $this->dispatcher);
+		// Versions are not user-specific; the user object is never resolved against a backend.
+		$dummyUser = $this->userManager->getExistingUser('');
 		foreach ($files as $fileId => $file) {
 			if ($file instanceof FileInfo) {
 				// Some versions could have been lost during move operations across storage.

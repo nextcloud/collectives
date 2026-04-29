@@ -9,16 +9,16 @@ declare(strict_types=1);
 
 namespace BackgroundJob;
 
-use OC\User\User;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use OCA\Collectives\Versions\ExpireManager;
 use OCA\Collectives\Versions\VersionsBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\IDBConnection;
+use OCP\IUser;
+use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 use Test\TestCase;
@@ -31,11 +31,18 @@ class CollectiveVersionsExpireManagerTest extends TestCase {
 		$this->versionsBackend = $this->createMock(VersionsBackend::class);
 	}
 
-	public function testEventDispatcherFallback() {
+	public function testExpireFolderUsesDummyUser(): void {
 		$appContainer = $this->createMock(ContainerInterface::class);
 		$appContainer->method('get')
 			->with(VersionsBackend::class)
 			->willReturn($this->versionsBackend);
+
+		$dummyUser = $this->createMock(IUser::class);
+		$userManager = $this->createMock(IUserManager::class);
+		$userManager->expects($this->once())
+			->method('getExistingUser')
+			->with('')
+			->willReturn($dummyUser);
 
 		$file = $this->createMock(FileInfo::class);
 		$file->method('getPath')->willReturn('/path/to/file.txt');
@@ -44,11 +51,8 @@ class CollectiveVersionsExpireManagerTest extends TestCase {
 			->willReturn([$file]);
 		$this->versionsBackend->expects($this->once())
 			->method('getVersionsForFile')
-			->willReturnCallback(function ($user, $passedFile) use ($file) {
-				self::assertEquals($file, $passedFile);
-				self::assertInstanceOf(User::class, $user);
-				return [];
-			});
+			->with($dummyUser, $file)
+			->willReturn([]);
 
 		$manager = new CollectiveVersionsExpireManager(
 			$appContainer,
@@ -57,7 +61,7 @@ class CollectiveVersionsExpireManagerTest extends TestCase {
 			$this->createMock(IDBConnection::class),
 			$this->createMock(CollectiveMapper::class),
 			$this->createMock(ITimeFactory::class),
-			$this->createMock(IEventDispatcher::class),
+			$userManager,
 		);
 		$manager->expireFolder(['id' => 123]);
 	}
