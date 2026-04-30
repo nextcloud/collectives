@@ -59,6 +59,7 @@ class CollectiveShare extends Entity implements JsonSerializable {
 			'token' => $this->token,
 			'owner' => $this->owner,
 			'editable' => $this->editable,
+			'hasPassword' => (bool)$this->password,
 		];
 	}
 }
