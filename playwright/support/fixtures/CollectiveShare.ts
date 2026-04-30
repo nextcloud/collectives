@@ -14,12 +14,12 @@ type CollectiveShareData = {
 	token: string
 	owner: string
 	editable: boolean
-	password: string
+	hasPassword: boolean
 }
 
 export class CollectiveShare {
 	public readonly collectiveUrlPart: string
-	public readonly data: CollectiveShareData
+	public data: CollectiveShareData
 	public readonly page: Page
 
 	constructor(collectiveUrlPart: string, data: CollectiveShareData, page: Page) {
@@ -60,5 +60,19 @@ export class CollectiveShare {
 				failOnStatusCode: true,
 			},
 		)
+	}
+
+	async updateData(): Promise<CollectiveShareData> {
+		const response = await this.page.request.get(
+			apiUrl('v1.0', 'collectives', this.data.collectiveId, 'shares'),
+			{ headers: ocsHeaders, failOnStatusCode: true },
+		)
+		const json = await response.json()
+		const share = json.ocs.data.find((s: CollectiveShareData) => s.token === this.data.token)
+		if (!share) {
+			throw new Error(`Share with token ${this.data.token} not found`)
+		}
+		this.data = share
+		return share
 	}
 }
