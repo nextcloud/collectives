@@ -346,7 +346,7 @@ export default {
 				}
 				return t('collectives', 'Cannot copy, please copy the link manually')
 			}
-			return t('collectives', 'Copy public link of {title} to clipboard', { title: this.title })
+			return t('collectives', 'Copy public link to clipboard')
 		},
 
 		isPageShare() {
@@ -364,7 +364,7 @@ export default {
 		},
 
 		actionsTooltip() {
-			return t('collectives', 'Actions for "{title}"', { title: this.title })
+			return t('collectives', 'Share actions')
 		},
 
 		isPasswordEnforced() {
