@@ -5,6 +5,7 @@
 
 import type { User as Account } from '@nextcloud/e2e-test-server'
 import type { Page } from '@playwright/test'
+import type { CollectiveShareData } from './CollectiveShare.ts'
 import type { User } from './User.ts'
 
 import { createRandomUser } from '@nextcloud/e2e-test-server/playwright'
@@ -198,6 +199,15 @@ export class Collective {
 		)
 		const data = await response.json()
 		return new CollectiveShare(this.getCollectiveUrlPart(), data.ocs.data, page)
+	}
+
+	async getShares(page: Page) {
+		const response = await page.request.get(
+			apiUrl('v1.0', 'collectives', this.data.id, 'shares'),
+			{ headers: ocsHeaders, failOnStatusCode: true },
+		)
+		const json = await response.json()
+		return json.ocs.data.map((s: CollectiveShareData) => new CollectiveShare(this.getCollectiveUrlPart(), s, page))
 	}
 
 	async addMember(): Promise<Account> {

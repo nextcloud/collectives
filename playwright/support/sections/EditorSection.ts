@@ -30,6 +30,17 @@ export class EditorSection {
 		this.isEdit = edit
 	}
 
+	public async switchMode(edit: boolean): Promise<void> {
+		const content = (edit ? this.editor : this.reader).locator('.ProseMirror')
+		if (await content.isVisible()) {
+			this.isEdit = edit
+			return
+		}
+		await this.page.locator('.edit-button').click()
+		await content.waitFor({ state: 'visible' })
+		this.isEdit = edit
+	}
+
 	public getMenu(name: string): Locator {
 		return this.editor.getByRole('button', { name })
 	}
@@ -80,6 +91,10 @@ export class EditorSection {
 		await link
 			.getByRole('link')
 			.click()
+	}
+
+	public async save(): Promise<void> {
+		await this.editor.getByRole('button', { name: 'Save document' }).click()
 	}
 
 	public async openCollectiveLink({ linkText, pageTitle }: {

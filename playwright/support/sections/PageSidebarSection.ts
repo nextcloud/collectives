@@ -38,11 +38,11 @@ export class PageSidebarSection {
 		return this.el.locator('.version-list .list-item').filter({ hasText: name })
 	}
 
-	public async openShareAdvancedSettings(sharingTab: Locator): Promise<void> {
+	public async clickShareMenuAction(sharingTab: Locator, actionName: string): Promise<void> {
 		const entry = sharingTab.locator('.sharing-entry')
 		await entry.locator('.sharing-entry__actions')
 			.getByRole('button', { name: 'Actions' }).click()
-		await this.page.getByRole('menuitem', { name: 'Advanced settings' }).click()
+		await this.page.getByRole('menuitem', { name: actionName }).click()
 	}
 
 	public getShareSettingsPanel(sharingTab: Locator): Locator {

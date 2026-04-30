@@ -35,4 +35,10 @@ export class PageListSection {
 			.locator('.item-icon-badge')
 			.click()
 	}
+
+	public async addPage(parentTitle: string): Promise <void> {
+		await this.getPageItem(parentTitle)
+			.getByRole('button', { name: 'Add a page' })
+			.click()
+	}
 }

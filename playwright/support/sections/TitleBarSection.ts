@@ -7,9 +7,11 @@ import type { Locator, Page } from '@playwright/test'
 
 export class TitleBarSection {
 	public readonly el: Locator
+	public readonly title: Locator
 
 	constructor(public readonly page: Page) {
 		this.el = this.page.locator('.page-title-container')
+		this.title = this.el.getByRole('textbox')
 	}
 
 	public async clickActionMenu(action: string): Promise<void> {
