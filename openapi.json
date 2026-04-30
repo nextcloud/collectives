@@ -2374,7 +2374,8 @@
                                 "properties": {
                                     "password": {
                                         "type": "string",
-                                        "default": "",
+                                        "nullable": true,
+                                        "default": null,
                                         "description": "Optional password for the share"
                                     }
                                 }
@@ -2558,7 +2559,8 @@
                                 "properties": {
                                     "password": {
                                         "type": "string",
-                                        "default": "",
+                                        "nullable": true,
+                                        "default": null,
                                         "description": "Optional password for the share"
                                     }
                                 }
@@ -3153,7 +3155,8 @@
                                     },
                                     "password": {
                                         "type": "string",
-                                        "default": "",
+                                        "nullable": true,
+                                        "default": null,
                                         "description": "Optional password for the share"
                                     }
                                 }

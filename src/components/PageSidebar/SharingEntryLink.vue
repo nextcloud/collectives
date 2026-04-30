@@ -13,7 +13,7 @@
 
 			<div class="sharing-entry__summary">
 				<div class="sharing-entry__desc">
-					<span class="sharing-entry__title" :title>
+					<span class="sharing-entry__title" :title="title">
 						{{ title }}
 					</span>
 					<div
@@ -289,7 +289,7 @@ export default {
 			isPending: false,
 			isPendingPasswordProtected: true,
 			pendingPassword: '',
-			newPassword: '',
+			newPassword: null,
 		}
 	},
 
@@ -377,7 +377,7 @@ export default {
 
 		isPasswordProtected: {
 			get() {
-				return !!this.share.password || !!this.newPassword
+				return this.newPassword === null ? this.share.hasPassword : !!this.newPassword
 			},
 
 			async set(enabled) {
@@ -390,7 +390,7 @@ export default {
 		},
 
 		hasUnsavedPassword() {
-			return !!this.newPassword
+			return this.newPassword !== null
 		},
 
 		errorPasswordLabel() {
@@ -555,23 +555,21 @@ export default {
 
 		async onPasswordChange(password) {
 			this.passwordError = !(password.trim())
-			this.newPassword = password
+			this.newPassword = password || null
 		},
 
 		cancelSettings() {
-			this.newPassword = ''
+			this.newPassword = null
 			this.showSettings = false
 		},
 
 		async saveSettings() {
 			const share = { ...this.share }
-			if (this.isPasswordProtected) {
-				if (this.hasUnsavedPassword) {
-					share.password = this.newPassword
-					this.newPassword = ''
-				}
+			if (this.hasUnsavedPassword) {
+				share.password = this.newPassword
 			} else {
-				share.password = ''
+				// Don't update share with empty password
+				delete share.password
 			}
 
 			await this.onUpdate(share)

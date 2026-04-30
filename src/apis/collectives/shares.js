@@ -90,7 +90,7 @@ export function createPageShare(collectiveId, pageId, password) {
 export function updateShare(share) {
 	return axios.put(
 		shareUrl(share),
-		{ editable: share.editable, password: share.password ?? '' },
+		{ editable: share.editable, password: share.password },
 	)
 }
 

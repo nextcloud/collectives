@@ -44,7 +44,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createFolderShare(string $userId, string $collectiveName, int $nodeId, string $password = ''): IShare {
+	public function createFolderShare(string $userId, string $collectiveName, int $nodeId, ?string $password = null): IShare {
 		$share = $this->shareManager->newShare();
 
 		$permissions = Constants::PERMISSION_READ;
@@ -81,7 +81,7 @@ class CollectiveShareService {
 		$share->setShareType(IShare::TYPE_LINK);
 		$share->setSharedBy($userId);
 		$share->setLabel($this->l10n->t('Collective Share'));
-		if ($password !== '') {
+		if ($password) {
 			$share->setPassword($password);
 		}
 
@@ -182,7 +182,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $password): CollectiveShare {
+	public function createShare(string $userId, Collective $collective, ?PageInfo $pageInfo, ?string $password = null): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -203,7 +203,7 @@ class CollectiveShareService {
 			throw new NotPermittedException('Failed to create collective/page share for ' . $collective->getName(), 0, $e);
 		}
 
-		if ($password != '') {
+		if ($password) {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
 		return $collectiveShare;
@@ -216,7 +216,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password): CollectiveShare {
+	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password = null): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -244,15 +244,21 @@ class CollectiveShareService {
 		}
 
 		$folderShare->setPermissions($permissions);
-		if ($password === '') {
-			// With enforced password policy, empty password strings fail to verify
-			$password = null;
+		if ($password !== null) {
+			if ($password === '') {
+				// With enforced password policy, empty password strings fail to verify
+				$folderShare->setPassword(null);
+			} else {
+				$folderShare->setPassword($password);
+			}
 		}
-		$folderShare->setPassword($password);
+
 		$this->shareManager->updateShare($folderShare);
 
 		$share->setEditable($this->isShareEditable($folderShare));
-		$share->setPassword($folderShare->getPassword() ?? '');
+		if ($folderShare->getPassword()) {
+			$share->setPassword($folderShare->getPassword());
+		}
 		return $share;
 	}
 

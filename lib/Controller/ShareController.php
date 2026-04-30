@@ -69,7 +69,7 @@ class ShareController extends OCSController {
 	 * Create a collective share
 	 *
 	 * @param int $collectiveId ID of the collective
-	 * @param string $password Optional password for the share
+	 * @param string|null $password Optional password for the share
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
@@ -78,7 +78,7 @@ class ShareController extends OCSController {
 	 * 200: Share created
 	 */
 	#[NoAdminRequired]
-	public function createCollectiveShare(int $collectiveId, string $password = ''): DataResponse {
+	public function createCollectiveShare(int $collectiveId, ?string $password = null): DataResponse {
 		return $this->createPageShare($collectiveId, 0, $password);
 	}
 
@@ -88,7 +88,7 @@ class ShareController extends OCSController {
 	 * @param int $collectiveId ID of the collective
 	 * @param string $token Token of the share
 	 * @param bool $editable Whether share has edit permissions
-	 * @param string $password Optional password for the share
+	 * @param string|null $password Optional password for the share
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
@@ -97,7 +97,7 @@ class ShareController extends OCSController {
 	 * 200: Share updated
 	 */
 	#[NoAdminRequired]
-	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, string $password = ''): DataResponse {
+	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, ?string $password = null): DataResponse {
 		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password);
 	}
 
@@ -123,7 +123,7 @@ class ShareController extends OCSController {
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param int $pageId ID of the page
-	 * @param string $password Optional password for the share
+	 * @param string|null $password Optional password for the share
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
@@ -132,7 +132,7 @@ class ShareController extends OCSController {
 	 * 200: Share created
 	 */
 	#[NoAdminRequired]
-	public function createPageShare(int $collectiveId, int $pageId = 0, string $password = ''): DataResponse {
+	public function createPageShare(int $collectiveId, int $pageId = 0, ?string $password = null): DataResponse {
 		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $password): CollectiveShare {
 			$uid = $this->getUid();
 			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
