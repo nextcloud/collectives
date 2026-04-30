@@ -37,4 +37,21 @@ export class PageSidebarSection {
 	public getVersionListItem(name: string): Locator {
 		return this.el.locator('.version-list .list-item').filter({ hasText: name })
 	}
+
+	public async openShareAdvancedSettings(sharingTab: Locator): Promise<void> {
+		const entry = sharingTab.locator('.sharing-entry')
+		await entry.locator('.sharing-entry__actions')
+			.getByRole('button', { name: 'Actions' }).click()
+		await this.page.getByRole('menuitem', { name: 'Advanced settings' }).click()
+	}
+
+	public getShareSettingsPanel(sharingTab: Locator): Locator {
+		return sharingTab.locator('.sharing-entry__settings')
+	}
+
+	public async selectShareDropdownOption(sharingTab: Locator, option: string): Promise<void> {
+		const entry = sharingTab.locator('.sharing-entry')
+		await entry.locator('.trigger-text').click()
+		await entry.locator('.dropdown-item').filter({ hasText: option }).click()
+	}
 }
