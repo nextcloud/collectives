@@ -33,7 +33,7 @@ const defaultUserFolder = ref(adminSettings.default_user_folder)
 
 const defaultUserFolderError = computed(() => {
 	return defaultUserFolder.value !== ''
-		&& /^\/[a-zA-Z0-9-_.\/]+$/.test(defaultUserFolder.value)
+		&& !/^\/[a-zA-Z0-9-_./]+$/.test(defaultUserFolder.value)
 })
 
 const defaultUserFolderHint = computed(() => {
