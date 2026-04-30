@@ -7,7 +7,7 @@ import type { Page } from '@playwright/test'
 
 import { apiUrl, ocsHeaders } from '../helpers/urls.ts'
 
-type CollectiveShareData = {
+export type CollectiveShareData = {
 	id: number
 	collectiveId: number
 	pageId: number
