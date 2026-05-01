@@ -110,7 +110,7 @@
     "View only" : "Для просмотра",
     "Can edit" : "Разрешено редактировать",
     "Cannot copy, please copy the link manually" : "Не удалось скопировать, выполните копирование вручную",
-    "Actions for \"{title}\"" : "Действия над «{title}»",
+    "Copy public link to clipboard" : "Скопировать общедоступную ссылку в буфер обмена",
     "Error generating password from password policy" : "Не удалось создать пароль на основе политики",
     "Please enter the following required information before creating the share" : "Для создания общего ресурса требуется указать следующие данные",
     "Password protection (enforced)" : "Защита паролем (требуется системной)",

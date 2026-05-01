@@ -186,8 +186,6 @@ OC.L10N.register(
     "View only" : "تنها مشاهده",
     "Can edit" : "توانایی ویرایش",
     "Cannot copy, please copy the link manually" : "کپی کردن امکان پذیر نیست ، لطفا پیوند را به صورت دستی کپی کنید",
-    "Copy public link of {title} to clipboard" : "رونوشت پیوند عمومی {title} به بریده‌دان",
-    "Actions for \"{title}\"" : "Actions for \"{title}\"",
     "Error generating password from password policy" : "Error generating password from password policy",
     "Quick share options dropdown" : "فهرست گزینه‌های هم‌رسانی سریع",
     "Please enter the following required information before creating the share" : "لطفا قبل از ایجاد اشتراک ، اطلاعات لازم را وارد کنید",

@@ -187,8 +187,6 @@ OC.L10N.register(
     "View only" : "Kun visning",
     "Can edit" : "Kan redigere",
     "Cannot copy, please copy the link manually" : "Kan ikke kopiere, kopier venligst linket manuelt",
-    "Copy public link of {title} to clipboard" : "Kopiér offentligt link fra {title} til udklipsholder",
-    "Actions for \"{title}\"" : "Handlinger for \"{title}\"",
     "Password field can't be empty" : "Adgangskodefeltet må ikke være tomt",
     "Page \"{name}\" has been shared" : "Side \"{name}\" er blevet delt",
     "Collective \"{name}\" has been shared" : "Kollektivet \"{name}\" er blevet delt",

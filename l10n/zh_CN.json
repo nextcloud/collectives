@@ -170,7 +170,7 @@
     "View only" : "仅查看",
     "Can edit" : "可以编辑",
     "Cannot copy, please copy the link manually" : "无法复制，请手动复制链接",
-    "Actions for \"{title}\"" : "“{title}”的动作",
+    "Copy public link to clipboard" : "复制公开链接到剪贴板",
     "Password field can't be empty" : "密码字段不能为空",
     "Error generating password from password policy" : "从密码策略生成密码时出错",
     "Please enter the following required information before creating the share" : "请在创建共享前输入以下必填信息",

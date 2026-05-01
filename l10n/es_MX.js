@@ -43,7 +43,6 @@ OC.L10N.register(
     "View only" : "Sólo lectura",
     "Can edit" : "Puede editar",
     "Cannot copy, please copy the link manually" : "No se ha podido copiar, por favor, copia el enlace manualmente",
-    "Actions for \"{title}\"" : "Acciones para \"{title}\"",
     "Error generating password from password policy" : "Error al generar la contraseña según la política de contraseñas",
     "Please enter the following required information before creating the share" : "Por favor, ingrese la siguiente información requerida antes de crear el recurso compartido",
     "Password protection (enforced)" : "Protección con contraseña (exigida)",

@@ -117,7 +117,6 @@
     "Share link ({index})" : "Enlace compartido ({index})",
     "View only" : "Solo vista",
     "Cannot copy, please copy the link manually" : "No se puede copiar, por favor copia el enlace manualmente",
-    "Actions for \"{title}\"" : "Acciones para \"{title}\"",
     "Error generating password from password policy" : "Error al generar la contraseña según la política de contraseñas",
     "Please enter the following required information before creating the share" : "Por favor, introduce la siguiente información requerida antes de crear la compartición",
     "Password protection (enforced)" : "Protección de contraseña (exigida)",

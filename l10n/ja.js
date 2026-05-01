@@ -113,7 +113,7 @@ OC.L10N.register(
     "View only" : "閲覧のみ",
     "Can edit" : "編集可能",
     "Cannot copy, please copy the link manually" : "コピーできませんでした。手動でリンクをコピーしてください。",
-    "Actions for \"{title}\"" : "\"{title}\"のアクション",
+    "Copy public link to clipboard" : "公開リンクをクリップボードにコピー",
     "Password field can't be empty" : "パスワードフィールドは空にできません",
     "Error generating password from password policy" : "パスワード ポリシーからのパスワード生成エラー",
     "Please enter the following required information before creating the share" : "共有を作成する前に、次の必要な情報を入力してください",

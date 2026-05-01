@@ -226,8 +226,6 @@ OC.L10N.register(
     "View only" : "Alleen bekijken",
     "Can edit" : "Kan bewerken",
     "Cannot copy, please copy the link manually" : "Kopiëren niet mogelijk, kopieer de link handmatig",
-    "Copy public link of {title} to clipboard" : "Kopieer openbare link van {title} naar klembord",
-    "Actions for \"{title}\"" : "Acties voor \"{title}\"",
     "Password field can't be empty" : "Wachtwoordveld mag niet leeg zijn",
     "Page \"{name}\" has been shared" : "Pagina \"{name}\" is gedeeld",
     "Collective \"{name}\" has been shared" : "Collectief \"{name}\" is gedeeld",

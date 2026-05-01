@@ -257,8 +257,6 @@ OC.L10N.register(
     "View only" : "Amharc amháin",
     "Can edit" : "Is féidir eagarthóireacht a dhéanamh",
     "Cannot copy, please copy the link manually" : "Ní féidir cóip a dhéanamh, cóipeáil an nasc de láimh",
-    "Copy public link of {title} to clipboard" : "Cóipeáil nasc poiblí {title} chuig an ngearrthaisce",
-    "Actions for \"{title}\"" : "Gníomhartha le haghaidh \"{title}\"",
     "Password field can't be empty" : "Ní féidir le réimse an phasfhocail a bheith folamh",
     "Page \"{name}\" has been shared" : "Tá leathanach \"{name}\" roinnte",
     "Collective \"{name}\" has been shared" : "Roinneadh \"{name}\" comhchoiteann",

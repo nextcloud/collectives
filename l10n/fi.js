@@ -49,7 +49,7 @@ OC.L10N.register(
     "View only" : "Vain katselu",
     "Can edit" : "Voi muokata",
     "Cannot copy, please copy the link manually" : "Kopioiminen ei onnistu. Kopioi linkki manuaalisesti",
-    "Actions for \"{title}\"" : "Toiminnot kohteelle \"{title}\"",
+    "Copy public link to clipboard" : "Kopioi julkinen linkki leikepöydälle",
     "Password field can't be empty" : "Salasanakenttä ei voi olla tyhjä",
     "Please enter the following required information before creating the share" : "Anna seuraavat vaaditut tiedot, ennen kuin luot jaon",
     "Password protection (enforced)" : "Salasanasuojaus (pakotettu)",

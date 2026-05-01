@@ -53,7 +53,6 @@ OC.L10N.register(
     "View only" : "Samo za gledanje",
     "Can edit" : "Uređivanje moguće",
     "Cannot copy, please copy the link manually" : "Kopiranje nije moguće, ručno kopirajte poveznicu",
-    "Actions for \"{title}\"" : "Radnje za „{title}”",
     "Error generating password from password policy" : "Pogreška pri generiranju lozinke prema pravilima lozinki",
     "Please enter the following required information before creating the share" : "Unesite sljedeće informacije prije stvaranja dijeljenja",
     "Password protection (enforced)" : "Zaštita zaporkom (provedeno)",

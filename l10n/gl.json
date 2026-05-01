@@ -250,8 +250,6 @@
     "View only" : "Só ver",
     "Can edit" : "Pode editar",
     "Cannot copy, please copy the link manually" : "Non foi posíbel copiala. Copie a ligazón manualmente",
-    "Copy public link of {title} to clipboard" : "Copiar a ligazón pública de {title} no portapapeis",
-    "Actions for \"{title}\"" : "Accións para «{title}»",
     "Password field can't be empty" : "O campo de contrasinal non pode estar baleiro",
     "Page \"{name}\" has been shared" : "Compartiuse a páxina «{name}»",
     "Collective \"{name}\" has been shared" : "Compartiuse o colectivo «{name}»",

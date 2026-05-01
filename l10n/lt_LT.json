@@ -76,7 +76,7 @@
     "View only" : "Tik peržiūrėti",
     "Can edit" : "Gali taisyti",
     "Cannot copy, please copy the link manually" : "Nepavyksta nukopijuoti, nukopijuokite nuorodą rankiniu būdu",
-    "Actions for \"{title}\"" : "Veiksmai, susiję su „{title}“",
+    "Copy public link to clipboard" : "Kopijuoti viešąją nuorodą į iškarpinę",
     "Error generating password from password policy" : "Klaida kuriant slaptažodį pagal slaptažodžių politiką",
     "Please enter the following required information before creating the share" : "Prieš sukurdami viešinį, įveskite šią reikiamą informaciją",
     "Password protection (enforced)" : "Apsauga slaptažodžiu (priverstinė)",

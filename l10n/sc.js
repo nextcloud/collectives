@@ -44,7 +44,6 @@ OC.L10N.register(
     "View only" : "Isceti in visualizatzione",
     "Can edit" : "Podet modificare",
     "Cannot copy, please copy the link manually" : "No at fatu a copiare, copia su ligòngiu a manu",
-    "Copy public link of {title} to clipboard" : "Còpia in punta de billete su ligòngiu pùblicu de {title}",
     "Please enter the following required information before creating the share" : "Inserta is informatziones rechertas in fatu in antis de creare sa cumpartzidura",
     "Password protection (enforced)" : "Bardiadura cun crae (posta)",
     "Set password" : "Cunfigura sa crae",

@@ -57,7 +57,6 @@
     "View only" : "ເບິ່ງເທົ່ານັ້ນ",
     "Can edit" : "ສາມາດແກ້ໄຂໄດ້",
     "Cannot copy, please copy the link manually" : "ບໍ່ສາມາດສຳເນົາໄດ້, ກະລຸນາສຳເນົາລິງດ້ວຍຕົວເອງ",
-    "Actions for \"{title}\"" : "ການດຳເນີນການສຳລັບ \"{title}\"",
     "Error generating password from password policy" : "ເກີດຂໍ້ຜິດພາດໃນການສ້າງລະຫັດຜ່ານຈາກນະໂຍບາຍລະຫັດຜ່ານ",
     "Please enter the following required information before creating the share" : "ກະລຸນາໃສ່ຂໍ້ມູນທີ່ຈຳເປັນຕໍ່ໄປນີ້ກ່ອນສ້າງການແບ່ງປັນ",
     "Password protection (enforced)" : "ການປ້ອງກັນດ້ວຍລະຫັດຜ່ານ (ບັງຄັບໃຊ້)",

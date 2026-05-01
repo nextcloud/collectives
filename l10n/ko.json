@@ -51,7 +51,6 @@
     "View only" : "읽기 전용",
     "Can edit" : "편집 허용",
     "Cannot copy, please copy the link manually" : "복사할 수 없습니다, 링크를 수동으로 복사하세요.",
-    "Actions for \"{title}\"" : "\"{title}\"에 대한 작업",
     "Password field can't be empty" : "암호 칸은 비워둘 수 없습니다.",
     "Error generating password from password policy" : "암호 정책에서 암호 생성 중에 오류 발생",
     "Please enter the following required information before creating the share" : "공유를 하기 전에 다음 필수 정보를 입력하세요.",

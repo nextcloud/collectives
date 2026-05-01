@@ -239,8 +239,6 @@ OC.L10N.register(
     "View only" : "Само преглед",
     "Can edit" : "Може да уређује",
     "Cannot copy, please copy the link manually" : "Не могу да копирам, копирајте везу ручно",
-    "Copy public link of {title} to clipboard" : "Копирај јавни линк за {title} у клипборд",
-    "Actions for \"{title}\"" : "Акције за „{title}",
     "Password field can't be empty" : "Поље лозинке не може да буде празно",
     "Page \"{name}\" has been shared" : "Подељена је страница „{name}”",
     "Collective \"{name}\" has been shared" : "Подељен је колектив „{name}”",

@@ -112,7 +112,6 @@
     "View only" : "Sola lettura",
     "Can edit" : "Può modificare",
     "Cannot copy, please copy the link manually" : "Impossibile copiare, copia il collegamento manualmente",
-    "Actions for \"{title}\"" : "Azioni per \"{title}\"",
     "Password field can't be empty" : "Il campo password non può essere vuoto",
     "Error generating password from password policy" : "Errore: la password non rispetta i criteri stabiliti",
     "Please enter the following required information before creating the share" : "Digita le seguenti informazioni richieste prima di creare la condivisione",

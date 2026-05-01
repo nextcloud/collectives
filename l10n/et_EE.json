@@ -255,8 +255,6 @@
     "View only" : "Ainult vaatamine",
     "Can edit" : "Võib muuta",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
-    "Copy public link of {title} to clipboard" : "Kopeeri „{title}“ avlik  link lõikelauale",
-    "Actions for \"{title}\"" : "„{title}“ tegevused",
     "Password field can't be empty" : "Salasõna väli ei saa olla tühi",
     "Page \"{name}\" has been shared" : "„{name}“ leht on jagatud",
     "Collective \"{name}\" has been shared" : "„{name}“ vabaühendus on jagatud",
