@@ -149,7 +149,7 @@ OC.L10N.register(
     "View only" : "Csak megtekintés",
     "Can edit" : "Szerkesztheti",
     "Cannot copy, please copy the link manually" : "A másolás sikertelen, másolja kézzel a hivatkozást",
-    "Actions for \"{title}\"" : "A(z) „{title}” műveletei",
+    "Copy public link to clipboard" : "Nyilvános hivatkozás másolása a vágólapra",
     "Error generating password from password policy" : "Hiba a jelszóházirend alapján történő jelszó-előállítás során",
     "Please enter the following required information before creating the share" : "A megosztás létrehozása előtt adja meg a következő szükséges információkat",
     "Password protection (enforced)" : "Jelszavas védelem (megkövetelve)",

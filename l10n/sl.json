@@ -118,7 +118,6 @@
     "View only" : "Le ogled",
     "Can edit" : "Lahko ureja",
     "Cannot copy, please copy the link manually" : "Povezave ni mogoče kopirati. Storite to ročno.",
-    "Actions for \"{title}\"" : "Dejanja za »{title}«",
     "Error generating password from password policy" : "Napaka ustvarjanja gesla po določenih varnostnih pravilih",
     "Please enter the following required information before creating the share" : "Pred ustvarjanjem mesta souporabe je treba vpisati nekatere podrobnosti",
     "Password protection (enforced)" : "Zaščita z geslom (vsiljena)",

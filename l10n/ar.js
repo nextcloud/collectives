@@ -188,8 +188,6 @@ OC.L10N.register(
     "View only" : "للعرض فقط",
     "Can edit" : "يمكنه التعديل",
     "Cannot copy, please copy the link manually" : "يتعذّر النسخ. يُرجى نسخ الرابط يدويًا",
-    "Copy public link of {title} to clipboard" : "إنسَخ الرابط العمومي لـ {title} إلى الحافظة",
-    "Actions for \"{title}\"" : "إجراءات لـ \"{title}\"",
     "Password field can't be empty" : "خانة كلمة المرور لايمكن أن تكون فارغة",
     "Page \"{name}\" has been shared" : "الصفحة  \"{name}\" تمّت مشاركتها",
     "Collective \"{name}\" has been shared" : "التجميعة  \"{name}\" تمّت مشاركتها",

@@ -117,7 +117,7 @@ OC.L10N.register(
     "View only" : "Само изглед",
     "Can edit" : "Може да се редактира",
     "Cannot copy, please copy the link manually" : "Не може да се копира, моля, копирайте връзката ръчно",
-    "Actions for \"{title}\"" : "Действия за „{title}“",
+    "Copy public link to clipboard" : "Копиране на публична връзка в клипборда",
     "Error generating password from password policy" : "Грешка при генериране на парола от политиката за пароли",
     "Please enter the following required information before creating the share" : "Моля, въведете следната необходима информация, преди да създадете споделянето",
     "Password protection (enforced)" : "Защита с парола (приложена)",

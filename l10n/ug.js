@@ -242,8 +242,6 @@ OC.L10N.register(
     "View only" : "پەقەت كۆرۈش",
     "Can edit" : "تەھرىرلىيەلەيدۇ",
     "Cannot copy, please copy the link manually" : "كۆچۈرگىلى بولمايدۇ ، ئۇلىنىشنى قولدا كۆچۈرۈڭ",
-    "Copy public link of {title} to clipboard" : "{title} ئاممىۋى ئۇلىنىشىنى چاپلاش تاختىسىغا كۆچۈرۈڭ",
-    "Actions for \"{title}\"" : "\"{title}\" نىڭ ھەرىكەتلىرى",
     "Password field can't be empty" : "پارول بوشلۇقى بوش قالماسلىقى كېرەك",
     "Page \"{name}\" has been shared" : "بەت \"{name}\" ھەمبەھىرلەندى",
     "Collective \"{name}\" has been shared" : "كوللىكتىپ \"{name}\" ئورتاقلاشتى",

@@ -243,8 +243,6 @@
     "View only" : "Tazama pekee",
     "Can edit" : "Inaweza kuhariri",
     "Cannot copy, please copy the link manually" : "Haiwezi kunakili, tafadhali nakili kiungio kwa njia za kawaida",
-    "Copy public link of {title} to clipboard" : "Nakili kiungo cha umma cha {title} kwenye ubao wa kunakili",
-    "Actions for \"{title}\"" : "Matendo kwa \"{title}\"",
     "Password field can't be empty" : "Sehemu ya nenosiri haiwezi kuwa tupu",
     "Page \"{name}\" has been shared" : "Ukurasa \"{name}\" umeshirikiwa",
     "Collective \"{name}\" has been shared" : "Mkusanyiko \"{name}\" umeshirikiwa",

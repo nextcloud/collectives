@@ -239,8 +239,6 @@ OC.L10N.register(
     "View only" : "Μόνο προβολή",
     "Can edit" : "Μπορεί να επεξεργαστεί",
     "Cannot copy, please copy the link manually" : "Δεν μπορεί να αντιγραφεί, παρακαλώ αντιγράψτε τον σύνδεσμο χειροκίνητα",
-    "Copy public link of {title} to clipboard" : "Αντιγραφή δημόσιου συνδέσμου του {title} στο πρόχειρο",
-    "Actions for \"{title}\"" : "Ενέργειες για \"{title}\"",
     "Password field can't be empty" : "Το πεδίο συνθηματικού δεν μπορεί να είναι κενό",
     "Page \"{name}\" has been shared" : "Η σελίδα \"{name}\" διαμοιράστηκε",
     "Collective \"{name}\" has been shared" : "Η συλλογικότητα \"{name}\" διαμοιράστηκε",

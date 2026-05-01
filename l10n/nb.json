@@ -185,8 +185,6 @@
     "View only" : "Kun se",
     "Can edit" : "Kan redigere",
     "Cannot copy, please copy the link manually" : "Kan ikke kopiere, kopier lenken manuelt",
-    "Copy public link of {title} to clipboard" : "Kopier den offentlige lenken til {title} til utklippstavlen",
-    "Actions for \"{title}\"" : "Valg for \"{title}\"",
     "Page \"{name}\" has been shared" : "Side \"{name}\" er delt",
     "Collective \"{name}\" has been shared" : "Kollektiv \"{name}\" er delt",
     "Failed to share page \"{name}\": {responseError}" : "Deling av side feilet \"{name}\": {responseError}",

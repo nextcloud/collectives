@@ -105,7 +105,6 @@ OC.L10N.register(
     "View only" : "Ver namás",
     "Can edit" : "Pue editar",
     "Cannot copy, please copy the link manually" : "Nun se pue copiar. Copia l'enllaz manualmente",
-    "Actions for \"{title}\"" : "Aiciones pa: {title}",
     "Page \"{name}\" has been shared" : "Compartióse la páxina «{name}»",
     "Collective \"{name}\" has been shared" : "Compartióse'l coleutivu «{name}»",
     "Page \"{name}\" has been unshared" : "Dexó de compartise la páxina «{name}»",
