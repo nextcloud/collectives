@@ -257,6 +257,7 @@ OC.L10N.register(
     "Can edit" : "Kan ändra",
     "Cannot copy, please copy the link manually" : "Kan inte kopiera, länken måste kopieras manuellt",
     "Copy public link to clipboard" : "Kopiera publik länk till urklipp",
+    "Share actions" : "Delningsåtgärder",
     "Password field can't be empty" : "Lösenordsfältet får inte vara tomt",
     "Page \"{name}\" has been shared" : "Sidan \"{name}\" har delats",
     "Collective \"{name}\" has been shared" : "Collective \"{name}\" har delats",

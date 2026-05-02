@@ -258,6 +258,7 @@ OC.L10N.register(
     "Can edit" : "Kann bearbeiten",
     "Cannot copy, please copy the link manually" : "Kopieren fehlgeschlagen. Bitte kopieren Sie den Link manuell",
     "Copy public link to clipboard" : "Öffentlichen Link in die Zwischenablage kopieren",
+    "Share actions" : "Aktionen teilen",
     "Password field can't be empty" : "Passwortfeld darf nicht leer sein",
     "Page \"{name}\" has been shared" : "Die Seite \"{name}\" wurde geteilt",
     "Collective \"{name}\" has been shared" : "Das Kollektiv \"{name}\" wurde geteilt",
