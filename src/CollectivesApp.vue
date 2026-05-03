@@ -85,6 +85,7 @@ export default {
 				this.rootStore.collectiveParam = val.params.collective
 				this.rootStore.collectiveId = val.params.collectiveId ? parseInt(val.params.collectiveId) : null
 				this.rootStore.pageParam = val.params.page
+				if (!val.params.pageId) this.rootStore.pageId = null
 				this.rootStore.pageId = val.params.pageId ? parseInt(val.params.pageId) : null
 				this.rootStore.shareTokenParam = val.params.token
 				this.rootStore.fileIdQuery = val.query.fileId ? parseInt(val.query.fileId) : ''
