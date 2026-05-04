@@ -211,7 +211,8 @@ class CollectiveFolderManager {
 	/**
 	 * @throws NotFoundException
 	 * @throws \OCP\DB\Exception
-	 * @return array{
+	 * @psalm-suppress MoreSpecificReturnType
+	 * @return array<int, array{
 	 *     folder_id: int,
 	 *     fileid: int,
 	 *     storage: int,
@@ -223,10 +224,10 @@ class CollectiveFolderManager {
 	 *     mtime: int,
 	 *     storage_mtime: int,
 	 *     etag: string,
-	 *     encrytped: bool,
+	 *     encrypted: bool,
 	 *     parent: int,
 	 *     permissions: int,
-	 * }|null[]
+	 * }|null>
 	 */
 	public function getFolderFileCachePerCollectiveId(array $ids): array {
 		if (!$ids) {
@@ -246,6 +247,7 @@ class CollectiveFolderManager {
 		foreach ($rows as $row) {
 			$result[$row['folder_id']] = $row;
 		}
+		/** @psalm-suppress LessSpecificReturnStatement */
 		return $result;
 	}
 
