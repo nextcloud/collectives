@@ -28,8 +28,7 @@ class PageLinkMapper {
 		$qb->select('linked_page_id')
 			->from(self::TABLE_NAME)
 			->where($qb->expr()->eq('page_id', $qb->createNamedParameter($pageId)));
-		$result = $qb->executeQuery()->fetchAll(\PDO::FETCH_COLUMN);
-		return array_values($result);
+		return $qb->executeQuery()->fetchAll(\PDO::FETCH_COLUMN);
 	}
 
 	/**

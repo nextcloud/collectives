@@ -133,9 +133,7 @@ class MountProvider implements IMountProvider {
 				$user
 			), $folders));
 
-			$mounts = array_merge($mounts, $collectiveMounts);
-
-			return $mounts;
+			return array_values(array_merge($mounts, $collectiveMounts));
 		} catch (FilesNotFoundException|\Exception $e) {
 			$this->log($e);
 			return [];
