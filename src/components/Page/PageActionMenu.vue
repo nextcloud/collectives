@@ -73,7 +73,7 @@
 			<NcActionButton
 				v-if="currentCollectiveCanShare && !isLandingPage"
 				closeAfterClick
-				@click="show('details')">
+				@click="openShareTab">
 				<template #icon>
 					<ShareVariantIcon :size="20" />
 				</template>
