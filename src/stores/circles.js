@@ -108,10 +108,9 @@ export const useCirclesStore = defineStore('circles', {
 		 * Get members of a team
 		 *
 		 * @param {string} circleId ID of the team
-		 * @param {number} limit Number of members to return
 		 */
-		async getCircleMembers(circleId, limit = 0) {
-			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true&limit=${limit}`))
+		async getCircleMembers(circleId) {
+			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true`))
 			this.circlesMembers[circleId] = response.data.ocs.data
 		},
 

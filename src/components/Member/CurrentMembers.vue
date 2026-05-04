@@ -132,7 +132,7 @@ export default {
 <style scoped lang="scss">
 .current-members {
 	.scroller {
-		height: 224px;
+		max-height: 370px;
 	}
 }
 </style>
