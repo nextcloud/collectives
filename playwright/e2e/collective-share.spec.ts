@@ -50,7 +50,7 @@ test.describe('Collective share', () => {
 
 		// Edit existing content
 		await shareEditor.switchMode(true)
-		await shareEditor.getContent().fill('Edited content')
+		await shareEditor.replaceContent('Edited content')
 		await shareEditor.save()
 		await shareEditor.switchMode(false)
 		await expect(shareEditor.getContent()).toHaveText('Edited content')

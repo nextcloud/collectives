@@ -59,6 +59,11 @@ export class EditorSection {
 			.locator('.ProseMirror')
 	}
 
+	public async replaceContent(text: string): Promise<void> {
+		await this.getContent().press('Control+a')
+		await this.getContent().pressSequentially(text)
+	}
+
 	public async hasImage(filename: string): Promise<void> {
 		const srcRegex = new RegExp(`imageFileName=${filename}`)
 		await expect(this.getContent()
