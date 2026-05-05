@@ -167,19 +167,7 @@ export default defineComponent({
 	},
 
 	async mounted() {
-		this.collectiveId = window.OCA?.Collectives?.currentCollective?.Id
-		if (this.collectiveId) {
-			this.filterCollective = true
-			const raw = localStorage.getItem('collectives/pinia/pages/allPages')
-			if (raw) {
-				const allPagesMap = JSON.parse(raw)
-				this.currentPages = allPagesMap[this.collectiveId] ?? []
-			}
-		} else {
-			if (!this.isPublic) {
-				this.getSearchedPages()
-			}
-		}
+		this.initCurrentPages()
 
 		// Wait for NcModal enter transition and its focus trap
 		setTimeout(() => this.$refs.searchInput.focus(), 0)
@@ -190,8 +178,30 @@ export default defineComponent({
 			this.$emit('cancel')
 		},
 
+		initCurrentPages() {
+			this.collectiveId = window.OCA?.Collectives?.currentCollective?.id
+			if (this.collectiveId) {
+				this.filterCollective = true
+				let raw
+				try {
+					raw = localStorage.getItem('collectives/pinia/pages/allPages')
+					if (raw) {
+						const allPagesMap = JSON.parse(raw)
+						this.currentPages = allPagesMap[this.collectiveId] ?? []
+					}
+					return
+				} catch {
+					// Nothing found in localStorage, defer to getting pages from server
+				}
+			}
+
+			if (!this.isPublic) {
+				this.getSearchedPages()
+			}
+		},
+
 		onClickPage(page: PageInfo) {
-			if (window.OCA.Collectives?.currentCollective?.path) {
+			if (this.filterCollective && window.OCA.Collectives?.currentCollective?.path) {
 				const pageLink = window.location.origin
 					+ generateUrl('/apps/collectives')
 					+ window.OCA.Collectives.currentCollective?.path
@@ -200,8 +210,10 @@ export default defineComponent({
 					bubbles: true,
 					detail: pageLink,
 				}))
-			} else {
+			} else if (this.filterCollective) {
 				console.error('Cannot generate page link from outside Collectives app')
+			} else {
+				// TODO
 			}
 		},
 
