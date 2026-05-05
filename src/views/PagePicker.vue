@@ -166,7 +166,7 @@ export default defineComponent({
 		},
 	},
 
-	async mounted() {
+	mounted() {
 		this.initCurrentPages()
 
 		// Wait for NcModal enter transition and its focus trap
