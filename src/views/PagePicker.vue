@@ -201,19 +201,24 @@ export default defineComponent({
 		},
 
 		onClickPage(page: PageInfo) {
-			if (this.filterCollective && window.OCA.Collectives?.currentCollective?.path) {
+			const collectivePath = this.filterCollective
+				? window.OCA.Collectives?.currentCollective?.path
+				: page.collectivePath
+
+			if (collectivePath) {
+				const pagePath = page.slug
+					? `${page.slug}-${page.id}`
+					: encodeURIComponent(page.title)
 				const pageLink = window.location.origin
 					+ generateUrl('/apps/collectives')
-					+ window.OCA.Collectives.currentCollective?.path
-					+ '/' + page.slug + '-' + page.id
+					+ collectivePath
+					+ '/' + pagePath
 				this.$el.dispatchEvent(new CustomEvent('submit', {
 					bubbles: true,
 					detail: pageLink,
 				}))
-			} else if (this.filterCollective) {
-				console.error('Cannot generate page link from outside Collectives app')
 			} else {
-				// TODO
+				console.error('Cannot generate page link')
 			}
 		},
 

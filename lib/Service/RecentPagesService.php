@@ -181,6 +181,10 @@ class RecentPagesService {
 			try {
 				$pageInfo = $this->pageService->find($collectiveId, (int)$row['file_id'], $userId);
 				$pageInfo->setCollectiveNameWithEmoji(CollectiveHelper::getCollectiveNameWithEmoji($collectivesMap[$collectiveId]));
+				$collectiveUrlPart = $collectivesMap[$collectiveId]->getSlug()
+					? $collectivesMap[$collectiveId]->getSlug() . '-' . $collectivesMap[$collectiveId]->getId()
+					: urlencode($collectivesMap[$collectiveId]->getName());
+				$pageInfo->setCollectivePath('/' . $collectiveUrlPart);
 				$pages[] = $pageInfo;
 			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				// Skip pages that can't be accessed
