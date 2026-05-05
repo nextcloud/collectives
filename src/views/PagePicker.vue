@@ -167,7 +167,7 @@ export default defineComponent({
 	},
 
 	async mounted() {
-		this.collectiveId = window.OCA?.Collectives?.currentCollectiveId
+		this.collectiveId = window.OCA?.Collectives?.currentCollective?.Id
 		if (this.collectiveId) {
 			this.filterCollective = true
 			const raw = localStorage.getItem('collectives/pinia/pages/allPages')
@@ -191,10 +191,10 @@ export default defineComponent({
 		},
 
 		onClickPage(page: PageInfo) {
-			if (window.OCA.Collectives?.currentCollectivePath) {
+			if (window.OCA.Collectives?.currentCollective?.path) {
 				const pageLink = window.location.origin
 					+ generateUrl('/apps/collectives')
-					+ window.OCA.Collectives.currentCollectivePath
+					+ window.OCA.Collectives.currentCollective?.path
 					+ '/' + page.slug + '-' + page.id
 				this.$el.dispatchEvent(new CustomEvent('submit', {
 					bubbles: true,
@@ -207,7 +207,7 @@ export default defineComponent({
 
 		description(page: PageInfo) {
 			const collectiveNameWithEmoji = this.filterCollective
-				? window.OCA.Collectives?.currentCollectiveNameWithEmoji || ''
+				? window.OCA.Collectives?.currentCollective?.nameWithEmoji || ''
 				: page.collectiveNameWithEmoji
 
 			const collectiveAndPagePath = page.filePathString
