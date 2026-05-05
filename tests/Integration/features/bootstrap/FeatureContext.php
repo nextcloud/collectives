@@ -1022,16 +1022,20 @@ class FeatureContext implements Context {
 
 		$jsonData = ['appIds' => [$appId]];
 
-		$headers = [];
+		$headers = [
+			'Authorization' => 'Basic ' . base64_encode('admin:admin'),
+		];
 
 		if ($status === 'enabled') {
-			$headers['Authorization'] = 'Basic ' . base64_encode('admin:admin');
-			$this->sendRequest('POST', '/settings/apps/enable', null, $jsonData, $headers);
+			$endpoint = 'enable';
 		} elseif ($status === 'disabled') {
-			$this->sendRequest('POST', '/settings/apps/disable', null, $jsonData, $headers);
+			$endpoint = 'disable';
 		} else {
 			throw new RuntimeException('Unknown app status: ' . $status);
 		}
+
+		$this->sendRequest('POST', '/settings/apps/' . $endpoint, null, $jsonData, $headers);
+
 		$this->assertStatusCode(200);
 	}
 
@@ -2167,16 +2171,19 @@ class FeatureContext implements Context {
 			$this->cookieJars[$this->currentUser] = new CookieJar();
 		}
 
-		// Get request token for user (required due to CSRF checks)
-		if ($auth === true && !isset($this->requestTokens[$this->currentUser])) {
-			$this->getUserRequestToken($this->currentUser);
+		if ($auth === true) {
+			// Get request token for user (required due to CSRF checks)
+			if (!isset($this->requestTokens[$this->currentUser])) {
+				$this->getUserRequestToken($this->currentUser);
+			}
+
+			$options = ['cookies' => $this->cookieJars[$this->currentUser]];
+			$options['headers'] = array_merge($headers, [
+				'requesttoken' => $this->requestTokens[$this->currentUser],
+			]);
+		} else {
+			$options['headers'] = $headers;
 		}
-
-		$options = ['cookies' => $this->cookieJars[$this->currentUser]];
-
-		$options['headers'] = array_merge($headers, [
-			'requesttoken' => $this->requestTokens[$this->currentUser],
-		]);
 
 		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
