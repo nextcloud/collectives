@@ -109,7 +109,7 @@ export const usePagesStore = defineStore('pages', {
 			}
 
 			return (!rootStore.pageId && !rootStore.pageParam)
-				|| rootStore.pageId === state.rootPage.id
+				|| rootStore.pageId === state.rootPage?.id
 				|| rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage(state) {
