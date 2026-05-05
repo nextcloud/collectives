@@ -180,8 +180,9 @@ export default defineComponent({
 				this.getSearchedPages()
 			}
 		}
-		// TODO: doesn't work
-		this.$refs.searchInput.focus()
+
+		// Wait for NcModal enter transition and its focus trap
+		setTimeout(() => this.$refs.searchInput.focus(), 0)
 	},
 
 	methods: {
