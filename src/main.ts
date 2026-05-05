@@ -4,11 +4,10 @@
  */
 
 import { createPinia } from 'pinia'
-import { createApp, watch } from 'vue'
+import { createApp, watchEffect } from 'vue'
 import CollectivesApp from './CollectivesApp.vue'
 import router from './router.js'
 import { useCollectivesStore } from './stores/collectives.js'
-import { useRootStore } from './stores/root.js'
 import registerServiceWorker from './util/registerServiceWorker.ts'
 
 if ('serviceWorker' in navigator) {
@@ -28,25 +27,22 @@ app.use(router)
 await router.isReady()
 app.mount('#content')
 
-const rootStore = useRootStore(pinia)
 const collectivesStore = useCollectivesStore(pinia)
 
-watch(() => rootStore.collectiveId, (id) => {
-	if (!id) {
-		delete window.OCA.Collectives.currentCollective
-	}
+watchEffect(() => {
 	const collective = collectivesStore.currentCollective
 	if (!collective) {
+		delete window.OCA.Collectives.currentCollective
 		return
 	}
 	window.OCA.Collectives.currentCollective = {
-		id,
+		id: collective.id,
 		nameWithEmoji: collective.emoji
 			? collective.emoji + ' ' + collective.name
 			: collective.name,
 		path: collectivesStore.currentCollectivePath,
 	}
-}, { immediate: true })
+})
 
 // Expose the app during Cypress tests
 if (window.Cypress) {
