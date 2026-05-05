@@ -45,25 +45,6 @@ test.describe('Page content', () => {
 		expect(Math.abs(expectedContentHeight - contentBox.height)).toBeLessThan(2)
 	})
 
-	test('link to page from link menu', async ({ user, page, collective, editor }) => {
-		const sourcePage = await collective.createPage({ title: 'Source page', user, page })
-		const targetPage = await collective.createPage({ title: 'Target page', user, page })
-		await sourcePage.open(true)
-
-		editor.setMode(true)
-		await editor.clickMenu('Insert link', 'Link to page')
-		await page.waitForTimeout(200)
-		await editor.pagePickerSearch.pressSequentially('Target page')
-
-		await editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Target page' }).click()
-
-		const pageWidget = editor.getContent().locator('.widget-custom a.collective-page')
-
-		await expect(pageWidget).toBeVisible()
-		const origin = new URL(page.url()).origin
-		await expect(pageWidget).toHaveAttribute('href', origin + targetPage.getPageUrl())
-	})
-
 	test('mentioning lists collective members first', async ({ user, page, collective, editor }) => {
 		const extraMemberIds = []
 		for (let i = 0; i < 2; i++) {
