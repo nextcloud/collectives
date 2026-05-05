@@ -94,17 +94,25 @@ Cypress.Commands.add('disableApp', (appName) => {
 
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 	const verb = value ? 'enable' : 'disable'
-	const url = `${Cypress.expose('baseUrl')}/index.php/settings/apps/${verb}`
+	const headers = { Authorization: `Basic ${btoa('admin:admin')}` }
 
-	const headers = {}
-	if (verb === 'enable') {
-		headers.Authorization = `Basic ${btoa('admin:admin')}`
-	}
-	return axios.post(
-		url,
-		{ appIds: [appName] },
-		{ headers },
-	)
+	cy.env(['ncVersion']).then(({ ncVersion }) => {
+		let url, data
+		if (['stable32', 'stable33'].includes(ncVersion)) {
+			url = `${Cypress.expose('baseUrl')}/index.php/settings/apps/${verb}`
+			data = { appIds: [appName] }
+		} else {
+			// Nextcloud 34 and above
+			url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/appstore/api/v1/apps/${verb}`
+			data = { appId: appName }
+		}
+
+		return axios.post(
+			url,
+			data,
+			{ headers },
+		)
+	})
 })
 
 /**
