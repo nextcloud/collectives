@@ -13,8 +13,8 @@ export class EditorSection {
 	public readonly reader: Locator
 	public readonly menubar: Locator
 	public readonly suggestionsContainer: Locator
-	public readonly smartPickerSearch: Locator
-	public readonly smartPickerSearchField: Locator
+	public readonly pagePicker: Locator
+	public readonly pagePickerSearch: Locator
 
 	constructor(public readonly page: Page) {
 		this.isEdit = false
@@ -22,8 +22,8 @@ export class EditorSection {
 		this.reader = this.page.locator('[data-cy-collectives="reader"]')
 		this.menubar = this.editor.getByRole('region')
 		this.suggestionsContainer = this.page.locator('.container-suggestions')
-		this.smartPickerSearch = this.page.locator('.smart-picker-search')
-		this.smartPickerSearchField = this.smartPickerSearch.getByPlaceholder('Search', { exact: true })
+		this.pagePicker = this.page.locator('.collectives-page-picker')
+		this.pagePickerSearch = this.pagePicker.getByRole('textbox', { name: 'Search pages' })
 	}
 
 	public setMode(edit: boolean) {
