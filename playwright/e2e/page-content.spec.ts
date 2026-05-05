@@ -53,9 +53,9 @@ test.describe('Page content', () => {
 		editor.setMode(true)
 		await editor.clickMenu('Insert link', 'Link to page')
 		await page.waitForTimeout(200)
-		await editor.smartPickerSearchField.pressSequentially('Target page')
+		await editor.pagePickerSearch.pressSequentially('Target page')
 
-		await editor.smartPickerSearch.locator('.search-result').filter({ hasText: 'Target page' }).click()
+		await editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Target page' }).click()
 
 		const pageWidget = editor.getContent().locator('.widget-custom a.collective-page')
 

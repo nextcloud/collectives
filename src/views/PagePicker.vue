@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="modal-scroller">
+	<div class="modal-scroller collectives-page-picker">
 		<h2>{{ t('collectives', 'Add link to page') }}</h2>
 		<div class="modal-inner">
 			<div class="searchbar">
