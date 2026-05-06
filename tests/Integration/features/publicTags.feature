@@ -41,6 +41,20 @@ Feature: tags
     Then anonymous fails to add tag "test2" to page "firstpage" in collective "BehatTagsPublicCollective" with owner "jane"
     And anonymous fails to remove tag "test2" from page "firstpage" in collective "BehatTagsPublicCollective" with owner "jane"
 
+  Scenario: Fail to create, update and delete tag when collective restricts editing to admins
+    When user "jane" sets editing permissions for collective share "BehatTagsPublicCollective"
+    And user "jane" sets "edit" level in collective "BehatTagsPublicCollective" to "Admin"
+    Then anonymous fails to create tag "test3" with color "00FF00" for collective "BehatTagsPublicCollective" with owner "jane"
+    Then anonymous fails to update tag "test2" with color "0000FF" for collective "BehatTagsPublicCollective" with owner "jane"
+    Then anonymous fails to delete tag "test2" for collective "BehatTagsPublicCollective" with owner "jane"
+    And user "jane" sets "edit" level in collective "BehatTagsPublicCollective" to "Member"
+
+  Scenario: Fail to tag and untag a page when collective restricts editing to admins
+    When user "jane" sets "edit" level in collective "BehatTagsPublicCollective" to "Admin"
+    Then anonymous fails to add tag "test2" to page "firstpage" in collective "BehatTagsPublicCollective" with owner "jane"
+    And anonymous fails to remove tag "test1" from page "firstpage" in collective "BehatTagsPublicCollective" with owner "jane"
+    And user "jane" sets "edit" level in collective "BehatTagsPublicCollective" to "Member"
+
   Scenario: Delete tag
     When user "jane" sets editing permissions for collective share "BehatTagsPublicCollective"
     And anonymous deletes tag "test1" for collective "BehatTagsPublicCollective" with owner "jane"
