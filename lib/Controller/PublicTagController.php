@@ -116,7 +116,11 @@ class PublicTagController extends CollectivesPublicOCSController {
 	 * @throws OCSForbiddenException
 	 */
 	private function checkEditPermissions(): void {
-		if (!$this->getCollectiveShare()->getEditable()) {
+		$collectiveShare = $this->getCollectiveShare();
+		if ($collectiveShare->getPageId() !== 0) {
+			throw new OCSForbiddenException('Tag management not available for page shares');
+		}
+		if (!$collectiveShare->getEditable()) {
 			throw new OCSForbiddenException('Not permitted to edit shared collective');
 		}
 	}
