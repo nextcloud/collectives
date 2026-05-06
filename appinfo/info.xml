@@ -1,30 +1,23 @@
 <?xml version="1.0"?>
 <!--
-  - SPDX-FileCopyrightText: 2012-2025 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
 	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>collectives</id>
 	<name>Collectives</name>
-	<summary>A place for activist and community projects to build shared knowledge</summary>
+	<summary><![CDATA[Your space to collaboratively write and organize]]></summary>
 	<description><![CDATA[
-Collectives is a Nextcloud App for activist and community projects to organize together.
-Come and gather in collectives to build shared knowledge.
+Your space to collaboratively write and organize. Collectives is designed for groups and communities
+to structure shared knowledge.
 
-* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are
-  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and
-  owned by the collective.
-* 📝 **Collaborative page editing** like known from Etherpad thanks to the
-  [Text app](https://github.com/nextcloud/text).
-* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
-  for page formatting.
-
-## Installation
-
-In your Nextcloud instance, simply navigate to **»Apps«**, find the
-**»Teams«** and **»Collectives«** apps and enable them.
-
+* **👥 Group-owned, non-hierarchical at its core**: Each collective is backed by a
+  [Nextcloud Team](https://docs.nextcloud.com/server/latest/user_manual/en/groupware/contacts.html#teams) - its
+  content is owned by the group, not a single user.
+* **📝 Collaborative page editing** thanks to the [Text app](https://github.com/nextcloud/text).
+* **🔤 Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax** for page formatting.
+* **🔎 Full-text search** with automatic indexing to find content straight away.
 	]]></description>
 	<version>4.3.0</version>
 	<licence>agpl</licence>
@@ -33,22 +26,30 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 	<types>
 		<filesystem/>
 	</types>
+
 	<documentation>
-		<user>https://nextcloud.github.io/collectives/usage/</user>
-		<admin>https://nextcloud.github.io/collectives/administration/</admin>
-		<developer>https://nextcloud.github.io/collectives/development/</developer>
+		<user>https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html</user>
+		<admin>https://docs.nextcloud.com/server/latest/admin_manual/en/collectives/index.html</admin>
+		<developer>https://github.com/nextcloud/collectives/blob/main/DEVELOPING.md</developer>
 	</documentation>
+
 	<category>organization</category>
 	<category>social</category>
-	<website>https://github.com/nextcloud/collectives</website>
+	<category>workflow</category>
+
+	<website>https://collectives.cloud/</website>
+	<discussion>https://help.nextcloud.com/tag/collectives-app</discussion>
 	<bugs>https://github.com/nextcloud/collectives/issues</bugs>
 	<repository type="git">https://github.com/nextcloud/collectives.git</repository>
+
 	<screenshot small-thumbnail="https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot-small.png">
 		https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot.png
 	</screenshot>
+
 	<dependencies>
 		<nextcloud min-version="32" max-version="34" />
 	</dependencies>
+
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\CleanupSessions</job>
 		<job>OCA\Collectives\BackgroundJob\ExpirePageTrash</job>
@@ -56,6 +57,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<job>OCA\Collectives\BackgroundJob\IndexCollectives</job>
 		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
 	</background-jobs>
+
 	<repair-steps>
 		<post-migration>
 			<step>OCA\Collectives\Migration\MigrateTemplates</step>
@@ -66,6 +68,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 			<step>OCA\Collectives\Migration\MigrateUserFolderSettings</step>
 		</live-migration>
 	</repair-steps>
+
 	<commands>
 		<command>OCA\Collectives\Command\CreateCollective</command>
 		<command>OCA\Collectives\Command\ExpirePageVersions</command>
@@ -75,9 +78,11 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<command>OCA\Collectives\Command\PageTrashCleanup</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
 	</commands>
+
 	<settings>
 		<admin>OCA\Collectives\Settings\Admin</admin>
 	</settings>
+
 	<navigations>
 		<navigation>
 			<name>Collectives</name>
@@ -86,9 +91,11 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 			<order>12</order>
 		</navigation>
 	</navigations>
+
 	<trash>
 		<backend for="OCA\Collectives\Mount\CollectiveStorage">OCA\Collectives\Trash\PageTrashBackend</backend>
 	</trash>
+
 	<versions>
 		<backend for="OCA\Collectives\Mount\CollectiveStorage">OCA\Collectives\Versions\VersionsBackend</backend>
 	</versions>
