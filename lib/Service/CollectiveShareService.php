@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
@@ -33,6 +34,7 @@ class CollectiveShareService {
 		private IShareManager $shareManager,
 		private UserFolderHelper $userFolderHelper,
 		private CollectiveShareMapper $collectiveShareMapper,
+		private CollectiveMapper $collectiveMapper,
 		private PageService $pageService,
 		private IL10N $l10n,
 	) {
@@ -119,7 +121,7 @@ class CollectiveShareService {
 			return null;
 		}
 
-		$collectiveShare->setEditable($this->isShareEditable($folderShare));
+		$collectiveShare->setEditable($this->isShareEditable($folderShare, $collectiveShare));
 		if ($folderShare->getPassword()) {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
@@ -145,7 +147,7 @@ class CollectiveShareService {
 			return null;
 		}
 
-		$collectiveShare->setEditable($this->isShareEditable($folderShare));
+		$collectiveShare->setEditable($this->isShareEditable($folderShare, $collectiveShare));
 		if ($folderShare->getPassword()) {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
@@ -163,7 +165,7 @@ class CollectiveShareService {
 				// Corresponding folder share not found, delete the collective share as well.
 				$this->collectiveShareMapper->delete($share);
 			}
-			$share->setEditable($this->isShareEditable($folderShare));
+			$share->setEditable($this->isShareEditable($folderShare, $share));
 			if ($folderShare->getPassword()) {
 				$share->setPassword($folderShare->getPassword());
 			}
@@ -173,9 +175,12 @@ class CollectiveShareService {
 		return $shares;
 	}
 
-	private function isShareEditable(IShare $folderShare): bool {
-		$folderShare->getPermissions();
-		return ($folderShare->getPermissions() & Collective::editPermissions) === Collective::editPermissions;
+	private function isShareEditable(IShare $folderShare, CollectiveShare $collectiveShare): bool {
+		if (($folderShare->getPermissions() & Collective::editPermissions) !== Collective::editPermissions) {
+			return false;
+		}
+		$collective = $this->collectiveMapper->findByIdAndUser($collectiveShare->getCollectiveId(), null);
+		return $collective !== null && $collective->canEdit();
 	}
 
 	/**
@@ -255,7 +260,7 @@ class CollectiveShareService {
 
 		$this->shareManager->updateShare($folderShare);
 
-		$share->setEditable($this->isShareEditable($folderShare));
+		$share->setEditable($this->isShareEditable($folderShare, $share));
 		if ($folderShare->getPassword()) {
 			$share->setPassword($folderShare->getPassword());
 		}
