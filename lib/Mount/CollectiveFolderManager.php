@@ -299,6 +299,6 @@ class CollectiveFolderManager {
 		$l10n = $this->l10nFactory->get('collectives', $lang);
 		return '# ' . $l10n->t('Welcome %s', $name) . "\n\n"
 			. $l10n->t('Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link.') . "\n\n"
-			. $l10n->t('Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/tag/collectives-app).');
+			. $l10n->t('Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app).');
 	}
 }
