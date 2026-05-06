@@ -8,6 +8,8 @@ Feature: tags
     And user "jane" creates page "firstpage" with parentPath "Readme.md" in "BehatTagsPublicCollective"
     And user "jane" creates public share for "BehatTagsPublicCollective"
     And user "jane" sets editing permissions for collective share "BehatTagsPublicCollective"
+    And user "jane" creates public page share for page "firstpage" in "BehatTagsPublicCollective"
+    And user "jane" sets editing permissions for page share "firstpage" in collective "BehatTagsPublicCollective"
 
   Scenario: Create and update tag in public collective share
     When anonymous creates tag "test1" with color "FFFFFF" for collective "BehatTagsPublicCollective" with owner "jane"
@@ -21,6 +23,13 @@ Feature: tags
     Then anonymous adds tag "test2" to page "firstpage" in collective "BehatTagsPublicCollective" with owner "jane"
     And anonymous fails to add tagId "9999" to page "firstpage" in collective "BehatTagsPublicCollective" with owner "jane"
     And anonymous removes tag "test2" from page "firstpage" in collective "BehatTagsPublicCollective" with owner "jane"
+
+  Scenario: Fail to manage tags in public page share
+    Then anonymous sees tag "test1" with color "FF0000" in public page share "firstpage" for collective "BehatTagsPublicCollective" with owner "jane"
+    And anonymous fails to create tag "page-share-tag" with color "FFFFFF" in public page share "firstpage" for collective "BehatTagsPublicCollective" with owner "jane"
+    And anonymous fails to update tag "test1" with color "00FF00" in public page share "firstpage" for collective "BehatTagsPublicCollective" with owner "jane"
+    And anonymous fails to delete tag "test1" in public page share "firstpage" for collective "BehatTagsPublicCollective" with owner "jane"
+    And anonymous sees tag "test1" with color "FF0000" for collective "BehatTagsPublicCollective" with owner "jane"
 
   Scenario: Fail to create, update and delete tag in public read-only collective share
     When user "jane" unsets editing permissions for collective share "BehatTagsPublicCollective"

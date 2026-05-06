@@ -1794,11 +1794,13 @@ class FeatureContext implements Context {
 	 * @When anonymous creates tag :tag with color :color for collective :collective with owner :owner
 	 * @When anonymous :fails to create tag :tag with color :color for collective :collective with owner :owner
 	 * @When anonymous :fails to create :existing tag :tag with color :color for collective :collective with owner :owner
+	 * @When anonymous creates tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
+	 * @When anonymous :fails to create tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
 	 */
-	public function anonymousCreatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null, ?string $existing = null): void {
+	public function anonymousCreatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null, ?string $existing = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getShareToken($collectiveId);
+		$token = $this->getPublicTagShareToken($collectiveId, $pageShare);
 		$data = new TableNode([
 			['name', $tag],
 			['color', $color],
@@ -1818,11 +1820,13 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous updates tag :tag with color :color for collective :collective with owner :owner
 	 * @When anonymous :fails to update tag :tag with color :color for collective :collective with owner :owner
+	 * @When anonymous updates tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
+	 * @When anonymous :fails to update tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
 	 */
-	public function anonymousUpdatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null): void {
+	public function anonymousUpdatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getShareToken($collectiveId);
+		$token = $this->getPublicTagShareToken($collectiveId, $pageShare);
 		$id = $this->tagIdByName($collectiveId, $tag, null, $token);
 		$data = new TableNode([
 			['name', $tag],
@@ -1839,11 +1843,13 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous deletes tag :tag for collective :collective with owner :owner
 	 * @When anonymous :fails to delete tag :tag for collective :collective with owner :owner
+	 * @When anonymous deletes tag :tag in public page share :pageShare for collective :collective with owner :owner
+	 * @When anonymous :fails to delete tag :tag in public page share :pageShare for collective :collective with owner :owner
 	 */
-	public function anonymousDeletesTag(string $collective, string $tag, string $owner, ?string $fails = null): void {
+	public function anonymousDeletesTag(string $collective, string $tag, string $owner, ?string $fails = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getShareToken($collectiveId);
+		$token = $this->getPublicTagShareToken($collectiveId, $pageShare);
 		$id = $this->tagIdByName($collectiveId, $tag, null, $token);
 		$this->sendOcsCollectivesRequest('DELETE', 'p/collectives/' . $token . '/tags/' . $id);
 		if ($fails !== 'fails') {
@@ -1857,11 +1863,13 @@ class FeatureContext implements Context {
 	 * @When anonymous sees tag :tag with color :color for collective :collective with owner :owner
 	 * @When anonymous :fails to see tag :tag for collective :collective with owner :owner
 	 * @When anonymous :fails to see tag :tag with color :color for collective :collective with owner :owner
+	 * @When anonymous sees tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
+	 * @When anonymous :fails to see tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
 	 */
-	public function anonymousSeesTag(string $collective, string $tag, string $owner, ?string $color = null, ?string $fails = null): void {
+	public function anonymousSeesTag(string $collective, string $tag, string $owner, ?string $color = null, ?string $fails = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getShareToken($collectiveId);
+		$token = $this->getPublicTagShareToken($collectiveId, $pageShare);
 		$id = $this->tagIdByName($collectiveId, $tag, $color, $token);
 		if ($fails !== 'fails') {
 			Assert::assertNotNull($id);
@@ -1910,6 +1918,14 @@ class FeatureContext implements Context {
 		} else {
 			$this->assertStatusCode(403);
 		}
+	}
+
+	private function getPublicTagShareToken(int $collectiveId, ?string $pageShare = null): ?string {
+		if ($pageShare === null) {
+			return $this->getShareToken($collectiveId);
+		}
+		$pageId = $this->pageIdByName($collectiveId, $pageShare);
+		return $this->getShareToken($collectiveId, $pageId);
 	}
 
 	private function getUserCollectivesPath(string $user): string {
