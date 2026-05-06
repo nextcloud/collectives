@@ -11,6 +11,7 @@ namespace Unit\Service;
 
 use OC\Share20\Share;
 use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
@@ -58,12 +59,14 @@ class CollectiveShareServiceTest extends TestCase {
 			->getMock();
 		$l10n->method('t')->willReturnArgument(0);
 
+		$collectiveMapper = $this->createMock(CollectiveMapper::class);
 		$pageService = $this->createMock(PageService::class);
 
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
 			$this->userFolderHelper,
 			$this->collectiveShareMapper,
+			$collectiveMapper,
 			$pageService,
 			$l10n
 		);
