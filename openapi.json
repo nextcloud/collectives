@@ -322,6 +322,7 @@
             "get": {
                 "operationId": "collective-index",
                 "summary": "Get collectives",
+                "description": "Get all active (i.e. not trashed) collectives for the current user",
                 "tags": [
                     "collective"
                 ],
