@@ -29,7 +29,7 @@ to structure shared knowledge.
 
 	<documentation>
 		<user>https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html</user>
-		<admin>https://docs.nextcloud.com/server/latest/admin_manual/en/collectives/index.html</admin>
+		<admin>https://docs.nextcloud.com/server/latest/admin_manual/collectives/index.html</admin>
 		<developer>https://github.com/nextcloud/collectives/blob/main/DEVELOPING.md</developer>
 	</documentation>
 
