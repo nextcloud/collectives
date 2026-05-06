@@ -8,6 +8,7 @@ import { createApp, watchEffect } from 'vue'
 import CollectivesApp from './CollectivesApp.vue'
 import router from './router.js'
 import { useCollectivesStore } from './stores/collectives.js'
+import { usePagesStore } from './stores/pages.js'
 import registerServiceWorker from './util/registerServiceWorker.ts'
 
 if ('serviceWorker' in navigator) {
@@ -28,6 +29,7 @@ await router.isReady()
 app.mount('#content')
 
 const collectivesStore = useCollectivesStore(pinia)
+const pagesStore = usePagesStore(pinia)
 
 watchEffect(() => {
 	const collective = collectivesStore.currentCollective
@@ -41,6 +43,7 @@ watchEffect(() => {
 			? collective.emoji + ' ' + collective.name
 			: collective.name,
 		path: collectivesStore.currentCollectivePath,
+		storeIndex: pagesStore.collectiveIndex,
 	}
 })
 

@@ -15,11 +15,13 @@ import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
 
 const STORE_PREFIX = 'collectives/pinia/pages/'
+// used in `PagePicker.vue`
+export const ALL_PAGES_STORE_NAME = STORE_PREFIX + 'allPages'
 
 export const usePagesStore = defineStore('pages', {
 	state: () => ({
 		// Uses `collectiveId` as index for internal collectives and `share_<shareToken>` for public ones
-		allPages: useLocalStorage(STORE_PREFIX + 'allPages', {}),
+		allPages: useLocalStorage(ALL_PAGES_STORE_NAME, {}),
 		allTrashPages: useLocalStorage(STORE_PREFIX + 'allTrashPages', {}),
 		allAttachments: useLocalStorage(STORE_PREFIX + 'allAttachments', {}),
 		textMode: useLocalStorage(STORE_PREFIX + 'textMode', {}),
