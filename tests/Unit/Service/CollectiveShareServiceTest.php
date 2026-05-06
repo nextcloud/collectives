@@ -163,6 +163,8 @@ class CollectiveShareServiceTest extends TestCase {
 
 	public function testFindShareShareNotFoundException(): void {
 		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setCollectiveId($this->collectiveId);
+		$collectiveShare->setOwner($this->userId);
 		$collectiveShare->setToken('token');
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willReturn($collectiveShare);
@@ -176,6 +178,8 @@ class CollectiveShareServiceTest extends TestCase {
 
 	public function testFindShare(): void {
 		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setCollectiveId($this->collectiveId);
+		$collectiveShare->setOwner($this->userId);
 		$collectiveShare->setToken('token');
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willReturn($collectiveShare);
@@ -197,6 +201,8 @@ class CollectiveShareServiceTest extends TestCase {
 
 	public function testUpdateShare(): void {
 		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setCollectiveId($this->collectiveId);
+		$collectiveShare->setOwner($this->userId);
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
 			->willReturn($collectiveShare);
 
