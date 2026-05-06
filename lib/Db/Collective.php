@@ -276,6 +276,10 @@ class Collective extends Entity implements JsonSerializable {
 		return $this->level >= $this->getEditPermissionLevel();
 	}
 
+	public function memberCanEdit(): bool {
+		return $this->getEditPermissionLevel() <= Member::LEVEL_MEMBER;
+	}
+
 	public function canShare(): bool {
 		return $this->level >= $this->getSharePermissionLevel();
 	}

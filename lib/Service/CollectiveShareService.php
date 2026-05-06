@@ -179,8 +179,8 @@ class CollectiveShareService {
 		if (($folderShare->getPermissions() & Collective::editPermissions) !== Collective::editPermissions) {
 			return false;
 		}
-		$collective = $this->collectiveMapper->findByIdAndUser($collectiveShare->getCollectiveId(), null);
-		return $collective !== null && $collective->canEdit();
+		$collective = $this->collectiveMapper->findByIdAndUser($collectiveShare->getCollectiveId(), $collectiveShare->getOwner());
+		return $collective !== null && $collective->memberCanEdit();
 	}
 
 	/**
