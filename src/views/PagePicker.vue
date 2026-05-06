@@ -23,11 +23,11 @@
 					<NcActionCheckbox v-model="filterCollective">
 						{{ t('collectives', 'Limit to current collective') }}
 					</NcActionCheckbox>
-					<NcActionText>
+					<NcActionText v-if="!filterCollective">
 						<template #icon>
 							<AlertOutlineIcon :size="20" />
 						</template>
-						{{ t('collectives', 'Links to pages from other collectives might not be accessible to everyone in this collective.') }}
+						{{ t('collectives', 'Other members may lack access to pages from other collectives.') }}
 					</NcActionText>
 				</NcActions>
 			</div>
