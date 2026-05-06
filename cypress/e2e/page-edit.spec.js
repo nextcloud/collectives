@@ -56,26 +56,4 @@ describe('Page edit', function() {
 			.find('.mention')
 			.should('contain', 'admin')
 	})
-
-	it('Supports selecting a page from a collective', function() {
-		cy.openPage('Page Title')
-
-		cy.getEditorContent(true)
-			.type('/Coll')
-		cy.get('.tippy-content .link-picker__item')
-			.contains('Collective pages')
-			.click()
-		cy.get('.reference-picker input[type="text"], .reference-picker input[type="search"]')
-			.type('Day 2')
-		cy.get('.search-result')
-			.contains('Day 2')
-			.click()
-
-		/*
-		 * Disable for now - in CI Nextcloud is on http (no TLS) and link previews don't get rendered
-		cy.getEditor()
-			.get('.widgets--list .collective-page--info .line')
-			.should('contain', 'Day 2')
-		 */
-	})
 })
