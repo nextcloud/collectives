@@ -90,6 +90,7 @@ import FilterOutlineIcon from 'vue-material-design-icons/FilterOutline.vue'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import PagePreview from '../components/PagePreview.vue'
 import { searchRecentPages } from '../apis/collectives/index.js'
+import { ALL_PAGES_STORE_NAME } from '../stores/pages.js'
 import { byTimeAsc } from '../util/sortOrders.js'
 
 export default defineComponent({
@@ -179,15 +180,16 @@ export default defineComponent({
 		},
 
 		initCurrentPages() {
-			this.collectiveId = window.OCA?.Collectives?.currentCollective?.id
-			if (this.collectiveId) {
+			this.collectiveId = window.OCA.Collectives?.currentCollective?.id
+			const storeIndex = window.OCA.Collectives?.currentCollective?.storeIndex
+			if (this.collectiveId && storeIndex) {
 				this.filterCollective = true
 				let raw
 				try {
-					raw = localStorage.getItem('collectives/pinia/pages/allPages')
+					raw = localStorage.getItem(ALL_PAGES_STORE_NAME)
 					if (raw) {
 						const allPagesMap = JSON.parse(raw)
-						this.currentPages = allPagesMap[this.collectiveId] ?? []
+						this.currentPages = allPagesMap[storeIndex] ?? []
 					}
 					return
 				} catch {
