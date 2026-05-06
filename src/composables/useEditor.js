@@ -25,7 +25,6 @@ export function useEditor(davContent) {
 	const editorEl = ref(null)
 	const editorContent = ref(null)
 	let editorPromise = null
-	const updateCounter = ref(0)
 	const rootStore = useRootStore()
 	const circlesStore = useCirclesStore()
 	const searchStore = useSearchStore()
@@ -51,13 +50,6 @@ export function useEditor(davContent) {
 
 	const updateEditorContent = (markdown) => {
 		editorContent.value = markdown
-		if (updateCounter.value === 1) {
-			// Scroll to location hash after first setContent (triggered by initial content)
-			nextTick(() => {
-				setTimeout(scrollToLocationHash, 50)
-			})
-		}
-		updateCounter.value++
 	}
 	const updateEditorContentDebounced = debounce(updateEditorContent, 200)
 
@@ -122,6 +114,7 @@ export function useEditor(davContent) {
 				editor.value.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
 				editor.value.setShowOutline(showCurrentPageOutline.value)
 				rootStore.done('editor')
+				nextTick(scrollToLocationHash)
 			},
 			onUpdate: ({ markdown }) => {
 				updateEditorContentDebounced(markdown)
