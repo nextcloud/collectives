@@ -1,5 +1,37 @@
 # Changelog
 
+## 4.4.0 - 2026.05.06
+
+A new page picker simplifies linking to other pages. Further improvements to the
+full-text search should make search results more accurate.
+
+The new Collectives user documentation is now available at
+https://docs.nextcloud.com/server/latest/user_manual/en/collectives/
+
+### ✨New
+* 🔗 New page picker for linking to other pages. (#2333)
+* ✨ Add Nextcloud 34 support.
+
+### 🐛Fixes
+* 🔎 Improve full text search: index exact words, add stopwords, minimize DB size.
+* 🔗 Fix "Share link" action in page list. (#2438)
+* 👥 Improve member list performance for collectives with many members. Thanks @Koc.
+* ⚙️ Allow setting Collectives user folder to hidden folder name. Thanks @Jerome-Herbinet.
+* 🐛 Don't log an error when refreshing an outdated session.
+* 🔒 Don't expose share password via JSON API. Thanks @tomaioo.
+* 🔒 Block tag management in page shares.
+* 🔒 Enforce collective edit level in public share editable flag.
+* 🔗 Update link to Transifex in Readme. Thanks @noantiq.
+* 💄 Overhaul app description and Readme.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.3.0 - 2026.04.21
 
 This release brings a reworked full-text search implementation. E.g. search
