@@ -304,7 +304,8 @@ class PageTrashBackend implements ITrashBackend {
 			}
 
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
-				$this->trashManager->addTrashItem($collectiveId, $name, $time, $internalPath, $fileEntry->getId(), $this->userSession->getUser()->getUID());
+				$deletedBy = $this->userSession->getUser()?->getUID() ?? '';
+				$this->trashManager->addTrashItem($collectiveId, $name, $time, $internalPath, $fileEntry->getId(), $deletedBy);
 				if ($trashStorage->getCache()->getId($targetInternalPath) !== $fileEntry->getId()) {
 					$trashStorage->getCache()->moveFromCache($unJailedStorage->getCache(), $unJailedInternalPath, $targetInternalPath);
 				}
