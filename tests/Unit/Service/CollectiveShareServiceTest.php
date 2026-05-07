@@ -22,6 +22,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\Folder;
 use OCP\IL10N;
+use OCP\ISession;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
@@ -61,6 +62,7 @@ class CollectiveShareServiceTest extends TestCase {
 
 		$collectiveMapper = $this->createMock(CollectiveMapper::class);
 		$pageService = $this->createMock(PageService::class);
+		$session = $this->createMock(ISession::class);
 
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
@@ -68,7 +70,8 @@ class CollectiveShareServiceTest extends TestCase {
 			$this->collectiveShareMapper,
 			$collectiveMapper,
 			$pageService,
-			$l10n
+			$l10n,
+			$session
 		);
 
 		$this->collective = new Collective();
@@ -238,5 +241,15 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn('passwordhash');
 		$collectiveShare = $this->service->updateShare($this->userId, $this->collective, null, 'token', false, 'password');
 		self::assertEquals('passwordhash', $collectiveShare->getPassword());
+	}
+
+	public function testIsShareNotAuthenticated(): void {
+		$share = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$share->method('getPassword')->willReturn('passwordhash');
+		$this->shareManager->method('getShareByToken')->willReturn($share);
+
+		self::assertFalse($this->service->isShareAuthenticated('token'));
 	}
 }

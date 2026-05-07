@@ -18,6 +18,7 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SharePageService;
@@ -43,6 +44,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		private IDateTimeFormatter $dateTimeFormatter,
 		private ReferenceManager $referenceManager,
 		private LinkReferenceProvider $linkReferenceProvider,
+		private CollectiveShareService $collectiveShareService,
 		private ?string $userId,
 	) {
 	}
@@ -158,7 +160,9 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	 */
 	private function getCollective(?int $collectiveId, string $collectiveName, ?string $sharingToken): Collective {
 		if ($sharingToken) {
-			// TODO: Check if share is password protected; if yes, then check in session if authenticated
+			if (!$this->collectiveShareService->isShareAuthenticated($sharingToken)) {
+				throw new NotFoundException('Share is password protected and not authenticated');
+			}
 			return $this->collectiveService->findCollectiveByShare($sharingToken);
 		}
 
