@@ -13,6 +13,7 @@ use OC\Collaboration\Reference\LinkReferenceProvider;
 use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SharePageService;
 use OCP\Collaboration\Reference\IPublicReferenceProvider;
@@ -23,10 +24,12 @@ use PHPUnit\Framework\TestCase;
 
 class SearchablePageReferenceProviderTest extends TestCase {
 	private SearchablePageReferenceProvider $provider;
+	private CollectiveService $collectiveService;
+	private CollectiveShareService $collectiveShareService;
 	protected function setUp(): void {
 		parent::setUp();
 		$this->needsIPublicReferenceProvider();
-		$collectiveService = $this->createMock(CollectiveService::class);
+		$this->collectiveService = $this->createMock(CollectiveService::class);
 		$pageService = $this->createMock(PageService::class);
 		$sharePageService = $this->createMock(SharePageService::class);
 		$l10n = $this->createMock(IL10N::class);
@@ -40,9 +43,10 @@ class SearchablePageReferenceProviderTest extends TestCase {
 		$dateTimeFormatter = $this->createMock(IDateTimeFormatter::class);
 		$referenceManager = $this->createMock(ReferenceManager::class);
 		$linkReferenceProvider = $this->createMock(LinkReferenceProvider::class);
+		$this->collectiveShareService = $this->createMock(CollectiveShareService::class);
 		$uid = 'jane';
 		$this->provider = new SearchablePageReferenceProvider(
-			$collectiveService,
+			$this->collectiveService,
 			$pageService,
 			$sharePageService,
 			$l10n,
@@ -50,6 +54,7 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			$dateTimeFormatter,
 			$referenceManager,
 			$linkReferenceProvider,
+			$this->collectiveShareService,
 			$uid,
 		);
 	}
@@ -158,5 +163,21 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	 */
 	public function testMatchUrlNonMatching(string $url): void {
 		self::assertEquals(null, $this->provider->matchUrl($url));
+	}
+
+	public function testResolveReferencePublicNotAuthenticated(): void {
+		$this->collectiveShareService
+			->method('isShareAuthenticated')
+			->with('sharetoken')
+			->willReturn(false);
+
+		$this->collectiveService
+			->expects(self::never())
+			->method('findCollectiveByShare');
+
+		$this->provider->resolveReferencePublic(
+			'https://nextcloud.local/apps/collectives/p/sharetoken/supacollective',
+			'sharetoken'
+		);
 	}
 }
