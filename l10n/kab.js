@@ -28,6 +28,7 @@ OC.L10N.register(
     "Clear search" : "Sfeḍ anadi",
     "Favorites" : "Imenyafen",
     "Favorite" : "Menyif",
+    "Page not found" : "Ulac asebter",
     "Share link ({index})" : "Bḍu aseɣwen ({index})",
     "Set password" : "Sbadu awal uffir",
     "Password" : "Awal n uɛeddi",
@@ -37,7 +38,6 @@ OC.L10N.register(
     "You" : "Kemm·čč",
     "Attachments" : "Ticeqqufin",
     "Sharing" : "Beṭṭu",
-    "Page not found" : "Ulac asebter",
     "Link copied" : "Aseɣwen yettwanɣel",
     "Copied" : "Yettwanɣel",
     "Done" : "Immed"

@@ -24,6 +24,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Favorites" : "Favoritos",
     "Favorite" : "Favorito",
+    "Page not found" : "Página no encontrada",
     "Password" : "Clave",
     "Add another link" : "Agregar otra liga",
     "Advanced settings" : "Configuraciones avanzados",
@@ -31,7 +32,6 @@ OC.L10N.register(
     "Upload" : "Cargar",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
-    "Page not found" : "Página no encontrada",
     "Please reload the page." : "Por favor vuelve a cargar la página.",
     "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {page} a revisión {timestamp}.",
     "Done" : "Terminado"
