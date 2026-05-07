@@ -26,6 +26,7 @@ OC.L10N.register(
     "Title" : "სათაური",
     "Favorites" : "რჩეულები",
     "Favorite" : "რჩეული",
+    "Page not found" : "გვერდი არაა ნაპოვნი",
     "Can edit" : "შეუძლია შეცვლა",
     "Password" : "პაროლ",
     "Advanced settings" : "დამატებითი პარამეტრები",
@@ -33,7 +34,6 @@ OC.L10N.register(
     "Upload" : "ატვირთვა",
     "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები",
-    "Page not found" : "გვერდი არაა ნაპოვნი",
     "Please reload the page." : "გთხოვთ გადატვირთოთ გვერდი.",
     "Failed to revert {page} to revision {timestamp}." : "ფაილის {page} დაბრუნება რევიზიაზე {timestamp} ვერ ხერხდება.",
     "Done" : "დასრულებულია"
