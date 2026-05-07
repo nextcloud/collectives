@@ -14,12 +14,12 @@ to structure shared knowledge.
 
 ## Why use Collectives?
 
-* **👥 Group-owned, non-hierarchical at its core**: Each collective is backed by a
+* **👥 Non-hierarchical at its core**: Each collective is backed by a
   [Nextcloud Team](https://docs.nextcloud.com/server/latest/user_manual/en/groupware/contacts.html#teams) - its
   content is owned by the group, not a single user.
 * **📝 Collaborative page editing** thanks to the [Text app](https://github.com/nextcloud/text).
 * **🔤 Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax** for page formatting.
-* **🔎 Full-text search** with automatic indexing to find content straight away.
+* **🔎 Full-text search** to find content straight away.
 
 ## 📚 Documentation
 
