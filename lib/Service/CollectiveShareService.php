@@ -16,11 +16,13 @@ use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\PublicShareController;
 use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\Files\Folder;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IL10N;
+use OCP\ISession;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
@@ -35,6 +37,7 @@ class CollectiveShareService {
 		private CollectiveShareMapper $collectiveShareMapper,
 		private PageService $pageService,
 		private IL10N $l10n,
+		private ISession $session,
 	) {
 	}
 
@@ -298,5 +301,33 @@ class CollectiveShareService {
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to delete collective share for ' . $collectiveId, 0, $e);
 		}
+	}
+
+	public function isShareAuthenticated(string $token): bool {
+		try {
+			$share = $this->shareManager->getShareByToken($token);
+		} catch (ShareNotFound) {
+			return false;
+		}
+
+		if ($share->getPassword() === null) {
+			return true;
+		}
+
+		$passwordHash = $share->getPassword();
+
+		// Until Nextcloud 32 (TODO: remove once we support only NC33+)
+		if ($this->session->get('public_link_authenticated_token') === $token
+			&& $this->session->get('public_link_authenticated_password_hash') === $passwordHash) {
+			return true;
+		}
+
+		// Since Nextcloud 33
+		$allowedTokensJSON = $this->session->get(PublicShareController::DAV_AUTHENTICATED_FRONTEND) ?? '[]';
+		$allowedTokens = json_decode($allowedTokensJSON, true);
+		if (!is_array($allowedTokens)) {
+			$allowedTokens = [];
+		}
+		return ($allowedTokens[$token] ?? '') === $passwordHash;
 	}
 }
