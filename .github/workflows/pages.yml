@@ -63,7 +63,8 @@ jobs:
           HUGO_ENV: production
         run: |
           hugo \
-            --config docs/hugo.toml \
+            --source docs \
+            --destination ../build/pages \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
           mv build/pages public
