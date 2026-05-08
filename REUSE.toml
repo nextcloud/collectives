@@ -18,7 +18,7 @@ SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["docs/archetypes/default.md", "docs/content/**", "docs/static/images/**"]
+path = ["docs/archetypes/*.md", "docs/assets/**", "docs/content/**", "docs/layouts/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
