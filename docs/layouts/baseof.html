@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		{{ partial "head.html" . }}
+    </head>
+    <body>
+		<section>
+			<div id="main-wrap">
+				<div id="intro">
+						{{ with resources.Get "collectives.svg" }}
+							<img id="logo" src="{{ .RelPermalink }}" width="100px" height="100px">
+						{{ end }}
+					<div id="name">
+						<h1>{{ .Title }}</h1>
+						<p class="small">for Nextcloud</p>
+					</div>
+					{{ block "intro" . }}
+					{{ end }}
+				</div>
+				<div class="links-wrap">
+					{{ $targetTag := "links" }}
+					{{ $taggedPages := where .Site.RegularPages "Params.tags" "intersect" (slice $targetTag) }}
+					{{ range $taggedPages }}
+					<button>
+						<span class="btn-wrap">
+							{{ with .Resources.GetMatch "icon.svg" }}
+								<img src="{{ .RelPermalink }}" width="4em">
+							{{ end }}
+							<a href="{{ .Params.link }}" target="_blank" rel="noopener noreferrer"><span>{{ .Title }}</span></a>
+						</span>
+					</button>
+					{{ end }}
+				</div>
+				<div id="feature-media-desktop">
+					{{ with resources.Get "preview.gif" }}
+						<img src="{{ .RelPermalink }}">
+					{{ end }}
+				</div>
+				<div id="feature-media-mobile">	
+					{{ with resources.Get "mobile-screenshot.png" }}
+						<img src="{{ .RelPermalink }}">
+					{{ end }}
+				</div>
+				<div id="features-box">
+					<div id="features">
+						{{ $targetTag := "features" }}
+						{{ $taggedPages := where .Site.RegularPages "Params.tags" "intersect" (slice $targetTag) }}
+						{{ range $taggedPages }}
+						<div>
+							<h3>{{ .Title }}</h3>
+							<p>{{ .Summary }}</p>
+						</div>
+						{{ end }}
+					</div>
+				</div>
+				<div id="fundline">
+					<h4>Funded by:</h4>
+				</div>
+			</div>
+		</section>
+		<footer>
+			{{ partial "footer.html" . }}
+		</footer>
+    </body>
+</html>

@@ -8,9 +8,9 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/collectives)](https://api.reuse.software/info/github.com/nextcloud/collectives)
 
 Your space to collaboratively write and organize. Collectives is designed for groups and communities
-to structure shared knowledge.
+to structure shared knowledge and cultivate trust.
 
-![Screenshot of Nextcloud Collectives](https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot.png)
+![Screenshot of Nextcloud Collectives](https://raw.githubusercontent.com/nextcloud/collectives/main/docs/assets/desktop-screenshot.png)
 
 ## Why use Collectives?
 

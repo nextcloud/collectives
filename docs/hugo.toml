@@ -1,0 +1,9 @@
+baseURL = 'https://collectives.cloud/'
+languageCode = 'en-us'
+title = 'Collectives'
+canonifyurls = true
+publishdir = "build/pages"
+
+[Author]
+	name = "Nextcloud Collectives Team"
+	github = "nextcloud"
