@@ -1,0 +1,5 @@
+{{ define "intro" }}
+	{{ with .Site.GetPage "/intro.md" }}
+		{{ .Content }}
+	{{ end }}
+{{ end }}

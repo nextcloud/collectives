@@ -10,7 +10,7 @@
 	<summary><![CDATA[Your space to collaboratively write and organize]]></summary>
 	<description><![CDATA[
 Your space to collaboratively write and organize. Collectives is designed for groups and communities
-to structure shared knowledge.
+to structure shared knowledge and cultivate trust.
 
 * **👥 Non-hierarchical at its core**: Each collective is backed by a
   [Nextcloud Team](https://docs.nextcloud.com/server/latest/user_manual/en/groupware/contacts.html#teams) - its
@@ -42,8 +42,8 @@ to structure shared knowledge.
 	<bugs>https://github.com/nextcloud/collectives/issues</bugs>
 	<repository type="git">https://github.com/nextcloud/collectives.git</repository>
 
-	<screenshot small-thumbnail="https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot-small.png">
-		https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot.png
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/nextcloud/collectives/main/docs/assets/desktop-screenshot.png">
+		https://raw.githubusercontent.com/nextcloud/collectives/main/docs/assets/desktop-screenshot.png
 	</screenshot>
 
 	<dependencies>

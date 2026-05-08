@@ -1,0 +1,17 @@
+			<div id="funding-logos">
+				<div id="logo-wrapper">
+					{{ with resources.Get "bmbf.jpg" }}
+						<img src="{{ .RelPermalink }}">
+					{{ end }}
+					{{ with resources.Get "prototype.png" }}
+					<img src="{{ .RelPermalink }}">
+					{{ end }}
+				</div>
+				<!-- <div id="legal"> -->
+				<!-- 	{{ $targetTag := "legals" }} -->
+				<!-- 	{{ $taggedPages := where .Site.RegularPages "Params.tags" "intersect" (slice $targetTag) }} -->
+				<!-- 	{{ range $taggedPages }} -->
+				<!-- 		<a href="{{ .RelPermalink }}">{{ .Title }}</a> -->
+				<!-- 	{{ end }} -->
+				<!-- </div> -->
+			</div>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		{{ partial "head.html" . }}
+    </head>
+    <body>
+		<section>
+			<div id="main-wrap">
+				<div id="intro">
+					{{ with resources.Get "collectives.svg" }}
+						<img id="logo" src="{{ .RelPermalink }}" width="100px" height="100px">
+					{{ end }}
+					<h2>{{ .Title }}</h2>
+					{{ .Content }}
+				</div>
+			</div>
+		</section>
+		<footer>
+			{{ partial "footer.html" . }}
+		</footer>
+    </body>
+</html>
