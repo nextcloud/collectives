@@ -13,8 +13,10 @@ use Closure;
 
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
+use OCP\HintException;
 use Psr\Log\LoggerInterface;
 
 trait OCSExceptionHelper {
@@ -31,6 +33,8 @@ trait OCSExceptionHelper {
 		} catch (NotFoundException $e) {
 			$logger?->debug('Collectives app NotFound Error: ' . $e->getMessage(), ['exception' => $e]);
 			throw new OCSNotFoundException($e->getMessage());
+		} catch (HintException $e) {
+			throw new OCSBadRequestException($e->getMessage());
 		}
 	}
 }
