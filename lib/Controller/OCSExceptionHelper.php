@@ -17,6 +17,7 @@ use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
+use OCP\HintException;
 use Psr\Log\LoggerInterface;
 
 trait OCSExceptionHelper {
@@ -36,6 +37,8 @@ trait OCSExceptionHelper {
 			throw new OCSNotFoundException($e->getMessage());
 		} catch (UnprocessableEntityException $e) {
 			$logger?->debug('Collectives app Unprocessable Entity: ' . $e->getMessage(), ['exception' => $e]);
+			throw new OCSBadRequestException($e->getMessage());
+		} catch (HintException $e) {
 			throw new OCSBadRequestException($e->getMessage());
 		}
 	}
