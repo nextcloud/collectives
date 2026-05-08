@@ -26,7 +26,7 @@ to structure shared knowledge and cultivate trust.
 * **[📙 Documentation for users and user groups](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html)**
 * **[📗 Documentation for administrators](https://docs.nextcloud.com/server/latest/admin_manual/collectives/index.html)**
 * **[📘 Documentation for developers](DEVELOPING.md)**
-* **[⚙️ OCS API](openapi.json).** - best viewed with the [OCS API Viewer app](https://apps.nextcloud.com/apps/ocs_api_viewer)
+* **[⚙️ OCS API](openapi.json)** - best viewed with the [OCS API Viewer app](https://apps.nextcloud.com/apps/ocs_api_viewer)
 
 ## 💬 Contact
 
