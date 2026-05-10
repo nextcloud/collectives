@@ -8,6 +8,7 @@ OC.L10N.register(
     "Landing page" : "Página de destino",
     "Welcome %s" : "Olá, %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Adicione páginas com o ➕ na lista de páginas! Você pode arrastá-las para alterar a ordem. Arrastá-las para o editor criará um 🔗 link.",
+    "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Pressione `✏️ Editar` para alterar este texto e sinta-se à vontade! Várias pessoas podem editar ao mesmo tempo. Saiba mais na [documentação](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) ou pergunte à [comunidade](https://help.nextcloud.com/tag/collectives-app).",
     "Collective pages" : "Páginas de coletivos",
     "In collective %1$s" : "No coletivo %1$s",
     "Last edition %1$s" : "Última edição %1$s",
