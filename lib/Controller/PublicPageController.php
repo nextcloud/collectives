@@ -30,9 +30,7 @@ use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\IRequest;
-use OCP\ISession;
 use OCP\Share\Exceptions\ShareNotFound;
-use OCP\Share\IManager as ShareManager;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
@@ -51,17 +49,15 @@ class PublicPageController extends CollectivesPublicOCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveShareService $collectiveShareService,
 		private PageService $service,
 		private AttachmentService $attachmentService,
 		private SearchService $indexedSearchService,
 		private CollectiveService $collectiveService,
-		ISession $session,
 		private LoggerInterface $logger,
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -70,7 +66,7 @@ class PublicPageController extends CollectivesPublicOCSController {
 	protected function getShare(): IShare {
 		if ($this->share === null) {
 			try {
-				$this->share = $this->shareManager->getShareByToken($this->getToken());
+				$this->share = $this->collectiveShareService->getShare($this->getToken());
 			} catch (ShareNotFound $e) {
 				throw new OCSNotFoundException($e->getMessage());
 			}
@@ -93,15 +89,6 @@ class PublicPageController extends CollectivesPublicOCSController {
 		return $this->collectiveShare;
 	}
 
-	/**
-	 * @psalm-suppress InvalidNullableReturnType
-	 * @psalm-suppress NullableReturnStatement
-	 * @throws OCSNotFoundException
-	 */
-	protected function getPasswordHash(): string {
-		return $this->getShare()->getPassword();
-	}
-
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
@@ -110,13 +97,6 @@ class PublicPageController extends CollectivesPublicOCSController {
 		}
 
 		return true;
-	}
-
-	/**
-	 * @throws OCSNotFoundException
-	 */
-	protected function isPasswordProtected(): bool {
-		return $this->getShare()->getPassword() !== null;
 	}
 
 	/**

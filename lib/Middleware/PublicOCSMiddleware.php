@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Middleware;
 
 use OCA\Collectives\Controller\CollectivesPublicOCSController;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\IConfig;
@@ -24,6 +25,7 @@ class PublicOCSMiddleware extends Middleware {
 		private IRequest $request,
 		private IConfig $config,
 		private IThrottler $throttler,
+		private CollectiveShareService $collectiveShareService,
 	) {
 	}
 
@@ -63,7 +65,7 @@ class PublicOCSMiddleware extends Middleware {
 		}
 
 		// If authentication succeeds just continue
-		if ($controller->isAuthenticated()) {
+		if ($this->collectiveShareService->isShareAuthenticated($token)) {
 			return;
 		}
 
