@@ -110,6 +110,7 @@ export function useEditor(davContent: Ref<string>) {
 					return getLinkWithPicker('collectives-ref-pages', false)
 				},
 			},
+			openLinkHandler: window.OCA.Collectives.openLink,
 			onCreate: ({ markdown }: { markdown: string }) => {
 				updateEditorContentDebounced(markdown)
 			},

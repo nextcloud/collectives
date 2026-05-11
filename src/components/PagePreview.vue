@@ -53,7 +53,6 @@
 
 <script lang="ts">
 import { t } from '@nextcloud/l10n'
-import { generateUrl } from '@nextcloud/router'
 import { defineComponent } from 'vue'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import PageIcon from './Icon/PageIcon.vue'
@@ -143,18 +142,13 @@ export default defineComponent({
 		t,
 
 		clickLink(event: Event) {
-			if (this.notFound || !this.link) {
+			if (!this.link) {
 				return false
 			}
 
-			const appUrl = '/apps/collectives'
-			const linkUrl = new URL(this.link, window.location)
-			// Only consider rerouting if we're inside the collectives app and for links to collectives app
-			if (window.OCA.Collectives?.vueRouter
-				&& linkUrl.pathname.toString().startsWith(generateUrl(appUrl))) {
+			if (window.OCA.Collectives?.openLink) {
 				event.preventDefault()
-				const collectivesUrl = linkUrl.href.substring(linkUrl.href.indexOf(appUrl) + appUrl.length)
-				window.OCA.Collectives.vueRouter.push(collectivesUrl)
+				window.OCA.Collectives.openLink(this.link)
 			}
 		},
 	},

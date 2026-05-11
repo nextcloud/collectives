@@ -42,6 +42,8 @@ export type NewTabLinkTestCaseData = {
 	getExpectedUrl: (params: GetUrlParameters) => string
 }
 
+type LinkTrigger = 'preview' | 'openLinkButton' | 'ctrlClick'
+
 export type ViewerLinkTestCase = {
 	page: Page
 	user: User
@@ -63,6 +65,7 @@ export type SameTabLinkTestCase = {
 	linkData: SameTabLinkTestCaseData
 	editMode: boolean
 	shareToken?: string
+	trigger?: LinkTrigger
 }
 
 export type NewTabLinkTestCase = {
@@ -111,7 +114,7 @@ export async function testLinkOpensInViewer({
 	await sourcePage.open(false)
 	await sourcePage.switchMode(editMode)
 	editor.setMode(editMode)
-	await editor.openLink({ linkText })
+	await editor.openLinkViaBubblePreview({ linkText })
 	await expect(sourcePage.getViewerContent()
 		.locator('.modal-header'))
 		.toContainText(linkData.fixtureName)
@@ -155,6 +158,7 @@ export async function testLinkOpensInSameTab({
 	linkData,
 	editMode,
 	shareToken,
+	trigger,
 }: SameTabLinkTestCase) {
 	const linkText = 'Link Text'
 	if (!targetPage || !targetCollective) {
@@ -171,10 +175,17 @@ export async function testLinkOpensInSameTab({
 	await sourcePage.open(false, shareToken)
 	await sourcePage.switchMode(editMode)
 	editor.setMode(editMode)
-	await editor.openCollectiveLink({
-		linkText,
-		pageTitle,
-	})
+
+	if (trigger === 'openLinkButton') {
+		await editor.openLinkViaOpenLinkButton({ linkText })
+	} else if (trigger === 'ctrlClick') {
+		await editor.ctrlClickLink({ linkText })
+	} else {
+		await editor.openCollectiveLinkViaBubblePreview({
+			linkText,
+			pageTitle,
+		})
+	}
 
 	await expect(page).toHaveURL(linkData.getExpectedUrl({ baseURL, collective: targetCollective, targetPage, shareToken }))
 }
@@ -215,7 +226,7 @@ export async function testLinkOpensInNewTab({
 	await sourcePage.switchMode(editMode)
 	editor.setMode(editMode)
 	const newTabPromise = page.waitForEvent('popup')
-	await editor.openLink({ linkText })
+	await editor.openLinkViaBubblePreview({ linkText })
 	const newTab = await newTabPromise
 	await newTab.waitForLoadState()
 

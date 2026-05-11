@@ -6,6 +6,7 @@
 import { createPinia } from 'pinia'
 import { createApp, watchEffect } from 'vue'
 import CollectivesApp from './CollectivesApp.vue'
+import { createOpenCollectivesLink } from './composables/useCollectivesLinkHandler.ts'
 import router from './router.js'
 import { useCollectivesStore } from './stores/collectives.js'
 import { usePagesStore } from './stores/pages.js'
@@ -15,12 +16,13 @@ if ('serviceWorker' in navigator) {
 	registerServiceWorker()
 }
 
+const pinia = createPinia()
+
 window.OCA.Collectives = {
 	...window.OCA.Collectives,
 	vueRouter: router,
+	openLink: createOpenCollectivesLink(router, pinia),
 }
-
-const pinia = createPinia()
 
 const app = createApp(CollectivesApp)
 app.use(pinia)
