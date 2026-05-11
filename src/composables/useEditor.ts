@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Ref } from 'vue'
+import type { TextEditorInstance } from '../types.ts'
+
 import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { computed, defineCustomElement, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
@@ -18,13 +21,13 @@ import { useSearch } from './useSearch.js'
 /**
  * Composable for setting up the editor and reader.
  *
- * @param {object} davContent markdown content fetched via dav.
+ * @param davContent markdown content fetched via dav.
  */
-export function useEditor(davContent) {
-	const editor = ref(null)
-	const editorEl = ref(null)
-	const editorContent = ref(null)
-	let editorPromise = null
+export function useEditor(davContent: Ref<string>) {
+	const editor = ref<TextEditorInstance | null>(null)
+	const editorEl = ref<HTMLElement | null>(null)
+	const editorContent = ref<string | null>(null)
+	let editorPromise: Promise<TextEditorInstance> | null = null
 	const rootStore = useRootStore()
 	const circlesStore = useCirclesStore()
 	const searchStore = useSearchStore()
@@ -48,7 +51,7 @@ export function useEditor(davContent) {
 		}
 	}
 
-	const updateEditorContent = (markdown) => {
+	const updateEditorContent = (markdown: string) => {
 		editorContent.value = markdown
 	}
 	const updateEditorContentDebounced = debounce(updateEditorContent, 200)
@@ -107,22 +110,22 @@ export function useEditor(davContent) {
 					return getLinkWithPicker('collectives-ref-pages', false)
 				},
 			},
-			onCreate: ({ markdown }) => {
+			onCreate: ({ markdown }: { markdown: string }) => {
 				updateEditorContentDebounced(markdown)
 			},
 			onLoaded: () => {
-				editor.value.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
-				editor.value.setShowOutline(showCurrentPageOutline.value)
+				editor.value?.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
+				editor.value?.setShowOutline(showCurrentPageOutline.value)
 				rootStore.done('editor')
 				nextTick(scrollToLocationHash)
 			},
-			onUpdate: ({ markdown }) => {
+			onUpdate: ({ markdown }: { markdown: string }) => {
 				updateEditorContentDebounced(markdown)
 			},
-			onAttachmentsUpdated({ attachmentSrcs }) {
+			onAttachmentsUpdated({ attachmentSrcs }: { attachmentSrcs: string[] }) {
 				pagesStore.setEditorEmbeddedAttachmentSrcs(attachmentSrcs)
 			},
-			onMentionSearch(query) {
+			onMentionSearch(query: string) {
 				const users = circlesStore.currentCircleUserMembersSorted
 				const lowerQuery = query.toLowerCase().trim()
 				return Object.fromEntries(Object.entries(users).filter(([key, value]) => key.toLowerCase().includes(lowerQuery) || value.toLowerCase().includes(lowerQuery)))
@@ -131,7 +134,7 @@ export function useEditor(davContent) {
 		})
 
 		// Use markRaw to prevent Vue 3 from proxying the Vue 2 editor instance
-		editor.value = markRaw(await editorPromise)
+		editor.value = markRaw(await editorPromise as TextEditorInstance)
 	}
 
 	return {
