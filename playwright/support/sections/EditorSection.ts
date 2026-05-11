@@ -75,34 +75,52 @@ export class EditorSection {
 		await this.getContent()
 			.getByRole('link', { name: linkText, exact: true })
 			.click()
-		await this.page.locator('.widgets--list')
+		await this.page.locator('.link-view-bubble')
 			.waitFor({ state: 'visible' })
-		return this.page.locator('.widgets--list')
+		return this.page.locator('.link-view-bubble')
 	}
 
 	public async hasCollectiveLink(linkText: string): Promise<void> {
 		await expect((await this.getLinkBubble(linkText))
-			.locator('.collective-page .title'))
+			.locator('.widgets--list .collective-page .title'))
 			.toHaveText(linkText)
 		// Click somewhere else to close the link bubble
 		await this.getContent()
 			.click()
 	}
 
-	public async openLink({ linkText }: {
+	public async openLinkViaBubblePreview({ linkText }: {
 		linkText: string
 	}): Promise<void> {
-		const link = await this.getLinkBubble(linkText)
-		await link
+		const linkBubble = await this.getLinkBubble(linkText)
+		await linkBubble
+			.locator('.widgets--list')
 			.getByRole('link')
 			.click()
+	}
+
+	public async openLinkViaOpenLinkButton({ linkText }: {
+		linkText: string
+	}): Promise<void> {
+		const linkBubble = await this.getLinkBubble(linkText)
+		await linkBubble
+			.getByRole('button', { name: 'Open link' })
+			.click()
+	}
+
+	public async ctrlClickLink({ linkText }: {
+		linkText: string
+	}): Promise<void> {
+		await this.getContent()
+			.getByRole('link', { name: linkText, exact: true })
+			.click({ modifiers: ['Control'] })
 	}
 
 	public async save(): Promise<void> {
 		await this.editor.getByRole('button', { name: 'Save document' }).click()
 	}
 
-	public async openCollectiveLink({ linkText, pageTitle }: {
+	public async openCollectiveLinkViaBubblePreview({ linkText, pageTitle }: {
 		linkText: string
 		pageTitle?: string
 	}): Promise<void> {

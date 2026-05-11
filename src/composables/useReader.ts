@@ -122,6 +122,7 @@ export function useReader(content: Ref<string>) {
 				component: 'page-info-bar',
 				props: {},
 			},
+			openLinkHandler: window.OCA.Collectives.openLink,
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
 			onLoaded: () => {
 				nextTick(updateReadonlyBarProps)
