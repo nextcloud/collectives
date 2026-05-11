@@ -33,6 +33,7 @@ to structure shared knowledge and cultivate trust.
 		<developer>https://github.com/nextcloud/collectives/blob/main/DEVELOPING.md</developer>
 	</documentation>
 
+	<category>office</category>
 	<category>organization</category>
 	<category>social</category>
 	<category>workflow</category>

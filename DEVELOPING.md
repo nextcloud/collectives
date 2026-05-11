@@ -123,12 +123,9 @@ supported the required Nextcloud server version.
 
 ## Build-time dependencies
 
-The following tools are required for app development. Some might already be installed on your system:
+The following tools are required for building the app. Some might already be installed on your system:
 
 * make: to run the Makefile targets
 * curl: to fetch some build tools from the web
 * npm: to install NodeJS dependencies and compile JS assets
 * g++: to compile some NodeJS dependencies
-* composer for installing php dependencies
-* Nextcloud server for running php tests
-* teams/circles app for passing some php tests that depend on it
