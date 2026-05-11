@@ -13,7 +13,18 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
 import { useSearchStore } from '../stores/search.js'
-import { useSearch } from './useSearch.js'
+import { useSearch } from './useSearch.ts'
+
+/**
+ * Vue custom element interface for <page-info-bar>.
+ * Props are exposed as JavaScript properties on the DOM element.
+ */
+interface PageInfoBarElement extends HTMLElement {
+	currentPage: PageInfo | null | undefined
+	canEdit: boolean
+	attachmentCount: number
+	backlinkCount: number
+}
 
 /**
  * Composable for setting up the editor and reader.
@@ -147,12 +158,6 @@ export function useReader(content: Ref<string>) {
 	 * Update properties of the PageInfoBar in the reader
 	 */
 	function updateReadonlyBarProps() {
-		interface PageInfoBarElement extends Element {
-			currentPage: PageInfo | null | undefined
-			canEdit: boolean
-			attachmentCount: number
-			backlinkCount: number
-		}
 		const el = readerEl.value?.querySelector<PageInfoBarElement>('page-info-bar')
 		if (!el) {
 			return
