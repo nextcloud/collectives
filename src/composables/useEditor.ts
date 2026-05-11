@@ -16,7 +16,7 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
 import { useSearchStore } from '../stores/search.js'
-import { useSearch } from './useSearch.js'
+import { useSearch } from './useSearch.ts'
 
 /**
  * Composable for setting up the editor and reader.

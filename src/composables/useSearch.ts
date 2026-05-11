@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Ref } from 'vue'
+import type { TextEditorInstance } from '../types.ts'
+
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { onBeforeUnmount, onMounted, watch } from 'vue'
 import { useSearchStore } from '../stores/search.js'
@@ -10,9 +13,9 @@ import { useSearchStore } from '../stores/search.js'
 /**
  * Handle search state and events.
  *
- * @param {object} searchable Object to search in.
+ * @param searchable Object to search in.
  */
-export function useSearch(searchable) {
+export function useSearch(searchable: Ref<TextEditorInstance | null>) {
 	const searchStore = useSearchStore()
 
 	const searchNext = () => {
