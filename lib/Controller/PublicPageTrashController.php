@@ -24,10 +24,6 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\IRequest;
-use OCP\ISession;
-use OCP\Share\Exceptions\ShareNotFound;
-use OCP\Share\IManager as ShareManager;
-use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,34 +34,17 @@ use Psr\Log\LoggerInterface;
 class PublicPageTrashController extends CollectivesPublicOCSController {
 	use OCSExceptionHelper;
 
-	private ?IShare $share = null;
 	private ?CollectiveShare $collectiveShare = null;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveShareService $collectiveShareService,
 		private PageService $service,
-		ISession $session,
 		private LoggerInterface $logger,
 	) {
-		parent::__construct($appName, $request, $session);
-	}
-
-	/**
-	 * @throws OCSNotFoundException
-	 */
-	protected function getShare(): IShare {
-		if ($this->share === null) {
-			try {
-				$this->share = $this->shareManager->getShareByToken($this->getToken());
-			} catch (ShareNotFound $e) {
-				throw new OCSNotFoundException($e->getMessage());
-			}
-		}
-		return $this->share;
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -87,15 +66,6 @@ class PublicPageTrashController extends CollectivesPublicOCSController {
 		return $this->collectiveShare;
 	}
 
-	/**
-	 * @psalm-suppress InvalidNullableReturnType
-	 * @psalm-suppress NullableReturnStatement
-	 * @throws OCSNotFoundException
-	 */
-	protected function getPasswordHash(): string {
-		return $this->getShare()->getPassword();
-	}
-
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
@@ -104,13 +74,6 @@ class PublicPageTrashController extends CollectivesPublicOCSController {
 		}
 
 		return true;
-	}
-
-	/**
-	 * @throws OCSNotFoundException
-	 */
-	protected function isPasswordProtected(): bool {
-		return $this->getShare()->getPassword() !== null;
 	}
 
 	/**

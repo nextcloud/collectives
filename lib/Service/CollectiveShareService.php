@@ -32,6 +32,8 @@ use OCP\Share\IManager as IShareManager;
 use OCP\Share\IShare;
 
 class CollectiveShareService {
+	private array $shareCache = [];
+
 	public function __construct(
 		private IShareManager $shareManager,
 		private UserFolderHelper $userFolderHelper,
@@ -313,18 +315,27 @@ class CollectiveShareService {
 		}
 	}
 
+	/**
+	 * @throws ShareNotFound
+	 */
+	public function getShare(string $token): IShare {
+		if (!isset($this->shareCache[$token])) {
+			$this->shareCache[$token] = $this->shareManager->getShareByToken($token);
+		}
+		return $this->shareCache[$token];
+	}
+
 	public function isShareAuthenticated(string $token): bool {
 		try {
-			$share = $this->shareManager->getShareByToken($token);
+			$share = $this->getShare($token);
 		} catch (ShareNotFound) {
 			return false;
 		}
 
-		if ($share->getPassword() === null) {
+		$passwordHash = $share->getPassword();
+		if ($passwordHash === null) {
 			return true;
 		}
-
-		$passwordHash = $share->getPassword();
 
 		// Until Nextcloud 32 (TODO: remove once we support only NC33+)
 		if ($this->session->get('public_link_authenticated_token') === $token

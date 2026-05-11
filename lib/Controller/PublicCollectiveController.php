@@ -24,10 +24,6 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\IRequest;
-use OCP\ISession;
-use OCP\Share\Exceptions\ShareNotFound;
-use OCP\Share\IManager as ShareManager;
-use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,41 +34,14 @@ use Psr\Log\LoggerInterface;
 class PublicCollectiveController extends CollectivesPublicOCSController {
 	use OCSExceptionHelper;
 
-	private ?IShare $share = null;
-
 	public function __construct(
 		string $AppName,
 		IRequest $request,
-		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveService $service,
-		ISession $session,
 		private LoggerInterface $logger,
 	) {
-		parent::__construct($AppName, $request, $session);
-	}
-
-	/**
-	 * @throws OCSNotFoundException
-	 */
-	protected function getShare(): IShare {
-		if ($this->share === null) {
-			try {
-				$this->share = $this->shareManager->getShareByToken($this->getToken());
-			} catch (ShareNotFound $e) {
-				throw new OCSNotFoundException($e->getMessage());
-			}
-		}
-		return $this->share;
-	}
-
-	/**
-	 * @psalm-suppress InvalidNullableReturnType
-	 * @psalm-suppress NullableReturnStatement
-	 * @throws OCSNotFoundException
-	 */
-	protected function getPasswordHash(): string {
-		return $this->getShare()->getPassword();
+		parent::__construct($AppName, $request);
 	}
 
 	public function isValidToken(): bool {
@@ -83,13 +52,6 @@ class PublicCollectiveController extends CollectivesPublicOCSController {
 		}
 
 		return true;
-	}
-
-	/**
-	 * @throws OCSNotFoundException
-	 */
-	protected function isPasswordProtected(): bool {
-		return $this->getShare()->getPassword() !== null;
 	}
 
 	/**
