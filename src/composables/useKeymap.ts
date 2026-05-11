@@ -3,14 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type NcTextField from '@nextcloud/vue/components/NcTextField'
+import type { ComponentPublicInstance } from 'vue'
 
-const ctrlFStack: NcTextField[] = []
+interface NcTextFieldInstance extends ComponentPublicInstance {
+	focus(): void
+	select(): void
+}
+
+const ctrlFStack: NcTextFieldInstance[] = []
 
 /**
  * @param textField - the NcTextField component object
  */
-function ctrlFHandler(textField: NcTextField) {
+function ctrlFHandler(textField: NcTextFieldInstance) {
 	if (!textField) {
 		return false
 	}
@@ -35,7 +40,7 @@ function ctrlFHandler(textField: NcTextField) {
  *
  * @param event - The keydown event
  */
-function onKeyDown(event) {
+function onKeyDown(event: KeyboardEvent) {
 	const isCtrlF = (event.ctrlKey || event.metaKey)
 		&& !event.shiftKey
 		&& !event.altKey
@@ -58,14 +63,14 @@ window.addEventListener('keydown', onKeyDown, true)
 /**
  * @param textField - the Vue element
  */
-export function pushCtrlF(textField: VueElement) {
+export function pushCtrlF(textField: NcTextFieldInstance) {
 	ctrlFStack.push(textField)
 }
 
 /**
  * @param textField - the Vue element
  */
-export function popCtrlF(textField: VueElement) {
+export function popCtrlF(textField: NcTextFieldInstance) {
 	const index = ctrlFStack.lastIndexOf(textField)
 	if (index !== -1) {
 		ctrlFStack.splice(index, 1)
