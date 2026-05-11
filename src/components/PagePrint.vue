@@ -22,7 +22,7 @@
 <script>
 import { mapState } from 'pinia'
 import { ref } from 'vue'
-import { useReader } from '../composables/useReader.js'
+import { useReader } from '../composables/useReader.ts'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'

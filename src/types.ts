@@ -51,3 +51,13 @@ export interface PageInfo {
 	shareToken: string | null
 	linkedPageIds: number[]
 }
+
+// Minimal interface for the Text app editor/reader instance returned by window.OCA.Text.createEditor()
+export interface TextEditorInstance {
+	setContent(content: string): void
+	setSearchQuery(query: string, matchAll?: boolean): void
+	setShowOutline(show: boolean): void
+	destroy(): void
+	searchNext(): void
+	searchPrevious(): void
+}
