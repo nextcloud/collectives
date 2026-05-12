@@ -23,6 +23,7 @@ OC.L10N.register(
     "Teams app is enabled" : "已啟用團隊應用程式",
     "The teams app is not enabled, but is required for Collectives to work." : "團隊應用程式未啟用，但 Collectives 需要該應用程式才能運作。",
     "Your space to collaboratively write and organize" : "您的協作書寫與整理空間",
+    "Your space to collaboratively write and organize. Collectives is designed for groups and communities\nto structure shared knowledge and cultivate trust.\n\n* **👥 Non-hierarchical at its core**: Each collective is backed by a\n  [Nextcloud Team](https://docs.nextcloud.com/server/latest/user_manual/en/groupware/contacts.html#teams) - its\n  content is owned by the group, not a single user.\n* **📝 Collaborative page editing** thanks to the [Text app](https://github.com/nextcloud/text).\n* **🔤 Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax** for page formatting.\n* **🔎 Full-text search** to find content straight away." : "您的協作書寫與整理空間。Collectives 專為團體與社群設計，旨在協助其建構共享知識並培養信任。\n\n* **👥 本質上非階層式**：每個群組都由 [Nextcloud 團隊](https://docs.nextcloud.com/server/latest/user_manual/en/groupware/contacts.html#teams)支援，其內容歸該群組所有，而非單一使用者。\n* **📝 協作頁面編輯**：歸功於 [Text 應用程式](https://github.com/nextcloud/text)。\n* **🔤 廣為人知的 [Markdown](https://zh.wikipedia.org/wiki/Markdown) 語法**，用於頁面排版。\n* **🔎 全文搜尋**：立刻找到內容。",
     "Extra action" : "額外動作",
     "You left collective {name}" : "您已離開知識庫 {name}",
     "Could not leave the collective. {errorMessage}" : "無法離開知識庫。{errorMessage}",
