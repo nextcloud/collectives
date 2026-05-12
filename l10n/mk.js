@@ -26,6 +26,8 @@ OC.L10N.register(
     "Delete" : "Избриши",
     "Rename" : "Преименувај",
     "Templates" : "Шаблони",
+    "Hide outline" : "Сокриј контура",
+    "Show outline" : "Прикажи контура",
     "Remove from favorites" : "Избриши од фаворити",
     "Manage tags" : "Уреди ги ознаките",
     "Move or copy" : "Премести или копирај",
