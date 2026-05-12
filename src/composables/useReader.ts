@@ -19,12 +19,8 @@ import { useSearch } from './useSearch.ts'
  * Vue custom element interface for <page-info-bar>.
  * Props are exposed as JavaScript properties on the DOM element.
  */
-interface PageInfoBarElement extends HTMLElement {
-	currentPage: PageInfo | null | undefined
-	canEdit: boolean
-	attachmentCount: number
-	backlinkCount: number
-}
+const PageInfoBarCE = defineCustomElement(PageInfoBar, { shadowRoot: false })
+type PageInfoBarElement = InstanceType<typeof PageInfoBarCE>
 
 /**
  * Composable for setting up the editor and reader.
@@ -111,10 +107,6 @@ export function useReader(content: Ref<string>) {
 
 		// Define PageInfoBar as custom web component
 		if (!window.customElements.get('page-info-bar')) {
-			const PageInfoBarCE = defineCustomElement({
-				...PageInfoBar,
-				styles: PageInfoBar.styles,
-			}, { shadowRoot: false })
 			customElements.define('page-info-bar', PageInfoBarCE)
 		}
 
