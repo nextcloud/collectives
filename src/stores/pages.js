@@ -45,7 +45,7 @@ export const usePagesStore = defineStore('pages', {
 	getters: {
 		collectiveId() {
 			const collectivesStore = useCollectivesStore()
-			return collectivesStore.currentCollective.id
+			return collectivesStore.currentCollective?.id
 		},
 
 		collectiveIndex(state) {
