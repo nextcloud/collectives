@@ -146,6 +146,7 @@ export async function testLinkOpensInViewer({
  * @param options.linkData test case data
  * @param options.editMode whether to test in edit mode or preview mode
  * @param options.shareToken share token if the page is a share
+ * @param options.trigger trigger to open the link
  */
 export async function testLinkOpensInSameTab({
 	baseURL,
