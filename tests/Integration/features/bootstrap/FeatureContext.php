@@ -942,20 +942,21 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user creates tag :tag with color :color for collective :collective
 	 * @When user :user :fails to create tag :tag with color :color for collective :collective
+	 * @When user :user :fails to create tag :tag with invalid color :invalidColor for collective :collective
 	 * @When user :user :fails to create :existing tag :tag with color :color for collective :collective
 	 */
-	public function userCreatesTag(string $user, string $collective, string $tag, string $color, ?string $fails = null, ?string $existing = null): void {
+	public function userCreatesTag(string $user, string $collective, string $tag, ?string $color = null, ?string $fails = null, ?string $invalidColor = null, ?string $existing = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$data = new TableNode([
 			['name', $tag],
-			['color', $color],
+			['color', $color ?? $invalidColor],
 		]);
 		$this->sendOcsCollectivesRequest('POST', 'collectives/' . $collectiveId . '/tags', $data);
 		if ($fails !== 'fails') {
 			$this->assertStatusCode(200);
 		} else {
-			if ($existing !== null) {
+			if ($existing !== null || $invalidColor !== null) {
 				$this->assertStatusCode(400);
 			} else {
 				$this->assertStatusCode(403);
@@ -966,20 +967,25 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user updates tag :tag with color :color for collective :collective
 	 * @When user :user :fails to update tag :tag with color :color for collective :collective
+	 * @When user :user :fails to update tag :tag with invalid color :invalidColor for collective :collective
 	 */
-	public function userUpdatesTag(string $user, string $collective, string $tag, string $color, ?string $fails = null): void {
+	public function userUpdatesTag(string $user, string $collective, string $tag, ?string $color = null, ?string $fails = null, ?string $invalidColor = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$id = $this->tagIdByName($collectiveId, $tag);
 		$data = new TableNode([
 			['name', $tag],
-			['color', $color],
+			['color', $color ?? $invalidColor],
 		]);
 		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/tags/' . $id, $data);
 		if ($fails !== 'fails') {
 			$this->assertStatusCode(200);
 		} else {
-			$this->assertStatusCode(403);
+			if ($invalidColor !== null) {
+				$this->assertStatusCode(400);
+			} else {
+				$this->assertStatusCode(403);
+			}
 		}
 	}
 

@@ -67,7 +67,7 @@ class TagController extends OCSController {
 	 * @param string $color Color of the tag
 	 *
 	 * @return DataResponse<Http::STATUS_OK, array{tag: CollectivesTag, info: string}, array{}>
-	 * @throws OCSBadRequestException Tag already exists for the collective
+	 * @throws OCSBadRequestException Tag already exists for the collective or color invalid
 	 * @throws OCSNotFoundException Collective not found
 	 * @throws OCSForbiddenException Not permitted
 	 *
@@ -98,6 +98,7 @@ class TagController extends OCSController {
 	 * @param string $color Color of the tag
 	 *
 	 * @return DataResponse<Http::STATUS_OK, array{tag: CollectivesTag}, array{}>
+	 * @throws OCSBadRequestException Color invalid
 	 * @throws OCSNotFoundException Collective or tag not found
 	 * @throws OCSForbiddenException Not permitted
 	 *
