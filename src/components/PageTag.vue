@@ -74,7 +74,7 @@ export default {
 
 		style() {
 			return this.tag.color
-				? `--page-tag-color: #${this.tag.color}`
+				? { '--page-tag-color': `#${this.tag.color}` }
 				: null
 		},
 	},

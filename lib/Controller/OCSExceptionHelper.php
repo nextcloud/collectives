@@ -13,6 +13,8 @@ use Closure;
 
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use Psr\Log\LoggerInterface;
@@ -21,6 +23,7 @@ trait OCSExceptionHelper {
 	/**
 	 * @throws OCSForbiddenException
 	 * @throws OCSNotFoundException
+	 * @throws OCSBadRequestException
 	 */
 	protected function handleErrorResponse(Closure $callback, ?LoggerInterface $logger): mixed {
 		try {
@@ -31,6 +34,9 @@ trait OCSExceptionHelper {
 		} catch (NotFoundException $e) {
 			$logger?->debug('Collectives app NotFound Error: ' . $e->getMessage(), ['exception' => $e]);
 			throw new OCSNotFoundException($e->getMessage());
+		} catch (UnprocessableEntityException $e) {
+			$logger?->debug('Collectives app Unprocessable Entity: ' . $e->getMessage(), ['exception' => $e]);
+			throw new OCSBadRequestException($e->getMessage());
 		}
 	}
 }

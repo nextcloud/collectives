@@ -44,6 +44,15 @@ class TagService {
 	}
 
 	/**
+	 * @throws UnprocessableEntityException
+	 */
+	private function validateColor(string $color): void {
+		if ($color !== '' && !preg_match('/^[0-9a-fA-F]{6}$/', $color)) {
+			throw new UnprocessableEntityException('Collective color is not valid: ' . $color);
+		}
+	}
+
+	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -56,9 +65,11 @@ class TagService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws TagExistsException
+	 * @throws UnprocessableEntityException
 	 */
 	public function create(int $collectiveId, string $userId, string $name, string $color): Tag {
 		$this->checkEditPermissions($collectiveId, $userId);
+		$this->validateColor($color);
 		if ($this->tagMapper->findByName($collectiveId, $name) !== null) {
 			throw new TagExistsException('Tag already exists for collective: ' . $name);
 		}
@@ -73,9 +84,11 @@ class TagService {
 	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws UnprocessableEntityException
 	 */
 	public function update(int $collectiveId, string $userId, int $id, string $name, string $color): Tag {
 		$this->checkEditPermissions($collectiveId, $userId);
+		$this->validateColor($color);
 		$tag = $this->tagMapper->find($collectiveId, $id);
 		$tag->setName($name);
 		$tag->setColor($color);

@@ -16,6 +16,12 @@ Feature: tags
     And user "jane" updates tag "test1" with color "FF0000" for collective "BehatTagsCollective"
     Then user "alice" sees tag "test1" with color "FF0000" for collective "BehatTagsCollective"
 
+  Scenario: Reject invalid tag colors
+    Then user "jane" fails to create tag "colortest" with invalid color "FFFFF" for collective "BehatTagsCollective"
+    Then user "jane" fails to create tag "colortest" with invalid color "FFFFFFF" for collective "BehatTagsCollective"
+    Then user "jane" fails to create tag "colortest" with invalid color "GGGGGG" for collective "BehatTagsCollective"
+    Then user "jane" fails to update tag "test2" with invalid color "FFFFF" for collective "BehatTagsCollective"
+
   Scenario: Tag and untag a page
     Then user "jane" adds tag "test1" to page "firstpage" in collective "BehatTagsCollective"
     Then user "jane" adds tag "test2" to page "firstpage" in collective "BehatTagsCollective"
