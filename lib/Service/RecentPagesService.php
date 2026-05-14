@@ -155,7 +155,6 @@ class RecentPagesService {
 			if ($query) {
 				// Extract title based on page type
 				$filename = $row['name'];
-				$path = $row['path'];
 
 				// Determine title
 				$splitPath = explode('/', $row['path'], 4);
@@ -165,8 +164,11 @@ class RecentPagesService {
 					// Regular page - title is filename without extension
 					$title = basename($filename, PageInfo::SUFFIX);
 				} elseif ($internalPath === '' || $internalPath === '.') {
-					// Landing page - title is "Landing page" (localized)
-					$title = $this->getLandingPageTranslation();
+					// Landing page - set title to "Landing page" (localized) + collective name
+					// in order to find searches for "Landing page" as well as searches for collective name
+					$title = $this->getLandingPageTranslation()
+						. ' '
+						. $collectivesMap[$collectiveId]->getName();
 				} else {
 					// Index page - title is folder name
 					$title = basename($internalPath);
@@ -245,9 +247,10 @@ class RecentPagesService {
 				$qb->expr()->like($qb->func()->lower('f.path'), $qb->createNamedParameter($pathSearchPattern)),
 			];
 
-			if (stripos($this->getLandingPageTranslation(), strtolower($query)) !== false) {
-				// Searching for landing page, also match root Readme.md files
-				foreach ($collectives as $collective) {
+			$queryMatchesLandingPageTitle = stripos($this->getLandingPageTranslation(), $query) !== false;
+			// Searching for landing page, also match root Readme.md files
+			foreach ($collectives as $collective) {
+				if ($queryMatchesLandingPageTitle || stripos($collective->getName(), $query) !== false) {
 					$landingPagePath = sprintf($appData . '/collectives/%d/%s', $collective->getId(), PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 					$searchConditions[] = $qb->expr()->eq('f.path', $qb->createNamedParameter($landingPagePath));
 				}

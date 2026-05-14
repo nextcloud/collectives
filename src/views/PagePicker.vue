@@ -140,9 +140,19 @@ export default defineComponent({
 			const recentPages = this.currentPages
 				.slice()
 				.sort(byTimeAsc)
-			return this.query
-				? recentPages.filter((p) => p.title.toLocaleLowerCase().includes(this.query.toLowerCase()))
-				: recentPages
+			if (!this.query) {
+				return recentPages
+			}
+			const lowerQuery = this.query.toLowerCase()
+			const collectiveName = window.OCA.Collectives?.currentCollective?.nameWithEmoji ?? ''
+			const collectiveNameMatches = collectiveName.toLocaleLowerCase().includes(lowerQuery)
+			return recentPages.filter((p) => {
+				if (p.title.toLocaleLowerCase().includes(lowerQuery)) {
+					return true
+				}
+				// Also show landing page when the collective name matches
+				return collectiveNameMatches && p.parentId === 0
+			})
 		},
 
 		pages() {
@@ -236,12 +246,17 @@ export default defineComponent({
 		},
 
 		async getSearchedPages() {
+			const currentQuery = this.query
 			this.searchedPagesLoading = true
 			try {
-				const response = await searchRecentPages(this.query)
-				this.searchedPages = response.data.ocs.data.pages
+				const response = await searchRecentPages(currentQuery)
+				if (this.query === currentQuery) {
+					this.searchedPages = response.data.ocs.data.pages
+				}
 			} finally {
-				this.searchedPagesLoading = false
+				if (this.query === currentQuery) {
+					this.searchedPagesLoading = false
+				}
 			}
 		},
 	},

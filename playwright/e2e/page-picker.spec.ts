@@ -42,6 +42,20 @@ test.describe('Custom page picker - local search', () => {
 		const origin = new URL(page.url()).origin
 		await expect(pageWidget).toHaveAttribute('href', origin + targetPage.getPageUrl())
 	})
+
+	test('searching "landing page" lists landing pages', async ({ editor }) => {
+		await editor.pagePickerSearch.pressSequentially('landing page')
+
+		const landingPageItem = editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Landing page' })
+		await expect(landingPageItem).toBeVisible()
+	})
+
+	test('searching collective title lists landing page', async ({ collective, editor }) => {
+		await editor.pagePickerSearch.pressSequentially(collective.data.name)
+
+		const landingPageItem = editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Landing page' })
+		await expect(landingPageItem).toBeVisible()
+	})
 })
 
 test.describe('Custom page picker - cross-collective search', () => {
@@ -87,5 +101,29 @@ test.describe('Custom page picker - cross-collective search', () => {
 		await expect(pageWidget).toBeVisible()
 		const origin = new URL(page.url()).origin
 		await expect(pageWidget).toHaveAttribute('href', origin + otherTargetPage.getPageUrl())
+	})
+
+	test('searching "Landing page" lists landing page', async ({ page, editor }) => {
+		await editor.pagePicker.locator('.searchbar [aria-haspopup="menu"]').click()
+		await page.getByText('Limit to current collective').click()
+
+		await editor.pagePickerSearch.fill('Landing page')
+		await expect(editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Source page' })).not.toBeVisible()
+
+		const landingPageItem = editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Landing page' })
+		await expect(landingPageItem).toHaveCount(2)
+	})
+
+	test('searching collective title lists landing page', async ({ page, collectives, editor }) => {
+		await editor.pagePicker.locator('.searchbar [aria-haspopup="menu"]').click()
+		await page.getByText('Limit to current collective').click()
+
+		await editor.pagePickerSearch.fill(collectives[1].data.name)
+		await expect(editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Source page' })).not.toBeVisible()
+
+		const landingPageItem = editor.pagePicker.locator('.page-preview-item')
+			.filter({ hasText: 'Landing page' })
+			.filter({ hasText: collectives[1].data.name })
+		await expect(landingPageItem).toBeVisible()
 	})
 })
