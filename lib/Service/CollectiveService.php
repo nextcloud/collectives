@@ -208,6 +208,7 @@ class CollectiveService extends CollectiveServiceBase {
 		$collective->setCircleId($circle->getSingleId());
 		$collective->setPermissions(Collective::defaultPermissions);
 		if ($emoji) {
+			EmojiHelper::assertValid($emoji);
 			$collective->setEmoji($emoji);
 		}
 		$collective = $this->collectiveMapper->insert($collective);
@@ -263,6 +264,7 @@ class CollectiveService extends CollectiveServiceBase {
 		if ($emoji === '') {
 			$collective->setEmoji(null);
 		} elseif ($emoji) {
+			EmojiHelper::assertValid($emoji);
 			$collective->setEmoji($emoji);
 		}
 
