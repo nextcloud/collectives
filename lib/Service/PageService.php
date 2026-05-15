@@ -314,6 +314,7 @@ class PageService {
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
 		if ($emoji !== null) {
+			EmojiHelper::assertValid($emoji);
 			$page->setEmoji($emoji);
 		}
 		if ($fullWidth !== null) {
@@ -1082,6 +1083,7 @@ class PageService {
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws UnprocessableEntityException
 	 */
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
