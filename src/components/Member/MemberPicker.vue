@@ -87,6 +87,11 @@ export default {
 	},
 
 	props: {
+		isLoading: {
+			type: Boolean,
+			default: false,
+		},
+
 		searchWithoutQuery: {
 			type: Boolean,
 			default: false,
@@ -169,7 +174,7 @@ export default {
 		},
 
 		showCurrentSkeleton() {
-			return this.showCurrent && this.currentMembers.length === 0
+			return this.showCurrent && (this.currentMembers.length === 0 || this.isLoading)
 		},
 	},
 

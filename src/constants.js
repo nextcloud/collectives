@@ -45,6 +45,9 @@ export const pageModes = {
 	MODE_EDIT: 1,
 }
 
+// Circle members
+export const CIRCLE_MEMBERS_PARTIAL_LIMIT = 15
+
 export const editorApiReaderFileId = 'READER_FILE_ID'
 export const editorApiUpdateReadonlyBarProps = 'UPDATE_READONLY_BAR_PROPS'
 export const editorApiAttachments = 'ATTACHMENTS'
