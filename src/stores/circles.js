@@ -17,7 +17,9 @@ const STORE_PREFIX = 'collectives/pinia/circles/'
 export const useCirclesStore = defineStore('circles', {
 	state: () => ({
 		circles: useLocalStorage(STORE_PREFIX + 'circles', []),
-		circlesMembers: useLocalStorage(STORE_PREFIX + 'circlesMembers', {}),
+		circlesMembers: {},
+		circlesMembersFullyLoaded: {},
+		circlesMembersPending: {},
 	}),
 
 	getters: {
@@ -58,6 +60,12 @@ export const useCirclesStore = defineStore('circles', {
 				}
 			}
 			return users
+		},
+
+		currentCircleMembersFullyLoaded: (state) => {
+			const collectivesStore = useCollectivesStore()
+			const currentCircleId = collectivesStore.currentCollective?.circleId
+			return state.circlesMembersFullyLoaded[currentCircleId] || false
 		},
 	},
 
@@ -108,10 +116,23 @@ export const useCirclesStore = defineStore('circles', {
 		 * Get members of a team
 		 *
 		 * @param {string} circleId ID of the team
+		 * @param {number} limit Limit of members to fetch, 0 for all members
 		 */
-		async getCircleMembers(circleId) {
-			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true`))
-			this.circlesMembers[circleId] = response.data.ocs.data
+		async getCircleMembers(circleId, limit = 0) {
+			// Skip if already fully loaded or request is pending
+			if (this.circlesMembersFullyLoaded[circleId] || this.circlesMembersPending[circleId]) {
+				return
+			}
+			this.circlesMembersPending[circleId] = true
+			try {
+				const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true&limit=${limit}`))
+				this.circlesMembers[circleId] = response.data.ocs.data
+				if (limit === 0) {
+					this.circlesMembersFullyLoaded[circleId] = true
+				}
+			} finally {
+				this.circlesMembersPending[circleId] = false
+			}
 		},
 
 		/**
@@ -127,6 +148,9 @@ export const useCirclesStore = defineStore('circles', {
 				generateOcsUrl('apps/circles/circles/' + circleId + '/members'),
 				{ userId, type },
 			)
+			if (this.circlesMembers[circleId]) {
+				this.circlesMembers[circleId].push(response.data.ocs.data)
+			}
 			return response.data.ocs.data
 		},
 
@@ -154,6 +178,9 @@ export const useCirclesStore = defineStore('circles', {
 		 */
 		async removeMemberFromCircle({ circleId, memberId }) {
 			const response = await axios.delete(generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId))
+			if (this.circlesMembers[circleId]) {
+				this.circlesMembers[circleId] = this.circlesMembers[circleId].filter((m) => m.id !== memberId)
+			}
 			return response.data.ocs.data
 		},
 
@@ -170,6 +197,12 @@ export const useCirclesStore = defineStore('circles', {
 				generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId + '/level'),
 				{ level },
 			)
+			if (this.circlesMembers[circleId]) {
+				const member = this.circlesMembers[circleId].find((m) => m.id === memberId)
+				if (member) {
+					member.level = level
+				}
+			}
 			return response.data.ocs.data
 		},
 

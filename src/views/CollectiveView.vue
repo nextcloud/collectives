@@ -33,7 +33,7 @@ import CollectiveContainer from '../components/CollectiveContainer.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import PageList from '../components/PageList.vue'
 import { useNetworkState } from '../composables/useNetworkState.ts'
-import { sessionUpdateInterval } from '../constants.js'
+import { CIRCLE_MEMBERS_PARTIAL_LIMIT, pageModes, sessionUpdateInterval } from '../constants.js'
 import { useCirclesStore } from '../stores/circles.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
@@ -221,7 +221,8 @@ export default {
 					promises.push(this.getTemplates(setLoading))
 				}
 				if (!this.isPublic) {
-					promises.push(this.getCircleMembers(this.currentCollective.circleId))
+					const limit = this.currentCollective.pageMode === pageModes.MODE_EDIT ? 0 : CIRCLE_MEMBERS_PARTIAL_LIMIT
+					promises.push(this.getCircleMembers(this.currentCollective.circleId, limit))
 				}
 			}
 
