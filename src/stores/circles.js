@@ -18,6 +18,7 @@ export const useCirclesStore = defineStore('circles', {
 	state: () => ({
 		circles: useLocalStorage(STORE_PREFIX + 'circles', []),
 		circlesMembers: useLocalStorage(STORE_PREFIX + 'circlesMembers', {}),
+		circlesMembersFullyLoaded: {},
 	}),
 
 	getters: {
@@ -58,6 +59,12 @@ export const useCirclesStore = defineStore('circles', {
 				}
 			}
 			return users
+		},
+
+		currentCircleMembersFullyLoaded: (state) => {
+			const collectivesStore = useCollectivesStore()
+			const currentCircleId = collectivesStore.currentCollective?.circleId
+			return state.circlesMembersFullyLoaded[currentCircleId] || false
 		},
 	},
 
@@ -108,10 +115,14 @@ export const useCirclesStore = defineStore('circles', {
 		 * Get members of a team
 		 *
 		 * @param {string} circleId ID of the team
+		 * @param {number} limit Limit of members to fetch, 0 for all members
 		 */
-		async getCircleMembers(circleId) {
-			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true`))
+		async getCircleMembers(circleId, limit = 0) {
+			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true&limit=${limit}`))
 			this.circlesMembers[circleId] = response.data.ocs.data
+			if (limit === 0) {
+				this.circlesMembersFullyLoaded[circleId] = true
+			}
 		},
 
 		/**
