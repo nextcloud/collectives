@@ -658,12 +658,12 @@ class PublicPageController extends CollectivesPublicOCSController {
 			foreach ($results as $value) {
 				if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 					try {
-						$this->checkPageShareAccess($collectiveId, $sharePageId, $value['id'], $owner);
+						$this->checkPageShareAccess($collectiveId, $sharePageId, $value['file_id'], $owner);
 					} catch (NotPermittedException) {
 						continue;
 					}
 				}
-				$pages[] = $this->service->find($collectiveId, $value['id'], $owner);
+				$pages[] = $this->service->find($collectiveId, $value['file_id'], $owner);
 			}
 			return $pages;
 		}, $this->logger);
