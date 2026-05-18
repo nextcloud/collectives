@@ -305,8 +305,27 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		visibleSubpagesForCollective(state) {
+			return (collective, parentId) => {
+				return state.sortedSubpagesForCollective(collective, parentId)
+			}
+		},
+
 		visibleSubpages: (state) => (parentId) => {
 			return state.sortedSubpages(parentId)
+		},
+
+		pagesTreeWalkForCollective(state) {
+			return (collective, parentId = 0) => {
+				const pages = []
+				for (const page of state.visibleSubpagesForCollective(collective, parentId)) {
+					pages.push(page)
+					for (const subpage of state.pagesTreeWalkForCollective(collective, page.id)) {
+						pages.push(subpage)
+					}
+				}
+				return pages
+			}
 		},
 
 		pagesTreeWalk: (state) => (parentId = 0) => {
@@ -352,6 +371,9 @@ export const usePagesStore = defineStore('pages', {
 
 		sortByDefault() {
 			const collectivesStore = useCollectivesStore()
+			if (!collectivesStore.currentCollective) {
+				return 'byOrder'
+			}
 			return sortOrders.pageOrdersByNumber[collectivesStore.currentCollective.userPageOrder]
 		},
 

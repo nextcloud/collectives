@@ -140,7 +140,7 @@ export default {
 			'isCollectiveAdmin',
 		]),
 
-		...mapState(usePagesStore, ['pagesTreeWalk']),
+		...mapState(usePagesStore, ['pagesTreeWalkForCollective']),
 
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
@@ -160,7 +160,7 @@ export default {
 				return null
 			}
 
-			const pageIds = this.pagesTreeWalk().map((p) => p.id)
+			const pageIds = this.pagesTreeWalkForCollective(this.collective).map((p) => p.id)
 			return {
 				title: collectiveExtraAction.title ?? t('collectives', 'Extra action'),
 				click: () => collectiveExtraAction.click(pageIds) ?? function() {},
