@@ -215,9 +215,13 @@ export default defineComponent({
 					+ generateUrl('/apps/collectives')
 					+ collectivePath
 					+ '/' + pagePath
+				const detail = {
+					link: pageLink,
+					title: page.title,
+				}
 				this.$el.dispatchEvent(new CustomEvent('submit', {
 					bubbles: true,
-					detail: pageLink,
+					detail,
 				}))
 			} else {
 				console.error('Cannot generate page link')
