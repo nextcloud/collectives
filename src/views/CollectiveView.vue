@@ -221,7 +221,7 @@ export default {
 					promises.push(this.getTemplates(setLoading))
 				}
 				if (!this.isPublic) {
-					promises.push(this.getCircleMembers(this.currentCollective.circleId))
+					promises.push(this.getCircleMembers(this.currentCollective.circleId, 15))
 				}
 			}
 

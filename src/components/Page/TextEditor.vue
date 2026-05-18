@@ -37,6 +37,7 @@ import SkeletonLoading from '../SkeletonLoading.vue'
 import { useEditor } from '../../composables/useEditor.ts'
 import { useReader } from '../../composables/useReader.ts'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
+import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -121,9 +122,15 @@ export default {
 			this.initEditMode()
 		})
 
-		this.textEditWatcher = this.$watch('isTextEdit', (val) => {
+		this.textEditWatcher = this.$watch('isTextEdit', async (val) => {
 			if (val === false) {
 				this.stopEdit()
+			} else if (val === true) {
+				// Load full circle members for autocomplete when entering edit mode
+				const circlesStore = useCirclesStore()
+				if (!circlesStore.currentCircleMembersFullyLoaded && !this.isPublic && circlesStore.currentCircleMembers?.length > 0) {
+					await this.getCircleMembers(this.currentCollective.circleId)
+				}
 			}
 		})
 		subscribe('collectives:attachment:insert', this.insertAttachment)
@@ -144,6 +151,7 @@ export default {
 		...mapActions(useRootStore, ['load', 'done']),
 		...mapActions(useVersionsStore, ['getVersions']),
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),
+		...mapActions(useCirclesStore, ['getCircleMembers']),
 
 		insertAttachment({ name }) {
 			// inspired by the fixedEncodeURIComponent function suggested in
