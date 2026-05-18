@@ -9,7 +9,7 @@ import type { TextEditorInstance } from '../types.ts'
 import { t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { computed, defineCustomElement, markRaw, nextTick, onBeforeUnmount, ref, watch } from 'vue'
-import { getLinkWithPicker } from '@nextcloud/vue/components/NcRichText'
+import { getReferenceWithPicker } from '@nextcloud/vue/components/NcRichText'
 import PageIcon from '../components/Icon/PageIcon.vue'
 import { useCirclesStore } from '../stores/circles.js'
 import { useCollectivesStore } from '../stores/collectives.js'
@@ -107,7 +107,7 @@ export function useEditor(davContent: Ref<string>) {
 				label: t('collectives', 'Link to page'),
 				icon: 'page-icon',
 				action: () => {
-					return getLinkWithPicker('collectives-ref-pages', false)
+					return getReferenceWithPicker('collectives-ref-pages', false)
 				},
 			},
 			openLinkHandler: window.OCA.Collectives.openLink,

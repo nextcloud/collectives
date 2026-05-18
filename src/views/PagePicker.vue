@@ -225,6 +225,14 @@ export default defineComponent({
 					+ generateUrl('/apps/collectives')
 					+ collectivePath
 					+ '/' + pagePath
+				const pickerReference = {
+					link: pageLink,
+					title: page.title,
+				}
+				this.$el.dispatchEvent(new CustomEvent('submitReference', {
+					bubbles: true,
+					detail: pickerReference,
+				}))
 				this.$el.dispatchEvent(new CustomEvent('submit', {
 					bubbles: true,
 					detail: pageLink,
