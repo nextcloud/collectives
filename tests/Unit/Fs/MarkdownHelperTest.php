@@ -89,7 +89,6 @@ class MarkdownHelperTest extends TestCase {
 		self::assertEquals($images, MarkdownHelper::getImageLinksFromContent($content));
 	}
 
-
 	public function testGetLinkedPageIds(): void {
 		$trustedDomains = ['nextcloud.local'];
 

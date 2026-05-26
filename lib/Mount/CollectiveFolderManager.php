@@ -165,7 +165,6 @@ class CollectiveFolderManager {
 		);
 	}
 
-
 	private function getJailPath(int $folderId): string {
 		return $this->getRootFolder()->getInternalPath() . '/' . $folderId;
 	}

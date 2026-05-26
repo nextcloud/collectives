@@ -11,7 +11,6 @@ namespace OCA\Collectives\Db;
 
 use JsonException;
 use JsonSerializable;
-
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Db\Entity;
 

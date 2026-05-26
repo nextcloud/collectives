@@ -21,7 +21,6 @@ class CirclesAppIsEnableCheck implements ISetupCheck {
 	) {
 	}
 
-
 	public function getCategory(): string {
 		return 'app';
 	}
