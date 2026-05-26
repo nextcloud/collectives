@@ -102,7 +102,6 @@ class GenerateSlugs implements IRepairStep {
 			));
 		$result = $query->executeQuery();
 
-
 		$update = $this->connection->getQueryBuilder();
 		$update->update('collectives_pages')
 			->set('slug', $update->createParameter('slug'))

@@ -68,7 +68,6 @@ class ACLStorageWrapperTest extends TestCase {
 
 		$this->assertFalse($storage->rename('file1', 'foo/file1'));
 
-
 		$storage = new ACLStorageWrapper([
 			'storage' => $this->source,
 			'permissions' => Constants::PERMISSION_ALL,
