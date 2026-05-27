@@ -56,6 +56,17 @@
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
 		<NcActionButton
+			v-if="!isPublic"
+			closeAfterClick
+			:disabled="!networkOnline"
+			@click="toggleNotify()">
+			<template #icon>
+				<BellOffOutlineIcon v-if="collective.userNotify" :size="20" />
+				<BellOutlineIcon v-else :size="20" />
+			</template>
+			{{ notifyString }}
+		</NcActionButton>
+		<NcActionButton
 			v-if="!isPublic && collective.canLeave !== false"
 			closeAfterClick
 			:disabled="!networkOnline"
@@ -87,6 +98,8 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionLink from '@nextcloud/vue/components/NcActionLink'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
+import BellOffOutlineIcon from 'vue-material-design-icons/BellOffOutline.vue'
+import BellOutlineIcon from 'vue-material-design-icons/BellOutline.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
@@ -103,6 +116,8 @@ export default {
 
 	components: {
 		AccountMultipleIcon,
+		BellOffOutlineIcon,
+		BellOutlineIcon,
 		CogIcon,
 		DownloadIcon,
 		LogoutIcon,
@@ -150,6 +165,12 @@ export default {
 			return generateUrl(`/apps/collectives${this.collectivePrintPath(this.collective)}`)
 		},
 
+		notifyString() {
+			return this.collective.userNotify
+				? t('collectives', 'No notifications')
+				: t('collectives', 'Notifications')
+		},
+
 		/**
 		 * Other apps can register an extra collective action via
 		 * window.OCA.Collectives.CollectiveExtraAction
@@ -177,6 +198,7 @@ export default {
 			'markCollectiveDeleted',
 			'setMembersCollectiveId',
 			'setSettingsCollectiveId',
+			'setCollectiveUserSettingNotify',
 			'setTemplatesCollectiveId',
 			'unmarkCollectiveDeleted',
 		]),
@@ -197,6 +219,13 @@ export default {
 
 		openCollectiveSettings() {
 			this.setSettingsCollectiveId(this.collective.id)
+		},
+
+		toggleNotify() {
+			this.setCollectiveUserSettingNotify({
+				id: this.collective.id,
+				notify: !this.collective.userNotify,
+			})
 		},
 
 		leaveCollectiveWithUndo(collective) {

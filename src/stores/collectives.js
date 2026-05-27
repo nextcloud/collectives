@@ -397,5 +397,10 @@ export const useCollectivesStore = defineStore('collectives', {
 			this.patchCollectiveWithProperty({ id, property: 'userFavoritePages', value: favoritePages })
 			await api.setCollectiveUserSettingFavoritePages(id, favoritePages)
 		},
+
+		async setCollectiveUserSettingNotify({ id, notify }) {
+			this.patchCollectiveWithProperty({ id, property: 'userNotify', value: notify })
+			await api.setCollectiveUserSettingNotify(id, notify)
+		},
 	},
 })
