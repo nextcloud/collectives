@@ -48,6 +48,7 @@ Feature: pages
 
   Scenario: Change page emoji
     When user "jane" sets emoji for page "firstpage" to "🍏" in "BehatPagesCollective"
+    And user "jane" fails to set emoji for page "firstpage" to invalid "invalid" in "BehatPagesCollective"
     And user "jane" sets emoji for page "firstpage" to "" in "BehatPagesCollective"
 
   Scenario: Change page full width
