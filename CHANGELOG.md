@@ -1,5 +1,27 @@
 # Changelog
 
+## 4.4.1 - 2026.05.27
+
+Collectives now has its own little homepage: https://collectives.cloud/
+
+### 🐛Fixes
+* 🔎 Page picker: find landing page by searching for collective name. (#2024)
+* 🔎 Fix full-text search in public shares. (#2492)
+* 💄 Improve error handling with weak share password and password policy. (#2418)
+* 🏷️ Validate tag colors. (#2311)
+* 😀 Validate collective and page emojis.
+* 🔗 Register global Collectives link handler. (#2378)
+* 🐛 Fix collective actions from start page with extra action.
+* 🐛 Check share authentication in reference provider.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.4.0 - 2026.05.06
 
 A new page picker simplifies linking to other pages. Further improvements to the
