@@ -61,7 +61,7 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable29', 'master']
+        server-versions: ['stable29', 'stable31']
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
@@ -175,12 +175,12 @@ jobs:
         containers: [1, 2, 3, 4]
         php-versions: ['8.1', '8.3']
         databases: ['sqlite']
-        server-versions: ['stable29', 'master']
+        server-versions: ['stable29', 'stable31']
         exclude:
           - php-versions: '8.3'
             server-versions: 'stable29'
           - php-versions: '8.1'
-            server-versions: 'master'
+            server-versions: 'stable31'
 
     name: runner ${{ matrix.containers }} (${{ matrix.server-versions }})
 
