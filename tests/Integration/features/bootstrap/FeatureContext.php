@@ -615,17 +615,22 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user sets emoji for page :page to :emoji in :collective
 	 * @When user :user :fails to set emoji for page :page to :emoji in :collective
+	 * @When user :user :fails to set emoji for page :page to :invalid :emoji in :collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $collective, ?string $fail = null): void {
+	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $collective, ?string $fail = null, ?string $invalid = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$formData = new TableNode([['emoji', $emoji]]);
 		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/emoji', $formData);
 		if ($fail === 'fails') {
-			$this->assertStatusCode(403);
+			if ($invalid === 'invalid') {
+				$this->assertStatusCode(400);
+			} else {
+				$this->assertStatusCode(403);
+			}
 		} else {
 			$this->assertStatusCode(200);
 			$this->assertPageKeyValue($pageId, 'emoji', $emoji);
