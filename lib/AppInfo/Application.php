@@ -30,6 +30,7 @@ use OCA\Collectives\Listeners\TextMentionListener;
 use OCA\Collectives\Middleware\PublicOCSMiddleware;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
+use OCA\Collectives\Notification\Notifier;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageContentProvider;
@@ -81,6 +82,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 		$context->registerEventListener(RenderReferenceEvent::class, CollectivesReferenceListener::class);
 		$context->registerEventListener(MentionEvent::class, TextMentionListener::class);
+
+		$context->registerNotifierService(Notifier::class);
 
 		$context->registerMiddleware(PublicOCSMiddleware::class);
 
