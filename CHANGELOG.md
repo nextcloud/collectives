@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.18.1 - 2026.05.27
+
+### 🐛Fixes
+* 🐛 Check share authentication in reference provider.
+
+
 ## 2.18.0 - 2025.06.09
 
 ### ✨New
