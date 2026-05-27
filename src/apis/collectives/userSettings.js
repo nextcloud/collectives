@@ -37,7 +37,7 @@ export function setCollectiveUserSettingPageOrder(collectiveId, pageOrder) {
  */
 export function setCollectiveUserSettingShowMembers(collectiveId, showMembers) {
 	return axios.put(
-		collectiveUserSettingsApiUrl(collectiveId, 'showMembers'),
+		collectiveUserSettingsApiUrl(collectiveId, ['showMembers']),
 		{ showMembers },
 	)
 }
@@ -50,7 +50,7 @@ export function setCollectiveUserSettingShowMembers(collectiveId, showMembers) {
  */
 export function setCollectiveUserSettingShowRecentPages(collectiveId, showRecentPages) {
 	return axios.put(
-		collectiveUserSettingsApiUrl(collectiveId, 'showRecentPages'),
+		collectiveUserSettingsApiUrl(collectiveId, ['showRecentPages']),
 		{ showRecentPages },
 	)
 }
@@ -63,7 +63,20 @@ export function setCollectiveUserSettingShowRecentPages(collectiveId, showRecent
  */
 export function setCollectiveUserSettingFavoritePages(collectiveId, favoritePages) {
 	return axios.put(
-		collectiveUserSettingsApiUrl(collectiveId, 'favoritePages'),
+		collectiveUserSettingsApiUrl(collectiveId, ['favoritePages']),
 		{ favoritePages: JSON.stringify(favoritePages) },
+	)
+}
+
+/**
+ * Set whether user gets notified about changes in the collective
+ *
+ * @param {number} collectiveId ID of the collective to be updated
+ * @param {boolean} notify the desired value
+ */
+export function setCollectiveUserSettingNotify(collectiveId, notify) {
+	return axios.put(
+		collectiveUserSettingsApiUrl(collectiveId, ['notify']),
+		{ notify },
 	)
 }

@@ -22,6 +22,7 @@ use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotificationService;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
@@ -100,6 +101,8 @@ class PageServiceTest extends TestCase {
 
 		$pageLinkMapper = $this->createMock(PageLinkMapper::class);
 
+		$notificationService = $this->createMock(NotificationService::class);
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -112,6 +115,7 @@ class PageServiceTest extends TestCase {
 			$slugger,
 			$tagMapper,
 			$pageLinkMapper,
+			$notificationService,
 		);
 	}
 

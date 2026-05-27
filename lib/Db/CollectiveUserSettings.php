@@ -30,6 +30,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 		'show_members',
 		'show_recent_pages',
 		'favorite_pages',
+		'notify',
 	];
 
 	protected ?int $collectiveId = null;
@@ -104,6 +105,14 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 			throw new NotPermittedException('Invalid favorite pages value.');
 		}
 		$this->setSetting('favorite_pages', $favoritePages);
+	}
+
+	/**
+	 * @throws NotPermittedException
+	 * @throws JsonException
+	 */
+	public function setNotify(bool $notify): void {
+		$this->setSetting('notify', $notify);
 	}
 
 	public function jsonSerialize(): array {

@@ -49,6 +49,7 @@ class CollectiveHelper {
 				$c->setUserShowMembers(($settings ? $settings->getSetting('show_members') : null) ?? Collective::defaultShowMembers);
 				$c->setUserShowRecentPages(($settings ? $settings->getSetting('show_recent_pages') : null) ?? Collective::defaultShowRecentPages);
 				$c->setUserFavoritePages(($settings ? $settings->getSetting('favorite_pages') : null) ?? []);
+				$c->setUserNotify(($settings ? $settings->getSetting('notify') : null) ?? false);
 			}
 		}
 		return $collectives;
