@@ -38,11 +38,25 @@ process.on('SIGINT', stop)
 // Start the Nextcloud docker container
 const ip = await start()
 await waitOnNextcloud(ip)
+
+// Install PHP composer
+await runExec(
+	['sh', '-c', 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'],
+	{ user: 'root', verbose: true },
+)
+
+// Download required apps
 await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/circles.git', 'apps/circles'], { verbose: true })
 await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/files_pdfviewer.git', 'apps/files_pdfviewer'], { verbose: true })
+await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/notifications.git', 'apps/notifications'], { verbose: true })
 await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/password_policy.git', 'apps/password_policy'], { verbose: true })
 await runExec(['git', 'clone', '--depth=1', `--branch=${textBranch}`, 'https://github.com/nextcloud/text.git', 'apps/text'], { verbose: true })
-await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'text', 'viewer'])
+
+// Install PHP dependencies for apps where required
+await runExec(['sh', '-c', 'cd apps/notifications && composer install --no-dev --no-scripts --no-cache --no-interaction'], { verbose: true })
+
+// Configure Nextcloud
+await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'notifications', 'text', 'viewer'])
 
 // Idle to wait for shutdown
 while (true) {
