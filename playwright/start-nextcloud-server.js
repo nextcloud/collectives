@@ -55,7 +55,7 @@ if (await isServerRunning()) {
 	await waitOnNextcloud(ip)
 	await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/password_policy.git', 'apps/password_policy'], { verbose: true })
 	await runExec(['git', 'clone', '--depth=1', `--branch=${textBranch}`, 'https://github.com/nextcloud/text.git', 'apps/text'], { verbose: true })
-	await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'text', 'viewer'])
+	await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'notifications', 'text', 'viewer'])
 }
 
 // Idle to wait for shutdown
