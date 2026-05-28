@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.6.2 - 2026.05.28
+
+### 🐛Fixes
+* 🐛 Check share authentication in reference provider.
+* 😀 Validate collective and page emojis.
+
+
 ## 3.6.1 - 2026.02.12
 
 ### 🐛Fixes
