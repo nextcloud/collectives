@@ -10,6 +10,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "Настана грешка при обидот за пребарување",
     "Loading…" : "Се вчитува…",
     "Add groups" : "Додади групи",
+    "Remove {name}" : "Избриши {name}",
     "Add emoji" : "Додади емотикон",
     "Permissions" : "Дозволи",
     "Edit" : "Уреди",
