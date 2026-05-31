@@ -6,7 +6,7 @@ OC.L10N.register(
     "Teams app is enabled" : "Komandu lietotne ir iespējota",
     "Share link" : "Koplietot saiti",
     "Settings" : "Iestatījumi",
-    "Members" : "Biedri",
+    "Members" : "Dalībnieki",
     "moderator" : "satura pārraudzītājs",
     "Promote to moderator" : "Paaugstināt par satura pārraudzītāju",
     "Remove" : "Noņemt",
