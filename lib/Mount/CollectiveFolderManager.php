@@ -15,6 +15,7 @@ use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper;
+use OCA\Collectives\Model\CollectiveFileInfo;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
@@ -247,6 +248,57 @@ class CollectiveFolderManager {
 			$result[$row['folder_id']] = $row;
 		}
 		/** @psalm-suppress LessSpecificReturnStatement */
+		return $result;
+	}
+
+	/**
+	 * Load all filecache entries (files and folders) of a collective folder in a single query.
+	 *
+	 * @return CollectiveFileInfo[] Indexed by file id, with paths relative to the collective root folder
+	 *
+	 * @throws NotFoundException
+	 * @throws \OCP\DB\Exception
+	 */
+	public function getFileCacheForCollective(int $collectiveId, ?string $subdirectory = null): array {
+		$jailPath = $this->getJailPath($collectiveId);
+		$storageId = $this->getRootFolderStorageId();
+
+		$qb = $this->connection->getQueryBuilder();
+
+		// Trailing slash matters: it restricts to descendants and
+		// avoids matching siblings (e.g. `16` must not match `160`).
+		$likePath = $jailPath . '/' . ($subdirectory ? $subdirectory . '/' : '');
+		$likePath = $this->connection->escapeLikeParameter($likePath) . '%';
+
+		$qb->select('fileid', 'storage', 'path', 'parent', 'name', 'mimetype', 'mimepart',
+			'size', 'mtime', 'storage_mtime', 'encrypted', 'etag', 'permissions')
+			->from('filecache')
+			->where($qb->expr()->eq('storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->like('path', $qb->createNamedParameter($likePath)));
+
+		$prefixLength = strlen($jailPath . '/');
+		$result = [];
+		$cursor = $qb->executeQuery();
+		while ($row = $cursor->fetch()) {
+			$relativePath = substr($row['path'], $prefixLength);
+			$result[(int)$row['fileid']] = new CollectiveFileInfo(
+				fileId: (int)$row['fileid'],
+				storage: (int)$row['storage'],
+				path: $relativePath,
+				parent: (int)$row['parent'],
+				name: (string)$row['name'],
+				mimetype: (int)$row['mimetype'],
+				mimepart: (int)$row['mimepart'],
+				size: (int)$row['size'],
+				mtime: (int)$row['mtime'],
+				storageMtime: (int)$row['storage_mtime'],
+				encrypted: (int)$row['encrypted'],
+				etag: (string)$row['etag'],
+				permissions: (int)$row['permissions'],
+			);
+		}
+		$cursor->closeCursor();
+
 		return $result;
 	}
 

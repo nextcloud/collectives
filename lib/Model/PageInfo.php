@@ -230,6 +230,70 @@ class PageInfo implements JsonSerializable {
 	}
 
 	/**
+	 * Build the page info from a lightweight filecache entry (see PageService::getPagesFromFolder).
+	 */
+	public function fromFileInfo(
+		CollectiveFileInfo $fileInfo,
+		int $parentId,
+		?string $collectivePath = null,
+		?string $lastUserId = null,
+		?string $lastUserDisplayName = null,
+		?string $emoji = null,
+		?string $subpageOrder = null,
+		?bool $fullWidth = false,
+		?string $slug = null,
+		?string $tags = null,
+		?array $linkedPageIds = null,
+	): void {
+		$this->setId($fileInfo->fileId);
+		$dirName = dirname($fileInfo->path);
+		$dirName = $dirName === '.' ? '' : $dirName;
+		if ($fileInfo->isIndexPage()) {
+			if ($parentId === 0) {
+				// Landing page
+				$this->setTitle(Server::get(IFactory::class)->get('collectives')->t('Landing page'));
+			} else {
+				// Index page
+				$this->setTitle(basename($dirName));
+			}
+		} else {
+			$this->setTitle(basename($fileInfo->name, self::SUFFIX));
+		}
+		$this->setFilePath($dirName);
+		$this->setTimestamp($fileInfo->mtime);
+		$this->setSize($fileInfo->size);
+		$this->setFileName($fileInfo->name);
+		if ($collectivePath !== null) {
+			$this->setCollectivePath($collectivePath);
+		}
+		if ($lastUserId !== null) {
+			$this->setLastUserId($lastUserId);
+		}
+		if ($lastUserDisplayName !== null) {
+			$this->setLastUserDisplayName($lastUserDisplayName);
+		}
+		if ($emoji !== null) {
+			$this->setEmoji($emoji);
+		}
+		if ($fullWidth !== null) {
+			$this->setFullWidth($fullWidth);
+		}
+		if ($subpageOrder !== null) {
+			$this->setSubpageOrder($subpageOrder);
+		}
+		if ($slug !== null) {
+			$this->setSlug($slug);
+		}
+		if ($tags !== null) {
+			$this->setTags($tags);
+		}
+		if ($linkedPageIds !== null) {
+			$this->setLinkedPageIds($linkedPageIds);
+		}
+		$this->setParentId($parentId);
+	}
+
+	/**
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
