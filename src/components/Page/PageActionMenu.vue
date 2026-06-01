@@ -8,137 +8,142 @@
 		<NcActions forceMenu @click.stop>
 			<!-- Collective actions: only displayed for landing page -->
 			<template v-if="isLandingPage">
-				<NcActionCollectiveActions :collective="currentCollective" :networkOnline />
-				<NcActionSeparator />
+				<NcActionCollectiveActions
+					v-model:submenu="collectiveSubmenu"
+					:collective="currentCollective"
+					:networkOnline />
+				<NcActionSeparator v-if="!collectiveSubmenu" />
 			</template>
 
-			<!-- Last edited info -->
-			<NcActionLastUser
-				v-if="displayLastEditedInfo"
-				:lastUserId
-				:lastUserDisplayName
-				:timestamp />
-			<NcActionSeparator v-if="displayLastEditedInfo" />
+			<template v-if="!collectiveSubmenu">
+				<!-- Last edited info -->
+				<NcActionLastUser
+					v-if="displayLastEditedInfo"
+					:lastUserId
+					:lastUserDisplayName
+					:timestamp />
+				<NcActionSeparator v-if="displayLastEditedInfo" />
 
-			<!-- Sidebar toggle: only displayed on mobile and in page title menu -->
-			<template v-if="displaySidebarAction">
+				<!-- Sidebar toggle: only displayed on mobile and in page title menu -->
+				<template v-if="displaySidebarAction">
+					<NcActionButton
+						:aria-label="t('collectives', 'Open page sidebar')"
+						aria-controls="app-sidebar-vue"
+						closeAfterClick
+						@click="toggleSidebar()">
+						<template #icon>
+							<DockRightIcon :size="20" />
+						</template>
+						{{ t('collectives', 'Open page sidebar') }}
+					</NcActionButton>
+					<NcActionSeparator />
+				</template>
+
+				<!-- Page view options: only displayed in page title menu -->
+				<template v-if="!inPageList">
+					<NcActionCheckbox
+						v-if="!isMobile"
+						v-model="currentPage.isFullWidth"
+						:disabled="!networkOnline || !currentCollectiveCanEdit"
+						@check="onCheckFullWidthView"
+						@uncheck="onUncheckFullWidthView">
+						{{ t('collectives', 'Full width') }}
+					</NcActionCheckbox>
+					<NcActionButton
+						closeAfterClick
+						@click="toggleOutline(currentPageId)">
+						<template #icon>
+							<FormatListBulletedIcon :size="20" />
+						</template>
+						{{ toggleOutlineString }}
+					</NcActionButton>
+					<NcActionSeparator v-if="!inPageList" />
+				</template>
+
+				<!-- Favor page action: not displayed for landing page -->
 				<NcActionButton
-					:aria-label="t('collectives', 'Open page sidebar')"
-					aria-controls="app-sidebar-vue"
+					v-if="!isLandingPage"
 					closeAfterClick
-					@click="toggleSidebar()">
+					:disabled="!networkOnline"
+					@click="toggleFavoritePage({ id: currentCollective.id, pageId })">
 					<template #icon>
-						<DockRightIcon :size="20" />
+						<StarOffIcon v-if="isFavoritePage(currentCollective.id, pageId)" :size="20" />
+						<StarIcon v-else :size="20" />
 					</template>
-					{{ t('collectives', 'Open page sidebar') }}
+					{{ toggleFavoriteString }}
 				</NcActionButton>
-				<NcActionSeparator />
-			</template>
 
-			<!-- Page view options: only displayed in page title menu -->
-			<template v-if="!inPageList">
-				<NcActionCheckbox
-					v-if="!isMobile"
-					v-model="currentPage.isFullWidth"
-					:disabled="!networkOnline || !currentCollectiveCanEdit"
-					@check="onCheckFullWidthView"
-					@uncheck="onUncheckFullWidthView">
-					{{ t('collectives', 'Full width') }}
-				</NcActionCheckbox>
+				<!-- Share page action: not displayed for landing page (already in collectives actions there) -->
 				<NcActionButton
+					v-if="currentCollectiveCanShare && !isLandingPage"
 					closeAfterClick
-					@click="toggleOutline(currentPageId)">
+					@click="openShareTab">
 					<template #icon>
-						<FormatListBulletedIcon :size="20" />
+						<ShareVariantIcon :size="20" />
 					</template>
-					{{ toggleOutlineString }}
+					{{ t('collectives', 'Share link') }}
 				</NcActionButton>
-				<NcActionSeparator v-if="!inPageList" />
+
+				<!-- Edit page emoji: not displayed for landing page -->
+				<NcActionButton
+					v-if="currentCollectiveCanEdit && !isLandingPage"
+					closeAfterClick
+					:disabled="!networkOnline"
+					@click="gotoPageEmojiPicker">
+					<template #icon>
+						<EmoticonIcon :size="20" />
+					</template>
+					{{ setEmojiString }}
+				</NcActionButton>
+
+				<!-- Open tags modal: always displayed if has edit permissions -->
+				<NcActionButton
+					v-if="currentCollectiveCanEdit"
+					closeAfterClick
+					:disabled="!networkOnline"
+					@click="onOpenTagsModal">
+					<template #icon>
+						<TagMultipleIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Manage tags') }}
+				</NcActionButton>
+
+				<!-- Move/copy page via modal: always displayed if has edit permissions -->
+				<NcActionButton
+					v-if="currentCollectiveCanEdit && !isLandingPage"
+					closeAfterClick
+					:disabled="!networkOnline"
+					@click="onOpenMoveOrCopyModal">
+					<template #icon>
+						<OpenInNewIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Move or copy') }}
+				</NcActionButton>
+
+				<!-- Download action: always displayed -->
+				<NcActionLink
+					:href="pageDavUrl(pageById(pageId))"
+					:class="{ 'action-link--disabled': !networkOnline }"
+					:download="pageById(pageId).fileName"
+					closeAfterClick>
+					<template #icon>
+						<DownloadIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Download') }}
+				</NcActionLink>
+
+				<!-- Delete page -->
+				<NcActionButton
+					v-if="displayDeleteAction"
+					closeAfterClick
+					:disabled="!networkOnline"
+					@click="deletePage(pageId)">
+					<template #icon>
+						<DeleteIcon :size="20" />
+					</template>
+					{{ deletePageString }}
+				</NcActionButton>
 			</template>
-
-			<!-- Favor page action: not displayed for landing page -->
-			<NcActionButton
-				v-if="!isLandingPage"
-				closeAfterClick
-				:disabled="!networkOnline"
-				@click="toggleFavoritePage({ id: currentCollective.id, pageId })">
-				<template #icon>
-					<StarOffIcon v-if="isFavoritePage(currentCollective.id, pageId)" :size="20" />
-					<StarIcon v-else :size="20" />
-				</template>
-				{{ toggleFavoriteString }}
-			</NcActionButton>
-
-			<!-- Share page action: not displayed for landing page (already in collectives actions there) -->
-			<NcActionButton
-				v-if="currentCollectiveCanShare && !isLandingPage"
-				closeAfterClick
-				@click="openShareTab">
-				<template #icon>
-					<ShareVariantIcon :size="20" />
-				</template>
-				{{ t('collectives', 'Share link') }}
-			</NcActionButton>
-
-			<!-- Edit page emoji: not displayed for landing page -->
-			<NcActionButton
-				v-if="currentCollectiveCanEdit && !isLandingPage"
-				closeAfterClick
-				:disabled="!networkOnline"
-				@click="gotoPageEmojiPicker">
-				<template #icon>
-					<EmoticonIcon :size="20" />
-				</template>
-				{{ setEmojiString }}
-			</NcActionButton>
-
-			<!-- Open tags modal: always displayed if has edit permissions -->
-			<NcActionButton
-				v-if="currentCollectiveCanEdit"
-				closeAfterClick
-				:disabled="!networkOnline"
-				@click="onOpenTagsModal">
-				<template #icon>
-					<TagMultipleIcon :size="20" />
-				</template>
-				{{ t('collectives', 'Manage tags') }}
-			</NcActionButton>
-
-			<!-- Move/copy page via modal: always displayed if has edit permissions -->
-			<NcActionButton
-				v-if="currentCollectiveCanEdit && !isLandingPage"
-				closeAfterClick
-				:disabled="!networkOnline"
-				@click="onOpenMoveOrCopyModal">
-				<template #icon>
-					<OpenInNewIcon :size="20" />
-				</template>
-				{{ t('collectives', 'Move or copy') }}
-			</NcActionButton>
-
-			<!-- Download action: always displayed -->
-			<NcActionLink
-				:href="pageDavUrl(pageById(pageId))"
-				:class="{ 'action-link--disabled': !networkOnline }"
-				:download="pageById(pageId).fileName"
-				closeAfterClick>
-				<template #icon>
-					<DownloadIcon :size="20" />
-				</template>
-				{{ t('collectives', 'Download') }}
-			</NcActionLink>
-
-			<!-- Delete page -->
-			<NcActionButton
-				v-if="displayDeleteAction"
-				closeAfterClick
-				:disabled="!networkOnline"
-				@click="deletePage(pageId)">
-				<template #icon>
-					<DeleteIcon :size="20" />
-				</template>
-				{{ deletePageString }}
-			</NcActionButton>
 		</NcActions>
 		<MoveOrCopyModal
 			v-if="showMoveOrCopyModal"
@@ -266,6 +271,7 @@ export default {
 		return {
 			showMoveOrCopyModal: false,
 			showTagsModal: false,
+			collectiveSubmenu: null,
 		}
 	},
 

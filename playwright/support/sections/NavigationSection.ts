@@ -45,7 +45,9 @@ export class NavigationSection {
 			.hover()
 		await collectiveItem.getByRole('button', { name: 'Actions' })
 			.click()
-		await this.page.getByRole('button', { name: action, exact: true })
+		// The extra `.action-item__popover` locator is needed to not conflict with other button with same name in DOM
+		await this.page.locator('.action-item__popper:visible')
+			.getByRole('button', { name: action, exact: true })
 			.click()
 	}
 
