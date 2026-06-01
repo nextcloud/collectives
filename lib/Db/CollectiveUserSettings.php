@@ -33,6 +33,11 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 		'notify',
 	];
 
+	public const NOTIFY_OFF = 0;
+	public const NOTIFY_MENTION = 1;
+	public const NOTIFY_ALL = 2;
+	private const NOTIFY_LEVELS = [self::NOTIFY_OFF, self::NOTIFY_MENTION, self::NOTIFY_ALL];
+
 	protected ?int $collectiveId = null;
 	protected ?string $userId = null;
 	protected int $pageOrder = Collective::defaultPageOrder;
@@ -111,7 +116,10 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 * @throws NotPermittedException
 	 * @throws JsonException
 	 */
-	public function setNotify(bool $notify): void {
+	public function setNotify(int $notify): void {
+		if (!in_array($notify, self::NOTIFY_LEVELS, true)) {
+			throw new NotPermittedException('Invalid notify value: ' . $notify);
+		}
 		$this->setSetting('notify', $notify);
 	}
 
