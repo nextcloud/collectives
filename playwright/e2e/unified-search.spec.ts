@@ -22,7 +22,11 @@ test.describe('Unified search', () => {
 		page1 = await collective.createPage({ title: 'Page 1', user, page })
 		page2 = await collective.createPage({ title: 'Page 2', user, page })
 		await collective.openCollective()
-		await page.getByRole('button', { name: 'Unified search' }).click()
+		if (['stable32', 'stable33'].includes(process.env.PLAYWRIGHT_NC_SERVER_BRANCH || '')) {
+			await page.getByRole('button', { name: 'Unified search' }).click()
+		} else {
+			await page.getByRole('button', { name: 'Search apps, files, tags, messages' }).click()
+		}
 		unifiedSearchDialog = page.locator('.unified-search-modal')
 		await expect(unifiedSearchDialog).toBeVisible()
 	})
