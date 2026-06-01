@@ -12,6 +12,7 @@ namespace OCA\Collectives\Service;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\CollectiveUserSettings;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Notification\Notifier;
@@ -63,7 +64,7 @@ class NotificationService {
 		$allSettings = $this->settingsMapper->findByCollectiveId($collective->getId());
 		$notifyUserIds = [];
 		foreach ($allSettings as $setting) {
-			if ($setting->getSetting('notify') === true) {
+			if ($setting->getSetting('notify') === CollectiveUserSettings::NOTIFY_ALL) {
 				$notifyUserIds[] = $setting->getUserId();
 			}
 		}

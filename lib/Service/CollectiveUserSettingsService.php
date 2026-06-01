@@ -113,7 +113,7 @@ class CollectiveUserSettingsService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function setNotify(int $collectiveId, string $userId, bool $notify): void {
+	public function setNotify(int $collectiveId, string $userId, int $notify): void {
 		$settings = $this->initSettings($collectiveId, $userId);
 		$settings->setNotify($notify);
 

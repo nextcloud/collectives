@@ -22,6 +22,7 @@
 		</template>
 		<template #actions>
 			<NcActionCollectiveActions
+				v-model:submenu="collectiveSubmenu"
 				:collective
 				:networkOnline />
 		</template>
@@ -61,6 +62,12 @@ export default {
 	setup() {
 		const isMobile = useIsMobile()
 		return { isMobile }
+	},
+
+	data() {
+		return {
+			collectiveSubmenu: null,
+		}
 	},
 
 	computed: {

@@ -53,7 +53,7 @@ await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https:/
 await runExec(['git', 'clone', '--depth=1', `--branch=${textBranch}`, 'https://github.com/nextcloud/text.git', 'apps/text'], { verbose: true })
 
 // Install PHP dependencies for apps where required
-await runExec(['sh', '-c', 'cd apps/notifications && composer install --no-dev --no-scripts --no-cache --no-interaction'], { verbose: true })
+await runExec(['sh', '-c', 'cd apps/notifications && composer install --no-dev --no-cache --no-interaction'], { verbose: true })
 
 // Configure Nextcloud
 await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'notifications', 'text', 'viewer'])
