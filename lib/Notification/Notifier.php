@@ -36,6 +36,17 @@ class Notifier implements INotifier {
 		return $this->factory->get(Application::APP_NAME)->t('Collectives');
 	}
 
+	private function setParsedSubjectFromRichSubject(INotification $notification): void {
+		$placeholders = $replacements = [];
+		foreach ($notification->getRichSubjectParameters() as $key => $value) {
+			$placeholders[] = '{' . $key . '}';
+			$replacements[] = $value['name'] ?? '';
+		}
+		$notification->setParsedSubject(
+			str_replace($placeholders, $replacements, $notification->getParsedSubject())
+		);
+	}
+
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		if ($notification->getApp() !== Application::APP_NAME) {
 			throw new UnknownNotificationException();
@@ -104,6 +115,7 @@ class Notifier implements INotifier {
 				throw new UnknownNotificationException();
 		}
 
+		$this->setParsedSubjectFromRichSubject($notification);
 		return $notification;
 	}
 }

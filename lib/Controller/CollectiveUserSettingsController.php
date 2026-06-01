@@ -136,16 +136,16 @@ class CollectiveUserSettingsController extends OCSController {
 	 * Set whether the user wants notifications about changes in this collective
 	 *
 	 * @param int $collectiveId ID of the collective
-	 * @param bool $subscribe Whether to receive notifications for changes
+	 * @param int $notify Notification level (0=off, 1=mentions only, 2=all changes)
 	 *
 	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
 	 * @throws OCSNotFoundException Collective not found
 	 * @throws OCSForbiddenException Not permitted
 	 *
-	 * 200: notify setting was set
+	 * 200: notify level was set
 	 */
 	#[NoAdminRequired]
-	public function setNotify(int $collectiveId, bool $notify): DataResponse {
+	public function setNotify(int $collectiveId, int $notify): DataResponse {
 		$this->handleErrorResponse(function () use ($collectiveId, $notify): void {
 			$this->service->setNotify(
 				$collectiveId,

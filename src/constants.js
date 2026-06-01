@@ -45,6 +45,12 @@ export const pageModes = {
 	MODE_EDIT: 1,
 }
 
+export const notifyLevels = {
+	NOTIFY_OFF: 0,
+	NOTIFY_MENTION: 1,
+	NOTIFY_ALL: 2,
+}
+
 export const editorApiReaderFileId = 'READER_FILE_ID'
 export const editorApiUpdateReadonlyBarProps = 'UPDATE_READONLY_BAR_PROPS'
 export const editorApiAttachments = 'ATTACHMENTS'

@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div>
+	<div v-if="!submenu">
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
 			closeAfterClick
@@ -57,14 +57,13 @@
 		</NcActionButton>
 		<NcActionButton
 			v-if="!isPublic"
-			closeAfterClick
+			isMenu
 			:disabled="!networkOnline"
-			@click="toggleNotify()">
+			@click="$emit('update:submenu', 'notifications')">
 			<template #icon>
-				<BellOffOutlineIcon v-if="collective.userNotify" :size="20" />
-				<BellOutlineIcon v-else :size="20" />
+				<BellOutlineIcon :size="20" />
 			</template>
-			{{ notifyString }}
+			{{ t('collectives', 'Notifications') }}
 		</NcActionButton>
 		<NcActionButton
 			v-if="!isPublic && collective.canLeave !== false"
@@ -87,6 +86,28 @@
 			</template>
 		</NcActionButton>
 	</div>
+	<div v-else-if="submenu === 'notifications'">
+		<NcActionButton @click="$emit('update:submenu', null)">
+			<template #icon>
+				<ArrowLeftIcon :size="20" />
+			</template>
+			{{ t('collectives', 'Back') }}
+		</NcActionButton>
+		<NcActionSeparator />
+		<NcActionButton
+			v-for="option in notifyOptions"
+			:key="option.value"
+			closeAfterClick
+			type="radio"
+			:modelValue="String(collective.userNotify)"
+			:value="String(option.value)"
+			@click="setNotify(option.value)">
+			<template #icon>
+				<component :is="option.icon" :size="20" />
+			</template>
+			{{ option.label }}
+		</NcActionButton>
+	</div>
 </template>
 
 <script>
@@ -98,14 +119,17 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionLink from '@nextcloud/vue/components/NcActionLink'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
+import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
 import BellOffOutlineIcon from 'vue-material-design-icons/BellOffOutline.vue'
 import BellOutlineIcon from 'vue-material-design-icons/BellOutline.vue'
+import BellRingOutlineIcon from 'vue-material-design-icons/BellRingOutline.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import { notifyLevels } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
@@ -116,8 +140,10 @@ export default {
 
 	components: {
 		AccountMultipleIcon,
+		ArrowLeftIcon,
 		BellOffOutlineIcon,
 		BellOutlineIcon,
+		BellRingOutlineIcon,
 		CogIcon,
 		DownloadIcon,
 		LogoutIcon,
@@ -130,6 +156,11 @@ export default {
 	},
 
 	props: {
+		submenu: {
+			type: String,
+			default: null,
+		},
+
 		collective: {
 			type: Object,
 			required: true,
@@ -140,6 +171,8 @@ export default {
 			required: true,
 		},
 	},
+
+	emits: ['update:submenu'],
 
 	data() {
 		return {
@@ -165,10 +198,12 @@ export default {
 			return generateUrl(`/apps/collectives${this.collectivePrintPath(this.collective)}`)
 		},
 
-		notifyString() {
-			return this.collective.userNotify
-				? t('collectives', 'No notifications')
-				: t('collectives', 'Notifications')
+		notifyOptions() {
+			return [
+				{ value: notifyLevels.NOTIFY_ALL, icon: BellRingOutlineIcon, label: t('collectives', 'All changes') },
+				{ value: notifyLevels.NOTIFY_MENTION, icon: BellOutlineIcon, label: t('collectives', '@-mentions only') },
+				{ value: notifyLevels.NOTIFY_OFF, icon: BellOffOutlineIcon, label: t('collectives', 'Off') },
+			]
 		},
 
 		/**
@@ -221,11 +256,12 @@ export default {
 			this.setSettingsCollectiveId(this.collective.id)
 		},
 
-		toggleNotify() {
+		setNotify(level) {
 			this.setCollectiveUserSettingNotify({
 				id: this.collective.id,
-				notify: !this.collective.userNotify,
+				notify: level,
 			})
+			this.$emit('update:submenu', null)
 		},
 
 		leaveCollectiveWithUndo(collective) {
