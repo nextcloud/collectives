@@ -20,6 +20,7 @@ OC.L10N.register(
     "Download" : "Last ned",
     "Title" : "Tittel",
     "Open sidebar" : "Opne sidestolpe",
+    "Clear search" : "Tøm søk",
     "Favorites" : "Favorittar",
     "Favorite" : "Favoritt",
     "Page not found" : "Fann ikkje sida",
