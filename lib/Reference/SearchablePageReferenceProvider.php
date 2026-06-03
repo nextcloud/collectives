@@ -11,7 +11,6 @@ namespace OCA\Collectives\Reference;
 
 use DateTime;
 use Exception;
-use OC\Collaboration\Reference\LinkReferenceProvider;
 use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Db\Collective;
@@ -26,6 +25,7 @@ use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
 use OCP\Collaboration\Reference\IPublicReferenceProvider;
 use OCP\Collaboration\Reference\IReference;
 use OCP\Collaboration\Reference\ISearchableReferenceProvider;
+use OCP\Collaboration\Reference\LinkReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
@@ -106,6 +106,13 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return $pagePath;
 	}
 
+	private function quoteBaseUrl(string $path): string {
+		$url = $this->urlGenerator->getAbsoluteURL($path);
+		// Drop http/https scheme so we can quote the rest and tolerate http/https mismatches (e.g. reverse proxies without `overwriteprotocol`)
+		$afterScheme = preg_replace('#^https?://#', '', $url);
+		return 'https?:\/\/' . preg_quote($afterScheme, '/');
+	}
+
 	public function matchUrl(string $url): ?array {
 		$urlParts = parse_url($url);
 		if (!$urlParts || !array_key_exists('path', $urlParts) || empty($urlParts['path'])) {
@@ -119,13 +126,13 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre
 		// https://nextcloud.local/index.php/apps/collectives/p/supacollective/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre?fileId=14457
 		$startPublicRegexes = [
-			$this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_NAME . '/p'),
-			$this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_NAME . '/p'),
+			$this->quoteBaseUrl('/apps/' . Application::APP_NAME . '/p'),
+			$this->quoteBaseUrl('/index.php/apps/' . Application::APP_NAME . '/p'),
 		];
 
 		$matches = false;
 		foreach ($startPublicRegexes as $regex) {
-			preg_match('/^' . preg_quote($regex, '/') . '\/\w+' . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
+			preg_match('/^' . $regex . '\/\w+' . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
 			if ($matches && count($matches) > 1) {
 				return self::pagePathFromMatches($urlParts, $matches[1], $matches[2] ?? '');
 			}
@@ -137,12 +144,12 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre
 		$startRegexes = [
-			$this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_NAME),
-			$this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_NAME),
+			$this->quoteBaseUrl('/apps/' . Application::APP_NAME),
+			$this->quoteBaseUrl('/index.php/apps/' . Application::APP_NAME),
 		];
 
 		foreach ($startRegexes as $regex) {
-			preg_match('/^' . preg_quote($regex, '/') . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
+			preg_match('/^' . $regex . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
 			if ($matches && count($matches) > 1) {
 				return self::pagePathFromMatches($urlParts, $matches[1], $matches[2] ?? '');
 			}
