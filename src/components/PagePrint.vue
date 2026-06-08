@@ -105,4 +105,9 @@ export default {
 :deep(.text-menubar) {
 	display: none;
 }
+
+:deep(.editor__toc-container) {
+	// Hide outline + table of contents
+	display: none !important;
+}
 </style>
