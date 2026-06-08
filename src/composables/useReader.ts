@@ -110,6 +110,11 @@ export function useReader(content: Ref<string>) {
 			customElements.define('page-info-bar', PageInfoBarCE)
 		}
 
+		let resolveLoaded: () => void
+		const loadedPromise = new Promise<void>((resolve) => {
+			resolveLoaded = resolve
+		})
+
 		const readerInstance = await window.OCA.Text.createEditor({
 			el: readerEl.value,
 			fileId,
@@ -122,12 +127,14 @@ export function useReader(content: Ref<string>) {
 				component: 'page-info-bar',
 				props: {},
 			},
+			noLazyImages: rootStore.printView,
 			openLinkHandler: window.OCA.Collectives.openLink,
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
 			onLoaded: () => {
 				nextTick(updateReadonlyBarProps)
 				reader.value?.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
 				reader.value?.setShowOutline(showCurrentPageOutline.value)
+				resolveLoaded()
 			},
 			onSearch: (results: unknown) => {
 				searchStore.setSearchResults(results)
@@ -140,6 +147,7 @@ export function useReader(content: Ref<string>) {
 
 		// Use markRaw to prevent Vue 3 from proxying the Vue 2 editor instance
 		reader.value = markRaw(readerInstance)
+		await loadedPromise
 
 		if (!rootStore.loading('pageContent')) {
 			reader.value?.setContent(content.value.trim())
