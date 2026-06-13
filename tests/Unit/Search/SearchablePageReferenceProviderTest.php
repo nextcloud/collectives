@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Unit\Search;
 
-use OC\Collaboration\Reference\LinkReferenceProvider;
 use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Service\CollectiveService;
@@ -17,6 +16,7 @@ use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SharePageService;
 use OCP\Collaboration\Reference\IPublicReferenceProvider;
+use OCP\Collaboration\Reference\LinkReferenceProvider;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -70,10 +70,14 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			// internal
 			['https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
 			['https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457#h-heading1', 'spectre-slug-14457', 'h-heading1'],
+			// scheme mismatch: server reports https, link is http
+			['http://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
 
 			// public
 			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
 			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457#h-heading1', 'spectre-slug-14457', 'h-heading1'],
+			// scheme mismatch: server reports https, link is http
+			['http://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
 		];
 	}
 
@@ -84,6 +88,8 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
 			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
 			['https://nextcloud.local/index.php/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
+			// scheme mismatch: server reports https, link is http
+			['http://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
 
 			// public
 			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective', '', null],
@@ -91,6 +97,8 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
 			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
 			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
+			// scheme mismatch: server reports https, link is http
+			['http://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
 		];
 	}
 
@@ -163,6 +171,41 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	 */
 	public function testMatchUrlNonMatching(string $url): void {
 		self::assertEquals(null, $this->provider->matchUrl($url));
+	}
+
+	public function testMatchUrlServerHttpUserHttps(): void {
+		$urlGenerator = $this->createMock(IURLGenerator::class);
+		$urlGenerator->method('getAbsoluteURL')->willReturnMap([
+			['/apps/collectives/p', 'http://nextcloud.local/apps/collectives/p'],
+			['/index.php/apps/collectives/p', 'http://nextcloud.local/index.php/apps/collectives/p'],
+			['/apps/collectives', 'http://nextcloud.local/apps/collectives'],
+			['/index.php/apps/collectives', 'http://nextcloud.local/index.php/apps/collectives'],
+		]);
+		$provider = new SearchablePageReferenceProvider(
+			$this->collectiveService,
+			$this->createMock(PageService::class),
+			$this->createMock(SharePageService::class),
+			$this->createMock(IL10N::class),
+			$urlGenerator,
+			$this->createMock(IDateTimeFormatter::class),
+			$this->createMock(ReferenceManager::class),
+			$this->createMock(LinkReferenceProvider::class),
+			$this->collectiveShareService,
+			'jane',
+		);
+
+		$expected = [
+			'collectiveName' => 'supacollective',
+			'pagePath' => 'Tutos/Hacking/Spectre',
+			'fragment' => null,
+		];
+
+		// server reports http://, link is https://
+		self::assertEquals($expected, $provider->matchUrl('https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre'));
+		// server reports http://, link is http://
+		self::assertEquals($expected, $provider->matchUrl('http://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre'));
+		// public share: server reports http://, link is https://
+		self::assertEquals($expected, $provider->matchUrl('https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre'));
 	}
 
 	public function testResolveReferencePublicNotAuthenticated(): void {
