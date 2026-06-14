@@ -16,6 +16,7 @@
     "dependencies"
   ],
   "rangeStrategy": "bump",
+  "minimumReleaseAge": "4 days",
   "rebaseWhen": "conflicted",
   "ignoreUnstable": false,
   "baseBranchPatterns": [
@@ -59,6 +60,11 @@
         "vueuse"
       ],
       "allowedVersions": "<12"
-    }
+    },
+	{
+		"description": "Disable minimum release age checks for internal dependencies",
+		"matchPackageNames": ["@nextcloud/*"],
+		"minimumReleaseAge": null
+	}
   ]
 }
