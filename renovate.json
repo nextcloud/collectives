@@ -37,30 +37,6 @@
         "@nextcloud/e2e-test-server"
       ]
     },
-    {
-      "matchPackageNames": [
-        "pinia"
-      ],
-      "allowedVersions": "<3"
-    },
-    {
-      "matchPackageNames": [
-        "vue"
-      ],
-      "allowedVersions": "<3"
-    },
-    {
-      "matchPackageNames": [
-        "vue-router"
-      ],
-      "allowedVersions": "<4"
-    },
-    {
-      "matchPackageNames": [
-        "vueuse"
-      ],
-      "allowedVersions": "<12"
-    },
 	{
 		"description": "Disable minimum release age checks for internal dependencies",
 		"matchPackageNames": ["@nextcloud/*"],
