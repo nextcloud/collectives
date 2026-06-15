@@ -6,6 +6,16 @@
 <template>
 	<div>
 		<NcActions forceMenu @click.stop>
+			<NcActionButton
+				closeAfterClick
+				@click="onHelloWorld">
+				<template #icon>
+					<EmoticonIcon :size="20" />
+				</template>
+				Hello World
+			</NcActionButton>
+			<NcActionSeparator />
+
 			<!-- Collective actions: only displayed for landing page -->
 			<template v-if="isLandingPage">
 				<NcActionCollectiveActions :collective="currentCollective" :networkOnline />
@@ -381,6 +391,10 @@ export default {
 
 		onCloseTagsModal() {
 			this.showTagsModal = false
+		},
+
+		onHelloWorld() {
+			alert('hello world')
 		},
 	},
 }
