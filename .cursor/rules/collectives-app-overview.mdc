@@ -1,0 +1,58 @@
+---
+description: Nextcloud Collectives app architecture and repo layout
+alwaysApply: true
+---
+
+# Collectives app overview
+
+Nextcloud app for collaborative wiki-style knowledge bases backed by **Teams/Circles**.
+
+## Stack
+
+- **Frontend**: Vue 3, Pinia, Vue Router, `@nextcloud/vue` (NcActions, NcActionButton, NcActionLink), Vite
+- **Backend**: PHP, App Framework (OCS controllers + a few web routes), custom filesystem mount
+- **Editor**: Nextcloud **Text** app (`OCA.Text`) for markdown pages
+- **Dependencies**: Circles/Teams, Text, Viewer
+
+## Key directories
+
+| Path | Purpose |
+|------|---------|
+| `src/` | Vue frontend (`main.ts`, stores, components) |
+| `lib/Controller/` | HTTP controllers (OCS + web) |
+| `lib/Service/` | Business logic |
+| `lib/Fs/`, `lib/Mount/` | Filesystem helpers and collective mount |
+| `appinfo/routes.php` | All routes (Vue catch-all must stay last in `routes`) |
+| `js/`, `css/` | Vite build output (committed / served to browser) |
+
+## Page filesystem model
+
+Pages are `.md` files on a per-collective mount:
+
+- **Landing page**: `Readme.md` at collective root (`NodeHelper::isLandingPage`)
+- **Leaf page**: `Title.md` in parent folder
+- **Page with subpages**: folder `Title/` containing `Readme.md` (index page) + children (`NodeHelper::isIndexPage`)
+- **Attachments**: `.attachments.{fileId}/` next to the page file
+- **Templates**: `.templates/` at collective root (hidden, not exported)
+
+Logical parent/child relationships are also tracked in DB (`PageService`, `PageInfo`).
+
+## UI entry points for page actions
+
+- `src/components/Page/PageActionMenu.vue` — three-dot menu (sidebar + title bar)
+- `src/components/PageList/PageListItem.vue` — sidebar row; mounts `PageActionMenu` when `canEdit || isLandingPage`
+- `src/components/Collective/NcActionCollectiveActions.vue` — landing-page collective actions
+
+## Development (nextcloud-docker-dev)
+
+- App path in container: `/var/www/html/apps-extra/collectives`
+- **Node 20+** required for `npm run dev` / `npm run build`
+- Collectives registers a **service worker** — stale JS is common; hard-refresh or disable SW in DevTools when testing frontend changes
+- See `DEVELOPING.md` for full setup
+
+## Conventions
+
+- Minimize scope; match existing patterns in neighboring code
+- OCS APIs live under `/api/v1.0/`; file downloads use regular web routes with `StreamResponse`
+- Use `t('collectives', '...')` for user-visible strings
+- Do not commit unless explicitly asked

@@ -14,7 +14,7 @@
 				<template #icon>
 					<DownloadIcon :size="20" />
 				</template>
-				{{ t('collectives', 'Download collective as ZIP') }}
+				{{ t('collectives', 'Download page as ZIP') }}
 			</NcActionLink>
 			<NcActionSeparator />
 
@@ -336,11 +336,12 @@ export default {
 		},
 
 		collectiveExportUrl() {
-			return generateUrl(`/apps/collectives/${this.currentCollective.id}/export`)
+			return generateUrl(`/apps/collectives/${this.currentCollective.id}/pages/${this.pageId}/export`)
 		},
 
 		collectiveExportFilename() {
-			const name = this.currentCollective.name || 'collective'
+			const page = this.pageById(this.pageId)
+			const name = page?.title || this.currentCollective.name || 'page'
 			return `${name}.zip`
 		},
 	},

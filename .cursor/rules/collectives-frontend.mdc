@@ -1,0 +1,52 @@
+---
+description: Collectives Vue frontend patterns and page action menus
+globs: src/**/*.{vue,js,ts}
+alwaysApply: false
+---
+
+# Collectives frontend
+
+## State
+
+- **Pinia stores** in `src/stores/` — `collectives.js`, `pages.js`, `root.js` are central
+- `usePagesStore`: `pageById`, `pageDavUrl`, page tree, attachments
+- `useCollectivesStore`: `currentCollective`, permissions (`currentCollectiveCanEdit`, etc.)
+
+## Page action menu (`PageActionMenu.vue`)
+
+- Rendered via `NcActions` with `forceMenu` (three-dot menu, not right-click)
+- Props: `pageId`, `parentId`, `inPageList`, `isLandingPage`, `networkOnline`
+- Uses `pageMixin` for shared page actions (delete, move, etc.)
+- **Do not** add right-click/context menus unless explicitly requested
+
+### Adding a menu item
+
+```vue
+<NcActionLink
+  :href="someUrl"
+  :class="{ 'action-link--disabled': !networkOnline }"
+  :download="suggestedFilename"
+  closeAfterClick>
+  <template #icon>
+    <DownloadIcon :size="20" />
+  </template>
+  {{ t('collectives', 'Label') }}
+</NcActionLink>
+```
+
+For API-triggered actions use `NcActionButton` + `@click`.
+
+URLs: `generateUrl('/apps/collectives/...')` from `@nextcloud/router`.
+
+## Build
+
+```bash
+npm run dev    # development build → js/
+npm run watch  # continuous
+```
+
+Requires Node 20+. After changes, hard-refresh; service worker may cache old bundles.
+
+## Sidebar visibility
+
+`.page-list-item-actions` is `visibility: hidden` until row hover/active — the three-dot button is easy to miss when testing.

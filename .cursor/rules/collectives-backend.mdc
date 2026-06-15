@@ -1,0 +1,46 @@
+---
+description: Collectives PHP backend controllers, services, and routes
+globs: lib/**/*.php,appinfo/**
+alwaysApply: false
+---
+
+# Collectives backend
+
+## Controllers
+
+- **OCS** (`extends OCSController`): JSON APIs in `appinfo/routes.php` under `ocs` key; use `OCSExceptionHelper` + `UserTrait`
+- **Web** (`extends Controller`): HTML/template or **binary downloads**; use `#[NoAdminRequired]` `#[NoCSRFRequired]` for GET downloads
+
+Inject `?string $userId` for authenticated user; call `$this->getUid()` from `UserTrait`.
+
+## Services
+
+- `CollectiveService` / `CollectiveServiceBase` — collective access + permissions via Circles
+- `PageService` — pages, folders, CRUD; key methods:
+  - `getCollectiveFolder($collectiveId, $userId)`
+  - `getPageFile($collectiveId, $fileId, $userId)`
+  - `find($collectiveId, $id, $userId)`
+- `NodeHelper` — file content, `isLandingPage`, `isIndexPage`, `isPage`, filename sanitization
+
+## Routes (`appinfo/routes.php`)
+
+- Vue SPA catch-all `start#indexPath` with `url => '/{path}'` **must remain last** among GET routes
+- Register specific web routes (e.g. exports) **before** the catch-all
+- OCS routes use `api/v{apiVersion}` with `apiVersion => (1.0)`
+
+## File download pattern
+
+```php
+return new StreamResponse($path, Http::STATUS_OK, [
+    'Content-Type' => 'application/zip',
+    'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+]);
+```
+
+Use `ITempManager::getTemporaryFile()` (not `getTempFile()`). Clean up temp files via `register_shutdown_function`.
+
+## Permissions
+
+- `CollectiveService::getCollective()` validates user access
+- Edit operations use `PageService::verifyEditPermissions()`
+- Read-only export only needs collective membership (via `getCollective` + `getPageFile`)

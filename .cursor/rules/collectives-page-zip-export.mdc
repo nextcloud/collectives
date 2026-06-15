@@ -1,0 +1,57 @@
+---
+description: Page-scoped ZIP export feature (download page + subpages)
+globs: lib/**/CollectiveExport*,src/components/Page/PageActionMenu.vue,appinfo/routes.php
+alwaysApply: false
+---
+
+# Page ZIP export feature
+
+Downloads the **clicked page and all descendant pages** as a zip file.
+
+## Endpoints
+
+| Layer | Location |
+|-------|----------|
+| Route | `GET /apps/collectives/{collectiveId}/pages/{pageId}/export` |
+| Route name | `collectiveExport#download` in `appinfo/routes.php` |
+| Controller | `lib/Controller/CollectiveExportController.php` |
+| Service | `lib/Service/CollectiveExportService.php` |
+| UI | `PageActionMenu.vue` — first item: "Download page as ZIP" |
+
+Frontend URL:
+
+```js
+generateUrl(`/apps/collectives/${collectiveId}/pages/${pageId}/export`)
+```
+
+## Export scope logic (`CollectiveExportService::createZip`)
+
+Resolve scope from the **page file** on disk:
+
+1. **Landing page** (`NodeHelper::isLandingPage`) → zip entire collective folder (all top-level pages); skips `.templates` and other dotfiles except `.attachments.*`
+2. **Index page** in subfolder (`isIndexPage` && !landing) → zip parent folder recursively, prefix `{folderName}/`
+3. **Leaf page** (single `.md` file) → zip file + `.attachments.{fileId}/` if present + sibling folder `{basename}/` if it exists (subpage tree)
+
+Zip filename: `{sanitisedPageTitle}.zip` (collective name if landing title empty).
+
+## Skipped nodes (`shouldSkipNode`)
+
+- `.templates` (`TemplateService::TEMPLATE_FOLDER`)
+- Hidden dot entries except `.attachments.*`
+
+## Testing
+
+```bash
+# Requires auth; example:
+curl -u admin:admin -o out.zip \
+  "http://localhost/index.php/apps/collectives/1/pages/133/export"
+unzip -l out.zip
+```
+
+Verify leaf page → single file; page with subpages → folder tree.
+
+## Extending
+
+- **Public shares**: would need `PublicCollectiveExportController` + token auth (not implemented)
+- **Async/large exports**: current impl is synchronous in-request; may need background job for huge collectives
+- Do not change scope to full collective unless explicitly requested

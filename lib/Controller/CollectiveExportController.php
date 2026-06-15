@@ -37,13 +37,13 @@ class CollectiveExportController extends Controller {
 	}
 
 	/**
-	 * Download all files of a collective as a zip archive
+	 * Download a page and its subpages as a zip archive
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function download(int $collectiveId): StreamResponse|JSONResponse {
+	public function download(int $collectiveId, int $pageId): StreamResponse|JSONResponse {
 		try {
-			[$zipPath, $filename] = $this->exportService->createZip($collectiveId, $this->getUid());
+			[$zipPath, $filename] = $this->exportService->createZip($collectiveId, $pageId, $this->getUid());
 		} catch (NotFoundException $e) {
 			$this->logger->debug('Collective export not found: ' . $e->getMessage(), ['exception' => $e]);
 			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_NOT_FOUND);
