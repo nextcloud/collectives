@@ -1,0 +1,6 @@
+{{ define "main" }}
+<article>
+	<h1>{{ with .Params.emoji }}{{ . }} {{ end }}{{ .Title }}</h1>
+	{{ .Content }}
+</article>
+{{ end }}

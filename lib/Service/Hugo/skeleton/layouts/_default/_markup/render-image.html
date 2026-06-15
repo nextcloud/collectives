@@ -1,0 +1,9 @@
+{{- /* Resolve relative image references (e.g. collectives attachments) to published page resources. */ -}}
+{{- $src := .Destination -}}
+{{- $u := urls.Parse $src -}}
+{{- if not $u.IsAbs -}}
+	{{- with .Page.Resources.GetMatch $src -}}
+		{{- $src = .RelPermalink -}}
+	{{- end -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ .Text }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" />

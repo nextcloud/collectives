@@ -1,0 +1,14 @@
+{{ define "main" }}
+<article>
+	<h1>{{ with .Params.emoji }}{{ . }} {{ end }}{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}</h1>
+	{{ .Content }}
+	{{ with .Pages }}
+	<nav class="subpages">
+		<h2>Pages</h2>
+		<ul>
+			{{ range . }}<li><a href="{{ .RelPermalink }}">{{ with .Params.emoji }}{{ . }} {{ end }}{{ .Title }}</a></li>{{ end }}
+		</ul>
+	</nav>
+	{{ end }}
+</article>
+{{ end }}

@@ -1,0 +1,7 @@
+{{- /* Rewrite relative internal links ending in .md to the rendered page URL. */ -}}
+{{- $dest := .Destination -}}
+{{- $u := urls.Parse $dest -}}
+{{- if and (not $u.IsAbs) (strings.HasSuffix $dest ".md") -}}
+	{{- $dest = printf "%s/" (strings.TrimSuffix ".md" $dest) -}}
+{{- end -}}
+<a href="{{ $dest }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>

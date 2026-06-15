@@ -1,0 +1,11 @@
+{{- /* Recursive navigation tree. Context: a Page (section or home). */ -}}
+{{- with .Pages -}}
+<ul>
+	{{- range . }}
+	<li>
+		<a href="{{ .RelPermalink }}">{{ with .Params.emoji }}{{ . }} {{ end }}{{ .Title }}</a>
+		{{- if .Pages }}{{ partial "tree.html" . }}{{ end -}}
+	</li>
+	{{- end }}
+</ul>
+{{- end -}}

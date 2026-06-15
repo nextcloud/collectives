@@ -1,12 +1,13 @@
 ---
-description: Page-scoped ZIP export feature (download page + subpages)
-globs: lib/**/CollectiveExport*,src/components/Page/PageActionMenu.vue,appinfo/routes.php
+description: Page-scoped static-site export feature (render page + subpages to HTML via Hugo, download as zip)
+globs: lib/**/CollectiveExport*,lib/Service/HugoService.php,lib/Service/Hugo/**,src/components/Page/PageActionMenu.vue,appinfo/routes.php
 alwaysApply: false
 ---
 
-# Page ZIP export feature
+# Page static-site export feature
 
-Downloads the **clicked page and all descendant pages** as a zip file.
+Renders the **clicked page and all descendant pages** to a static HTML site with **Hugo**, then
+returns the rendered `public/` folder as a zip download.
 
 ## Endpoints
 
@@ -15,43 +16,70 @@ Downloads the **clicked page and all descendant pages** as a zip file.
 | Route | `GET /apps/collectives/{collectiveId}/pages/{pageId}/export` |
 | Route name | `collectiveExport#download` in `appinfo/routes.php` |
 | Controller | `lib/Controller/CollectiveExportController.php` |
-| Service | `lib/Service/CollectiveExportService.php` |
-| UI | `PageActionMenu.vue` — first item: "Download page as ZIP" |
+| Orchestration | `lib/Service/CollectiveExportService.php` (`createStaticSiteZip`) |
+| Hugo runner | `lib/Service/HugoService.php` |
+| Embedded theme | `lib/Service/Hugo/skeleton/` (layouts + render hooks) |
 
-Frontend URL:
+Frontend URL (not yet wired into the UI):
 
 ```js
 generateUrl(`/apps/collectives/${collectiveId}/pages/${pageId}/export`)
 ```
 
-## Export scope logic (`CollectiveExportService::createZip`)
+## Hugo binary (`HugoService`)
 
-Resolve scope from the **page file** on disk:
+- Path resolved from app config `collectives` → `hugo_binary`, else looked up in `$PATH`
+  (and common bin dirs). Throws `MissingDependencyException` if missing.
+- Install in the container, e.g. `apt-get install hugo`, or
+  `occ config:app:set collectives hugo_binary --value=/usr/bin/hugo`.
+- Build runs via `proc_open` (array command, no shell). `HOME`/`TMPDIR`/`cacheDir` are pointed
+  inside the temp site dir so the web user can write Hugo's cache.
 
-1. **Landing page** (`NodeHelper::isLandingPage`) → zip entire collective folder (all top-level pages); skips `.templates` and other dotfiles except `.attachments.*`
-2. **Index page** in subfolder (`isIndexPage` && !landing) → zip parent folder recursively, prefix `{folderName}/`
-3. **Leaf page** (single `.md` file) → zip file + `.attachments.{fileId}/` if present + sibling folder `{basename}/` if it exists (subpage tree)
+## Export scope (`CollectiveExportService::createStaticSiteZip`)
 
-Zip filename: `{sanitisedPageTitle}.zip` (collective name if landing title empty).
+Resolve scope from the **page file** on disk, then populate `content/`:
+
+1. **Landing page** (`isLandingPage`) → whole collective folder as the site root (`writeBranch`)
+2. **Index page** in subfolder (`isIndexPage` && !landing) → that folder as the site root
+3. **Leaf page** (single `.md`) → `_index.md` + attachments + sibling `{basename}/` subpage tree
+
+### Content mapping
+
+- `Readme.md` (index) → `_index.md` (branch bundle); folder title as frontmatter `title`
+- Leaf `Title.md` → page bundle `slug/index.md` (slug = `slugify(title)`, deduped per dir)
+- Subfolder `Title/` → recurse into `slug/`
+- **Attachments**: `.attachments.{fileId}/` is copied next to its page as `attachments.{fileId}/`
+  (Hugo ignores dot-prefixed dirs). Markdown refs are rewritten `.attachments.{id}/` →
+  `attachments.{id}/` in `rewriteAttachmentLinks()`.
+
+### Embedded theme (`Hugo/skeleton`)
+
+- `hugo.toml` is generated per-export (title, `relativeURLs=true`, goldmark `unsafe=true`).
+- Layouts: `baseof.html` (inline CSS + sidebar nav via `partials/tree.html`), `single.html`, `list.html`.
+- Render hooks: `render-image.html` resolves relative images to published page resources
+  (`.Page.Resources.GetMatch`); `render-link.html` turns relative `*.md` links into `*/`.
 
 ## Skipped nodes (`shouldSkipNode`)
 
 - `.templates` (`TemplateService::TEMPLATE_FOLDER`)
-- Hidden dot entries except `.attachments.*`
+- All other dot entries (attachments are copied per-page, not via the directory walk)
 
 ## Testing
 
 ```bash
-# Requires auth; example:
+# Requires auth + hugo installed in the container; example:
 curl -u admin:admin -o out.zip \
   "http://localhost/index.php/apps/collectives/1/pages/133/export"
-unzip -l out.zip
+unzip -l out.zip   # contains index.html + nested page HTML + attachments.{id}/...
 ```
 
-Verify leaf page → single file; page with subpages → folder tree.
+You can smoke-test the embedded theme directly by copying `Hugo/skeleton/layouts`, writing a
+generated `hugo.toml`, populating `content/`, and running `hugo` (use an absolute `cacheDir`).
 
-## Extending
+## Limitations / extending
 
 - **Public shares**: would need `PublicCollectiveExportController` + token auth (not implemented)
-- **Async/large exports**: current impl is synchronous in-request; may need background job for huge collectives
+- **Async/large exports**: synchronous in-request; huge collectives may need a background job
+- Subpage **ordering** (`subpageOrder`) is not applied; Hugo orders by its defaults
+- Non-image attachment links (e.g. PDFs) are not auto-published unless referenced as images
 - Do not change scope to full collective unless explicitly requested

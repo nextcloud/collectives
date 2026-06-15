@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Service\CollectiveExportService;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Controller;
@@ -37,16 +38,19 @@ class CollectiveExportController extends Controller {
 	}
 
 	/**
-	 * Download a page and its subpages as a zip archive
+	 * Render a page and its subpages to a static HTML site (via Hugo) and download it as a zip archive
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function download(int $collectiveId, int $pageId): StreamResponse|JSONResponse {
 		try {
-			[$zipPath, $filename] = $this->exportService->createZip($collectiveId, $pageId, $this->getUid());
+			[$zipPath, $filename] = $this->exportService->createStaticSiteZip($collectiveId, $pageId, $this->getUid());
 		} catch (NotFoundException $e) {
 			$this->logger->debug('Collective export not found: ' . $e->getMessage(), ['exception' => $e]);
 			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_NOT_FOUND);
+		} catch (MissingDependencyException $e) {
+			$this->logger->error('Collective export dependency missing: ' . $e->getMessage(), ['exception' => $e]);
+			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_INTERNAL_SERVER_ERROR);
 		} catch (NotPermittedException $e) {
 			$this->logger->debug('Collective export not permitted: ' . $e->getMessage(), ['exception' => $e]);
 			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_FORBIDDEN);
