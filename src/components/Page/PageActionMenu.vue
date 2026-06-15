@@ -6,14 +6,16 @@
 <template>
 	<div>
 		<NcActions forceMenu @click.stop>
-			<NcActionButton
-				closeAfterClick
-				@click="onHelloWorld">
+			<NcActionLink
+				:href="collectiveExportUrl"
+				:class="{ 'action-link--disabled': !networkOnline }"
+				:download="collectiveExportFilename"
+				closeAfterClick>
 				<template #icon>
-					<EmoticonIcon :size="20" />
+					<DownloadIcon :size="20" />
 				</template>
-				Hello World
-			</NcActionButton>
+				{{ t('collectives', 'Download collective as ZIP') }}
+			</NcActionLink>
 			<NcActionSeparator />
 
 			<!-- Collective actions: only displayed for landing page -->
@@ -165,6 +167,7 @@
 <script>
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -331,6 +334,15 @@ export default {
 				? t('collectives', 'Delete page and subpages')
 				: t('collectives', 'Delete page')
 		},
+
+		collectiveExportUrl() {
+			return generateUrl(`/apps/collectives/${this.currentCollective.id}/export`)
+		},
+
+		collectiveExportFilename() {
+			const name = this.currentCollective.name || 'collective'
+			return `${name}.zip`
+		},
 	},
 
 	methods: {
@@ -391,10 +403,6 @@ export default {
 
 		onCloseTagsModal() {
 			this.showTagsModal = false
-		},
-
-		onHelloWorld() {
-			alert('hello world')
 		},
 	},
 }
