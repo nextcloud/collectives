@@ -38,7 +38,7 @@
     "@nextcloud/paths": "^3.1.0",
     "@nextcloud/router": "^3.1.0",
     "@nextcloud/vue": "^9.8.2",
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.61.0",
     "@vueuse/core": "^14.3.0",
     "debounce": "^3.0.0",
     "escape-html": "^1.0.3",
