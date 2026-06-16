@@ -20,6 +20,9 @@ class FileSearcher {
 	private const SEARCH_LIMIT = 50;
 	private const FUZZY_PREFIX_LENGTH = 3;
 	public const FUZZY_MAX_DISTANCE = 1;
+	private const MATCH_TYPE_EXACT = 3;
+	private const MATCH_TYPE_PREFIX = 2;
+	private const MATCH_TYPE_STEM = 1;
 
 	public function __construct(
 		private readonly SearchWordMapper $wordMapper,
@@ -31,82 +34,43 @@ class FileSearcher {
 	) {
 	}
 
-	private function mergeResults(array $results, array $newResults): array {
-		$existingFileIds = array_column($results, 'file_id');
-		foreach ($newResults as $result) {
-			if (!in_array($result['file_id'], $existingFileIds)) {
-				$results[] = $result;
-			}
-		}
-		return $results;
-	}
-
 	public function search(int $collectiveId, string $query): array {
-		$tokens = $this->tokenizer->tokenize($query);
+		$languages = $this->fileMapper->getLanguagesByCollective($collectiveId) ?: [null];
+
+		$tokens = null;
+		foreach ($languages as $language) {
+			$languageTokens = $this->tokenizer->tokenize($query, $language);
+			$tokens = $tokens === null ? $languageTokens : array_intersect($tokens, $languageTokens);
+		}
+		$tokens = array_values($tokens ?? []);
+
 		if (empty($tokens)) {
 			return [];
 		}
 
-		// step 1: exact match on term
-		$exactWordIds = [];
+		$tokenResults = [];
+		$fileIdSets = [];
+
 		foreach ($tokens as $token) {
-			$exactWord = $this->wordMapper->findByCollectiveAndTerm($collectiveId, $token);
-			if ($exactWord !== null) {
-				$exactWordIds[] = $exactWord->getId();
+			$result = $this->findWordIdsForToken($collectiveId, $token, $languages);
+			if (empty($result['wordIds'])) {
+				continue;
 			}
+			$docs = $this->docMapper->findDocumentsByWords($collectiveId, $result['wordIds'], self::SEARCH_LIMIT);
+			$tokenResults[] = ['matchType' => $result['matchType'], 'docs' => $docs];
+			$fileIdSets[] = array_column($docs, 'file_id');
 		}
 
-		$results = !empty($exactWordIds)
-			? $this->docMapper->findDocumentsByWords($collectiveId, $exactWordIds, self::SEARCH_LIMIT)
-			: [];
-
-		$remainingLimit = self::SEARCH_LIMIT - count($results);
-		if ($remainingLimit <= 0) {
-			return $results;
+		if (empty($fileIdSets)) {
+			return [];
 		}
 
-		// step 2: prefix match on term
-		$prefixWordIds = [];
-		foreach ($tokens as $token) {
-			$prefixWords = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $token, $remainingLimit);
-			foreach ($prefixWords as $word) {
-				if (!in_array($word->getId(), $exactWordIds)) {
-					$prefixWordIds[] = $word->getId();
-				}
-			}
+		$matchingFileIds = array_intersect(...$fileIdSets);
+		if (empty($matchingFileIds)) {
+			return [];
 		}
 
-		$prefixWordIds = array_unique($prefixWordIds);
-		$prefixResults = !empty($prefixWordIds)
-			? $this->docMapper->findDocumentsByWords($collectiveId, $prefixWordIds, $remainingLimit)
-			: [];
-		$results = $this->mergeResults($results, $prefixResults);
-
-		$remainingLimit = self::SEARCH_LIMIT - count($results);
-		if ($remainingLimit <= 0) {
-			return $results;
-		}
-
-		// step 3: stem match with fuzzy fallback
-		$languages = $this->fileMapper->getLanguagesByCollective($collectiveId) ?: [null];
-		$stemWordIds = [];
-		foreach ($tokens as $token) {
-			foreach ($languages as $language) {
-				$stem = $this->stemmer->stem($token, $language);
-				$stemWords = $this->wordMapper->findByCollectiveAndStem($collectiveId, $stem)
-					?: $this->fuzzySearchWord($collectiveId, $token);
-				foreach ($stemWords as $word) {
-					$stemWordIds[] = $word->getId();
-				}
-			}
-		}
-
-		$stemWordIds = array_unique($stemWordIds);
-		$stemResults = !empty($stemWordIds)
-			? $this->docMapper->findDocumentsByWords($collectiveId, $stemWordIds, $remainingLimit)
-			: [];
-
-		return $this->mergeResults($results, $stemResults);
+		return $this->rankResults($tokenResults, $matchingFileIds);
 	}
 
 	public function rankByBigrams(string $query, array $files): array {
@@ -159,5 +123,56 @@ class FileSearcher {
 		}
 
 		return $matches;
+	}
+
+	private function findWordIdsForToken(int $collectiveId, string $token, array $languages): array {
+		// step 1: exact match
+		$exactWord = $this->wordMapper->findByCollectiveAndTerm($collectiveId, $token);
+
+		// step 2: prefix match
+		$prefixWords = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $token, self::SEARCH_LIMIT);
+
+		if ($exactWord !== null || !empty($prefixWords)) {
+			$wordIds = array_unique(array_map(fn ($w) => $w->getId(), $prefixWords));
+			if ($exactWord !== null && !in_array($exactWord->getId(), $wordIds)) {
+				$wordIds[] = $exactWord->getId();
+			}
+			$matchType = $exactWord !== null ? self::MATCH_TYPE_EXACT : self::MATCH_TYPE_PREFIX;
+			return ['wordIds' => $wordIds, 'matchType' => $matchType];
+		}
+
+		// step 3: stem match with fuzzy fallback
+		$wordIds = [];
+		foreach ($languages as $language) {
+			$stem = $this->stemmer->stem($token, $language);
+			$stemWords = $this->wordMapper->findByCollectiveAndStem($collectiveId, $stem)
+				?: $this->fuzzySearchWord($collectiveId, $token);
+			foreach ($stemWords as $word) {
+				$wordIds[] = $word->getId();
+			}
+		}
+		return ['wordIds' => array_unique($wordIds), 'matchType' => self::MATCH_TYPE_STEM];
+	}
+
+	private function rankResults(array $tokenResults, array $matchingFileIds): array {
+		$fileScores = [];
+		$allDocs = [];
+
+		foreach ($tokenResults as $tokenResult) {
+			foreach ($tokenResult['docs'] as $doc) {
+				$fileId = $doc['file_id'];
+				if (!in_array($fileId, $matchingFileIds)) {
+					continue;
+				}
+				$fileScores[$fileId] = ($fileScores[$fileId] ?? 0)
+					+ $tokenResult['matchType']
+					+ log1p((int)$doc['total_hits']);
+				$allDocs[$fileId] ??= $doc;
+			}
+		}
+
+		usort($allDocs, fn ($a, $b) => ($fileScores[$b['file_id']] ?? 0) <=> ($fileScores[$a['file_id']] ?? 0));
+
+		return array_slice($allDocs, 0, self::SEARCH_LIMIT);
 	}
 }

@@ -27,7 +27,7 @@ class SearchWordMapper extends QBMapper {
 		parent::__construct($db, 'collectives_s_words', SearchWord::class);
 	}
 
-	public function upsert(int $collectiveId, string $term, string $stem, int $numHits, int $numFiles): SearchWord {
+	public function upsert(int $collectiveId, string $term, ?string $stem, int $numHits, int $numFiles): SearchWord {
 		$word = $this->findByCollectiveAndTerm($collectiveId, $term);
 
 		if ($word !== null) {

@@ -45,7 +45,6 @@ class SearchDocMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('d.file_id')
 			->selectAlias($qb->func()->sum('d.hit_count'), 'total_hits')
-			->selectAlias($qb->createFunction('MIN(w.term)'), 'matched_term')
 			->from($this->tableName, 'd')
 			->innerJoin('d', 'collectives_s_words', 'w', $qb->expr()->eq('d.word_id', 'w.id'))
 			->where($qb->expr()->eq('d.collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)))
