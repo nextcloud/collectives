@@ -17,9 +17,10 @@ use OCA\Collectives\Search\FileSearch\Tokenizer\ClauseTokenizer;
 use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 
 class FileSearcher {
-	private const SEARCH_LIMIT = 50;
+	private const TOKEN_CANDIDATE_LIMIT = 500;
+	private const SEARCH_RESULT_LIMIT = 50;
 	private const FUZZY_PREFIX_LENGTH = 3;
-	public const FUZZY_MAX_DISTANCE = 1;
+	private const FUZZY_MAX_DISTANCE = 1;
 	private const MATCH_TYPE_EXACT = 3;
 	private const MATCH_TYPE_PREFIX = 2;
 	private const MATCH_TYPE_STEM = 1;
@@ -50,13 +51,15 @@ class FileSearcher {
 
 		$tokenResults = [];
 		$fileIdSets = [];
+		$lastIndex = array_key_last($tokens);
 
-		foreach ($tokens as $token) {
-			$result = $this->findWordIdsForToken($collectiveId, $token, $languages);
+		foreach ($tokens as $index => $token) {
+			$isLastToken = $index === $lastIndex;
+			$result = $this->findWordIdsForToken($collectiveId, $token, $languages, $isLastToken);
 			if (empty($result['wordIds'])) {
 				continue;
 			}
-			$docs = $this->docMapper->findDocumentsByWords($collectiveId, $result['wordIds'], self::SEARCH_LIMIT);
+			$docs = $this->docMapper->findDocumentsByWords($collectiveId, $result['wordIds'], self::TOKEN_CANDIDATE_LIMIT);
 			$tokenResults[] = ['matchType' => $result['matchType'], 'docs' => $docs];
 			$fileIdSets[] = array_column($docs, 'file_id');
 		}
@@ -112,7 +115,7 @@ class FileSearcher {
 		}
 
 		$prefix = mb_substr($term, 0, self::FUZZY_PREFIX_LENGTH);
-		$candidates = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $prefix, self::SEARCH_LIMIT);
+		$candidates = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $prefix, self::TOKEN_CANDIDATE_LIMIT);
 
 		$matches = [];
 		foreach ($candidates as $candidate) {
@@ -125,13 +128,15 @@ class FileSearcher {
 		return $matches;
 	}
 
-	private function findWordIdsForToken(int $collectiveId, string $token, array $languages): array {
+	private function findWordIdsForToken(int $collectiveId, string $token, array $languages, bool $isLastToken = false): array {
 		// step 1: exact match
 		$exactWord = $this->wordMapper->findByCollectiveAndTerm($collectiveId, $token);
+		if ($exactWord !== null && !$isLastToken) {
+			return ['wordIds' => [$exactWord->getId()], 'matchType' => self::MATCH_TYPE_EXACT];
+		}
 
 		// step 2: prefix match
-		$prefixWords = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $token, self::SEARCH_LIMIT);
-
+		$prefixWords = $this->wordMapper->findByCollectiveAndPrefix($collectiveId, $token, self::TOKEN_CANDIDATE_LIMIT);
 		if ($exactWord !== null || !empty($prefixWords)) {
 			$wordIds = array_unique(array_map(fn ($w) => $w->getId(), $prefixWords));
 			if ($exactWord !== null && !in_array($exactWord->getId(), $wordIds)) {
@@ -173,6 +178,6 @@ class FileSearcher {
 
 		usort($allDocs, fn ($a, $b) => ($fileScores[$b['file_id']] ?? 0) <=> ($fileScores[$a['file_id']] ?? 0));
 
-		return array_slice($allDocs, 0, self::SEARCH_LIMIT);
+		return array_slice($allDocs, 0, self::SEARCH_RESULT_LIMIT);
 	}
 }
