@@ -57,15 +57,16 @@ class FileSearcher {
 			$isLastToken = $index === $lastIndex;
 			$result = $this->findWordIdsForToken($collectiveId, $token, $languages, $isLastToken);
 			if (empty($result['wordIds'])) {
-				continue;
+				return [];
 			}
+
 			$docs = $this->docMapper->findDocumentsByWords($collectiveId, $result['wordIds'], self::TOKEN_CANDIDATE_LIMIT);
+			if (empty($docs)) {
+				return [];
+			}
+
 			$tokenResults[] = ['matchType' => $result['matchType'], 'docs' => $docs];
 			$fileIdSets[] = array_column($docs, 'file_id');
-		}
-
-		if (empty($fileIdSets)) {
-			return [];
 		}
 
 		$matchingFileIds = array_intersect(...$fileIdSets);
@@ -171,7 +172,7 @@ class FileSearcher {
 				}
 				$fileScores[$fileId] = ($fileScores[$fileId] ?? 0)
 					+ $tokenResult['matchType']
-					+ log1p((int)$doc['total_hits']);
+					* log1p((int)$doc['total_hits']);
 				$allDocs[$fileId] ??= $doc;
 			}
 		}
