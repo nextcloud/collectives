@@ -6,6 +6,8 @@
 import type { Page } from '@playwright/test'
 import type { User } from './User.ts'
 
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { webdavUrl } from '../helpers/urls.ts'
 
 type CollectivePageData = {
@@ -155,5 +157,44 @@ export class CollectivePage {
 	}) {
 		const content = `## Link\n\n[${linkText}](${linkUrl})`
 		await this.setContent({ content, user, page })
+	}
+
+	async uploadImage({ filename, mimetype = 'image/png', user, page }: {
+		filename: string
+		mimetype?: string
+		user: User
+		page: Page
+	}): Promise<string> {
+		const attachmentsDir = `.attachments.${this.data.id}`
+
+		// MKCOL is idempotent enough: 201 = created, 405 = already exists
+		const dirUrl = webdavUrl(
+			user.account.userId,
+			this.data.collectivePath,
+			this.data.filePath,
+			attachmentsDir,
+		)
+		const mkcol = await page.request.fetch(dirUrl, { method: 'MKCOL' })
+		if (![201, 405].includes(mkcol.status())) {
+			throw new Error(`MKCOL ${dirUrl} failed: ${mkcol.status()}`)
+		}
+
+		const filepath = resolve(import.meta.dirname, 'files', filename)
+		await page.request.put(
+			webdavUrl(
+				user.account.userId,
+				this.data.collectivePath,
+				this.data.filePath,
+				attachmentsDir,
+				filename,
+			),
+			{
+				headers: { 'Content-Type': mimetype },
+				data: readFileSync(filepath),
+				failOnStatusCode: true,
+			},
+		)
+
+		return `${attachmentsDir}/${filename}`
 	}
 }

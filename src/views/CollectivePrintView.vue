@@ -35,7 +35,7 @@ export default {
 		...mapState(useCollectivesStore, ['currentCollective']),
 	},
 
-	mounted() {
+	created() {
 		this.setPrintView()
 	},
 
