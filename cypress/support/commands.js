@@ -339,7 +339,7 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 			if (!circle) {
 				const response = await axios.post(
 					url,
-					{ name, personal: false, local: true },
+					{ name, personal: false },
 				)
 				circleId = response.data.ocs.data.id
 			} else {
