@@ -13,6 +13,7 @@ OC.L10N.register(
     "Create" : "සාදන්න",
     "Go back" : "ආපසු යන්න",
     "Back" : "ආපසු",
+    "Delete" : "Delete",
     "Download" : "බාගන්න",
     "Could not rename the page" : "පිටුව නැවත නම් කිරීමට නොහැකි විය",
     "Favorites" : "ප්‍රියතම",
