@@ -22,6 +22,7 @@ use OCP\Files\NotFoundException;
 
 class FileIndexer {
 	private const LANGUAGE_DETECTION_LIMIT = 2000;
+	private const STEM_MAX_DISTANCE = 3;
 
 	public function __construct(
 		private readonly SearchWordMapper $wordMapper,
@@ -80,7 +81,9 @@ class FileIndexer {
 		foreach ($tokens as $token) {
 			$term = mb_substr($token, 0, 50);
 			$termCounts[$term] = ($termCounts[$term] ?? 0) + 1;
-			$termStems[$term] = $this->stemmer->stem($token, $language);
+			$stem = $this->stemmer->stem($token, $language);
+			$isUsefulStem = $stem !== $term && levenshtein($token, $stem) <= self::STEM_MAX_DISTANCE;
+			$termStems[$term] = $isUsefulStem ? $stem : null;
 		}
 
 		unset($content, $tokens);

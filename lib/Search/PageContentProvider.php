@@ -38,6 +38,7 @@ class PageContentProvider implements IProvider {
 		private readonly SearchService $indexedSearchService,
 		private readonly LoggerInterface $logger,
 		private readonly IAppManager $appManager,
+		private readonly WordTokenizer $tokenizer,
 	) {
 	}
 
@@ -87,13 +88,11 @@ class PageContentProvider implements IProvider {
 					continue;
 				}
 
-				$pages[$fileId] = ['file' => $fileEntry, 'matched_term' => $fileData['matched_term']];
+				$pages[$fileId] = $fileEntry;
 				$collectiveMap[$fileId] = $collective;
 			}
 		}
 
-		$pageData = $pages;
-		$pages = array_map(fn ($p) => $p['file'], $pages);
 		$pages = $this->indexedSearchService->rankByBigrams($query->getTerm(), $pages);
 
 		$pageSearchResults = [];
@@ -112,9 +111,7 @@ class PageContentProvider implements IProvider {
 
 			$content = $page->getContent();
 			$normalizedContent = WordTokenizer::normalize($content);
-
-			$pos = mb_stripos($normalizedContent, $pageData[$page->getId()]['matched_term'] ?? $query->getTerm());
-			$pos = $pos !== false ? $pos : 0;
+			$pos = $this->findSnippetPosition($normalizedContent, $query->getTerm());
 
 			$pageSearchResults[] = new SearchResultEntry(
 				'',
@@ -137,5 +134,46 @@ class PageContentProvider implements IProvider {
 		} catch (Exception) {
 			return null;
 		}
+	}
+
+	private function findSnippetPosition(string $content, string $query): int {
+		// try exact phrase first
+		$pos = mb_stripos($content, $query);
+		if ($pos !== false) {
+			return $pos;
+		}
+
+		// fall back to finding section with most tokens
+		$tokens = $this->tokenizer->tokenize($query);
+		$positions = [];
+		foreach ($tokens as $token) {
+			$offset = 0;
+			while (($pos = mb_stripos($content, $token, $offset)) !== false) {
+				$positions[] = $pos;
+				$offset = $pos + 1;
+			}
+		}
+
+		if (empty($positions)) {
+			return 0;
+		}
+
+		sort($positions);
+		$bestStart = $positions[0];
+		$bestScore = 0;
+
+		foreach ($positions as $startPos) {
+			$score = count(array_filter($tokens, function ($token) use ($content, $startPos) {
+				$pos = mb_stripos($content, $token, $startPos);
+				return $pos !== false && $pos <= $startPos + 200;
+			}));
+
+			if ($score > $bestScore || ($score === $bestScore && $startPos < $bestStart)) {
+				$bestScore = $score;
+				$bestStart = $startPos;
+			}
+		}
+
+		return $bestStart;
 	}
 }

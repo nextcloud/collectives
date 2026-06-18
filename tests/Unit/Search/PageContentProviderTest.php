@@ -11,6 +11,7 @@ namespace Unit\Service;
 
 use OC\Search\SearchQuery;
 use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\PageService;
@@ -60,6 +61,8 @@ class PageContentProviderTest extends TestCase {
 		$appManager = $this->createMock(IAppManager::class);
 		$appManager->method('isEnabledForUser')
 			->willReturn(true);
+		/** @var WordTokenizer&MockObject $tokenizer */
+		$tokenizer = $this->createMock(WordTokenizer::class);
 
 		$this->provider = new PageContentProvider(
 			$l10n,
@@ -68,7 +71,8 @@ class PageContentProviderTest extends TestCase {
 			$pageService,
 			$indexedSearchService,
 			$logger,
-			$appManager
+			$appManager,
+			$tokenizer
 		);
 	}
 
