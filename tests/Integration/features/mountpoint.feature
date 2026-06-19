@@ -66,6 +66,15 @@ Feature: mountpoint
     And user "bob" sees webdav node ".Collectives"
     And user "bob" deletes folder "some"
 
+  Scenario: Page content accessible after user folder change (relevant when encryption is enabled)
+    When user "jane" creates page "secondpage" with parentPath "Readme.md" in "BehatMountPoint"
+    And user "jane" sets content "test content" for webdav node ".Collectives/BehatMountPoint/secondpage.md"
+    And user "alice" sees webdav node ".Collectives/BehatMountPoint/secondpage.md" with content "test content"
+    Then user "alice" sets setting "user_folder" to value "/Collectives"
+    And user "alice" fails to see webdav node ".Collectives"
+    And user "alice" sees webdav node "Collectives/BehatMountPoint/secondpage.md" with content "test content"
+    Then user "alice" sets setting "user_folder" to value "/.Collectives"
+
   Scenario: Trash page via webdav
     When user "bob" fails to trash page "firstpage" via webdav in "BehatMountPoint"
     And user "jane" trashes page "firstpage" via webdav in "BehatMountPoint"
