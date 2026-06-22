@@ -19,7 +19,7 @@ to structure shared knowledge and cultivate trust.
 * **🔤 Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax** for page formatting.
 * **🔎 Full-text search** to find content straight away.
 	]]></description>
-	<version>4.4.1</version>
+	<version>4.4.2</version>
 	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
