@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.4.2 - 2026.06.22
+
+### 🐛Fixes
+* 🔎 Improve full text search: better multi-word results, ranking and snippet preview. (#2577)
+* 🖨️ Ensure all images are loaded before opening print dialog. (#2562)
+* 🔗 Fix page previews on some instances with reverse proxy. (#2558)
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+
+
 ## 4.4.1 - 2026.05.27
 
 Collectives now has its own little homepage: https://collectives.cloud/
