@@ -51,6 +51,10 @@ return [
 		['name' => 'trash#restore', 'url' => '/api/v{apiVersion}/collectives/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 
+		// Static site generator (SSG) API
+		['name' => 'staticSite#create', 'url' => '/api/v{apiVersion}/staticsite', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
 		// Collective shares API
 		['name' => 'share#getCollectiveShares', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/shares', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],

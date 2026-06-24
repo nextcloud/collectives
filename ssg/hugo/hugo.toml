@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+baseURL = "/"
+languageCode = "en-us"
+title = "Collectives"
+
+# Keep the output minimal: just the rendered homepage, no feeds/taxonomies.
+disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404", "robotsTXT"]
+
+# Allow templates to read COLLECTIVES_SSG_* environment variables via os.Getenv.
+[security.funcs]
+getenv = ["^COLLECTIVES_SSG_"]

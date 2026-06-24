@@ -50,6 +50,12 @@ $(BUILD_TOOLS_DIR)/info.xsd:
 node-modules:
 	$(NPM) ci
 
+# Static site generator (Hugo) runtime
+# Installs a portable Hugo binary so the PHP backend can render static sites at
+# runtime. Hugo is a single static binary, so no further dependencies are needed.
+ssg-setup:
+	sh ssg/fetch-hugo.sh
+
 composer-install: composer
 	php $(BUILD_TOOLS_DIR)/composer.phar install --prefer-dist
 
