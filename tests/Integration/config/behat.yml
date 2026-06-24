@@ -14,6 +14,7 @@ default:
                     ocsUrl: 'https://nextcloud.local/ocs/v2.php'
                     publicUrl: 'https://nextcloud.local/public.php'
                     remoteUrl: 'https://nextcloud.local/remote.php'
+                    occPath: 'nc-shell.sh master php occ'
 ci:
     suites:
         default:

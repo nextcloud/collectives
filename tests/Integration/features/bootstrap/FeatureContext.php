@@ -56,6 +56,7 @@ class FeatureContext implements Context {
 		private string $ocsUrl,
 		public string $publicUrl,
 		private string $remoteUrl,
+		private string $occPath = 'php ../../occ',
 	) {
 		$this->clientOptions = ['verify' => false];
 	}
@@ -742,6 +743,17 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(200);
 			$this->assertPageKeyValue($pageId, 'subpageOrder', json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR));
 		}
+	}
+
+	/**
+	 * @When user :user sets content of file :filePath to :content in collective :collective
+	 */
+	public function userSetsCollectiveFileContent(string $user, string $filePath, string $content, string $collective): void {
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+		$davPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . $filePath;
+		$this->sendRemoteRequest('PUT', $davPath, $content, null, ['Content-Type' => 'text/markdown']);
+		$this->assertStatusCode(204);
 	}
 
 	/**
@@ -2813,5 +2825,34 @@ class FeatureContext implements Context {
 			}
 		}
 		Assert::assertTrue($found, "Page '$title' with collectiveName '$collective' not found in results");
+	}
+
+	/**
+	 * @When anonymous searches :title in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSearchesInPublicShare(string $title, string $pageShare, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
+		$this->sendOcsCollectivesRequest('GET', 'p/collectives/' . $token . '/search?searchString=' . urlencode($title), null, null, [], false);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @Then anonymous sees page :title in search results
+	 */
+	public function anonymousSeesPageInResults(string $title): void {
+		$this->assertPageInSearchResults($title, false);
+	}
+
+	/**
+	 * @When occ command :command is run
+	 */
+	public function runOccCommand(string $command): void {
+		exec($this->occPath . ' ' . escapeshellcmd($command), $output, $returnCode);
+		Assert::assertEquals(0, $returnCode, 'OCC command failed: ' . implode('\n', $output));
 	}
 }
