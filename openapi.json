@@ -33,6 +33,7 @@
                     "canEdit",
                     "canShare",
                     "isPageShare",
+                    "sharePageId",
                     "shareEditable",
                     "userPageOrder",
                     "userShowMembers",
@@ -44,6 +45,9 @@
                     "id": {
                         "type": "integer",
                         "format": "int64"
+                    },
+                    "slug": {
+                        "type": "string"
                     },
                     "circleId": {
                         "type": "string"
@@ -124,7 +128,7 @@
                     "token",
                     "owner",
                     "editable",
-                    "password"
+                    "hasPassword"
                 ],
                 "properties": {
                     "id": {
@@ -148,8 +152,8 @@
                     "editable": {
                         "type": "boolean"
                     },
-                    "password": {
-                        "type": "string"
+                    "hasPassword": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -186,8 +190,10 @@
                     "mimetype",
                     "timestamp",
                     "path",
+                    "src",
                     "internalPath",
-                    "hasPreview"
+                    "hasPreview",
+                    "type"
                 ],
                 "properties": {
                     "id": {
@@ -211,11 +217,21 @@
                     "path": {
                         "type": "string"
                     },
+                    "src": {
+                        "type": "string"
+                    },
                     "internalPath": {
                         "type": "string"
                     },
                     "hasPreview": {
                         "type": "boolean"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "text",
+                            "folder"
+                        ]
                     }
                 }
             },
@@ -223,20 +239,25 @@
                 "type": "object",
                 "required": [
                     "id",
-                    "isFullWidth",
                     "subpageOrder",
+                    "isFullWidth",
+                    "tags",
                     "title",
                     "timestamp",
                     "size",
                     "fileName",
                     "filePath",
-                    "collectivePath",
-                    "parentId"
+                    "filePathString",
+                    "parentId",
+                    "linkedPageIds"
                 ],
                 "properties": {
                     "id": {
                         "type": "integer",
                         "format": "int64"
+                    },
+                    "slug": {
+                        "type": "string"
                     },
                     "lastUserId": {
                         "type": "string"
@@ -247,10 +268,18 @@
                     "emoji": {
                         "type": "string"
                     },
+                    "subpageOrder": {
+                        "type": "array",
+                        "description": "Custom subpage order. Not guaranteed to contain all subpages of this page.",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
                     "isFullWidth": {
                         "type": "boolean"
                     },
-                    "subpageOrder": {
+                    "tags": {
                         "type": "array",
                         "items": {
                             "type": "integer",
@@ -278,7 +307,13 @@
                     "filePath": {
                         "type": "string"
                     },
+                    "filePathString": {
+                        "type": "string"
+                    },
                     "collectivePath": {
+                        "type": "string"
+                    },
+                    "collectiveNameWithEmoji": {
                         "type": "string"
                     },
                     "parentId": {
@@ -287,6 +322,13 @@
                     },
                     "shareToken": {
                         "type": "string"
+                    },
+                    "linkedPageIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
                     }
                 }
             },

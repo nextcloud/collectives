@@ -12,6 +12,7 @@ namespace OCA\Collectives;
 /**
  * @psalm-type CollectivesCollective = array{
  *     id: int,
+ *     slug?: string,
  *     circleId: string,
  *     emoji?: string,
  *     trashTimestamp?: int,
@@ -24,7 +25,7 @@ namespace OCA\Collectives;
  *     canShare: bool,
  *     shareToken?: string,
  *     isPageShare: bool,
- *     sharePageId?: int,
+ *     sharePageId: int,
  *     shareEditable: bool,
  *     userPageOrder: int,
  *     userShowMembers: bool,
@@ -40,25 +41,31 @@ namespace OCA\Collectives;
  *     token: string,
  *     owner: string,
  *     editable: bool,
- *     password: string,
+ *     hasPassword: bool,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{
  *     id: int,
+ *     slug?: string,
  *     lastUserId?: string,
  *     lastUserDisplayName?: string,
  *     emoji?: string,
- *     isFullWidth: bool,
+ *     // Custom subpage order. Not guaranteed to contain all subpages of this page.
  *     subpageOrder: list<int>,
+ *     isFullWidth: bool,
+ *     tags: list<int>,
  *     trashTimestamp?: int,
  *     title: string,
  *     timestamp: int,
  *     size: int,
  *     fileName: string,
  *     filePath: string,
- *     collectivePath: string,
+ *     filePathString: string,
+ *     collectivePath?: string,
+ *     collectiveNameWithEmoji?: string,
  *     parentId: int,
  *     shareToken?: string,
+ *     linkedPageIds: list<int>,
  * }
  *
  * @psalm-type CollectivesPageAttachment = array{
@@ -68,8 +75,10 @@ namespace OCA\Collectives;
  *     mimetype: string,
  *     timestamp: int,
  *     path: string,
+ *     src: string,
  *     internalPath: string,
  *     hasPreview: bool,
+ *     type: 'text'|'folder',
  * }
  *
  * @psalm-type CollectivesTag = array{
