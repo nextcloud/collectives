@@ -43,7 +43,7 @@
 				{{ t('collectives', 'Found {matches} matches for "{query}"', {
 					matches: results.totalMatches ?? 0,
 					query: searchQuery,
-				}) }}
+				}, { escape: false }) }}
 			</span>
 
 			<span v-else>
@@ -51,7 +51,7 @@
 					index: results.matchIndex + 1,
 					matches: results.totalMatches,
 					query: searchQuery,
-				}) }}
+				}, { escape: false }) }}
 			</span>
 		</div>
 
