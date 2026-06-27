@@ -135,7 +135,11 @@ export class EditorSection {
 			.click()
 	}
 
-	public getMentionSuggestions(): Locator {
-		return this.page.getByRole('tooltip').locator('.suggestion-list')
+	public getMentionSuggestions({ limit }: { limit?: number } = {}): Locator {
+		// only pick the first `limit` elements
+		const limitSelector = limit
+			? `:nth-child(-n+${limit})`
+			: ''
+		return this.page.getByRole('tooltip').locator('.suggestion-list__item' + limitSelector)
 	}
 }
