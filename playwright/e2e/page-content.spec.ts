@@ -56,8 +56,9 @@ test.describe('Page content', () => {
 
 		editor.setMode(true)
 		await editor.getContent().fill('@')
-		for (const userId of [user.account.userId, ...extraMemberIds]) {
-			await expect(editor.getMentionSuggestions()).toContainText(userId)
-		}
+		await expect(editor.getMentionSuggestions({ limit: 3 })).toHaveText([
+			user.account.userId,
+			...extraMemberIds.sort(),
+		])
 	})
 })
