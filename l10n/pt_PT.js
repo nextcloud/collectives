@@ -49,6 +49,7 @@ OC.L10N.register(
     "View only" : "Visualizar apenas",
     "Can edit" : "Pode editar",
     "Cannot copy, please copy the link manually" : "Não foi possível copiar, copie a ligação manualmente",
+    "Error generating password from password policy" : "Erro ao gerar senha usando a política de senha",
     "Set password" : "Definir palavra-passe",
     "Password" : "Password",
     "Create share" : "Criar partilha",
@@ -64,6 +65,7 @@ OC.L10N.register(
     "No other versions available" : "Nenhuma outra versão disponível",
     "You" : "Você",
     "Download version" : "Transferir versão",
+    "Remove version name" : "Remover nome da versão",
     "Attachments" : "Anexos",
     "Sharing" : "Partilha",
     "Versions" : "Versões",
@@ -76,6 +78,7 @@ OC.L10N.register(
     "Failed to revert {page} to revision {timestamp}." : "Falhou a recuperação do ficheiro {page} para a revisão {timestamp}.",
     "Template" : "Modelo",
     "Done" : "Concluído",
+    "Sort by title" : "Ordenar por título",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
