@@ -51,6 +51,10 @@ export default {
 	pointer-events: none;
 }
 
+.action--user-bubble :deep(.timestamp) {
+	pointer-events: auto;
+}
+
 .action-button--user-bubble {
 	display: flex;
 	align-items: flex-start;
