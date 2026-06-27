@@ -17,13 +17,10 @@ use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Model\CollectiveFileInfo;
 use OCA\Collectives\Model\PageInfo;
-use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\NotifyPush\Queue\IQueue;
 use OCP\App\IAppManager;
-use OCP\DB\Exception as DBException;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -56,7 +53,7 @@ class PageService {
 		private readonly SluggerInterface $slugger,
 		private readonly TagMapper $tagMapper,
 		private readonly PageLinkMapper $pageLinkMapper,
-		private readonly CollectiveFolderManager $collectiveFolderManager,
+		private readonly PageInfoTreeBuilderFactory $pageInfoTreeBuilderFactory,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -451,212 +448,11 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false, bool $forceIndex = false): array {
-		try {
-			$fileInfos = $this->collectiveFolderManager->getFileCacheForCollective($collectiveId, $folder->getInternalPath());
-		} catch (DBException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
-		}
-
-		// Group child entries by their parent folder file id
-		$childrenByParent = [];
-		foreach ($fileInfos as $fileInfo) {
-			$childrenByParent[$fileInfo->parent][] = $fileInfo;
-		}
-
-		// Batch load page metadata, links and display names
-		$pageFileIds = [];
-		foreach ($fileInfos as $fileInfo) {
-			if ($fileInfo->isPage()) {
-				$pageFileIds[] = $fileInfo->fileId;
-			}
-		}
-		$pagesByFileId = $this->pageMapper->findByFileIds($pageFileIds);
-		$linkedPageIdsByFileId = $this->pageLinkMapper->findByPageIds($pageFileIds);
-		$displayNames = [];
-		foreach ($pagesByFileId as $page) {
-			$lastUserId = $page->getLastUserId();
-			if ($lastUserId !== null && !isset($displayNames[$lastUserId])) {
-				$displayNames[$lastUserId] = $this->userManager->getDisplayName($lastUserId);
-			}
-		}
-
-		// Derive collectivePath from the mount point (incl. user folder prefix),
-		// matching PageInfo::fromFile().
-		$mountPoint = explode('/', $folder->getMountPoint()->getMountPoint(), 4);
-		$collectivePath = (count($mountPoint) >= 4)
-			? rtrim($mountPoint[3], '/')
-			: $this->getCollective($collectiveId, $userId)->getName();
-
+		$builder = $this->pageInfoTreeBuilderFactory->create($collectiveId, $folder, $userId, $recurse, $forceIndex);
 		$pageInfos = [];
-		$this->buildPageInfoTree(
-			$collectiveId,
-			$folder,
-			$folder->getId(),
-			0,
-			$forceIndex,
-			$recurse,
-			$childrenByParent,
-			$pagesByFileId,
-			$linkedPageIdsByFileId,
-			$displayNames,
-			$collectivePath,
-			$userId,
-			$pageInfos,
-		);
+		$builder->build($folder->getId(), 0, $pageInfos);
 
 		return $pageInfos;
-	}
-
-	/**
-	 * Recursively build PageInfo objects from the in-memory filecache tree.
-	 *
-	 * @param array<int, CollectiveFileInfo[]> $childrenByParent
-	 * @param array<int, Page> $pagesByFileId
-	 * @param array<int, int[]> $linkedPageIdsByFileId
-	 * @param array<string, null|string> $displayNames
-	 * @param PageInfo[] $pageInfos
-	 *
-	 * @throws MissingDependencyException
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	private function buildPageInfoTree(
-		int $collectiveId,
-		Folder $collectiveFolder,
-		int $folderId,
-		int $parentPageId,
-		bool $forceIndex,
-		bool $recurse,
-		array $childrenByParent,
-		array $pagesByFileId,
-		array $linkedPageIdsByFileId,
-		array $displayNames,
-		string $collectivePath,
-		string $userId,
-		array &$pageInfos,
-	): void {
-		$indexFileInfo = null;
-		$pageFileInfos = [];
-		$subFolderIds = [];
-		foreach ($childrenByParent[$folderId] ?? [] as $child) {
-			if (str_starts_with($child->name, '.')) {
-				// Ignore hidden folders and files
-				continue;
-			}
-
-			if (isset($childrenByParent[$child->fileId])) {
-				// Has children, so it's a (non-empty) folder
-				$subFolderIds[] = $child->fileId;
-			} elseif ($child->isIndexPage()) {
-				$indexFileInfo = $child;
-			} elseif ($child->isPage()) {
-				$pageFileInfos[] = $child;
-			}
-		}
-
-		if ($indexFileInfo === null) {
-			if (!$forceIndex && !$this->folderHasPages($folderId, $childrenByParent)) {
-				// Ignore folders without an index page and without any (sub)pages
-				return;
-			}
-
-			// Create missing index page if folder or subfolders have page files (or forceIndex)
-			$folder = $collectiveFolder->getFirstNodeById($folderId);
-			if (!($folder instanceof Folder)) {
-				return;
-			}
-			$indexPageInfo = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId, PageInfo::INDEX_PAGE_TITLE);
-			$indexPageInfo->setParentId($parentPageId);
-			$indexPageId = $indexPageInfo->getId();
-		} else {
-			$indexPageInfo = $this->buildPageInfo($indexFileInfo, $parentPageId, $pagesByFileId, $linkedPageIdsByFileId, $displayNames, $collectivePath);
-			$indexPageId = $indexFileInfo->fileId;
-		}
-		$pageInfos[] = $indexPageInfo;
-
-		foreach ($pageFileInfos as $pageFileInfo) {
-			$pageInfos[] = $this->buildPageInfo($pageFileInfo, $indexPageId, $pagesByFileId, $linkedPageIdsByFileId, $displayNames, $collectivePath);
-		}
-
-		foreach ($subFolderIds as $subFolderId) {
-			if ($recurse) {
-				$this->buildPageInfoTree($collectiveId, $collectiveFolder, $subFolderId, $indexPageId, false, true, $childrenByParent, $pagesByFileId, $linkedPageIdsByFileId, $displayNames, $collectivePath, $userId, $pageInfos);
-				continue;
-			}
-
-			// Not recursive: only add the subfolder's index page (ignore subfolders without one)
-			$subIndexFileInfo = $this->findIndexPageInfo($subFolderId, $childrenByParent);
-			if ($subIndexFileInfo !== null) {
-				$pageInfos[] = $this->buildPageInfo($subIndexFileInfo, $indexPageId, $pagesByFileId, $linkedPageIdsByFileId, $displayNames, $collectivePath);
-			}
-		}
-	}
-
-	/**
-	 * @param array<int, CollectiveFileInfo[]> $childrenByParent
-	 */
-	private function findIndexPageInfo(int $folderId, array $childrenByParent): ?CollectiveFileInfo {
-		foreach ($childrenByParent[$folderId] ?? [] as $child) {
-			if ($child->isIndexPage()) {
-				return $child;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param array<int, CollectiveFileInfo[]> $childrenByParent
-	 */
-	private function folderHasPages(int $folderId, array $childrenByParent): bool {
-		foreach ($childrenByParent[$folderId] ?? [] as $child) {
-			if (str_starts_with($child->name, '.')) {
-				continue;
-			}
-
-			if (isset($childrenByParent[$child->fileId])) {
-				if ($this->folderHasPages($child->fileId, $childrenByParent)) {
-					return true;
-				}
-			} elseif ($child->isPage()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param array<int, Page> $pagesByFileId
-	 * @param array<int, int[]> $linkedPageIdsByFileId
-	 * @param array<string, null|string> $displayNames
-	 */
-	private function buildPageInfo(
-		CollectiveFileInfo $fileInfo,
-		int $parentId,
-		array $pagesByFileId,
-		array $linkedPageIdsByFileId,
-		array $displayNames,
-		string $collectivePath,
-	): PageInfo {
-		$page = $pagesByFileId[$fileInfo->fileId] ?? null;
-		$lastUserId = $page?->getLastUserId();
-		$pageInfo = new PageInfo();
-		$pageInfo->fromFileInfo(
-			$fileInfo,
-			$parentId,
-			$collectivePath,
-			$lastUserId,
-			$lastUserId !== null ? ($displayNames[$lastUserId] ?? null) : null,
-			$page?->getEmoji(),
-			$page?->getSubpageOrder(),
-			$page !== null && $page->getFullWidth(),
-			$page?->getSlug(),
-			$page?->getTags(),
-			$linkedPageIdsByFileId[$fileInfo->fileId] ?? null,
-		);
-
-		return $pageInfo;
 	}
 
 	/**

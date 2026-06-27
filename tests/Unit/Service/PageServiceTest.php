@@ -23,6 +23,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Collectives\Service\PageInfoTreeBuilderFactory;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
 use OCP\Files\File;
@@ -103,6 +104,15 @@ class PageServiceTest extends TestCase {
 
 		$this->collectiveFolderManager = $this->createMock(CollectiveFolderManager::class);
 
+		$pageInfoTreeBuilderFactory = new PageInfoTreeBuilderFactory(
+			$this->pageMapper,
+			$pageLinkMapper,
+			$userManager,
+			$slugger,
+			$this->collectiveFolderManager,
+			$this->collectiveService,
+		);
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -115,7 +125,7 @@ class PageServiceTest extends TestCase {
 			$slugger,
 			$tagMapper,
 			$pageLinkMapper,
-			$this->collectiveFolderManager,
+			$pageInfoTreeBuilderFactory,
 		);
 	}
 
