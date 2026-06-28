@@ -64,7 +64,7 @@ export default {
 	],
 
 	computed: {
-		...mapState(useCirclesStore, ['circleMembersSorted', 'currentCircleMembersFullyLoaded']),
+		...mapState(useCirclesStore, ['circleMembersSorted', 'circleMembersFullyLoaded']),
 		...mapState(useCollectivesStore, ['isCollectiveAdmin']),
 		...mapState(useRootStore, ['isPublic']),
 
@@ -85,7 +85,7 @@ export default {
 		},
 
 		isLoadingMembers() {
-			return !this.currentCircleMembersFullyLoaded
+			return !this.circleMembersFullyLoaded(this.collective.circleId)
 		},
 	},
 

@@ -12,8 +12,10 @@ describe('Collective members', function() {
 	beforeEach(function() {
 		cy.loginAs('bob')
 		cy.visit('apps/collectives')
+		cy.intercept('GET', '**/circles/circles/*/members?**').as('getCircleMembers')
 		cy.openCollectiveMenu('Members Collective')
 		cy.clickMenuButton('Manage members')
+		cy.wait('@getCircleMembers')
 	})
 
 	it('Allows to add members', function() {
@@ -67,6 +69,6 @@ describe('Collective members', function() {
 			.click()
 		cy.wait('@removeCircleMember')
 
-		cy.get('.current-members .member-row').should('not.contain', member)
+		cy.get('.current-members .member-row:visible').should('not.contain', member)
 	})
 })
