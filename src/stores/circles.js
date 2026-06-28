@@ -62,6 +62,8 @@ export const useCirclesStore = defineStore('circles', {
 			return users
 		},
 
+		circleMembersFullyLoaded: (state) => (circleId) => state.circlesMembersFullyLoaded[circleId] || false,
+
 		currentCircleMembersFullyLoaded: (state) => {
 			const collectivesStore = useCollectivesStore()
 			const currentCircleId = collectivesStore.currentCollective?.circleId
