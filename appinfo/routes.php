@@ -148,6 +148,8 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 		['name' => 'collectiveUserSettings#setFavoritePages', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/userSettings/favoritePages', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'collectiveUserSettings#setNotify', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/userSettings/notify', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 
 		// Session API
 		['name' => 'session#create', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/sessions', 'verb' => 'POST',

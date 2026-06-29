@@ -207,6 +207,7 @@ class CollectiveServiceTest extends TestCase {
 			'userShowMembers' => true,
 			'userShowRecentPages' => true,
 			'userFavoritePages' => [],
+			'userNotify' => 1,
 			'canLeave' => true,
 		], $collective->jsonSerialize());
 	}

@@ -108,4 +108,19 @@ class CollectiveUserSettingsService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setNotify(int $collectiveId, string $userId, int $notify): void {
+		$settings = $this->initSettings($collectiveId, $userId);
+		$settings->setNotify($notify);
+
+		try {
+			$this->collectiveUserSettingsMapper->insertOrUpdate($settings);
+		} catch (Exception $e) {
+			throw new NotPermittedException($e->getMessage(), 0, $e);
+		}
+	}
 }
