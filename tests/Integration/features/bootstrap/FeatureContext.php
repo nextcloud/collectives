@@ -2814,4 +2814,26 @@ class FeatureContext implements Context {
 		}
 		Assert::assertTrue($found, "Page '$title' with collectiveName '$collective' not found in results");
 	}
+
+	/**
+	 * @When anonymous searches :title in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSearchesInPublicShare(string $title, string $pageShare, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
+		$this->sendOcsCollectivesRequest('GET', 'p/collectives/' . $token . '/search?searchString=' . urlencode($title), null, null, [], false);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @Then anonymous sees page :title in search results
+	 */
+	public function anonymousSeesPageInResults(string $title): void {
+		$this->assertPageInSearchResults($title, false);
+	}
+
 }
