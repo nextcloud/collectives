@@ -62,7 +62,6 @@ export default {
 	border-radius: 0;
 	background-color: transparent;
 	box-shadow: none;
-	cursor: default;
 	font-weight: normal;
 	font-size: var(--default-font-size);
 	line-height: var(--default-clickable-area);
