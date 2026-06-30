@@ -10,19 +10,20 @@ declare(strict_types=1);
 namespace Unit\Service;
 
 use OC\App\AppManager;
-use OC\Files\Mount\MountPoint;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
-use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Model\CollectiveFileInfo;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Collectives\Service\PageInfoTreeBuilderFactory;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
 use OCP\Files\File;
@@ -41,6 +42,7 @@ class PageServiceTest extends TestCase {
 	private NodeHelper $nodeHelper;
 	private CollectiveServiceBase $collectiveService;
 	private Folder $collectiveFolder;
+	private CollectiveFolderManager $collectiveFolderManager;
 	private PageService $service;
 	private string $userId = 'jane';
 	private int $collectiveId = 1;
@@ -100,6 +102,17 @@ class PageServiceTest extends TestCase {
 
 		$pageLinkMapper = $this->createMock(PageLinkMapper::class);
 
+		$this->collectiveFolderManager = $this->createMock(CollectiveFolderManager::class);
+
+		$pageInfoTreeBuilderFactory = new PageInfoTreeBuilderFactory(
+			$this->pageMapper,
+			$pageLinkMapper,
+			$userManager,
+			$slugger,
+			$this->collectiveFolderManager,
+			$this->collectiveService,
+		);
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -112,6 +125,7 @@ class PageServiceTest extends TestCase {
 			$slugger,
 			$tagMapper,
 			$pageLinkMapper,
+			$pageInfoTreeBuilderFactory,
 		);
 	}
 
@@ -193,237 +207,130 @@ class PageServiceTest extends TestCase {
 		PageService::getIndexPageFile($folder);
 	}
 
-	private function prepareFile(string $fileName, Folder $parent, IMountPoint $mountPoint, int $id = 1): File {
-		$file = $this->createMock(File::class);
-		$file->method('getId')
-			->willReturn($id);
-		$file->method('getName')
-			->willReturn($fileName);
-		$file->method('getParent')
-			->willReturn($parent);
-		$file->method('getMountPoint')
-			->willReturn($mountPoint);
-		$file->method('getInternalPath')
-			->willReturn('.Collectives/testfolder/' . $fileName);
-		$file->method('getMTime')
-			->willReturn(0);
-		$file->method('getSize')
-			->willReturn(0);
+	private function fileInfo(int $fileId, int $parent, string $name, string $path): CollectiveFileInfo {
+		return new CollectiveFileInfo(
+			$fileId,
+			1,
+			$path,
+			$parent,
+			$name,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			'',
+			31,
+		);
+	}
 
-		return $file;
+	private function buildExpectedPageInfo(CollectiveFileInfo $fileInfo, int $parentId, string $collectivePath): PageInfo {
+		$pageInfo = new PageInfo();
+		$pageInfo->fromFileInfo($fileInfo, $parentId, $collectivePath);
+		return $pageInfo;
 	}
 
 	public function testGetPagesFromFolderWithSubfolderWithoutRecurse(): void {
-		$files = [];
-		$pageInfos = [];
-
-		$folder = $this->getMockBuilder(Folder::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$folder->method('getParent')
-			->willReturn($folder);
-		$folder->method('getName')
-			->willReturn('testfolder');
-
-		$mountPoint = $this->getMockBuilder(MountPoint::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
-
-		$indexFile = $this->prepareFile('Readme.md', $folder, $mountPoint, 101);
-		$folder->method('get')
-			->willReturn($indexFile);
-		$indexPage = new Page();
-		$this->pageMapper->method('findByFileId')
-			->willReturn($indexPage);
-		$indexPageInfo = new PageInfo();
-		$indexPageInfo->fromFile($indexFile, 1);
-		$indexPageInfo->setParentId(101);
-		$indexPageInfo->setTitle('testfolder');
-
-		$files[] = $indexFile;
-		$pageInfos[] = $indexPageInfo;
-
-		// Add markdown files
-		$fileNameList = ['page1.md', 'page2.md'];
-		foreach ($fileNameList as $fileName) {
-			$file = $this->prepareFile($fileName, $folder, $mountPoint);
-			$files[] = $file;
-
-			$pageInfo = new PageInfo();
-			$pageInfo->fromFile($file, 1);
-			$pageInfo->setParentId(101);
-			$pageInfos[] = $pageInfo;
-		}
-
-		// Add subfolder
-		$subfolder = $this->createMock(Folder::class);
-		$subfolder->method('getId')
-			->willReturn(102);
-		$subfolder->method('getName')
-			->willReturn($fileName);
-		$subfolder->method('getParent')
-			->willReturn($folder);
-		$subfolder->method('getMountPoint')
-			->willReturn($mountPoint);
-		$subfolder->method('getInternalPath')
-			->willReturn('.Collectives/testfolder/' . $fileName);
-		$subfolder->method('getMTime')
-			->willReturn(0);
-		$subfolder->method('getSize')
-			->willReturn(0);
-
-		$subfolderIndexFile = $this->prepareFile('Readme.md', $subfolder, $mountPoint, 103);
-		$subfolderIndexPageInfo = new PageInfo();
-		$subfolderIndexPageInfo->fromFile($subfolderIndexFile, 1);
-		$subfolderIndexPageInfo->setParentId(101);
-
-		$subfolder->method('get')
-			->with(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)
-			->willReturn($subfolderIndexFile);
-
-		$files[] = $subfolder;
-		$pageInfos[] = $subfolderIndexPageInfo;
-
-		$folder->method('getDirectoryListing')
-			->willReturn($files);
-
-		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId));
-	}
-
-	public function testGetPagesFromFolderRecursive(): void {
-		$filesNotJustMd = [];
-		$filesJustMd = [];
-		$pageInfos = [];
-
-		$folder = $this->getMockBuilder(Folder::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$folder->method('getParent')
-			->willReturn($folder);
-		$folder->method('getName')
-			->willReturn('testfolder');
+		$collectivePath = '.Collectives/collective';
 
 		$mountPoint = $this->createMock(IMountPoint::class);
 		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
 
-		$indexFile = $this->prepareFile('Readme.md', $folder, $mountPoint, 101);
-		$folder->method('get')
-			->willReturn($indexFile);
-		$indexPage = new Page();
-		$this->pageMapper->method('findByFileId')
-			->willReturn($indexPage);
-		$indexPageInfo = new PageInfo();
-		$indexPageInfo->fromFile($indexFile, 1);
-		$indexPageInfo->setParentId(101);
-		$indexPageInfo->setTitle('testfolder');
+		$folder = $this->createMock(Folder::class);
+		$folder->method('getId')->willReturn(100);
+		$folder->method('getInternalPath')->willReturn('');
+		$folder->method('getMountPoint')->willReturn($mountPoint);
 
-		$filesJustMd[] = $indexFile;
-		$filesNotJustMd[] = $indexFile;
-		$pageInfos[] = $indexPageInfo;
+		$index = $this->fileInfo(101, 100, 'Readme.md', 'Readme.md');
+		$page1 = $this->fileInfo(1, 100, 'page1.md', 'page1.md');
+		$page2 = $this->fileInfo(2, 100, 'page2.md', 'page2.md');
+		$subfolder = $this->fileInfo(102, 100, 'subfolder', 'subfolder');
+		$subfolderIndex = $this->fileInfo(103, 102, 'Readme.md', 'subfolder/Readme.md');
 
-		$fileNameList = [ 'page1.md', 'page2.md', 'page3.md', 'another.jpg', 'whatever.txt' ];
-		foreach ($fileNameList as $fileName) {
-			// Add all files to $filesNotJustMd
-			$file = $this->prepareFile($fileName, $folder, $mountPoint);
+		$this->collectiveFolderManager->method('getFileCacheForCollective')
+			->willReturn([$index, $page1, $page2, $subfolder, $subfolderIndex]);
 
-			$filesNotJustMd[] = $file;
+		// Without recursion only the subfolder's index page is added
+		$expected = [
+			$this->buildExpectedPageInfo($index, 0, $collectivePath),
+			$this->buildExpectedPageInfo($page1, 101, $collectivePath),
+			$this->buildExpectedPageInfo($page2, 101, $collectivePath),
+			$this->buildExpectedPageInfo($subfolderIndex, 101, $collectivePath),
+		];
 
-			// Only add markdown files to $filesJustMd
-			if (!NodeHelper::isPage($file)) {
-				continue;
-			}
-
-			$filesJustMd[] = $file;
-
-			$pageInfo = new PageInfo();
-			$pageInfo->fromFile($file, 1);
-			$pageInfo->setParentId(101);
-			$pageInfos[] = $pageInfo;
-		}
-
-		$folder->method('getDirectoryListing')
-			->willReturnOnConsecutiveCalls(
-				$filesJustMd,
-				$filesNotJustMd,
-			);
-
-		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
-		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
+		self::assertEquals($expected, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId));
 	}
 
-	public function testGetPagesFromFolderWithMissingIndex(): void {
-		$files = [];
-		$pageInfos = [];
+	public function testGetPagesFromFolderRecursive(): void {
+		$collectivePath = '.Collectives/collective';
 
-		$mountPoint = $this->getMockBuilder(MountPoint::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$mountPoint = $this->createMock(IMountPoint::class);
 		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
 
 		$folder = $this->createMock(Folder::class);
-		$folder->method('getParent')
-			->willReturn($folder);
-		$folder->method('getName')
-			->willReturn('testfolder');
+		$folder->method('getId')->willReturn(100);
+		$folder->method('getInternalPath')->willReturn('');
+		$folder->method('getMountPoint')->willReturn($mountPoint);
 
-		$file1Name = 'page1.md';
-		$file1 = $this->getMockBuilder(File::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$file1->method('getId')
-			->willReturn(1);
-		$file1->method('getName')
-			->willReturn($file1Name);
-		$file1->method('getParent')
-			->willReturn($folder);
-		$file1->method('getMountPoint')
-			->willReturn($mountPoint);
-		$file1->method('getInternalPath')
-			->willReturn('.Collectives/testfolder/' . $file1Name);
-		$file1->method('getMTime')
-			->willReturn(0);
-		$file1->method('getSize')
-			->willReturn(0);
-		$files[] = $file1;
+		$index = $this->fileInfo(101, 100, 'Readme.md', 'Readme.md');
+		$page1 = $this->fileInfo(1, 100, 'page1.md', 'page1.md');
+		$subfolder = $this->fileInfo(102, 100, 'subfolder', 'subfolder');
+		$subfolderIndex = $this->fileInfo(103, 102, 'Readme.md', 'subfolder/Readme.md');
+		$subPage = $this->fileInfo(3, 102, 'page3.md', 'subfolder/page3.md');
 
-		$folder->method('getDirectoryListing')
-			->willReturn($files);
+		$this->collectiveFolderManager->method('getFileCacheForCollective')
+			->willReturn([$index, $page1, $subfolder, $subfolderIndex, $subPage]);
 
-		$pageInfo1 = new PageInfo();
-		$pageInfo1->fromFile($file1, 1);
-		$pageInfo1->setParentId(101);
-		$pageInfos[] = $pageInfo1;
+		// With recursion the subfolder's pages are added below its index page
+		$expected = [
+			$this->buildExpectedPageInfo($index, 0, $collectivePath),
+			$this->buildExpectedPageInfo($page1, 101, $collectivePath),
+			$this->buildExpectedPageInfo($subfolderIndex, 101, $collectivePath),
+			$this->buildExpectedPageInfo($subPage, 103, $collectivePath),
+		];
+
+		self::assertEquals($expected, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
+	}
+
+	public function testGetPagesFromFolderWithMissingIndex(): void {
+		$collectivePath = '.Collectives/collective';
+
+		$mountPoint = $this->createMock(IMountPoint::class);
+		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
+
+		$folder = $this->createMock(Folder::class);
+		$folder->method('getId')->willReturn(100);
+		$folder->method('getInternalPath')->willReturn('');
+		$folder->method('getMountPoint')->willReturn($mountPoint);
+
+		$page1 = $this->fileInfo(1, 100, 'page1.md', 'page1.md');
+		$this->collectiveFolderManager->method('getFileCacheForCollective')
+			->willReturn([$page1]);
+
+		// No index page present, so a new one gets created for the entry folder
+		$folder->method('getFirstNodeById')->willReturn($folder);
 
 		$indexFile = $this->createMock(File::class);
-		$indexFile->method('getId')
-			->willReturn(101);
-		$indexFile->method('getName')
-			->willReturn('Readme.md');
-		$folder->method('get')
-			->willReturn($indexFile);
-		$indexFile->method('getParent')
-			->willReturn($folder);
-		$indexFile->method('getMountPoint')
-			->willReturn($mountPoint);
-		$indexFile->method('getInternalPath')
-			->willReturn('.Collectives/testfolder/Readme.md');
-		$indexFile->method('getMTime')
-			->willReturn(0);
-		$indexFile->method('getSize')
-			->willReturn(0);
-		$folder->method('newFile')
-			->willReturn($indexFile);
+		$indexFile->method('getId')->willReturn(101);
+		$indexFile->method('getName')->willReturn('Readme.md');
+		$indexFile->method('getInternalPath')->willReturn('Readme.md');
+		$indexFile->method('getMountPoint')->willReturn($mountPoint);
+		$indexFile->method('getMTime')->willReturn(0);
+		$indexFile->method('getSize')->willReturn(0);
+		$folder->method('newFile')->willReturn($indexFile);
 
 		$indexPageInfo = new PageInfo();
-		$indexPageInfo->fromFile($indexFile, 1);
-		$indexPageInfo->setParentId(101);
-		$indexPageInfo->setTitle('testfolder');
+		$indexPageInfo->fromFile($indexFile, 0, $this->userId);
 		$indexPageInfo->setSlug('free-123');
-		$indexPageInfo->setLastUserId('jane');
-		array_unshift($pageInfos, $indexPageInfo);
+		$indexPageInfo->setParentId(0);
 
-		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
+		$expected = [
+			$indexPageInfo,
+			$this->buildExpectedPageInfo($page1, 101, $collectivePath),
+		];
+
+		self::assertEquals($expected, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
 	}
 
 	public function testGetPageLink(): void {

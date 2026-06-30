@@ -89,22 +89,24 @@ class PageMapper extends QBMapper {
 			return [];
 		}
 
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from($this->tableName)
-			->where($qb->expr()->in('file_id',
-				$qb->createNamedParameter($fileIds, IQueryBuilder::PARAM_INT_ARRAY)));
-
-		if ($trashed) {
-			$qb->andWhere($qb->expr()->isNotNull('trash_timestamp'));
-		} else {
-			$qb->andWhere($qb->expr()->isNull('trash_timestamp'));
-		}
-
-		$pages = $this->findEntities($qb);
 		$pagesByFileId = [];
-		foreach ($pages as $page) {
-			$pagesByFileId[$page->getFileId()] = $page;
+		foreach (array_chunk($fileIds, 1000) as $chunk) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('*')
+				->from($this->tableName)
+				->where($qb->expr()->in('file_id',
+					$qb->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
+
+			if ($trashed) {
+				$qb->andWhere($qb->expr()->isNotNull('trash_timestamp'));
+			} else {
+				$qb->andWhere($qb->expr()->isNull('trash_timestamp'));
+			}
+
+			$pages = $this->findEntities($qb);
+			foreach ($pages as $page) {
+				$pagesByFileId[$page->getFileId()] = $page;
+			}
 		}
 
 		return $pagesByFileId;

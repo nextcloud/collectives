@@ -53,6 +53,7 @@ class PageService {
 		private readonly SluggerInterface $slugger,
 		private readonly TagMapper $tagMapper,
 		private readonly PageLinkMapper $pageLinkMapper,
+		private readonly PageInfoTreeBuilderFactory $pageInfoTreeBuilderFactory,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -434,81 +435,24 @@ class PageService {
 	}
 
 	/**
-	 * @throws FilesNotFoundException
+	 * Loads the whole collective page tree with a single filecache query
+	 * and batched metadata queries (no N+1 queries).
+	 *
+	 * @param bool $recurse Descend into subfolders; if false, only their index page is added
+	 * @param bool $forceIndex Create the entry folder's index page even if it has no pages
+	 *
+	 * @return PageInfo[]
+	 *
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false, bool $forceIndex = false): array {
-		$subPageInfos = [];
-		$folderNodes = $folder->getDirectoryListing();
+		$builder = $this->pageInfoTreeBuilderFactory->create($collectiveId, $folder, $userId, $recurse, $forceIndex);
+		$pageInfos = [];
+		$builder->build($folder->getId(), 0, $pageInfos);
 
-		$hasPages = false;
-		$pageFiles = [];
-		foreach ($folderNodes as $node) {
-			if (str_starts_with($node->getName(), '.')) {
-				// Ignore hidden folders
-				continue;
-			}
-
-			if ($node instanceof Folder) {
-				if ($recurse) {
-					// Recursive: get subpage infos from folder
-					try {
-						array_push($subPageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
-					} catch (NotFoundException) {
-						// If parent folder doesn't have an index page, `getPagesFromFolder()` throws NotFoundException even though having subpages.
-						$hasPages = true;
-					}
-				} else {
-					// Not recursive: get index page of folder, as the folder is not to be processed
-					try {
-						$subPageInfos[] = $this->getPageByFile(self::getIndexPageFile($node), $node);
-					} catch (NotFoundException) {
-						// Ignore subfolders without index page
-					}
-				}
-			} elseif ($node instanceof File && NodeHelper::isPage($node)) {
-				$hasPages = true;
-				$pageFiles[] = $node;
-				if (!isset($indexPage) && NodeHelper::isIndexPage($node)) {
-					$indexPage = $this->getPageByFile($node, $folder);
-				}
-			}
-		}
-
-		// One of the subfolders had a page
-		if (isset($subPageInfos[0])) {
-			$hasPages = true;
-		}
-
-		if (!isset($indexPage)) {
-			if ($hasPages || $forceIndex) {
-				// Create missing index page if folder or subfolders have page files (or forceIndex)
-				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId, PageInfo::INDEX_PAGE_TITLE);
-			} else {
-				// Ignore folders without an index page
-				return [];
-			}
-		}
-
-		// Add markdown files from this folder
-		$folderPageInfos = [];
-		foreach ($pageFiles as $pageFile) {
-			if (NodeHelper::isIndexPage($pageFile)) {
-				continue;
-			}
-
-			try {
-				$pageInfo = $this->getPageByFile($pageFile, $folder);
-			} catch (NotFoundException) {
-				// If parent folder doesn't have an index page, it throws NotFoundException.
-				continue;
-			}
-
-			$folderPageInfos[] = $pageInfo;
-		}
-
-		return array_merge([$indexPage], $folderPageInfos, $subPageInfos);
+		return $pageInfos;
 	}
 
 	/**

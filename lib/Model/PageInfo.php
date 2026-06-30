@@ -230,6 +230,44 @@ class PageInfo implements JsonSerializable {
 	}
 
 	/**
+	 * Build the page info from a lightweight filecache entry (see PageService::getPagesFromFolder).
+	 */
+	public function fromFileInfo(
+		CollectiveFileInfo $fileInfo,
+		int $parentId,
+		?string $collectivePath = null,
+		?string $lastUserId = null,
+		?string $lastUserDisplayName = null,
+		?string $emoji = null,
+		?string $subpageOrder = null,
+		?bool $fullWidth = false,
+		?string $slug = null,
+		?string $tags = null,
+		?array $linkedPageIds = null,
+	): void {
+		$dirName = dirname($fileInfo->path);
+		$dirName = $dirName === '.' ? '' : $dirName;
+		$this->fromData(
+			$fileInfo->fileId,
+			$dirName,
+			$fileInfo->isIndexPage(),
+			$parentId,
+			$fileInfo->name,
+			$fileInfo->mtime,
+			$fileInfo->size,
+			$collectivePath,
+			$lastUserId,
+			$lastUserDisplayName,
+			$emoji,
+			$subpageOrder,
+			$fullWidth,
+			$slug,
+			$tags,
+			$linkedPageIds,
+		);
+	}
+
+	/**
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
@@ -245,11 +283,51 @@ class PageInfo implements JsonSerializable {
 		?string $tags = null,
 		?array $linkedPageIds = null,
 	): void {
-		$this->setId($file->getId());
-		// Set folder name as title for all index pages except the collective landing page
 		$dirName = dirname($file->getInternalPath());
 		$dirName = $dirName === '.' ? '' : $dirName;
-		if (strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX) === 0) {
+		$isIndexPage = strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX) === 0;
+		$mountPoint = explode('/', $file->getMountPoint()->getMountPoint(), 4);
+		$collectivePath = count($mountPoint) >= 4 ? rtrim($mountPoint[3], '/') : null;
+		$this->fromData(
+			$file->getId(),
+			$dirName,
+			$isIndexPage,
+			$parentId,
+			$file->getName(),
+			$file->getMTime(),
+			(int)$file->getSize(),
+			$collectivePath,
+			$lastUserId,
+			$lastUserDisplayName,
+			$emoji,
+			$subpageOrder,
+			$fullWidth,
+			$slug,
+			$tags,
+			$linkedPageIds,
+		);
+	}
+
+	private function fromData(
+		int $id,
+		string $dirName,
+		bool $isIndexPage,
+		int $parentId,
+		string $fileName,
+		int $timestamp,
+		int $size,
+		?string $collectivePath = null,
+		?string $lastUserId = null,
+		?string $lastUserDisplayName = null,
+		?string $emoji = null,
+		?string $subpageOrder = null,
+		?bool $fullWidth = false,
+		?string $slug = null,
+		?string $tags = null,
+		?array $linkedPageIds = null,
+	): void {
+		$this->setId($id);
+		if ($isIndexPage) {
 			if ($parentId === 0) {
 				// Landing page
 				$this->setTitle(Server::get(IFactory::class)->get('collectives')->t('Landing page'));
@@ -258,15 +336,14 @@ class PageInfo implements JsonSerializable {
 				$this->setTitle(basename($dirName));
 			}
 		} else {
-			$this->setTitle(basename($file->getName(), self::SUFFIX));
+			$this->setTitle(basename($fileName, self::SUFFIX));
 		}
 		$this->setFilePath($dirName);
-		$this->setTimestamp($file->getMTime());
-		$this->setSize((int)$file->getSize());
-		$this->setFileName($file->getName());
-		$mountPoint = explode('/', $file->getMountPoint()->getMountPoint(), 4);
-		if (count($mountPoint) >= 4) {
-			$this->setCollectivePath(rtrim($mountPoint[3], '/'));
+		$this->setTimestamp($timestamp);
+		$this->setSize($size);
+		$this->setFileName($fileName);
+		if ($collectivePath !== null) {
+			$this->setCollectivePath($collectivePath);
 		}
 		if ($lastUserId !== null) {
 			$this->setLastUserId($lastUserId);

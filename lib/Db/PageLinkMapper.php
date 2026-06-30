@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Db;
 
 use OCP\DB\Exception;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class PageLinkMapper {
@@ -29,6 +30,33 @@ class PageLinkMapper {
 			->from(self::TABLE_NAME)
 			->where($qb->expr()->eq('page_id', $qb->createNamedParameter($pageId)));
 		return $qb->executeQuery()->fetchAll(\PDO::FETCH_COLUMN);
+	}
+
+	/**
+	 * @param int[] $pageIds
+	 * @return array<int, int[]> Linked page ids indexed by page id
+	 * @throws Exception
+	 */
+	public function findByPageIds(array $pageIds): array {
+		if (empty($pageIds)) {
+			return [];
+		}
+
+		$linkedPageIds = [];
+		foreach (array_chunk($pageIds, 1000) as $chunk) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('page_id', 'linked_page_id')
+				->from(self::TABLE_NAME)
+				->where($qb->expr()->in('page_id', $qb->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
+
+			$result = $qb->executeQuery();
+			while ($row = $result->fetch()) {
+				$linkedPageIds[(int)$row['page_id']][] = (int)$row['linked_page_id'];
+			}
+			$result->closeCursor();
+		}
+
+		return $linkedPageIds;
 	}
 
 	/**
