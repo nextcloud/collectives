@@ -11,7 +11,7 @@
 		<NcUserBubble
 			:displayName="lastUserDisplayName"
 			:user="lastUserId" />
-		<span class="timestamp">
+		<span class="timestamp" :title="lastUpdateTitle">
 			{{ lastUpdate }}
 		</span>
 	</div>
@@ -54,6 +54,10 @@ export default {
 	computed: {
 		lastUpdate() {
 			return moment.unix(this.timestamp).fromNow()
+		},
+
+		lastUpdateTitle() {
+			return moment.unix(this.timestamp).format('LLL')
 		},
 	},
 
