@@ -5,13 +5,13 @@
 
 <template>
 	<li v-if="lastUserDisplayName" class="action action--user-bubble">
-		<button class="action-button action-button--user-bubble" type="button">
+		<div class="action-button action-button--user-bubble">
 			<ClockIcon :size="20" />
 			<LastUserBubble
 				:lastUserId
 				:lastUserDisplayName
 				:timestamp />
-		</button>
+		</div>
 	</li>
 </template>
 
@@ -47,14 +47,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.action--user-bubble {
-	pointer-events: none;
-}
-
-.action--user-bubble :deep(.timestamp) {
-	pointer-events: auto;
-}
-
 .action-button--user-bubble {
 	display: flex;
 	align-items: flex-start;
@@ -70,6 +62,7 @@ export default {
 	border-radius: 0;
 	background-color: transparent;
 	box-shadow: none;
+	cursor: default;
 	font-weight: normal;
 	font-size: var(--default-font-size);
 	line-height: var(--default-clickable-area);

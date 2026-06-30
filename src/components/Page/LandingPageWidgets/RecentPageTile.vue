@@ -24,7 +24,7 @@
 					:displayName="page.lastUserDisplayName || ''"
 					disableMenu
 					:size="24" />
-				<span class="timestamp">
+				<span class="timestamp" :title="lastUpdateTitle">
 					{{ lastUpdate }}
 				</span>
 			</div>
@@ -81,6 +81,10 @@ export default {
 
 		lastUpdate() {
 			return moment.unix(this.page.timestamp).fromNow()
+		},
+
+		lastUpdateTitle() {
+			return moment.unix(this.page.timestamp).format('LLL')
 		},
 	},
 }
