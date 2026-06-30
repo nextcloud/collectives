@@ -39,10 +39,21 @@ jobs:
           ref: 'v${{ steps.collectives_app.outputs.version }}'
           persist-credentials: false
 
-      - name: Checkout migrations from main branch
+      - name: Checkout migrations from this branch
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          path: tmp
+          sparse-checkout: lib/Migration
+
+      - name: Copy over migrations
         run: |
-          git fetch origin ${{ env.BRANCH }}
-          git checkout origin/${{ env.BRANCH }} -- lib/Migration
+          rm -rf lib/Migration
+          cp tmp/lib/Migration lib/Migration -r
+          rm -rf tmp
+
+      - name: Git status
+        run: |
+          git status
 
       - name: Get php version
         id: versions
