@@ -649,4 +649,9 @@ class PageTrashBackend implements ITrashBackend {
 		}
 		return $trashFilename;
 	}
+
+	public function getCacheableRootsForUser(IUser $user): array {
+		// TODO provide an actual implementation
+		return [];
+	}
 }
