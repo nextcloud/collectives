@@ -287,6 +287,7 @@ OC.L10N.register(
     "Open in Collectives" : "Open in Collectives",
     "Come, organize and build shared knowledge!" : "Kom, organiseer en bouw aan gedeelde kennis!",
     "Create new collective" : "Nieuw collectief maken",
+    "Link to page" : "Link naar pagina",
     "Link copied" : "Link gekopieerd",
     "Could not copy link to the clipboard:" : "Kan link niet naar het klembord kopiëren:",
     "New page" : "Nieuwe pagina",
