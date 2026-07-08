@@ -301,6 +301,7 @@ OC.L10N.register(
     "Open in Collectives" : "Abrir en Cuadernos colectivos",
     "Come, organize and build shared knowledge!" : "¡Venga, organice y construya conocimiento compartido!",
     "Create new collective" : "Crear un cuaderno colectivo nuevo",
+    "Link to page" : "Enlazar a una página",
     "Link copied" : "Enlace copiado",
     "Could not copy link to the clipboard:" : "No se pudo copiar el enlace al portapapeles:",
     "New page" : "Página nueva",
