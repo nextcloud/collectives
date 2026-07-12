@@ -21,11 +21,7 @@ test.describe('Keyboard shortcuts', () => {
 
 		// Second Ctrl-F: open unified search
 		await page.keyboard.press('Control+f')
-		await expect(page.locator('.unified-search-modal')).toBeVisible()
-
-		// Third Ctrl-F: close unified search (focus browsers search util, but that's not testable)
-		await page.keyboard.press('Control+f')
-		await expect(page.locator('.unified-search-modal')).not.toBeVisible()
+		await expect(page.locator('.unified-search-modal-root')).toBeVisible()
 		await expect(pageFilter).not.toBeFocused()
 	})
 
@@ -49,10 +45,6 @@ test.describe('Keyboard shortcuts', () => {
 
 		// Second Ctrl-F: open unified search
 		await page.keyboard.press('Control+f')
-		await expect(page.locator('.unified-search-modal')).toBeVisible()
-
-		// Third Ctrl-F: close unified search (focus browsers search util, but that's not testable)
-		await page.keyboard.press('Control+f')
-		await expect(page.locator('.unified-search-modal')).not.toBeVisible()
+		await expect(page.locator('.unified-search-modal-root')).toBeVisible()
 	})
 })

@@ -16,24 +16,28 @@ const test = mergeTests(createCollectiveTest, editorTest)
 test.describe('Unified search', () => {
 	let page1: CollectivePage
 	let page2: CollectivePage
+	let unifiedSearchInput: Locator
 	let unifiedSearchDialog: Locator
 
 	test.beforeEach(async ({ page, user, collective }) => {
 		page1 = await collective.createPage({ title: 'Page 1', user, page })
 		page2 = await collective.createPage({ title: 'Page 2', user, page })
 		await collective.openCollective()
+		unifiedSearchDialog = page.locator('.unified-search-modal-root')
 		if (['stable32', 'stable33'].includes(process.env.PLAYWRIGHT_NC_SERVER_BRANCH || '')) {
 			await page.getByRole('button', { name: 'Unified search' }).click()
+			unifiedSearchInput = unifiedSearchDialog.getByRole('textbox')
 		} else {
-			await page.getByRole('button', { name: 'Search apps, files, tags, messages' }).click()
+			const unifiedSearchArea = page.locator('.unified-search-input')
+			unifiedSearchArea.click()
+			unifiedSearchInput = unifiedSearchArea.locator('input')
 		}
-		unifiedSearchDialog = page.locator('.unified-search-modal')
-		await expect(unifiedSearchDialog).toBeVisible()
+		await expect(unifiedSearchInput).toBeVisible()
 	})
 
 	// eslint-disable-next-line no-empty-pattern
 	test('Search for page title', async ({}) => {
-		await unifiedSearchDialog.getByRole('textbox').fill('page')
+		await unifiedSearchInput.fill('page')
 		await expect(unifiedSearchDialog.getByRole('heading', { name: 'Collectives - Pages' })
 			.locator('~ ul')
 			.locator('.list-item-content__name'))
@@ -47,7 +51,7 @@ test.describe('Unified search', () => {
 			'collectives:index',
 			collective.data.name,
 		])
-		await unifiedSearchDialog.getByRole('textbox').fill('lorem')
+		await unifiedSearchInput.fill('lorem')
 		await expect(unifiedSearchDialog.getByRole('heading', { name: 'Collectives - Page content' })
 			.locator('~ ul')
 			.locator('.list-item-content__name'))
