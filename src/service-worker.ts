@@ -3,11 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {
-	type RouteMatchCallbackOptions,
+import type { RouteMatchCallbackOptions } from 'workbox-core'
 
-	clientsClaim,
-} from 'workbox-core'
+import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
