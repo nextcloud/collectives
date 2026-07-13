@@ -11,7 +11,7 @@ import { defineConfig, devices } from '@playwright/test'
  */
 const LOCAL_CONFIG = {
 	// Just the html report with the traces
-	reporter: 'html',
+	reporter: 'list',
 } as const
 
 /**
