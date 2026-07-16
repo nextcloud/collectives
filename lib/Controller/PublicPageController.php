@@ -639,7 +639,7 @@ class PublicPageController extends CollectivesPublicOCSController {
 				if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 					try {
 						$this->checkPageShareAccess($collectiveId, $sharePageId, $value['file_id'], $owner);
-					} catch (NotPermittedException) {
+					} catch (OCSNotFoundException) {
 						continue;
 					}
 				}

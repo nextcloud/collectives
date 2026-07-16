@@ -18,6 +18,10 @@ Feature: publicPageShare
     Then anonymous sees public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
     And anonymous sees pagePath "Readme.md" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
 
+  Scenario: Search a subpage in a shared page (read-only)
+    When anonymous searches "subpage" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
+    Then anonymous sees page "subpage" in search results
+
   Scenario: Upload and list attachment for page
     When user "jane" uploads attachment "test.png" via webdav to "subpage" with file path "/sharefolderpage/" in "BehatPublicPageCollective"
     Then anonymous sees attachment "test.png" with mimetype "image/png" for "subpage" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
