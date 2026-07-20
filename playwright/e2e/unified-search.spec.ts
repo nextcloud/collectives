@@ -10,6 +10,7 @@ import { runOcc } from '@nextcloud/e2e-test-server'
 import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as editorTest } from '../support/fixtures/editor.ts'
+import { hasServerVersion } from '../support/helpers/server.ts'
 
 const test = mergeTests(createCollectiveTest, editorTest)
 
@@ -24,7 +25,7 @@ test.describe('Unified search', () => {
 		page2 = await collective.createPage({ title: 'Page 2', user, page })
 		await collective.openCollective()
 		unifiedSearchDialog = page.locator('.unified-search-modal-root')
-		if (['stable32', 'stable33'].includes(process.env.PLAYWRIGHT_NC_SERVER_BRANCH || '')) {
+		if (hasServerVersion(32, 33)) {
 			await page.getByRole('button', { name: 'Unified search' }).click()
 			unifiedSearchInput = unifiedSearchDialog.getByRole('textbox')
 		} else {
