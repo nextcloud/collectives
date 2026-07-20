@@ -22,6 +22,7 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotificationService;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageInfoTreeBuilderFactory;
 use OCA\Collectives\Service\PageService;
@@ -113,6 +114,8 @@ class PageServiceTest extends TestCase {
 			$this->collectiveService,
 		);
 
+		$notificationService = $this->createMock(NotificationService::class);
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -126,6 +129,7 @@ class PageServiceTest extends TestCase {
 			$tagMapper,
 			$pageLinkMapper,
 			$pageInfoTreeBuilderFactory,
+			$notificationService,
 		);
 	}
 

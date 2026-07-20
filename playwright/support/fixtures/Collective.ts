@@ -226,6 +226,13 @@ export class Collective {
 		this.extraMembers.push(account)
 		return account
 	}
+
+	async setNotify(level: number): Promise<void> {
+		await this.page.request.put(
+			apiUrl('v1.0', 'collectives', this.data.id, 'userSettings', 'notify'),
+			{ headers: ocsHeaders, data: { notify: level }, failOnStatusCode: true },
+		)
+	}
 }
 
 /**
