@@ -6,6 +6,7 @@
 import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectivesTest } from '../support/fixtures/create-collectives.ts'
 import { test as navigationTest } from '../support/fixtures/navigation.ts'
+import { hasServerVersion } from '../support/helpers/server.ts'
 
 const test = mergeTests(createCollectivesTest, navigationTest)
 
@@ -22,7 +23,7 @@ test.describe('Keyboard shortcuts', () => {
 		// Second Ctrl-F: open unified search
 		await page.keyboard.press('Control+f')
 		await expect(pageFilter).not.toBeFocused()
-		if (['stable32', 'stable33', 'stable34'].includes(process.env.PLAYWRIGHT_NC_SERVER_BRANCH)) {
+		if (hasServerVersion(32, 33, 34)) {
 			// Before NC 35: show unified search modal
 			await expect(page.locator('.unified-search-modal-root')).toBeVisible()
 		} else {
@@ -51,7 +52,7 @@ test.describe('Keyboard shortcuts', () => {
 
 		// Second Ctrl-F
 		await page.keyboard.press('Control+f')
-		if (['stable32', 'stable33', 'stable34'].includes(process.env.PLAYWRIGHT_NC_SERVER_BRANCH)) {
+		if (hasServerVersion(32, 33, 34)) {
 			// Before NC 35: open unified search
 			await expect(page.locator('.unified-search-modal-root')).toBeVisible()
 		} else {
