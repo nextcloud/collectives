@@ -21,8 +21,14 @@ test.describe('Keyboard shortcuts', () => {
 
 		// Second Ctrl-F: open unified search
 		await page.keyboard.press('Control+f')
-		await expect(page.locator('.unified-search-modal-root')).toBeVisible()
 		await expect(pageFilter).not.toBeFocused()
+		if (['stable32', 'stable33', 'stable34'].includes(process.env.PLAYWRIGHT_NC_SERVER_BRANCH)) {
+			// Before NC 35: show unified search modal
+			await expect(page.locator('.unified-search-modal-root')).toBeVisible()
+		} else {
+			// Afterwards: Focus search entry in title bar
+			await expect(page.locator('.unified-search-input input')).toBeFocused()
+		}
 	})
 
 	test('Ctrl-F in MemberPicker', async ({ page, collective, navigation }) => {
@@ -43,8 +49,14 @@ test.describe('Keyboard shortcuts', () => {
 		await page.keyboard.press('Control+f')
 		await expect(memberSearch).toBeFocused()
 
-		// Second Ctrl-F: open unified search
+		// Second Ctrl-F
 		await page.keyboard.press('Control+f')
-		await expect(page.locator('.unified-search-modal-root')).toBeVisible()
+		if (['stable32', 'stable33', 'stable34'].includes(process.env.PLAYWRIGHT_NC_SERVER_BRANCH)) {
+			// Before NC 35: open unified search
+			await expect(page.locator('.unified-search-modal-root')).toBeVisible()
+		} else {
+			// Afterwards: do not open unified search when modal is open
+			await expect(page.locator('.unified-search-input input')).not.toBeFocused()
+		}
 	})
 })
