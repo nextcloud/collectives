@@ -299,6 +299,7 @@ OC.L10N.register(
     "Open in Collectives" : "Άνοιγμα στις Συλλογικότητες",
     "Come, organize and build shared knowledge!" : "Ελάτε, οργανωθείτε και δημιουργήστε κοινή γνώση!",
     "Create new collective" : "Δημιουργία νέας συλλογικότητας",
+    "Link to page" : "Σύνδεσμος προς σελίδα",
     "Link copied" : "Ο σύνδεσμος αντιγράφηκε",
     "Could not copy link to the clipboard:" : "Δεν ήταν δυνατή η αντιγραφή του συνδέσμου στο πρόχειρο:",
     "New page" : "Νέα σελίδα",
