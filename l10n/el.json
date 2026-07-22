@@ -164,6 +164,7 @@
     "Copy or move page" : "Αντιγραφή ή μετακίνηση σελίδας",
     "Move page up" : "Μετακίνηση σελίδας πάνω",
     "Move page down" : "Μετακίνηση σελίδας κάτω",
+    "_%n attachment_::_%n attachments_" : ["%n συνημμένο","%n συνημμένα"],
     "Page not found: {page}" : "Η σελίδα δεν βρέθηκε: {page}",
     "Page with ID {id} not found" : "Η σελίδα με ID {id} δεν βρέθηκε",
     "Select a page from the list or create a new one." : "Επιλέξτε μια σελίδα από τη λίστα ή δημιουργήστε μια νέα.",
