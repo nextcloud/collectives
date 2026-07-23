@@ -63,7 +63,7 @@ import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePl
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import SkeletonLoading from '../../SkeletonLoading.vue'
 import WidgetHeading from './WidgetHeading.vue'
-import { circlesMemberTypes } from '../../../constants.js'
+import { CIRCLE_MEMBERS_PARTIAL_LIMIT, circlesMemberTypes } from '../../../constants.js'
 import { useCirclesStore } from '../../../stores/circles.js'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
@@ -208,7 +208,7 @@ export default {
 			const avatarHeight = defaultClickableArea + 12
 			if (membersWidth) {
 				const maxMembers = Math.floor(membersWidth / avatarHeight) - 1
-				this.showMembersCount = Math.min(this.sortedMembers.length, maxMembers)
+				this.showMembersCount = Math.min(this.sortedMembers.length, maxMembers, CIRCLE_MEMBERS_PARTIAL_LIMIT)
 			}
 		},
 
