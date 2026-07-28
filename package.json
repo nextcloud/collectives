@@ -81,5 +81,14 @@
   "engines": {
     "node": "^24.0.0",
     "npm": "^11.3.0"
+  },
+  "allowScripts": {
+    "@parcel/watcher": true,
+    "core-js": true,
+    "cpu-features": true,
+    "cypress": true,
+    "esbuild": true,
+    "protobufjs": true,
+    "ssh2": true
   }
 }
