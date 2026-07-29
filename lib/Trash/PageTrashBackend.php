@@ -75,6 +75,12 @@ class PageTrashBackend implements ITrashBackend {
 		return $this->getTrashForFolders($user, $folders);
 	}
 
+	public function getTrashRootItem(IUser $user, string $name): ?ITrashItem {
+		$folders = $this->mountProvider->getFoldersForUser($user);
+
+		return $this->getTrashItemForFolders($user, $folders, $name);
+	}
+
 	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -398,6 +404,7 @@ class PageTrashBackend implements ITrashBackend {
 	/**
 	 * @throws NotPermittedException
 	 * @throws NotFoundException
+	 * @return list<CollectivePageTrashItem>
 	 */
 	private function getTrashForFolders(IUser $user, array $folders): array {
 		$collectiveIds = array_map(static fn (array $folder): int => $folder['folder_id'], $folders);
@@ -442,6 +449,58 @@ class PageTrashBackend implements ITrashBackend {
 			}
 		}
 		return $items;
+	}
+
+	/**
+	 * @throws NotPermittedException
+	 * @throws NotFoundException
+	 */
+	private function getTrashItemForFolders(IUser $user, array $folders, $name): ?ITrashItem {
+		$collectiveIds = array_map(static fn (array $folder): int => $folder['folder_id'], $folders);
+		$rows = $this->trashManager->listTrashForCollectives($collectiveIds);
+		$indexedRows = [];
+		foreach ($rows as $row) {
+			$key = $row['collective_id'] . '/' . $row['name'] . '/' . $row['deleted_time'];
+			$indexedRows[$key] = $row;
+		}
+
+		$items = [];
+		foreach ($folders as $folder) {
+			$collectiveId = $folder['folder_id'];
+			if (!$this->userHasAccessToFolder($user, (int)$collectiveId)) {
+				continue;
+			}
+
+			$mountPoint = $folder['mount_point'];
+			$trashFolder = $this->getTrashFolder($collectiveId);
+			try {
+				$item = $trashFolder->get($name);
+			} catch (NotFoundException) {
+				continue;
+			}
+
+			$pathParts = pathinfo($item->getName());
+			$timestamp = (int)substr($pathParts['extension'], 1);
+			$name = $pathParts['filename'];
+			$key = $collectiveId . '/' . $name . '/' . $timestamp;
+			$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
+			$deletedBy = isset($indexedRows[$key]) ? $indexedRows[$key]['deleted_by'] : '';
+
+			if (method_exists($item, 'getFileInfo') && null !== $info = $item->getFileInfo()) {
+				$info['name'] = $name;
+				return new CollectivePageTrashItem(
+					$this,
+					$originalLocation,
+					$timestamp,
+					'/' . $collectiveId . '/' . $item->getName(),
+					$info,
+					$user,
+					$this->userManager->get($deletedBy),
+					$mountPoint,
+				);
+			}
+		}
+		return null;
 	}
 
 	public function getTrashNodeById(IUser $user, int $fileId): ?Node {
