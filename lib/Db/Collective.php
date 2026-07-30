@@ -78,6 +78,7 @@ class Collective extends Entity implements JsonSerializable {
 	protected bool $userShowMembers = Collective::defaultShowMembers;
 	protected bool $userShowRecentPages = Collective::defaultShowRecentPages;
 	protected array $userFavoritePages = [];
+	protected int $userNotify = CollectiveUserSettings::NOTIFY_MENTION;
 	protected bool $canLeave = false;
 
 	public function getCircleId(): string {
@@ -233,6 +234,14 @@ class Collective extends Entity implements JsonSerializable {
 		$this->userFavoritePages = $userFavoritePages;
 	}
 
+	public function getUserNotify(): int {
+		return $this->userNotify;
+	}
+
+	public function setUserNotify(int $userNotify): void {
+		$this->userNotify = $userNotify;
+	}
+
 	public function getUserPermissions(bool $isShare = false): int {
 		// Public shares always get permissions of a simple member plus sharing permission of owner
 		if ($isShare) {
@@ -309,6 +318,7 @@ class Collective extends Entity implements JsonSerializable {
 			'userShowMembers' => $this->userShowMembers,
 			'userShowRecentPages' => $this->userShowRecentPages,
 			'userFavoritePages' => $this->userFavoritePages,
+			'userNotify' => $this->userNotify,
 			'canLeave' => $this->getCanLeave(),
 		];
 	}

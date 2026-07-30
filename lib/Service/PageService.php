@@ -18,6 +18,7 @@ use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Notification\Notifier;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\NotifyPush\Queue\IQueue;
 use OCP\App\IAppManager;
@@ -54,6 +55,7 @@ class PageService {
 		private readonly TagMapper $tagMapper,
 		private readonly PageLinkMapper $pageLinkMapper,
 		private readonly PageInfoTreeBuilderFactory $pageInfoTreeBuilderFactory,
+		private readonly NotificationService $notificationService,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -727,6 +729,8 @@ class PageService {
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
+		$collective = $this->getCollective($collectiveId, $userId);
+		$this->notificationService->notifyMembers($collective, $pageInfo, Notifier::SUBJECT_PAGE_UPDATED, $userId, $this->getPageLink($collective->getUrlPath(), $pageInfo));
 		return $pageInfo;
 	}
 
@@ -945,6 +949,9 @@ class PageService {
 			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$newPageInfo]]);
 		}
 
+		$collective = $this->getCollective($collectiveId, $userId);
+		$this->notificationService->notifyMembers($collective, $newPageInfo, Notifier::SUBJECT_PAGE_UPDATED, $userId, $this->getPageLink($collective->getUrlPath(), $newPageInfo));
+
 		return $newPageInfo;
 	}
 
@@ -1039,6 +1046,8 @@ class PageService {
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, $emoji);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
+		$collective = $this->getCollective($collectiveId, $userId);
+		$this->notificationService->notifyMembers($collective, $pageInfo, Notifier::SUBJECT_PAGE_UPDATED, $userId, $this->getPageLink($collective->getUrlPath(), $pageInfo));
 		return $pageInfo;
 	}
 
@@ -1188,6 +1197,7 @@ class PageService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 
+		$collective = $this->getCollective($collectiveId, $userId);
 		$this->initTrashBackend();
 		if ($direct || !$this->trashBackend) {
 			// Delete directly if desired or trash is not available
@@ -1195,6 +1205,7 @@ class PageService {
 			$this->pageMapper->deleteByFileId($id);
 			$oldParentPageInfo = $this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$oldParentPageInfo], 'removed' => [$id]]);
+			$this->notificationService->notifyMembers($collective, $pageInfo, Notifier::SUBJECT_PAGE_DELETED, $userId, $this->getPageLink($collective->getUrlPath(), $pageInfo));
 			return $pageInfo;
 		}
 
@@ -1205,6 +1216,7 @@ class PageService {
 
 		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
+		$this->notificationService->notifyMembers($collective, $pageInfo, Notifier::SUBJECT_PAGE_DELETED, $userId, $this->getPageLink($collective->getUrlPath(), $pageInfo));
 		return $pageInfo;
 	}
 
@@ -1281,5 +1293,17 @@ class PageService {
 			$pagePathRoute,
 			$pageTitleRoute
 		])) . $fileIdQuery;
+	}
+
+	public function notifyContentChange(File $file, Collective $collective, string $userId): void {
+		try {
+			$pageInfo = $this->getPageByFile($file);
+		} catch (\Throwable) {
+			return;
+		}
+		$this->notificationService->notifyMembers(
+			$collective, $pageInfo, Notifier::SUBJECT_PAGE_UPDATED,
+			$userId, $this->getPageLink($collective->getUrlPath(), $pageInfo)
+		);
 	}
 }

@@ -13,18 +13,22 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Fs\MarkdownHelper;
 use OCA\Collectives\Mount\CollectiveStorage;
+use OCA\Collectives\Service\PageService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\Files\File;
 use OCP\IConfig;
+use OCP\IUserSession;
 
 /** @template-implements IEventListener<Event|NodeWrittenEvent> */
 class NodeWrittenListener implements IEventListener {
 	public function __construct(
-		private IConfig $config,
-		private PageLinkMapper $pageLinkMapper,
-		private CollectiveMapper $collectiveMapper,
+		private readonly IConfig $config,
+		private readonly PageLinkMapper $pageLinkMapper,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly IUserSession $userSession,
+		private readonly PageService $pageService,
 	) {
 	}
 
@@ -46,5 +50,10 @@ class NodeWrittenListener implements IEventListener {
 
 		$linkedPageIds = MarkdownHelper::getLinkedPageIds($collective, $node->getContent(), $this->config->getSystemValue('trusted_domains', []));
 		$this->pageLinkMapper->updateByPageId($node->getId(), $linkedPageIds);
+
+		$userId = $this->userSession->getUser()?->getUID();
+		if ($userId) {
+			$this->pageService->notifyContentChange($node, $collective, $userId);
+		}
 	}
 }

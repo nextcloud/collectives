@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Listeners;
 
+use OCA\Collectives\Db\CollectiveUserSettings;
+use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Mount\CollectiveMountPoint;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
@@ -17,6 +19,7 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\Notification\AlreadyProcessedException;
 
 /** @template-implements IEventListener<Event|MentionEvent> */
 class TextMentionListener implements IEventListener {
@@ -25,6 +28,7 @@ class TextMentionListener implements IEventListener {
 		private IURLGenerator $urlGenerator,
 		private CollectiveService $collectiveService,
 		private PageService $pageService,
+		private CollectiveUserSettingsMapper $settingsMapper,
 		private ?string $userId,
 	) {
 	}
@@ -44,6 +48,15 @@ class TextMentionListener implements IEventListener {
 		}
 
 		$collective = $this->collectiveService->getCollective($mountPoint->getFolderId(), $this->userId);
+
+		// Skip notification if mentioned user has notifications turned off
+		$mentionedUserId = $event->getNotification()->getUser();
+		$settings = $this->settingsMapper->findByCollectiveAndUser($collective->getId(), $mentionedUserId);
+		$notifyLevel = ($settings?->getSetting('notify')) ?? CollectiveUserSettings::NOTIFY_MENTION;
+		if ($notifyLevel < CollectiveUserSettings::NOTIFY_MENTION) {
+			throw new AlreadyProcessedException();
+		}
+
 		$pageInfo = $this->pageService->findByFile($mountPoint->getFolderId(), $event->getFile(), $this->userId);
 
 		$collectiveLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collective->getName());
