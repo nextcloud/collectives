@@ -258,7 +258,6 @@ export default {
 		t,
 
 		...mapActions(useCirclesStore, [
-			'getCircleMembers',
 			'changeCircleMemberLevel',
 			'removeMemberFromCircle',
 		]),
@@ -267,9 +266,8 @@ export default {
 			if (this.circleId) {
 				this.isLoadingLevel = true
 				await this.changeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
-					.then(async () => {
+					.then(() => {
 						showSuccess(t('collectives', 'Member level changed'))
-						await this.getCircleMembers(this.circleId)
 					}).catch((error) => {
 						showError(t('collectives', 'Could not change member level'))
 						throw error
@@ -283,16 +281,14 @@ export default {
 			if (this.circleId) {
 				this.isLoadingLevel = true
 				await this.removeMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
-					.then(async () => {
+					.then(() => {
 						showSuccess(t('collectives', 'Member removed'))
-						await this.getCircleMembers(this.circleId)
 					}).catch((error) => {
 						showError(t('collectives', 'Could not remove member'))
 						throw error
 					}).finally(() => {
 						this.isLoadingLevel = false
 					})
-				this.isLoadingLevel = false
 			}
 		},
 

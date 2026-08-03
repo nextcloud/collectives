@@ -25,6 +25,7 @@
 				:circleId="collective.circleId"
 				:currentUserIsAdmin
 				:currentMembers="circleMembersSorted(collective.circleId)"
+				:isLoading="isLoadingMembers"
 				:onClickSearched />
 		</div>
 	</NcModal>
@@ -63,7 +64,7 @@ export default {
 	],
 
 	computed: {
-		...mapState(useCirclesStore, ['circleMembersSorted']),
+		...mapState(useCirclesStore, ['circleMembersSorted', 'circleMembersFullyLoaded']),
 		...mapState(useCollectivesStore, ['isCollectiveAdmin']),
 		...mapState(useRootStore, ['isPublic']),
 
@@ -81,6 +82,10 @@ export default {
 
 		showTeamLink() {
 			return this.hasContactsApp && !this.isPublic
+		},
+
+		isLoadingMembers() {
+			return !this.circleMembersFullyLoaded(this.collective.circleId)
 		},
 	},
 
@@ -107,7 +112,6 @@ export default {
 				userId: member.id,
 				type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[member.source]],
 			})
-			await this.getCircleMembers(this.collective.circleId)
 		},
 	},
 }
