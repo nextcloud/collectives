@@ -89,7 +89,12 @@ export default {
 		},
 
 		setActive() {
-			this.active = collectivesFolder && collectivesFolder !== '/' && this.internalPath.startsWith(collectivesFolder)
+			const folder = collectivesFolder?.replace(/\/$/, '')
+			this.active = Boolean(
+				folder
+				&& folder !== '/'
+				&& (this.internalPath === folder || this.internalPath.startsWith(folder + '/')),
+			)
 		},
 	},
 }
