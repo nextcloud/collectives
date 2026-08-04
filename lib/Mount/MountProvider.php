@@ -18,7 +18,6 @@ use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\App\IAppManager;
-use OCP\AppFramework\QueryException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
@@ -30,6 +29,7 @@ use OCP\Files\Storage\IStorageFactory;
 use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserSession;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class MountProvider implements IMountProvider {
@@ -51,7 +51,7 @@ class MountProvider implements IMountProvider {
 
 		try {
 			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID(), true, false);
-		} catch (QueryException|MissingDependencyException|NotFoundException|NotPermittedException|CircleException $e) {
+		} catch (ContainerExceptionInterface|MissingDependencyException|NotFoundException|NotPermittedException|CircleException $e) {
 			$this->log($e);
 			return $folders;
 		}
