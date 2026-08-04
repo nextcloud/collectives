@@ -66,6 +66,7 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
+				return
 			}
 
 			await this.$router.push(this.newPagePath)
