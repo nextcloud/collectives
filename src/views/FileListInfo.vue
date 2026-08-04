@@ -31,7 +31,7 @@ import { generateUrl } from '@nextcloud/router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
-const collectivesFolder = loadState('collectives', 'user_folder', null)
+const collectivesFolder = loadState('collectives', 'user_folder', null)?.replace(/\/$/, '')
 
 export default {
 	name: 'FileListInfo',
@@ -59,7 +59,7 @@ export default {
 
 	computed: {
 		collectivesLink() {
-			let collectivesPath = this.internalPath.startsWith(collectivesFolder)
+			let collectivesPath = this.active
 				? this.internalPath.slice(collectivesFolder.length)
 				: ''
 
@@ -89,7 +89,8 @@ export default {
 		},
 
 		setActive() {
-			this.active = collectivesFolder && collectivesFolder !== '/' && this.internalPath.startsWith(collectivesFolder)
+			this.active = collectivesFolder
+				&& (this.internalPath === collectivesFolder || this.internalPath.startsWith(collectivesFolder + '/'))
 		},
 	},
 }
