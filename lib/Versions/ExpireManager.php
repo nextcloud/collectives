@@ -13,7 +13,7 @@ use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Files_Versions\Expiration;
 use OCA\Files_Versions\Versions\IMetadataVersion;
 use OCA\Files_Versions\Versions\IVersion;
-use OCP\AppFramework\QueryException;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 class ExpireManager {
@@ -38,7 +38,7 @@ class ExpireManager {
 	public function __construct(ContainerInterface $appContainer) {
 		try {
 			$this->expiration = $appContainer->get(Expiration::class);
-		} catch (QueryException $e) {
+		} catch (ContainerExceptionInterface $e) {
 			// Could not instantiate - probably files_versions app is disabled
 			$this->dependencyInjectionError = $e->getMessage();
 		}

@@ -20,9 +20,9 @@ use OCA\Circles\Model\Member;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\Circles\Model\Probes\DataProbe;
 use OCA\Circles\Tools\Exceptions\InvalidItemException;
-use OCP\AppFramework\QueryException;
 use OCP\AutoloadNotAllowedException;
 use OCP\Util;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 class CircleHelper {
@@ -32,7 +32,7 @@ class CircleHelper {
 	public function __construct(ContainerInterface $appContainer) {
 		try {
 			$this->circlesManager = $appContainer->get(CirclesManager::class);
-		} catch (QueryException|AutoloadNotAllowedException $e) {
+		} catch (ContainerExceptionInterface|AutoloadNotAllowedException $e) {
 			// Could not instantiate - probably teams app is disabled
 			$this->dependencyInjectionError = $e->getMessage();
 		}

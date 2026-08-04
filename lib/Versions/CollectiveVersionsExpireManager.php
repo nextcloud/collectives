@@ -17,7 +17,6 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
-use OCP\AppFramework\QueryException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
@@ -26,6 +25,7 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
 use OCP\IUser;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
@@ -43,7 +43,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	) {
 		try {
 			$this->versionsBackend = $appContainer->get(VersionsBackend::class);
-		} catch (QueryException $e) {
+		} catch (ContainerExceptionInterface $e) {
 			$this->dependencyInjectionError = $e->getMessage();
 		}
 	}
