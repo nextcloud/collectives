@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.4.3 - 2026.08.05
+
+### 🐛Fixes
+* 🔌 OpenAPI: fix response definitions. (#2588)
+* 🔎 Render search query quotes correctly. Thanks @Saithej2k. (#2576)
+* ⌚ Show absolute timestamps on hover. Thanks @Saithej2k. (#2597)
+* 🚀 Improve performance when loading page list. Thanks @Koc. (#2380)
+* 🚀 Improve performance when collective has many members. Thanks @Koc.
+* 🙂 Fix emoji detection with PCRE < 10.35.
+* 🗑️ Fix restoring trashed pages with recent Server releases. Thanks @CarlSchwan.
+* 🐛 Stop navigation when page creation fails. Thanks @joshtrichards.
+* 🔎 Fix full-text search in public page shares. (#2345)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.4.2 - 2026.06.22
 
 ### 🐛Fixes
