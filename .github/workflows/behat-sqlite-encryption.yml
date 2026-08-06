@@ -121,7 +121,7 @@ jobs:
 
       - name: Behat integration
         working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/bin/behat --config=${{ env.BEHAT_CONFIG }} --profile ci
+        run: ./vendor/bin/behat --config=${{ env.BEHAT_CONFIG }} --profile ci-encryption
 
       - name: Upload NC logs
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
