@@ -14,13 +14,19 @@ default:
                     ocsUrl: 'https://nextcloud.local/ocs/v2.php'
                     publicUrl: 'https://nextcloud.local/public.php'
                     remoteUrl: 'https://nextcloud.local/remote.php'
-                    occPath: 'nc-shell.sh master php occ'
+                    occPath: 'nc-shell.sh master_enc php occ'
 ci:
     suites:
         default:
-            contexts:
+            contexts: &ci-contexts
                 - FeatureContext:
                     baseUrl: 'http://localhost:8080/index.php'
                     ocsUrl: 'http://localhost:8080/ocs/v2.php'
                     publicUrl: 'http://localhost:8080/public.php'
                     remoteUrl: 'http://localhost:8080/remote.php'
+ci-encryption:
+    suites:
+        default:
+            contexts: *ci-contexts
+            filters:
+                tags: '~@no-encryption'

@@ -18,6 +18,7 @@ Feature: publicPageShare
     Then anonymous sees public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
     And anonymous sees pagePath "Readme.md" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
 
+  @no-encryption
   Scenario: Search a subpage in a shared page (read-only)
     When user "jane" sets content of file "sharefolderpage/subpage.md" to "subpage" in collective "BehatPublicPageCollective"
     And occ command "collectives:index" is run
