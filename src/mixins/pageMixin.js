@@ -10,6 +10,7 @@ import { mapActions, mapState } from 'pinia'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
+import { useTemplatesStore } from '../stores/templates.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 
 export default {
@@ -29,6 +30,7 @@ export default {
 			'pages',
 			'sortedSubpages',
 		]),
+		...mapState(useTemplatesStore, ['hasTemplates']),
 	},
 
 	methods: {
@@ -40,6 +42,7 @@ export default {
 			'updateSubpageOrder',
 			'getPages',
 			'createPage',
+			'setNewPageParentId',
 			'setPageEmoji',
 			'setPageSubpageOrder',
 			'copyPage',
@@ -48,6 +51,20 @@ export default {
 			'movePageToCollective',
 			'trashPage',
 		]),
+
+		/**
+		 * Add a page under the given parent, going through the template picker
+		 * first if the collective has any templates configured
+		 *
+		 * @param {number} parentId ID of the parent page
+		 */
+		addPage(parentId) {
+			if (this.hasTemplates) {
+				this.setNewPageParentId(parentId)
+			} else {
+				this.newPage(parentId)
+			}
+		},
 
 		/**
 		 * Create a new page and focus the page automatically

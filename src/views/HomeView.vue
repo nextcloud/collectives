@@ -4,7 +4,16 @@
 -->
 
 <template>
-	<NcAppContent>
+	<NcAppContent
+		:showDetails="showing('details')"
+		:listSize="20"
+		:listMinWidth="15"
+		@update:showDetails="hide('details')">
+		<template #list>
+			<NcAppContentList :showDetails="showing('details')">
+				<CollectiveSelector />
+			</NcAppContentList>
+		</template>
 		<NcEmptyContent
 			:title="t('collectives', 'Collectives')"
 			:description="t('collectives', 'Come, organize and build shared knowledge!')"
@@ -29,19 +38,23 @@
 
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcAppContentList from '@nextcloud/vue/components/NcAppContentList'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
+import CollectiveSelector from '../components/Nav/CollectiveSelector.vue'
 import { useNetworkState } from '../composables/useNetworkState.js'
-import { useCollectivesStore } from '../stores/collectives.js'
+import { useRootStore } from '../stores/root.js'
 
 export default {
 	name: 'HomeView',
 
 	components: {
+		CollectiveSelector,
 		NcAppContent,
+		NcAppContentList,
 		NcButton,
 		CollectivesIcon,
 		NcEmptyContent,
@@ -59,24 +72,15 @@ export default {
 	},
 
 	computed: {
-		...mapState(useCollectivesStore, ['collectives', 'collectivePath']),
-	},
-
-	mounted() {
-		if (this.collectives.length === 1) {
-			// Open collective if only one exists
-			this.$router.push(this.collectivePath(this.collectives[0]))
-		} else if (this.collectives.length > 1) {
-			// Open the navigation (on mobile) if we have collectives
-			emit('toggle-navigation', { open: true })
-		}
+		...mapState(useRootStore, ['showing']),
 	},
 
 	methods: {
 		t,
 
+		...mapActions(useRootStore, ['hide']),
+
 		newCollective() {
-			emit('toggle-navigation', { open: true })
 			emit('open-new-collective-modal')
 			this.buttonVariant = 'secondary'
 		},

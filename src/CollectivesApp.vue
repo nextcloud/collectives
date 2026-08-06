@@ -16,20 +16,21 @@
 			id="sharingToken"
 			type="hidden"
 			:value="shareTokenParam">
-		<NavigationBar v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentCollective && currentPage" />
 		<CollectiveSettings
 			v-if="showCollectiveSettings"
 			:collective="settingsCollective" />
+		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
 	</NcContent>
 </template>
 
 <script>
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapActions, mapState } from 'pinia'
 import NcContent from '@nextcloud/vue/components/NcContent'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
-import NavigationBar from './components/NavigationBar.vue'
+import NewCollectiveModal from './components/Nav/NewCollectiveModal.vue'
 import PageSidebar from './components/PageSidebar.vue'
 import { useNetworkState } from './composables/useNetworkState.js'
 import { useCollectivesStore } from './stores/collectives.js'
@@ -44,7 +45,7 @@ export default {
 	components: {
 		CollectiveSettings,
 		NcContent,
-		NavigationBar,
+		NewCollectiveModal,
 		PageSidebar,
 	},
 
@@ -57,13 +58,13 @@ export default {
 	data() {
 		return {
 			loadPending: true,
+			showNewCollectiveModal: false,
 		}
 	},
 
 	computed: {
 		...mapState(useRootStore, [
 			'isPublic',
-			'printView',
 			'shareTokenParam',
 		]),
 
@@ -102,6 +103,11 @@ export default {
 
 	mounted() {
 		this.getCollectivesAndSettings()
+		subscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
+	},
+
+	beforeUnmount() {
+		unsubscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
 	},
 
 	methods: {
@@ -109,6 +115,14 @@ export default {
 		...mapActions(useCollectivesStore, [
 			'getCollectives',
 		]),
+
+		onOpenNewCollectiveModal() {
+			this.showNewCollectiveModal = true
+		},
+
+		onCloseNewCollectiveModal() {
+			this.showNewCollectiveModal = false
+		},
 
 		async getCollectivesAndSettings() {
 			this.loadPending = true

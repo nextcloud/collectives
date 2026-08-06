@@ -10,7 +10,10 @@
 		:listMinWidth="15"
 		@update:showDetails="hide('details')">
 		<template #list>
-			<PageList v-if="currentCollective" />
+			<NcAppContentList :showDetails="showing('details')">
+				<CollectiveSelector />
+				<PageList v-if="currentCollective" />
+			</NcAppContentList>
 		</template>
 		<CollectiveContainer v-if="currentCollective" />
 		<NcEmptyContent v-else-if="loading('collectives')">
@@ -27,10 +30,12 @@
 import { listen } from '@nextcloud/notify_push'
 import { mapActions, mapState } from 'pinia'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcAppContentList from '@nextcloud/vue/components/NcAppContentList'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import CollectiveContainer from '../components/CollectiveContainer.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
+import CollectiveSelector from '../components/Nav/CollectiveSelector.vue'
 import PageList from '../components/PageList.vue'
 import { useNetworkState } from '../composables/useNetworkState.ts'
 import { CIRCLE_MEMBERS_PARTIAL_LIMIT, pageModes, sessionUpdateInterval } from '../constants.js'
@@ -49,7 +54,9 @@ export default {
 	components: {
 		CollectiveContainer,
 		CollectiveNotFound,
+		CollectiveSelector,
 		NcAppContent,
+		NcAppContentList,
 		NcEmptyContent,
 		NcLoadingIcon,
 		PageList,
@@ -243,5 +250,11 @@ button.app-details-toggle {
 	z-index: 10023 !important;
 	top: 58px !important;
 	position: fixed !important;
+}
+
+.app-content-list {
+	// nextcloud-vue component sets `max-height: unset` on mobile.
+	// Overwrite this to fix stickiness of the page list header and selector.
+	max-height: 100%;
 }
 </style>
