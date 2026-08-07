@@ -46,7 +46,7 @@ to structure shared knowledge and cultivate trust.
 	<screenshot>https://raw.githubusercontent.com/nextcloud/collectives/main/docs/assets/desktop-screenshot.png</screenshot>
 
 	<dependencies>
-		<nextcloud min-version="32" max-version="34" />
+		<nextcloud min-version="32" max-version="35" />
 	</dependencies>
 
 	<background-jobs>
