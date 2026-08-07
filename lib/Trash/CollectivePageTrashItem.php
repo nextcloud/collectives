@@ -23,7 +23,7 @@ class CollectivePageTrashItem extends TrashItem {
 		FileInfo $fileInfo,
 		IUser $user,
 		?IUser $deletedBy,
-		private string $mountPoint,
+		private readonly string $mountPoint,
 	) {
 		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);
 	}

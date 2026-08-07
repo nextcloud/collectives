@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Fs;
 
+use OC_Util;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -19,11 +20,11 @@ use OCP\L10N\IFactory;
 
 class UserFolderHelper {
 	public function __construct(
-		private IRootFolder $rootFolder,
-		private IUserManager $userManager,
-		private IAppConfig $appConfig,
-		private IConfig $config,
-		private IFactory $l10nFactory,
+		private readonly IRootFolder $rootFolder,
+		private readonly IUserManager $userManager,
+		private readonly IAppConfig $appConfig,
+		private readonly IConfig $config,
+		private readonly IFactory $l10nFactory,
 	) {
 	}
 
@@ -48,8 +49,8 @@ class UserFolderHelper {
 		try {
 			/** @var Folder $userCollectivesFolder */
 			$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
-		} catch (NotFoundException $e) {
-			\OC_Util::setupFS($userId);
+		} catch (NotFoundException) {
+			OC_Util::setupFS($userId);
 			/** @var Folder $userCollectivesFolder */
 			$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
 		}

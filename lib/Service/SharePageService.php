@@ -13,8 +13,8 @@ use OCA\Collectives\Model\PageInfo;
 
 class SharePageService {
 	public function __construct(
-		private PageService $pageService,
-		private CollectiveShareService $shareService,
+		private readonly PageService $pageService,
+		private readonly CollectiveShareService $shareService,
 	) {
 	}
 

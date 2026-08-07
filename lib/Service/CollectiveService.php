@@ -37,19 +37,19 @@ class CollectiveService extends CollectiveServiceBase {
 	private ?VersionsBackend $pageVersionsBackend = null;
 
 	public function __construct(
-		private IAppManager $appManager,
+		private readonly IAppManager $appManager,
 		CollectiveMapper $collectiveMapper,
-		private CollectiveHelper $collectiveHelper,
-		private CollectiveFolderManager $collectiveFolderManager,
+		private readonly CollectiveHelper $collectiveHelper,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
 		CircleHelper $circleHelper,
-		private CollectiveShareService $shareService,
-		private CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-		private PageMapper $pageMapper,
-		private TagMapper $tagMapper,
-		private IL10N $l10n,
-		private IEventDispatcher $eventDispatcher,
-		private NodeHelper $nodeHelper,
-		private SluggerInterface $slugger,
+		private readonly CollectiveShareService $shareService,
+		private readonly CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
+		private readonly PageMapper $pageMapper,
+		private readonly TagMapper $tagMapper,
+		private readonly IL10N $l10n,
+		private readonly IEventDispatcher $eventDispatcher,
+		private readonly NodeHelper $nodeHelper,
+		private readonly SluggerInterface $slugger,
 	) {
 		parent::__construct($collectiveMapper, $circleHelper);
 	}

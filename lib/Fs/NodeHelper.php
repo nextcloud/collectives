@@ -24,7 +24,7 @@ use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
 
 class NodeHelper {
-	private bool $db4ByteSupport;
+	private readonly bool $db4ByteSupport;
 
 	public function __construct(
 		IDBConnection $db,

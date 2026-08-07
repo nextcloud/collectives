@@ -24,11 +24,11 @@ use Psr\Log\LoggerInterface;
 class IndexCollectives extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private CollectiveMapper $collectiveMapper,
-		private CollectiveFolderManager $collectiveFolderManager,
-		private SearchFileMapper $fileMapper,
-		private LoggerInterface $logger,
-		private SearchService $searchService,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
+		private readonly SearchFileMapper $fileMapper,
+		private readonly LoggerInterface $logger,
+		private readonly SearchService $searchService,
 	) {
 		parent::__construct($time);
 

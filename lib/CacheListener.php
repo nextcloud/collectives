@@ -17,13 +17,13 @@ use OCP\Files\Cache\ICacheEvent;
 
 class CacheListener {
 	public function __construct(
-		private IEventDispatcher $eventDispatcher,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
 	}
 
 	public function listen(): void {
-		$this->eventDispatcher->addListener(CacheEntryInsertedEvent::class, [$this, 'onCacheEvent'], 99999);
-		$this->eventDispatcher->addListener(CacheEntryUpdatedEvent::class, [$this, 'onCacheEvent'], 99999);
+		$this->eventDispatcher->addListener(CacheEntryInsertedEvent::class, $this->onCacheEvent(...), 99999);
+		$this->eventDispatcher->addListener(CacheEntryUpdatedEvent::class, $this->onCacheEvent(...), 99999);
 	}
 
 	public function onCacheEvent(ICacheEvent $event): void {

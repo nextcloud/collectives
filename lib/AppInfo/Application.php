@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\AppInfo;
 
-use Closure;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Circles\Events\EditingCircleEvent;
 use OCA\Collectives\CacheListener;
@@ -149,13 +148,11 @@ class Application extends App implements IBootstrap {
 			$context->registerSetupCheck(CirclesAppIsEnableCheck::class);
 		}
 
-		$context->registerService(SluggerInterface::class, function () {
-			return new AsciiSlugger();
-		}, false);
+		$context->registerService(SluggerInterface::class, fn () => new AsciiSlugger(), false);
 	}
 
 	public function boot(IBootcontext $context): void {
-		$context->injectFn(Closure::fromCallable([$this, 'registerMountProvider']));
+		$context->injectFn($this->registerMountProvider(...));
 	}
 
 	private function registerMountProvider(IMountProviderCollection $collection,

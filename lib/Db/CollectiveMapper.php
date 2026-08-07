@@ -31,7 +31,7 @@ use OCP\IDBConnection;
 class CollectiveMapper extends QBMapper {
 	public function __construct(
 		IDBConnection $db,
-		private CircleHelper $circleHelper,
+		private readonly CircleHelper $circleHelper,
 	) {
 		parent::__construct($db, 'collectives', Collective::class);
 	}

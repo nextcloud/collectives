@@ -24,10 +24,10 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class GenerateSlugs extends Command {
 	public function __construct(
-		private IDBConnection $connection,
-		private CircleHelper $circleHelper,
-		private PageService $pageService,
-		private SluggerInterface $slugger,
+		private readonly IDBConnection $connection,
+		private readonly CircleHelper $circleHelper,
+		private readonly PageService $pageService,
+		private readonly SluggerInterface $slugger,
 	) {
 		parent::__construct();
 	}

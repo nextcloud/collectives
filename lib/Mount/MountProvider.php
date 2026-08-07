@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Mount;
 
+use Exception;
 use OC\Files\Cache\Cache;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
@@ -34,15 +35,15 @@ use Psr\Log\LoggerInterface;
 
 class MountProvider implements IMountProvider {
 	public function __construct(
-		private CollectiveHelper $collectiveHelper,
-		private CollectiveFolderManager $collectiveFolderManager,
-		private IDBConnection $connection,
-		private IMountProviderCollection $mountProviderCollection,
-		private IMimeTypeLoader $mimeTypeLoader,
-		private IAppManager $appManager,
-		private LoggerInterface $logger,
-		private UserFolderHelper $userFolderHelper,
-		private IUserSession $userSession,
+		private readonly CollectiveHelper $collectiveHelper,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
+		private readonly IDBConnection $connection,
+		private readonly IMountProviderCollection $mountProviderCollection,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly IAppManager $appManager,
+		private readonly LoggerInterface $logger,
+		private readonly UserFolderHelper $userFolderHelper,
+		private readonly IUserSession $userSession,
 	) {
 	}
 
@@ -108,7 +109,7 @@ class MountProvider implements IMountProvider {
 		try {
 			// Delete or rename existing node to avoid conflicts
 			$this->resolveNameConflict($user, trim($userFolderSetting, '/'));
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->log($e);
 		}
 
@@ -134,7 +135,7 @@ class MountProvider implements IMountProvider {
 			), $folders));
 
 			return array_values(array_merge($mounts, $collectiveMounts));
-		} catch (FilesNotFoundException|\Exception $e) {
+		} catch (FilesNotFoundException|Exception $e) {
 			$this->log($e);
 			return [];
 		}
@@ -145,7 +146,7 @@ class MountProvider implements IMountProvider {
 			&& $this->appManager->isEnabledForUser('collectives', $user);
 	}
 
-	private function log(\Exception $e): void {
+	private function log(Exception $e): void {
 		$this->logger->error('Collectives App Error: ' . $e->getMessage(),
 			['exception' => $e]
 		);

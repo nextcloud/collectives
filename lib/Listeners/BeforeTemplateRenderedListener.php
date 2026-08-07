@@ -26,11 +26,11 @@ use OCP\Util;
 /** @template-implements IEventListener<Event|BeforeTemplateRenderedEvent> */
 class BeforeTemplateRenderedListener implements IEventListener {
 	public function __construct(
-		private IUserSession $userSession,
-		private UserFolderHelper $userFolderHelper,
-		private IEventDispatcher $eventDispatcher,
-		private IInitialState $initialState,
-		private ITemplateManager $templateManager,
+		private readonly IUserSession $userSession,
+		private readonly UserFolderHelper $userFolderHelper,
+		private readonly IEventDispatcher $eventDispatcher,
+		private readonly IInitialState $initialState,
+		private readonly ITemplateManager $templateManager,
 	) {
 	}
 

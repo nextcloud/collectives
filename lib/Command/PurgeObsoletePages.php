@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PurgeObsoletePages extends Command {
 	public function __construct(
-		private PageGarbageCollector $garbageCollector,
+		private readonly PageGarbageCollector $garbageCollector,
 	) {
 		parent::__construct();
 	}

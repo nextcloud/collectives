@@ -15,7 +15,7 @@ use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCP\DB\QueryBuilder\IExpressionBuilder;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class CollectiveUserSettingsMapperTest extends TestCase {
 	private IQueryBuilder $qb;

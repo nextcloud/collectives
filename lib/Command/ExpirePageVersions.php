@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpirePageVersions extends Command {
 	public function __construct(
-		private CollectiveVersionsExpireManager $expireManager,
+		private readonly CollectiveVersionsExpireManager $expireManager,
 	) {
 		parent::__construct();
 	}

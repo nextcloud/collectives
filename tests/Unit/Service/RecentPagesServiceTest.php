@@ -20,7 +20,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class RecentPagesServiceTest extends TestCase {
 	private CollectiveService $collectiveService;

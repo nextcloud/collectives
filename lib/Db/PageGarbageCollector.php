@@ -13,9 +13,9 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 
 class PageGarbageCollector {
 	public function __construct(
-		private PageMapper $pageMapper,
-		private PageLinkMapper $pageLinkMapper,
-		private CollectiveFolderManager $folderManager,
+		private readonly PageMapper $pageMapper,
+		private readonly PageLinkMapper $pageLinkMapper,
+		private readonly CollectiveFolderManager $folderManager,
 	) {
 	}
 

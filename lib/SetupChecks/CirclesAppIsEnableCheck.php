@@ -16,8 +16,8 @@ use OCP\SetupCheck\SetupResult;
 
 class CirclesAppIsEnableCheck implements ISetupCheck {
 	public function __construct(
-		private IL10N $l10n,
-		private IAppManager $appManager,
+		private readonly IL10N $l10n,
+		private readonly IAppManager $appManager,
 	) {
 	}
 

@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace Unit\Db;
 
 use OCA\Collectives\Db\Collective;
-use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Test\TestCase;
 
 class CollectiveTest extends TestCase {
 	public function testsetPageMode(): void {

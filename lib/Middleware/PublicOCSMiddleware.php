@@ -11,9 +11,10 @@ namespace OCA\Collectives\Middleware;
 
 use OCA\Collectives\Controller\CollectivesPublicOCSController;
 use OCA\Collectives\Service\CollectiveShareService;
+use OCP\AppFramework\Controller;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\OCS\OCSNotFoundException;
-use OCP\IConfig;
+use OCP\IAppConfig;
 use OCP\IRequest;
 use OCP\Security\Bruteforce\IThrottler;
 
@@ -22,14 +23,15 @@ use OCP\Security\Bruteforce\IThrottler;
  */
 class PublicOCSMiddleware extends Middleware {
 	public function __construct(
-		private IRequest $request,
-		private IConfig $config,
-		private IThrottler $throttler,
-		private CollectiveShareService $collectiveShareService,
+		private readonly IRequest $request,
+		private readonly IAppConfig $appConfig,
+		private readonly IThrottler $throttler,
+		private readonly CollectiveShareService $collectiveShareService,
 	) {
 	}
 
-	public function beforeController($controller, $methodName) {
+	#[\Override]
+	public function beforeController(Controller $controller, string $methodName) {
 		if (!($controller instanceof CollectivesPublicOCSController)) {
 			return;
 		}
@@ -77,20 +79,12 @@ class PublicOCSMiddleware extends Middleware {
 	 * Check if link sharing is allowed
 	 */
 	private function isLinkSharingEnabled(): bool {
-		// Check if the shareAPI is enabled
-		if ($this->config->getAppValue('core', 'shareapi_enabled', 'yes') !== 'yes') {
-			return false;
-		}
-
-		// Check whether public sharing is enabled
-		if ($this->config->getAppValue('core', 'shareapi_allow_links', 'yes') !== 'yes') {
-			return false;
-		}
-
-		return true;
+		// Check if the shareAPI and public sharing is enabled
+		return $this->appConfig->getValueBool('core', 'shareapi_enabled', true)
+			&& $this->appConfig->getValueBool('core', 'shareapi_allow_links', true);
 	}
 
-	private function throttle($bruteforceProtectionAction, $token): void {
+	private function throttle(string $bruteforceProtectionAction, string $token): void {
 		$ip = $this->request->getRemoteAddress();
 		$this->throttler->sleepDelayOrThrowOnMax($ip, $bruteforceProtectionAction);
 		$this->throttler->registerAttempt($bruteforceProtectionAction, $ip, ['token' => $token]);

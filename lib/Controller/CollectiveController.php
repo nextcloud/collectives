@@ -38,7 +38,7 @@ class CollectiveController extends OCSController {
 	use UserTrait;
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
 		private CollectiveService $service,
 		private IUserSession $userSession,
@@ -47,7 +47,7 @@ class CollectiveController extends OCSController {
 		private NodeHelper $nodeHelper,
 		private ?string $userId,
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 	}
 
 	private function getUserLang(): string {

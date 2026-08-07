@@ -19,7 +19,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\PreConditionNotMetException;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class UserFolderHelperTest extends TestCase {
 	private Folder $collectivesUserFolder;

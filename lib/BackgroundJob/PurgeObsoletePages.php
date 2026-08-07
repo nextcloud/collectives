@@ -17,7 +17,7 @@ use OCP\BackgroundJob\TimedJob;
 class PurgeObsoletePages extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private PageGarbageCollector $garbageCollector,
+		private readonly PageGarbageCollector $garbageCollector,
 	) {
 		parent::__construct($time);
 

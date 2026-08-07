@@ -35,13 +35,13 @@ class CollectiveShareService {
 	private array $shareCache = [];
 
 	public function __construct(
-		private IShareManager $shareManager,
-		private UserFolderHelper $userFolderHelper,
-		private CollectiveShareMapper $collectiveShareMapper,
-		private CollectiveMapper $collectiveMapper,
-		private PageService $pageService,
-		private IL10N $l10n,
-		private ISession $session,
+		private readonly IShareManager $shareManager,
+		private readonly UserFolderHelper $userFolderHelper,
+		private readonly CollectiveShareMapper $collectiveShareMapper,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly PageService $pageService,
+		private readonly IL10N $l10n,
+		private readonly ISession $session,
 	) {
 	}
 

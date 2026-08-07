@@ -15,7 +15,7 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\IPreview;
 use OCP\IUserManager;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class AttachmentServiceTest extends TestCase {
 	private AttachmentService $service;

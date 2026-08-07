@@ -21,7 +21,7 @@ class TemplateService {
 	private const DEFAULT_TEMPLATE_TITLE = 'New Template';
 
 	public function __construct(
-		private PageService $pageService,
+		private readonly PageService $pageService,
 	) {
 	}
 

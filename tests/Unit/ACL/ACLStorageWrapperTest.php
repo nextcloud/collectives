@@ -15,7 +15,7 @@ use OCA\Collectives\ACL\ACLStorageWrapper;
 use OCP\Constants;
 use OCP\Files\Storage\IStorage;
 use OCP\IDBConnection;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class ACLStorageWrapperTest extends TestCase {
 	private IStorage $source;

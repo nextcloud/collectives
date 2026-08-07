@@ -55,9 +55,7 @@ class SearchController extends OCSController {
 	public function searchRecentPages(?string $query = null, int $limit = 10): DataResponse {
 		$limit = min($limit, 100);
 		$uid = $this->getUid();
-		$pageInfos = $this->handleErrorResponse(function () use ($uid, $query, $limit): array {
-			return $this->recentPagesService->forUserAsPageInfo($uid, $query, $limit);
-		}, $this->logger);
+		$pageInfos = $this->handleErrorResponse(fn (): array => $this->recentPagesService->forUserAsPageInfo($uid, $query, $limit), $this->logger);
 		return new DataResponse(['pages' => $pageInfos]);
 	}
 }

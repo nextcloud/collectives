@@ -35,13 +35,13 @@ class PublicCollectiveController extends CollectivesPublicOCSController {
 	use OCSExceptionHelper;
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveService $service,
 		private LoggerInterface $logger,
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 	}
 
 	public function isValidToken(): bool {

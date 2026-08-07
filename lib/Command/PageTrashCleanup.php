@@ -30,7 +30,7 @@ class PageTrashCleanup extends Command {
 
 	public function __construct(
 		IAppManager $appManager,
-		private CollectiveMapper $collectiveMapper,
+		private readonly CollectiveMapper $collectiveMapper,
 	) {
 		parent::__construct();
 		if ($appManager->isEnabledForUser('files_trashbin')) {

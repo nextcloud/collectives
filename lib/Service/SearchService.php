@@ -20,9 +20,9 @@ use OCP\Files\NotFoundException;
 class SearchService {
 
 	public function __construct(
-		private FileIndexer $indexer,
-		private FileSearcher $searcher,
-		private CollectiveFolderManager $collectiveFolderManager,
+		private readonly FileIndexer $indexer,
+		private readonly FileSearcher $searcher,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
 	) {
 	}
 

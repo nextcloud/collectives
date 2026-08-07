@@ -24,8 +24,8 @@ use OCP\IUser;
 use OCP\Search\IFilterCollection;
 use OCP\Search\ISearchQuery;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Test\TestCase;
 
 class PageContentProviderTest extends TestCase {
 	private PageContentProvider $provider;

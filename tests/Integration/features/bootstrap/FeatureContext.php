@@ -20,7 +20,7 @@ use Psr\Http\Message\ResponseInterface;
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context {
-	private array $clientOptions;
+	private readonly array $clientOptions;
 	private ?ResponseInterface $response = null;
 	private ?array $json = null;
 	private ?string $currentUser = null;
@@ -52,11 +52,11 @@ class FeatureContext implements Context {
 	 * context constructor through behat.yml.
 	 */
 	public function __construct(
-		private string $baseUrl,
-		private string $ocsUrl,
+		private readonly string $baseUrl,
+		private readonly string $ocsUrl,
 		public string $publicUrl,
-		private string $remoteUrl,
-		private string $occPath = 'php ../../occ',
+		private readonly string $remoteUrl,
+		private readonly string $occPath = 'php ../../occ',
 	) {
 		$this->clientOptions = ['verify' => false];
 	}

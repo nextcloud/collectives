@@ -21,11 +21,11 @@ use OCP\IURLGenerator;
 /** @template-implements IEventListener<Event|MentionEvent> */
 class TextMentionListener implements IEventListener {
 	public function __construct(
-		private IL10N $l10n,
-		private IURLGenerator $urlGenerator,
-		private CollectiveService $collectiveService,
-		private PageService $pageService,
-		private ?string $userId,
+		private readonly IL10N $l10n,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly CollectiveService $collectiveService,
+		private readonly PageService $pageService,
+		private readonly ?string $userId,
 	) {
 	}
 

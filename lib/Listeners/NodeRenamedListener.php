@@ -20,8 +20,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 /** @template-implements IEventListener<Event|NodeRenamedEvent> */
 class NodeRenamedListener implements IEventListener {
 	public function __construct(
-		private PageMapper $pageMapper,
-		private SluggerInterface $slugger,
+		private readonly PageMapper $pageMapper,
+		private readonly SluggerInterface $slugger,
 	) {
 	}
 

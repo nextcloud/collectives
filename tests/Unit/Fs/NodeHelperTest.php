@@ -15,8 +15,8 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Test\TestCase;
 
 class NodeHelperTest extends TestCase {
 	private IL10N $l10n;

@@ -31,11 +31,11 @@ use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IUserManager;
-use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\String\UnicodeString;
+use Test\TestCase;
 
 class PageServiceTest extends TestCase {
 	private PageMapper $pageMapper;

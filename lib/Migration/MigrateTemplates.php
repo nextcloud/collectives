@@ -31,9 +31,9 @@ class MigrateTemplates implements IRepairStep {
 	private const TEMPLATE_INDEX_CONTENT = '## This folder contains template files for the collective';
 
 	public function __construct(
-		private IAppConfig $config,
-		private CollectiveFolderManager $collectiveFolderManager,
-		private CollectiveMapper $collectiveMapper,
+		private readonly IAppConfig $config,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
+		private readonly CollectiveMapper $collectiveMapper,
 	) {
 	}
 

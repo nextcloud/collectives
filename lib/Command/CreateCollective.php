@@ -22,11 +22,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateCollective extends Command {
 	public function __construct(
-		private CollectiveService $collectiveService,
-		private NodeHelper $nodeHelper,
-		private IUserManager $userManager,
-		private IUserSession $userSession,
-		private IFactory $l10nFactory,
+		private readonly CollectiveService $collectiveService,
+		private readonly NodeHelper $nodeHelper,
+		private readonly IUserManager $userManager,
+		private readonly IUserSession $userSession,
+		private readonly IFactory $l10nFactory,
 	) {
 		parent::__construct();
 	}

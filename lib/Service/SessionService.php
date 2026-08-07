@@ -19,10 +19,10 @@ class SessionService {
 	public const SESSION_VALID_TIME = 120;
 
 	public function __construct(
-		private CollectiveMapper $collectiveMapper,
-		private SessionMapper $sessionMapper,
-		private ISecureRandom $secureRandom,
-		private ITimeFactory $timeFactory,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly SessionMapper $sessionMapper,
+		private readonly ISecureRandom $secureRandom,
+		private readonly ITimeFactory $timeFactory,
 	) {
 	}
 

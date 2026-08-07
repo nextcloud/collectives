@@ -16,6 +16,7 @@ use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper;
 use OCA\Collectives\Model\CollectiveFileInfo;
+use OCA\Richdocuments\Db\WopiMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
@@ -43,12 +44,12 @@ class CollectiveFolderManager {
 	private ?Folder $collectivesRootFolder = null;
 
 	public function __construct(
-		private IRootFolder $rootFolder,
-		private IDBConnection $connection,
-		private IConfig $config,
-		private IUserSession $userSession,
-		private IRequest $request,
-		private IFactory $l10nFactory,
+		private readonly IRootFolder $rootFolder,
+		private readonly IDBConnection $connection,
+		private readonly IConfig $config,
+		private readonly IUserSession $userSession,
+		private readonly IRequest $request,
+		private readonly IFactory $l10nFactory,
 	) {
 	}
 
@@ -91,8 +92,8 @@ class CollectiveFolderManager {
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
-			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists(\OCA\Richdocuments\Db\WopiMapper::class)) {
-				$wopiMapper = Server::get(\OCA\Richdocuments\Db\WopiMapper::class);
+			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists(WopiMapper::class)) {
+				$wopiMapper = Server::get(WopiMapper::class);
 				$token = $this->request->getParam('access_token');
 				if ($token) {
 					return $wopiMapper->getPathForToken($token)->getEditorUid();

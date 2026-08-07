@@ -20,8 +20,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 /** @template-implements IEventListener<Event|EditingCircleEvent> */
 class CircleEditingEventListener implements IEventListener {
 	public function __construct(
-		private CollectiveMapper $collectiveMapper,
-		private SluggerInterface $slugger,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly SluggerInterface $slugger,
 	) {
 	}
 	/**
