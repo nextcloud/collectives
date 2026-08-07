@@ -33,6 +33,7 @@
       "openapi": "generate-spec --verbose",
       "psalm": "psalm --no-cache --threads=$(nproc)",
       "psalm:update-baseline": "psalm --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml",
+      "rector": "vendor/bin/rector process && composer cs:fix",
       "test:unit": "phpunit -c tests/phpunit.xml",
       "post-install-cmd": [
         "[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
