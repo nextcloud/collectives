@@ -1,9 +1,13 @@
 { "translations": {
     "Share link" : "Del lenkje",
     "Settings" : "Innstillingar",
+    "Members" : "Medlemmar",
     "Promote to moderator" : "Fremje til moderator",
+    "Remove" : "Fjern",
     "Loading…" : "Lastar...",
+    "Preview" : "Førehandsvisning",
     "Edit" : "Rediger",
+    "Danger zone" : "Faresone",
     "Choose" : "Vel",
     "Name" : "Namn",
     "Deleted" : "Sletta",
@@ -21,6 +25,7 @@
     "Clear search" : "Tøm søk",
     "Favorites" : "Favorittar",
     "Favorite" : "Favoritt",
+    "Sort order" : "Sortering",
     "Page not found" : "Fann ikkje sida",
     "Add another link" : "Legg til ei anna lenkje",
     "Advanced settings" : "Avanserte innstillingar",
@@ -31,6 +36,7 @@
     "Versions" : "Utgåver",
     "Link copied" : "Lenkje kopiert",
     "Please reload the page." : "Ver venleg og last sida på nytt.",
+    "View" : "Vis",
     "Failed to revert {page} to revision {timestamp}." : "Klarte ikkje å tilbakestilla {page} til utgåva {timestamp}.",
     "Done" : "Ferdig"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
