@@ -85,9 +85,7 @@ class ImportService {
 		}
 
 		// First pass: import Markdown files at this level
-		$mdFiles = array_filter($items, static function ($item) use ($directory) {
-			return is_file($directory . DIRECTORY_SEPARATOR . $item) && strtolower(pathinfo($item, PATHINFO_EXTENSION)) === 'md';
-		});
+		$mdFiles = array_filter($items, static fn ($item) => is_file($directory . DIRECTORY_SEPARATOR . $item) && strtolower(pathinfo($item, PATHINFO_EXTENSION)) === 'md');
 		foreach ($mdFiles as $item) {
 			$path = $directory . DIRECTORY_SEPARATOR . $item;
 
@@ -102,9 +100,7 @@ class ImportService {
 		}
 
 		// Second pass: import subdirectories
-		$subDirs = array_filter($items, static function ($item) use ($directory) {
-			return is_dir($directory . DIRECTORY_SEPARATOR . $item) && $item !== '.' && $item !== '..';
-		});
+		$subDirs = array_filter($items, static fn ($item) => is_dir($directory . DIRECTORY_SEPARATOR . $item) && $item !== '.' && $item !== '..');
 		foreach ($subDirs as $item) {
 			$path = $directory . DIRECTORY_SEPARATOR . $item;
 
@@ -132,7 +128,7 @@ class ImportService {
 	private function processFile(string $directory, string $item, ?PageInfo $parentPage, ?string $title = null): array {
 		$path = $directory . DIRECTORY_SEPARATOR . $item;
 		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
-		$title = $title ?? basename($path, '.md');
+		$title ??= basename($path, '.md');
 		if (!is_readable($path)) {
 			throw new NotFoundException('File not readable');
 		}

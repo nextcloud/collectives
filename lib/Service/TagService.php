@@ -15,9 +15,9 @@ use OCA\Collectives\Db\TagMapper;
 
 class TagService {
 	public function __construct(
-		private TagMapper $tagMapper,
-		private CollectiveMapper $collectiveMapper,
-		private CollectiveServiceBase $collectiveService,
+		private readonly TagMapper $tagMapper,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly CollectiveServiceBase $collectiveService,
 	) {
 	}
 

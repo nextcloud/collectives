@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch;
 
+use Exception;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Search\FileSearch\Db\SearchDocMapper;
 use OCA\Collectives\Search\FileSearch\Db\SearchFileMapper;
@@ -69,7 +70,7 @@ class FileIndexer {
 
 		try {
 			$content = $file->getContent();
-		} catch (\Exception) {
+		} catch (Exception) {
 			return;
 		}
 
@@ -93,14 +94,14 @@ class FileIndexer {
 				/** @psalm-suppress RedundantCast */
 				$word = $this->wordMapper->upsert($collectiveId, (string)$term, $termStems[$term], $hitCount, 1);
 				$this->docMapper->insertDoc($collectiveId, $word->getId(), $file->getId(), $hitCount);
-			} catch (\Exception) {
+			} catch (Exception) {
 				continue;
 			}
 		}
 
 		try {
 			$this->fileMapper->insertFile($collectiveId, $file->getId(), $file->getInternalPath(), $file->getMTime(), $language);
-		} catch (\Exception) {
+		} catch (Exception) {
 		}
 	}
 

@@ -30,9 +30,9 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\IL10N;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\String\UnicodeString;
+use Test\TestCase;
 
 class CollectiveServiceTest extends TestCase {
 	private string $userId = 'jane';
@@ -67,9 +67,7 @@ class CollectiveServiceTest extends TestCase {
 
 		$nodeHelper = $this->createMock(NodeHelper::class);
 		$nodeHelper->method('sanitiseFilename')
-			->willReturnCallback(function (string $name, string $default = 'New File') {
-				return $name;
-			});
+			->willReturnCallback(fn (string $name, string $default = 'New File') => $name);
 
 		$slug = new UnicodeString('free-123');
 		$slugger = $this->createMock(SluggerInterface::class);

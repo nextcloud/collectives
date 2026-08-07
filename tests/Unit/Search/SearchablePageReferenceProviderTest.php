@@ -20,7 +20,7 @@ use OCP\Collaboration\Reference\LinkReferenceProvider;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class SearchablePageReferenceProviderTest extends TestCase {
 	private SearchablePageReferenceProvider $provider;

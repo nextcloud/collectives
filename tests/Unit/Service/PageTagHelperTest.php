@@ -11,7 +11,7 @@ namespace Service;
 
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageTagHelper;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class PageTagHelperTest extends TestCase {
 	private const collectiveTags = [1, 2, 3, 4];

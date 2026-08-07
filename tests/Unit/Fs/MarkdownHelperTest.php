@@ -13,7 +13,7 @@ use OC;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\MarkdownHelper;
 use OCA\Collectives\Model\PageInfo;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class MarkdownHelperTest extends TestCase {
 	public function linksContentProvider(): array {

@@ -9,15 +9,16 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use Exception;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 
 class CollectiveHelper {
 	public function __construct(
-		private CollectiveMapper $collectiveMapper,
-		private CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-		private CircleHelper $circleHelper,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
+		private readonly CircleHelper $circleHelper,
 	) {
 	}
 
@@ -39,7 +40,7 @@ class CollectiveHelper {
 			$c->setName($circle->getSanitizedName());
 			try {
 				$c->setLevel($getLevel ? $circle->getInitiator()->getLevel(): 0);
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				throw new CircleException($e->getMessage(), 0, $e);
 			}
 			if ($getUserSettings) {
@@ -71,7 +72,7 @@ class CollectiveHelper {
 			$c->setName($circle->getSanitizedName());
 			try {
 				$c->setLevel($circle->getInitiator()->getLevel());
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				throw new CircleException($e->getMessage(), 0, $e);
 			}
 		}

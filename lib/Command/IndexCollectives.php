@@ -23,8 +23,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class IndexCollectives extends Command {
 	public function __construct(
-		private SearchService $searchService,
-		private CollectiveMapper $collectiveMapper,
+		private readonly SearchService $searchService,
+		private readonly CollectiveMapper $collectiveMapper,
 	) {
 		parent::__construct();
 	}

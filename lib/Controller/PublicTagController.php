@@ -38,14 +38,14 @@ class PublicTagController extends CollectivesPublicOCSController {
 	private ?CollectiveShare $collectiveShare = null;
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveShareService $collectiveShareService,
 		private TagService $service,
 		private LoggerInterface $logger,
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -187,7 +187,7 @@ class PublicTagController extends CollectivesPublicOCSController {
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function delete(int $id): DataResponse {
-		$this->handleErrorResponse(function () use ($id) {
+		$this->handleErrorResponse(function () use ($id): void {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();

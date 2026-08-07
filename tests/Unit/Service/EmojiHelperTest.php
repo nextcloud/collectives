@@ -11,7 +11,7 @@ namespace Unit\Service;
 
 use OCA\Collectives\Service\EmojiHelper;
 use OCA\Collectives\Service\UnprocessableEntityException;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class EmojiHelperTest extends TestCase {
 	public function testNullAndEmptyAreValid(): void {

@@ -36,6 +36,7 @@ use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Util;
 use Psr\Log\LoggerInterface;
 
 class PageTrashBackend implements ITrashBackend {
@@ -190,7 +191,7 @@ class PageTrashBackend implements ITrashBackend {
 			$this->restoreItem($attachmentsFolderItem);
 		}
 
-		\OCP\Util::emitHook(
+		Util::emitHook(
 			'\OCA\Files_Trashbin\Trashbin',
 			'post_restore',
 			[

@@ -39,7 +39,7 @@ class MigrateUserFolderSettings implements IRepairStep {
 		$output->info('Migrating user folder settings ...');
 		$output->startProgress();
 
-		$this->userManager->callForSeenUsers(function (IUser $user) use ($output) {
+		$this->userManager->callForSeenUsers(function (IUser $user) use ($output): void {
 			$oldDefaultUserFolderPath = DIRECTORY_SEPARATOR . 'Collectives';
 			$newDefaultUserFolderPath = DIRECTORY_SEPARATOR . '.' . 'Collectives';
 			$userFolderPath = $this->config->getUserValue($user->getUID(), 'collectives', 'user_folder', '');

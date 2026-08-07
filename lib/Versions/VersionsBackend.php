@@ -40,11 +40,11 @@ use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDeletableVersionBackend, INeedSyncVersionBackend, IVersionsImporterBackend {
 	public function __construct(
-		private CollectiveFolderManager $collectiveFolderManager,
-		private CollectiveVersionMapper $collectiveVersionMapper,
-		private IMimeTypeLoader $mimeTypeLoader,
-		private IUserSession $userSession,
-		private LoggerInterface $logger,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
+		private readonly CollectiveVersionMapper $collectiveVersionMapper,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
+		private readonly IUserSession $userSession,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -395,7 +395,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
 		try {
 			$versionEntity = $this->collectiveVersionMapper->findVersionForFileId($sourceFile->getId(), $revision);
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			// The version entity can be missing when a file is written immediately
 			// after being copied (e.g. by the Text app's NodeCopiedListener clearing
 			// attachment IDs). Fall back to creation to stay consistent.

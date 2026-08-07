@@ -16,8 +16,8 @@ use OCP\Files\Storage\IStorageFactory;
 
 class CollectiveMountPoint extends MountPoint implements ISystemMountPoint {
 	public function __construct(
-		private ?int $folderId,
-		private CollectiveFolderManager $collectiveFolderManager,
+		private readonly ?int $folderId,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
 		Storage $storage,
 		string $mountPoint,
 		?array $arguments = null,

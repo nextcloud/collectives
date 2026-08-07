@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch;
 
+use Exception;
 use OCA\Collectives\Search\FileSearch\Db\SearchDocMapper;
 use OCA\Collectives\Search\FileSearch\Db\SearchFileMapper;
 use OCA\Collectives\Search\FileSearch\Db\SearchWordMapper;
@@ -88,7 +89,7 @@ class FileSearcher {
 		foreach ($files as $file) {
 			try {
 				$content = mb_strtolower($file->getContent());
-			} catch (\Exception) {
+			} catch (Exception) {
 				continue;
 			}
 

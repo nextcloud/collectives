@@ -12,9 +12,9 @@ namespace Unit\Db;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveUserSettings;
 use OCA\Collectives\Service\NotPermittedException;
-use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
+use Test\TestCase;
 
 class CollectiveUserSettingsTest extends TestCase {
 	// Required to test private function `CollectiveUserSettings->setSetting()`

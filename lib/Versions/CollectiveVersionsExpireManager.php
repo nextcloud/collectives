@@ -34,12 +34,12 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 
 	public function __construct(
 		ContainerInterface $appContainer,
-		private CollectiveFolderManager $folderManager,
-		private ExpireManager $expireManager,
-		private IDBConnection $connection,
-		private CollectiveMapper $collectiveMapper,
-		private ITimeFactory $timeFactory,
-		private IEventDispatcher $dispatcher,
+		private readonly CollectiveFolderManager $folderManager,
+		private readonly ExpireManager $expireManager,
+		private readonly IDBConnection $connection,
+		private readonly CollectiveMapper $collectiveMapper,
+		private readonly ITimeFactory $timeFactory,
+		private readonly IEventDispatcher $dispatcher,
 	) {
 		try {
 			$this->versionsBackend = $appContainer->get(VersionsBackend::class);

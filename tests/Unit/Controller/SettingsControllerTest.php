@@ -15,7 +15,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\IConfig;
 use OCP\IRequest;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class SettingsControllerTest extends TestCase {
 	private SettingsController $settingsController;

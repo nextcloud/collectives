@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch\Db;
 
+use Exception;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use PDO;
 
 /**
  * @method SearchFile insert(SearchFile $file)
@@ -44,7 +46,7 @@ class SearchFileMapper extends QBMapper {
 
 		try {
 			return $this->findEntity($qb);
-		} catch (\Exception) {
+		} catch (Exception) {
 			return null;
 		}
 	}
@@ -70,7 +72,7 @@ class SearchFileMapper extends QBMapper {
 			->andWhere($qb->expr()->isNotNull('language'));
 
 		$result = $qb->executeQuery();
-		$languages = $result->fetchAll(\PDO::FETCH_COLUMN);
+		$languages = $result->fetchAll(PDO::FETCH_COLUMN);
 		$result->closeCursor();
 
 		return $languages;

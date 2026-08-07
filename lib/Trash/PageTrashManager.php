@@ -14,7 +14,7 @@ use OCP\IDBConnection;
 
 class PageTrashManager {
 	public function __construct(
-		private IDBConnection $connection,
+		private readonly IDBConnection $connection,
 	) {
 	}
 

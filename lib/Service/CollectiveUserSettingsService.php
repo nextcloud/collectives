@@ -17,8 +17,8 @@ use OCP\DB\Exception;
 
 class CollectiveUserSettingsService {
 	public function __construct(
-		private CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-		private CollectiveMapper $collectiveMapper,
+		private readonly CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
+		private readonly CollectiveMapper $collectiveMapper,
 	) {
 	}
 

@@ -15,7 +15,7 @@ use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Service\CollectiveUserSettingsService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class CollectiveUserSettingsServiceTest extends TestCase {
 	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;

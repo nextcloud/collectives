@@ -27,7 +27,7 @@ use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager as IShareManager;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class CollectiveShareServiceTest extends TestCase {
 	private IShareManager $shareManager;

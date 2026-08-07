@@ -13,7 +13,7 @@ use OC\Files\Mount\MountPoint;
 use OCA\Collectives\Model\PageInfo;
 use OCP\Files\File;
 use OCP\Files\Folder;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class PageInfoTest extends TestCase {
 	public function testFromFile(): void {

@@ -36,16 +36,16 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	private const RICH_OBJECT_TYPE = Application::APP_NAME . '_page';
 
 	public function __construct(
-		private CollectiveService $collectiveService,
-		private PageService $pageService,
-		private SharePageService $sharePageService,
-		private IL10N $l10n,
-		private IURLGenerator $urlGenerator,
-		private IDateTimeFormatter $dateTimeFormatter,
-		private ReferenceManager $referenceManager,
-		private LinkReferenceProvider $linkReferenceProvider,
-		private CollectiveShareService $collectiveShareService,
-		private ?string $userId,
+		private readonly CollectiveService $collectiveService,
+		private readonly PageService $pageService,
+		private readonly SharePageService $sharePageService,
+		private readonly IL10N $l10n,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly IDateTimeFormatter $dateTimeFormatter,
+		private readonly ReferenceManager $referenceManager,
+		private readonly LinkReferenceProvider $linkReferenceProvider,
+		private readonly CollectiveShareService $collectiveShareService,
+		private readonly ?string $userId,
 	) {
 	}
 

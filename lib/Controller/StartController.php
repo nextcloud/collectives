@@ -25,12 +25,12 @@ use OCP\IRequest;
 #[OpenAPI(scope: OpenAPI::SCOPE_IGNORE)]
 class StartController extends Controller {
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
-		private IAppManager $appManager,
-		private IEventDispatcher $eventDispatcher,
+		private readonly IAppManager $appManager,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 	}
 
 	#[NoAdminRequired]

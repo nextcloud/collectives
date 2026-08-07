@@ -11,7 +11,7 @@ namespace Unit\Service;
 
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\SubpageOrderService;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class SubpageOrderServiceTest extends TestCase {
 	public function testVerify(): void {

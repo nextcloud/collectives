@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch\LanguageDetector;
 
+use Exception;
 use LanguageDetection\Language;
 
 class LanguageDetector {
@@ -26,7 +27,7 @@ class LanguageDetector {
 		try {
 			$result = (string)$this->detector->detect($text);
 			return $result !== '' ? $result : null;
-		} catch (\Exception) {
+		} catch (Exception) {
 			return null;
 		}
 	}

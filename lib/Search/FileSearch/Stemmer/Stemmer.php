@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch\Stemmer;
 
+use Exception;
 use OCP\IConfig;
 use Wamania\Snowball\NotFoundException;
 use Wamania\Snowball\Stemmer\Stemmer as WamaniaStemmer;
@@ -43,7 +44,7 @@ class Stemmer {
 
 		try {
 			return $stemmer->stem($word);
-		} catch (\Exception) {
+		} catch (Exception) {
 			return $word;
 		}
 	}

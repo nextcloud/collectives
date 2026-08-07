@@ -25,11 +25,11 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class GenerateSlugs implements IRepairStep {
 	public function __construct(
-		private IAppConfig $config,
-		private IDBConnection $connection,
-		private CircleHelper $circleHelper,
-		private CollectiveFolderManager $collectiveFolderManager,
-		private SluggerInterface $slugger,
+		private readonly IAppConfig $config,
+		private readonly IDBConnection $connection,
+		private readonly CircleHelper $circleHelper,
+		private readonly CollectiveFolderManager $collectiveFolderManager,
+		private readonly SluggerInterface $slugger,
 	) {
 	}
 

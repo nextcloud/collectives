@@ -19,7 +19,7 @@ use OCP\BackgroundJob\TimedJob;
 class ExpirePageVersions extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private CollectiveVersionsExpireManager $expireManager,
+		private readonly CollectiveVersionsExpireManager $expireManager,
 	) {
 		parent::__construct($time);
 

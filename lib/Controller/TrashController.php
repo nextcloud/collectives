@@ -32,14 +32,14 @@ class TrashController extends OCSController {
 	use UserTrait;
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
 		private CollectiveService $service,
 		private IUserSession $userSession,
 		private LoggerInterface $logger,
 		private ?string $userId,
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 	}
 
 	/**

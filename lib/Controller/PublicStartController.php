@@ -36,16 +36,16 @@ class PublicStartController extends AuthPublicShareController {
 	protected ?IShare $share = null;
 
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
 		ISession $session,
 		IURLGenerator $urlGenerator,
-		private ShareManager $shareManager,
-		private CollectiveShareMapper $collectiveShareMapper,
-		private IAppManager $appManager,
-		private IEventDispatcher $eventDispatcher,
+		private readonly ShareManager $shareManager,
+		private readonly CollectiveShareMapper $collectiveShareMapper,
+		private readonly IAppManager $appManager,
+		private readonly IEventDispatcher $eventDispatcher,
 	) {
-		parent::__construct($AppName, $request, $session, $urlGenerator);
+		parent::__construct($appName, $request, $session, $urlGenerator);
 	}
 
 	/**

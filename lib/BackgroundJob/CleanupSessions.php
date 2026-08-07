@@ -16,7 +16,7 @@ use OCP\BackgroundJob\TimedJob;
 class CleanupSessions extends TimedJob {
 	public function __construct(
 		ITimeFactory $time,
-		private SessionService $sessionService,
+		private readonly SessionService $sessionService,
 	) {
 		parent::__construct($time);
 

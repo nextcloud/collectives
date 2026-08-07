@@ -22,9 +22,9 @@ use OCP\IConfig;
 /** @template-implements IEventListener<Event|NodeWrittenEvent> */
 class NodeWrittenListener implements IEventListener {
 	public function __construct(
-		private IConfig $config,
-		private PageLinkMapper $pageLinkMapper,
-		private CollectiveMapper $collectiveMapper,
+		private readonly IConfig $config,
+		private readonly PageLinkMapper $pageLinkMapper,
+		private readonly CollectiveMapper $collectiveMapper,
 	) {
 	}
 

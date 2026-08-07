@@ -100,7 +100,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 * @throws JsonException
 	 */
 	public function setFavoritePages(array $favoritePages): void {
-		if ($favoritePages !== array_filter($favoritePages, 'is_int')) {
+		if ($favoritePages !== array_filter($favoritePages, is_int(...))) {
 			throw new NotPermittedException('Invalid favorite pages value.');
 		}
 		$this->setSetting('favorite_pages', $favoritePages);

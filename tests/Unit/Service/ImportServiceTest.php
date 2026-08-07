@@ -19,7 +19,7 @@ use OCA\Collectives\Service\PageService;
 use OCP\Files\File;
 use OCP\Files\IMimeTypeDetector;
 use OCP\IUser;
-use PHPUnit\Framework\TestCase;
+use Test\TestCase;
 
 class ImportServiceTest extends TestCase {
 	private int $pageIdCounter = 0;
