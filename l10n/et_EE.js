@@ -372,7 +372,7 @@ OC.L10N.register(
     "Please reload the page." : "Palun laadi leht uuesti.",
     "Error: Missing apps" : "Viga: puuduvad rakendused",
     "The following dependency apps are missing:" : "Järgnevad sõltuvused on puudu:",
-    "Please ask the administrator to enable these apps." : "Palun peakasutajat, et ta paigaldaks serverisse needrakendused.",
+    "Please ask the administrator to enable these apps." : "Palu peakasutajat, et ta paigaldaks serverisse need rakendused.",
     "in Collective {collective}" : "Vabaühenduses {collective}",
     "Created collective \"%s\" for existing circle." : "Olemasoleva tiimi jaoks on loodud vabaühendus „%s“.",
     "A share for collective %s exists already" : "„%s“ vabaühenduse jaosmeedia on juba olemas",
