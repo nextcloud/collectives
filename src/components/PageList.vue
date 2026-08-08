@@ -4,216 +4,207 @@
 -->
 
 <template>
-	<NcAppContentList :showDetails="showing('details')">
-		<!-- Headerbar with filter field and sort selector -->
-		<div class="page-list-headerbar">
-			<!-- Tag selection popover -->
-			<NcPopover
-				popupRole="listbox"
-				class="page-filter"
-				popoverBaseClass="page-filter-popover"
-				:shown="showTagSelection"
-				:triggers="[]"
-				placement="bottom-start"
-				noFocusTrap>
-				<template #trigger="{ attrs }">
-					<NcTextField
-						ref="pageFilter"
-						v-model="filterString"
-						name="pageFilter"
-						v-bind="attrs"
-						:label="t('collectives', 'Search pages')"
-						:placeholder="t('collectives', 'Search pages…')"
-						trailingButtonIcon="close"
-						:showTrailingButton="isFilteredView"
-						@trailingButtonClick="clearFilterString"
-						@keydown.esc.prevent.stop="stopTagSelection"
-						@keydown.tab="onPageFilterTabKey" />
-				</template>
-				<template #default>
-					<div
-						class="page-filter-tag-select"
-						@keydown.esc.prevent.stop="stopTagSelection">
-						<ul class="page-tags select-popover">
-							<PageTag
-								v-for="tag in filterStringTags"
-								ref="filterStringTag"
-								:key="tag.id"
-								:tag
-								@select="onSelectFilterTag(tag.id)" />
-						</ul>
-					</div>
-				</template>
-			</NcPopover>
+	<!-- Headerbar with filter field, add-page button and sort selector -->
+	<div class="page-list-headerbar">
+		<!-- Tag selection popover -->
+		<NcPopover
+			popupRole="listbox"
+			class="page-filter"
+			popoverBaseClass="page-filter-popover"
+			:shown="showTagSelection"
+			:triggers="[]"
+			placement="bottom-start"
+			noFocusTrap>
+			<template #trigger="{ attrs }">
+				<NcTextField
+					ref="pageFilter"
+					v-model="filterString"
+					name="pageFilter"
+					v-bind="attrs"
+					:label="t('collectives', 'Search pages')"
+					:placeholder="t('collectives', 'Search pages…')"
+					trailingButtonIcon="close"
+					:showTrailingButton="isFilteredView"
+					@trailingButtonClick="clearFilterString"
+					@keydown.esc.prevent.stop="stopTagSelection"
+					@keydown.tab="onPageFilterTabKey" />
+			</template>
+			<template #default>
+				<div
+					class="page-filter-tag-select"
+					@keydown.esc.prevent.stop="stopTagSelection">
+					<ul class="page-tags select-popover">
+						<PageTag
+							v-for="tag in filterStringTags"
+							ref="filterStringTag"
+							:key="tag.id"
+							:tag
+							@select="onSelectFilterTag(tag.id)" />
+					</ul>
+				</div>
+			</template>
+		</NcPopover>
 
-			<NcActions
-				class="toggle"
-				:aria-label="t('collectives', 'Sort order')">
+		<NcActions
+			class="toggle"
+			:aria-label="t('collectives', 'Sort order')">
+			<template #icon>
+				<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
+				<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitleAsc')" :size="16" />
+				<SortAlphabeticalDescendingIcon v-else-if="sortedBy('byTitleDesc')" :size="16" />
+				<SortClockAscendingIcon v-else-if="sortedBy('byTimeAsc')" :size="16" />
+				<SortClockDescendingIcon v-else :size="16" />
+			</template>
+			<NcActionButton
+				class="toggle-button"
+				:class="{ selected: sortedBy('byOrder') }"
+				closeAfterClick
+				@click="sortPagesAndScroll('byOrder')">
 				<template #icon>
-					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
-					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitleAsc')" :size="16" />
-					<SortAlphabeticalDescendingIcon v-else-if="sortedBy('byTitleDesc')" :size="16" />
-					<SortClockAscendingIcon v-else-if="sortedBy('byTimeAsc')" :size="16" />
-					<SortClockDescendingIcon v-else :size="16" />
+					<SortAscendingIcon :size="20" />
 				</template>
-				<NcActionButton
-					class="toggle-button"
-					:class="{ selected: sortedBy('byOrder') }"
-					closeAfterClick
+				{{ t('collectives', 'Sort by custom order') }}
+			</NcActionButton>
+			<NcActionButton
+				class="toggle-button"
+				:class="{ selected: sortedBy('byTimeAsc') || sortedBy('byTimeDesc') }"
+				closeAfterClick
+				@click="sortedBy('byTimeAsc') ? sortPagesAndScroll('byTimeDesc') : sortPagesAndScroll('byTimeAsc')">
+				<template #icon>
+					<SortClockAscendingIcon v-if="!sortedBy('byTimeAsc')" :size="20" />
+					<SortClockDescendingIcon v-else :size="20" />
+				</template>
+				{{ sortedBy('byTimeAsc') ? t('collectives', 'Sort least recently changed first') : t('collectives', 'Sort recently changed first') }}
+			</NcActionButton>
+			<NcActionButton
+				class="toggle-button"
+				:class="{ selected: sortedBy('byTitleAsc') || sortedBy('byTitleDesc') }"
+				closeAfterClick
+				@click="sortedBy('byTitleAsc') ? sortPagesAndScroll('byTitleDesc') : sortPagesAndScroll('byTitleAsc')">
+				<template #icon>
+					<SortAlphabeticalAscendingIcon v-if="!sortedBy('byTitleAsc')" :size="20" />
+					<SortAlphabeticalDescendingIcon v-else :size="20" />
+				</template>
+				{{ sortedBy('byTitleAsc') ? t('collectives', 'Sort descending by title') : t('collectives', 'Sort ascending by title') }}
+			</NcActionButton>
+		</NcActions>
+
+		<NcButton
+			v-if="currentCollectiveCanEdit"
+			:aria-label="t('collectives', 'Add a page')"
+			variant="tertiary"
+			class="toggle"
+			:disabled="!networkOnline"
+			@click="onNewPage">
+			<template #icon>
+				<PlusIcon :size="20" />
+			</template>
+		</NcButton>
+	</div>
+
+	<!-- Filter tags -->
+	<div class="page-filter-tags">
+		<ul class="page-tags">
+			<PageTag
+				v-for="tag in filterTags"
+				:key="tag.id"
+				:tag
+				canRemove
+				@remove="removeFilterTagId(tag.id)" />
+		</ul>
+	</div>
+
+	<!-- Loading -->
+	<div v-if="!currentCollective || !rootPage || loading('pagelist')" class="page-list">
+		<SkeletonLoading type="items" :count="3" />
+	</div>
+
+	<!-- Page list -->
+	<div v-else class="page-list">
+		<!-- Sort order container (optional) -->
+		<div v-if="!sortedBy('byOrder')" class="sort-order-container">
+			<div class="sort-order-chip">
+				<span class="sort-order-chip-text">
+					{{ sortedByString }}
+				</span>
+				<NcButton
+					:aria-label="t('collectives', 'Switch back to default sort order')"
+					variant="tertiary"
+					class="sort-order-chip-button"
 					@click="sortPagesAndScroll('byOrder')">
 					<template #icon>
-						<SortAscendingIcon :size="20" />
+						<CloseIcon :size="20" />
 					</template>
-					{{ t('collectives', 'Sort by custom order') }}
-				</NcActionButton>
-				<NcActionButton
-					class="toggle-button"
-					:class="{ selected: sortedBy('byTimeAsc') || sortedBy('byTimeDesc') }"
-					closeAfterClick
-					@click="sortedBy('byTimeAsc') ? sortPagesAndScroll('byTimeDesc') : sortPagesAndScroll('byTimeAsc')">
-					<template #icon>
-						<SortClockAscendingIcon v-if="!sortedBy('byTimeAsc')" :size="20" />
-						<SortClockDescendingIcon v-else :size="20" />
-					</template>
-					{{ sortedBy('byTimeAsc') ? t('collectives', 'Sort least recently changed first') : t('collectives', 'Sort recently changed first') }}
-				</NcActionButton>
-				<NcActionButton
-					class="toggle-button"
-					:class="{ selected: sortedBy('byTitleAsc') || sortedBy('byTitleDesc') }"
-					closeAfterClick
-					@click="sortedBy('byTitleAsc') ? sortPagesAndScroll('byTitleDesc') : sortPagesAndScroll('byTitleAsc')">
-					<template #icon>
-						<SortAlphabeticalAscendingIcon v-if="!sortedBy('byTitleAsc')" :size="20" />
-						<SortAlphabeticalDescendingIcon v-else :size="20" />
-					</template>
-					{{ sortedBy('byTitleAsc') ? t('collectives', 'Sort descending by title') : t('collectives', 'Sort ascending by title') }}
-				</NcActionButton>
-			</NcActions>
-		</div>
-
-		<!-- Filter tags -->
-		<div class="page-filter-tags">
-			<ul class="page-tags">
-				<PageTag
-					v-for="tag in filterTags"
-					:key="tag.id"
-					:tag
-					canRemove
-					@remove="removeFilterTagId(tag.id)" />
-			</ul>
-		</div>
-
-		<!-- Loading -->
-		<div v-if="!currentCollective || !rootPage || loading('pagelist')" class="page-list">
-			<SkeletonLoading type="items" :count="3" />
-		</div>
-
-		<!-- Page list -->
-		<div v-else class="page-list">
-			<!-- Landing page -->
-			<PageListItem
-				key="Readme"
-				:to="currentCollectivePath"
-				:pageId="rootPage.id"
-				:parentId="0"
-				:title="currentCollectiveIsPageShare ? rootPage.title : currentCollective.name"
-				:timestamp="rootPage.timestamp"
-				:lastUserId="rootPage.lastUserId"
-				:lastUserDisplayName="rootPage.lastUserDisplayName"
-				:emoji="currentCollectiveIsPageShare ? rootPage.emoji : currentCollective.emoji"
-				:level="0"
-				:canEdit="currentCollectiveCanEdit"
-				isRootPage
-				:isLandingPage="!currentCollectiveIsPageShare"
-				:networkOnline
-				class="page-list-root-page"
-				@click="show('details')" />
-
-			<!-- Sort order container (optional) -->
-			<div v-if="!sortedBy('byOrder')" class="sort-order-container">
-				<div class="sort-order-chip">
-					<span class="sort-order-chip-text">
-						{{ sortedByString }}
-					</span>
-					<NcButton
-						:aria-label="t('collectives', 'Switch back to default sort order')"
-						variant="tertiary"
-						class="sort-order-chip-button"
-						@click="sortPagesAndScroll('byOrder')">
-						<template #icon>
-							<CloseIcon :size="20" />
-						</template>
-					</NcButton>
-				</div>
+				</NcButton>
 			</div>
+		</div>
 
-			<!-- Favorites -->
-			<PageFavorites v-if="showFavorites" :networkOnline />
+		<!-- Favorites -->
+		<PageFavorites v-if="showFavorites" :networkOnline />
 
-			<!-- Filtered view page list -->
-			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
-				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives', 'Results in title or tags')" />
-				<RecycleScroller
-					v-if="filteredPages.length > 0"
-					v-slot="{ item }"
-					ref="filteredScroller"
-					:items="filteredPages"
-					:itemSize
-					keyField="id">
-					<SubpageList
-						:key="item.id"
-						:data-page-id="item.id"
-						:page="item"
-						:level="1"
-						filteredView
-						:networkOnline
-						class="page-list-drag-item" />
-				</RecycleScroller>
-				<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
-				<RecycleScroller
-					v-if="!loadingContentFilteredPages && contentFilteredPages.length > 0"
-					v-slot="{ item }"
-					ref="contentFilteredScroller"
-					:items="contentFilteredPages"
-					:itemSize
-					keyField="id">
-					<SubpageList
-						:key="item.id"
-						:data-page-id="item.id"
-						:page="item"
-						:level="1"
-						filteredView
-						:networkOnline
-						class="page-list-drag-item" />
-				</RecycleScroller>
-				<div v-if="loadingContentFilteredPages" class="scrollload">
-					<SkeletonLoading type="items" :count="3" />
-				</div>
-			</div>
-
-			<!-- Unfiltered view page list -->
-			<DraggableElement
-				v-else
-				class="page-list-dragarea"
-				:list="subpages"
-				:parentId="rootPage.id"
-				:disableSorting="isFilteredView">
+		<!-- Filtered view page list -->
+		<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
+			<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives', 'Results in title or tags')" />
+			<RecycleScroller
+				v-if="filteredPages.length > 0"
+				v-slot="{ item }"
+				ref="filteredScroller"
+				:items="filteredPages"
+				:itemSize
+				keyField="id">
 				<SubpageList
-					v-for="page in subpages"
-					:key="page.id"
-					:data-page-id="page.id"
-					:page
+					:key="item.id"
+					:data-page-id="item.id"
+					:page="item"
 					:level="1"
+					filteredView
 					:networkOnline
 					class="page-list-drag-item" />
-			</DraggableElement>
+			</RecycleScroller>
+			<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
+			<RecycleScroller
+				v-if="!loadingContentFilteredPages && contentFilteredPages.length > 0"
+				v-slot="{ item }"
+				ref="contentFilteredScroller"
+				:items="contentFilteredPages"
+				:itemSize
+				keyField="id">
+				<SubpageList
+					:key="item.id"
+					:data-page-id="item.id"
+					:page="item"
+					:level="1"
+					filteredView
+					:networkOnline
+					class="page-list-drag-item" />
+			</RecycleScroller>
+			<div v-if="loadingContentFilteredPages" class="scrollload">
+				<SkeletonLoading type="items" :count="3" />
+			</div>
 		</div>
 
-		<!-- Page trash -->
-		<PageTrash v-if="displayTrash" :networkOnline />
+		<!-- Unfiltered view page list -->
+		<DraggableElement
+			v-else
+			class="page-list-dragarea"
+			:list="subpages"
+			:parentId="rootPage.id"
+			:disableSorting="isFilteredView">
+			<SubpageList
+				v-for="page in subpages"
+				:key="page.id"
+				:data-page-id="page.id"
+				:page
+				:level="1"
+				:networkOnline
+				class="page-list-drag-item" />
+		</DraggableElement>
+	</div>
 
-		<NewPageDialog v-if="newPageParentId" />
-	</NcAppContentList>
+	<!-- Page trash -->
+	<PageTrash v-if="displayTrash" :networkOnline />
+
+	<NewPageDialog v-if="newPageParentId" />
 </template>
 
 <script>
@@ -226,12 +217,12 @@ import { ref } from 'vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
-import NcAppContentList from '@nextcloud/vue/components/NcAppContentList'
 import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAlphabeticalDescendingIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
@@ -240,13 +231,13 @@ import SortClockDescendingIcon from 'vue-material-design-icons/SortClockDescendi
 import DraggableElement from './PageList/DraggableElement.vue'
 import NewPageDialog from './PageList/NewPageDialog.vue'
 import PageFavorites from './PageList/PageFavorites.vue'
-import PageListItem from './PageList/PageListItem.vue'
 import PageTrash from './PageList/PageTrash.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import PageTag from './PageTag.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
 import { popCtrlF, pushCtrlF } from '../composables/useKeymap.ts'
 import { useNetworkState } from '../composables/useNetworkState.js'
+import pageMixin from '../mixins/pageMixin.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
@@ -263,7 +254,6 @@ export default {
 	components: {
 		NcActionButton,
 		NcActions,
-		NcAppContentList,
 		NcAppNavigationCaption,
 		NcButton,
 		NcPopover,
@@ -273,9 +263,9 @@ export default {
 		CloseIcon,
 		DraggableElement,
 		PageFavorites,
-		PageListItem,
 		PageTag,
 		PageTrash,
+		PlusIcon,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
 		SortAlphabeticalDescendingIcon,
@@ -284,6 +274,10 @@ export default {
 		SortClockDescendingIcon,
 		RecycleScroller,
 	},
+
+	mixins: [
+		pageMixin,
+	],
 
 	setup() {
 		const { networkOnline } = useNetworkState()
@@ -303,12 +297,11 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading', 'showing']),
+		...mapState(useRootStore, ['isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveIsPageShare',
-			'currentCollectivePath',
 		]),
 
 		...mapState(useTagsStore, ['sortedTags', 'filterTags']),
@@ -476,7 +469,6 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(useRootStore, ['show']),
 		...mapActions(useTagsStore, ['addFilterTagId', 'removeFilterTagId']),
 		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),
 		...mapActions(usePagesStore, ['contentSearch', 'setPageOrder']),
@@ -484,6 +476,10 @@ export default {
 
 		clearFilterString() {
 			this.filterString = ''
+		},
+
+		onNewPage() {
+			this.addPage(this.rootPage.id)
 		},
 
 		/**
@@ -563,28 +559,21 @@ export default {
 <style lang="scss">
 :root {
 	--page-list-header-height: calc(var(--default-clickable-area) + 14px);
-	--landing-page-height: calc(var(--default-clickable-area) + 8px);
 	--page-trash-height: calc(var(--default-clickable-area) + 24px);
-	--page-list-height: calc(100vh - var(--header-height) - var(--page-list-header-height) - var(--landing-page-height) - var(--page-trash-height));
+	--page-list-height: calc(100vh - var(--header-height) - var(--collective-selector-height) - var(--page-list-header-height) - var(--page-trash-height));
 	--navigation-caption-height: calc(var(--default-clickable-area) + 4px + (var(--default-clickable-area) / 2));
 }
 </style>
 
 <style lang="scss" scoped>
 .scroller {
-	// NC header bar 50px; page list header bar; landing page; page trash; NcAppNavigationCaption 78px divided by 2 for multiple scrollers
+	// NC header bar 50px; collective selector; page list header bar; page trash; NcAppNavigationCaption 78px divided by 2 for multiple scrollers
 	max-height: calc((var(--page-list-height) - var(--navigation-caption-height) * 2) / 2);
 }
 
 .fullscroller{
-	// NC header bar 50px; page list header bar; landing page; page trash; NcAppNavigationCaption 78px
+	// NC header bar 50px; collective selector; page list header bar; page trash; NcAppNavigationCaption 78px
 	max-height: calc(var(--page-list-height) - var(--navigation-caption-height));
-}
-
-.app-content-list {
-	// nextcloud-vue component sets `max-height: unset` on mobile.
-	// Overwrite this to fix stickiness of header and rootpage.
-	max-height: 100%;
 }
 
 .page-list-headerbar {
@@ -594,11 +583,11 @@ export default {
 	min-height: var(--page-list-header-height);
 	background-color: var(--color-main-background);
 	align-items: center;
-	justify-content: space-between;
+	padding-inline-start: 4px;
 	margin-inline-end: 4px;
 
 	.page-filter {
-		margin-inline-start: calc(var(--default-clickable-area) + 12px) !important;
+		flex-grow: 1;
 		padding-bottom: 6px;
 	}
 }
@@ -629,14 +618,6 @@ li.toggle-button.selected {
 	padding-bottom: 20px;
 }
 
-.page-list-root-page {
-	position: sticky;
-	top: 0;
-	z-index: 1;
-	background-color: var(--color-main-background);
-	margin-block-end: 8px;
-}
-
 .page-list-filtered {
 	flex-grow: 1;
 	max-height: 100%;
@@ -648,8 +629,7 @@ li.toggle-button.selected {
 	align-items: center;
 
 	position: sticky;
-	// landing page + 8px margin-bottom
-	top: var(--landing-page-height);
+	top: 0;
 	z-index: 1;
 	background-color: var(--color-main-background);
 	border-bottom: 4px solid var(--color-main-background);

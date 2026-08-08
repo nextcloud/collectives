@@ -8,8 +8,6 @@
 		:key="collective.circleId"
 		:name="collective.name"
 		:to="collectivePath(collective)"
-		forceMenu
-		:forceDisplayActions="isMobile"
 		class="collectives_list_item"
 		@click="onClick">
 		<template #icon>
@@ -20,11 +18,6 @@
 				<CollectivesIcon :size="20" />
 			</template>
 		</template>
-		<template #actions>
-			<NcActionCollectiveActions
-				:collective
-				:networkOnline />
-		</template>
 	</NcAppNavigationItem>
 </template>
 
@@ -32,7 +25,6 @@
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
-import NcActionCollectiveActions from '../Collective/NcActionCollectiveActions.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { useRootStore } from '../../stores/root.js'
@@ -42,18 +34,12 @@ export default {
 
 	components: {
 		NcAppNavigationItem,
-		NcActionCollectiveActions,
 		CollectivesIcon,
 	},
 
 	props: {
 		collective: {
 			type: Object,
-			required: true,
-		},
-
-		networkOnline: {
-			type: Boolean,
 			required: true,
 		},
 	},

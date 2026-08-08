@@ -11,7 +11,6 @@
 		:class="{
 			active: isActive,
 			mobile: isMobile,
-			toplevel: level === 0,
 			highlight: isHighlighted,
 			'dragged-over-target': isDraggedOverTarget,
 			'highlight-target': isHighlightedTarget,
@@ -30,12 +29,9 @@
 			@click="toggleCollapsedOrRoute">
 			<slot name="icon">
 				<template v-if="emoji">
-					<div class="item-icon-emoji" :class="{ 'root-page': isRootPage }">
+					<div class="item-icon-emoji">
 						{{ emoji }}
 					</div>
-				</template>
-				<template v-else-if="isLandingPage">
-					<CollectivesIcon :size="22" fillColor="var(--color-main-text)" />
 				</template>
 				<template v-else>
 					<PageIcon :size="22" fillColor="var(--color-background-darker)" />
@@ -73,14 +69,13 @@
 		</router-link>
 		<div class="page-list-item-actions">
 			<PageActionMenu
-				v-if="canEdit || isLandingPage"
+				v-if="canEdit"
 				:pageId
 				:pageUrl="to"
 				:parentId
 				:timestamp
 				:lastUserId
 				:lastUserDisplayName
-				:isLandingPage
 				inPageList
 				:networkOnline />
 			<NcActions v-if="canEdit">
@@ -91,7 +86,7 @@
 					<template #icon>
 						<PlusIcon :size="20" fillColor="var(--color-main-text)" />
 					</template>
-					{{ addPageString }}
+					{{ t('collectives', 'Add a subpage') }}
 				</NcActionButton>
 			</NcActions>
 		</div>
@@ -108,21 +103,18 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import MenuRightIcon from 'vue-material-design-icons/MenuRightOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import StarIconFilled from 'vue-material-design-icons/Star.vue'
-import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
-import { useTemplatesStore } from '../../stores/templates.js'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
 	name: 'PageListItem',
 
 	components: {
-		CollectivesIcon,
 		MenuRightIcon,
 		NcActionButton,
 		NcActions,
@@ -197,16 +189,6 @@ export default {
 			default: false,
 		},
 
-		isRootPage: {
-			type: Boolean,
-			default: false,
-		},
-
-		isLandingPage: {
-			type: Boolean,
-			default: false,
-		},
-
 		filteredView: {
 			type: Boolean,
 			default: false,
@@ -251,8 +233,6 @@ export default {
 			'pageParents',
 		]),
 
-		...mapState(useTemplatesStore, ['hasTemplates']),
-
 		pageElementId() {
 			return this.inFavoriteList
 				? `page-favorite-${this.pageId}`
@@ -265,7 +245,7 @@ export default {
 		},
 
 		isCollapsible() {
-			// root page and favorites are not collapsible
+			// favorites are not collapsible
 			return this.level > 0 && !this.inFavoriteList && this.hasVisibleSubpages
 		},
 
@@ -279,12 +259,6 @@ export default {
 
 		pageTitleIfTruncated() {
 			return this.pageTitleIsTruncated ? this.pageTitleString : null
-		},
-
-		addPageString() {
-			return this.isLandingPage
-				? t('collectives', 'Add a page')
-				: t('collectives', 'Add a subpage')
 		},
 
 		isHighlighted() {
@@ -338,7 +312,6 @@ export default {
 
 		...mapActions(usePagesStore, [
 			'expand',
-			'setNewPageParentId',
 			'setDragoverTargetPage',
 			'setDraggedPageId',
 			'toggleCollapsed',
@@ -365,16 +338,12 @@ export default {
 		},
 
 		onNewPage() {
-			if (this.hasTemplates) {
-				this.setNewPageParentId(this.pageId)
-			} else {
-				this.newPage(this.pageId)
-			}
+			this.addPage(this.pageId)
 		},
 
 		onDragstart(event) {
-			// Don't set root page or favorite as dragged page
-			if (this.isRootPage || this.inFavoriteList) {
+			// Don't set favorite as dragged page
+			if (this.inFavoriteList) {
 				return
 			}
 
@@ -442,10 +411,6 @@ export default {
 	padding: 0;
 	border-radius: var(--border-radius-large);
 
-	&.toplevel {
-		font-size: 1.2em;
-	}
-
 	&.active {
 		background-color: var(--color-primary-element-light);
 
@@ -488,7 +453,7 @@ export default {
 		opacity: .3;
 	}
 
-	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
+	&.active, &.mobile, &:hover, &:focus, &:active {
 		// Shorter width to prevent collision with actions
 		.app-content-list-item-link {
 			width: calc(100% - 88px);
@@ -507,10 +472,6 @@ export default {
 
 		.item-icon-emoji {
 			cursor: pointer;
-
-			&.root-page {
-				margin: -3px 0;
-			}
 		}
 
 		.material-design-icon {

@@ -285,12 +285,7 @@ export default {
 			justify-content: start;
 		}
 
-		:deep(.button-vue__icon) {
-			margin-left: -2px;
-		}
-
 		:deep(.button-vue__text) {
-			margin-left: -2px;
 			font-weight: normal;
 		}
 	}
