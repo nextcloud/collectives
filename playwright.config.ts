@@ -53,6 +53,7 @@ export default defineConfig({
 	],
 
 	webServer: {
+		// Don't set `url` as it would take precedence over `wait.stdout` and tests start too early
 		// url: 'http://127.0.0.1:8089',
 		// Starts the Nextcloud docker container
 		command: 'node playwright/start-nextcloud-server.js',
@@ -62,7 +63,8 @@ export default defineConfig({
 			signal: 'SIGTERM',
 			timeout: 10000,
 		},
-		reuseExistingServer: !process.env.CI,
+		// `start-nextcloud-server.mjs` only starts the server if not reachable yet.
+		reuseExistingServer: false,
 		stderr: 'pipe',
 		stdout: 'pipe',
 		// max. 5 minutes for creating the container
