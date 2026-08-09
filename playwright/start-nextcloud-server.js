@@ -15,6 +15,18 @@ const serverBranch = process.env.PLAYWRIGHT_NC_SERVER_BRANCH ?? 'master'
 const textBranch = serverBranch === 'master' ? 'main' : serverBranch
 
 /**
+ *
+ */
+async function isServerRunning() {
+	try {
+		const res = await fetch('https://127.0.0.1:8089/status.php')
+		return res.ok
+	} catch {
+		return false
+	}
+}
+
+/**
  * Starts the Nextcloud server.
  */
 async function start() {
@@ -36,13 +48,15 @@ process.on('SIGTERM', stop)
 process.on('SIGINT', stop)
 
 // Start the Nextcloud docker container
-const ip = await start()
-await waitOnNextcloud(ip)
-await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/circles.git', 'apps/circles'], { verbose: true })
-await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/files_pdfviewer.git', 'apps/files_pdfviewer'], { verbose: true })
-await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/password_policy.git', 'apps/password_policy'], { verbose: true })
-await runExec(['git', 'clone', '--depth=1', `--branch=${textBranch}`, 'https://github.com/nextcloud/text.git', 'apps/text'], { verbose: true })
-await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'text', 'viewer'])
+if (await isServerRunning()) {
+	console.log('└─ Nextcloud is now ready to use')
+} else {
+	const ip = await start()
+	await waitOnNextcloud(ip)
+	await runExec(['git', 'clone', '--depth=1', `--branch=${serverBranch}`, 'https://github.com/nextcloud/password_policy.git', 'apps/password_policy'], { verbose: true })
+	await runExec(['git', 'clone', '--depth=1', `--branch=${textBranch}`, 'https://github.com/nextcloud/text.git', 'apps/text'], { verbose: true })
+	await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'text', 'viewer'])
+}
 
 // Idle to wait for shutdown
 while (true) {

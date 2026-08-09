@@ -11,7 +11,7 @@ import { randomString } from '../support/helpers/randomString.ts'
 const collectiveTest = createCollectiveTest.extend({
 	// eslint-disable-next-line no-empty-pattern
 	collectiveConfigs: async ({}, use) => use([
-		{ name: randomString(), markdownImportPath: '/var/www/html/apps/collectives/playwright/support/fixtures/files/DokuwikiMarkdownExport/pages' },
+		{ name: randomString(), markdownImportPath: '/var/www/html/apps-writable/collectives/playwright/support/fixtures/files/DokuwikiMarkdownExport/pages' },
 	]),
 })
 
