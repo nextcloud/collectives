@@ -19,6 +19,7 @@ use OCP\Collaboration\Reference\IPublicReferenceProvider;
 use OCP\Collaboration\Reference\LinkReferenceProvider;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
+use OCP\IRequest;
 use OCP\IURLGenerator;
 use Test\TestCase;
 
@@ -26,6 +27,7 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	private SearchablePageReferenceProvider $provider;
 	private CollectiveService $collectiveService;
 	private CollectiveShareService $collectiveShareService;
+	private IRequest $request;
 	protected function setUp(): void {
 		parent::setUp();
 		$this->needsIPublicReferenceProvider();
@@ -44,6 +46,7 @@ class SearchablePageReferenceProviderTest extends TestCase {
 		$referenceManager = $this->createMock(ReferenceManager::class);
 		$linkReferenceProvider = $this->createMock(LinkReferenceProvider::class);
 		$this->collectiveShareService = $this->createMock(CollectiveShareService::class);
+		$this->request = $this->createMock(IRequest::class);
 		$uid = 'jane';
 		$this->provider = new SearchablePageReferenceProvider(
 			$this->collectiveService,
@@ -55,6 +58,7 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			$referenceManager,
 			$linkReferenceProvider,
 			$this->collectiveShareService,
+			$this->request,
 			$uid,
 		);
 	}
@@ -191,6 +195,7 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			$this->createMock(ReferenceManager::class),
 			$this->createMock(LinkReferenceProvider::class),
 			$this->collectiveShareService,
+			$this->request,
 			'jane',
 		);
 
