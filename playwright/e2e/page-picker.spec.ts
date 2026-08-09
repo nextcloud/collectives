@@ -127,3 +127,19 @@ test.describe('Custom page picker - cross-collective search', () => {
 		await expect(landingPageItem).toBeVisible()
 	})
 })
+
+test.describe('Smart picker - provider order witin Collectives', () => {
+	test.beforeEach(async ({ user, page, collective, editor }) => {
+		const sourcePage = await collective.createPage({ title: 'Source page', user, page })
+		await sourcePage.open(true)
+		editor.setMode(true)
+	})
+
+	test('lists Collective pages first with changed provider title', async ({ page, editor }) => {
+		await editor.getContent().press('/')
+
+		const options = page.locator('.suggestion-list__item')
+		await expect(options.first()).toContainText('Link to page in collective')
+		expect(await options.count()).toBeGreaterThan(1)
+	})
+})

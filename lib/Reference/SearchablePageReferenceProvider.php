@@ -29,11 +29,13 @@ use OCP\Collaboration\Reference\LinkReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
+use OCP\IRequest;
 use OCP\IURLGenerator;
 use Throwable;
 
 class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider, IPublicReferenceProvider {
 	private const RICH_OBJECT_TYPE = Application::APP_NAME . '_page';
+	private bool $inCollectives = false;
 
 	public function __construct(
 		private readonly CollectiveService $collectiveService,
@@ -45,8 +47,12 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		private readonly ReferenceManager $referenceManager,
 		private readonly LinkReferenceProvider $linkReferenceProvider,
 		private readonly CollectiveShareService $collectiveShareService,
+		IRequest $request,
 		private readonly ?string $userId,
 	) {
+		if (str_starts_with((string)$request->getPathInfo(), '/apps/collectives')) {
+			$this->inCollectives = true;
+		}
 	}
 
 	public function getId(): string {
@@ -54,10 +60,16 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	}
 
 	public function getTitle(): string {
+		if ($this->inCollectives) {
+			return $this->l10n->t('Link to page in collective');
+		}
 		return $this->l10n->t('Collective pages');
 	}
 
 	public function getOrder(): int {
+		if ($this->inCollectives) {
+			return -1;
+		}
 		return 10;
 	}
 
