@@ -24,6 +24,7 @@ use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Files_Versions\Versions\IVersionsImporterBackend;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\Constants;
+use OCP\DB\Exception as DBException;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
@@ -107,7 +108,15 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionEntity->setSize($file->getSize());
 			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 			$versionEntity->setDecodedMetadata([]);
-			$this->collectiveVersionMapper->insert($versionEntity);
+			try {
+				$this->collectiveVersionMapper->insert($versionEntity);
+			} catch (DBException $e) {
+				if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					throw $e;
+				}
+				// Another concurrent request already populated the DB for this file; return what's there.
+				return $this->getVersionsForFileFromDb($file, $user);
+			}
 
 			// Insert entries in the DB for existing versions.
 			$versionsOnFS = $versionsFolder->getDirectoryListing();
@@ -133,7 +142,14 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				// Use the main file mimetype for this initialization as the original mimetype is unknown.
 				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 				$versionEntity->setDecodedMetadata([]);
-				$this->collectiveVersionMapper->insert($versionEntity);
+				try {
+					$this->collectiveVersionMapper->insert($versionEntity);
+				} catch (DBException $e) {
+					if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+						throw $e;
+					}
+					// Duplicate on disk versions: skip this entry, it was already recorded.
+				}
 			}
 
 			return $this->getVersionsForFileFromDb($file, $user);
@@ -389,7 +405,14 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionEntity->setSize($file->getSize());
 		$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 		$versionEntity->setDecodedMetadata([]);
-		$this->collectiveVersionMapper->insert($versionEntity);
+		try {
+			$this->collectiveVersionMapper->insert($versionEntity);
+		} catch (DBException $e) {
+			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw $e;
+			}
+			// Entity already exists (e.g. created by a concurrent request or the lazy-init path); nothing to do.
+		}
 	}
 
 	public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void {
@@ -458,7 +481,14 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				$versionEntity->setDecodedMetadata($version->getMetadata());
 			}
 
-			$this->collectiveVersionMapper->insert($versionEntity);
+			try {
+				$this->collectiveVersionMapper->insert($versionEntity);
+			} catch (DBException $e) {
+				if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					throw $e;
+				}
+				// Version was already imported (e.g. on a retry); skip.
+			}
 		}
 	}
 
