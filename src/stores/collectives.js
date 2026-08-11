@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { useLocalStorage } from '@vueuse/core'
+import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import * as api from '../apis/collectives/index.js'
 import { memberLevels } from '../constants.js'
@@ -21,6 +21,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		collectivesState: useLocalStorage(STORE_PREFIX + 'collectives', []),
 		publicCollectivesState: useLocalStorage(STORE_PREFIX + 'publicCollectives', {}),
 		trashCollectives: useLocalStorage(STORE_PREFIX + 'trashCollectives', []),
+		lastVisitedCollectiveId: useLocalStorage(STORE_PREFIX + 'lastVisitedCollectiveId', null, { serializer: StorageSerializers.number }),
 		trashCollectivesLoaded: false,
 		updatedCollective: undefined,
 		templatesCollectiveId: undefined,
@@ -188,6 +189,10 @@ export const useCollectivesStore = defineStore('collectives', {
 
 		setSettingsCollectiveId(id) {
 			this.settingsCollectiveId = id
+		},
+
+		setLastVisitedCollectiveId(id) {
+			this.lastVisitedCollectiveId = id
 		},
 
 		/**

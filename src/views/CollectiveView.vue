@@ -86,6 +86,7 @@ export default {
 		'currentCollective.id': function(val) {
 			this.clearSession()
 			if (val) {
+				this.setLastVisitedCollectiveId(val)
 				this.getAllPages()
 				this.initSession()
 			}
@@ -102,6 +103,7 @@ export default {
 
 	mounted() {
 		if (this.currentCollective) {
+			this.setLastVisitedCollectiveId(this.currentCollective.id)
 			this.getAllPages()
 			this.initSession()
 		}
@@ -115,6 +117,7 @@ export default {
 
 	methods: {
 		...mapActions(useCirclesStore, ['getCircleMembers']),
+		...mapActions(useCollectivesStore, ['setLastVisitedCollectiveId']),
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(useTagsStore, ['getTags']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
