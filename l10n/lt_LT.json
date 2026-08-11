@@ -7,6 +7,7 @@
     "Welcome %s" : "Sveiki atvykę %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Puslapių sąraše spustelėkite ➕ ir pridėkite puslapius! Juos vilkdami galite keisti jų tvarką. Jei juos vilksite į redaktorių, bus sukurta 🔗 nuoroda.",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Paspauskite „✏️ Redaguoti“, kad pakeistumėte šį tekstą ir jaustumėtės kaip namie! Jį gali redaguoti keli žmonės kartu. Daugiau informacijos rasite [dokumentacijoje](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) arba paklauskite [bendruomenės](https://help.nextcloud.com/tag/collectives-app).",
+    "Link to page in collective" : "Nuoroda į puslapį rinkinyje",
     "Collective pages" : "Rinkinių puslapiai",
     "In collective %1$s" : "Rinkinyje %1$s",
     "Last edition %1$s" : "Paskutinis leidimas %1$s",

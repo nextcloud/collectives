@@ -7,6 +7,7 @@
     "Welcome %s" : "Tere tulemast, %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "➕ ikoonist saad lehtede loendist lisada uusi lehti! Lohistades võid muuta nende järjekorda. Lohistades lehe muutmisvaatesse, tekib sellest 🔗 link.",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Klõpsa valikut „✏️ Muuda“ ja saad seda teksti kohendada enda soovide järgi! Ka mitu huvilist saavad samal ajal sisu hallata. Lisateavet leiad [meie juhendist](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app).",
+    "Link to page in collective" : "Link vabaühenduse lehele",
     "Collective pages" : "Vabaühenduse lehed",
     "In collective %1$s" : "Vabaühenduses %1$s",
     "Last edition %1$s" : "Viimane muutmine: %1$s",
