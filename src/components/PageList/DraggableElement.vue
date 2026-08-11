@@ -79,6 +79,8 @@ export default {
 	computed: {
 		...mapState(usePagesStore, [
 			'disableDragndropSortOrMove',
+			'draggedPageId',
+			'pageParents',
 			'sortByOrder',
 		]),
 
@@ -125,6 +127,13 @@ export default {
 		onMove(ev) {
 			this.dragoverPageId = ev.related.dataset.pageId || ev.related.dataset.parentId
 
+			// Reject moving a page into itself or one of its own descendants
+			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
+			const targetParentId = Number(ev.to.dataset.parentId)
+			if (this.draggedPageId && this.pageParents(targetParentId).some((page) => page.id === this.draggedPageId)) {
+				return false
+			}
+
 			// Force-move items to the end of the list if sorting is disabled (not effective for now, see `disabled()` method)
 			if (!this.allowSorting) {
 				if (ev.to !== ev.from) {
@@ -146,11 +155,19 @@ export default {
 
 		// Dragged element is added to another list
 		onAdd(ev) {
-			// Moving from one list to another
-			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
 			const oldParentId = Number(ev.from.dataset.parentId)
 			const newParentId = Number(ev.to.dataset.parentId)
+
+			// Reject moving a page into itself or one of its own descendants
+			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
+			if (this.pageParents(newParentId).some((page) => page.id === pageId)) {
+				ev.from.append(ev.item)
+				return
+			}
+
+			// Moving from one list to another
+			this.sortableActive = true
 			let index = ev.newDraggableIndex
 			// Force-move items to the end of the list if sorting is disabled
 			if (!this.allowSorting) {

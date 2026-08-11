@@ -285,7 +285,7 @@ export default {
 				// Ignore if inside favorite list
 				&& !this.inFavoriteList
 				// Ignore if dragged element is a parent of self
-				&& !this.pageParents(this.pageId).includes(this.draggedPageId)
+				&& !this.pageParents(this.pageId).some((page) => page.id === this.draggedPageId)
 		},
 
 		isDropTarget() {
