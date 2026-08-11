@@ -145,10 +145,12 @@ export default {
 		...mapActions(useVersionsStore, ['selectVersion']),
 
 		async initCollective({ closeNavDelay = false }) {
-			if (closeNavDelay && !this.isPublic) {
-				setTimeout(() => this.closeNav(), 1000)
-			} else {
-				this.closeNav()
+			if (this.isMobile) {
+				if (closeNavDelay && !this.isPublic) {
+					setTimeout(() => this.closeNav(), 1000)
+				} else {
+					this.closeNav()
+				}
 			}
 			this.show('details')
 
