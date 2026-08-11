@@ -14,9 +14,22 @@ describe('Collective publish', function() {
 		cy.visit('/apps/collectives/Our Garden')
 	})
 
-	it('Finds publish button', function() {
+	it('opens publish modal on publish button click', function() {
+		// Open publish modal
 		cy.openCollectiveMenu('Our Garden')
-		cy.get('button.action-button')
-			.should('contain', 'Publish')
+		cy.contains('button.action-button', 'Publish')
+			.click({ force: true })
+		cy.get('.collective-publish-modal')
+			.should('contain', 'Our Garden')
+
+		// Close modal and check it can open after clicking publish button again
+		cy.get('.collective-publish-modal button[aria-label="Close"]')
+			.click({ force: true })
+		cy.get('.collective-publish-modal')
+			.should('not.exist')
+		cy.contains('button.action-button', 'Publish')
+			.click({ force: true })
+		cy.get('.collective-publish-modal')
+			.should('contain', 'Our Garden')
 	})
 })

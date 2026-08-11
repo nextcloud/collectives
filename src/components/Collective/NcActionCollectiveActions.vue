@@ -25,7 +25,8 @@
 			</template>
 		</NcActionButton>
 		<NcActionButton
-			@click="openShareTab(collective)">
+			closeAfterClick
+			@click="openPublishDialog()">
 			{{ t('collectives', 'Publish') }}
 			<template #icon>
 				<WebIcon :size="20" />
@@ -241,6 +242,7 @@ export default {
 		...mapActions(useCollectivesStore, [
 			'markCollectiveDeleted',
 			'setMembersCollectiveId',
+			'setPublishCollectiveId',
 			'setSettingsCollectiveId',
 			'setCollectiveUserSettingNotify',
 			'setTemplatesCollectiveId',
@@ -271,6 +273,10 @@ export default {
 				notify: level,
 			})
 			this.$emit('update:submenu', null)
+		},
+
+		openPublishDialog() {
+			this.setPublishCollectiveId(this.collective.id)
 		},
 
 		leaveCollectiveWithUndo(collective) {
