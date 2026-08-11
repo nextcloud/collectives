@@ -55,7 +55,7 @@
 					</template>
 					<template v-else>
 						<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
-						<ul class="collective-selector-list">
+						<ul class="collective-selector-list" @click="showSelector = false">
 							<CollectiveListItem
 								v-for="collective in sortedCollectives"
 								v-show="!collective.deleted"
@@ -186,12 +186,6 @@ export default {
 
 		showCollectiveMembersModal() {
 			return !!this.membersCollective
-		},
-	},
-
-	watch: {
-		$route() {
-			this.showSelector = false
 		},
 	},
 
