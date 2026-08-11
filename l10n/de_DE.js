@@ -9,6 +9,7 @@ OC.L10N.register(
     "Welcome %s" : "Hallo %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Seiten mit dem ➕ in der Seitenliste hinzufügen! Um die Reihenfolge zu ändern können die Seiten verschoben werden. Wenn Seiten in den Editor gezogen werden, wird ein 🔗-Link erstellt.",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "`✏️ Bearbeiten` drücken, um diesen Text zu ändern und sich wie zu Hause zu fühlen! Mehrere Personen können gemeinsam bearbeiten. Weitere Informationen in der [Anleitung] (https://docs.nextcloud.com/server/latest/user_manual/de/collectives/index.html) oder im [Forum] (https://help.nextcloud.com/tag/collectives-app).",
+    "Link to page in collective" : "Zur Seite im Kollektiv verlinken",
     "Collective pages" : "Kollektiv-Seiten",
     "In collective %1$s" : "In Kollektiv %1$s",
     "Last edition %1$s" : "Letzte Version %1$s",

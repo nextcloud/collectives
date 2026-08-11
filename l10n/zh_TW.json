@@ -7,6 +7,7 @@
     "Welcome %s" : "歡迎 %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "在頁面清單中點選 ➕ 新增頁面！您可拖曳頁面調整順序。將頁面拖曳至編輯器中即可建立 🔗 超連結。",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "按下 `✏️ 編輯` 即可修改此文字，請隨意使用！多人可同時編輯。更多資訊請參閱[文件](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html)或詢問[社群](https://help.nextcloud.com/tag/collectives-app)。",
+    "Link to page in collective" : "知識庫頁面連結",
     "Collective pages" : "知識庫頁面",
     "In collective %1$s" : "在知識庫 %1$s 中",
     "Last edition %1$s" : "上一版 %1$s",
