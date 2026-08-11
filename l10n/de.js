@@ -35,6 +35,7 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Das Kollektiv konnte nicht verlassen werden. {errorMessage}",
     "Manage members" : "Mitglieder verwalten",
     "Share link" : "Link teilen",
+    "Publish" : "Veröffentlichen",
     "Manage templates" : "Vorlagen verwalten",
     "Export or print" : "Exportieren oder Drucken",
     "Settings" : "Einstellungen",
