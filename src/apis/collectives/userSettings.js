@@ -10,10 +10,10 @@ import { apiUrl } from './urls.js'
  * URL for the collective user settings API
  *
  * @param {number} collectiveId - ID of the collective
- * @param {Array} parts - URL parts to append - will be joined with `/`
+ * @param {...string} parts - URL parts to append - will be joined with `/`
  */
 function collectiveUserSettingsApiUrl(collectiveId, ...parts) {
-	return apiUrl('v1.0', 'collectives', collectiveId, 'userSettings', parts)
+	return apiUrl('v1.0', 'collectives', collectiveId, 'userSettings', ...parts)
 }
 
 /**
@@ -37,7 +37,7 @@ export function setCollectiveUserSettingPageOrder(collectiveId, pageOrder) {
  */
 export function setCollectiveUserSettingShowMembers(collectiveId, showMembers) {
 	return axios.put(
-		collectiveUserSettingsApiUrl(collectiveId, ['showMembers']),
+		collectiveUserSettingsApiUrl(collectiveId, 'showMembers'),
 		{ showMembers },
 	)
 }
@@ -50,7 +50,7 @@ export function setCollectiveUserSettingShowMembers(collectiveId, showMembers) {
  */
 export function setCollectiveUserSettingShowRecentPages(collectiveId, showRecentPages) {
 	return axios.put(
-		collectiveUserSettingsApiUrl(collectiveId, ['showRecentPages']),
+		collectiveUserSettingsApiUrl(collectiveId, 'showRecentPages'),
 		{ showRecentPages },
 	)
 }
@@ -63,7 +63,7 @@ export function setCollectiveUserSettingShowRecentPages(collectiveId, showRecent
  */
 export function setCollectiveUserSettingFavoritePages(collectiveId, favoritePages) {
 	return axios.put(
-		collectiveUserSettingsApiUrl(collectiveId, ['favoritePages']),
+		collectiveUserSettingsApiUrl(collectiveId, 'favoritePages'),
 		{ favoritePages: JSON.stringify(favoritePages) },
 	)
 }
@@ -76,7 +76,7 @@ export function setCollectiveUserSettingFavoritePages(collectiveId, favoritePage
  */
 export function setCollectiveUserSettingNotify(collectiveId, notify) {
 	return axios.put(
-		collectiveUserSettingsApiUrl(collectiveId, ['notify']),
+		collectiveUserSettingsApiUrl(collectiveId, 'notify'),
 		{ notify },
 	)
 }

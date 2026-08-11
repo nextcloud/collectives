@@ -9,7 +9,7 @@ import { apiUrl } from './urls.js'
 /**
  * URL for the settings API
  *
- * @param {Array} parts - URL parts to append - will be joined with `/`
+ * @param {...string} parts - URL parts to append - will be joined with `/`
  */
 function settingsApiUrl(...parts) {
 	return apiUrl('v1.0', 'settings', parts)

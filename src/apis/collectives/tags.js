@@ -10,7 +10,7 @@ import { apiUrl } from './urls.js'
  * URL for the collective tags API
  *
  * @param {object} context - either the current collective or a share context
- * @param {Array} parts - URL parts to append - will be joined with `/`
+ * @param {...string} parts - URL parts to append - will be joined with `/`
  */
 function tagApiUrl(context, ...parts) {
 	return context.isPublic
