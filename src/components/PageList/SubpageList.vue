@@ -4,40 +4,37 @@
 -->
 
 <template>
-	<div>
-		<PageListItem
-			:key="page.title"
-			:to="pagePath(page)"
-			:pageId="page.id"
-			:parentId="page.parentId"
-			:title="page.title"
-			:timestamp="page.timestamp"
-			:lastUserId="page.lastUserId"
-			:lastUserDisplayName="page.lastUserDisplayName"
-			:emoji="page.emoji"
-			:level
-			:canEdit="currentCollectiveCanEdit"
-			:hasVisibleSubpages
-			:filteredView
-			:networkOnline
-			@click="show('details')" />
-		<div class="page-list-indent">
-			<DraggableElement
-				v-if="subpagesView.length > 0 || keptSortable(page.id)"
-				:list="subpagesView"
-				:parentId="page.id"
-				:disableSorting>
-				<SubpageList
-					v-for="subpage in subpagesView"
-					:key="subpage.id"
-					:data-page-id="subpage.id"
-					:page="subpage"
-					:level="level + 1"
-					:networkOnline
-					class="page-list-drag-item" />
-			</DraggableElement>
-		</div>
-	</div>
+	<PageListItem
+		:key="page.title"
+		:to="pagePath(page)"
+		:pageId="page.id"
+		:parentId="page.parentId"
+		:title="page.title"
+		:timestamp="page.timestamp"
+		:lastUserId="page.lastUserId"
+		:lastUserDisplayName="page.lastUserDisplayName"
+		:emoji="page.emoji"
+		:level
+		:canEdit="currentCollectiveCanEdit"
+		:hasVisibleSubpages
+		:filteredView
+		:networkOnline
+		@click="show('details')">
+		<DraggableElement
+			v-if="subpagesView.length > 0 || keptSortable(page.id)"
+			:list="subpagesView"
+			:parentId="page.id"
+			:disableSorting>
+			<SubpageList
+				v-for="subpage in subpagesView"
+				:key="subpage.id"
+				:data-page-id="subpage.id"
+				:page="subpage"
+				:level="level + 1"
+				:networkOnline
+				class="page-list-drag-item" />
+		</DraggableElement>
+	</PageListItem>
 </template>
 
 <script>
@@ -139,9 +136,3 @@ export default {
 }
 
 </script>
-
-<style>
-.page-list-indent {
-	padding-left: 20px;
-}
-</style>

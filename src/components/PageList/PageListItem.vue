@@ -4,12 +4,15 @@
 -->
 
 <template>
-	<div
+	<NcAppNavigationItem
 		:id="pageElementId"
 		:data-page-id="pageId"
-		class="app-content-list-item"
+		:name="pageTitleString"
+		:to="to"
+		:open="isCollapsible ? !isCollapsed(pageId) : undefined"
+		:allowCollapse="isCollapsible"
+		class="page-list-item"
 		:class="{
-			active: isActive,
 			mobile: isMobile,
 			highlight: isHighlighted,
 			'dragged-over-target': isDraggedOverTarget,
@@ -17,16 +20,14 @@
 			'highlight-animation': isHighlightAnimation,
 		}"
 		draggable="true"
+		@update:open="toggleCollapsed(pageId)"
 		@dragstart="onDragstart"
 		@dragend="onDragend"
 		@dragover.prevent="onDragover"
 		@dragleave="onDragleave"
-		@drop="onDrop">
-		<div
-			class="app-content-list-item-icon"
-			:tabindex="isCollapsible ? '0' : null"
-			@keydown.enter="toggleCollapsedOrRoute"
-			@click="toggleCollapsedOrRoute">
+		@drop="onDrop"
+		@click="expandAndScroll">
+		<template #icon>
 			<slot name="icon">
 				<template v-if="emoji">
 					<div class="item-icon-emoji">
@@ -37,15 +38,6 @@
 					<PageIcon :size="22" fillColor="var(--color-background-darker)" />
 				</template>
 			</slot>
-			<template v-if="isCollapsible">
-				<MenuRightIcon
-					v-show="!filteredView"
-					:size="18"
-					fillColor="var(--color-main-text)"
-					:title="t('collectives', 'Expand subpage list')"
-					class="item-icon-badge"
-					:class="isCollapsed(pageId) ? 'collapsed' : 'expanded'" />
-			</template>
 			<template v-if="showFavoriteStar">
 				<StarIconFilled
 					v-show="!filteredView"
@@ -54,43 +46,33 @@
 					:title="t('collectives', 'Favorite')"
 					class="item-icon-favorite" />
 			</template>
-		</div>
-		<router-link
-			:to
-			draggable="false"
-			class="app-content-list-item-link">
-			<div
-				ref="page-title"
-				:title="pageTitleIfTruncated"
-				class="app-content-list-item-line-one"
-				@click="expandAndScroll">
-				{{ pageTitleString }}
+		</template>
+		<template v-if="canEdit" #extra>
+			<div class="page-list-item-actions">
+				<PageActionMenu
+					:pageId
+					:pageUrl="to"
+					:parentId
+					:timestamp
+					:lastUserId
+					:lastUserDisplayName
+					inPageList
+					:networkOnline />
+				<NcActions container="#app-navigation-vue">
+					<NcActionButton
+						class="action-button-add"
+						:disabled="!networkOnline || loading(`template-list-${templatesCollectiveId}`)"
+						@click="onNewPage">
+						<template #icon>
+							<PlusIcon :size="20" fillColor="var(--color-main-text)" />
+						</template>
+						{{ t('collectives', 'Add a subpage') }}
+					</NcActionButton>
+				</NcActions>
 			</div>
-		</router-link>
-		<div class="page-list-item-actions">
-			<PageActionMenu
-				v-if="canEdit"
-				:pageId
-				:pageUrl="to"
-				:parentId
-				:timestamp
-				:lastUserId
-				:lastUserDisplayName
-				inPageList
-				:networkOnline />
-			<NcActions v-if="canEdit">
-				<NcActionButton
-					class="action-button-add"
-					:disabled="!networkOnline || loading(`template-list-${templatesCollectiveId}`)"
-					@click="onNewPage">
-					<template #icon>
-						<PlusIcon :size="20" fillColor="var(--color-main-text)" />
-					</template>
-					{{ t('collectives', 'Add a subpage') }}
-				</NcActionButton>
-			</NcActions>
-		</div>
-	</div>
+		</template>
+		<slot />
+	</NcAppNavigationItem>
 </template>
 
 <script>
@@ -100,7 +82,7 @@ import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
-import MenuRightIcon from 'vue-material-design-icons/MenuRightOutline.vue'
+import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import StarIconFilled from 'vue-material-design-icons/Star.vue'
 import PageIcon from '../Icon/PageIcon.vue'
@@ -115,9 +97,9 @@ export default {
 	name: 'PageListItem',
 
 	components: {
-		MenuRightIcon,
 		NcActionButton,
 		NcActions,
+		NcAppNavigationItem,
 		PageIcon,
 		PageActionMenu,
 		PlusIcon,
@@ -207,7 +189,6 @@ export default {
 
 	data() {
 		return {
-			pageTitleIsTruncated: false,
 			isHighlightedTarget: false,
 			dragoverTimer: null,
 		}
@@ -257,10 +238,6 @@ export default {
 			return this.title
 		},
 
-		pageTitleIfTruncated() {
-			return this.pageTitleIsTruncated ? this.pageTitleString : null
-		},
-
 		isHighlighted() {
 			return this.highlightPageId === this.pageId
 		},
@@ -303,8 +280,6 @@ export default {
 		if (this.isActive && !this.inFavoriteList) {
 			scrollToPage(this.pageId)
 		}
-
-		this.pageTitleIsTruncated = this.$refs['page-title'].scrollWidth > this.$refs['page-title'].clientWidth
 	},
 
 	methods: {
@@ -316,18 +291,6 @@ export default {
 			'setDraggedPageId',
 			'toggleCollapsed',
 		]),
-
-		toggleCollapsedOrRoute(event) {
-			if (this.isCollapsible) {
-				event.stopPropagation()
-				this.toggleCollapsed(this.pageId)
-			} else {
-				this.expandAndScroll()
-				if (this.currentPage.id !== this.pageId) {
-					this.$router.push(this.to)
-				}
-			}
-		},
 
 		expandAndScroll() {
 			this.expand(this.pageId)
@@ -402,49 +365,16 @@ export default {
 <style lang="scss" scoped>
 @use '../../css/animation';
 
-.app-content-list-item {
-	box-sizing: border-box;
-	height: var(--default-clickable-area);
-	// border-bottom: 4px solid var(--color-main-background);
-	margin-bottom: 4px;
-
-	padding: 0;
-	border-radius: var(--border-radius-large);
-
-	&.active {
-		background-color: var(--color-primary-element-light);
-
-		span.item-icon-badge {
-			background-color: var(--color-primary-element-light);
-		}
-
-		span.item-icon-favorite {
-			background-color: var(--color-primary-element-light);
-		}
-	}
-
-	&:hover, &:focus, &:active, &.highlight {
+.page-list-item {
+	&.highlight :deep(.app-navigation-entry) {
 		background-color: var(--color-background-hover);
-
-		span.item-icon-badge {
-			background-color: var(--color-background-hover);
-		}
-
-		span.item-icon-favorite {
-			background-color: var(--color-background-hover);
-		}
 	}
 
-	&.highlight-animation {
+	&.highlight-animation :deep(.app-navigation-entry) {
 		animation: highlight-animation 5s 1;
-
-		span.item-icon-badge {
-			animation: highlight-animation 5s 1;
-		}
 	}
 
-	&.highlight-target {
-		// background-color: var(--color-primary-element-light);
+	&.highlight-target :deep(.app-navigation-entry) {
 		border: 1px solid var(--color-border-maxcontrast);
 	}
 
@@ -452,81 +382,45 @@ export default {
 		// Make cloned drag element less visible if dragged over a target page
 		opacity: .3;
 	}
+}
 
-	&.active, &.mobile, &:hover, &:focus, &:active {
-		// Shorter width to prevent collision with actions
-		.app-content-list-item-link {
-			width: calc(100% - 88px);
-		}
+.item-icon-emoji {
+	cursor: pointer;
+}
 
-		.page-list-item-actions {
-			visibility: visible;
-		}
-	}
+// Anchor the favorite badge to the icon box itself, not the whole row
+:deep(.app-navigation-entry-icon) {
+	position: relative;
+}
 
-	.app-content-list-item-icon {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		font-size: 20px;
+.item-icon-favorite {
+	position: absolute;
+	top: 0;
+	right: -1px;
+	cursor: pointer;
+	border: 0;
+	border-radius: 50%;
+}
 
-		.item-icon-emoji {
-			cursor: pointer;
-		}
-
-		.material-design-icon {
-			cursor: pointer;
-		}
-
-		// Configure collapse/expand badge
-		.item-icon-badge {
-			position: absolute;
-			bottom: -2px;
-			right: -1px;
-			cursor: pointer;
-			border: 0;
-			border-radius: 50%;
-			background-color: var(--color-main-background);
-			transition: transform var(--animation-slow);
-
-			&.expanded {
-				transform: rotate(90deg);
-			}
-		}
-
-		// Configure favorite icon
-		.item-icon-favorite {
-			position: absolute;
-			top: 0;
-			right: -1px;
-			cursor: pointer;
-			border: 0;
-			border-radius: 50%;
-			background-color: var(--color-main-background);
-		}
-	}
-
-	.app-content-list-item-line-one {
-		padding-left: 40px;
-	}
-
-	.app-content-list-item-link {
-		display: flex;
-		align-items: center;
-		height: 100%;
-		width: 100%;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+// Push the built-in collapse arrow after the actions/add-page buttons
+:deep(.icon-collapse) {
+	order: 1;
 }
 
 .page-list-item-actions {
+	order: 0;
 	visibility: hidden;
 	display: flex;
 	gap: 2px;
-	position: absolute;
-	top: 0;
-	right: 0;
-	margin: 0;
+}
+
+.page-list-item.mobile .page-list-item-actions {
+	visibility: visible;
+}
+
+:deep(.app-navigation-entry:hover) .page-list-item-actions,
+:deep(.app-navigation-entry:focus-within) .page-list-item-actions,
+:deep(.app-navigation-entry.active) .page-list-item-actions {
+	visibility: visible;
 }
 </style>

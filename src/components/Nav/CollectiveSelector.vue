@@ -10,6 +10,7 @@
 			:shown="showSelector"
 			:triggers="[]"
 			placement="bottom-start"
+			container="#app-navigation-vue"
 			popoverBaseClass="collective-selector-popover"
 			@update:shown="showSelector = $event">
 			<template #trigger="{ attrs }">
@@ -88,6 +89,7 @@
 			v-if="currentCollective"
 			forceMenu
 			class="collective-selector-actions"
+			container="#app-navigation-vue"
 			:aria-label="t('collectives', 'Collective actions')">
 			<NcActionCollectiveActions
 				:collective="currentCollective"

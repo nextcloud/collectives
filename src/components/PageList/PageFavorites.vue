@@ -112,10 +112,12 @@ export default {
 }
 
 .app-content-list-item {
+	position: relative;
+	display: flex;
+	align-items: center;
 	box-sizing: border-box;
 	height: var(--default-clickable-area);
 	margin-bottom: 4px;
-
 	padding: 0;
 	border-radius: var(--border-radius-large);
 
@@ -133,8 +135,10 @@ export default {
 
 	.app-content-list-item-icon {
 		display: flex;
+		flex: 0 0 var(--default-clickable-area);
 		justify-content: center;
 		align-items: center;
+		width: var(--default-clickable-area);
 
 		.material-design-icon {
 			cursor: pointer;
@@ -143,7 +147,7 @@ export default {
 
 	.app-content-list-item-line-one {
 		display: flex;
-		padding-left: 40px;
+		flex-grow: 1;
 	}
 
 	.toggle-favorites-button {

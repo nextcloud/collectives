@@ -16,6 +16,12 @@
 			id="sharingToken"
 			type="hidden"
 			:value="shareTokenParam">
+		<NcAppNavigation v-if="!printView">
+			<template #list>
+				<CollectiveSelector />
+				<PageList v-if="currentCollective" />
+			</template>
+		</NcAppNavigation>
 		<router-view />
 		<PageSidebar v-if="currentCollective && currentPage" />
 		<CollectiveSettings
@@ -28,9 +34,12 @@
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapActions, mapState } from 'pinia'
+import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcContent from '@nextcloud/vue/components/NcContent'
+import CollectiveSelector from './components/Nav/CollectiveSelector.vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import NewCollectiveModal from './components/Nav/NewCollectiveModal.vue'
+import PageList from './components/PageList.vue'
 import PageSidebar from './components/PageSidebar.vue'
 import { useNetworkState } from './composables/useNetworkState.js'
 import { useCollectivesStore } from './stores/collectives.js'
@@ -43,9 +52,12 @@ export default {
 	name: 'CollectivesApp',
 
 	components: {
+		CollectiveSelector,
 		CollectiveSettings,
+		NcAppNavigation,
 		NcContent,
 		NewCollectiveModal,
+		PageList,
 		PageSidebar,
 	},
 
@@ -65,6 +77,7 @@ export default {
 	computed: {
 		...mapState(useRootStore, [
 			'isPublic',
+			'printView',
 			'shareTokenParam',
 		]),
 

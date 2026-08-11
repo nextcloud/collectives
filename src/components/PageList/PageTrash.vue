@@ -72,7 +72,7 @@
 										</template>
 										{{ t('collectives', 'Restore') }}
 									</NcButton>
-									<NcActions forceMenu>
+									<NcActions forceMenu container="#app-navigation-vue">
 										<NcActionButton
 											closeAfterClick
 											:disabled="!networkOnline"

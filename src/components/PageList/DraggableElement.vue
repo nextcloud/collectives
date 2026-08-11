@@ -111,7 +111,7 @@ export default {
 		},
 
 		setData(dataTransfer, dragEl) {
-			dataTransfer.setData('pageId', dragEl.firstChild.dataset.pageId)
+			dataTransfer.setData('pageId', dragEl.dataset.pageId)
 		},
 
 		// Dragged element changes position
