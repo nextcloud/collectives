@@ -50,7 +50,7 @@ class NotificationService {
 		// Collect direct user member IDs
 		$memberUserIds = [];
 		foreach ($circle->getMembers() as $member) {
-			// TODO: also notify indirect circle/team members
+			// Indirect members get detected below
 			if ($member->getUserType() === Member::TYPE_USER) {
 				$memberUserIds[] = $member->getUserId();
 			}
@@ -65,7 +65,24 @@ class NotificationService {
 		$notifyUserIds = [];
 		foreach ($allSettings as $setting) {
 			if ($setting->getSetting('notify') === CollectiveUserSettings::NOTIFY_ALL) {
-				$notifyUserIds[] = $setting->getUserId();
+				$userId = $setting->getUserId();
+
+				// Skip acting user
+				if ($userId === $actingUserId) {
+					continue;
+				}
+				if (in_array($userId, $memberUserIds, true)) {
+					$notifyUserIds[] = $setting->getUserId();
+					continue;
+				}
+
+				// Check for indirect membership
+				$circles = $this->circleHelper->getCircles($userId);
+				$circleIds = array_map(static fn ($circle) => $circle->getSingleId(), $circles);
+
+				if (in_array($collective->getCircleId(), $circleIds, true)) {
+					$notifyUserIds[] = $setting->getUserId();
+				}
 			}
 		}
 
@@ -94,15 +111,7 @@ class NotificationService {
 			'pageLink' => $pageLink,
 		];
 
-		foreach ($memberUserIds as $userId) {
-			// Skip acting and non-notify users
-			if ($userId === $actingUserId) {
-				continue;
-			}
-			if (!in_array($userId, $notifyUserIds, true)) {
-				continue;
-			}
-
+		foreach ($notifyUserIds as $userId) {
 			// Replace existing notifications for this page
 			$filter = $this->notificationManager->createNotification();
 			$filter->setApp(Application::APP_NAME)
