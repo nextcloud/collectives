@@ -20,6 +20,7 @@ describe('Collective on mobile', function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives')
 
+		cy.openCollectiveSelector()
 		cy.get('.collectives_list_item')
 			.contains('li', 'First Mobile Collective')
 			.should('be.visible')

@@ -24,6 +24,7 @@ describe('Collective via group membership to team', function() {
 	it('Lists the collective', function() {
 		cy.loginAs('bob')
 		cy.visit('apps/collectives')
+		cy.openCollectiveSelector()
 		cy.get('.app-navigation').contains('Group Collective').click()
 		cy.getReadOnlyEditor()
 			.find('h1').should('contain', 'Welcome Group Collective')

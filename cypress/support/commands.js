@@ -177,6 +177,7 @@ Cypress.Commands.add(
  */
 Cypress.Commands.add('createCollective', (name, members = []) => {
 	Cypress.log()
+	cy.openCollectiveSelector()
 	cy.get('button').contains('New collective').click()
 	cy.get('.collective-name input[type="text"]').type(`${name}{enter}`)
 	if (members.length > 0) {

@@ -31,11 +31,22 @@ Cypress.Commands.add('openCollective', (collectiveName) => {
 	cy.routeTo(collectiveName)
 })
 
+Cypress.Commands.add('openCollectiveSelector', () => {
+	Cypress.log()
+	cy.get('body').then(($body) => {
+		if ($body.find('.collective-selector-list').length === 0) {
+			cy.get('.collective-selector-chevron-button').click()
+		}
+	})
+})
+
 Cypress.Commands.add('openCollectiveMenu', (collectiveName) => {
 	Cypress.log()
+	cy.openCollectiveSelector()
 	cy.get('.collectives_list_item')
 		.contains('li', collectiveName)
-		.find('.action-item__menutoggle')
+		.click()
+	cy.get('.collective-selector-actions .action-item__menutoggle')
 		.click({ force: true })
 })
 

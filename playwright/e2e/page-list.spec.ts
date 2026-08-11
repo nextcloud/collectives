@@ -26,7 +26,7 @@ test.describe('Page list drag and drop', () => {
 	test('Reorder pages', async ({ page, collective, pageList }) => {
 		await collective.openCollective()
 		await expect(pageList.el).toBeVisible()
-		await pageList.expectPageListOrder([collective.data.name, page3.data.title, page2.data.title, page1.data.title])
+		await pageList.expectPageListOrder([page3.data.title, page2.data.title, page1.data.title])
 
 		const page1El = pageList.getPageItem(page1.data.title)
 		const page2El = pageList.getPageItem(page2.data.title)
@@ -37,13 +37,13 @@ test.describe('Page list drag and drop', () => {
 		await page2El.hover()
 		await page2El.hover({ position: { x: 10, y: 0 } })
 		await page.mouse.up()
-		await pageList.expectPageListOrder([collective.data.name, page3.data.title, page1.data.title, page2.data.title])
+		await pageList.expectPageListOrder([page3.data.title, page1.data.title, page2.data.title])
 	})
 
 	test('Move page into subpage', async ({ page, collective, pageList }) => {
 		await collective.openCollective()
 		await expect(pageList.el).toBeVisible()
-		await pageList.expectPageListOrder([collective.data.name, page3.data.title, page2.data.title, page1.data.title])
+		await pageList.expectPageListOrder([page3.data.title, page2.data.title, page1.data.title])
 
 		const page1El = pageList.getPageItem(page1.data.title)
 		const page3El = pageList.getPageItem(page3.data.title)
@@ -56,15 +56,15 @@ test.describe('Page list drag and drop', () => {
 		// Wait for timeout in PageListItem.vue onDragover()
 		await page.waitForTimeout(21)
 		await page.mouse.up()
-		await pageList.expectPageListOrder([collective.data.name, page3.data.title, page2.data.title])
+		await pageList.expectPageListOrder([page3.data.title, page2.data.title])
 		await pageList.toggleExpandPage(page3.data.title)
-		await pageList.expectPageListOrder([collective.data.name, page3.data.title, page1.data.title, page2.data.title])
+		await pageList.expectPageListOrder([page3.data.title, page1.data.title, page2.data.title])
 	})
 
-	test('Drop page outside list reverts order', async ({ page, collective, pageList, editor }) => {
+	test('Drop page outside list reverts order', async ({ page, pageList, editor }) => {
 		await page2.open(true)
 		await expect(pageList.el).toBeVisible()
-		await pageList.expectPageListOrder([collective.data.name, page3.data.title, page2.data.title, page1.data.title])
+		await pageList.expectPageListOrder([page3.data.title, page2.data.title, page1.data.title])
 
 		const page1El = pageList.getPageItem(page1.data.title)
 		const page2El = pageList.getPageItem(page2.data.title)
@@ -74,7 +74,7 @@ test.describe('Page list drag and drop', () => {
 		await page2El.hover()
 		await editor.menubar.hover()
 		await page.mouse.up()
-		await pageList.expectPageListOrder([collective.data.name, page3.data.title, page2.data.title, page1.data.title])
+		await pageList.expectPageListOrder([page3.data.title, page2.data.title, page1.data.title])
 	})
 
 	test('Drag page into editor', async ({ pageList, editor }) => {

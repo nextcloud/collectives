@@ -20,6 +20,7 @@ describe('Collective settings', function() {
 
 		// Test persistence of changed emoji
 		cy.reload()
+		cy.openCollectiveSelector()
 		cy.contains('.app-navigation-entry', 'Change me')
 			.find('.app-navigation-entry-icon').should('contain', '🥰')
 
@@ -32,6 +33,7 @@ describe('Collective settings', function() {
 
 		// Test persistence of unset emoji
 		cy.reload()
+		cy.openCollectiveSelector()
 		cy.contains('.app-navigation-entry', 'Change me')
 			.find('.app-navigation-entry-icon .collectives-icon')
 	})
@@ -41,6 +43,7 @@ describe('Collective settings', function() {
 		cy.clickMenuButton('Settings')
 		cy.get('div.collective-name-and-emoji input[type="text"]').type(' now{enter}')
 		cy.reload()
+		cy.openCollectiveSelector()
 		cy.get('.collectives_list_item')
 			.should('contain', 'Change me now')
 	})

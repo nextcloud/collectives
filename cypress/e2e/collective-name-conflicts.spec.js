@@ -33,6 +33,7 @@ describe('Collective name conflicts', function() {
 	it('creates collectives by picking team', function() {
 		cy.loginAs('bob')
 		cy.visit('apps/collectives')
+		cy.openCollectiveSelector()
 		cy.get('button').contains('New collective').click()
 		cy.get('button span.teams-icon').click()
 		cy.get('.circle-selector').click()
@@ -46,6 +47,7 @@ describe('Collective name conflicts', function() {
 	it('collectives of visible teams only show for members', function() {
 		cy.loginAs('jane')
 		cy.visit('apps/collectives')
+		cy.openCollectiveSelector()
 		cy.get('.app-navigation-entry').should('not.contain', 'History Club')
 	})
 	it('creates collectives for admins of corresponding team', function() {
