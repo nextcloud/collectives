@@ -24,6 +24,8 @@ export const useRootStore = defineStore('root', {
 		fileIdQuery: '',
 		listenPush: false,
 		isGuest: loadState('collectives', 'is_guest', false),
+		// Safety default - actual value gets loaded from backend by setPublishFeatureEnabled()
+		isPublishFeatureEnabled: false,
 	}),
 
 	getters: {
@@ -61,5 +63,7 @@ export const useRootStore = defineStore('root', {
 
 		setPrintView() { this.printView = true },
 		setActiveSidebarTab(id) { this.activeSidebarTab = id },
+
+		setPublishFeatureEnabled(enabled) { this.isPublishFeatureEnabled = enabled },
 	},
 })
