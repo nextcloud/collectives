@@ -20,7 +20,7 @@ describe('Page', function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives/Our Garden')
 		// make sure the page list loaded properly
-		cy.contains('.app-content-list-item a', 'Day 1')
+		cy.contains('.page-list-item .app-navigation-entry-link', 'Day 1')
 	})
 
 	it('Allows setting a page emoji from title bar', function() {
@@ -33,8 +33,8 @@ describe('Page', function() {
 		cy.reload()
 		cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
 			.should('contain', '🥰')
-		cy.contains('.app-content-list-item', 'Day 1')
-			.find('.app-content-list-item-icon')
+		cy.contains('.page-list-item', 'Day 1')
+			.find('.app-navigation-entry-icon')
 			.should('contain', '🥰')
 
 		// Unset emoji
@@ -45,11 +45,11 @@ describe('Page', function() {
 		// Test persistence of unset emoji
 		cy.reload()
 		cy.get('[data-cy-collectives="page-title-container"] .page-title-icon .emoticon-outline-icon')
-		cy.contains('.app-content-list-item', 'Day 1')
-			.find('.app-content-list-item-icon .collectives-page-icon')
+		cy.contains('.page-list-item', 'Day 1')
+			.find('.app-navigation-entry-icon .collectives-page-icon')
 	})
 	it('Allows setting a page emoji from page list', function() {
-		cy.contains('.app-content-list-item', 'Day 2')
+		cy.contains('.page-list-item', 'Day 2')
 			.find('.action-item__menutoggle')
 			.click({ force: true })
 		cy.get('button.action-button')
@@ -59,14 +59,14 @@ describe('Page', function() {
 		cy.reload()
 		cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
 			.should('contain', '😀')
-		cy.contains('.app-content-list-item', 'Day 2')
-			.find('.app-content-list-item-icon')
+		cy.contains('.page-list-item', 'Day 2')
+			.find('.app-navigation-entry-icon')
 			.should('contain', '😀')
 	})
 
 	it('Title with special chars loads well', function() {
-		cy.contains('.app-content-list-item a', '#% special chars').click()
-		cy.get('.app-content-list-item').should('contain', '#% special chars')
+		cy.contains('.page-list-item .app-navigation-entry-link', '#% special chars').click()
+		cy.get('.page-list-item').should('contain', '#% special chars')
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', '#% special chars')
 	})
 
@@ -74,7 +74,7 @@ describe('Page', function() {
 		// Do some handstands to ensure that new page with editor is loaded before we edit the title
 		cy.intercept('POST', '**/api/v1.0/collectives/*/pages/*').as('createPage')
 		cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
-		cy.contains('.app-content-list-item', '#% special chars')
+		cy.contains('.page-list-item', '#% special chars')
 			.find('button.action-button-add')
 			.click({ force: true })
 		cy.wait(['@createPage', '@textCreateSession'])
@@ -84,7 +84,7 @@ describe('Page', function() {
 			.should('not.have.attr', 'disabled')
 		cy.get('[data-cy-collectives="page-title-container"] input.title')
 			.type('{selectAll}Subpage Title{enter}')
-		cy.get('.app-content-list-item').should('contain', 'Subpage Title')
+		cy.get('.page-list-item').should('contain', 'Subpage Title')
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Subpage Title')
 		cy.get('[data-cy-collectives="page-title-container"] input').should('not.have.attr', 'disabled')
 		cy.title().should('eq', 'Subpage Title - #% special chars - Our Garden - Collectives - Nextcloud')

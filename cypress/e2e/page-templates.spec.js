@@ -17,7 +17,7 @@ describe('Page templates', function() {
 	})
 
 	it('Create a new template', function() {
-		cy.openPageMenu('Template Collective')
+		cy.openCollectiveMenu('Template Collective')
 		cy.clickMenuButton('Manage templates')
 
 		// Create template
@@ -58,8 +58,7 @@ describe('Page templates', function() {
 	})
 
 	it('Create a new page from template', function() {
-		cy.contains('.app-content-list-item', 'Template Collective')
-			.find('button.action-button-add')
+		cy.get('.page-list-headerbar button[aria-label="Add a page"]')
 			.click()
 
 		cy.get('.template-item')
@@ -74,8 +73,7 @@ describe('Page templates', function() {
 	})
 
 	it('Create a new blank page', function() {
-		cy.contains('.app-content-list-item', 'Template Collective')
-			.find('button.action-button-add')
+		cy.get('.page-list-headerbar button[aria-label="Add a page"]')
 			.click()
 
 		cy.get('.template-item')
@@ -87,7 +85,7 @@ describe('Page templates', function() {
 	})
 
 	it('Delete template', function() {
-		cy.openPageMenu('Template Collective')
+		cy.openCollectiveMenu('Template Collective')
 		cy.clickMenuButton('Manage templates')
 
 		cy.contains('.template-list-item', 'Supertemplate')

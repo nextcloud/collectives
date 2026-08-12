@@ -20,7 +20,7 @@ describe('Page edit', function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives/Our Garden')
 		// make sure the page list loaded properly
-		cy.contains('.app-content-list-item a', 'Day 1')
+		cy.contains('.page-list-item .app-navigation-entry-link', 'Day 1')
 	})
 
 	it('Supports page content editing and switching to read mode', function() {

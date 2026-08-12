@@ -33,8 +33,7 @@ describe('Collective name conflicts', function() {
 	it('creates collectives by picking team', function() {
 		cy.loginAs('bob')
 		cy.visit('apps/collectives')
-		cy.openCollectiveSelector()
-		cy.get('button').contains('New collective').click()
+		cy.openNewCollectiveModal()
 		cy.get('button span.teams-icon').click()
 		cy.get('.circle-selector').click()
 		cy.get('.circle-selector li [title*=History]').click()

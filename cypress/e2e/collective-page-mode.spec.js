@@ -19,7 +19,7 @@ describe('Collective page mode', function() {
 		cy.seedCollectivePageMode('Our Garden', 1)
 		cy.visit('/apps/collectives/Our Garden')
 		// make sure the page list loaded properly
-		cy.contains('.app-content-list-item a', 'Day 1')
+		cy.contains('.page-list-item .app-navigation-entry-link', 'Day 1')
 		cy.openPage('Day 2')
 		cy.getEditor()
 			.should('be.visible')
@@ -31,7 +31,7 @@ describe('Collective page mode', function() {
 		cy.seedCollectivePageMode('Our Garden', 0)
 		cy.visit('/apps/collectives/Our Garden')
 		// make sure the page list loaded properly
-		cy.contains('.app-content-list-item a', 'Day 1')
+		cy.contains('.page-list-item .app-navigation-entry-link', 'Day 1')
 		cy.openPage('Day 2')
 		cy.getReadOnlyEditor()
 			.should('be.visible')

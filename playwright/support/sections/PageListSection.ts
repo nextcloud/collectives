@@ -37,8 +37,9 @@ export class PageListSection {
 	}
 
 	public async addPage(parentTitle: string): Promise <void> {
-		await this.getPageItem(parentTitle)
-			.getByRole('button', { name: 'Add a page' })
-			.click()
+		const item = this.getPageItem(parentTitle)
+		// The add-subpage button is only shown on hover
+		await item.hover()
+		await item.getByRole('button', { name: 'Add a subpage' }).click()
 	}
 }

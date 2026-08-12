@@ -10,12 +10,12 @@ Cypress.Commands.add('openApp', (appName) => {
 
 Cypress.Commands.add('openPage', (pageName) => {
 	Cypress.log()
-	cy.contains('.app-content-list-item a', pageName).click()
+	cy.contains('.page-list-item .app-navigation-entry-link', pageName).click()
 })
 
 Cypress.Commands.add('openPageMenu', (pageName) => {
 	Cypress.log()
-	cy.contains('.app-content-list-item', pageName)
+	cy.contains('.page-list-item', pageName)
 		.find('.action-item__menutoggle')
 		.click({ force: true })
 })
@@ -33,11 +33,19 @@ Cypress.Commands.add('openCollective', (collectiveName) => {
 
 Cypress.Commands.add('openCollectiveSelector', () => {
 	Cypress.log()
-	cy.get('body').then(($body) => {
-		if ($body.find('.collective-selector-list').length === 0) {
-			cy.get('.collective-selector-chevron-button').click()
+	cy.get('.collective-selector-chevron-button').then(($button) => {
+		if ($button.attr('aria-expanded') !== 'true') {
+			cy.wrap($button).click()
+			cy.get('.collective-selector-list').should('be.visible')
 		}
 	})
+})
+
+Cypress.Commands.add('openNewCollectiveModal', () => {
+	Cypress.log()
+	cy.openCollectiveSelector()
+	cy.get('button').contains('New collective').click()
+	cy.get('.collective-name input[type="text"]').should('be.focused')
 })
 
 Cypress.Commands.add('openCollectiveMenu', (collectiveName) => {

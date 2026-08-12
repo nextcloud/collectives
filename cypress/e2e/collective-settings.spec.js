@@ -74,7 +74,7 @@ describe('Collective settings', function() {
 
 	it('Allows to open settings from landing page actions', function() {
 		cy.openCollective('Change me')
-		cy.openPageMenu('Change me')
+		cy.openCollectiveMenu('Change me')
 		cy.clickMenuButton('Settings')
 		cy.get('.edit-permissions')
 	})

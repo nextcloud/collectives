@@ -20,6 +20,10 @@ describe('Collective on mobile', function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives')
 
+		cy.get('.app-navigation__list').should('not.be.visible')
+		cy.get('button.app-navigation-toggle').click()
+		cy.get('.app-navigation__list').should('be.visible')
+
 		cy.openCollectiveSelector()
 		cy.get('.collectives_list_item')
 			.contains('li', 'First Mobile Collective')
@@ -30,13 +34,13 @@ describe('Collective on mobile', function() {
 		cy.viewport(360, 800)
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives/First Mobile Collective')
-		cy.get('.app-content-list').should('not.be.visible')
+		cy.get('.app-navigation__list').should('not.be.visible')
 
-		cy.get('.app-details-toggle').click()
-		cy.get('.app-content-list').should('be.visible')
+		cy.get('button.app-navigation-toggle').click()
+		cy.get('.app-navigation__list').should('be.visible')
 
 		cy.openPage('Page 1')
-		cy.get('.app-content-list').should('not.be.visible')
+		cy.get('.app-navigation__list').should('not.be.visible')
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Page 1')
 	})
 })
