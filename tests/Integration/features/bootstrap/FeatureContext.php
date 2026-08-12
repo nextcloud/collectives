@@ -2503,11 +2503,7 @@ class FeatureContext implements Context {
 		// clear the cached JSON response
 		$this->json = null;
 		try {
-			if ($verb === 'PROPFIND' || $verb === 'MOVE') {
-				$this->response = $client->request($verb, $url, $options);
-			} else {
-				$this->response = $client->{$verb}($url, $options);
-			}
+			$this->response = $client->request($verb, $url, $options);
 		} catch (ClientException $e) {
 			$this->response = $e->getResponse();
 		}
