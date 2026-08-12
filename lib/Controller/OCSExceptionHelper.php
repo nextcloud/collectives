@@ -29,13 +29,13 @@ trait OCSExceptionHelper {
 		try {
 			return $callback();
 		} catch (NotPermittedException $e) {
-			$logger?->debug('Collectives app NotPermitted Error: ' . $e->getMessage(), ['exception' => $e]);
+			$logger?->debug('Collectives NotPermitted error: ' . $e->getMessage(), ['exception' => $e]);
 			throw new OCSForbiddenException($e->getMessage());
 		} catch (NotFoundException $e) {
-			$logger?->debug('Collectives app NotFound Error: ' . $e->getMessage(), ['exception' => $e]);
+			$logger?->debug('Collectives NotFound error: ' . $e->getMessage(), ['exception' => $e]);
 			throw new OCSNotFoundException($e->getMessage());
 		} catch (UnprocessableEntityException $e) {
-			$logger?->debug('Collectives app Unprocessable Entity: ' . $e->getMessage(), ['exception' => $e]);
+			$logger?->debug('Collectives unprocessable entity: ' . $e->getMessage(), ['exception' => $e]);
 			throw new OCSBadRequestException($e->getMessage());
 		} catch (HintException $e) {
 			throw new OCSBadRequestException($e->getMessage());
