@@ -2096,15 +2096,18 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user deletes folder :folder
+	 * @When user :user deletes folder :folder if it :exists
 	 *
 	 * @throws GuzzleException
 	 */
-	public function deletesFolder(string $user, string $folderName): void {
+	public function deletesFolder(string $user, string $folderName, ?string $noFail = null): void {
 		$this->setCurrentUser($user);
 		$folderPath = '/dav/files/' . $user . '/' . $folderName;
 
 		$this->sendRemoteRequest('DELETE', $folderPath);
-		$this->assertStatusCode(204);
+		if ($noFail === null) {
+			$this->assertStatusCode(204);
+		}
 	}
 
 	/**
