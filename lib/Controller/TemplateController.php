@@ -19,7 +19,6 @@ use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
-use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,7 +33,6 @@ class TemplateController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private IUserSession $userSession,
 		private TemplateService $templateService,
 		private LoggerInterface $logger,
 		private ?string $userId,

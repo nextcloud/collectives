@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\Collective;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CollectiveService;
@@ -44,7 +43,6 @@ class CollectiveController extends OCSController {
 		private IUserSession $userSession,
 		private IFactory $l10nFactory,
 		private LoggerInterface $logger,
-		private NodeHelper $nodeHelper,
 		private ?string $userId,
 	) {
 		parent::__construct($appName, $request);
