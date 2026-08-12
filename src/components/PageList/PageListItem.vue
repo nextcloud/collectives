@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -297,6 +298,10 @@ export default {
 			// Scroll favored page in page list into viewport
 			if (this.inFavoriteList) {
 				scrollToPage(this.pageId)
+			}
+			// Close the nav sidebar on mobile after navigating to a page
+			if (this.isMobile) {
+				emit('toggle-navigation', { open: false })
 			}
 		},
 
