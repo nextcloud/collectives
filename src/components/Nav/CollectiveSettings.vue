@@ -346,13 +346,13 @@ export default {
 		 * Trash a collective with the given name
 		 */
 		async onTrashCollective() {
-			if (this.collectiveId === this.collective.id) {
-				await this.$router.push('/')
-				emit('toggle-navigation', { open: true })
-			}
 			try {
 				await this.trashCollective(this.collective)
 				emit('collectives:navigation:collective-trashed')
+				if (this.collectiveId === this.collective.id) {
+					await this.$router.push('/')
+					emit('toggle-navigation', { open: true })
+				}
 			} catch (e) {
 				displayError('Could not move the collective to trash')(e)
 			} finally {
