@@ -41,7 +41,7 @@ class Version020802Date20231004000000 extends SimpleMigrationStep {
 
 			// Required to allow setting other columns without providing a value for `page_order`
 			if ($table->hasColumn('page_order')) {
-				$table->changeColumn('page_order', [
+				$table->modifyColumn('page_order', [
 					'default' => 0,
 				]);
 			}
@@ -51,7 +51,7 @@ class Version020802Date20231004000000 extends SimpleMigrationStep {
 
 		if ($table->getColumn('settings')->getType() === Type::getType('json')) {
 			// `settings` column exists and is JSON, migrate to STRING
-			$table->changeColumn('settings', [
+			$table->modifyColumn('settings', [
 				'type' => Type::getType('string')
 			]);
 			return $schema;

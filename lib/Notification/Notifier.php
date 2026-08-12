@@ -22,9 +22,9 @@ class Notifier implements INotifier {
 	public const SUBJECT_PAGE_DELETED = 'page_deleted';
 
 	public function __construct(
-		private IFactory $factory,
-		private IURLGenerator $urlGenerator,
-		private IUserManager $userManager,
+		private readonly IFactory $factory,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly IUserManager $userManager,
 	) {
 	}
 
@@ -98,22 +98,17 @@ class Notifier implements INotifier {
 			$notification->setLink($params['collectiveLink']);
 		}
 
-		switch ($notification->getSubject()) {
-			case self::SUBJECT_PAGE_UPDATED:
-				$notification->setRichSubject(
-					$l->t('{user} updated {page} in {collective}'),
-					$richParams,
-				);
-				break;
-			case self::SUBJECT_PAGE_DELETED:
-				$notification->setRichSubject(
-					$l->t('{user} deleted {page} from {collective}'),
-					$richParams,
-				);
-				break;
-			default:
-				throw new UnknownNotificationException();
-		}
+		match ($notification->getSubject()) {
+			self::SUBJECT_PAGE_UPDATED => $notification->setRichSubject(
+				$l->t('{user} updated {page} in {collective}'),
+				$richParams,
+			),
+			self::SUBJECT_PAGE_DELETED => $notification->setRichSubject(
+				$l->t('{user} deleted {page} from {collective}'),
+				$richParams,
+			),
+			default => throw new UnknownNotificationException(),
+		};
 
 		$this->setParsedSubjectFromRichSubject($notification);
 		return $notification;
