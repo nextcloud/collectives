@@ -1963,7 +1963,7 @@ class FeatureContext implements Context {
 	 */
 	public function webdavNodeExists(string $user, string $path, ?string $fail = null): void {
 		$this->setCurrentUser($user);
-		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . trim($path, '/'), null, null, ['Depth' => 0]);
+		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . trim($path, '/'), null, null, ['Depth' => '0']);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(404);
 		} else {
@@ -1980,7 +1980,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$headers = [
 			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
-			'Depth' => 0,
+			'Depth' => '0',
 		];
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
@@ -2011,7 +2011,7 @@ class FeatureContext implements Context {
 		$token = $this->getShareToken($collectiveId);
 		$headers = [
 			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
-			'Depth' => 0,
+			'Depth' => '0',
 		];
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
@@ -2037,7 +2037,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$headers = [
 			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
-			'Depth' => 1,
+			'Depth' => '1',
 		];
 		$dom = new DOMDocument('1.0', 'UTF-8');
 		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
@@ -2517,7 +2517,7 @@ class FeatureContext implements Context {
 		if ($this->nextcloudVersion === null) {
 			$headers = [
 				'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
-				'Depth' => 0,
+				'Depth' => '0',
 			];
 
 			$statusUrl = str_replace('index.php', 'status.php', $this->baseUrl);
