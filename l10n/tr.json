@@ -7,6 +7,7 @@
     "Welcome %s" : "Hoş geldiniz %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "➕ ile sayfa listesinde sayfalar oluşturun! Bunları sürükleyerek sıralamayı değiştirebilirsiniz. Düzenleyiciye sürüklerseniz bir 🔗 bağlantısı oluşturulur.",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Bu yazıyı değiştirmek ve kendinizi evinizde hissetmek için `✏️ Düzenle` üzerine basın! Birden fazla kişi birlikte düzenleyebilir. [Belgeler](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) bölümünden ayrıntılı bilgi alabilir veya [topluluğa] (https://help.nextcloud.com/tag/collectives-app) sorular sorabilirsiniz.",
+    "Link to page in collective" : "Topluluk sayfasına bağla",
     "Collective pages" : "Topluluk sayfaları",
     "In collective %1$s" : "%1$s topluluğunda",
     "Last edition %1$s" : "Son düzenleme %1$s",
