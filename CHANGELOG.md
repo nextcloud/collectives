@@ -1,5 +1,22 @@
 # Changelog
 
+## 4.5.0 - 2026.08.13
+
+### ✨New
+* ✨ Add Nextcloud 35 support.
+* 🔔 Allow to subscribe to changes in a collective (#317).
+
+### 🐛Fixes
+* 🔎 Always list page picker first in smart picker when in Collectives app.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.4.3 - 2026.08.05
 
 ### 🐛Fixes
