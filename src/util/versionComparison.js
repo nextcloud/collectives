@@ -3,7 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { isValidComparisonId } from './versionComparisonRoute.js'
+
 export const CURRENT_VERSION_KEY = 'current'
+
+const CURRENT_ROUTE_NAMESPACE = 'current'
+const HISTORICAL_ROUTE_NAMESPACE = 'version'
 
 /**
  * Select the supported renderer without using the Text API version as a gate.
@@ -29,22 +34,32 @@ export function selectVersionComparisonRenderer({ comparisonFactory, viewerCompa
  *
  * @param {object} currentVersion Persisted current version
  * @param {object[]} versions Historical version list
- * @return {{options: object[], quarantined: object[]}} Selector state
+ * @return {{ambiguousRouteIds: string[], options: object[], quarantined: object[]}} Selector state
  */
 export function createVersionComparisonState(currentVersion, versions) {
+	const currentSnapshot = versions.find(({ isCurrentSnapshot }) => isCurrentSnapshot)
+		?? versions.find(({ mtime }) => mtime === currentVersion.mtime)
+	const currentMtime = currentSnapshot?.mtime ?? currentVersion.mtime
+	const currentSnapshotId = isValidHistoricalIdentity(currentSnapshot?.fileVersion)
+		? currentSnapshot.fileVersion
+		: String(Math.floor(currentMtime / 1000))
+	const currentRouteId = namespacedRouteId(CURRENT_ROUTE_NAMESPACE, currentSnapshotId)
 	const current = {
 		fileInfo: currentVersion,
 		fileVersion: null,
 		key: CURRENT_VERSION_KEY,
 		kind: 'current',
 		label: currentVersion.label,
-		mtime: currentVersion.mtime,
+		mtime: currentMtime,
+		routeAliases: [CURRENT_VERSION_KEY],
+		routeId: currentRouteId,
 		url: currentVersion.source ?? currentVersion.url,
 	}
-	const candidates = versions.filter((version) => version.mtime !== currentVersion.mtime)
+	const candidates = versions.filter((version) => version !== currentSnapshot)
 	const identityCounts = candidates.reduce((counts, version) => {
-		if (isValidHistoricalIdentity(version.fileVersion)) {
-			counts.set(version.fileVersion, (counts.get(version.fileVersion) ?? 0) + 1)
+		const fileVersion = version.fileVersion
+		if (isValidHistoricalIdentity(fileVersion)) {
+			counts.set(fileVersion, (counts.get(fileVersion) ?? 0) + 1)
 		}
 		return counts
 	}, new Map())
@@ -64,27 +79,55 @@ export function createVersionComparisonState(currentVersion, versions) {
 				quarantined.push({ fileVersion, reason })
 				return []
 			}
+			const routeId = namespacedRouteId(HISTORICAL_ROUTE_NAMESPACE, fileVersion)
+			const previousCurrentRouteId = namespacedRouteId(CURRENT_ROUTE_NAMESPACE, fileVersion)
 			return [{
 				fileInfo: version,
 				fileVersion,
-				key: `version:${fileVersion}`,
+				key: routeId,
 				kind: 'historical',
 				label: version.label,
 				mtime: version.mtime,
+				routeAliases: previousCurrentRouteId === currentRouteId ? [] : [previousCurrentRouteId],
+				routeId,
 				url: version.source ?? version.url,
 			}]
 		})
 		.toSorted(compareSnapshots)
 
 	return {
+		ambiguousRouteIds: [...duplicateIdentities]
+			.flatMap((fileVersion) => [
+				namespacedRouteId(HISTORICAL_ROUTE_NAMESPACE, fileVersion),
+				namespacedRouteId(CURRENT_ROUTE_NAMESPACE, fileVersion),
+			])
+			.filter((routeId) => routeId !== currentRouteId),
 		options: [current, ...historical.reverse()],
 		quarantined,
 	}
 }
 
-/** @param {unknown} fileVersion DAV version basename */
+/**
+ * Build one route identity without mixing current and persisted namespaces.
+ *
+ * @param {string} namespace Identity namespace
+ * @param {string} identity Snapshot identity
+ * @return {string} Namespaced route identity
+ */
+function namespacedRouteId(namespace, identity) {
+	return `${namespace}:${identity}`
+}
+
+/**
+ * Validate both a DAV version basename and every route identity derived from it.
+ *
+ * @param {unknown} fileVersion DAV version basename
+ * @return {fileVersion is string} Whether the identity is safe for routing
+ */
 function isValidHistoricalIdentity(fileVersion) {
-	return typeof fileVersion === 'string' && fileVersion.length > 0
+	return isValidComparisonId(fileVersion)
+		&& isValidComparisonId(namespacedRouteId(HISTORICAL_ROUTE_NAMESPACE, fileVersion))
+		&& isValidComparisonId(namespacedRouteId(CURRENT_ROUTE_NAMESPACE, fileVersion))
 }
 
 /**
