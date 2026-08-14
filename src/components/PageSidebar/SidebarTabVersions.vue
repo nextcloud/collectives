@@ -74,7 +74,8 @@
 			:currentVersion
 			:versions
 			:filePath="`/${currentPageFilePath}`"
-			:shareToken="shareTokenParam" />
+			:shareToken="shareTokenParam"
+			@retryRoute="onRetryComparisonRoute" />
 	</div>
 </template>
 
@@ -97,6 +98,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { useVersionsStore } from '../../stores/versions.js'
 import { createVersionComparisonState } from '../../util/versionComparison.js'
+import { parseVersionComparisonRoute } from '../../util/versionComparisonRoute.js'
 
 export default {
 	name: 'SidebarTabVersions',
@@ -147,6 +149,7 @@ export default {
 		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
 		...mapState(useVersionsStore, [
 			'currentVersion',
+			'loadedPageId',
 			'selectedVersion',
 			'versions',
 		]),
@@ -206,6 +209,14 @@ export default {
 			}
 		},
 
+		'$route.fullPath': {
+			handler() {
+				this.syncComparisonRoute()
+			},
+
+			immediate: true,
+		},
+
 		networkOnline: function(val) {
 			if (val && this.loadPending) {
 				this.getPageVersions()
@@ -249,6 +260,8 @@ export default {
 					return
 				}
 				this.loadPending = false
+				await this.$nextTick()
+				this.syncComparisonRoute()
 			} catch (e) {
 				if (generation !== this.loadGeneration || pageId !== this.pageId) {
 					return
@@ -294,6 +307,22 @@ export default {
 
 		onOpenComparisonSelector() {
 			this.$refs.comparisonDialog.openSelector()
+		},
+
+		async onRetryComparisonRoute() {
+			await this.getPageVersions()
+		},
+
+		syncComparisonRoute() {
+			const comparisonRoute = parseVersionComparisonRoute(this.$route.query)
+			if (comparisonRoute.kind === 'absent') {
+				this.$refs.comparisonDialog?.closeFromRoute()
+				return
+			}
+			if (comparisonRoute.kind !== 'valid' || this.loadPending || this.loadedPageId !== this.pageId) {
+				return
+			}
+			this.$nextTick(() => this.$refs.comparisonDialog?.openRoutedPair(comparisonRoute))
 		},
 
 		async onRestoreVersion(version) {
