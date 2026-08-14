@@ -1,7 +1,10 @@
 { "translations": {
     "You are not allowed to share %s" : "Nu există permisiunea de partajare %s",
+    "Off" : "Oprit",
     "Share link" : "Partajează link-ul",
     "Settings" : "Setări",
+    "Notifications" : "Notificări",
+    "Back" : "Înapoi",
     "Offline" : "Offline",
     "Members" : "Membri",
     "No search results" : "Căutarea nu are rezultate",
@@ -20,7 +23,6 @@
     "Cancel" : "Anulare",
     "Create" : "Crează",
     "Go back" : "Înapoi",
-    "Back" : "Înapoi",
     "Delete" : "Șterge",
     "Rename" : "Redenumire",
     "Templates" : "Șabloane",

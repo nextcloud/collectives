@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Share link" : "Ceangal co-roinnidh",
     "Settings" : "Roghainnean",
+    "Notifications" : "Brathan",
+    "Back" : "Air ais",
     "Remove" : "Thoir air falbh",
     "Loading…" : "’Ga luchdadh…",
     "Preview" : "Ro-sheall",
@@ -12,7 +14,6 @@ OC.L10N.register(
     "Deleted" : "Chaidh a sguabadh às",
     "Cancel" : "Sguir dheth",
     "Create" : "Cruthaich",
-    "Back" : "Air ais",
     "Delete" : "Sguab às",
     "Rename" : "Thoir ainm ùr air",
     "Add to favorites" : "Cuir ris na h-annsachdan",

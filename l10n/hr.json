@@ -1,7 +1,10 @@
 { "translations": {
     "You are not allowed to share %s" : "Nije vam dopušteno dijeliti %s",
+    "Off" : "Isključeno",
     "Share link" : "Dijeli poveznicu",
     "Settings" : "Postavke",
+    "Notifications" : "Obavijesti",
+    "Back" : "Natrag",
     "Offline" : "Izvan mreže",
     "Members" : "Članovi",
     "No search results" : "Nema rezultata pretraživanja",
@@ -24,7 +27,6 @@
     "Cancel" : "Odustani",
     "Create" : "Stvori",
     "Go back" : "Natrag",
-    "Back" : "Natrag",
     "Delete" : "Izbriši",
     "Rename" : "Preimenuj",
     "Templates" : "Predlošci",

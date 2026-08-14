@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Rhannu dolen",
     "Settings" : "Gosodiadau",
+    "Back" : "Nôl",
     "Loading…" : "Yn llwytho…",
     "Preview" : "Rhagolwg",
     "Edit" : "Golygu",
@@ -14,7 +15,6 @@ OC.L10N.register(
     "Cancel" : "Diddymu",
     "Create" : "Creu",
     "Go back" : "Nôl",
-    "Back" : "Nôl",
     "Delete" : "Dileu",
     "Rename" : "Ailenwi",
     "Download" : "Llwytho i lawr",

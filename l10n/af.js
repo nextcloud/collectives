@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Deel skakel",
     "Settings" : "Instellings",
+    "Back" : "Terug",
     "Loading…" : "Laai…",
     "Edit" : "Wysig",
     "Choose" : "Kies",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Cancel" : "Kanselleer",
     "Create" : "Skep",
     "Go back" : "Gaan terug",
-    "Back" : "Terug",
     "Delete" : "Skrap",
     "Move or copy" : "Kopieer of skuif",
     "Download" : "Laai af",

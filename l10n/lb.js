@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Link deelen",
     "Settings" : "Astellungen",
+    "Back" : "Zeréck",
     "Loading…" : "Et gëtt gelueden",
     "Edit" : "Änneren",
     "Choose" : "Auswielen",
@@ -13,7 +14,6 @@ OC.L10N.register(
     "Cancel" : "Ofbriechen",
     "Create" : "Erstellen",
     "Go back" : "Zeréckgoen",
-    "Back" : "Zeréck",
     "Delete" : "Läschen",
     "Rename" : "Ëmbenennen",
     "Download" : "Eroflueden",

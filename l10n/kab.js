@@ -1,8 +1,11 @@
 OC.L10N.register(
     "collectives",
     {
+    "Off" : "Ur irmid ara",
     "Share link" : "Fren aseɣwen",
     "Settings" : "Iɣewwaṛen",
+    "Notifications" : "Ilɣa",
+    "Back" : "Retour",
     "Offline" : "D aruqqin",
     "Members" : "Imedrawen",
     "No search results" : "Ulac igmaḍ n unadi",
@@ -19,7 +22,6 @@ OC.L10N.register(
     "Cancel" : "Sefsex",
     "Create" : "Snulfu-d",
     "Go back" : "Tuɣalin",
-    "Back" : "Retour",
     "Delete" : "Kkes",
     "Rename" : "Beddel isem",
     "Templates" : "Timudmiwin",

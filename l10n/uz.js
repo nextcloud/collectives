@@ -1,8 +1,11 @@
 OC.L10N.register(
     "collectives",
     {
+    "Off" : "Oʻchirilgan",
     "Share link" : "Share link",
     "Settings" : "Sozlamalar",
+    "Notifications" : "Bildirishnomalar",
+    "Back" : "Orqaga",
     "Offline" : "Offline",
     "No search results" : "Qidiruv natijalari yo‘q",
     "Remove" : "O'chirish",
@@ -19,7 +22,6 @@ OC.L10N.register(
     "Delete permanently" : "Butunlay o'chirish",
     "Cancel" : "Bekor qilish",
     "Create" : "Yaratish",
-    "Back" : "Orqaga",
     "Delete" : "O'chirish",
     "Rename" : "Nomini o'zgartirish",
     "Templates" : "Shablonlar",

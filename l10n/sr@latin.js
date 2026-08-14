@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Podeli vezu",
     "Settings" : "Поставке",
+    "Back" : "Nazad",
     "Offline" : "Van mreže",
     "Loading…" : "Učitavam…",
     "Edit" : "Izmeni",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Delete permanently" : "Obriši zauvek",
     "Cancel" : "Otkaži",
     "Create" : "Napravi",
-    "Back" : "Nazad",
     "Delete" : "Obriši",
     "Rename" : "Preimenuj",
     "Title" : "Naslov",
