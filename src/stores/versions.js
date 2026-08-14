@@ -57,6 +57,13 @@ export const useVersionsStore = defineStore('versions', {
 				// filter out root
 				.filter(({ mime }) => mime !== '')
 				.map((version) => this.formatVersion(version, pageId))
+			// DAV includes the live snapshot. Mark it because page metadata can lag after a write.
+			const currentSnapshot = versions.reduce((latest, version) => (
+				!latest || version.mtime > latest.mtime ? version : latest
+			), null)
+			if (currentSnapshot) {
+				currentSnapshot.isCurrentSnapshot = true
+			}
 			if (generation === this.requestGeneration) {
 				this.versions = versions
 				this.loadedPageId = pageId
