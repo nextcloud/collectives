@@ -21,9 +21,9 @@
 				<select
 					v-model="earlierKey"
 					:disabled="status === 'loading'"
-					@change="resetResult">
+					@change="onSelectionChange">
 					<option
-						v-for="option in comparisonOptions"
+						v-for="option in comparisonOptionsForDisplay"
 						:key="option.key"
 						:value="option.key">
 						{{ optionLabel(option) }}
@@ -38,15 +38,26 @@
 				<select
 					v-model="laterKey"
 					:disabled="status === 'loading'"
-					@change="resetResult">
+					@change="onSelectionChange">
 					<option
-						v-for="option in comparisonOptions"
+						v-for="option in comparisonOptionsForDisplay"
 						:key="option.key"
 						:value="option.key">
 						{{ optionLabel(option) }}
 					</option>
 				</select>
 			</label>
+			<NcButton
+				v-if="canCopyComparisonLink"
+				class="version-comparison-dialog__copy"
+				variant="secondary"
+				type="button"
+				@click="copyComparisonLink">
+				<template #icon>
+					<ContentCopyIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Copy comparison link') }}
+			</NcButton>
 		</div>
 
 		<NcNoteCard
@@ -87,7 +98,7 @@
 				v-if="status === 'error'"
 				variant="primary"
 				type="button"
-				@click="compareSelected">
+				@click="retryComparison">
 				{{ t('collectives', 'Retry') }}
 			</NcButton>
 			<NcButton
@@ -103,7 +114,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { showError } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
@@ -112,6 +123,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
+import ContentCopyIcon from 'vue-material-design-icons/ContentCopy.vue'
 import {
 	ComparisonRequestManager,
 	ComparisonSnapshotError,
@@ -122,11 +134,21 @@ import {
 	selectVersionComparisonRenderer,
 	VersionComparisonSnapshotCache,
 } from '../../util/versionComparison.js'
+import {
+	COMPARE_FROM_QUERY,
+	COMPARE_TO_QUERY,
+	COMPARISON_HISTORY_STATE,
+	parseVersionComparisonRoute,
+	resolveVersionComparisonRoute,
+	withoutVersionComparisonRoute,
+	withVersionComparisonRoute,
+} from '../../util/versionComparisonRoute.js'
 
 export default {
 	name: 'VersionComparisonDialog',
 
 	components: {
+		ContentCopyIcon,
 		NcButton,
 		NcDialog,
 		NcLoadingIcon,
@@ -155,6 +177,8 @@ export default {
 		},
 	},
 
+	emits: ['retryRoute'],
+
 	setup() {
 		return {
 			historicalSnapshotCache: markRaw(new VersionComparisonSnapshotCache()),
@@ -169,8 +193,12 @@ export default {
 			earlierKey: '',
 			errorMessage: '',
 			laterKey: '',
+			missingOptions: [],
 			open: false,
+			openMode: 'none',
+			requestedRoute: null,
 			status: 'idle',
+			successfulRouteSignature: '',
 			unsupportedMessage: '',
 		}
 	},
@@ -184,12 +212,16 @@ export default {
 			return this.comparisonOptionState.options
 		},
 
+		comparisonOptionsForDisplay() {
+			return [...this.comparisonOptions, ...this.missingOptions]
+		},
+
 		earlier() {
-			return this.comparisonOptions.find(({ key }) => key === this.earlierKey)
+			return this.comparisonOptionsForDisplay.find(({ key }) => key === this.earlierKey)
 		},
 
 		later() {
-			return this.comparisonOptions.find(({ key }) => key === this.laterKey)
+			return this.comparisonOptionsForDisplay.find(({ key }) => key === this.laterKey)
 		},
 
 		sameSelection() {
@@ -202,6 +234,15 @@ export default {
 				&& ['current', 'historical'].includes(this.earlier.kind)
 				&& ['current', 'historical'].includes(this.later.kind)
 				&& !this.sameSelection)
+		},
+
+		canCopyComparisonLink() {
+			if (this.status !== 'ready' || !this.successfulRouteSignature) {
+				return false
+			}
+			const route = parseVersionComparisonRoute(this.$route.query)
+			return route.kind === 'valid'
+				&& this.pairSignature(route.from, route.to) === this.successfulRouteSignature
 		},
 	},
 
@@ -224,6 +265,9 @@ export default {
 			if (!historical) {
 				return
 			}
+			this.missingOptions = []
+			this.openMode = 'manual'
+			this.requestedRoute = null
 			this.earlierKey = historical.key
 			this.laterKey = CURRENT_VERSION_KEY
 			this.resetResult()
@@ -236,6 +280,9 @@ export default {
 				showError(t('collectives', 'This page version cannot be used for comparison.'))
 				return
 			}
+			this.missingOptions = []
+			this.openMode = 'manual'
+			this.requestedRoute = null
 			this.earlierKey = selected.key
 			this.laterKey = CURRENT_VERSION_KEY
 			this.resetResult()
@@ -243,14 +290,90 @@ export default {
 			this.$nextTick(this.compareSelected)
 		},
 
-		onOpenUpdate(open) {
-			this.open = open
-			if (!open) {
-				this.cleanup()
+		async openRoutedPair(requested) {
+			const requestedSignature = this.pairSignature(requested.from, requested.to)
+			if (this.open
+				&& this.status === 'ready'
+				&& requestedSignature === this.successfulRouteSignature) {
+				this.openMode = 'route'
+				return
 			}
+			if (this.open
+				&& (this.status === 'idle' || this.status === 'loading')
+				&& this.requestedRoute
+				&& requestedSignature === this.pairSignature(this.requestedRoute.from, this.requestedRoute.to)) {
+				return
+			}
+
+			this.resetResult()
+			this.missingOptions = []
+			this.open = true
+			this.openMode = 'route'
+			this.requestedRoute = { ...requested }
+
+			const ambiguousRouteIds = new Set(this.comparisonOptionState.ambiguousRouteIds)
+			const resolved = resolveVersionComparisonRoute(
+				this.comparisonOptions,
+				requested,
+				ambiguousRouteIds,
+			)
+			this.missingOptions = resolved.missing.map((routeId) => ({
+				fileInfo: { basename: routeId },
+				fileVersion: routeId,
+				key: `${ambiguousRouteIds.has(routeId) ? 'ambiguous' : 'missing'}:${routeId}`,
+				kind: ambiguousRouteIds.has(routeId) ? 'ambiguous' : 'missing',
+				label: ambiguousRouteIds.has(routeId)
+					? t('collectives', 'Ambiguous version')
+					: t('collectives', 'Unavailable version ({version})', { version: routeId }),
+				mtime: 0,
+				routeId,
+			}))
+			const optionFor = (routeId, resolvedOption) => resolvedOption
+				?? this.missingOptions.find((option) => option.routeId === routeId)
+			this.earlierKey = optionFor(requested.from, resolved.first).key
+			this.laterKey = optionFor(requested.to, resolved.second).key
+
+			if (resolved.missing.some((routeId) => ambiguousRouteIds.has(routeId))) {
+				this.status = 'error'
+				this.errorMessage = t('collectives', 'The version comparison link is ambiguous and could not be opened.')
+				return
+			}
+
+			if (resolved.missing.length) {
+				this.status = 'error'
+				this.errorMessage = resolved.missing.length === 2
+					? t('collectives', 'The selected versions have expired or were removed.')
+					: t('collectives', 'One of the selected versions has expired or was removed.')
+				return
+			}
+
+			await this.$nextTick()
+			await this.compareSelected({ routeDriven: true })
+		},
+
+		async onOpenUpdate(open) {
+			this.open = open
+			if (open) {
+				return
+			}
+
+			this.cleanup()
+			const comparisonRoute = parseVersionComparisonRoute(this.$route.query)
+			if (this.isManagedHistoryEntry()) {
+				this.$router.back()
+			} else if (comparisonRoute.kind === 'valid') {
+				await this.removeComparisonRoute()
+			}
+			this.clearRouteState()
 		},
 
 		optionLabel(option) {
+			if (option.kind === 'missing') {
+				return option.label
+			}
+			if (option.kind === 'ambiguous') {
+				return option.label
+			}
 			const timestamp = t('collectives', '{date} at {time}', {
 				date: moment(option.mtime).format('LL'),
 				time: moment(option.mtime).format('LTS'),
@@ -263,10 +386,11 @@ export default {
 				: timestamp
 		},
 
-		async compareSelected() {
+		async compareSelected(eventOrOptions = {}) {
 			if (!this.canCompare) {
 				return
 			}
+			const routeDriven = eventOrOptions?.routeDriven === true
 			const pair = normalizeVersionComparisonPair(this.earlier, this.later)
 			this.earlierKey = pair.earlier.key
 			this.laterKey = pair.later.key
@@ -292,7 +416,8 @@ export default {
 					{ ...pair.later.fileInfo },
 					{ ...pair.earlier.fileInfo },
 				)
-				this.onOpenUpdate(false)
+				await this.removeComparisonRoute()
+				this.closeWithoutRouteAction()
 				return
 			}
 
@@ -327,6 +452,12 @@ export default {
 				this.comparisonInstance = markRaw(pendingInstance)
 				pendingInstance = null
 				this.status = 'ready'
+				try {
+					await this.routeSuccessfulPair(pair, routeDriven)
+				} catch {
+					this.successfulRouteSignature = ''
+					showError(t('collectives', 'Could not update the comparison link.'))
+				}
 			} catch (error) {
 				pendingInstance?.destroy()
 				if (!this.requestManager.isCurrent(request.generation) || this.isCancellation(error)) {
@@ -339,10 +470,115 @@ export default {
 			}
 		},
 
+		onSelectionChange() {
+			this.openMode = 'manual'
+			this.requestedRoute = null
+			this.resetResult()
+			this.removeComparisonRoute(true)
+		},
+
+		async retryComparison() {
+			if (this.requestedRoute && this.missingOptions.length) {
+				this.$emit('retryRoute')
+				return
+			}
+			await this.compareSelected({ routeDriven: this.openMode === 'route' })
+		},
+
+		async routeSuccessfulPair(pair, routeDriven) {
+			const from = pair.earlier.routeId
+			const to = pair.later.routeId
+			if ([from, to].some((routeId) => this.comparisonOptionState.ambiguousRouteIds.includes(routeId))) {
+				this.successfulRouteSignature = ''
+				return
+			}
+			const signature = this.pairSignature(from, to)
+			this.successfulRouteSignature = signature
+			const currentRoute = parseVersionComparisonRoute(this.$route.query)
+			if (currentRoute.kind === 'valid'
+				&& this.pairSignature(currentRoute.from, currentRoute.to) === signature) {
+				this.openMode = 'route'
+				return
+			}
+
+			const location = withVersionComparisonRoute(this.$route, from, to)
+			if (routeDriven || currentRoute.kind === 'valid' || this.isManagedHistoryEntry()) {
+				await this.$router.replace({
+					...location,
+					state: { [COMPARISON_HISTORY_STATE]: this.isManagedHistoryEntry() },
+				})
+			} else {
+				await this.$router.push({
+					...location,
+					state: { [COMPARISON_HISTORY_STATE]: true },
+				})
+			}
+			this.openMode = 'route'
+		},
+
+		async removeComparisonRoute(preserveManaged = false) {
+			const hasComparisonQuery = Object.hasOwn(this.$route.query, COMPARE_FROM_QUERY)
+				|| Object.hasOwn(this.$route.query, COMPARE_TO_QUERY)
+			if (!hasComparisonQuery) {
+				return
+			}
+			await this.$router.replace({
+				...withoutVersionComparisonRoute(this.$route),
+				state: {
+					[COMPARISON_HISTORY_STATE]: preserveManaged && this.isManagedHistoryEntry(),
+				},
+			})
+		},
+
+		closeFromRoute() {
+			if (this.openMode !== 'route') {
+				return
+			}
+			this.closeWithoutRouteAction()
+		},
+
+		closeWithoutRouteAction() {
+			this.open = false
+			this.cleanup()
+			this.clearRouteState()
+		},
+
 		routeContextChanged() {
 			this.open = false
 			this.cleanup()
 			this.historicalSnapshotCache.clear()
+			this.clearRouteState()
+		},
+
+		clearRouteState() {
+			this.missingOptions = []
+			this.openMode = 'none'
+			this.requestedRoute = null
+			this.successfulRouteSignature = ''
+		},
+
+		isManagedHistoryEntry() {
+			return window.history.state?.[COMPARISON_HISTORY_STATE] === true
+		},
+
+		pairSignature(from, to) {
+			return `${from}\u0000${to}`
+		},
+
+		async copyComparisonLink() {
+			if (!this.canCopyComparisonLink) {
+				return
+			}
+			const url = new URL(
+				this.$router.resolve(this.$route.fullPath).href,
+				window.location.origin,
+			).href
+			try {
+				await navigator.clipboard.writeText(url)
+				showSuccess(t('collectives', 'Comparison link copied'))
+			} catch {
+				showError(t('collectives', 'Could not copy the comparison link.'))
+			}
 		},
 
 		async fetchSnapshot(snapshot, signal) {
@@ -384,6 +620,7 @@ export default {
 			this.destroyComparison()
 			this.requestManager.cancel()
 			this.errorMessage = ''
+			this.successfulRouteSignature = ''
 			this.unsupportedMessage = ''
 			this.status = 'idle'
 		},
@@ -423,7 +660,7 @@ $selectors-max-inline-size: 1040px;
 .version-comparison-dialog {
 	&__selectors {
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
 		align-items: end;
 		flex: 0 0 auto;
 		gap: calc(3 * var(--default-grid-baseline));
@@ -485,6 +722,11 @@ $selectors-max-inline-size: 1040px;
 		}
 	}
 
+	&__copy {
+		align-self: end;
+		white-space: nowrap;
+	}
+
 	&__message {
 		margin-block: calc(3 * var(--default-grid-baseline));
 	}
@@ -513,9 +755,24 @@ $selectors-max-inline-size: 1040px;
 	}
 }
 
+@media (max-width: 900px) {
+	.version-comparison-dialog__selectors {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.version-comparison-dialog__copy {
+		grid-column: 1 / -1;
+		justify-self: end;
+	}
+}
+
 @media (max-width: 600px) {
 	.version-comparison-dialog__selectors {
 		grid-template-columns: 1fr;
+	}
+
+	.version-comparison-dialog__copy {
+		grid-column: auto;
 	}
 }
 </style>

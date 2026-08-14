@@ -354,6 +354,8 @@ The image checksum is recorded separately.
 const INITIAL_PHRASE = '10% pilot cohort'
 const REVIEWED_PHRASE = '15% reviewed cohort'
 const CURRENT_PHRASE = '25% progressive rollout'
+const STABLE_LINK_CURRENT = 'Stable comparison snapshot'
+const STABLE_LINK_UPDATED = 'Later page update'
 const RAPID_FIRST_PHRASE = 'Rapid comparison first save'
 const RAPID_SECOND_PHRASE = 'Rapid comparison second save'
 
@@ -368,6 +370,9 @@ describe('Page versions', function() {
 		cy.getCollectives()
 			.findBy({ name: 'Versions Collective' })
 			.seedPage('Fresh page', '', 'Readme.md')
+		cy.getCollectives()
+			.findBy({ name: 'Versions Collective' })
+			.seedPage('Stable link page', '', 'Readme.md')
 		cy.getCollectives()
 			.findBy({ name: 'Versions Collective' })
 			.seedPage('Restore page', '', 'Readme.md')
@@ -394,6 +399,10 @@ describe('Page versions', function() {
 		cy.seedPageContent('Versions Collective/Page.md', REVIEWED_CONTENT)
 			.wait(1100)
 		cy.seedPageContent('Versions Collective/Page.md', CURRENT_CONTENT)
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		cy.seedPageContent('Versions Collective/Stable link page.md', 'Stable comparison baseline')
+			.wait(1100)
+		cy.seedPageContent('Versions Collective/Stable link page.md', STABLE_LINK_CURRENT)
 		// eslint-disable-next-line cypress/no-unnecessary-waiting
 		cy.seedPageContent('Versions Collective/Restore page.md', INITIAL_CONTENT)
 			.wait(1100)
@@ -527,6 +536,7 @@ describe('Page versions', function() {
 				.parent()
 				.should('have.class', 'modal-wrapper--full')
 			getVersionComparisonModal().find('button[type="submit"]').should('not.exist')
+			getVersionComparisonModal().contains('button', 'Copy comparison link').should('be.visible')
 			cy.get('.version-comparison-dialog')
 				.should('have.css', 'display', 'flex')
 				.and('have.css', 'overflow', 'hidden')
@@ -728,7 +738,135 @@ describe('Page versions', function() {
 		closeSemanticComparison()
 	})
 
-	it('quarantines duplicate DAV identities without disabling valid versions', function() {
+	it('routes, copies, and restores semantic comparison history', function() {
+		cy.stubClipboardAndVisit('/apps/collectives/Versions Collective/Page?view=grid#rollout')
+		openVersionsSidebar()
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.eq(3)
+			.find('.list-item-content__actions')
+			.click()
+		cy.clickMenuButton('Compare with current version')
+
+		if (usesLegacyViewer) {
+			assertViewerComparison(INITIAL_PHRASE, CURRENT_PHRASE)
+			cy.location().should((location) => {
+				const query = new URLSearchParams(location.search)
+				expect(query.get('compareFrom')).to.be.null
+				expect(query.get('compareTo')).to.be.null
+				expect(query.get('view')).to.equal('grid')
+				expect(location.hash).to.equal('#rollout')
+			})
+			closeViewerComparison()
+			return
+		}
+
+		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		let comparisonUrl
+		cy.location().then((location) => {
+			const query = new URLSearchParams(location.search)
+			expect(query.get('compareFrom')).to.match(/^version:[^/\\]+$/)
+			expect(query.get('compareTo')).to.match(/^current:\d+$/)
+			expect(query.get('view')).to.equal('grid')
+			expect(location.hash).to.equal('#rollout')
+			expect(location.href).not.to.contain('/remote.php/dav')
+			comparisonUrl = location.href
+		})
+		cy.go('back')
+		cy.get('.version-comparison-dialog').should('not.exist')
+		cy.location('search').should('eq', '?view=grid')
+		cy.go('forward')
+		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		getVersionComparisonModal()
+			.contains('button', 'Copy comparison link')
+			.should('not.be.disabled')
+			.click()
+		cy.getClipboardText().then((copiedUrl) => {
+			expect(copiedUrl).to.equal(comparisonUrl)
+		})
+		cy.contains('.toastify', 'Comparison link copied')
+			.find('.toast-close')
+			.click()
+		cy.get('@clipboardWriteText').then((writeText) => {
+			writeText.rejects(new Error('clipboard denied'))
+		})
+		getVersionComparisonModal().contains('button', 'Copy comparison link').click()
+		cy.contains('.toast-error', 'Could not copy the comparison link.')
+			.should('be.visible')
+			.find('.toast-close')
+			.click()
+
+		closeSemanticComparison()
+		cy.location('search').should('eq', '?view=grid')
+		cy.go('forward')
+		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		selectVersionAt(0, 2)
+		cy.location('search').should('eq', '?view=grid')
+		getVersionComparisonModal().should('be.visible')
+		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
+		closeSemanticComparison()
+		cy.window().should(({ history }) => {
+			expect(history.state?.collectivesVersionComparison).not.to.equal(true)
+		})
+
+		cy.intercept('GET', CURRENT_SNAPSHOT_URL).as('routedCurrentSnapshotRequest')
+		cy.then(() => cy.stubClipboardAndVisit(comparisonUrl))
+		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		cy.get('@routedCurrentSnapshotRequest.all').should('have.length', 1)
+		closeSemanticComparison()
+		cy.location().should((location) => {
+			const query = new URLSearchParams(location.search)
+			expect(query.get('compareFrom')).to.be.null
+			expect(query.get('compareTo')).to.be.null
+			expect(query.get('view')).to.equal('grid')
+			expect(location.hash).to.equal('#rollout')
+		})
+	})
+
+	it('keeps a copied Current comparison stable after a later page edit', function() {
+		if (usesLegacyViewer) {
+			return
+		}
+		cy.visit('/apps/collectives/Versions Collective/Stable link page')
+		openVersionsSidebar()
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.eq(1)
+			.find('.list-item-content__actions')
+			.click()
+		cy.clickMenuButton('Compare with current version')
+		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+
+		let comparisonUrl
+		cy.location().then((location) => {
+			const query = new URLSearchParams(location.search)
+			expect(query.get('compareFrom')).to.match(/^version:[^/\\]+$/)
+			expect(query.get('compareTo')).to.match(/^current:\d+$/)
+			comparisonUrl = location.href
+		})
+		// A subsequent write must turn the routed Current snapshot into immutable history.
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		cy.wait(1100)
+		cy.seedPageContent('Versions Collective/Stable link page.md', STABLE_LINK_UPDATED)
+		cy.then(() => cy.visit(comparisonUrl))
+		cy.get('.version-comparison-dialog .text-comparison__document--after')
+			.should('contain', STABLE_LINK_CURRENT)
+			.and('not.contain', STABLE_LINK_UPDATED)
+	})
+
+	it('keeps an unavailable routed identity visible without requesting a snapshot', function() {
+		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('historicalSnapshotRequest')
+		cy.intercept('GET', CURRENT_SNAPSHOT_URL).as('currentSnapshotRequest')
+		cy.visit('/apps/collectives/Versions Collective/Page?compareFrom=missing-version&compareTo=current')
+		getVersionComparisonModal()
+			.should('contain', 'Unavailable version (missing-version)')
+			.and('contain', 'One of the selected versions has expired or was removed.')
+		cy.get('@historicalSnapshotRequest.all').should('have.length', 0)
+		cy.get('@currentSnapshotRequest.all').should('have.length', 0)
+		getVersionComparisonModal().contains('button', 'Retry').should('be.visible')
+		closeSemanticComparison()
+		cy.location('search').should('eq', '')
+	})
+
+	it('quarantines ambiguous DAV identities without disabling valid versions', function() {
 		let duplicateVersionId
 		cy.intercept('PROPFIND', '**/remote.php/dav/versions/**', (request) => {
 			request.continue((response) => {
@@ -740,7 +878,6 @@ describe('Page versions', function() {
 		cy.visit('/apps/collectives/Versions Collective/Page')
 		openVersionsSidebar()
 		cy.wait('@versionsWithQuarantinedEntries')
-
 		cy.then(() => {
 			cy.get('.app-sidebar-tabs__content .version-list .version')
 				.filter((_index, element) => element.dataset.versionId === String(duplicateVersionId))
@@ -773,17 +910,54 @@ describe('Page versions', function() {
 			cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
 			closeSemanticComparison()
 		}
+
+		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('historicalSnapshotRequest')
+		cy.intercept('GET', CURRENT_SNAPSHOT_URL).as('currentSnapshotRequest')
+		cy.then(() => {
+			expect(duplicateVersionId).to.be.a('string').and.not.be.empty
+			cy.visit(`/apps/collectives/Versions Collective/Page?compareFrom=${encodeURIComponent(`version:${duplicateVersionId}`)}&compareTo=current`)
+		})
+		getVersionComparisonModal()
+			.should('contain', 'Ambiguous version')
+			.and('contain', 'The version comparison link is ambiguous and could not be opened.')
+			.and('not.contain', duplicateVersionId)
+		cy.get('@historicalSnapshotRequest.all').should('have.length', 0)
+		cy.get('@currentSnapshotRequest.all').should('have.length', 0)
 	})
 
-	it('does not expose version comparison on public pages', function() {
+	it('rejects malformed pair parameters before requesting versions', function() {
+		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('versionRequest')
+		cy.visit('/apps/collectives/Versions Collective/Page?compareFrom=versions%2F1&compareTo=current&view=grid#rollout')
+		cy.location().should((location) => {
+			const query = new URLSearchParams(location.search)
+			expect(query.get('compareFrom')).to.be.null
+			expect(query.get('compareTo')).to.be.null
+			expect(query.get('view')).to.equal('grid')
+			expect(location.hash).to.equal('#rollout')
+		})
+		cy.get('.version-comparison-dialog').should('not.exist')
+		cy.get('@versionRequest.all').should('have.length', 0)
+	})
+
+	it('does not expose version comparison on public routes', function() {
 		if (usesLegacyViewer) {
 			// Preview mode no longer creates a legacy editing session that can race logout.
 			cy.get('[data-cy-collectives="editor"] .ProseMirror').should('not.exist')
 		}
 		cy.logout()
-		cy.visit(publicSharePath)
+		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('versionRequest')
+		cy.visit(`${publicSharePath}?compareFrom=missing-version&compareTo=current&view=grid#rollout`)
 		cy.getReadOnlyEditor().should('contain', CURRENT_PHRASE)
+		cy.location().should((location) => {
+			const query = new URLSearchParams(location.search)
+			expect(query.get('compareFrom')).to.be.null
+			expect(query.get('compareTo')).to.be.null
+			expect(query.get('view')).to.equal('grid')
+			expect(location.hash).to.equal('#rollout')
+		})
+		cy.contains('Version comparison is not available for public links.').should('be.visible')
 		cy.get('#tab-button-versions').should('not.exist')
+		cy.get('@versionRequest.all').should('have.length', 0)
 	})
 
 	it('Blocks comparing a version with itself', function() {
