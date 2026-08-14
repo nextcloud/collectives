@@ -1,6 +1,7 @@
 { "translations": {
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
+    "Back" : "Назад",
     "Offline" : "Па-за сеткай",
     "Members" : "Удзельнікі",
     "No search results" : "Няма вынікаў пошуку",
@@ -28,7 +29,6 @@
     "Cancel" : "Скасаваць",
     "Create" : "Стварыць",
     "Go back" : "Назад",
-    "Back" : "Назад",
     "Delete" : "Выдаліць",
     "Rename" : "Перайменаваць",
     "Templates" : "Шаблоны",

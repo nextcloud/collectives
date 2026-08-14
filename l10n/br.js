@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Share link" : "Lodañ al liamm",
     "Settings" : "Arventennoù",
+    "Notifications" : "Kemennadennoù",
+    "Back" : "Distro",
     "No search results" : "Disoc'h enklask ebet",
     "admin" : "merour",
     "An error occurred while performing the search" : "Ur fazi a zo bet en ur ober an enklask",
@@ -18,7 +20,6 @@ OC.L10N.register(
     "Delete permanently" : "Lamet da viken",
     "Cancel" : "Nullañ",
     "Create" : "Krouiñ",
-    "Back" : "Distro",
     "Delete" : "Dilemel",
     "Rename" : "Adenvel",
     "Add to favorites" : "Ouzhpennañ d'ar penndibaboù",

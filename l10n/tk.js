@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Share link" : "Baglanyşyk paýlaş",
     "Settings" : "Sazlamalar",
+    "Notifications" : "Duýduryşlar",
+    "Back" : "Yzyna",
     "Remove" : "Aýyrmak",
     "Loading…" : "Ýüklenýär…",
     "Edit" : "Redaktirläň",
@@ -11,7 +13,6 @@ OC.L10N.register(
     "Deleted" : "Öçürildi",
     "Cancel" : "ýatyrmak",
     "Create" : "Dörediň",
-    "Back" : "Yzyna",
     "Delete" : "Pozmak",
     "Rename" : "Adyny üýtgetmek",
     "Add to favorites" : "Saýlananlara goşuň",

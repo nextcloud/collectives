@@ -1,6 +1,7 @@
 { "translations": {
     "Share link" : "Compartir ligamine",
     "Settings" : "Configurationes",
+    "Back" : "Retro",
     "Members" : "Membros",
     "Loading…" : "Cargante...",
     "Preview" : "Previsualisar",
@@ -11,7 +12,6 @@
     "Cancel" : "Cancellar",
     "Create" : "Crear",
     "Go back" : "Retornar",
-    "Back" : "Retro",
     "Delete" : "Deler",
     "Rename" : "Renominar",
     "Download" : "Discargar",

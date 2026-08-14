@@ -2,8 +2,10 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "คุณไม่ได้รับอนุญาตให้แชร์ %s",
+    "@-mentions only" : "เฉพาะการกล่าวถึงแบบ @",
     "Share link" : "แชร์ลิงก์",
     "Settings" : "การตั้งค่า",
+    "Back" : "ย้อนกลับ",
     "Offline" : "ออฟไลน์",
     "Remove" : "ลบออก",
     "Loading…" : "กำลังโหลด…",
@@ -17,7 +19,6 @@ OC.L10N.register(
     "Cancel" : "ยกเลิก",
     "Create" : "สร้าง",
     "Go back" : "กลับไป",
-    "Back" : "ย้อนกลับ",
     "Delete" : "ลบ",
     "Rename" : "เปลี่ยนชื่อ",
     "Templates" : "เทมเพลต",

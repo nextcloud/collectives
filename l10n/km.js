@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Share link",
     "Settings" : "ការកំណត់",
+    "Back" : "ត្រឡប់ក្រោយ",
     "Edit" : "កែប្រែ",
     "Choose" : "ជ្រើស",
     "Name" : "ឈ្មោះ",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Delete permanently" : "លុប​ជា​អចិន្ត្រៃយ៍",
     "Cancel" : "បោះបង់",
     "Create" : "បង្កើត",
-    "Back" : "ត្រឡប់ក្រោយ",
     "Delete" : "លុប",
     "Rename" : "ប្ដូរ​ឈ្មោះ",
     "Download" : "ទាញយក",

@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "Settings" : "සැකසුම්",
+    "Back" : "ආපසු",
     "Remove" : "ඉවත් කරන්න",
     "Loading…" : "පූරණය වෙමින්…",
     "Preview" : "පෙරදසුන",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Cancel" : "අවලංගු",
     "Create" : "සාදන්න",
     "Go back" : "ආපසු යන්න",
-    "Back" : "ආපසු",
     "Delete" : "Delete",
     "Download" : "බාගන්න",
     "Could not rename the page" : "පිටුව නැවත නම් කිරීමට නොහැකි විය",

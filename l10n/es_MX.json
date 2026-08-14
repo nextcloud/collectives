@@ -1,7 +1,10 @@
 { "translations": {
     "You are not allowed to share %s" : "No tienes permitido compartir %s",
+    "@-mentions only" : "Solo menciones con @",
+    "Off" : "Desactivado",
     "Share link" : "Compartir liga",
     "Settings" : "Ajustes",
+    "Back" : "Atrás",
     "Preparing collective for exporting or printing" : "Preparando colección para exportación o impresión",
     "Members" : "Miembros",
     "No search results" : "No hay resultados de búsqueda",
@@ -18,7 +21,6 @@
     "Cancel" : "Cancelar",
     "Create" : "Crear",
     "Go back" : "Regresar",
-    "Back" : "Atrás",
     "Delete" : "Eliminar",
     "Rename" : "Renombrar",
     "Templates" : "Plantillas",

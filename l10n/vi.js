@@ -1,8 +1,11 @@
 OC.L10N.register(
     "collectives",
     {
+    "Off" : "Tắt",
     "Share link" : "Chia sẻ liên kết",
     "Settings" : "Cài đặt",
+    "Notifications" : "Thông báo",
+    "Back" : "Quay lại",
     "Offline" : "Ngoại tuyến",
     "Members" : "Thành viên",
     "No search results" : "Không có kết quả tìm kiếm",
@@ -25,7 +28,6 @@ OC.L10N.register(
     "Cancel" : "Hủy",
     "Create" : "‎Tạo‎",
     "Go back" : "Quay lại",
-    "Back" : "Quay lại",
     "Delete" : "Xóa",
     "Rename" : "Đổi tên",
     "Templates" : "Mẫu",

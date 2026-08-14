@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Compartir ligamine",
     "Settings" : "Configurationes",
+    "Back" : "Retro",
     "Members" : "Membros",
     "Loading…" : "Cargante...",
     "Preview" : "Previsualisar",
@@ -13,7 +14,6 @@ OC.L10N.register(
     "Cancel" : "Cancellar",
     "Create" : "Crear",
     "Go back" : "Retornar",
-    "Back" : "Retro",
     "Delete" : "Deler",
     "Rename" : "Renominar",
     "Download" : "Discargar",

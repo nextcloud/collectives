@@ -1,6 +1,7 @@
 { "translations": {
     "Share link" : "Podeli vezu",
     "Settings" : "Поставке",
+    "Back" : "Nazad",
     "Offline" : "Van mreže",
     "Loading…" : "Učitavam…",
     "Edit" : "Izmeni",
@@ -10,7 +11,6 @@
     "Delete permanently" : "Obriši zauvek",
     "Cancel" : "Otkaži",
     "Create" : "Napravi",
-    "Back" : "Nazad",
     "Delete" : "Obriši",
     "Rename" : "Preimenuj",
     "Title" : "Naslov",

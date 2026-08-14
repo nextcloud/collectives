@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
+    "Back" : "Назад",
     "Offline" : "Па-за сеткай",
     "Members" : "Удзельнікі",
     "No search results" : "Няма вынікаў пошуку",
@@ -30,7 +31,6 @@ OC.L10N.register(
     "Cancel" : "Скасаваць",
     "Create" : "Стварыць",
     "Go back" : "Назад",
-    "Back" : "Назад",
     "Delete" : "Выдаліць",
     "Rename" : "Перайменаваць",
     "Templates" : "Шаблоны",

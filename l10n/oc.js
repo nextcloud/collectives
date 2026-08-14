@@ -1,8 +1,12 @@
 OC.L10N.register(
     "collectives",
     {
+    "@-mentions only" : "@-mencions sonque",
+    "Off" : "Atudat",
     "Share link" : "Partejar lo ligam",
     "Settings" : "Paramètres",
+    "Notifications" : "Notificacions",
+    "Back" : "Retorn",
     "Offline" : "Fòra linha",
     "Members" : "Membres",
     "No search results" : "pas cap de resultats de recèrca",
@@ -24,7 +28,6 @@ OC.L10N.register(
     "Cancel" : "Anullar",
     "Create" : "Crear",
     "Go back" : "Revenir en arrière",
-    "Back" : "Retorn",
     "Delete" : "Suprimir",
     "Rename" : "Tornar nommar",
     "Templates" : "Modèls",

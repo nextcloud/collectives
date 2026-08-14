@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Share link" : "Del lenkje",
     "Settings" : "Innstillingar",
+    "Notifications" : "Varsel",
+    "Back" : "Tilbake",
     "Members" : "Medlemmar",
     "Promote to moderator" : "Fremje til moderator",
     "Remove" : "Fjern",
@@ -17,7 +19,6 @@ OC.L10N.register(
     "Delete permanently" : "Slett for godt",
     "Cancel" : "Avbryt",
     "Create" : "Lag",
-    "Back" : "Tilbake",
     "Delete" : "Slett",
     "Rename" : "Endra namn",
     "Add to favorites" : "Legg til i favorittar",

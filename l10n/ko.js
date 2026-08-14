@@ -2,8 +2,10 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "%s을(를) 공유할 수 있는 권한이 없습니다.",
+    "@-mentions only" : "@-언급만",
     "Share link" : "링크 공유",
     "Settings" : "설정",
+    "Back" : "뒤로",
     "Offline" : "오프라인",
     "Members" : "구성원",
     "No search results" : "검색 결과 없음",
@@ -29,7 +31,6 @@ OC.L10N.register(
     "Create" : "생성",
     "Select emoji" : "이모지 선택",
     "Go back" : "뒤로 가기",
-    "Back" : "뒤로",
     "Delete" : "삭제",
     "Rename" : "이름 바꾸기",
     "Templates" : "템플릿",
