@@ -7,6 +7,7 @@
 	<NcListItem
 		:name="version.basename"
 		class="version"
+		:data-version-id="version.fileVersion"
 		:class="{ active: isSelected }"
 		:active="isSelected"
 		forceDisplayActions
@@ -67,6 +68,7 @@
 		<!-- Actions -->
 		<template #actions>
 			<NcActionButton
+				v-if="canEdit"
 				closeAfterClick
 				@click="$emit('startLabelUpdate')">
 				<template #icon>
@@ -81,7 +83,7 @@
 				<template #icon>
 					<FileCompareIcon :size="22" />
 				</template>
-				{{ t('collectives', 'Compare to current version') }}
+				{{ t('collectives', 'Compare with current version') }}
 			</NcActionButton>
 			<NcActionButton
 				v-if="!isCurrent && canEdit"

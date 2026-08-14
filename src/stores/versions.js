@@ -15,13 +15,13 @@ import { usePagesStore } from './pages.js'
 
 export const useVersionsStore = defineStore('versions', {
 	state: () => ({
+		loadedPageId: null,
+		requestGeneration: 0,
 		selectedVersion: null,
 		versions: [],
 	}),
 
 	getters: {
-		hasVersionsLoaded: (state) => !!state.versions.length,
-
 		currentVersion: () => {
 			const collectivesStore = useCollectivesStore()
 			const pagesStore = usePagesStore()
@@ -51,11 +51,17 @@ export const useVersionsStore = defineStore('versions', {
 		},
 
 		async getVersions(pageId) {
+			const generation = ++this.requestGeneration
 			const response = await davApi.getVersions(pageId)
-			this.versions = response.data
+			const versions = response.data
 				// filter out root
 				.filter(({ mime }) => mime !== '')
 				.map((version) => this.formatVersion(version, pageId))
+			if (generation === this.requestGeneration) {
+				this.versions = versions
+				this.loadedPageId = pageId
+			}
+			return versions
 		},
 
 		formatVersion(version, pageId) {

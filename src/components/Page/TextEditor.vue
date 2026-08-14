@@ -41,7 +41,6 @@ import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
-import { useVersionsStore } from '../../stores/versions.js'
 import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
 
 export default {
@@ -69,13 +68,14 @@ export default {
 			document.documentElement.style.setProperty('--text-container-width', value + 'px')
 		})
 		const davContent = ref('')
-		const { contentLoaded, editor, editorContent, editorEl, pageContent, setupEditor } = useEditor(davContent)
+		const { contentLoaded, destroyEditor, editor, editorContent, editorEl, pageContent, setupEditor } = useEditor(davContent)
 		const { pageInfoBarPage, reader, readerEl, setupReader } = useReader(pageContent)
-		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, setupReader, textContainer, width }
+		return { contentLoaded, davContent, destroyEditor, editor, editorContent, editorEl, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, setupReader, textContainer, width }
 	},
 
 	data() {
 		return {
+			editorSetupPromise: null,
 			textEditWatcher: null,
 		}
 	},
@@ -94,7 +94,10 @@ export default {
 		]),
 
 		showEditor() {
-			return this.currentCollectiveCanEdit && !this.loading('editor') && this.isTextEdit
+			return this.currentCollectiveCanEdit
+				&& this.editor
+				&& !this.loading('editor')
+				&& this.isTextEdit
 		},
 	},
 
@@ -116,26 +119,36 @@ export default {
 
 	async mounted() {
 		const readerPromise = this.setupReader(this.currentPage)
-		const editorPromise = this.setupEditor()
 		const pageContentPromise = this.getPageContent()
-		Promise.all([readerPromise, editorPromise, pageContentPromise]).then(() => {
-			this.initEditMode()
-		})
 
 		this.textEditWatcher = this.$watch('isTextEdit', async (val) => {
-			if (val === false) {
-				this.stopEdit()
-			} else if (val === true) {
-				// Load full circle members for autocomplete when entering edit mode
-				const circlesStore = useCirclesStore()
-				if (!circlesStore.currentCircleMembersFullyLoaded && !this.isPublic) {
-					await this.getCircleMembers(this.currentCollective.circleId)
-				}
+			if (!val) {
+				await this.stopEdit()
+				return
+			}
+
+			const editorPromise = this.ensureEditor()
+			const circlesStore = useCirclesStore()
+			if (!circlesStore.currentCircleMembersFullyLoaded && !this.isPublic) {
+				await Promise.all([
+					editorPromise,
+					this.getCircleMembers(this.currentCollective.circleId),
+				])
+			} else {
+				await editorPromise
 			}
 		})
 		subscribe('collectives:attachment:insert', this.insertAttachment)
 		subscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		subscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
+
+		await Promise.all([readerPromise, pageContentPromise])
+		this.initEditMode()
+		if (this.isTextEdit) {
+			await this.ensureEditor()
+		} else {
+			this.done('editor')
+		}
 	},
 
 	beforeUnmount() {
@@ -149,9 +162,29 @@ export default {
 		t,
 
 		...mapActions(useRootStore, ['load', 'done']),
-		...mapActions(useVersionsStore, ['getVersions']),
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),
 		...mapActions(useCirclesStore, ['getCircleMembers']),
+
+		async ensureEditor() {
+			if (this.editor) {
+				return
+			}
+			const setupPromise = this.editorSetupPromise ?? (() => {
+				this.load('editor')
+				return this.setupEditor()
+			})()
+			this.editorSetupPromise = setupPromise
+			try {
+				await setupPromise
+			} finally {
+				if (this.editorSetupPromise === setupPromise) {
+					this.editorSetupPromise = null
+				}
+			}
+			if (!this.isTextEdit && this.editor) {
+				await this.destroyEditor()
+			}
+		},
 
 		insertAttachment({ name }) {
 			// inspired by the fixedEncodeURIComponent function suggested in
@@ -220,12 +253,11 @@ export default {
 						this.setTextEdit()
 					})
 
-				// Touch page to update last changed timestamp
-				this.touchPage()
-
-				// Update loaded versions
-				if (!this.isPublic && this.hasVersionsLoaded) {
-					this.getVersions(this.currentPage.id)
+				// Touch the page before reading the versions created by this save.
+				try {
+					await this.touchPage()
+				} catch {
+					// A failed metadata touch must not undo the completed document save.
 				}
 			}
 		},
