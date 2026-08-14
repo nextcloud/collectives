@@ -359,9 +359,6 @@ const RAPID_SECOND_PHRASE = 'Rapid comparison second save'
 
 describe('Page versions', function() {
 	before(function() {
-		cy.env(['ncVersion']).then(({ ncVersion }) => {
-			usesLegacyViewer = ncVersion === 'stable34'
-		})
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Versions Collective')
 			.seedPage('Page', '', 'Readme.md')
@@ -426,6 +423,9 @@ describe('Page versions', function() {
 	beforeEach(function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives/Versions Collective/Page')
+		cy.window().then((window) => {
+			usesLegacyViewer = typeof window.OCA?.Text?.createMarkdownContentComparison !== 'function'
+		})
 
 		openVersionsSidebar()
 	})
