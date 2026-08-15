@@ -1,8 +1,11 @@
 OC.L10N.register(
     "collectives",
     {
+    "@-mentions only" : "Толькі згадкі з @",
+    "Off" : "Выкл.",
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
+    "Notifications" : "Апавяшчэнні",
     "Back" : "Назад",
     "Offline" : "Па-за сеткай",
     "Members" : "Удзельнікі",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "You are not allowed to edit %s" : "Нямате права да редактирате %s",
     "Share not found for user" : "Не е намерено споделяне за потребителя",
     "@-mentions only" : "@-само споменавания",
+    "Off" : "Изключен",
     "Extra action" : "Допълнително действие",
     "Could not leave the collective. {errorMessage}" : "Не можа да се напусне колектива. {errorMessage}",
     "Manage members" : "Управление на членове",
