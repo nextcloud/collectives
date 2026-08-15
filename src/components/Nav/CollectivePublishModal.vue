@@ -8,13 +8,16 @@
 		size="normal"
 		class="collective-publish-modal"
 		@close="onClose">
-		<h2 class="modal-collective-members__name">
-			{{ collective.name }}
-		</h2>
+		<div class="modal-publish">
+			<h2 class="modal-publish__name">
+				{{ t('collectives', 'Publish website for collective {name}', { name: collective.name }) }}
+			</h2>
+		</div>
 	</NcModal>
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import NcModal from '@nextcloud/vue/components/NcModal'
 
 export default {
@@ -36,6 +39,8 @@ export default {
 	],
 
 	methods: {
+		t,
+
 		onClose() {
 			this.$emit('close')
 		},
@@ -57,4 +62,15 @@ export default {
 		overflow: hidden;
 	}
 }
+
+.modal-publish {
+	height: 550px;
+	max-height: 80vh;
+
+	&__name {
+		font-size: 21px;
+		text-align: center;
+	}
+}
+
 </style>

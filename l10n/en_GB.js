@@ -36,6 +36,7 @@ OC.L10N.register(
     "Manage members" : "Manage members",
     "Share link" : "Share link",
 	"Publish" : "Publish",
+	"Publish website for collective {name}" : "Publish website for collective {name}",
     "Manage templates" : "Manage templates",
     "Export or print" : "Export or print",
     "Settings" : "Settings",

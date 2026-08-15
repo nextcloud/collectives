@@ -25,6 +25,7 @@
 			</template>
 		</NcActionButton>
 		<NcActionButton
+			v-if="isCollectiveAdmin(collective)"
 			closeAfterClick
 			@click="openPublishDialog()">
 			{{ t('collectives', 'Publish') }}
