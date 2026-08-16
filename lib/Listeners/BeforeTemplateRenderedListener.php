@@ -11,6 +11,7 @@ namespace OCA\Collectives\Listeners;
 
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Service\PublishSettings;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Text\Event\LoadEditor;
@@ -20,6 +21,7 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Template\ITemplateManager;
+use OCP\IAppConfig;
 use OCP\IUserSession;
 use OCP\Util;
 
@@ -31,6 +33,8 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		private readonly IEventDispatcher $eventDispatcher,
 		private readonly IInitialState $initialState,
 		private readonly ITemplateManager $templateManager,
+		private readonly IAppConfig $appConfig,
+		private PublishSettings $publishSettings,
 	) {
 	}
 
@@ -65,5 +69,8 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		// Provide Collectives user folder as initial state
 		$this->initialState->provideInitialState('user_folder', $userFolder);
 		$this->initialState->provideInitialState('templates', $this->templateManager->listCreators());
+
+		// Provide admin settings as initial state
+		$this->initialState->provideInitialState('publish_enabled', $this->publishSettings->isPublishEnabled());
 	}
 }

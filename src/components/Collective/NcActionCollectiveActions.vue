@@ -25,9 +25,10 @@
 			</template>
 		</NcActionButton>
 		<NcActionButton
-			v-if="isCollectiveAdmin(collective)"
+			v-if="isCollectiveAdmin(collective) && isPublishFeatureEnabled"
 			closeAfterClick
 			@click="openPublishDialog()">
+			<!-- TRANSLATORS 'Publish' means to publish a selection of your collective pages to a public website -->
 			{{ t('collectives', 'Publish') }}
 			<template #icon>
 				<WebIcon :size="20" />
@@ -192,7 +193,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic']),
+		...mapState(useRootStore, ['isPublic', 'isPublishFeatureEnabled']),
 		...mapState(useCollectivesStore, [
 			'collectiveCanShare',
 			'collectivePrintPath',

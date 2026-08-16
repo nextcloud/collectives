@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { loadState } from '@nextcloud/initial-state'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -127,6 +128,7 @@ export default {
 	},
 
 	mounted() {
+		this.loadAdminSettings()
 		this.getCollectivesAndSettings()
 		subscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
 	},
@@ -142,6 +144,18 @@ export default {
 		...mapActions(useCollectivesStore, [
 			'getCollectives',
 		]),
+
+		...mapActions(useRootStore, ['setPublishFeatureEnabled']),
+
+		loadAdminSettings() {
+			try {
+				const publishEnabledState = loadState('collectives', 'publish_enabled', true)
+				const isPublishEnabled = publishEnabledState === true || publishEnabledState === 'true'
+				this.setPublishFeatureEnabled(isPublishEnabled)
+			} catch (e) {
+				console.error('Failed to load admin settings:', e)
+			}
+		},
 
 		onOpenNewCollectiveModal() {
 			this.showNewCollectiveModal = true

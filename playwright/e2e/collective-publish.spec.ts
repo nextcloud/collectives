@@ -5,6 +5,7 @@
 
 import type { User as Account } from '@nextcloud/e2e-test-server'
 
+import { runOcc } from '@nextcloud/e2e-test-server/docker'
 import { login } from '@nextcloud/e2e-test-server/playwright'
 import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
@@ -67,9 +68,25 @@ test.describe('Collective publish', () => {
 
 		// Publish button should NOT be visible for regular member
 		const publishButton = memberPage.getByRole('button', { name: 'Publish', exact: true })
-		await expect(publishButton).not.toBeVisible()
+		await expect(publishButton).toHaveCount(0)
 
 		// Cleanup member context
 		await memberContext.close()
+	})
+
+	test('admin cannot see publish button when feature is disabled', async ({ collective, navigation, page }) => {
+		await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'false'])
+
+		try {
+			await collective.openCollective()
+			await navigation.open()
+			const collectiveItem = navigation.getCollectiveItem(collective.data.name)
+			await collectiveItem.getByRole('button', { name: 'Actions' }).click()
+
+			const publishButton = page.getByRole('button', { name: 'Publish', exact: true })
+			await expect(publishButton).toHaveCount(0)
+		} finally {
+			await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true'])
+		}
 	})
 })

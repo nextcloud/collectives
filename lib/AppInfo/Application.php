@@ -34,6 +34,7 @@ use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Search\PageProvider;
+use OCA\Collectives\Service\PublishSettings;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\SetupChecks\CirclesAppIsEnableCheck;
 use OCA\Collectives\Team\CollectiveTeamResourceProvider;
@@ -54,6 +55,7 @@ use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\Files\IMimeTypeLoader;
+use OCP\IAppConfig;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -85,6 +87,10 @@ class Application extends App implements IBootstrap {
 		$context->registerNotifierService(Notifier::class);
 
 		$context->registerMiddleware(PublicOCSMiddleware::class);
+
+		$context->registerService(PublishSettings::class, fn (ContainerInterface $c) => new PublishSettings(
+			$c->get(IAppConfig::class)
+		));
 
 		$context->registerService(MountProvider::class, fn (ContainerInterface $c) => new MountProvider(
 			$c->get(CollectiveHelper::class),
