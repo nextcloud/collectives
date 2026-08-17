@@ -408,7 +408,7 @@ $comparison-max-inline-size: 1600px;
 // Deliberate layout maximum: keeps the two version pickers close together instead of edge to edge.
 $selectors-max-inline-size: 1040px;
 
-:deep(.dialog__content.version-comparison-dialog) {
+:global(div.dialog__content.version-comparison-dialog) {
 	display: flex;
 	flex: 1 1 auto;
 	flex-direction: column;
