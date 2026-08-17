@@ -92,6 +92,7 @@
 			container="#app-navigation-vue"
 			:aria-label="t('collectives', 'Collective actions')">
 			<NcActionCollectiveActions
+				v-model:submenu="collectiveSubmenu"
 				:collective="currentCollective"
 				:networkOnline />
 		</NcActions>
@@ -166,6 +167,7 @@ export default {
 	data() {
 		return {
 			showSelector: false,
+			collectiveSubmenu: null,
 		}
 	},
 
