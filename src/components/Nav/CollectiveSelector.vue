@@ -244,6 +244,7 @@ export default {
 		},
 
 		onNewCollective() {
+			this.showSelector = false
 			emit('open-new-collective-modal')
 		},
 
