@@ -11,7 +11,7 @@ describe('Collective members', function() {
 
 	beforeEach(function() {
 		cy.loginAs('bob')
-		cy.visit('apps/collectives')
+		cy.visit('apps/collectives/Members Collective')
 		cy.intercept('GET', '**/circles/circles/*/members?**').as('getCircleMembers')
 		cy.openCollectiveMenu('Members Collective')
 		cy.clickMenuButton('Manage members')

@@ -72,7 +72,7 @@ describe('Collective', function() {
 	})
 	it('cannot leave collective as last member', function() {
 		cy.loginAs('bob')
-		cy.visit('/apps/collectives')
+		cy.visit('/apps/collectives/Preexisting Collective')
 
 		cy.openCollectiveMenu('Preexisting Collective')
 		// No leave collective option

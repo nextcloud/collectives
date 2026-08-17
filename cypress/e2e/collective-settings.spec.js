@@ -8,7 +8,7 @@ describe('Collective settings', function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Change me')
 		cy.deleteCollective('Change me now')
-		cy.visit('apps/collectives')
+		cy.visit('apps/collectives/Change me')
 	})
 
 	it('Allows setting an emoji', function() {

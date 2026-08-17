@@ -10,7 +10,7 @@ describe('Collectives trash', function() {
 	})
 
 	it('Allows moving the collective to trash', function() {
-		cy.visit('/apps/collectives')
+		cy.visit('/apps/collectives/Delete me')
 		cy.openCollectiveMenu('Delete me')
 		cy.clickMenuButton('Settings')
 		cy.get('button')
@@ -37,7 +37,7 @@ describe('Collectives trash', function() {
 
 	it('Allows deleting the collective and team from trash', function() {
 		cy.loginAs('bob')
-		cy.visit('apps/collectives')
+		cy.visit('apps/collectives/Delete me')
 
 		// Move to trash
 		cy.openCollectiveMenu('Delete me')
