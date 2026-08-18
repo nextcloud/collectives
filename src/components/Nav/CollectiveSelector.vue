@@ -12,6 +12,7 @@
 			placement="bottom-start"
 			container="#app-navigation-vue"
 			popoverBaseClass="collective-selector-popover"
+			:noCloseOnClickOutside="pickingFolder"
 			@update:shown="showSelector = $event">
 			<template #trigger="{ attrs }">
 				<div class="collective-selector-trigger-row">
@@ -80,7 +81,11 @@
 							:networkOnline
 							@restoreCollective="onRestoreCollective"
 							@deleteCollective="onDeleteCollective" />
-						<CollectivesGlobalSettings v-if="!isPublic" :networkOnline class="collective-selector-global-settings" />
+						<CollectivesGlobalSettings
+							v-if="!isPublic"
+							:networkOnline
+							class="collective-selector-global-settings"
+							@update:pickingFolder="pickingFolder = $event" />
 					</template>
 				</div>
 			</template>
@@ -168,6 +173,7 @@ export default {
 		return {
 			showSelector: false,
 			collectiveSubmenu: null,
+			pickingFolder: false,
 		}
 	},
 
