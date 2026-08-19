@@ -16,10 +16,16 @@
 			id="sharingToken"
 			type="hidden"
 			:value="shareTokenParam">
-		<NcAppNavigation v-if="!printView">
+		<NcAppNavigation
+			v-if="!printView"
+			:style="isMobile ? undefined : { width: `${navWidth}px`, '--collectives-nav-width': `${navWidth}px` }">
 			<template #list>
 				<CollectiveSelector />
 				<PageList v-if="currentCollective" />
+				<div
+					v-if="!isMobile"
+					class="app-navigation-resize-handle"
+					@pointerdown="onResizeStart" />
 			</template>
 		</NcAppNavigation>
 		<router-view />
@@ -33,6 +39,7 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcContent from '@nextcloud/vue/components/NcContent'
@@ -47,6 +54,7 @@ import { usePagesStore } from './stores/pages.js'
 import { useRootStore } from './stores/root.js'
 import { useSettingsStore } from './stores/settings.js'
 import displayError from './util/displayError.js'
+import { clampNavWidth, NAV_WIDTH_DEFAULT } from './util/navWidth.js'
 
 export default {
 	name: 'CollectivesApp',
@@ -64,13 +72,17 @@ export default {
 	setup() {
 		const rootStore = useRootStore()
 		const { networkOnline } = useNetworkState()
-		return { networkOnline, rootStore }
+		const isMobile = useIsMobile()
+		return { isMobile, networkOnline, rootStore }
 	},
 
 	data() {
 		return {
 			loadPending: true,
 			showNewCollectiveModal: false,
+			navWidth: NAV_WIDTH_DEFAULT,
+			resizeStartX: 0,
+			resizeStartWidth: 0,
 		}
 	},
 
@@ -121,6 +133,8 @@ export default {
 
 	beforeUnmount() {
 		unsubscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
+		document.removeEventListener('pointermove', this.onResizeMove)
+		document.removeEventListener('pointerup', this.onResizeEnd)
 	},
 
 	methods: {
@@ -135,6 +149,32 @@ export default {
 
 		onCloseNewCollectiveModal() {
 			this.showNewCollectiveModal = false
+		},
+
+		onResizeStart(event) {
+			if (event.button !== 0) {
+				return
+			}
+			event.preventDefault()
+			this.resizeStartX = event.clientX
+			this.resizeStartWidth = this.navWidth
+			document.body.style.cursor = 'col-resize'
+			document.body.style.userSelect = 'none'
+			document.addEventListener('pointermove', this.onResizeMove)
+			document.addEventListener('pointerup', this.onResizeEnd)
+		},
+
+		onResizeMove(event) {
+			const direction = document.documentElement.dir === 'rtl' ? -1 : 1
+			const delta = (event.clientX - this.resizeStartX) * direction
+			this.navWidth = clampNavWidth(this.resizeStartWidth + delta)
+		},
+
+		onResizeEnd() {
+			document.body.style.cursor = ''
+			document.body.style.userSelect = ''
+			document.removeEventListener('pointermove', this.onResizeMove)
+			document.removeEventListener('pointerup', this.onResizeEnd)
 		},
 
 		async getCollectivesAndSettings() {
@@ -166,6 +206,30 @@ export default {
 </script>
 
 <style lang="scss">
+// Overrides NcAppNavigation's own closed-state margin, which is hardcoded to
+// its 300px default width and doesn't account for our custom resized width
+.app-navigation--closed {
+	margin-inline-start: calc(-1 * var(--collectives-nav-width, 300px)) !important;
+}
+
+.app-navigation-resize-handle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	inset-inline-end: 0;
+	z-index: 100;
+	width: 4px;
+	cursor: col-resize;
+	// Widen the grabbable area without widening the visible line
+	background-clip: content-box;
+	border-inline-start: 4px solid transparent;
+	border-inline-end: 4px solid transparent;
+
+	&:hover, &:active {
+		background-color: var(--color-primary-element);
+	}
+}
+
 .app-content-wrapper.app-content-wrapper--mobile {
 	/* Required to allow scrolling long content on mobile */
 	overflow-y: auto;
