@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { emit } from '@nextcloud/event-bus'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
@@ -66,6 +67,7 @@ export default {
 			if (this.isMobile) {
 				// Go straight to landingpage on mobile. Also required to reload page list.
 				this.show('details')
+				emit('toggle-navigation', { open: false })
 			}
 		},
 	},

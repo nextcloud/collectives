@@ -16,31 +16,23 @@
 			@update:shown="showSelector = $event">
 			<template #trigger="{ attrs }">
 				<div class="collective-selector-trigger-row">
-					<component
-						:is="currentCollective ? 'router-link' : 'div'"
-						:to="currentCollective ? currentCollectivePath : undefined"
-						:role="currentCollective ? undefined : 'button'"
-						:tabindex="currentCollective ? undefined : 0"
+					<NcButton
 						class="collective-selector-trigger"
-						@click="onTriggerClick"
-						@keydown.enter="onTriggerKeydown"
-						@keydown.space="onTriggerKeydown">
-						<span class="collective-selector-icon">
-							<template v-if="currentCollective?.emoji">
-								{{ currentCollective.emoji }}
-							</template>
-							<CollectivesIcon v-else :size="20" />
-						</span>
+						v-bind="attrs"
+						variant="tertiary"
+						alignment="start"
+						@click="onTriggerClick">
+						<template #icon>
+							<span class="collective-selector-icon">
+								<template v-if="currentCollective?.emoji">
+									{{ currentCollective.emoji }}
+								</template>
+								<CollectivesIcon v-else :size="20" />
+							</span>
+						</template>
 						<span class="collective-selector-label">
 							{{ currentCollective ? currentCollective.name : t('collectives', 'Select a collective') }}
 						</span>
-					</component>
-					<NcButton
-						class="collective-selector-chevron-button"
-						v-bind="attrs"
-						:aria-label="t('collectives', 'Select a collective')"
-						variant="tertiary"
-						@click="onChevronClick">
 						<ChevronDownIcon
 							:size="20"
 							class="collective-selector-chevron"
@@ -181,7 +173,6 @@ export default {
 		...mapState(useCollectivesStore, [
 			'collectivePath',
 			'currentCollective',
-			'currentCollectivePath',
 			'membersCollective',
 			'sortedCollectives',
 			'templatesCollectiveId',
@@ -201,24 +192,7 @@ export default {
 			'setMembersCollectiveId',
 		]),
 
-		onTriggerClick(event) {
-			event.preventDefault()
-			this.showSelector = !this.showSelector
-		},
-
-		onTriggerKeydown(event) {
-			event.preventDefault()
-
-			if (!this.currentCollective) {
-				this.showSelector = !this.showSelector
-				return
-			}
-
-			this.showSelector = false
-			this.$router.push(this.currentCollectivePath)
-		},
-
-		onChevronClick() {
+		onTriggerClick() {
 			this.showSelector = !this.showSelector
 		},
 
@@ -285,38 +259,16 @@ export default {
 }
 
 .collective-selector-trigger {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	min-width: 0;
 	flex-grow: 1;
-	height: var(--default-clickable-area);
-	padding-inline: 0;
-	border-radius: var(--border-radius-large);
-	color: var(--color-main-text);
-	text-decoration: none;
+	min-width: 0;
+	--button-radius: var(--border-radius-large);
 
-	&:hover, &:focus, &:active {
-		background-color: var(--color-background-hover);
-	}
-}
-
-.collective-selector-chevron-button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-	width: var(--default-clickable-area);
-	height: var(--default-clickable-area);
-	padding: 0;
-	border: none;
-	border-radius: var(--border-radius-large);
-	background-color: transparent;
-	color: var(--color-main-text);
-	cursor: pointer;
-
-	&:hover, &:focus, &:active {
-		background-color: var(--color-background-hover);
+	:deep(.button-vue__text) {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		flex-grow: 1;
+		min-width: 0;
 	}
 }
 
@@ -331,8 +283,10 @@ export default {
 .collective-selector-label {
 	overflow: hidden;
 	flex-grow: 1;
+	min-width: 0;
 	font-weight: bold;
 	font-size: 1.2em;
+	text-align: start;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }

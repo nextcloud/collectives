@@ -33,7 +33,7 @@ Cypress.Commands.add('openCollective', (collectiveName) => {
 
 Cypress.Commands.add('openCollectiveSelector', () => {
 	Cypress.log()
-	cy.get('.collective-selector-chevron-button').then(($button) => {
+	cy.get('.collective-selector-trigger').then(($button) => {
 		if ($button.attr('aria-expanded') !== 'true') {
 			cy.wrap($button).click()
 			cy.get('.collective-selector-list').should('be.visible')
