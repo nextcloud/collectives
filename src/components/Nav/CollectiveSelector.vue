@@ -179,6 +179,7 @@ export default {
 	computed: {
 		...mapState(useRootStore, ['isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
+			'collectivePath',
 			'currentCollective',
 			'currentCollectivePath',
 			'membersCollective',
@@ -223,6 +224,10 @@ export default {
 
 		onRestoreCollective(collective) {
 			return this.restoreCollective(collective)
+				.then(() => {
+					this.showSelector = false
+					this.$router.push(this.collectivePath(collective))
+				})
 				.catch(displayError('Could not restore collective from trash'))
 		},
 
