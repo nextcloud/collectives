@@ -284,6 +284,9 @@ export const useCollectivesStore = defineStore('collectives', {
 			const collective = response.data.ocs.data.collective
 			removeFrom(this.collectives, collective)
 			this.trashCollectives.unshift(collective)
+			if (this.lastVisitedCollectiveId === collective.id) {
+				this.lastVisitedCollectiveId = null
+			}
 		},
 
 		/**
@@ -313,6 +316,9 @@ export const useCollectivesStore = defineStore('collectives', {
 			this.trashCollectives.splice(this.trashCollectives.findIndex((c) => c.id === collective.id), 1)
 			if (circle) {
 				circlesStore.deleteCircleForCollectiveFromState(collective)
+			}
+			if (this.lastVisitedCollectiveId === collective.id) {
+				this.lastVisitedCollectiveId = null
 			}
 		},
 
