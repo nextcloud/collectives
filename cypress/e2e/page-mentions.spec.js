@@ -13,7 +13,11 @@ describe('Page mentions', function() {
 
 		cy.visit('/apps/collectives/Mention Collective/Page 1')
 		cy.getEditorContent(true)
-			.type('Bob mentions @alice')
+			.type('Bob mentions @')
+		cy.get('.tippy-content')
+			.should('be.visible')
+		cy.getEditorContent(true)
+			.type('alice')
 		cy.get('.tippy-content')
 			.contains('alice')
 			.click()

@@ -31,7 +31,7 @@ export class EditorSection {
 	}
 
 	public async switchMode(edit: boolean): Promise<void> {
-		const content = (edit ? this.editor : this.reader).locator('.ProseMirror')
+		const content = this.contentLocator(edit)
 		if (await content.isVisible()) {
 			this.isEdit = edit
 			return
@@ -55,8 +55,15 @@ export class EditorSection {
 	}
 
 	public getContent() {
-		return (this.isEdit ? this.editor : this.reader)
-			.locator('.ProseMirror')
+		return this.contentLocator(this.isEdit)
+	}
+
+	public contentLocator(edit: boolean): Locator {
+		// The editor embeds an extra read-only ProseMirror instance,
+		// so only match the editable one there
+		return edit
+			? this.editor.locator('.ProseMirror[contenteditable="true"]')
+			: this.reader.locator('.ProseMirror')
 	}
 
 	public async replaceContent(text: string): Promise<void> {

@@ -37,8 +37,8 @@ describe('Collective name conflicts', function() {
 		cy.get('button span.teams-icon').click()
 		cy.get('.circle-selector').click()
 		cy.get('.circle-selector li [title*=History]').click()
-		cy.get('button').contains('Add members').click()
-		cy.get('button').contains('Create').click()
+		cy.get('.dialog__actions button').contains('Add members').click()
+		cy.get('.dialog__actions button').contains('Create').click()
 
 		cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'History Club')
 		cy.get('.toast-info').should('contain', 'Created collective "History Club" for existing team.')

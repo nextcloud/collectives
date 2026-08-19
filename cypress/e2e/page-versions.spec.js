@@ -107,10 +107,18 @@ describe('Page versions', function() {
 		cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
 		cy.clickMenuButton('Restore version')
 		cy.wait('@moveVersion')
+		cy.get('.toast-success')
+			.should('contain', 'Restored')
 
-		cy.reload()
-		cy.getReadOnlyEditor()
-			.should('contain', 'v1')
+		// Check the restored file content via WebDAV instead of reloading:
+		// reloading makes the text client replay its cached (pre-restore)
+		// document state into the open session, overwriting the restore.
+		cy.request('/csrftoken').then(({ body }) => {
+			cy.request({
+				url: `${Cypress.expose('baseUrl')}/remote.php/webdav/.Collectives/${encodeURIComponent('Versions Collective')}/Page.md`,
+				headers: { requesttoken: body.token },
+			}).its('body').should('contain', 'v1')
+		})
 	})
 
 	it('Delete version', function() {

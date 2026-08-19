@@ -187,7 +187,7 @@ Cypress.Commands.add('createCollective', (name, members = []) => {
 			cy.get('.selected-members .user-bubble__content').should('contain', member)
 		}
 	}
-	cy.get('button').contains('Create').click()
+	cy.get('.dialog__actions button').contains('Create').click()
 })
 
 /**

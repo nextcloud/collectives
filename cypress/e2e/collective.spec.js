@@ -28,7 +28,7 @@ describe('Collective', function() {
 		cy.log('Allows creation of pages')
 		cy.get('.page-list-headerbar button[aria-label="Add a page"]')
 			.should('be.visible')
-		cy.visit('apps/collectives')
+		cy.visit('apps/collectives/Preexisting Collective')
 		cy.deleteCollective(randomName)
 	})
 	it('can leave collective and undo', function() {

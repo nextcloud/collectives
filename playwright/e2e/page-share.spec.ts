@@ -29,9 +29,10 @@ test.describe('Page share', () => {
 		await expect(shareEditor.getContent()).toBeVisible()
 		await expect(shareEditor.getContent()).toHaveText('Some content')
 
-		// Only shared page is listed
+		// The shared page has no subpages, so the page list stays empty
+		// ("Anotherone" is not a subpage of it and must not be listed)
 		await expect(sharePageList.el).toBeVisible()
-		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(1)
+		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(0)
 	})
 })
 

@@ -42,4 +42,8 @@ export class PageListSection {
 		await item.hover()
 		await item.getByRole('button', { name: 'Add a subpage' }).click()
 	}
+
+	public async addTopLevelPage(): Promise<void> {
+		await this.el.getByRole('button', { name: 'Add a page' }).click()
+	}
 }

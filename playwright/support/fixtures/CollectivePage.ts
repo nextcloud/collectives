@@ -97,8 +97,11 @@ export class CollectivePage {
 	 * @param edit whether to get content from editor or reader
 	 */
 	getContent(edit: boolean = false) {
-		const mode = edit ? 'editor' : 'reader'
-		return this.page.locator(`[data-cy-collectives="${mode}"] .ProseMirror`)
+		// The editor embeds an extra read-only ProseMirror instance,
+		// so only match the editable one there
+		return edit
+			? this.page.locator('[data-cy-collectives="editor"] .ProseMirror[contenteditable="true"]')
+			: this.page.locator('[data-cy-collectives="reader"] .ProseMirror')
 	}
 
 	getViewerContent() {

@@ -38,12 +38,12 @@ export class NavigationSection {
 
 	public async openCollectiveSelector(): Promise<void> {
 		if (await this.page.locator('.collective-selector-list').count() === 0) {
-			await this.page.getByRole('button', { name: 'Select a collective' }).click()
+			await this.el.locator('.collective-selector-trigger').click()
 		}
 	}
 
 	public getCollectiveItem(collectiveName: string): Locator {
-		return this.el.getByRole('listitem')
+		return this.page.locator('.collective-selector-list').getByRole('listitem')
 			.filter({ has: this.page.getByRole('link', { name: collectiveName }) })
 	}
 
