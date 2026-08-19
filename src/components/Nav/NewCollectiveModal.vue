@@ -280,9 +280,7 @@ export default {
 		const focusCollectiveName = () => {
 			this.$refs.collectiveName?.$el.getElementsByTagName('input')[0]?.focus()
 		}
-		focusCollectiveName()
-		const focusInterval = setInterval(focusCollectiveName, 50)
-		setTimeout(() => clearInterval(focusInterval), 500)
+		setTimeout(focusCollectiveName, 50)
 	},
 
 	methods: {
