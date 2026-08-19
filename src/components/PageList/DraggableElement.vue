@@ -8,6 +8,7 @@
 		:modelValue="list"
 		:data-parent-id="parentId"
 		:disabled="disabled"
+		:class="{ 'dragover-target-active': isDragoverTargetPage }"
 		:group="{ name: 'page-list', pull: true, put: true }"
 		draggable=".page-list-drag-item"
 		filter=".page-list-nodrag-item"
@@ -80,6 +81,7 @@ export default {
 		...mapState(usePagesStore, [
 			'disableDragndropSortOrMove',
 			'draggedPageId',
+			'isDragoverTargetPage',
 			'pageParents',
 			'sortByOrder',
 		]),
@@ -192,5 +194,9 @@ export default {
 	opacity: 0.7;
 	border-radius: var(--border-radius-large);
 	background-color: var(--color-background-hover);
+}
+
+.dragover-target-active :deep(.sortable-ghost) {
+	opacity: 0;
 }
 </style>

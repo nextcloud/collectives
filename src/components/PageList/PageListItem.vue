@@ -351,10 +351,14 @@ export default {
 			this.setDragoverTargetPage(false)
 		},
 
-		onDrop() {
+		onDrop(event) {
 			if (this.isDropTarget
 				// Ignore if self is direct parent of dragged element
 				&& this.pageParent(this.draggedPageId) !== this.pageId) {
+				// Claim this drop: prevent it from also bubbling to sortable.js's
+				// own drop handling, which would otherwise process the same drop
+				// a second time as a sibling reorder instead of a move into this page
+				event.stopPropagation()
 				this.move(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
 			}
 			clearTimeout(this.dragoverTimer)
