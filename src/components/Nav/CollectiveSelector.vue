@@ -35,17 +35,28 @@
 							{{ currentCollective ? currentCollective.name : t('collectives', 'Select a collective') }}
 						</span>
 					</component>
-					<button
-						type="button"
+					<NcButton
 						class="collective-selector-chevron-button"
 						v-bind="attrs"
 						:aria-label="t('collectives', 'Select a collective')"
+						variant="tertiary"
 						@click="onChevronClick">
 						<ChevronDownIcon
 							:size="20"
 							class="collective-selector-chevron"
 							:class="{ 'collective-selector-chevron--open': showSelector }" />
-					</button>
+					</NcButton>
+					<NcActions
+						v-if="currentCollective"
+						forceMenu
+						class="collective-selector-actions"
+						container="#app-navigation-vue"
+						:aria-label="t('collectives', 'Collective actions')">
+						<NcActionCollectiveActions
+							v-model:submenu="collectiveSubmenu"
+							:collective="currentCollective"
+							:networkOnline />
+					</NcActions>
 				</div>
 			</template>
 			<template #default>
@@ -75,32 +86,19 @@
 									<PlusIcon />
 								</template>
 							</NcAppNavigationNew>
+							<CollectivesTrash
+								:networkOnline
+								@restoreCollective="onRestoreCollective"
+								@deleteCollective="onDeleteCollective" />
+							<CollectivesGlobalSettings
+								:networkOnline
+								class="collective-selector-global-settings"
+								@update:pickingFolder="pickingFolder = $event" />
 						</template>
-						<CollectivesTrash
-							v-if="displayTrash"
-							:networkOnline
-							@restoreCollective="onRestoreCollective"
-							@deleteCollective="onDeleteCollective" />
-						<CollectivesGlobalSettings
-							v-if="!isPublic"
-							:networkOnline
-							class="collective-selector-global-settings"
-							@update:pickingFolder="pickingFolder = $event" />
 					</template>
 				</div>
 			</template>
 		</NcPopover>
-		<NcActions
-			v-if="currentCollective"
-			forceMenu
-			class="collective-selector-actions"
-			container="#app-navigation-vue"
-			:aria-label="t('collectives', 'Collective actions')">
-			<NcActionCollectiveActions
-				v-model:submenu="collectiveSubmenu"
-				:collective="currentCollective"
-				:networkOnline />
-		</NcActions>
 		<CollectiveMembersModal
 			v-if="showCollectiveMembersModal"
 			:collective="membersCollective"
@@ -112,6 +110,7 @@
 <script>
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
+import { NcButton } from '@nextcloud/vue'
 import { useElementSize } from '@vueuse/core'
 import { mapActions, mapState } from 'pinia'
 import { ref, watch } from 'vue'
@@ -149,6 +148,7 @@ export default {
 		NcAppNavigationCaption,
 		NcAppNavigationNew,
 		NcPopover,
+		NcButton,
 		PlusIcon,
 		SkeletonLoading,
 		TemplatesDialog,
@@ -187,11 +187,6 @@ export default {
 			'templatesCollectiveId',
 		]),
 
-		displayTrash() {
-			return !this.isPublic
-				&& !this.loading('collectives')
-		},
-
 		showCollectiveMembersModal() {
 			return !!this.membersCollective
 		},
@@ -207,20 +202,6 @@ export default {
 		]),
 
 		onTriggerClick(event) {
-			if (!this.currentCollective) {
-				event.preventDefault()
-				this.showSelector = !this.showSelector
-				return
-			}
-
-			const isModifierClick = event.ctrlKey || event.metaKey || event.shiftKey
-			const clickedLabel = event.target.closest('.collective-selector-label')
-
-			if (clickedLabel || isModifierClick) {
-				this.showSelector = false
-				return
-			}
-
 			event.preventDefault()
 			this.showSelector = !this.showSelector
 		},
@@ -269,16 +250,21 @@ export default {
 	// component is always rendered as its sibling above the page list.
 	--collective-selector-height: calc(var(--default-clickable-area) + 8px);
 }
+
+.app-navigation__list {
+	padding: 0 !important
+}
+
+.collective-selector-popover {
+	width: calc(var(--collective-selector-width, 300px) - 32px);
+}
 </style>
 
 <style lang="scss" scoped>
 .collective-selector {
 	display: flex;
 	align-items: center;
-	margin-top: 4px;
-	justify-content: space-between;
 	gap: 2px;
-	min-height: var(--collective-selector-height);
 	padding-inline: 4px;
 }
 
@@ -292,7 +278,6 @@ export default {
 	align-items: center;
 	min-width: 0;
 	padding-left: 4px;
-	margin-top: 5px;
 }
 
 .collective-selector-trigger {
@@ -373,19 +358,9 @@ export default {
 		width: calc(100% - 8px);
 	}
 
-	:deep(.app-navigation-entry-icon) {
-		flex-basis: auto;
-		width: auto;
-		justify-content: flex-start;
-	}
-
 	:deep(.app-navigation-entry-link),
 	:deep(.app-navigation-entry__name) {
 		font-weight: normal !important;
-	}
-
-	:deep(.app-navigation-entry:focus-within) {
-		background-color: transparent !important;
 	}
 
 	:deep(.app-navigation-entry:has(:focus-visible)) {
@@ -424,11 +399,5 @@ export default {
 
 :deep(.collective-selector-global-settings .button-vue) {
 	padding-inline: 0 !important;
-}
-</style>
-
-<style lang="scss">
-.collective-selector-popover {
-	width: calc(var(--collective-selector-width, 300px) - 32px);
 }
 </style>

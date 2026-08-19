@@ -35,7 +35,7 @@
 					</div>
 				</template>
 				<template v-else>
-					<PageIcon :size="22" fillColor="var(--color-background-darker)" />
+					<PageIcon :size="22" fillColor="var(--color-background-maxcontrast)" />
 				</template>
 			</slot>
 			<template v-if="showFavoriteStar">
