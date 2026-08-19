@@ -58,7 +58,7 @@
 					:lastUserDisplayName
 					inPageList
 					:networkOnline />
-				<NcActions container="#app-navigation-vue">
+				<NcActions>
 					<NcActionButton
 						class="action-button-add"
 						:disabled="!networkOnline || loading(`template-list-${templatesCollectiveId}`)"

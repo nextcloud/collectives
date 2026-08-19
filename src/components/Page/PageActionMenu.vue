@@ -7,7 +7,6 @@
 	<div>
 		<NcActions
 			forceMenu
-			:container="inPageList ? '#app-navigation-vue' : undefined"
 			@click.stop>
 			<!-- Collective actions: only displayed for landing page -->
 			<template v-if="isLandingPage">

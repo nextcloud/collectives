@@ -50,7 +50,6 @@
 						v-if="currentCollective"
 						forceMenu
 						class="collective-selector-actions"
-						container="#app-navigation-vue"
 						:aria-label="t('collectives', 'Collective actions')">
 						<NcActionCollectiveActions
 							v-model:submenu="collectiveSubmenu"

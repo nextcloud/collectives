@@ -14,7 +14,6 @@
 			:shown="showTagSelection"
 			:triggers="[]"
 			placement="bottom-start"
-			container="#app-navigation-vue"
 			noFocusTrap>
 			<template #trigger="{ attrs }">
 				<NcTextField
@@ -48,7 +47,6 @@
 
 		<NcActions
 			class="toggle"
-			container="#app-navigation-vue"
 			:aria-label="t('collectives', 'Sort order')">
 			<template #icon>
 				<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
