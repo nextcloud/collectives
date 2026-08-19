@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -114,7 +113,7 @@ export default {
 			this.clearFilterTags()
 			this.setTrashPagesLoaded(false)
 			if (val) {
-				this.initCollective({ closeNavDelay: true })
+				this.initCollective()
 			}
 		},
 
@@ -131,7 +130,7 @@ export default {
 	},
 
 	mounted() {
-		this.initCollective({})
+		this.initCollective()
 		this.slugUrl()
 	},
 
@@ -144,14 +143,7 @@ export default {
 		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 
-		async initCollective({ closeNavDelay = false }) {
-			if (this.isMobile) {
-				if (closeNavDelay && !this.isPublic) {
-					setTimeout(() => this.closeNav(), 1000)
-				} else {
-					this.closeNav()
-				}
-			}
+		async initCollective() {
 			this.show('details')
 
 			this.loadPending = true
@@ -167,10 +159,6 @@ export default {
 					displayError('Could not fetch shares')(e)
 				}
 			}
-		},
-
-		closeNav() {
-			emit('toggle-navigation', { open: false })
 		},
 
 		slugUrl() {
