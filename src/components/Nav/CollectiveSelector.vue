@@ -312,7 +312,7 @@ export default {
 
 .collective-selector-list {
 	:deep(.app-navigation-entry) {
-		margin-inline: 4px;
+		margin: 2px 4px;
 		width: calc(100% - 8px);
 	}
 
@@ -327,8 +327,6 @@ export default {
 }
 
 .collective-selector-popover-content {
-	padding-bottom: 4px;
-
 	:deep(.new-collective-button) {
 		padding: 0 2px 4px 4px;
 	}
