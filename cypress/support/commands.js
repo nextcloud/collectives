@@ -177,7 +177,7 @@ Cypress.Commands.add(
  */
 Cypress.Commands.add('createCollective', (name, members = []) => {
 	Cypress.log()
-	cy.get('button').contains('New collective').click()
+	cy.openNewCollectiveModal()
 	cy.get('.collective-name input[type="text"]').type(`${name}{enter}`)
 	if (members.length > 0) {
 		for (const member of members) {
@@ -187,7 +187,7 @@ Cypress.Commands.add('createCollective', (name, members = []) => {
 			cy.get('.selected-members .user-bubble__content').should('contain', member)
 		}
 	}
-	cy.get('button').contains('Create').click()
+	cy.get('.dialog__actions button').contains('Create').click()
 })
 
 /**

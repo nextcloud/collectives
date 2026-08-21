@@ -4,14 +4,7 @@
 -->
 
 <template>
-	<NcAppContent
-		:showDetails="showing('details')"
-		:listSize="20"
-		:listMinWidth="15"
-		@update:showDetails="hide('details')">
-		<template #list>
-			<PageList v-if="currentCollective" />
-		</template>
+	<NcAppContent>
 		<CollectiveContainer v-if="currentCollective" />
 		<NcEmptyContent v-else-if="loading('collectives')">
 			<template #icon>
@@ -31,7 +24,6 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import CollectiveContainer from '../components/CollectiveContainer.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
-import PageList from '../components/PageList.vue'
 import { useNetworkState } from '../composables/useNetworkState.ts'
 import { CIRCLE_MEMBERS_PARTIAL_LIMIT, pageModes, sessionUpdateInterval } from '../constants.js'
 import { useCirclesStore } from '../stores/circles.js'
@@ -52,7 +44,6 @@ export default {
 		NcAppContent,
 		NcEmptyContent,
 		NcLoadingIcon,
-		PageList,
 	},
 
 	setup() {
@@ -81,7 +72,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['loading', 'showing', 'isPublic']),
+		...mapState(useRootStore, ['loading', 'isPublic']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
@@ -95,6 +86,7 @@ export default {
 		'currentCollective.id': function(val) {
 			this.clearSession()
 			if (val) {
+				this.setLastVisitedCollectiveId(val)
 				this.getAllPages()
 				this.initSession()
 			}
@@ -111,6 +103,7 @@ export default {
 
 	mounted() {
 		if (this.currentCollective) {
+			this.setLastVisitedCollectiveId(this.currentCollective.id)
 			this.getAllPages()
 			this.initSession()
 		}
@@ -123,8 +116,8 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useRootStore, ['hide']),
 		...mapActions(useCirclesStore, ['getCircleMembers']),
+		...mapActions(useCollectivesStore, ['setLastVisitedCollectiveId']),
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(useTagsStore, ['getTags']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
@@ -236,12 +229,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-// Align details toggle button with page title bar (only relevant on mobile)
-button.app-details-toggle {
-	z-index: 10023 !important;
-	top: 58px !important;
-	position: fixed !important;
-}
-</style>

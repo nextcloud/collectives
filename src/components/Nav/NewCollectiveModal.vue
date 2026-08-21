@@ -277,9 +277,10 @@ export default {
 		this.emoji = this.randomCollectiveEmoji()
 		this.getCircles()
 			.catch(displayError('Could not get list of teams'))
-		this.$nextTick(() => {
-			this.$refs.collectiveName.$el.getElementsByTagName('input')[0]?.focus()
-		})
+		const focusCollectiveName = () => {
+			this.$refs.collectiveName?.$el.getElementsByTagName('input')[0]?.focus()
+		}
+		setTimeout(focusCollectiveName, 50)
 	},
 
 	methods: {

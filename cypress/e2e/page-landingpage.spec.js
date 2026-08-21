@@ -36,7 +36,7 @@ describe('Page landing page', function() {
 		cy.loginAs('bob')
 		cy.visit(`/apps/collectives/${collective}`)
 		// make sure the page list loaded properly
-		cy.contains('.app-content-list-item a', 'Page 1')
+		cy.contains('.page-list-item .app-navigation-entry-link', 'Page 1')
 	})
 
 	it('Allows to toggle recent pages widget', function() {

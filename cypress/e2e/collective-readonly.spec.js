@@ -21,8 +21,7 @@ describe('Read-only collective', function() {
 	it('not able to edit collective', function() {
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.attr', 'disabled')
 		cy.get('button.titleform-button').should('not.exist')
-		cy.get('.app-content-list-item.toplevel')
-			.find('button.icon.add')
+		cy.get('.page-list-headerbar button[aria-label="Add a page"]')
 			.should('not.exist')
 		cy.getEditor()
 			.should('not.exist')

@@ -37,7 +37,7 @@ describe('Page link preview handling', function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives/Link Preview Testing/Link Source')
 		// make sure the page list loaded properly
-		cy.contains('.app-content-list-item a', 'Link Target')
+		cy.contains('.page-list-item .app-navigation-entry-link', 'Link Target')
 	})
 
 	it('Shows previews in view and edit mode', function() {

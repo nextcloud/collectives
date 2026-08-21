@@ -14,7 +14,7 @@ describe('Page attachments', function() {
 		cy.loginAs('bob')
 		cy.visit('/apps/collectives/Attachments Collective')
 		// make sure the page list loaded properly
-		cy.contains('.app-content-list-item a', 'Page1')
+		cy.contains('.page-list-item .app-navigation-entry-link', 'Page1')
 	})
 
 	it('Inserted attachment listed in sidebar tab', function() {

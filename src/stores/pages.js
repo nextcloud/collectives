@@ -600,6 +600,15 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		/**
+		 * Drop the cached page list for a collective
+		 *
+		 * @param {object} collective Collective to drop the cached pages for
+		 */
+		clearPagesForCollective(collective) {
+			delete this.allPages[this.indexForCollective(collective)]
+		},
+
+		/**
 		 * Get a list of all pages in trash
 		 */
 		async getTrashPages() {

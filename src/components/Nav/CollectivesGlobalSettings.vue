@@ -4,7 +4,9 @@
 -->
 
 <template>
-	<NcAppNavigationSettings :name="t('collectives', 'Collectives settings')">
+	<NcAppNavigationSettings
+		:name="t('collectives', 'Collectives settings')"
+		excludeClickOutsideSelectors=".dialog__modal">
 		<NcTextField
 			name="userFolder"
 			:label="t('collectives', 'Collectives folder')"
@@ -38,6 +40,8 @@ export default {
 		},
 	},
 
+	emits: ['update:pickingFolder'],
+
 	data() {
 		return {
 			collectivesFolderLoading: false,
@@ -64,36 +68,41 @@ export default {
 		...mapActions(useSettingsStore, ['updateCollectivesFolder']),
 
 		async selectCollectivesFolder() {
-			const picker = getFilePickerBuilder(t('collectives', 'Select location for collectives'))
-				.setMultiSelect(false)
-				.addButton({
-					label: t('collectives', 'Choose'),
-					variant: 'primary',
-					callback: () => {},
-				})
-				.addMimeTypeFilter('httpd/unix-directory')
-				.allowDirectories()
-				.startAt(this.collectivesFolder)
-				.build()
-			const path = await picker.pick()
-
-			// No root folder, has to start with `/`, not allowed to end with `/`
-			if (path === '/'
-				|| !path.startsWith('/')
-				|| path.endsWith('/')) {
-				const error = t('collectives', 'Invalid path selected. Only folders on first level are supported.')
-				showError(error)
-				throw new Error(error)
-			}
-
-			this.collectivesFolderLoading = true
+			this.$emit('update:pickingFolder', true)
 			try {
-				await this.updateCollectivesFolder(path)
-			} catch (e) {
-				console.error('Error updating collectives folder: ', e)
-				displayError('Could not update collectives folder')(e)
+				const picker = getFilePickerBuilder(t('collectives', 'Select location for collectives'))
+					.setMultiSelect(false)
+					.addButton({
+						label: t('collectives', 'Choose'),
+						variant: 'primary',
+						callback: () => {},
+					})
+					.addMimeTypeFilter('httpd/unix-directory')
+					.allowDirectories()
+					.startAt(this.collectivesFolder)
+					.build()
+				const path = await picker.pick()
+
+				// No root folder, has to start with `/`, not allowed to end with `/`
+				if (path === '/'
+					|| !path.startsWith('/')
+					|| path.endsWith('/')) {
+					const error = t('collectives', 'Invalid path selected. Only folders on first level are supported.')
+					showError(error)
+					throw new Error(error)
+				}
+
+				this.collectivesFolderLoading = true
+				try {
+					await this.updateCollectivesFolder(path)
+				} catch (e) {
+					console.error('Error updating collectives folder: ', e)
+					displayError('Could not update collectives folder')(e)
+				} finally {
+					this.collectivesFolderLoading = false
+				}
 			} finally {
-				this.collectivesFolderLoading = false
+				this.$emit('update:pickingFolder', false)
 			}
 		},
 	},

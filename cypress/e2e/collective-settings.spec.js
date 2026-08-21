@@ -8,7 +8,7 @@ describe('Collective settings', function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Change me')
 		cy.deleteCollective('Change me now')
-		cy.visit('apps/collectives')
+		cy.visit('apps/collectives/Change me')
 	})
 
 	it('Allows setting an emoji', function() {
@@ -20,6 +20,7 @@ describe('Collective settings', function() {
 
 		// Test persistence of changed emoji
 		cy.reload()
+		cy.openCollectiveSelector()
 		cy.contains('.app-navigation-entry', 'Change me')
 			.find('.app-navigation-entry-icon').should('contain', '🥰')
 
@@ -32,6 +33,7 @@ describe('Collective settings', function() {
 
 		// Test persistence of unset emoji
 		cy.reload()
+		cy.openCollectiveSelector()
 		cy.contains('.app-navigation-entry', 'Change me')
 			.find('.app-navigation-entry-icon .collectives-icon')
 	})
@@ -41,6 +43,7 @@ describe('Collective settings', function() {
 		cy.clickMenuButton('Settings')
 		cy.get('div.collective-name-and-emoji input[type="text"]').type(' now{enter}')
 		cy.reload()
+		cy.openCollectiveSelector()
 		cy.get('.collectives_list_item')
 			.should('contain', 'Change me now')
 	})
@@ -71,7 +74,7 @@ describe('Collective settings', function() {
 
 	it('Allows to open settings from landing page actions', function() {
 		cy.openCollective('Change me')
-		cy.openPageMenu('Change me')
+		cy.openCollectiveMenu('Change me')
 		cy.clickMenuButton('Settings')
 		cy.get('.edit-permissions')
 	})

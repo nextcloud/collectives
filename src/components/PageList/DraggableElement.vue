@@ -8,6 +8,7 @@
 		:modelValue="list"
 		:data-parent-id="parentId"
 		:disabled="disabled"
+		:class="{ 'dragover-target-active': isDragoverTargetPage }"
 		:group="{ name: 'page-list', pull: true, put: true }"
 		draggable=".page-list-drag-item"
 		filter=".page-list-nodrag-item"
@@ -79,6 +80,9 @@ export default {
 	computed: {
 		...mapState(usePagesStore, [
 			'disableDragndropSortOrMove',
+			'draggedPageId',
+			'isDragoverTargetPage',
+			'pageParents',
 			'sortByOrder',
 		]),
 
@@ -109,7 +113,7 @@ export default {
 		},
 
 		setData(dataTransfer, dragEl) {
-			dataTransfer.setData('pageId', dragEl.firstChild.dataset.pageId)
+			dataTransfer.setData('pageId', dragEl.dataset.pageId)
 		},
 
 		// Dragged element changes position
@@ -124,6 +128,13 @@ export default {
 		// Dragged element is moved inside list or between lists
 		onMove(ev) {
 			this.dragoverPageId = ev.related.dataset.pageId || ev.related.dataset.parentId
+
+			// Reject moving a page into itself or one of its own descendants
+			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
+			const targetParentId = Number(ev.to.dataset.parentId)
+			if (this.draggedPageId && this.pageParents(targetParentId).some((page) => page.id === this.draggedPageId)) {
+				return false
+			}
 
 			// Force-move items to the end of the list if sorting is disabled (not effective for now, see `disabled()` method)
 			if (!this.allowSorting) {
@@ -146,11 +157,19 @@ export default {
 
 		// Dragged element is added to another list
 		onAdd(ev) {
-			// Moving from one list to another
-			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
 			const oldParentId = Number(ev.from.dataset.parentId)
 			const newParentId = Number(ev.to.dataset.parentId)
+
+			// Reject moving a page into itself or one of its own descendants
+			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
+			if (this.pageParents(newParentId).some((page) => page.id === pageId)) {
+				ev.from.append(ev.item)
+				return
+			}
+
+			// Moving from one list to another
+			this.sortableActive = true
 			let index = ev.newDraggableIndex
 			// Force-move items to the end of the list if sorting is disabled
 			if (!this.allowSorting) {
@@ -175,5 +194,9 @@ export default {
 	opacity: 0.7;
 	border-radius: var(--border-radius-large);
 	background-color: var(--color-background-hover);
+}
+
+.dragover-target-active :deep(.sortable-ghost) {
+	opacity: 0;
 }
 </style>

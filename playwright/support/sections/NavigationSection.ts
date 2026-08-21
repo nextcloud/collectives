@@ -25,7 +25,9 @@ export class NavigationSection {
 	}
 
 	public async open(): Promise<void> {
-		await this.page.getByRole('button', { name: 'Open navigation' }).click()
+		if (!await this.el.isVisible()) {
+			await this.page.getByRole('button', { name: 'Open navigation' }).click()
+		}
 		await expect(this.el).toBeVisible()
 	}
 
@@ -34,16 +36,23 @@ export class NavigationSection {
 		await expect(this.el).not.toBeVisible()
 	}
 
+	public async openCollectiveSelector(): Promise<void> {
+		if (await this.page.locator('.collective-selector-list').count() === 0) {
+			await this.el.locator('.collective-selector-trigger').click()
+		}
+	}
+
 	public getCollectiveItem(collectiveName: string): Locator {
-		return this.el.getByRole('listitem')
+		return this.page.locator('.collective-selector-list').getByRole('listitem')
 			.filter({ has: this.page.getByRole('link', { name: collectiveName }) })
 	}
 
 	public async clickCollectiveMenu(collectiveName: string, action: string): Promise<void> {
-		const collectiveItem = this.getCollectiveItem(collectiveName)
-		await collectiveItem.getByRole('button', { name: 'Actions' })
-			.hover()
-		await collectiveItem.getByRole('button', { name: 'Actions' })
+		await this.openCollectiveSelector()
+		await this.getCollectiveItem(collectiveName)
+			.getByRole('link', { name: collectiveName })
+			.click()
+		await this.page.getByRole('button', { name: 'Collective actions' })
 			.click()
 		// The extra `.action-item__popover` locator is needed to not conflict with other button with same name in DOM
 		await this.page.locator('.action-item__popper:visible')
@@ -52,11 +61,13 @@ export class NavigationSection {
 	}
 
 	public async openCollectivesSettings(): Promise<void> {
+		await this.openCollectiveSelector()
 		await this.collectivesSettingsButton.click()
 	}
 
 	public async openUserFolderSetting(): Promise<Locator> {
 		await this.openCollectivesSettings()
+		await expect(this.collectivesFolderInputEl).toBeEnabled()
 		await this.collectivesFolderInputEl.click()
 		return this.filePickerDialog
 	}

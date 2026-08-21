@@ -4,44 +4,43 @@
  */
 
 describe('Collectives trash', function() {
-	before(function() {
+	beforeEach(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Delete me')
 	})
 
 	it('Allows moving the collective to trash', function() {
-		cy.visit('/apps/collectives')
+		cy.visit('/apps/collectives/Delete me')
 		cy.openCollectiveMenu('Delete me')
 		cy.clickMenuButton('Settings')
 		cy.get('button')
 			.contains('Delete collective')
 			.click()
+		cy.openCollectiveSelector()
 		cy.get('#collectives-trash')
 			.click()
 		cy.get('.dialog tr')
 			.should('contain', 'Delete me')
 	})
+
 	it('Allows restoring the collective from trash', function() {
-		cy.loginAs('bob')
+		cy.trashCollective('Delete me')
 		cy.visit('apps/collectives')
+		cy.openCollectiveSelector()
 		cy.get('#collectives-trash')
 			.click()
 		cy.openTrashedCollectiveMenu('Delete me')
 		cy.get('button').contains('Restore').click()
+		cy.get('.dialog__collectives-trash').should('not.exist')
+		cy.openCollectiveSelector()
 		cy.get('.collectives_list_item')
 			.should('contain', 'Delete me')
 	})
 
 	it('Allows deleting the collective and team from trash', function() {
-		cy.loginAs('bob')
+		cy.trashCollective('Delete me')
 		cy.visit('apps/collectives')
-
-		// Move to trash
-		cy.openCollectiveMenu('Delete me')
-		cy.clickMenuButton('Settings')
-		cy.get('button')
-			.contains('Delete collective')
-			.click()
+		cy.openCollectiveSelector()
 		cy.get('#collectives-trash')
 			.click()
 		cy.get('.dialog tr')

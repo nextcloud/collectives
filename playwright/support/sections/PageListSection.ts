@@ -15,8 +15,8 @@ export class PageListSection {
 	public readonly activeFilterTags: Locator
 
 	constructor(public readonly page: Page) {
-		this.el = this.page.locator('.app-content-list')
-		this.pageListItems = this.el.locator('.app-content-list-item')
+		this.el = this.page.locator('.app-navigation__list')
+		this.pageListItems = this.el.locator('.page-list-item')
 		this.filter = this.el.getByRole('textbox', { name: 'Search pages' })
 		this.filterTagSelect = this.page.locator('.page-filter-tag-select')
 		this.activeFilterTags = this.el.locator('.page-filter-tags')
@@ -32,13 +32,18 @@ export class PageListSection {
 
 	public async toggleExpandPage(title: string): Promise<void> {
 		await this.getPageItem(title)
-			.locator('.item-icon-badge')
+			.locator('.icon-collapse')
 			.click()
 	}
 
 	public async addPage(parentTitle: string): Promise <void> {
-		await this.getPageItem(parentTitle)
-			.getByRole('button', { name: 'Add a page' })
-			.click()
+		const item = this.getPageItem(parentTitle)
+		// The add-subpage button is only shown on hover
+		await item.hover()
+		await item.getByRole('button', { name: 'Add a subpage' }).click()
+	}
+
+	public async addTopLevelPage(): Promise<void> {
+		await this.el.getByRole('button', { name: 'Add a page' }).click()
 	}
 }

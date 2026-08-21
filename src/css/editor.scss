@@ -25,7 +25,7 @@
 		margin-inline: calc((100% - var(--text-editor-max-width, var(--text-editor-max-width-default))) / 2) !important;
 
 		.text-menubar__entries {
-			margin-left: unset !important;
+			margin-inline-start: unset !important;
 		}
 	}
 }

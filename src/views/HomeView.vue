@@ -6,6 +6,7 @@
 <template>
 	<NcAppContent>
 		<NcEmptyContent
+			v-if="loading('collectives') === false && sortedCollectives.length === 0"
 			:title="t('collectives', 'Collectives')"
 			:description="t('collectives', 'Come, organize and build shared knowledge!')"
 			class="content-home">
@@ -22,6 +23,11 @@
 				</NcButton>
 			</template>
 		</NcEmptyContent>
+		<NcEmptyContent v-else>
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 	</NcAppContent>
 </template>
 
@@ -33,9 +39,11 @@ import { mapState } from 'pinia'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import { useNetworkState } from '../composables/useNetworkState.js'
 import { useCollectivesStore } from '../stores/collectives.js'
+import { useRootStore } from '../stores/root.js'
 
 export default {
 	name: 'HomeView',
@@ -45,6 +53,7 @@ export default {
 		NcButton,
 		CollectivesIcon,
 		NcEmptyContent,
+		NcLoadingIcon,
 	},
 
 	setup() {
@@ -59,24 +68,33 @@ export default {
 	},
 
 	computed: {
-		...mapState(useCollectivesStore, ['collectives', 'collectivePath']),
+		...mapState(useRootStore, ['loading']),
+		...mapState(useCollectivesStore, ['sortedCollectives', 'lastVisitedCollectiveId', 'collectivePath']),
+
+		targetCollective() {
+			if (this.loading('collectives') !== false || this.sortedCollectives.length === 0) {
+				return null
+			}
+			return this.sortedCollectives.find((c) => c.id === this.lastVisitedCollectiveId)
+				?? this.sortedCollectives[0]
+		},
 	},
 
-	mounted() {
-		if (this.collectives.length === 1) {
-			// Open collective if only one exists
-			this.$router.push(this.collectivePath(this.collectives[0]))
-		} else if (this.collectives.length > 1) {
-			// Open the navigation (on mobile) if we have collectives
-			emit('toggle-navigation', { open: true })
-		}
+	watch: {
+		targetCollective: {
+			immediate: true,
+			handler(collective) {
+				if (collective) {
+					this.$router.replace(this.collectivePath(collective))
+				}
+			},
+		},
 	},
 
 	methods: {
 		t,
 
 		newCollective() {
-			emit('toggle-navigation', { open: true })
 			emit('open-new-collective-modal')
 			this.buttonVariant = 'secondary'
 		},

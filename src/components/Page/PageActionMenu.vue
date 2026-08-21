@@ -5,7 +5,9 @@
 
 <template>
 	<div>
-		<NcActions forceMenu @click.stop>
+		<NcActions
+			forceMenu
+			@click.stop>
 			<!-- Collective actions: only displayed for landing page -->
 			<template v-if="isLandingPage">
 				<NcActionCollectiveActions

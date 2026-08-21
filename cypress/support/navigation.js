@@ -10,13 +10,19 @@ Cypress.Commands.add('openApp', (appName) => {
 
 Cypress.Commands.add('openPage', (pageName) => {
 	Cypress.log()
-	cy.contains('.app-content-list-item a', pageName).click()
+	cy.contains('.page-list-item .app-navigation-entry-link', pageName).click()
+})
+
+Cypress.Commands.add('getPageListItem', (title) => {
+	Cypress.log()
+	return cy.contains('.page-list-drag-item .app-navigation-entry__name', new RegExp(`^${title}$`))
+		.closest('.page-list-drag-item')
 })
 
 Cypress.Commands.add('openPageMenu', (pageName) => {
 	Cypress.log()
-	cy.contains('.app-content-list-item', pageName)
-		.find('.action-item__menutoggle')
+	cy.contains('.page-list-item', pageName)
+		.find('> .app-navigation-entry .action-item__menutoggle')
 		.click({ force: true })
 })
 
@@ -31,11 +37,32 @@ Cypress.Commands.add('openCollective', (collectiveName) => {
 	cy.routeTo(collectiveName)
 })
 
+Cypress.Commands.add('openCollectiveSelector', () => {
+	Cypress.log()
+	cy.get('body').then(($body) => {
+		if ($body.find('.collective-selector-popover-content:visible').length === 0) {
+			cy.get('.collective-selector-trigger').click()
+		}
+	})
+	cy.get('.collective-selector-popover-content').should('be.visible')
+})
+
+Cypress.Commands.add('openNewCollectiveModal', () => {
+	Cypress.log()
+	cy.openCollectiveSelector()
+	cy.get('.collective-selector-popover-content button')
+		.contains('New collective')
+		.click()
+	cy.get('.collective-name input[type="text"]').should('be.focused')
+})
+
 Cypress.Commands.add('openCollectiveMenu', (collectiveName) => {
 	Cypress.log()
+	cy.openCollectiveSelector()
 	cy.get('.collectives_list_item')
 		.contains('li', collectiveName)
-		.find('.action-item__menutoggle')
+		.click()
+	cy.get('.collective-selector-actions .action-item__menutoggle')
 		.click({ force: true })
 })
 

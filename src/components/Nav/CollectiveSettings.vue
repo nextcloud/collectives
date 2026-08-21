@@ -144,6 +144,7 @@ import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { memberLevels, pageModes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import displayError from '../../util/displayError.js'
 
@@ -269,6 +270,7 @@ export default {
 		]),
 
 		...mapActions(useCirclesStore, ['renameCircle']),
+		...mapActions(usePagesStore, ['clearPagesForCollective']),
 		...mapActions(useCollectivesStore, [
 			'setSettingsCollectiveId',
 			'trashCollective',
@@ -336,6 +338,8 @@ export default {
 
 			// Push new router path if currentCollective was renamed
 			if (redirect) {
+				// Clear pages so a reload can't render a page with a stale pre-rename collectivePath
+				this.clearPagesForCollective(this.collective)
 				this.$router.go(0)
 			}
 
@@ -346,13 +350,13 @@ export default {
 		 * Trash a collective with the given name
 		 */
 		async onTrashCollective() {
-			if (this.collectiveId === this.collective.id) {
-				await this.$router.push('/')
-				emit('toggle-navigation', { open: true })
-			}
 			try {
 				await this.trashCollective(this.collective)
 				emit('collectives:navigation:collective-trashed')
+				if (this.collectiveId === this.collective.id) {
+					await this.$router.push('/')
+					emit('toggle-navigation', { open: true })
+				}
 			} catch (e) {
 				displayError('Could not move the collective to trash')(e)
 			} finally {

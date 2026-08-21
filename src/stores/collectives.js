@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { useLocalStorage } from '@vueuse/core'
+import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import * as api from '../apis/collectives/index.js'
 import { memberLevels } from '../constants.js'
@@ -21,6 +21,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		collectivesState: useLocalStorage(STORE_PREFIX + 'collectives', []),
 		publicCollectivesState: useLocalStorage(STORE_PREFIX + 'publicCollectives', {}),
 		trashCollectives: useLocalStorage(STORE_PREFIX + 'trashCollectives', []),
+		lastVisitedCollectiveId: useLocalStorage(STORE_PREFIX + 'lastVisitedCollectiveId', null, { serializer: StorageSerializers.number }),
 		trashCollectivesLoaded: false,
 		updatedCollective: undefined,
 		templatesCollectiveId: undefined,
@@ -190,6 +191,10 @@ export const useCollectivesStore = defineStore('collectives', {
 			this.settingsCollectiveId = id
 		},
 
+		setLastVisitedCollectiveId(id) {
+			this.lastVisitedCollectiveId = id
+		},
+
 		/**
 		 * Get list of all collectives
 		 */
@@ -279,6 +284,9 @@ export const useCollectivesStore = defineStore('collectives', {
 			const collective = response.data.ocs.data.collective
 			removeFrom(this.collectives, collective)
 			this.trashCollectives.unshift(collective)
+			if (this.lastVisitedCollectiveId === collective.id) {
+				this.lastVisitedCollectiveId = null
+			}
 		},
 
 		/**
@@ -308,6 +316,9 @@ export const useCollectivesStore = defineStore('collectives', {
 			this.trashCollectives.splice(this.trashCollectives.findIndex((c) => c.id === collective.id), 1)
 			if (circle) {
 				circlesStore.deleteCircleForCollectiveFromState(collective)
+			}
+			if (this.lastVisitedCollectiveId === collective.id) {
+				this.lastVisitedCollectiveId = null
 			}
 		},
 

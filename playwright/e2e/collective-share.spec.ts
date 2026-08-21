@@ -29,9 +29,9 @@ test.describe('Collective share', () => {
 
 		// Allows to filter pages
 		await expect(sharePageList.el).toBeVisible()
-		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(3)
-		await sharePageList.filter.fill('page')
 		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(2)
+		await sharePageList.filter.fill('page')
+		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(1)
 	})
 
 	test('Create read-write share and open share unauthenticated', async ({ page, collective, pageSidebar, sharePage, shareEditor, sharePageList, shareTitleBar }) => {
@@ -56,8 +56,8 @@ test.describe('Collective share', () => {
 		await expect(shareEditor.getContent()).toHaveText('Edited content')
 
 		// Create a new page
-		await sharePageList.addPage(collective.data.name)
-		await shareEditor.editor.locator('.ProseMirror').waitFor({ state: 'visible' })
+		await sharePageList.addTopLevelPage()
+		await shareEditor.contentLocator(true).waitFor({ state: 'visible' })
 		await shareTitleBar.title.fill('First page')
 		await shareTitleBar.title.press('Enter')
 
