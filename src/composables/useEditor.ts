@@ -63,9 +63,7 @@ export function useEditor(davContent: Ref<string>) {
 		return !!pageContent.value || !rootStore.loading('pageContent')
 	})
 
-	onBeforeUnmount(() => {
-		editorPromise?.then((ed) => ed.destroy())
-	})
+	onBeforeUnmount(destroyEditor)
 
 	watch(showCurrentPageOutline, (value) => {
 		editor.value?.setShowOutline(value)
@@ -138,9 +136,21 @@ export function useEditor(davContent: Ref<string>) {
 		editor.value = markRaw(await editorPromise as TextEditorInstance)
 	}
 
+	/** Destroy the current or pending editor and clear its delayed state. */
+	async function destroyEditor() {
+		const pendingEditor = editorPromise
+		editorPromise = null
+		const instance = await pendingEditor
+		updateEditorContentDebounced.clear()
+		editor.value = null
+		editorContent.value = null
+		instance?.destroy()
+	}
+
 	return {
 		contentLoaded,
 		davContent,
+		destroyEditor,
 		editor,
 		editorEl,
 		editorContent,

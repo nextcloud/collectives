@@ -39,7 +39,7 @@
 			<SidebarTabSharing v-if="showingSidebar" :pageId="currentPageId" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
-			v-if="!isPublic && currentCollectiveCanEdit"
+			v-if="!isPublic"
 			id="versions"
 			:order="3"
 			:name="t('collectives', 'Versions')">
@@ -90,10 +90,7 @@ export default {
 
 	computed: {
 		...mapState(useRootStore, ['activeSidebarTab', 'isPublic', 'showingSidebar']),
-		...mapState(useCollectivesStore, [
-			'currentCollectiveCanEdit',
-			'currentCollectiveCanShare',
-		]),
+		...mapState(useCollectivesStore, ['currentCollectiveCanShare']),
 
 		...mapState(usePagesStore, ['currentPage', 'currentPageId', 'title']),
 
