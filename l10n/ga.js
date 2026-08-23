@@ -75,6 +75,7 @@ OC.L10N.register(
     "Members of collective {name}" : "Baill de {name} comhchoiteann",
     "Go to team overview" : "Téigh go dtí forbhreathnú na foirne",
     "Select a collective" : "Roghnaigh comhchoiteann",
+    "Collective actions" : "Gníomhartha comhchoiteanna",
     "New collective" : "Comhchoiteann nua",
     "Change emoji" : "Athraigh emoji",
     "Add emoji" : "Cuir emoji leis",

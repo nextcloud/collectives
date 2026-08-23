@@ -75,6 +75,7 @@ OC.L10N.register(
     "Members of collective {name}" : "Mitglieder des Kollektivs {name}",
     "Go to team overview" : "Gehe zur Teamübersicht",
     "Select a collective" : "Wähle ein Kollektiv aus",
+    "Collective actions" : "Kollektiv-Aktionen",
     "New collective" : "Neues Kollektiv",
     "Change emoji" : "Den Emoji ändern",
     "Add emoji" : "Ein Emoji auswählen",
