@@ -75,6 +75,7 @@ OC.L10N.register(
     "Members of collective {name}" : "{name} vabaühenduse liikmed",
     "Go to team overview" : "Ava tiimi ülevaade",
     "Select a collective" : "Vali vabaühendus",
+    "Collective actions" : "Vabaühendusega seotud tegevused",
     "New collective" : "Uus vabaühendus",
     "Change emoji" : "Muuda emojit",
     "Add emoji" : "Lisa emoji",

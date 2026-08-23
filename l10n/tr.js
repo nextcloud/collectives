@@ -75,6 +75,7 @@ OC.L10N.register(
     "Members of collective {name}" : "{name} topluluğunun üyeleri",
     "Go to team overview" : "Takım özetine git",
     "Select a collective" : "Bir topluluk seçin",
+    "Collective actions" : "Topluluk işlemleri",
     "New collective" : "Yeni topluluk",
     "Change emoji" : "Emojiyi değiştir",
     "Add emoji" : "Emoji ekle",
