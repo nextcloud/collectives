@@ -9,6 +9,8 @@ OC.L10N.register(
     "Welcome %s" : "Bienvenue dans %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Ajoutez des pages avec le ➕ dans la liste des pages ! Vous pouvez les faire glisser pour modifier leur ordre. En les faisant glisser dans l'éditeur, un lien 🔗 sera créé.",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Appuyez sur `✏️ Modifier` pour modifier ce texte et vous approprier cet espace ! Plusieurs personnes peuvent le modifier simultanément. Pour en savoir plus, consultez la [documentation](https://docs.nextcloud.com/server/latest/user_manual/en/collectives/index.html) ou posez vos questions à [la communauté](https://help.nextcloud.com/tag/collectives-app).",
+    "{user} updated {page} in {collective}" : "{user} a mis à jour {page} dans {collective}",
+    "{user} deleted {page} from {collective}" : "{user} a supprimé {page} de {collective}",
     "Collective pages" : "Pages de Collectifs",
     "In collective %1$s" : "Dans le collectif %1$s",
     "Last edition %1$s" : "Dernière modification le %1$s",
