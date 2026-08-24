@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.6.0 - 2026.08.24
+
+### ✨New
+* 🚀 Navigation dropdown to select collective (#2682)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+
+
 ## 4.5.0 - 2026.08.13
 
 ### ✨New
