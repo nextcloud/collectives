@@ -30,6 +30,7 @@ OC.L10N.register(
     "Hide outline" : "Сокриј контура",
     "Show outline" : "Прикажи контура",
     "Remove from favorites" : "Избриши од фаворити",
+    "Add to favorites" : "Додади во фаворити",
     "Manage tags" : "Уреди ги ознаките",
     "Move or copy" : "Премести или копирај",
     "Download" : "Преземи",
