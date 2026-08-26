@@ -14,6 +14,7 @@ use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCA\Guests\GuestManager;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -25,6 +26,7 @@ use OCP\Constants;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -50,6 +52,10 @@ class CollectiveController extends OCSController {
 
 	private function getUserLang(): string {
 		return $this->l10nFactory->getUserLanguage($this->userSession->getUser());
+	}
+
+	private function isGuest(): bool {
+		return class_exists(GuestManager::class) && Server::get(GuestManager::class)->isGuest($this->userId);
 	}
 
 	/**
@@ -82,6 +88,10 @@ class CollectiveController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function create(string $name, ?string $emoji = null): DataResponse {
+		if ($this->isGuest()) {
+			throw new OCSForbiddenException('Guests are not allowed to create collectives');
+		}
+		
 		try {
 			[$collective, $info] = $this->handleErrorResponse(function () use ($name, $emoji): array {
 				[$collective, $info] = $this->service->createCollective(

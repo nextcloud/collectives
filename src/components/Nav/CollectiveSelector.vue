@@ -68,6 +68,7 @@
 						<template v-if="!isPublic">
 							<hr class="collective-selector-divider">
 							<NcAppNavigationNew
+								v-if="!isGuest"
 								:text="t('collectives', 'New collective')"
 								:disabled="!networkOnline"
 								variant="tertiary"
@@ -169,7 +170,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading']),
+		...mapState(useRootStore, ['isGuest', 'isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
 			'collectivePath',
 			'currentCollective',

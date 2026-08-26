@@ -6,6 +6,7 @@
 import { useSessionStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { editorApiAttachments, editorApiReaderFileId, editorApiUpdateReadonlyBarProps } from '../constants.js'
+import { loadState } from '@nextcloud/initial-state'
 
 const STORE_PREFIX = 'collectives/pinia/root/'
 
@@ -23,6 +24,7 @@ export const useRootStore = defineStore('root', {
 		shareTokenParam: '',
 		fileIdQuery: '',
 		listenPush: false,
+		isGuest: loadState('collectives', 'isGuest', false),
 	}),
 
 	getters: {
