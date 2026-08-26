@@ -15,6 +15,7 @@
 			</template>
 			<template #action>
 				<NcButton
+					v-if="!isGuest"
 					:aria-label="t('collectives', 'Create new collective')"
 					:variant="buttonVariant"
 					:disabled="!networkOnline"
@@ -68,7 +69,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['loading']),
+		...mapState(useRootStore, ['loading', 'isGuest']),
 		...mapState(useCollectivesStore, ['sortedCollectives', 'lastVisitedCollectiveId', 'collectivePath']),
 
 		targetCollective() {

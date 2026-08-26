@@ -13,6 +13,7 @@ use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Guests\GuestManager;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Services\IInitialState;
@@ -21,6 +22,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\Template\ITemplateManager;
 use OCP\IUserSession;
+use OCP\Server;
 use OCP\Util;
 
 /** @template-implements IEventListener<Event|BeforeTemplateRenderedEvent> */
@@ -43,6 +45,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		}
 
 		$userFolder = '';
+		$isGuest = false;
 		if ($event->isLoggedIn()) {
 			Util::addStyle(Application::APP_NAME, Application::APP_NAME . '-icons');
 
@@ -52,6 +55,10 @@ class BeforeTemplateRenderedListener implements IEventListener {
 				throw new NotFoundException('Session user not found');
 			}
 			$userFolder = $this->userFolderHelper->getUserFolderSetting($userId);
+
+			if (class_exists(GuestManager::class)) {
+				$isGuest = Server::get(GuestManager::class)->isGuest($userId);
+			}
 		}
 
 		Util::addInitScript('collectives', 'collectives-init');
@@ -65,5 +72,6 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		// Provide Collectives user folder as initial state
 		$this->initialState->provideInitialState('user_folder', $userFolder);
 		$this->initialState->provideInitialState('templates', $this->templateManager->listCreators());
+        $this->initialState->provideInitialState('isGuest', $isGuest);
 	}
 }
