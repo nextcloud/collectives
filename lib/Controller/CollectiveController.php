@@ -54,6 +54,9 @@ class CollectiveController extends OCSController {
 		return $this->l10nFactory->getUserLanguage($this->userSession->getUser());
 	}
 
+	/**
+	* @psalm-suppress UndefinedDocblockClass
+	*/
 	private function isGuest(): bool {
 		return class_exists(GuestManager::class) && Server::get(GuestManager::class)->isGuest($this->userId);
 	}
