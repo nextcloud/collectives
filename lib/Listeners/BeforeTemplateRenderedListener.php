@@ -72,6 +72,6 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		// Provide Collectives user folder as initial state
 		$this->initialState->provideInitialState('user_folder', $userFolder);
 		$this->initialState->provideInitialState('templates', $this->templateManager->listCreators());
-		$this->initialState->provideInitialState('isGuest', $isGuest);
+		$this->initialState->provideInitialState('is_guest', $isGuest);
 	}
 }
