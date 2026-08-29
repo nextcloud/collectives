@@ -74,6 +74,14 @@ jobs:
           path: apps/circles
           ref: ${{ matrix.server-versions }}
 
+      - name: Checkout guests app
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          repository: nextcloud/guests
+          path: apps/guests
+          ref: main
+
       - name: Checkout app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -103,6 +111,8 @@ jobs:
           ./occ maintenance:install --verbose --database=sqlite --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           ./occ config:system:set --value="http://localhost:8080" -- overwrite.cli.url
           ./occ app:enable --force ${{ env.APP_NAME }}
+          ./occ app:install --force guests
+          OC_PASS=guest ./occ guest:add --password-from-env admin guest@example.org --uid guest
           for user in alice bob jane john; do \
           OC_PASS="$user" ./occ user:add --password-from-env "$user"; \
           done
