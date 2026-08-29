@@ -91,7 +91,7 @@ class CollectiveController extends OCSController {
 		if ($this->isGuest()) {
 			throw new OCSForbiddenException('Guests are not allowed to create collectives');
 		}
-		
+
 		try {
 			[$collective, $info] = $this->handleErrorResponse(function () use ($name, $emoji): array {
 				[$collective, $info] = $this->service->createCollective(
