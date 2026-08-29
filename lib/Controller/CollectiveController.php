@@ -55,8 +55,8 @@ class CollectiveController extends OCSController {
 	}
 
 	/**
-	* @psalm-suppress UndefinedDocblockClass
-	*/
+	 * @psalm-suppress UndefinedDocblockClass
+	 */
 	private function isGuest(): bool {
 		return class_exists(GuestManager::class) && Server::get(GuestManager::class)->isGuest($this->userId);
 	}
