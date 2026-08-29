@@ -243,6 +243,7 @@ export default {
 	display: flex;
 	align-items: center;
 	gap: 2px;
+	padding-block-start: calc(2 * var(--default-grid-baseline));
 	padding-inline: 4px;
 }
 
