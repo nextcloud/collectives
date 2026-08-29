@@ -52,12 +52,11 @@
 			</template>
 			<template #default>
 				<div class="collective-selector-popover-content">
+					<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
 					<template v-if="loading('collectives')">
-						<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
 						<SkeletonLoading type="items" :count="3" />
 					</template>
 					<template v-else>
-						<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
 						<ul class="collective-selector-list" @click="showSelector = false">
 							<CollectiveListItem
 								v-for="collective in sortedCollectives"
@@ -313,6 +312,8 @@ export default {
 }
 
 .collective-selector-list {
+	overflow-y: auto;
+
 	:deep(.app-navigation-entry) {
 		margin: 2px 4px;
 		width: calc(100% - 8px);
@@ -329,6 +330,11 @@ export default {
 }
 
 .collective-selector-popover-content {
+	display: flex;
+	flex-direction: column;
+	// Global header, trigger button and spacing
+	max-height: calc(100vh - var(--header-height) - var(--default-clickable-area) - 8 * var(--default-grid-baseline));
+
 	:deep(.new-collective-button) {
 		padding: 0 2px 4px 4px;
 	}
