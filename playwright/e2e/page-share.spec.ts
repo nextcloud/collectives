@@ -89,7 +89,7 @@ test.describe('Page share enforced password protection', () => {
 	})
 
 	test('Fails to create share with weak password', async ({ page }) => {
-		await shareActionsPanel.locator('input[autocomplete="new-password"]').pressSequentially('password')
+		await shareActionsPanel.locator('input[autocomplete="new-password"]').fill('password')
 		await shareActionsPanel.getByRole('button', { name: 'Create share' }).click()
 		await expect(page.locator('.toast-error')).toContainText('most common')
 	})
