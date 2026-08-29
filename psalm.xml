@@ -37,6 +37,7 @@
 				<referencedClass name="Doctrine\DBAL\Types\Type" />
 				<referencedClass name="OCP\SetupCheck\ISetupCheck" />
 				<referencedClass name="OCA\Richdocuments\Db\WopiMapper" />
+				<referencedClass name="OCA\Guests\GuestManager" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>

@@ -43,6 +43,9 @@ Feature: collective
   Scenario: Trash an owned collective
     When user "jane" trashes collective "BehatCollective"
 
+  Scenario: Fail to create a collective as guest
+    Then user "guest" fails to create collective "BehatGuestCollective"
+
   Scenario: Fail to delete a team via teams API
     Then user "jane" fails to delete team "BehatCollective"
 
