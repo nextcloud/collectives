@@ -24,7 +24,7 @@ export const useRootStore = defineStore('root', {
 		shareTokenParam: '',
 		fileIdQuery: '',
 		listenPush: false,
-		isGuest: loadState('collectives', 'isGuest', false),
+		isGuest: loadState('collectives', 'is_guest', false),
 	}),
 
 	getters: {
