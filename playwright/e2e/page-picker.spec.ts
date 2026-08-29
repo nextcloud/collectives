@@ -43,6 +43,17 @@ test.describe('Custom page picker - local search', () => {
 		await expect(pageWidget).toHaveAttribute('href', origin + targetPage.getPageUrl())
 	})
 
+	test('link to local page has page title as link text', async ({ page, editor }) => {
+		const targetPageItem = editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Target page' })
+		await targetPageItem.click()
+
+		const targetPagePreview = editor.getContent().locator('.preview').filter({ hasText: 'Target page' })
+		await targetPagePreview.getByLabel('Actions').click()
+		await page.getByRole('menuitemradio', { name: 'Text only' }).click()
+
+		await expect(editor.getContent().getByRole('link', { name: 'Target page', exact: true })).toBeVisible()
+	})
+
 	test('searching "landing page" lists landing pages', async ({ editor }) => {
 		await editor.pagePickerSearch.pressSequentially('landing page')
 
