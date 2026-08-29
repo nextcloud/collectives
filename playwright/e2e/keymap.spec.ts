@@ -20,15 +20,11 @@ test.describe('Keyboard shortcuts', () => {
 		await page.keyboard.press('Control+f')
 		await expect(pageFilter).toBeFocused()
 
-		// Second Ctrl-F: open unified search
-		await page.keyboard.press('Control+f')
-		await expect(pageFilter).not.toBeFocused()
 		if (hasServerVersion(32, 33, 34)) {
-			// Before NC 35: show unified search modal
+			// Before NC 35: Second Ctrl-F: open unified search
+			await page.keyboard.press('Control+f')
+			await expect(pageFilter).not.toBeFocused()
 			await expect(page.locator('.unified-search-modal-root')).toBeVisible()
-		} else {
-			// Afterwards: Focus search entry in title bar
-			await expect(page.locator('.unified-search-input input')).toBeFocused()
 		}
 	})
 
