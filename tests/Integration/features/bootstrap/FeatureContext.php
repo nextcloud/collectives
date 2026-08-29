@@ -72,7 +72,7 @@ class FeatureContext implements Context {
 		$formData = new TableNode([['name', $collective]]);
 		$this->sendOcsCollectivesRequest('POST', 'collectives', $formData);
 		if ($fail === 'fails') {
-			$this->assertStatusCode(400);
+			$this->assertStatusCode($user === 'guest' ? 403 : 400);
 		} else {
 			$this->assertStatusCode(200);
 			$this->assertCollectiveLevel($collective, 9);
