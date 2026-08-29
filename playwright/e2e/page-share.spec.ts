@@ -10,6 +10,7 @@ import { expect, mergeTests } from '@playwright/test'
 import { test as collectiveShareTest } from '../support/fixtures/collective-share.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
+import { ocsHeaders } from '../support/helpers/urls.ts'
 
 const test = mergeTests(createCollectiveTest, pageSidebarTest, collectiveShareTest)
 
@@ -37,6 +38,8 @@ test.describe('Page share', () => {
 })
 
 test.describe('Page share enforced password protection', () => {
+	test.slow()
+
 	let sharingTab: Locator
 	let shareActionsPanel: Locator
 
@@ -52,6 +55,14 @@ test.describe('Page share enforced password protection', () => {
 
 	test.beforeEach(async ({ user, page, collective, pageSidebar }) => {
 		await runOcc(['app:enable', '--force', 'password_policy'])
+
+		// Dirty hack to wait for config changes to propagate through cache
+		await expect.poll(async () => {
+			const resp = await page.request.get('/ocs/v2.php/cloud/capabilities?format=json', { headers: ocsHeaders, failOnStatusCode: true })
+			const caps = await resp.json()
+			return caps.ocs.data.capabilities.files_sharing?.public?.password?.enforced
+		}, { timeout: 15_000, intervals: [500] }).toBe(true)
+
 		const collectivePage = await collective.createPage({ title: 'Sharepage', content: 'Some content', user, page })
 		await collectivePage.open()
 
