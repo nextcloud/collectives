@@ -80,6 +80,7 @@ import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import escapeHtml from 'escape-html'
 import { mapActions, mapState } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -323,7 +324,7 @@ export default {
 			// Set drag data
 			const path = generateUrl(`/apps/collectives${this.to}`)
 			const href = new URL(path, window.location).href
-			const html = `<a href=${href}>${this.title}</a>`
+			const html = `<a href=${escapeHtml(href)}>${escapeHtml(this.title)}</a>`
 			event.dataTransfer.effectAllowed = 'copyMove'
 			event.dataTransfer.setData('text/plain', href)
 			event.dataTransfer.setData('text/uri-list', href)
