@@ -38,7 +38,7 @@ export const usePagesStore = defineStore('pages', {
 		readerEmbeddedAttachmentSrcs: [],
 		highlightPageId: null,
 		highlightAnimationPageId: null,
-		isDragoverTargetPage: false,
+		dragoverTargetPageId: null,
 		draggedPageId: null,
 	}),
 
@@ -470,6 +470,8 @@ export const usePagesStore = defineStore('pages', {
 				? collectivesStore.currentCollective.name
 				: state.currentPage.title
 		},
+
+		isDragoverTargetPage: (state) => state.dragoverTargetPageId !== null,
 	},
 
 	actions: {
@@ -555,8 +557,8 @@ export const usePagesStore = defineStore('pages', {
 			this.highlightAnimationPageId = pageId
 		},
 
-		setDragoverTargetPage(bool) {
-			this.isDragoverTargetPage = bool
+		setDragoverTargetPageId(pageId) {
+			this.dragoverTargetPageId = pageId
 		},
 
 		setDraggedPageId(pageId) {
