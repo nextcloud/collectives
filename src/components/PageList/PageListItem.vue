@@ -373,7 +373,16 @@ export default {
 		},
 
 		onDrop(event) {
-			if (this.isDropTarget
+			clearTimeout(this.dragoverTimer)
+			this.isHighlightedTarget = false
+
+			// Only the armed target claims the drop. A drop bubbling up from a subpage
+			// must fall through to the highlighted ancestor without clearing drag state.
+			if (this.dragoverTargetPageId !== this.pageId) {
+				return
+			}
+
+			if (this.isPotentialDropTarget
 				// Ignore if self is direct parent of dragged element
 				&& this.pageParent(this.draggedPageId) !== this.pageId) {
 				// Claim this drop: prevent it from also bubbling to sortable.js's
@@ -382,8 +391,6 @@ export default {
 				event.stopPropagation()
 				this.move(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
 			}
-			clearTimeout(this.dragoverTimer)
-			this.isHighlightedTarget = false
 			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
 		},
