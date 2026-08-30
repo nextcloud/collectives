@@ -6,7 +6,7 @@
 <template>
 	<NcListItem
 		:name="attachment.name"
-		:href="davUrl"
+		:href="isPublic ? davUrl : filesUrl"
 		forceDisplayActions
 		class="attachment"
 		:class="{ mobile: isMobile }"
