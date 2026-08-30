@@ -97,7 +97,7 @@ class PublicTagController extends CollectivesPublicOCSController {
 	 * 200: Tags returned
 	 */
 	#[PublicPage]
-	#[AnonRateLimit(limit: 10, period: 10)]
+	#[AnonRateLimit(limit: 20, period: 10)]
 	public function index(): DataResponse {
 		$tags = $this->handleErrorResponse(function (): array {
 			$owner = $this->getCollectiveShare()->getOwner();
