@@ -402,7 +402,8 @@ export default {
 	}
 
 	&.highlight-target > :deep(.app-navigation-entry) {
-		border: 1px solid var(--color-border-maxcontrast);
+		outline: 1px solid var(--color-border-maxcontrast);
+		outline-offset: -1px;
 	}
 
 	&.dragged-over-target {
