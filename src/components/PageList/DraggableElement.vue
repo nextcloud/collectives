@@ -11,7 +11,6 @@
 		:class="{ 'dragover-target-active': isDragoverTargetPage }"
 		:group="{ name: 'page-list', pull: true, put: true }"
 		draggable=".page-list-drag-item"
-		filter=".page-list-nodrag-item"
 		:sort="allowSorting"
 		:revertOnSpill="true"
 		:fallbackTolerance="5"
@@ -23,7 +22,6 @@
 		:swapThreshold
 		:emptyInsertThreshold="4"
 		direction="vertical"
-		:setData="setData"
 		@change="onChange"
 		@move="onMove"
 		@update="onUpdate"
@@ -46,11 +44,6 @@ import { defineComponent } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'
-
-// Sortable.js sets `originalEvent` on the event it dispatches, but it's missing in its types
-interface SortableDragEvent extends DraggableEvent {
-	originalEvent: DragEvent
-}
 
 // Direction to insert the dragged element in relative to the related element
 type SwapDirection = boolean | -1 | 1 | undefined
@@ -85,7 +78,6 @@ export default defineComponent({
 
 	data() {
 		return {
-			sortableActive: false,
 			swapThreshold: 0.65,
 		}
 	},
@@ -107,8 +99,6 @@ export default defineComponent({
 		disabled(): boolean {
 			// IMPORTANT: needs to be synchronized with custom drag/drop events in PageListItem.vue
 			return this.disableDragndropSortOrMove
-				// Disable during Sortable move/sort operation
-				|| this.sortableActive
 				// Disable if disabled by parent component (e.g. in filtered view)
 				|| this.disableSorting
 		},
@@ -116,18 +106,6 @@ export default defineComponent({
 
 	methods: {
 		...mapActions(usePagesStore, ['setHighlightPageId']),
-
-		getComponentData() {
-			return {
-				on: {
-					change: this.onChange,
-				},
-			}
-		},
-
-		setData(dataTransfer: DataTransfer, dragEl: HTMLElement) {
-			dataTransfer.setData('pageId', dragEl.dataset.pageId ?? '')
-		},
 
 		// Dragged element changes position
 		onChange(event: DraggableEvent) {
@@ -202,18 +180,14 @@ export default defineComponent({
 		// Dragged element changes position inside a list
 		onUpdate(event: DraggableEvent) {
 			// Sorting in one list
-			this.sortableActive = true
-			const { originalEvent } = event as SortableDragEvent
-			const pageId = Number(originalEvent.dataTransfer?.getData('pageId'))
+			const pageId = Number(event.item.dataset.pageId)
 			const parentId = Number(event.to.dataset.parentId)
 			this.subpageOrderUpdate(parentId, pageId, event.newDraggableIndex ?? 0)
-			this.sortableActive = false
 		},
 
 		// Dragged element is added to another list
 		onAdd(event: DraggableEvent) {
-			const { originalEvent } = event as SortableDragEvent
-			const pageId = Number(originalEvent.dataTransfer?.getData('pageId'))
+			const pageId = Number(event.item.dataset.pageId)
 			const oldParentId = Number(event.from.dataset.parentId)
 			const newParentId = Number(event.to.dataset.parentId)
 
@@ -225,7 +199,6 @@ export default defineComponent({
 			}
 
 			// Moving from one list to another
-			this.sortableActive = true
 			let index = event.newDraggableIndex ?? Infinity
 			// Force-move items to the end of the list if sorting is disabled
 			if (!this.allowSorting) {
@@ -233,7 +206,6 @@ export default defineComponent({
 			}
 			this.expand(newParentId)
 			this.move(oldParentId, newParentId, pageId, index)
-			this.sortableActive = false
 		},
 
 		// Element stops being dragged
