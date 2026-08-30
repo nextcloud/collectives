@@ -33,9 +33,9 @@ test.describe('Page list drag and drop', () => {
 
 		await page1El.hover()
 		await page.mouse.down()
-		// Trigger `hover()` two times, See https://playwright.dev/docs/input#dragging-manually
-		await page2El.hover()
-		await page2El.hover({ position: { x: 10, y: 0 } })
+		await page2El.hover({ position: { x: 10, y: 5 } })
+		// Wait for sortable.js animation to move target
+		await expect(page2El).toHaveCSS('transform', 'none')
 		await page.mouse.up()
 		await pageList.expectPageListOrder([page3.data.title, page1.data.title, page2.data.title])
 	})
@@ -50,8 +50,6 @@ test.describe('Page list drag and drop', () => {
 
 		await page1El.hover()
 		await page.mouse.down()
-		// Trigger `hover()` two times, See https://playwright.dev/docs/input#dragging-manually
-		await page3El.hover()
 		await page3El.hover()
 		// Wait for timeout in PageListItem.vue onDragover()
 		await page.waitForTimeout(21)

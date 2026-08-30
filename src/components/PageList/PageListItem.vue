@@ -208,6 +208,7 @@ export default {
 			'currentPage',
 			'disableDragndropSortOrMove',
 			'draggedPageId',
+			'dragoverTargetPageId',
 			'highlightAnimationPageId',
 			'highlightPageId',
 			'isDragoverTargetPage',
@@ -266,11 +267,6 @@ export default {
 				&& !this.pageParents(this.pageId).some((page) => page.id === this.draggedPageId)
 		},
 
-		isDropTarget() {
-			return this.isPotentialDropTarget
-				&& this.isDragoverTargetPage
-		},
-
 		isHighlightAnimation() {
 			return this.highlightAnimationPageId === this.pageId
 		},
@@ -288,7 +284,7 @@ export default {
 
 		...mapActions(usePagesStore, [
 			'expand',
-			'setDragoverTargetPage',
+			'setDragoverTargetPageId',
 			'setDraggedPageId',
 			'toggleCollapsed',
 		]),
@@ -337,7 +333,7 @@ export default {
 		onDragend() {
 			clearTimeout(this.dragoverTimer)
 			this.isHighlightedTarget = false
-			this.setDragoverTargetPage(false)
+			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
 		},
 
@@ -348,25 +344,31 @@ export default {
 				return
 			}
 
+			// Don't steal highlight from an ancestor that is already the nest-into target
+			if (this.dragoverTargetPageId && this.pageParents(this.pageId).some((p) => p.id === this.dragoverTargetPageId)) {
+				return
+			}
+
 			if (this.isPotentialDropTarget) {
 				clearTimeout(this.dragoverTimer)
 				this.dragoverTimer = setTimeout(() => {
 					this.isHighlightedTarget = true
-					this.setDragoverTargetPage(true)
+					this.setDragoverTargetPageId(this.pageId)
 				}, 20)
 			}
 		},
 
 		onDragleave(event) {
-			// Ignore dragleave events that bubbled from a nested subpage item
-			const sourcePageId = Number(event.target.closest('[data-page-id]')?.dataset.pageId)
-			if (sourcePageId !== this.pageId) {
+			// Ignore dragleave events from other pages
+			if (this.$el.contains(event.relatedTarget)) {
 				return
 			}
 
 			clearTimeout(this.dragoverTimer)
 			this.isHighlightedTarget = false
-			this.setDragoverTargetPage(false)
+			if (this.dragoverTargetPageId === this.pageId) {
+				this.setDragoverTargetPageId(null)
+			}
 		},
 
 		onDrop(event) {
@@ -381,7 +383,7 @@ export default {
 			}
 			clearTimeout(this.dragoverTimer)
 			this.isHighlightedTarget = false
-			this.setDragoverTargetPage(false)
+			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
 		},
 	},

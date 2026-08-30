@@ -20,7 +20,7 @@
 		:delayOnTouchOnly="true"
 		:touchStartThreshold="3"
 		:invertSwap="true"
-		:swapThreshold="0.65"
+		:swapThreshold
 		:emptyInsertThreshold="4"
 		direction="vertical"
 		:setData="setData"
@@ -74,6 +74,7 @@ export default {
 		return {
 			sortableActive: false,
 			dragoverPageId: 0,
+			swapThreshold: 0.65,
 		}
 	},
 
@@ -143,6 +144,50 @@ export default {
 					return false
 				}
 			}
+
+			return this.swapDirection(ev)
+		},
+
+		// Recompute the swap direction relative to the page row of the related element.
+		//
+		// Sortable.js derives the swap zones from the bounding box of the related element.
+		// For an expanded page that box spans the entire subtree, so the `insert before`
+		// zone covers the whole page row and the ghost jumps above the page as soon as
+		// it's dragged onto it. Deriving the zones from the page row instead restores the
+		// neutral zone in the middle of the row that's needed to drop a page into it.
+		swapDirection(ev) {
+			const row = ev.related.querySelector(':scope > .app-navigation-entry')
+			const posY = ev.originalEvent.clientY
+
+			// Only handle swaps with the pointer inside the related element
+			if (!row || posY < ev.relatedRect.top || posY > ev.relatedRect.bottom) {
+				return
+			}
+
+			// Pointer is next to the subpages of an expanded page, not on the page row itself
+			const rowRect = row.getBoundingClientRect()
+			if (posY < rowRect.top || posY > rowRect.bottom) {
+				return false
+			}
+
+			// Same swap zone that Sortable.js applies to a page without visible subpages
+			const margin = rowRect.height * this.swapThreshold / 2
+			if (posY < rowRect.top + margin) {
+				return -1
+			}
+
+			// Subpages are only rendered while the page is expanded
+			const hasVisibleSubpages = !!ev.related.querySelector('.page-list-drag-item')
+
+			// Inserting after a page with visible subpages would move the ghost below its
+			// entire subtree, far away from the pointer. Keep that zone neutral instead,
+			// it's used to drop the dragged page into the page anyway.
+			if (posY > rowRect.bottom - margin && !hasVisibleSubpages) {
+				return 1
+			}
+
+			// Neutral zone in the middle of the page row: leave the ghost where it is
+			return false
 		},
 
 		// Dragged element changes position inside a list
