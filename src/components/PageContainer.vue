@@ -87,7 +87,7 @@ export default {
 
 		networkOnline: function(val) {
 			if (val && this.loadPending) {
-				this.getAttachmentsForPage(true)
+				this.getAttachmentsForPage(false)
 			}
 		},
 	},
@@ -95,15 +95,15 @@ export default {
 	mounted() {
 		this.getAttachmentsForPage(true)
 		// Reload attachment list on event from Text
-		subscribe('text:image-node:add', this.getAttachmentsForPage)
+		subscribe('text:image-node:add', this.onAttachmentsEvent)
 		subscribe('collectives:page-sidebar', this.toggleSidebar)
 
 		// Reload attachment list on filesystem changes
-		listen('notify_file', this.getAttachmentsForPage.bind(this))
+		listen('notify_file', this.onAttachmentsEvent.bind(this))
 	},
 
 	beforeUnmount() {
-		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
+		unsubscribe('text:image-node:add', this.onAttachmentsEvent)
 		unsubscribe('collectives:page-sidebar', this.toggleSidebar)
 	},
 
@@ -135,7 +135,7 @@ export default {
 		 *
 		 * @param {boolean} setLoading Whether to set loading attribute
 		 */
-		async getAttachmentsForPage(setLoading) {
+		async getAttachmentsForPage(setLoading = false) {
 			this.loadPending = true
 			if (!this.networkOnline) {
 				return
@@ -154,6 +154,10 @@ export default {
 			} finally {
 				this.done('attachments')
 			}
+		},
+
+		onAttachmentsEvent() {
+			this.getAttachmentsForPage(false)
 		},
 
 		toggleSidebar({ open, tab }) {
