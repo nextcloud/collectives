@@ -53,6 +53,24 @@
 				</div>
 			</div>
 
+			<!-- uploading placeholders -->
+			<div v-if="uploadingFiles.length">
+				<div class="attachment-list-subheading">
+					{{ t('collectives', 'Uploading') }}
+				</div>
+				<NcListItem
+					v-for="upload in uploadingFiles"
+					:key="upload.id"
+					:name="upload.name">
+					<template #icon>
+						<NcLoadingIcon :size="48" />
+					</template>
+					<template #subname>
+						<progress :value="upload.progress" max="100" class="upload-progress" />
+					</template>
+				</NcListItem>
+			</div>
+
 			<!-- attachments lists -->
 			<div v-if="hasAttachments">
 				<!-- text attachments in page list -->
@@ -142,7 +160,7 @@
 
 			<!-- no attachments found -->
 			<NcEmptyContent
-				v-else
+				v-else-if="!uploadingFiles.length"
 				:name="t('collectives', 'No attachments')"
 				:description="noAttachmentsDescription">
 				<template #icon>
@@ -167,6 +185,7 @@ import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcListItem from '@nextcloud/vue/components/NcListItem'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
@@ -193,6 +212,7 @@ export default {
 		InformationIcon,
 		NcButton,
 		NcEmptyContent,
+		NcListItem,
 		NcLoadingIcon,
 		NcPopover,
 		OfflineContent,
@@ -211,6 +231,8 @@ export default {
 			isDragover: false,
 			renamedAttachment: null,
 			showRenameAttachmentsForm: false,
+			nextUploadId: 0,
+			uploadingFiles: [],
 		}
 	},
 
@@ -279,6 +301,13 @@ export default {
 		},
 	},
 
+	watch: {
+		'currentPage.id': function() {
+			this.nextUploadId = 0
+			this.uploadingFiles = []
+		},
+	},
+
 	methods: {
 		t,
 
@@ -330,11 +359,23 @@ export default {
 
 		async uploadAttachments(files) {
 			for (const file of files) {
+				const id = this.nextUploadId++
+				this.uploadingFiles.push({ id, name: file.name, progress: 0 })
 				try {
-					await this.uploadAttachment(file)
+					await this.uploadAttachment(file, (event) => {
+						const entry = this.uploadingFiles.find((u) => u.id === id)
+						if (entry && event.total) {
+							entry.progress = Math.round(event.loaded / event.total * 100)
+						}
+					})
 				} catch (e) {
 					console.error('Failed to upload attachment', e)
 					showError(t('collectives', 'Failed to upload attachment {name}', { name: file.name }))
+				} finally {
+					const index = this.uploadingFiles.findIndex((u) => u.id === id)
+					if (index !== -1) {
+						this.uploadingFiles.splice(index, 1)
+					}
 				}
 			}
 			this.$refs.fileInput.value = ''
@@ -457,6 +498,13 @@ export default {
 	.hint-icon {
 		color: var(--color-primary-element);
 	}
+}
+
+.upload-progress {
+	width: 100%;
+	height: 4px;
+	border: none;
+	accent-color: var(--color-primary-element);
 }
 
 .hint-body {
