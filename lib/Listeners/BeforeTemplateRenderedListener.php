@@ -11,9 +11,9 @@ namespace OCA\Collectives\Listeners;
 
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Service\PublishSettings;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Collectives\Service\PublishSettings;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Services\IInitialState;

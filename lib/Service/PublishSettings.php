@@ -16,7 +16,9 @@ class PublishSettings {
 	private const CONFIG_KEY_PUBLISH_ENABLED = 'publish_enabled';
 	private const DEFAULT_PUBLISH_ENABLED = 'false';
 
-	public function __construct(private readonly IAppConfig $appConfig) {
+	public function __construct(
+		private readonly IAppConfig $appConfig,
+	) {
 	}
 
 	public function isPublishEnabled(): bool {

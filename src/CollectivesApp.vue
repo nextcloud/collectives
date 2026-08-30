@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import { loadState } from '@nextcloud/initial-state'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { loadState } from '@nextcloud/initial-state'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
