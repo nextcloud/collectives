@@ -1039,11 +1039,11 @@ export const usePagesStore = defineStore('pages', {
 				.filter((a) => this.attachments.map((a) => a.name).includes(a.name))
 		},
 
-		async uploadAttachment(file) {
+		async uploadAttachment(file, onProgress) {
 			const formData = new FormData()
 			formData.append('file', file)
 
-			const response = await api.uploadAttachment(this.context, this.currentPageId, formData)
+			const response = await api.uploadAttachment(this.context, this.currentPageId, formData, onProgress)
 			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
 				this.allAttachments[this.collectiveIndex] = {}
 			}

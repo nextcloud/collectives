@@ -277,8 +277,9 @@ export function getPageAttachments(context, pageId) {
  * @param {object} context - either the current collective or a share context
  * @param {number} pageId - ID of the page that the attachment belongs to
  * @param {string} formData - The formData containing the attachment
+ * @param {object|null} onUploadProgress - optional onUploadProgress callback
  */
-export function uploadAttachment(context, pageId, formData) {
+export function uploadAttachment(context, pageId, formData, onUploadProgress) {
 	return axios.post(
 		pagesApiUrl(context, pageId, 'attachments'),
 		formData,
@@ -286,6 +287,7 @@ export function uploadAttachment(context, pageId, formData) {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},
+			onUploadProgress,
 		},
 	)
 }
