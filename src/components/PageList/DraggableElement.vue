@@ -36,13 +36,26 @@
 	</VueDraggable>
 </template>
 
-<script>
+<script lang="ts">
+import type { PropType } from 'vue'
+import type { DraggableEvent, MoveEvent } from 'vue-draggable-plus'
+import type { PageInfo } from '../../types.ts'
+
 import { mapActions, mapState } from 'pinia'
+import { defineComponent } from 'vue'
 import { VueDraggable } from 'vue-draggable-plus'
 import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'
 
-export default {
+// Sortable.js sets `originalEvent` on the event it dispatches, but it's missing in its types
+interface SortableDragEvent extends DraggableEvent {
+	originalEvent: DragEvent
+}
+
+// Direction to insert the dragged element in relative to the related element
+type SwapDirection = boolean | -1 | 1 | undefined
+
+export default defineComponent({
 	name: 'DraggableElement',
 
 	components: {
@@ -55,7 +68,7 @@ export default {
 
 	props: {
 		list: {
-			type: Array,
+			type: Array as PropType<PageInfo[]>,
 			required: true,
 		},
 
@@ -73,7 +86,6 @@ export default {
 	data() {
 		return {
 			sortableActive: false,
-			dragoverPageId: 0,
 			swapThreshold: 0.65,
 		}
 	},
@@ -87,12 +99,12 @@ export default {
 			'sortByOrder',
 		]),
 
-		allowSorting() {
+		allowSorting(): boolean {
 			// Disable sorting with alternative page orders
 			return this.sortByOrder === 'byOrder'
 		},
 
-		disabled() {
+		disabled(): boolean {
 			// IMPORTANT: needs to be synchronized with custom drag/drop events in PageListItem.vue
 			return this.disableDragndropSortOrMove
 				// Disable during Sortable move/sort operation
@@ -113,39 +125,37 @@ export default {
 			}
 		},
 
-		setData(dataTransfer, dragEl) {
-			dataTransfer.setData('pageId', dragEl.dataset.pageId)
+		setData(dataTransfer: DataTransfer, dragEl: HTMLElement) {
+			dataTransfer.setData('pageId', dragEl.dataset.pageId ?? '')
 		},
 
 		// Dragged element changes position
-		onChange(ev) {
+		onChange(event: DraggableEvent) {
 			// Highlight direct parent page when moving between subpages
 			this.setHighlightPageId(null)
-			if (ev.to !== ev.from) {
-				this.setHighlightPageId(Number(ev.to.dataset.parentId))
+			if (event.to !== event.from) {
+				this.setHighlightPageId(Number(event.to.dataset.parentId))
 			}
 		},
 
 		// Dragged element is moved inside list or between lists
-		onMove(ev) {
-			this.dragoverPageId = ev.related.dataset.pageId || ev.related.dataset.parentId
-
+		onMove(event: MoveEvent, originalEvent: Event) {
 			// Reject moving a page into itself or one of its own descendants
 			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
-			const targetParentId = Number(ev.to.dataset.parentId)
-			if (this.draggedPageId && this.pageParents(targetParentId).some((page) => page.id === this.draggedPageId)) {
+			const targetParentId = Number(event.to.dataset.parentId)
+			if (this.draggedPageId && this.pageParents(targetParentId).some((page: PageInfo) => page.id === this.draggedPageId)) {
 				return false
 			}
 
 			// Force-move items to the end of the list if sorting is disabled (not effective for now, see `disabled()` method)
 			if (!this.allowSorting) {
-				if (ev.to !== ev.from) {
-					ev.to.append(ev.dragged)
+				if (event.to !== event.from) {
+					event.to.append(event.dragged)
 					return false
 				}
 			}
 
-			return this.swapDirection(ev)
+			return this.swapDirection(event, (originalEvent as MouseEvent).clientY)
 		},
 
 		// Recompute the swap direction relative to the page row of the related element.
@@ -155,12 +165,11 @@ export default {
 		// zone covers the whole page row and the ghost jumps above the page as soon as
 		// it's dragged onto it. Deriving the zones from the page row instead restores the
 		// neutral zone in the middle of the row that's needed to drop a page into it.
-		swapDirection(ev) {
-			const row = ev.related.querySelector(':scope > .app-navigation-entry')
-			const posY = ev.originalEvent.clientY
+		swapDirection(event: MoveEvent, posY: number): SwapDirection {
+			const row = event.related.querySelector(':scope > .app-navigation-entry')
 
 			// Only handle swaps with the pointer inside the related element
-			if (!row || posY < ev.relatedRect.top || posY > ev.relatedRect.bottom) {
+			if (!row || posY < event.relatedRect.top || posY > event.relatedRect.bottom) {
 				return
 			}
 
@@ -177,7 +186,7 @@ export default {
 			}
 
 			// Subpages are only rendered while the page is expanded
-			const hasVisibleSubpages = !!ev.related.querySelector('.page-list-drag-item')
+			const hasVisibleSubpages = !!event.related.querySelector('.page-list-drag-item')
 
 			// Inserting after a page with visible subpages would move the ghost below its
 			// entire subtree, far away from the pointer. Keep that zone neutral instead,
@@ -191,31 +200,33 @@ export default {
 		},
 
 		// Dragged element changes position inside a list
-		onUpdate(ev) {
+		onUpdate(event: DraggableEvent) {
 			// Sorting in one list
 			this.sortableActive = true
-			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
-			const parentId = Number(ev.to.dataset.parentId)
-			this.subpageOrderUpdate(parentId, pageId, ev.newDraggableIndex)
+			const { originalEvent } = event as SortableDragEvent
+			const pageId = Number(originalEvent.dataTransfer?.getData('pageId'))
+			const parentId = Number(event.to.dataset.parentId)
+			this.subpageOrderUpdate(parentId, pageId, event.newDraggableIndex ?? 0)
 			this.sortableActive = false
 		},
 
 		// Dragged element is added to another list
-		onAdd(ev) {
-			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
-			const oldParentId = Number(ev.from.dataset.parentId)
-			const newParentId = Number(ev.to.dataset.parentId)
+		onAdd(event: DraggableEvent) {
+			const { originalEvent } = event as SortableDragEvent
+			const pageId = Number(originalEvent.dataTransfer?.getData('pageId'))
+			const oldParentId = Number(event.from.dataset.parentId)
+			const newParentId = Number(event.to.dataset.parentId)
 
 			// Reject moving a page into itself or one of its own descendants
 			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
-			if (this.pageParents(newParentId).some((page) => page.id === pageId)) {
-				ev.from.append(ev.item)
+			if (this.pageParents(newParentId).some((page: PageInfo) => page.id === pageId)) {
+				event.from.append(event.item)
 				return
 			}
 
 			// Moving from one list to another
 			this.sortableActive = true
-			let index = ev.newDraggableIndex
+			let index = event.newDraggableIndex ?? Infinity
 			// Force-move items to the end of the list if sorting is disabled
 			if (!this.allowSorting) {
 				index = Infinity
@@ -230,7 +241,7 @@ export default {
 			this.setHighlightPageId(null)
 		},
 	},
-}
+})
 </script>
 
 <style lang="scss" scoped>
