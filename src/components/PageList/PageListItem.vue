@@ -315,6 +315,12 @@ export default {
 				return
 			}
 
+			// Ignore dragstart events that bubbled from a nested subpage item
+			const sourcePageId = Number(event.target.closest('[data-page-id]')?.dataset.pageId)
+			if (sourcePageId !== this.pageId) {
+				return
+			}
+
 			// Set dragged page (allows to move the page)
 			this.setDraggedPageId(this.pageId)
 
@@ -335,7 +341,13 @@ export default {
 			this.setDraggedPageId(null)
 		},
 
-		onDragover() {
+		onDragover(event) {
+			// Ignore dragover events that bubbled from a nested subpage item
+			const sourcePageId = Number(event.target.closest('[data-page-id]')?.dataset.pageId)
+			if (sourcePageId !== this.pageId) {
+				return
+			}
+
 			if (this.isPotentialDropTarget) {
 				clearTimeout(this.dragoverTimer)
 				this.dragoverTimer = setTimeout(() => {
@@ -345,7 +357,13 @@ export default {
 			}
 		},
 
-		onDragleave() {
+		onDragleave(event) {
+			// Ignore dragleave events that bubbled from a nested subpage item
+			const sourcePageId = Number(event.target.closest('[data-page-id]')?.dataset.pageId)
+			if (sourcePageId !== this.pageId) {
+				return
+			}
+
 			clearTimeout(this.dragoverTimer)
 			this.isHighlightedTarget = false
 			this.setDragoverTargetPage(false)
