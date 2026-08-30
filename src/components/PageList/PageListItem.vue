@@ -393,15 +393,15 @@ export default {
 @use '../../css/animation';
 
 .page-list-item {
-	&.highlight :deep(.app-navigation-entry) {
+	&.highlight > :deep(.app-navigation-entry) {
 		background-color: var(--color-background-hover);
 	}
 
-	&.highlight-animation :deep(.app-navigation-entry) {
+	&.highlight-animation > :deep(.app-navigation-entry) {
 		animation: highlight-animation 5s 1;
 	}
 
-	&.highlight-target :deep(.app-navigation-entry) {
+	&.highlight-target > :deep(.app-navigation-entry) {
 		border: 1px solid var(--color-border-maxcontrast);
 	}
 
