@@ -24,11 +24,10 @@
 <script>
 import { emit } from '@nextcloud/event-bus'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { mapActions, mapState } from 'pinia'
+import { mapState } from 'pinia'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
-import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'CollectiveListItem',
@@ -61,12 +60,9 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useRootStore, ['show']),
-
 		onClick() {
 			if (this.isMobile) {
-				// Go straight to landingpage on mobile. Also required to reload page list.
-				this.show('details')
+				// Go straight to landingpage on mobile.
 				emit('toggle-navigation', { open: false })
 			}
 		},

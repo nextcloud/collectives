@@ -336,7 +336,6 @@ export default {
 
 		...mapActions(useRootStore, [
 			'setActiveSidebarTab',
-			'show',
 			'showSidebar',
 			'toggleSidebar',
 		]),
@@ -362,7 +361,6 @@ export default {
 			if (this.pageUrl && (this.currentPageId !== this.pageId)) {
 				await this.$router.push(this.pageUrl)
 			}
-			this.show('details')
 			this.showSidebar()
 			this.setActiveSidebarTab('sharing')
 		},
@@ -371,7 +369,6 @@ export default {
 			if (this.pageUrl && (this.currentPageId !== this.pageId)) {
 				await this.$router.push(this.pageUrl)
 			}
-			this.show('details')
 			emit('collectives:page:open-emoji-picker')
 		},
 

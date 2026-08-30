@@ -18,8 +18,7 @@
 		:canEdit="currentCollectiveCanEdit"
 		:hasVisibleSubpages
 		:filteredView
-		:networkOnline
-		@click="show('details')">
+		:networkOnline>
 		<DraggableElement
 			v-if="subpagesView.length > 0 || keptSortable(page.id)"
 			:list="subpagesView"
@@ -123,7 +122,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useRootStore, ['show']),
 		...mapActions(usePagesStore, ['expand']),
 
 		initCollapsed() {

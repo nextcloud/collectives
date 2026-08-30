@@ -39,22 +39,20 @@
 				:level="2"
 				:canEdit="currentCollectiveCanEdit"
 				inFavoriteList
-				:networkOnline
-				@click="show('details')" />
+				:networkOnline />
 		</div>
 	</div>
 </template>
 
 <script>
 import { t } from '@nextcloud/l10n'
-import { mapActions, mapState } from 'pinia'
+import { mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import StarIcon from 'vue-material-design-icons/StarOutline.vue'
 import PageListItem from './PageListItem.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
-import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'PageFavorites',
@@ -92,8 +90,6 @@ export default {
 
 	methods: {
 		t,
-
-		...mapActions(useRootStore, ['show']),
 
 		toggleFavorites() {
 			this.showFavoritesOpen = !this.showFavoritesOpen
