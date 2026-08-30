@@ -5,7 +5,7 @@
 
 <template>
 	<PageListItem
-		:key="page.title"
+		:key="page.id"
 		:to="pagePath(page)"
 		:pageId="page.id"
 		:parentId="page.parentId"

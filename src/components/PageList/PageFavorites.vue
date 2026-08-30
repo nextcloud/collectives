@@ -27,7 +27,7 @@
 		<div v-show="showFavoritesOpen" class="page-list-favorites-list">
 			<PageListItem
 				v-for="page in favoritePages"
-				:key="page.title"
+				:key="page.id"
 				:to="pagePath(page)"
 				:pageId="page.id"
 				:parentId="page.parentId"
