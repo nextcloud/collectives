@@ -137,15 +137,12 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(useRootStore, ['show']),
 		...mapActions(usePagesStore, ['setTrashPagesLoaded']),
 		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 
 		async initCollective() {
-			this.show('details')
-
 			this.loadPending = true
 			if (!this.networkOnline) {
 				return

@@ -12,7 +12,6 @@ const STORE_PREFIX = 'collectives/pinia/root/'
 
 export const useRootStore = defineStore('root', {
 	state: () => ({
-		showings: {},
 		loadings: {},
 		printView: false,
 		showingSidebar: useSessionStorage(STORE_PREFIX + 'showingSidebar', false),
@@ -29,7 +28,6 @@ export const useRootStore = defineStore('root', {
 
 	getters: {
 		loading: (state) => (aspect) => state.loadings[aspect],
-		showing: (state) => (aspect) => state.showings[aspect],
 
 		isPublic() { return !!this.shareTokenParam },
 
@@ -56,10 +54,6 @@ export const useRootStore = defineStore('root', {
 	actions: {
 		load(aspect) { this.loadings[aspect] = true },
 		done(aspect) { this.loadings[aspect] = false },
-
-		show(aspect) { this.showings[aspect] = true },
-		hide(aspect) { this.showings[aspect] = false },
-		toggle(aspect) { this.showings[aspect] = !this.showings[aspect] },
 
 		showSidebar() { this.showingSidebar = true },
 		hideSidebar() { this.showingSidebar = false },
