@@ -52,9 +52,7 @@ class PublicStartController extends AuthPublicShareController {
 	 * @throws ShareNotFound
 	 */
 	protected function getShare(): IShare {
-		if ($this->share === null) {
-			$this->share = $this->shareManager->getShareByToken($this->getToken());
-		}
+		$this->share ??= $this->shareManager->getShareByToken($this->getToken());
 		return $this->share;
 	}
 

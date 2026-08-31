@@ -26,9 +26,7 @@ class NoExcludePropagatorStorageWrapper extends Wrapper {
 		if (!$storage) {
 			$storage = $this;
 		}
-		if (!isset($storage->propagator)) {
-			$storage->propagator = new Propagator($storage, Server::get(IDBConnection::class));
-		}
+		$storage->propagator ??= new Propagator($storage, Server::get(IDBConnection::class));
 		return $storage->propagator;
 	}
 }
