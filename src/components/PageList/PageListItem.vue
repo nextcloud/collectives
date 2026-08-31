@@ -191,7 +191,6 @@ export default {
 
 	data() {
 		return {
-			isHighlightedTarget: false,
 			dragoverTimer: null,
 		}
 	},
@@ -243,6 +242,10 @@ export default {
 
 		isHighlighted() {
 			return this.highlightPageId === this.pageId
+		},
+
+		isHighlightedTarget() {
+			return !this.inFavoriteList && (this.dragoverTargetPageId === this.pageId)
 		},
 
 		isDragged() {
@@ -333,27 +336,22 @@ export default {
 
 		onDragend() {
 			clearTimeout(this.dragoverTimer)
-			this.isHighlightedTarget = false
 			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
 		},
 
 		onDragover(event) {
-			// Ignore dragover events that bubbled from a nested subpage item
-			const sourcePageId = Number(event.target.closest('[data-page-id]')?.dataset.pageId)
-			if (sourcePageId !== this.pageId) {
-				return
-			}
-
-			// Don't steal highlight from an ancestor that is already the nest-into target
-			if (this.dragoverTargetPageId && this.pageParents(this.pageId).some((p) => p.id === this.dragoverTargetPageId)) {
+			// Only react to dragover on this page's own row. Events on the subpage list
+			// (its inline-start padding, or gaps opened up by sortable.js animations)
+			// resolve to this page as well, but must not make it the drop target.
+			const row = event.target.closest('.app-navigation-entry')
+			if (row?.parentNode !== this.$el) {
 				return
 			}
 
 			if (this.isPotentialDropTarget) {
 				clearTimeout(this.dragoverTimer)
 				this.dragoverTimer = setTimeout(() => {
-					this.isHighlightedTarget = true
 					this.setDragoverTargetPageId(this.pageId)
 				}, 20)
 			}
@@ -366,7 +364,6 @@ export default {
 			}
 
 			clearTimeout(this.dragoverTimer)
-			this.isHighlightedTarget = false
 			if (this.dragoverTargetPageId === this.pageId) {
 				this.setDragoverTargetPageId(null)
 			}
@@ -374,7 +371,6 @@ export default {
 
 		onDrop(event) {
 			clearTimeout(this.dragoverTimer)
-			this.isHighlightedTarget = false
 
 			// Only the armed target claims the drop. A drop bubbling up from a subpage
 			// must fall through to the highlighted ancestor without clearing drag state.
