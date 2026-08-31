@@ -15,7 +15,6 @@
 		:class="{
 			mobile: isMobile,
 			highlight: isHighlighted,
-			'dragged-over-target': isDraggedOverTarget,
 			'highlight-target': isHighlightedTarget,
 			'highlight-animation': isHighlightAnimation,
 		}"
@@ -252,10 +251,6 @@ export default {
 			return this.draggedPageId === this.pageId
 		},
 
-		isDraggedOverTarget() {
-			return this.isDragged && this.isDragoverTargetPage
-		},
-
 		isPotentialDropTarget() {
 			// IMPORTANT: needs to be synchronized with custom drag/drop events in DraggableElement.vue
 			return !this.disableDragndropSortOrMove
@@ -410,11 +405,6 @@ export default {
 	&.highlight-target > :deep(.app-navigation-entry) {
 		outline: 1px solid var(--color-border-maxcontrast);
 		outline-offset: -1px;
-	}
-
-	&.dragged-over-target {
-		// Make cloned drag element less visible if dragged over a target page
-		opacity: .3;
 	}
 }
 

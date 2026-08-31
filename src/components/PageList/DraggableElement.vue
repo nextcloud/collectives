@@ -225,6 +225,6 @@ export default defineComponent({
 }
 
 .dragover-target-active :deep(.sortable-ghost) {
-	opacity: 0;
+	opacity: 0.2;
 }
 </style>
