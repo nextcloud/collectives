@@ -365,6 +365,11 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		// Whether a page is in the subtree of another page
+		isInSubtreeOf(state) {
+			return (pageId, subtreeRootId) => state.pageParents(pageId).some((page) => page.id === subtreeRootId)
+		},
+
 		sortOrder(state) {
 			return sortOrders[state.sortByOrder] || sortOrders.byOrder
 		},
