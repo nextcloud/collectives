@@ -202,15 +202,15 @@ export default {
 		]),
 
 		...mapState(usePagesStore, [
-			'isCollapsed',
 			'currentPage',
 			'disableDragndropSortOrMove',
+			'dragParentPageId',
 			'draggedPageId',
 			'dragoverTargetPageId',
 			'highlightAnimationPageId',
-			'dragParentPageId',
+			'isCollapsed',
+			'isInSubtreeOf',
 			'pageParent',
-			'pageParents',
 		]),
 
 		pageElementId() {
@@ -253,7 +253,7 @@ export default {
 		},
 
 		isPotentialDropTarget() {
-			// IMPORTANT: needs to be synchronized with custom drag/drop events in DraggableElement.vue
+			// IMPORTANT: needs to be synchronized with `disabled` in DraggableElement.vue
 			return !this.disableDragndropSortOrMove
 				// Ignore if draggedPageId is unset
 				&& this.draggedPageId !== null
@@ -264,7 +264,7 @@ export default {
 				// Ignore if inside favorite list
 				&& !this.inFavoriteList
 				// Ignore if dragged element is a parent of self
-				&& !this.pageParents(this.pageId).some((page) => page.id === this.draggedPageId)
+				&& !this.isInSubtreeOf(this.pageId, this.draggedPageId)
 		},
 
 		isHighlightAnimation() {

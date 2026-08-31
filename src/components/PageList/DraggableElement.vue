@@ -87,7 +87,7 @@ export default defineComponent({
 			'disableDragndropSortOrMove',
 			'draggedPageId',
 			'isDragoverTargetPage',
-			'pageParents',
+			'isInSubtreeOf',
 			'sortByOrder',
 		]),
 
@@ -119,9 +119,8 @@ export default defineComponent({
 		// Dragged element is moved inside list or between lists
 		onMove(event: MoveEvent, originalEvent: Event) {
 			// Reject moving a page into itself or one of its own descendants
-			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
 			const targetParentId = Number(event.to.dataset.parentId)
-			if (this.draggedPageId !== null && this.pageParents(targetParentId).some((page: PageInfo) => page.id === this.draggedPageId)) {
+			if (this.draggedPageId !== null && this.isInSubtreeOf(targetParentId, this.draggedPageId)) {
 				return false
 			}
 
@@ -192,8 +191,7 @@ export default defineComponent({
 			const newParentId = Number(event.to.dataset.parentId)
 
 			// Reject moving a page into itself or one of its own descendants
-			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
-			if (this.pageParents(newParentId).some((page: PageInfo) => page.id === pageId)) {
+			if (this.isInSubtreeOf(newParentId, pageId)) {
 				event.from.append(event.item)
 				return
 			}
