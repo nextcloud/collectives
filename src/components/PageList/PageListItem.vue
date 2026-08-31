@@ -14,7 +14,6 @@
 		class="page-list-item"
 		:class="{
 			mobile: isMobile,
-			highlight: isHighlighted,
 			'highlight-target': isHighlightedTarget,
 			'highlight-animation': isHighlightAnimation,
 		}"
@@ -239,12 +238,15 @@ export default {
 			return this.title
 		},
 
-		isHighlighted() {
-			return this.highlightPageId === this.pageId
-		},
-
 		isHighlightedTarget() {
-			return !this.inFavoriteList && (this.dragoverTargetPageId === this.pageId)
+			if (this.inFavoriteList) {
+				return false
+			}
+
+			// Highlight dragover target page, or, if moving in an expanded parent page, the parent page
+			return this.dragoverTargetPageId !== null
+				? this.dragoverTargetPageId === this.pageId
+				: this.highlightPageId === this.pageId
 		},
 
 		isDragged() {
@@ -285,6 +287,7 @@ export default {
 			'expand',
 			'setDragoverTargetPageId',
 			'setDraggedPageId',
+			'setHighlightPageId',
 			'toggleCollapsed',
 		]),
 
@@ -333,6 +336,7 @@ export default {
 			clearTimeout(this.dragoverTimer)
 			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
+			this.setHighlightPageId(null)
 		},
 
 		onDragover(event) {
@@ -384,6 +388,7 @@ export default {
 			}
 			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
+			this.setHighlightPageId(null)
 		},
 	},
 }
@@ -394,10 +399,6 @@ export default {
 @use '../../css/animation';
 
 .page-list-item {
-	&.highlight > :deep(.app-navigation-entry) {
-		background-color: var(--color-background-hover);
-	}
-
 	&.highlight-animation > :deep(.app-navigation-entry) {
 		animation: highlight-animation 5s 1;
 	}
