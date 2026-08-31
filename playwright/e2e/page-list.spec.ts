@@ -40,7 +40,7 @@ test.describe('Page list drag and drop', () => {
 		await pageList.expectPageListOrder([page3.data.title, page1.data.title, page2.data.title])
 	})
 
-	test('Move page into subpage', async ({ page, collective, pageList }) => {
+	test('Move page into another page', async ({ page, collective, pageList }) => {
 		await collective.openCollective()
 		await expect(pageList.el).toBeVisible()
 		await pageList.expectPageListOrder([page3.data.title, page2.data.title, page1.data.title])
@@ -50,13 +50,67 @@ test.describe('Page list drag and drop', () => {
 
 		await page1El.hover()
 		await page.mouse.down()
+		// Trigger `hover()` two times, see https://playwright.dev/docs/input#dragging-manually —
+		// only the second one dispatches the `dragover` that arms the drop targe
 		await page3El.hover()
-		// Wait for timeout in PageListItem.vue onDragover()
-		await page.waitForTimeout(21)
+		await page3El.hover()
+		// Wait for drop target to have the class (sortable.js 20ms delay)
+		await expect(page3El).toHaveClass(/highlight-target/)
 		await page.mouse.up()
-		await pageList.expectPageListOrder([page3.data.title, page2.data.title])
-		await pageList.toggleExpandPage(page3.data.title)
 		await pageList.expectPageListOrder([page3.data.title, page1.data.title, page2.data.title])
+	})
+
+	test('Move page into subpage of expanded page', async ({ page, user, collective, pageList }) => {
+		const subpage = await collective.createPage({ title: 'Subpage', parentId: page3.data.id, user, page })
+
+		await collective.openCollective()
+		await expect(pageList.el).toBeVisible()
+		await pageList.toggleExpandPage(page3.data.title)
+		await pageList.expectPageListOrder([page3.data.title, subpage.data.title, page2.data.title, page1.data.title])
+
+		const page1El = pageList.getPageItem(page1.data.title)
+		const subpageEl = pageList.getPageItem(subpage.data.title)
+
+		await page1El.hover()
+		await page.mouse.down()
+		// Trigger `hover()` two times, see https://playwright.dev/docs/input#dragging-manually
+		await subpageEl.hover()
+		await subpageEl.hover()
+		// Wait for the hovered page to be armed as nest-into target
+		await expect(subpageEl).toHaveClass(/highlight-target/)
+		await page.mouse.up()
+
+		await pageList.expectPageListOrder([page3.data.title, subpage.data.title, page1.data.title, page2.data.title])
+	})
+
+	test('Move page into subpage of expanded page after hovering its parent', async ({ page, user, collective, pageList }) => {
+		const subpage = await collective.createPage({ title: 'Subpage', parentId: page3.data.id, user, page })
+
+		await collective.openCollective()
+		await expect(pageList.el).toBeVisible()
+		await pageList.toggleExpandPage(page3.data.title)
+
+		const page1El = pageList.getPageItem(page1.data.title)
+		const page3El = pageList.getPageItem(page3.data.title)
+		const subpageEl = pageList.getPageItem(subpage.data.title)
+
+		await page1El.hover()
+		await page.mouse.down()
+		// Rest on the expanded parent's own row (the item element spans the whole
+		// subtree, so the default hover position would land on the subpage)
+		await page3El.hover({ position: { x: 100, y: 22 } })
+		await page3El.hover({ position: { x: 100, y: 22 } })
+		// Wait for the hovered page to be armed as nest-into target
+		await expect(page3El).toHaveClass(/highlight-target/)
+
+		// Slide onto the subpage
+		await subpageEl.hover()
+		await subpageEl.hover()
+		await expect(subpageEl).toHaveClass(/highlight-target/)
+		await expect(page3El).not.toHaveClass(/highlight-target/)
+		await page.mouse.up()
+
+		await pageList.expectPageListOrder([page3.data.title, subpage.data.title, page1.data.title, page2.data.title])
 	})
 
 	test('Drop page outside list reverts order', async ({ page, pageList, editor }) => {
