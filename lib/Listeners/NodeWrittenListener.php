@@ -54,6 +54,7 @@ class NodeWrittenListener implements IEventListener {
 		$userId = $this->userSession->getUser()?->getUID();
 		if ($userId) {
 			$this->pageService->notifyContentChange($node, $collective, $userId);
+			$this->pageService->setLastUser($node->getId(), $userId);
 		}
 	}
 }
