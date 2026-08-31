@@ -380,6 +380,7 @@ export default {
 				// own drop handling, which would otherwise process the same drop
 				// a second time as a sibling reorder instead of a move into this page
 				event.stopPropagation()
+				this.expand(this.pageId)
 				this.move(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
 			}
 			this.setDragoverTargetPageId(null)
