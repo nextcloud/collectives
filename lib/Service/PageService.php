@@ -1051,6 +1051,13 @@ class PageService {
 		return $pageInfo;
 	}
 
+	public function setLastUser(int $fileId, string $userId): void {
+		$page = new Page();
+		$page->setFileId($fileId);
+		$page->setLastUserId($userId);
+		$this->pageMapper->updateOrInsert($page);
+	}
+
 	/**
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
