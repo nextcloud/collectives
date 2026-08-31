@@ -23,7 +23,10 @@ export class PageListSection {
 	}
 
 	public getPageItem(title: string): Locator {
-		return this.pageListItems.filter({ hasText: title, visible: true })
+		return this.pageListItems.filter({
+			has: this.page.locator('> .app-navigation-entry').getByText(title, { exact: true }),
+			visible: true,
+		})
 	}
 
 	public async expectPageListOrder(titles: string[]): Promise<void> {
