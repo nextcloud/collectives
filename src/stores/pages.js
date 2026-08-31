@@ -36,7 +36,7 @@ export const usePagesStore = defineStore('pages', {
 		attachmentsError: false,
 		editorEmbeddedAttachmentSrcs: [],
 		readerEmbeddedAttachmentSrcs: [],
-		highlightPageId: null,
+		dragParentPageId: null,
 		highlightAnimationPageId: null,
 		dragoverTargetPageId: null,
 		draggedPageId: null,
@@ -549,8 +549,8 @@ export const usePagesStore = defineStore('pages', {
 			this.newPageParentId = id
 		},
 
-		setHighlightPageId(pageId) {
-			this.highlightPageId = pageId
+		setDragParentPageId(pageId) {
+			this.dragParentPageId = pageId
 		},
 
 		setHighlightAnimationPageId(pageId) {

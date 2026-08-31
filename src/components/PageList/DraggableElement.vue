@@ -105,14 +105,14 @@ export default defineComponent({
 	},
 
 	methods: {
-		...mapActions(usePagesStore, ['setHighlightPageId']),
+		...mapActions(usePagesStore, ['setDragParentPageId']),
 
 		// Dragged element changes position
 		onChange(event: DraggableEvent) {
-			// Highlight direct parent page when moving between subpages
-			this.setHighlightPageId(null)
+			// Highlight the parent page the dragged element would move under
+			this.setDragParentPageId(null)
 			if (event.to !== event.from) {
-				this.setHighlightPageId(Number(event.to.dataset.parentId))
+				this.setDragParentPageId(Number(event.to.dataset.parentId))
 			}
 		},
 
@@ -210,7 +210,7 @@ export default defineComponent({
 
 		// Element stops being dragged
 		onEnd() {
-			this.setHighlightPageId(null)
+			this.setDragParentPageId(null)
 		},
 	},
 })
