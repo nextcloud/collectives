@@ -193,9 +193,7 @@ class PageInfoTreeBuilder {
 	 * @throws NotFoundException
 	 */
 	private function pagesByFileId(): array {
-		if ($this->pagesByFileId === null) {
-			$this->pagesByFileId = $this->pageMapper->findByFileIds($this->pageFileIds());
-		}
+		$this->pagesByFileId ??= $this->pageMapper->findByFileIds($this->pageFileIds());
 
 		return $this->pagesByFileId;
 	}
@@ -206,9 +204,7 @@ class PageInfoTreeBuilder {
 	 * @throws NotFoundException
 	 */
 	private function linkedPageIdsByFileId(): array {
-		if ($this->linkedPageIdsByFileId === null) {
-			$this->linkedPageIdsByFileId = $this->pageLinkMapper->findByPageIds($this->pageFileIds());
-		}
+		$this->linkedPageIdsByFileId ??= $this->pageLinkMapper->findByPageIds($this->pageFileIds());
 
 		return $this->linkedPageIdsByFileId;
 	}

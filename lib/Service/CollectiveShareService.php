@@ -319,9 +319,7 @@ class CollectiveShareService {
 	 * @throws ShareNotFound
 	 */
 	public function getShare(string $token): IShare {
-		if (!isset($this->shareCache[$token])) {
-			$this->shareCache[$token] = $this->shareManager->getShareByToken($token);
-		}
+		$this->shareCache[$token] ??= $this->shareManager->getShareByToken($token);
 		return $this->shareCache[$token];
 	}
 
