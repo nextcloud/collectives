@@ -256,7 +256,7 @@ export default {
 			// IMPORTANT: needs to be synchronized with custom drag/drop events in DraggableElement.vue
 			return !this.disableDragndropSortOrMove
 				// Ignore if draggedPageId is unset
-				&& this.draggedPageId
+				&& this.draggedPageId !== null
 				// Ignore if self is the dragged element
 				&& !this.isDragged
 				// Ignore if in filtered view
