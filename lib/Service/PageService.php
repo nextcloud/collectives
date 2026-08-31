@@ -744,8 +744,6 @@ class PageService {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
-		$pageInfo->setLastUserId($userId);
-		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setFullWidth($fullWidth);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, fullWidth: $fullWidth);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
@@ -1041,8 +1039,6 @@ class PageService {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
-		$pageInfo->setLastUserId($userId);
-		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, $emoji);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
