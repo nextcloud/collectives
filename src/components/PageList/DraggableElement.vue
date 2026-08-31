@@ -121,7 +121,7 @@ export default defineComponent({
 			// Reject moving a page into itself or one of its own descendants
 			// IMPORTANT: needs to be synchronized with `isPotentialDropTarget` in PageListItem.vue
 			const targetParentId = Number(event.to.dataset.parentId)
-			if (this.draggedPageId && this.pageParents(targetParentId).some((page: PageInfo) => page.id === this.draggedPageId)) {
+			if (this.draggedPageId !== null && this.pageParents(targetParentId).some((page: PageInfo) => page.id === this.draggedPageId)) {
 				return false
 			}
 
