@@ -41,7 +41,7 @@ describe('Collective name conflicts', function() {
 		cy.get('.dialog__actions button').contains('Create').click()
 
 		cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'History Club')
-		cy.get('.toast-info').should('contain', 'Created collective "History Club" for existing team.')
+		cy.get('[role="status"]').should('contain', 'Created collective "History Club" for existing team.')
 	})
 	it('collectives of visible teams only show for members', function() {
 		cy.loginAs('jane')
@@ -54,7 +54,7 @@ describe('Collective name conflicts', function() {
 		cy.visit('apps/collectives')
 		cy.createCollective('Preexisting Team')
 		cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'Preexisting Team')
-		cy.get('.toast-info').should(
+		cy.get('[role="status"]').should(
 			'contain',
 			'Created collective "Preexisting Team" for existing team.',
 		)

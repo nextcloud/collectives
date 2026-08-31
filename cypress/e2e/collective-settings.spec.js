@@ -53,7 +53,7 @@ describe('Collective settings', function() {
 		cy.clickMenuButton('Settings')
 		cy.get('.edit-permissions').contains('Admins only')
 			.click()
-		cy.get('div.toast-success').should('contain', 'Editing permissions updated')
+		cy.get('[role="status"]').should('contain', 'Editing permissions updated')
 	})
 
 	it('Allows to change sharing permissions', function() {
@@ -61,7 +61,7 @@ describe('Collective settings', function() {
 		cy.clickMenuButton('Settings')
 		cy.get('.share-permissions').contains('Admins only')
 			.click()
-		cy.get('div.toast-success').should('contain', 'Sharing permissions updated')
+		cy.get('[role="status"]').should('contain', 'Sharing permissions updated')
 	})
 
 	it('Allows to change page mode', function() {
@@ -69,7 +69,7 @@ describe('Collective settings', function() {
 		cy.clickMenuButton('Settings')
 		cy.get('.page-mode').contains('Edit')
 			.click()
-		cy.get('div.toast-success').should('contain', 'Default page mode updated')
+		cy.get('[role="status"]').should('contain', 'Default page mode updated')
 	})
 
 	it('Allows to open settings from landing page actions', function() {
