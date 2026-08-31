@@ -208,8 +208,7 @@ export default {
 			'draggedPageId',
 			'dragoverTargetPageId',
 			'highlightAnimationPageId',
-			'highlightPageId',
-			'isDragoverTargetPage',
+			'dragParentPageId',
 			'pageParent',
 			'pageParents',
 		]),
@@ -246,7 +245,7 @@ export default {
 			// Highlight dragover target page, or, if moving in an expanded parent page, the parent page
 			return this.dragoverTargetPageId !== null
 				? this.dragoverTargetPageId === this.pageId
-				: this.highlightPageId === this.pageId
+				: this.dragParentPageId === this.pageId
 		},
 
 		isDragged() {
@@ -287,7 +286,7 @@ export default {
 			'expand',
 			'setDragoverTargetPageId',
 			'setDraggedPageId',
-			'setHighlightPageId',
+			'setDragParentPageId',
 			'toggleCollapsed',
 		]),
 
@@ -336,7 +335,7 @@ export default {
 			clearTimeout(this.dragoverTimer)
 			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
-			this.setHighlightPageId(null)
+			this.setDragParentPageId(null)
 		},
 
 		onDragover(event) {
@@ -388,7 +387,7 @@ export default {
 			}
 			this.setDragoverTargetPageId(null)
 			this.setDraggedPageId(null)
-			this.setHighlightPageId(null)
+			this.setDragParentPageId(null)
 		},
 	},
 }
