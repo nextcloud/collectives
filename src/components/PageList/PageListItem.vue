@@ -307,19 +307,16 @@ export default {
 		},
 
 		onDragstart(event) {
-			// Don't set favorite as dragged page
-			if (this.inFavoriteList) {
-				return
-			}
-
 			// Ignore dragstart events that bubbled from a nested subpage item
 			const sourcePageId = Number(event.target.closest('[data-page-id]')?.dataset.pageId)
 			if (sourcePageId !== this.pageId) {
 				return
 			}
 
-			// Set dragged page (allows to move the page)
-			this.setDraggedPageId(this.pageId)
+			// Set dragged page except if from favorite list (allows to move the page)
+			if (!this.inFavoriteList) {
+				this.setDraggedPageId(this.pageId)
+			}
 
 			// Set drag data
 			const path = generateUrl(`/apps/collectives${this.to}`)
