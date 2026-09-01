@@ -211,6 +211,7 @@ class CollectiveServiceTest extends TestCase {
 			'userFavoritePages' => [],
 			'userNotify' => 1,
 			'canLeave' => true,
+			'customSettings' => [],
 		], $collective->jsonSerialize());
 	}
 

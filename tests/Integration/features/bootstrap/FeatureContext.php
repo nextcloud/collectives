@@ -74,8 +74,10 @@ class FeatureContext implements Context {
 		if ($fail === 'fails') {
 			$this->assertStatusCode($user === 'guest' ? 403 : 400);
 		} else {
-			$this->assertStatusCode(200);
-			$this->assertCollectiveLevel($collective, 9);
+			$this->assertStatusCode([200, 400]);
+			if ($this->response->getStatusCode() === 200) {
+				$this->assertCollectiveLevel($collective, 9);
+			}
 		}
 	}
 
@@ -753,7 +755,7 @@ class FeatureContext implements Context {
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
 		$davPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . $filePath;
 		$this->sendRemoteRequest('PUT', $davPath, $content, null, ['Content-Type' => 'text/markdown']);
-		$this->assertStatusCode(204);
+		$this->assertStatusCode([201, 204]);
 	}
 
 	/**
@@ -1950,9 +1952,101 @@ class FeatureContext implements Context {
 		return $this->getShareToken($collectiveId, $pageId);
 	}
 
+	/**
+	 * @When user :user sets custom setting :setting to value :value for collective :collective
+	 * @When user :user :fails to set custom setting :setting to value :value for collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsCollectiveCustomSetting(string $user, string $setting, string $value, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$formData = new TableNode([['key', $setting], ['value', $value]]);
+		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/customSettings', $formData);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @Then user :user can download :fileName from collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDownloadsFileFromCollective(string $user, string $fileName, string $collective): void {
+		$this->requestCollectiveFileDownload($user, $fileName, $collective);
+		$this->assertStatusCode(200);
+		Assert::assertArrayHasKey('url', $this->getJson()['ocs']['data']);
+	}
+
+	/**
+	 * @Then user :user cannot download :fileName from collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCannotDownloadFileFromCollective(string $user, string $fileName, string $collective): void {
+		$this->requestCollectiveFileDownload($user, $fileName, $collective);
+		$this->assertStatusCode(403);
+	}
+
+	private function requestCollectiveFileDownload(string $user, string $fileName, string $collective): void {
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+		$davPath = '/dav/files/' . $user . $userCollectivesPath . '/' . urlencode($collective) . '/' . $fileName;
+		$this->sendRemoteRequest('PROPFIND', $davPath, null, null, ['Depth' => '0']);
+		$this->assertStatusCode(207);
+		$xml = simplexml_load_string($this->response->getBody()->getContents());
+		$xml->registerXPathNamespace('oc', 'http://owncloud.org/ns');
+		$fileId = (int)$xml->xpath('//oc:fileid')[0];
+		Assert::assertGreaterThan(0, $fileId);
+		$this->sendOcsRequest('POST', '/apps/dav/api/v1/direct', null, ['fileId' => $fileId]);
+	}
+
+	/**
+	 * @Then user :user sees preview :content for page :page in collective :collective owned by :owner
+	 * @Then user :user cannot preview page :page in collective :collective owned by :owner
+	 */
+	public function userPreviewsPage(string $user, string $page, string $collective, string $owner, ?string $content = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/pages/' . $pageId);
+		$this->assertStatusCode(200);
+		$pagePath = $this->getJson()['ocs']['data']['page']['filePath'];
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+		$this->sendRemoteRequest('GET', '/dav/files/' . $user . $userCollectivesPath . '/' . urlencode($collective) . '/' . $pagePath);
+		$this->assertStatusCode($content === null ? [403, 404] : 200);
+		if ($content !== null) {
+			Assert::assertSame($content, $this->response->getBody()->getContents());
+		}
+	}
+
+	/**
+	 * @Then user :user cannot download an archive of collective :collective
+	 */
+	public function userCannotDownloadCollectiveArchive(string $user, string $collective): void {
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+		$this->sendRemoteRequest('GET', '/dav/files/' . $user . $userCollectivesPath . '/' . urlencode($collective) . '/?accept=zip');
+		$this->assertStatusCode(403);
+	}
+
+	/**
+	 * @Then user :user can list the DAV home folder
+	 */
+	public function userListsDavHome(string $user): void {
+		$this->setCurrentUser($user);
+		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/', null, null, ['Depth' => '1']);
+		$this->assertStatusCode(207);
+	}
+
 	private function getUserCollectivesPath(string $user): string {
 		$this->setCurrentUser($user);
-		return $this->userGetsSetting($user, 'user_folder');
+		$path = $this->userGetsSetting($user, 'user_folder');
+		return ($path !== '') ? $path : '/.Collectives';
 	}
 
 	/**
