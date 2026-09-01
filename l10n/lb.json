@@ -1,8 +1,14 @@
 { "translations": {
     "Share link" : "Link deelen",
     "Settings" : "Astellungen",
+    "Notifications" : "Notifikatiounen",
     "Back" : "Zeréck",
+    "Offline" : "Offline",
+    "admin" : "Administratioun",
+    "moderator" : "Moderator",
+    "Remove" : "Ewechhuelen",
     "Loading…" : "Et gëtt gelueden",
+    "Preview" : "Virschau",
     "Edit" : "Änneren",
     "Choose" : "Auswielen",
     "Name" : "Numm",
@@ -14,6 +20,7 @@
     "Go back" : "Zeréckgoen",
     "Delete" : "Läschen",
     "Rename" : "Ëmbenennen",
+    "Templates" : "Virlagen",
     "Download" : "Eroflueden",
     "Title" : "Titel",
     "Favorites" : "Favoriten",
@@ -26,6 +33,7 @@
     "Sharing" : "Gedeelt",
     "Versions" : "Versiounen",
     "Link copied" : "Link kopéiert",
+    "View" : "Usiicht",
     "Failed to revert {page} to revision {timestamp}." : "Konnt {page} net op d'Versioun {timestamp} zrécksetzen.",
     "Done" : "Done"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
