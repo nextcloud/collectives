@@ -33,9 +33,9 @@ use RuntimeException;
  * @method setCustomSettings(?string $customSettings)
  */
 class Collective extends Entity implements JsonSerializable {
-	public const CUSTOM_SETTINGS_ALLOW_DOWNLOAD = 'allowDownload';
+	public const CUSTOM_SETTINGS_DOWNLOAD_PERMISSION_LEVEL = 'downloadPermissionLevel';
 	public const CUSTOM_SETTINGS = [
-		self::CUSTOM_SETTINGS_ALLOW_DOWNLOAD,
+		self::CUSTOM_SETTINGS_DOWNLOAD_PERMISSION_LEVEL,
 	];
 
 	/** @var int */
@@ -309,6 +309,14 @@ class Collective extends Entity implements JsonSerializable {
 
 	public function canShare(): bool {
 		return $this->level >= $this->getSharePermissionLevel();
+	}
+
+	public function getDownloadPermissionLevel(): int {
+		return $this->getCustomSettingsArray()[self::CUSTOM_SETTINGS_DOWNLOAD_PERMISSION_LEVEL] ?? Member::LEVEL_ADMIN;
+	}
+
+	public function canDownload(): bool {
+		return $this->level >= $this->getDownloadPermissionLevel();
 	}
 
 	public function getUrlPath(): string {
