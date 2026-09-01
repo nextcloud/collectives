@@ -29,8 +29,8 @@ use RuntimeException;
  * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(?int $trashTimestamp)
  * @method int getPageMode()
- * @method getCustomSettings(): ?string
- * @method setCustomSettings(?string $customSettings)
+ * @method string|null getCustomSettings()
+ * @method void setCustomSettings(?string $customSettings)
  */
 class Collective extends Entity implements JsonSerializable {
 	public const CUSTOM_SETTINGS_DOWNLOAD_PERMISSION_LEVEL = 'downloadPermissionLevel';

@@ -97,7 +97,7 @@ class DownloadCheckService {
 	private function normalizePath(string $path): string {
 		// Collapse duplicate slashes (e.g. when concatenating root paths) and
 		// strip leading/trailing slashes, always keeping a single leading slash.
-		$path = preg_replace('#/+#', '/', str_replace('\\', '/', $path));
+		$path = (string)preg_replace('#/+#', '/', str_replace('\\', '/', $path));
 		return '/' . trim($path, '/');
 	}
 }

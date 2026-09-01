@@ -203,7 +203,7 @@ class CollectiveController extends OCSController {
 	 * Set custom settings for an existing collective
 	 *
 	 * @param int $id ID of the collective
-	 * @param int $key Key of the setting
+	 * @param string $key Key of the setting
 	 * @param mixed $value Value of the setting
 	 *
 	 * @return DataResponse<Http::STATUS_OK, array{collective: CollectivesCollective}, array{}>

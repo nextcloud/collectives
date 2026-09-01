@@ -161,7 +161,7 @@ class PropFindPlugin extends ServerPlugin {
 		$collectives = $this->collectiveHelper->getCollectivesForUser($userId, true, false);
 		$this->allowDownloadPerCollectiveId = [];
 		foreach ($collectives as $collective) {
-			$this->allowDownloadPerCollectiveId[$collective->getId()] = $collective->getCustomSettingsArray()[$collective::CUSTOM_SETTINGS_ALLOW_DOWNLOAD] ?? false;
+			$this->allowDownloadPerCollectiveId[$collective->getId()] = $collective->canDownload();
 		}
 
 		return $this->allowDownloadPerCollectiveId;
