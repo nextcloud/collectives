@@ -88,16 +88,23 @@
 				</NcRadioGroupButton>
 			</NcRadioGroup>
 
-			<div class="subsection-header">
-				{{ t('collectives', 'Allow download') }}
-			</div>
-
-			<NcCheckboxRadioSwitch
-				v-model="allowDownload"
-				:disabled="loading('allowDownload')"
-				:loading="loading('allowDownload')">
-				{{ t('collectives', 'Allow download collective via files') }}
-			</NcCheckboxRadioSwitch>
+			<NcRadioGroup v-model="downloadPermissions" :label="t('collectives', 'Allow download for')" class="download-permissions">
+				<NcRadioGroupButton :label="t('collectives', 'Admins only')" :value="String(memberLevels.LEVEL_ADMIN)">
+					<template #icon>
+						<CrownIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'Admins and moderators')" :value="String(memberLevels.LEVEL_MODERATOR)">
+					<template #icon>
+						<AccountCogIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'All members')" :value="String(memberLevels.LEVEL_MEMBER)">
+					<template #icon>
+						<AccountIcon />
+					</template>
+				</NcRadioGroupButton>
+			</NcRadioGroup>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="page-settings" :name="t('collectives', 'Page settings')">
@@ -175,7 +182,6 @@ export default {
 		NcFormGroup,
 		NcRadioGroup,
 		NcRadioGroupButton,
-		NcCheckboxRadioSwitch,
 		NcTextField,
 		Emoticon,
 		EyeIcon,
@@ -198,7 +204,7 @@ export default {
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
 			pageMode: String(this.collective.pageMode),
-			allowDownload: Boolean(this.collective.customSettings?.allowDownload),
+			downloadPermissions: String(this.collective.customSettings?.downloadPermissionLevel ?? memberLevels.LEVEL_ADMIN),
 			emoji: null,
 		}
 	},
@@ -274,16 +280,16 @@ export default {
 			})
 		},
 
-		allowDownload(val) {
-			const allowDownload = Boolean(val)
-			this.load('allowDownload')
-			this.updateCollectiveCustomSettings({ id: this.collective.id, key: 'allowDownload', value: allowDownload }).then(() => {
-				this.done('allowDownload')
-				showSuccess(t('collectives', 'Allow download mode updated'))
+		downloadPermissions(val) {
+			const permission = String(val)
+			this.load('updateCollectiveDownloadPermissions_' + permission)
+			this.updateCollectiveCustomSettings({ id: this.collective.id, key: 'downloadPermissionLevel', value: parseInt(permission) }).then(() => {
+				showSuccess(t('collectives', 'Download permissions updated'))
+				this.done('updateCollectiveDownloadPermissions_' + permission)
 			}).catch((error) => {
-				this.allowDownload = Boolean(this.collective.customSettings?.allowDownload)
-				this.done('allowDownload')
-				showError(t('collectives', 'Could not update allow download mode'))
+				this.downloadPermissions = String(this.collective.customSettings?.downloadPermissionLevel ?? memberLevels.LEVEL_ADMIN)
+				this.done('updateCollectiveDownloadPermissions_' + permission)
+				showError(t('collectives', 'Could not update download permissions'))
 				throw error
 			})
 		},
