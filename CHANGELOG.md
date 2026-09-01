@@ -1,9 +1,28 @@
 # Changelog
 
+## 4.6.1 - 2026.09.01
+
+### 🐛Fixes
+* 🔒 Prevent guest users from creating collectives (#2702). Thanks @ ZakariaHogeschoolR.
+* 🛢️ Fix duplicate entry for key 'c_p_versions_uniq_idx' DB error (#1886, #2405).
+* 🖱️ Allow to scroll long collectives list (#2725).
+* 🖱️ Fix several drag and drop issues in page list.
+* 📎 Show progress when uploading an attachment in sidebar tab.
+* 📎 Don't show loading spinner when refreshing list of attachments in background.
+* 📎 Allow to open office attachments in new tab with middle-click as authenticated user.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.6.0 - 2026.08.24
 
 ### ✨New
-* 🚀 Navigation dropdown to select collective (#2682)
+* 🚀 Navigation dropdown to select collective (#2682).
 
 ### 🌎Translations
 * 🗣️ Translation updates from Transifex. Thanks to all contributors.
