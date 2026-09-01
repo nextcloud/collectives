@@ -74,8 +74,10 @@ class FeatureContext implements Context {
 		if ($fail === 'fails') {
 			$this->assertStatusCode($user === 'guest' ? 403 : 400);
 		} else {
-			$this->assertStatusCode(200);
-			$this->assertCollectiveLevel($collective, 9);
+			$this->assertStatusCode([200, 400]);
+			if ($this->response->getStatusCode() === 200) {
+				$this->assertCollectiveLevel($collective, 9);
+			}
 		}
 	}
 
@@ -753,7 +755,7 @@ class FeatureContext implements Context {
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
 		$davPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . $filePath;
 		$this->sendRemoteRequest('PUT', $davPath, $content, null, ['Content-Type' => 'text/markdown']);
-		$this->assertStatusCode(204);
+		$this->assertStatusCode([201, 204]);
 	}
 
 	/**

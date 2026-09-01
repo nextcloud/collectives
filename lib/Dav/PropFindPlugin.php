@@ -20,6 +20,8 @@ use Sabre\DAV\INode;
 use Sabre\DAV\PropFind;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
+use Sabre\HTTP\RequestInterface;
+use Sabre\HTTP\ResponseInterface;
 
 class PropFindPlugin extends ServerPlugin {
 	private ?array $allowDownloadPerCollectiveId = null;
@@ -27,17 +29,18 @@ class PropFindPlugin extends ServerPlugin {
 	private Server $server;
 
 	public function __construct(
-		private IUserSession $userSession,
-		private UserFolderHelper $userFolderHelper,
-		private CollectiveHelper $collectiveHelper,
+		private readonly IUserSession $userSession,
+		private readonly UserFolderHelper $userFolderHelper,
+		private readonly CollectiveHelper $collectiveHelper,
 	) {
 	}
 
 	public function initialize(Server $server): void {
 		$this->server = $server;
-		$server->on('propFind', [$this, 'propFind'], 200);
-		$server->on('beforeCopy', [$this, 'beforeCopy'], 200);
-		$server->on('beforeMove', [$this, 'beforeMove'], 200);
+		$server->on('propFind', $this->propFind(...), 200);
+		$server->on('beforeCopy', $this->beforeCopy(...), 200);
+		$server->on('beforeMove', $this->beforeMove(...), 200);
+		$server->on('beforeMethod:GET', $this->beforeGet(...), 200);
 	}
 
 	public function beforeCopy(string $source, string $destination): void {
@@ -73,6 +76,26 @@ class PropFindPlugin extends ServerPlugin {
 		}
 
 		throw new Forbidden('Moving this item out of the collective is not allowed');
+	}
+
+	public function beforeGet(RequestInterface $request, ResponseInterface $response): void {
+		try {
+			$node = $this->server->tree->getNodeForPath($request->getPath());
+		} catch (NotFound) {
+			return;
+		}
+
+		if (!$node instanceof Node) {
+			return;
+		}
+
+		if ($node->getFileInfo()->getType() === 'dir') {
+			return;
+		}
+
+		if ($this->isDownloadDisabled($node)) {
+			throw new Forbidden('Downloading this file is not allowed');
+		}
 	}
 
 	private function isDownloadDisabled(Node $node): bool {
