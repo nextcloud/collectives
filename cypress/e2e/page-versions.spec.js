@@ -107,7 +107,7 @@ describe('Page versions', function() {
 		cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
 		cy.clickMenuButton('Restore version')
 		cy.wait('@moveVersion')
-		cy.get('.toast-success')
+		cy.get('[role="status"]')
 			.should('contain', 'Restored')
 
 		// Check the restored file content via WebDAV instead of reloading:
