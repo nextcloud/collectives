@@ -3,12 +3,18 @@
 # https://github.com/nextcloud/.github
 # https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
 #
-# SPDX-FileCopyrightText: 2021-2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-FileCopyrightText: 2023-2024 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: MIT
 
 name: Node tests
 
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - stable*
 
 permissions:
   contents: read
@@ -35,6 +41,8 @@ jobs:
           filters: |
             src:
               - '.github/workflows/**'
+              - '__tests__/**'
+              - '__mocks__/**'
               - 'src/**'
               - 'appinfo/info.xml'
               - 'package.json'
@@ -74,7 +82,6 @@ jobs:
       - name: Install dependencies & build
         env:
           CYPRESS_INSTALL_BINARY: 0
-          PUPPETEER_SKIP_DOWNLOAD: true
         run: |
           npm ci
           npm run build --if-present
@@ -98,7 +105,6 @@ jobs:
 
     if: always()
 
-    # This is the summary, we just avoid to rename it so that branch protection rules still match
     name: test-summary
 
     steps:

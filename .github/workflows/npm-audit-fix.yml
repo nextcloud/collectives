@@ -6,7 +6,7 @@
 # SPDX-FileCopyrightText: 2023-2024 Nextcloud GmbH and Nextcloud contributors
 # SPDX-License-Identifier: MIT
 
-name: Npm audit fix
+name: Npm audit fix and compile
 
 on:
   workflow_dispatch:
@@ -26,6 +26,10 @@ jobs:
       matrix:
         branches:
           - ${{ github.event.repository.default_branch }}
+          - 'stable35'
+          - 'stable34'
+          - 'stable33'
+          - 'stable32'
 
     name: npm-audit-fix-${{ matrix.branches }}
 
