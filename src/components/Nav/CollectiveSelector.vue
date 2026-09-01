@@ -94,6 +94,10 @@
 			v-if="showCollectiveMembersModal"
 			:collective="membersCollective"
 			@close="onCloseCollectiveMembersModal" />
+		<CollectivePublishModal
+			v-if="showCollectivePublishModal"
+			:collective="publishCollective"
+			@close="onCloseCollectivePublishModal" />
 		<TemplatesDialog v-if="templatesCollectiveId" />
 	</div>
 </template>
@@ -116,6 +120,7 @@ import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
 import CollectiveListItem from './CollectiveListItem.vue'
 import CollectiveMembersModal from './CollectiveMembersModal.vue'
+import CollectivePublishModal from './CollectivePublishModal.vue'
 import CollectivesGlobalSettings from './CollectivesGlobalSettings.vue'
 import CollectivesTrash from './CollectivesTrash.vue'
 import TemplatesDialog from './TemplatesDialog.vue'
@@ -131,6 +136,7 @@ export default {
 		ChevronDownIcon,
 		CollectiveListItem,
 		CollectiveMembersModal,
+		CollectivePublishModal,
 		CollectivesGlobalSettings,
 		CollectivesIcon,
 		CollectivesTrash,
@@ -174,12 +180,17 @@ export default {
 			'collectivePath',
 			'currentCollective',
 			'membersCollective',
+			'publishCollective',
 			'sortedCollectives',
 			'templatesCollectiveId',
 		]),
 
 		showCollectiveMembersModal() {
 			return !!this.membersCollective
+		},
+
+		showCollectivePublishModal() {
+			return !!this.publishCollective
 		},
 	},
 
@@ -190,6 +201,7 @@ export default {
 			'deleteCollective',
 			'restoreCollective',
 			'setMembersCollectiveId',
+			'setPublishCollectiveId',
 		]),
 
 		onTriggerClick() {
@@ -217,6 +229,10 @@ export default {
 
 		onCloseCollectiveMembersModal() {
 			this.setMembersCollectiveId(null)
+		},
+
+		onCloseCollectivePublishModal() {
+			this.setPublishCollectiveId(null)
 		},
 	},
 }
