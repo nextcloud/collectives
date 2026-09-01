@@ -87,7 +87,7 @@ describe('Page versions', function() {
 			.find('.list-item-content__actions')
 			.click()
 
-		cy.clickMenuButton('Compare to current version')
+		cy.clickMenuButton('Compare with current version')
 
 		cy.get('#viewer .text-editor')
 			.should('contain', 'v1')
