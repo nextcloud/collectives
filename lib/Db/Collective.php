@@ -312,7 +312,7 @@ class Collective extends Entity implements JsonSerializable {
 	}
 
 	public function getDownloadPermissionLevel(): int {
-		return $this->getCustomSettingsArray()[self::CUSTOM_SETTINGS_DOWNLOAD_PERMISSION_LEVEL] ?? Member::LEVEL_ADMIN;
+		return (int)($this->getCustomSettingsArray()[self::CUSTOM_SETTINGS_DOWNLOAD_PERMISSION_LEVEL] ?? Member::LEVEL_ADMIN);
 	}
 
 	public function canDownload(): bool {

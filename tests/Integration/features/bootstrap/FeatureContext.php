@@ -1950,6 +1950,50 @@ class FeatureContext implements Context {
 		return $this->getShareToken($collectiveId, $pageId);
 	}
 
+	/**
+	 * @When user :user sets custom setting :setting to value :value for collective :collective
+	 * @When user :user :fails to set custom setting :setting to value :value for collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsCollectiveCustomSetting(string $user, string $setting, string $value, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$formData = new TableNode([['key', $setting], ['value', $value]]);
+		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/customSettings', $formData);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @Then user :user can download :fileName from collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDownloadsFileFromCollective(string $user, string $fileName, string $collective): void {
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+		$davPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . $fileName;
+		$this->sendRemoteRequest('GET', $davPath);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @Then user :user cannot download :fileName from collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCannotDownloadFileFromCollective(string $user, string $fileName, string $collective): void {
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+		$davPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . $fileName;
+		$this->sendRemoteRequest('GET', $davPath);
+		Assert::assertGreaterThanOrEqual(400, $this->response->getStatusCode(), 'Expected download to be blocked for user ' . $user);
+	}
+
 	private function getUserCollectivesPath(string $user): string {
 		$this->setCurrentUser($user);
 		return $this->userGetsSetting($user, 'user_folder');
