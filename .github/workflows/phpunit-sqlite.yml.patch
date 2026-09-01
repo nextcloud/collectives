@@ -1,0 +1,19 @@
+diff --git a/.github/workflows/phpunit-sqlite.yml b/.github/workflows/phpunit-sqlite.yml
+index 1a14ed65..f1756551 100644
+--- a/.github/workflows/phpunit-sqlite.yml
++++ b/.github/workflows/phpunit-sqlite.yml
+@@ -95,6 +95,14 @@ jobs:
+           persist-credentials: false
+           path: apps/${{ env.APP_NAME }}
+ 
++      - name: Checkout circles app
++        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
++        with:
++          persist-credentials: false
++          repository: nextcloud/circles
++          path: apps/circles
++          ref: ${{ matrix.server-versions }}
++
+       - name: Set up php ${{ matrix.php-versions }}
+         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+         with:

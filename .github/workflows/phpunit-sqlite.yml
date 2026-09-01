@@ -31,7 +31,7 @@ jobs:
 
       - name: Get version matrix
         id: versions
-        uses: icewind1991/nextcloud-version-matrix@8a7bac6300b2f0f3100088b297995a229558ddba # v1.3.2.3.1.3.2
+        uses: nextcloud-releases/nextcloud-version-matrix@cd0211ffcef1065e2020cd579e4843b8746e7a58 # v1.3.3
 
   changes:
     runs-on: ubuntu-latest-low
@@ -67,6 +67,7 @@ jobs:
     if: needs.changes.outputs.src != 'false'
 
     strategy:
+      fail-fast: false
       matrix:
         php-versions: ${{ fromJson(needs.matrix.outputs.php-version) }}
         server-versions: ${{ fromJson(needs.matrix.outputs.server-max) }}
@@ -88,6 +89,12 @@ jobs:
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
 
+      - name: Checkout app
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          path: apps/${{ env.APP_NAME }}
+
       - name: Checkout circles app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -96,14 +103,8 @@ jobs:
           path: apps/circles
           ref: ${{ matrix.server-versions }}
 
-      - name: Checkout app
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          path: apps/${{ env.APP_NAME }}
-
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
@@ -121,13 +122,17 @@ jobs:
         with:
           files: apps/${{ env.APP_NAME }}/composer.json
 
-      - name: Set up dependencies
+      - name: Remove nextcloud/ocp
         # Only run if phpunit config file exists
         if: steps.check_composer.outputs.files_exists == 'true'
         working-directory: apps/${{ env.APP_NAME }}
         run: |
           composer remove nextcloud/ocp --dev --no-scripts
-          composer i
+
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+        with:
+          working-directory: apps/${{ env.APP_NAME }}
 
       - name: Set up Nextcloud
         env:

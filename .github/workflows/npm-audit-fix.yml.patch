@@ -1,0 +1,19 @@
+diff --git a/.github/workflows/npm-audit-fix.yml b/.github/workflows/npm-audit-fix.yml
+index fd84e64a..e45dba9e 100644
+--- a/.github/workflows/npm-audit-fix.yml
++++ b/.github/workflows/npm-audit-fix.yml
+@@ -61,13 +61,12 @@ jobs:
+         id: npm-audit
+         uses: nextcloud-libraries/npm-audit-action@1b1728b2b4a7a78d69de65608efcf4db0e3e42d0 # v0.2.0
+ 
+-      - name: Run npm ci and npm run build
++      - name: Run npm ci
+         if: steps.checkout.outcome == 'success'
+         env:
+           CYPRESS_INSTALL_BINARY: 0
+         run: |
+           npm ci
+-          npm run build --if-present
+ 
+       - name: Create Pull Request
+         if: steps.checkout.outcome == 'success'
