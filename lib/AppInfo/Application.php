@@ -40,6 +40,7 @@ use OCA\Collectives\Team\CollectiveTeamResourceProvider;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\Collectives\Trash\PageTrashManager;
 use OCA\Collectives\Versions\VersionsBackend;
+use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Text\Event\MentionEvent;
 use OCP\App\IAppManager;
@@ -51,6 +52,8 @@ use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Events\BeforeDirectFileDownloadEvent;
+use OCP\Files\Events\BeforeZipCreatedEvent;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\Files\IMimeTypeLoader;
@@ -83,6 +86,13 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(MentionEvent::class, TextMentionListener::class);
 
 		$context->registerNotifierService(Notifier::class);
+
+		// Negative priority so it runs after other listeners (e.g. files_sharing
+		// at priority 5) and has the final say on whether the download is allowed.
+		$context->registerEventListener(BeforeZipCreatedEvent::class, BeforeZipCreatedListener::class, -100);
+		$context->registerEventListener(BeforeDirectFileDownloadEvent::class, BeforeDirectFileDownloadListener::class, -100);
+
+		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginAddListener::class, 500);
 
 		$context->registerMiddleware(PublicOCSMiddleware::class);
 

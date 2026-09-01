@@ -29,8 +29,15 @@ use RuntimeException;
  * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(?int $trashTimestamp)
  * @method int getPageMode()
+ * @method getCustomSettings(): ?string
+ * @method setCustomSettings(?string $customSettings)
  */
 class Collective extends Entity implements JsonSerializable {
+	public const CUSTOM_SETTINGS_ALLOW_DOWNLOAD = 'allowDownload';
+	public const CUSTOM_SETTINGS = [
+		self::CUSTOM_SETTINGS_ALLOW_DOWNLOAD,
+	];
+
 	/** @var int */
 	public const defaultPermissions
 		= Constants::PERMISSION_ALL * 100 // Moderator
@@ -67,6 +74,8 @@ class Collective extends Entity implements JsonSerializable {
 	protected ?string $emoji = null;
 	protected ?int $trashTimestamp = null;
 	protected int $pageMode = self::defaultPageMode;
+	protected ?string $customSettings = null;
+
 	/** transient attributes, not persisted in database  */
 	protected string $name = '';
 	protected int $level = Member::LEVEL_MEMBER;
@@ -134,6 +143,16 @@ class Collective extends Entity implements JsonSerializable {
 		}
 		$this->pageMode = $mode;
 		$this->markFieldUpdated('pageMode');
+	}
+
+	public function getCustomSettingsArray(): array {
+		return json_decode($this->customSettings ?: '{}', true) ?: [];
+	}
+
+	public function setCustomSetting(string $key, mixed $value): void {
+		$customSettings = $this->getCustomSettingsArray();
+		$customSettings[$key] = $value;
+		$this->setCustomSettings(json_encode($customSettings));
 	}
 
 	public function isTrashed(): bool {
@@ -320,6 +339,7 @@ class Collective extends Entity implements JsonSerializable {
 			'userFavoritePages' => $this->userFavoritePages,
 			'userNotify' => $this->userNotify,
 			'canLeave' => $this->getCanLeave(),
+			'customSettings' => $this->getCustomSettingsArray(),
 		];
 	}
 }
