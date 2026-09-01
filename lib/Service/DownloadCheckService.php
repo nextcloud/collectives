@@ -21,8 +21,8 @@ use OCA\Collectives\Fs\UserFolderHelper;
  */
 class DownloadCheckService {
 	public function __construct(
-		private UserFolderHelper $userFolderHelper,
-		private CollectiveHelper $collectiveHelper,
+		private readonly UserFolderHelper $userFolderHelper,
+		private readonly CollectiveHelper $collectiveHelper,
 	) {
 	}
 
