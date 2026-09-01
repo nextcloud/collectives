@@ -352,6 +352,11 @@ export const useCollectivesStore = defineStore('collectives', {
 			this._addOrUpdateCollectiveState(response.data.ocs.data.collective)
 		},
 
+		async updateCollectiveCustomSettings({ id, key, value }) {
+			const response = await api.updateCollectiveCustomSettings(id, key, value)
+			this._addOrUpdateCollectiveState(response.data.ocs.data.collective)
+		},
+
 		/**
 		 * @param {object} data the data object
 		 * @param {number} data.id ID of the collective to be updated
