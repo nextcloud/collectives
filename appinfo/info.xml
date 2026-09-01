@@ -25,6 +25,7 @@ to structure shared knowledge and cultivate trust.
 	<namespace>Collectives</namespace>
 	<types>
 		<filesystem/>
+		<dav/>
 	</types>
 
 	<documentation>
@@ -90,6 +91,12 @@ to structure shared knowledge and cultivate trust.
 			<order>12</order>
 		</navigation>
 	</navigations>
+
+	<sabre>
+		<plugins>
+			<plugin>OCA\Collectives\Dav\PropFindPlugin</plugin>
+		</plugins>
+	</sabre>
 
 	<trash>
 		<backend for="OCA\Collectives\Mount\CollectiveStorage">OCA\Collectives\Trash\PageTrashBackend</backend>

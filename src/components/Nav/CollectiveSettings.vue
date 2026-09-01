@@ -87,6 +87,17 @@
 					</template>
 				</NcRadioGroupButton>
 			</NcRadioGroup>
+
+			<div class="subsection-header">
+				{{ t('collectives', 'Allow download') }}
+			</div>
+
+			<NcCheckboxRadioSwitch
+				v-model="allowDownload"
+				:disabled="loading('allowDownload')"
+				:loading="loading('allowDownload')">
+				{{ t('collectives', 'Allow download collective via files') }}
+			</NcCheckboxRadioSwitch>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="page-settings" :name="t('collectives', 'Page settings')">
@@ -129,6 +140,7 @@ import { mapActions, mapState } from 'pinia'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcEmojiPicker from '@nextcloud/vue/components/NcEmojiPicker'
 import NcFormGroup from '@nextcloud/vue/components/NcFormGroup'
 import NcRadioGroup from '@nextcloud/vue/components/NcRadioGroup'
@@ -163,6 +175,7 @@ export default {
 		NcFormGroup,
 		NcRadioGroup,
 		NcRadioGroupButton,
+		NcCheckboxRadioSwitch,
 		NcTextField,
 		Emoticon,
 		EyeIcon,
@@ -185,6 +198,7 @@ export default {
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
 			pageMode: String(this.collective.pageMode),
+			allowDownload: Boolean(this.collective.customSettings?.allowDownload),
 			emoji: null,
 		}
 	},
@@ -259,6 +273,20 @@ export default {
 				throw error
 			})
 		},
+
+		allowDownload(val) {
+			const allowDownload = Boolean(val)
+			this.load('allowDownload')
+			this.updateCollectiveCustomSettings({ id: this.collective.id, key: 'allowDownload', value: allowDownload }).then(() => {
+				this.done('allowDownload')
+				showSuccess(t('collectives', 'Allow download mode updated'))
+			}).catch((error) => {
+				this.allowDownload = Boolean(this.collective.customSettings?.allowDownload)
+				this.done('allowDownload')
+				showError(t('collectives', 'Could not update allow download mode'))
+				throw error
+			})
+		},
 	},
 
 	methods: {
@@ -278,6 +306,7 @@ export default {
 			'updateCollectiveEditPermissions',
 			'updateCollectiveSharePermissions',
 			'updateCollectivePageMode',
+			'updateCollectiveCustomSettings',
 		]),
 
 		/**
