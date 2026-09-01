@@ -65,8 +65,14 @@ jobs:
         include:
           - server-versions: 'stable32'
             server-major: '32'
+            semantic-e2e: '0'
+            text-app-repository: 'nextcloud/text'
+            text-app-ref: 'stable32'
           - server-versions: 'master'
             server-major: ''
+            semantic-e2e: '1'
+            text-app-repository: 'nextcloud/text'
+            text-app-ref: 'b5ff1b0ce8d38b8a8dfdd6acf7b3f36c3fa2e272'
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
@@ -112,18 +118,13 @@ jobs:
           path: apps/password_policy
           ref: ${{ matrix.server-versions }}
 
-      - name: Register text Git reference
-        run: |
-          text_app_ref="$(if [ "${{ matrix.server-versions }}" = "master" ]; then echo -n "main"; else echo -n "${{ matrix.server-versions }}"; fi)"
-          echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
-
       - name: Checkout text app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          repository: nextcloud/text
+          repository: ${{ matrix.text-app-repository }}
           path: apps/text
-          ref: ${{ env.text_app_ref }}
+          ref: ${{ matrix.text-app-ref }}
 
       - name: Checkout viewer app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -164,6 +165,13 @@ jobs:
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
         run: npm i -g 'npm@${{ steps.versions.outputs.npmVersion }}'
 
+      - name: Build compatible Text semantic API
+        if: matrix.semantic-e2e == '1'
+        working-directory: apps/text
+        run: |
+          npm ci
+          npm run build
+
       - name: Install node dependencies & build app
         working-directory: apps/${{ env.APP_NAME }}
         run: |
@@ -189,6 +197,11 @@ jobs:
         php-versions: ['8.1', '8.4']
         databases: ['sqlite']
         server-versions: ['stable32', 'master']
+        include:
+          - server-versions: 'stable32'
+            semantic-e2e: '0'
+          - server-versions: 'master'
+            semantic-e2e: '1'
         exclude:
           - php-versions: '8.1'
             server-versions: 'stable32'
@@ -276,6 +289,7 @@ jobs:
           npx cypress run --record false --config defaultCommandTimeout=20000,video=false
         env:
           CYPRESS_ncVersion: ${{ matrix.server-versions }}
+          CYPRESS_semanticE2E: ${{ matrix.semantic-e2e }}
           # `SPLIT` needs to match count of `containers` in the matrix above
           SPLIT: 4
           SPLIT_INDEX: ${{ env.container_index }}

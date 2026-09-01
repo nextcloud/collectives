@@ -6,30 +6,35 @@
 export const COMPARE_FROM_QUERY = 'compareFrom'
 export const COMPARE_TO_QUERY = 'compareTo'
 export const COMPARISON_HISTORY_STATE = 'collectivesVersionComparison'
+export const COMPARISON_WARNING_STATE = 'collectivesVersionComparisonWarning'
 export const MAX_COMPARISON_ID_LENGTH = 255
 
-/**
- * Replace only a route path during slug canonicalization.
- *
- * @param {object} route Current route
- * @param {string} path Canonical path
- * @return {object} Vue Router location
- */
-export function canonicalPathRoute(route, path) {
+/* eslint-disable jsdoc/require-jsdoc */
+
+const warningKey = (query) => JSON.stringify([query[COMPARE_FROM_QUERY], query[COMPARE_TO_QUERY]])
+const routeLocation = (route, query = route.query) => ({ path: route.path, query, hash: route.hash })
+function invalidComparisonIdCharacter(character) {
+	const codePoint = character.codePointAt(0)
+	return character === '/' || character === '\\' || codePoint <= 31 || codePoint === 127
+}
+
+export function claimVersionComparisonRouteWarning(query, state = window.history.state) {
+	return state?.[COMPARISON_WARNING_STATE] !== warningKey(query)
+}
+
+export function rejectedVersionComparisonRoute(route) {
 	return {
-		path,
-		query: route.query,
-		hash: route.hash,
+		...withoutVersionComparisonRoute(route),
+		state: {
+			[COMPARISON_WARNING_STATE]: warningKey(route.query),
+		},
 	}
 }
 
-/**
- * Parse the two comparison-only parameters without accepting Vue Router's
- * array representation for duplicate values.
- *
- * @param {object} query Decoded Vue Router query
- * @return {{kind: 'absent'}|{kind: 'invalid'}|{kind: 'valid', from: string, to: string}}
- */
+export function canonicalPathRoute(route, path) {
+	return routeLocation({ ...route, path })
+}
+
 export function parseVersionComparisonRoute(query) {
 	const hasFrom = Object.hasOwn(query, COMPARE_FROM_QUERY)
 	const hasTo = Object.hasOwn(query, COMPARE_TO_QUERY)
@@ -51,92 +56,32 @@ export function parseVersionComparisonRoute(query) {
 	return { kind: 'valid', from, to }
 }
 
-/**
- * Build a route location containing one comparison pair.
- *
- * @param {object} route Current route
- * @param {string} from Earlier/current opaque identity
- * @param {string} to Later/current opaque identity
- * @return {object} Vue Router location
- */
 export function withVersionComparisonRoute(route, from, to) {
-	return {
-		path: route.path,
-		query: {
-			...route.query,
-			[COMPARE_FROM_QUERY]: from,
-			[COMPARE_TO_QUERY]: to,
-		},
-		hash: route.hash,
-	}
+	return routeLocation(route, {
+		...route.query,
+		[COMPARE_FROM_QUERY]: from,
+		[COMPARE_TO_QUERY]: to,
+	})
 }
 
-/**
- * Remove only comparison parameters.
- *
- * @param {object} route Current route
- * @return {object} Vue Router location
- */
 export function withoutVersionComparisonRoute(route) {
 	const query = { ...route.query }
 	delete query[COMPARE_FROM_QUERY]
 	delete query[COMPARE_TO_QUERY]
-	return {
-		path: route.path,
-		query,
-		hash: route.hash,
-	}
+	return routeLocation(route, query)
 }
 
-/**
- * Resolve a URL identity against selector options without substituting.
- *
- * @param {object[]} options Comparison options
- * @param {{from: string, to: string}} requested Requested pair
- * @param {Iterable<string>} unavailableRouteIds Ambiguous identities to reject
- * @return {{first: object|null, second: object|null, missing: string[], invalid?: 'self-pair'}}
- */
-export function resolveVersionComparisonRoute(options, requested, unavailableRouteIds = []) {
-	const unavailable = new Set(unavailableRouteIds)
-	const byRouteId = new Map()
-	for (const option of options) {
-		for (const routeId of [option.routeId, ...(option.routeAliases ?? [])]) {
-			if (!unavailable.has(routeId)) {
-				byRouteId.set(routeId, option)
-			}
-		}
-	}
+export function resolveVersionComparisonRoute(options, requested) {
+	const byRouteId = new Map(options.flatMap((option) => [option.routeId, ...(option.routeAliases ?? [])].map((routeId) => [routeId, option])))
 	const first = byRouteId.get(requested.from) ?? null
 	const second = byRouteId.get(requested.to) ?? null
-	const missing = [
-		...first ? [] : [requested.from],
-		...second ? [] : [requested.to],
-	]
-	return {
-		first,
-		second,
-		missing,
-		...(first && second
-			&& (first === second || (first.key !== undefined && first.key === second.key))
-			? { invalid: 'self-pair' }
-			: {}),
-	}
+	const missing = [requested.from, requested.to].filter((routeId) => !byRouteId.has(routeId))
+	return { first, second, missing, invalid: Boolean(first && second && (first === second || (first.key !== undefined && first.key === second.key))) }
 }
 
-/**
- * Test an already-decoded opaque version identity.
- *
- * @param {unknown} value Candidate identity
- * @return {value is string} Whether it is a bounded route identity
- */
 export function isValidComparisonId(value) {
 	return typeof value === 'string'
 		&& value.length > 0
 		&& value.length <= MAX_COMPARISON_ID_LENGTH
-		&& !value.includes('/')
-		&& !value.includes('\\')
-		&& ![...value].some((character) => {
-			const codePoint = character.codePointAt(0)
-			return codePoint <= 31 || codePoint === 127
-		})
+		&& ![...value].some(invalidComparisonIdCharacter)
 }

@@ -8,6 +8,8 @@ import { defineConfig } from 'cypress'
 import cypressSplit from 'cypress-split'
 import vitePreprocessor from 'cypress-vite'
 
+const SEMANTIC_E2E = process.env.CYPRESS_semanticE2E === '1'
+
 export default defineConfig({
 	viewportWidth: 1280,
 	viewportHeight: 900,
@@ -20,6 +22,9 @@ export default defineConfig({
 
 		baseUrl: 'http://localhost:8081/index.php/',
 		specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
+	},
+	expose: {
+		semanticE2E: SEMANTIC_E2E,
 	},
 	defaultCommandTimeout: 7000,
 	retries: {

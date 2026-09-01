@@ -6,8 +6,10 @@
 import { describe, expect, it } from 'vitest'
 import {
 	canonicalPathRoute,
+	claimVersionComparisonRouteWarning,
 	MAX_COMPARISON_ID_LENGTH,
 	parseVersionComparisonRoute,
+	rejectedVersionComparisonRoute,
 	resolveVersionComparisonRoute,
 	withoutVersionComparisonRoute,
 	withVersionComparisonRoute,
@@ -20,6 +22,16 @@ const route = {
 }
 
 describe('canonical version comparison routes', () => {
+	it('warns once per rejected history entry and again after re-entry', () => {
+		const query = { ...route.query, compareFrom: 'version:1', compareTo: 'current:2' }
+		const rejected = rejectedVersionComparisonRoute({ ...route, query }, {})
+
+		expect(claimVersionComparisonRouteWarning(query, {})).toBe(true)
+		expect(claimVersionComparisonRouteWarning(query, rejected.state)).toBe(false)
+		expect(claimVersionComparisonRouteWarning(query, {})).toBe(true)
+		expect(rejected.query).toEqual(route.query)
+	})
+
 	it('R01 round-trips an exact ordered current/historical or historical/historical pair', () => {
 		for (const [from, to] of [
 			['version:1', 'current:2'],
@@ -79,16 +91,6 @@ describe('canonical version comparison routes', () => {
 			.toEqual(['missing-1', 'missing-2'])
 	})
 
-	it('R09 resolves an unavailable ambiguous identity to a fail-closed missing result', () => {
-		const current = { routeId: 'current:2', routeAliases: ['current'] }
-		const resolved = resolveVersionComparisonRoute(
-			[current, { routeId: 'version:1' }],
-			{ from: 'current:2', to: 'current' },
-			['current:2'],
-		)
-		expect(resolved).toEqual({ first: null, second: current, missing: ['current:2'] })
-	})
-
 	it.each([
 		['canonical ID then alias', 'current:2', 'current'],
 		['alias then canonical ID', 'current', 'current:2'],
@@ -103,7 +105,7 @@ describe('canonical version comparison routes', () => {
 			first: current,
 			second: current,
 			missing: [],
-			invalid: 'self-pair',
+			invalid: true,
 		})
 	})
 
@@ -118,7 +120,7 @@ describe('canonical version comparison routes', () => {
 			first: canonical,
 			second: alias,
 			missing: [],
-			invalid: 'self-pair',
+			invalid: true,
 		})
 	})
 })

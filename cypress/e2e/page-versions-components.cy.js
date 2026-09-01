@@ -6,6 +6,7 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { createApp, h, nextTick, ref } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import PageSidebar from '../../src/components/PageSidebar.vue'
 import SidebarTabVersions from '../../src/components/PageSidebar/SidebarTabVersions.vue'
 import VersionComparisonDialog from '../../src/components/PageSidebar/VersionComparisonDialog.vue'
 import { useCollectivesStore } from '../../src/stores/collectives.js'
@@ -13,6 +14,19 @@ import { usePagesStore } from '../../src/stores/pages.js'
 import { useRootStore } from '../../src/stores/root.js'
 import { useVersionsStore } from '../../src/stores/versions.js'
 import { VERSION_COMPARISON_LIMITS } from '../../src/util/versionComparison.js'
+import {
+	COMPARISON_WARNING_STATE,
+	rejectedVersionComparisonRoute,
+} from '../../src/util/versionComparisonRoute.js'
+
+function nextNavigation(router) {
+	return new Promise((resolve) => {
+		const remove = router.afterEach(() => {
+			remove()
+			resolve()
+		})
+	})
+}
 
 async function waitFor(condition, message = 'Expected component state was not reached') {
 	for (let attempt = 0; attempt < 100; attempt++) {
@@ -22,6 +36,34 @@ async function waitFor(condition, message = 'Expected component state was not re
 		await new Promise((resolve) => setTimeout(resolve))
 	}
 	throw new Error(typeof message === 'function' ? message() : message)
+}
+
+async function mountPageSidebar() {
+	const pinia = createPinia()
+	setActivePinia(pinia)
+	const rootStore = useRootStore()
+	const collectivesStore = useCollectivesStore()
+	const pagesStore = usePagesStore()
+	rootStore.$patch({ collectiveId: 1, pageId: 7, showingSidebar: false })
+	collectivesStore.collectivesState = [{ id: 1, name: 'Atlas', canEdit: true, canShare: true, isPageShare: false }]
+	pagesStore.allPages = {
+		1: [{ id: 7, parentId: 0, title: 'Page', fileName: 'Readme.md', timestamp: 1 }],
+	}
+
+	window.history.replaceState({}, '', '/Atlas/Page?fileId=42&view=grid#rollout')
+	const router = createRouter({
+		history: createWebHistory(),
+		routes: [{ path: '/:pathMatch(.*)*', component: { render: () => null } }],
+	})
+	const element = document.createElement('div')
+	document.body.append(element)
+	const app = createApp({ render: () => h(PageSidebar) })
+	app.use(pinia)
+	app.use(router)
+	app.mount(element)
+	await router.isReady()
+	await nextTick()
+	return { app, element, router }
 }
 
 function deferred() {
@@ -113,6 +155,46 @@ function comparisonFixture(size = 10) {
 }
 
 describe('Mounted page version components', () => {
+	it('rejects an invalid comparison without corrupting real router history', () => {
+		cy.then(async () => {
+			const { app, element, router } = await mountPageSidebar()
+			const invalid = {
+				path: '/Atlas/Page',
+				query: { fileId: '42', view: 'grid', compareFrom: 'broken' },
+				hash: '#rollout',
+			}
+			const rejected = rejectedVersionComparisonRoute(invalid, {
+				back: '/stale-back',
+				current: '/Atlas/Page?fileId=42&view=grid&compareFrom=broken#rollout',
+				forward: '/stale-forward',
+				position: 99,
+			})
+			expect(rejected.state).to.deep.equal({
+				[COMPARISON_WARNING_STATE]: JSON.stringify(['broken', undefined]),
+			})
+
+			await router.push(invalid)
+			await waitFor(() => router.currentRoute.value.query.compareFrom === undefined)
+			expect(router.currentRoute.value.fullPath).to.equal('/Atlas/Page?fileId=42&view=grid#rollout')
+			expect(window.history.state[COMPARISON_WARNING_STATE]).to.equal(JSON.stringify(['broken', undefined]))
+
+			await router.push('/Atlas/Next?step=1#next')
+			const back = nextNavigation(router)
+			router.back()
+			await back
+			expect(router.currentRoute.value.fullPath).to.equal('/Atlas/Page?fileId=42&view=grid#rollout')
+
+			const forward = nextNavigation(router)
+			router.forward()
+			await forward
+			expect(router.currentRoute.value.fullPath).to.equal('/Atlas/Next?step=1#next')
+			expect(window.history.state).to.include.keys('back', 'current', 'forward', 'position')
+
+			app.unmount()
+			element.remove()
+		})
+	})
+
 	it('keeps the active page loading while a stale page request completes', () => {
 		cy.then(async () => {
 			const consoleError = Cypress.sinon.spy(console, 'error')
@@ -175,6 +257,28 @@ describe('Mounted page version components', () => {
 				mounted.element.remove()
 				fetchSnapshot.restore()
 			}
+		})
+	})
+
+	it('shows routed Viewer preparation failure before any snapshot read', () => {
+		cy.then(async () => {
+			const fixture = comparisonFixture()
+			window.OCA ??= {}
+			window.OCA.Text = {}
+			window.OCA.Viewer = { compare: Cypress.sinon.stub() }
+			const fetchSnapshot = Cypress.sinon.stub(window, 'fetch')
+			const mounted = await mountVersionComparisonDialog(fixture.currentVersion, fixture.versions)
+
+			await mounted.component.value.openRoutedPair({ from: 'version:1', to: 'current:3' })
+			await waitFor(() => document.querySelector('.version-comparison-dialog [role="alert"]'))
+			expect(document.querySelector('.version-comparison-dialog [role="alert"]').textContent)
+				.to.contain('Could not save current changes before comparison. Please try again.')
+			expect(fetchSnapshot).not.to.have.been.called
+			expect(window.OCA.Viewer.compare).not.to.have.been.called
+
+			mounted.app.unmount()
+			mounted.element.remove()
+			fetchSnapshot.restore()
 		})
 	})
 
@@ -267,6 +371,27 @@ describe('Mounted page version components', () => {
 				mounted.app.unmount()
 				mounted.element.remove()
 				fetchSnapshot.restore()
+			}
+		})
+	})
+
+	it('shows one informational message for current snapshot aliases', () => {
+		cy.then(async () => {
+			const fixture = comparisonFixture()
+			window.OCA ??= {}
+			window.OCA.Text = {}
+			const mounted = await mountVersionComparisonDialog(fixture.currentVersion, fixture.versions)
+
+			try {
+				await mounted.component.value.openRoutedPair({ from: 'current:3', to: 'current' })
+				await waitFor(() => document.querySelector('.modal-wrapper [role="status"]'))
+				expect(document.querySelectorAll('.modal-wrapper [role="status"]')).to.have.length(1)
+				expect(document.querySelector('.modal-wrapper [role="status"]').textContent).to.contain('Select two different versions.')
+				expect(document.querySelectorAll('.modal-wrapper [role="alert"]')).to.have.length(0)
+				expect([...document.querySelectorAll('.modal-wrapper button')].some(({ textContent }) => textContent.includes('Retry'))).to.equal(false)
+			} finally {
+				mounted.app.unmount()
+				mounted.element.remove()
 			}
 		})
 	})

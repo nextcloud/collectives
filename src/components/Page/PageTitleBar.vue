@@ -135,6 +135,7 @@ import pageMixin from '../../mixins/pageMixin.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
+import { canonicalPathRoute } from '../../util/versionComparisonRoute.js'
 
 export default {
 	name: 'PageTitleBar',
@@ -296,7 +297,7 @@ export default {
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
 				this.getPages(false)
-				await this.$router.replace(this.currentPagePath)
+				await this.$router.replace(canonicalPathRoute(this.$route, this.currentPagePath))
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
