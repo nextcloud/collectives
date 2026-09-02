@@ -1998,7 +1998,8 @@ class FeatureContext implements Context {
 
 	private function getUserCollectivesPath(string $user): string {
 		$this->setCurrentUser($user);
-		return $this->userGetsSetting($user, 'user_folder');
+		$path = $this->userGetsSetting($user, 'user_folder');
+		return ($path !== '') ? $path : '/.Collectives';
 	}
 
 	/**

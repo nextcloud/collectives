@@ -954,3 +954,51 @@ namespace OCA\Text\Event {
 		public function getNotification(): INotification
 	}
 }
+
+namespace OCA\DAV\Events {
+	use OCP\EventDispatcher\Event;
+	use Sabre\DAV\Server;
+
+	class SabrePluginAddEvent extends Event {
+		public function __construct(private Server $server) {}
+		public function getServer(): Server {}
+	}
+}
+
+namespace Sabre\DAV {
+	class Server {
+		public $tree;
+		public function on(string $event, callable $handler, int $priority = 0): void {}
+		public function addPlugin(ServerPlugin $plugin): void {}
+	}
+
+	abstract class ServerPlugin {
+		abstract public function initialize(Server $server): void;
+	}
+
+	class PropFind {
+		public function handle(string $propertyName, callable $handler) {}
+		public function get(string $propertyName) {}
+	}
+
+	interface INode {}
+}
+
+namespace Sabre\DAV\Exception {
+	class Forbidden extends \Exception {}
+	class NotFound extends \Exception {}
+}
+
+namespace Sabre\HTTP {
+	interface RequestInterface {
+		public function getPath(): string;
+	}
+
+	interface ResponseInterface {}
+}
+
+namespace OCA\DAV\Connector\Sabre {
+	class FilesPlugin {
+		public const SHARE_HIDE_DOWNLOAD_PROPERTYNAME = '';
+	}
+}
