@@ -294,6 +294,7 @@ OC.L10N.register(
     "Could not get attachments" : "Δεν ήταν δυνατή η λήψη των συνημμένων",
     "Upload" : "Μεταφόρτωση",
     "Drag and drop files here to upload" : "Σύρετε και αφήστε αρχεία εδώ για να τα μεταφορτώσετε",
+    "Uploading" : "Γίνεται μεταφόρτωση",
     "In page" : "Στη σελίδα",
     "Not in page" : "Όχι στη σελίδα",
     "Recently deleted" : "Πρόσφατα διαγραμμένα",

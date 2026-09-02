@@ -58,6 +58,7 @@ OC.L10N.register(
     "Update share" : "Agiorna sa cumpartzidura",
     "Upload" : "Càrriga",
     "Drag and drop files here to upload" : "Traga archìvios inoghe pro ddos carrigare",
+    "Uploading" : "Carrigamentu",
     "No other versions available" : "Peruna àtera versione disponìbile",
     "Current version" : "Versione atuale",
     "You" : "Tue",

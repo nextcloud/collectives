@@ -52,6 +52,7 @@ OC.L10N.register(
     "Create a new share link" : "Izveidot jaunu kopīgošanas saiti",
     "Upload" : "Augšupielādēt",
     "Drag and drop files here to upload" : "Vilkt un iemest datnes šeit, lai augšupielādētu",
+    "Uploading" : "Augšupielāde",
     "No attachments" : "Nav pielikumu",
     "External shares" : "Ārējie koplietojumi",
     "External shares explanation" : "Paskaidrojums par ārējiem koplietojumiem",

@@ -127,6 +127,7 @@ OC.L10N.register(
     "Update share" : "Обновить общий ресурс",
     "Upload" : "Отправить",
     "Drag and drop files here to upload" : "Перетаскивайте файлы сюда для загрузки",
+    "Uploading" : "Выгружается",
     "No attachments" : "Нет ни одного вложения",
     "No backlinks available" : "Обратных ссылок не обнаружено",
     "If other pages link to this one, they will be listed here." : "Если другие страницы ссылаются на эту страницу, они будут показаны здесь.",

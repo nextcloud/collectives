@@ -271,6 +271,7 @@ OC.L10N.register(
     "Could not get attachments" : "Nepodarilo sa získať prílohy",
     "Upload" : "Nahrať",
     "Drag and drop files here to upload" : "Pre nahratie presuňte do tohto priestoru súbory ťahaním",
+    "Uploading" : "Nahrávanie",
     "Recently deleted" : "Nedávno odstránené",
     "No attachments" : "Žiadne prílohy",
     "No backlinks available" : "Nie sú dostupné žiadne spätné odkazy",

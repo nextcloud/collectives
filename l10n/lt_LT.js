@@ -300,6 +300,7 @@ OC.L10N.register(
     "Could not get attachments" : "Nepavyko gauti priedų",
     "Upload" : "Įkelti",
     "Drag and drop files here to upload" : "Tempkite failus čia norėdami išsiųsti",
+    "Uploading" : "Įkeliama",
     "In page" : "Puslapyje",
     "Not in page" : "Puslapyje nėra",
     "Recently deleted" : "Neseniai ištrinta",

@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add a page" : "පිටුවක් එකතු කරන්න",
     "Add another link" : "තවත් සබැඳියක් එකතු කරන්න",
     "Upload" : "උඩුගත",
+    "Uploading" : "උඩුගත වෙමින්",
     "No other versions available" : "වෙනත් අනුවාද නැත",
     "Current version" : "වත්මන් අනුවාදය",
     "You" : "ඔබ",

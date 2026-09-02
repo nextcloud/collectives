@@ -32,6 +32,7 @@ OC.L10N.register(
     "Advanced settings" : "დამატებითი პარამეტრები",
     "Unshare" : "გაზიარების შეწყვეტა",
     "Upload" : "ატვირთვა",
+    "Uploading" : "ხდება ატვირთვა",
     "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები",
     "Please reload the page." : "გთხოვთ გადატვირთოთ გვერდი.",

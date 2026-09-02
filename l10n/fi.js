@@ -65,6 +65,7 @@ OC.L10N.register(
     "Update share" : "Päivitä jako",
     "Upload" : "Lähetä",
     "Drag and drop files here to upload" : "Vedä ja pudota tiedostot tähän lähettääksesi",
+    "Uploading" : "Lähetys",
     "No attachments" : "Ei liitteitä",
     "External shares" : "Ulkoiset jaot",
     "No other versions available" : "Ei muita versioita saatavilla",

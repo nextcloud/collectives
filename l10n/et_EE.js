@@ -300,6 +300,7 @@ OC.L10N.register(
     "Could not get attachments" : "Manuseid ei õnnestunud laadida",
     "Upload" : "Laadi üles",
     "Drag and drop files here to upload" : "Üleslaadimiseks lohista failid siia",
+    "Uploading" : "Üleslaadimisel",
     "In page" : "Lehel",
     "Not in page" : "Pole lehel",
     "Recently deleted" : "Hiljuti kustutatud",

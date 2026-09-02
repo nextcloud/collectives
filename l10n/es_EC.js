@@ -130,6 +130,7 @@ OC.L10N.register(
     "Create a new share link" : "Crear un nuevo enlace compartido",
     "Could not get attachments" : "No se pudieron obtener los archivos adjuntos",
     "Upload" : "Cargar",
+    "Uploading" : "Cargando",
     "Recently deleted" : "Eliminadas recientemente",
     "No attachments" : "Sin adjuntos",
     "No backlinks available" : "No hay enlaces de referencia disponibles",

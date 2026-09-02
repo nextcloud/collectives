@@ -69,6 +69,7 @@ OC.L10N.register(
     "Update share" : "Ažuriranje dijeljenja",
     "Upload" : "Učitaj",
     "Drag and drop files here to upload" : "Za prilaganje povucite i ispustite datoteke ovdje",
+    "Uploading" : "Otpremanje",
     "No attachments" : "Nema privitaka",
     "External shares" : "Vanjska dijeljenja",
     "External shares explanation" : "Objašnjenje vanjskih dijeljenja",

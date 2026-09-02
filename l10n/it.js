@@ -131,6 +131,7 @@ OC.L10N.register(
     "Could not get attachments" : "Impossibile ottenere gli allegati",
     "Upload" : "Carica",
     "Drag and drop files here to upload" : "Trascina e rilascia i file qui per caricarli",
+    "Uploading" : "Caricamento",
     "No attachments" : "Nessun allegato",
     "No backlinks available" : "Non sono disponibili collegamento entranti",
     "If other pages link to this one, they will be listed here." : "Se altre pagine sono collegate a questa, saranno elencate qui.",

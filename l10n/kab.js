@@ -43,6 +43,7 @@ OC.L10N.register(
     "Password" : "Awal n uɛeddi",
     "Add another link" : "Rnu aseɣwen-nniḍen",
     "Upload" : "Sili",
+    "Uploading" : "Tuzzna n ifuyla",
     "External shares" : "Beṭṭu n uzγaray",
     "Current version" : "Lqem amiran",
     "You" : "Kemm·čč",

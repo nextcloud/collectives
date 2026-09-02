@@ -300,6 +300,7 @@ OC.L10N.register(
     "Could not get attachments" : "Não foi possível obter anexos",
     "Upload" : "Fazer upload",
     "Drag and drop files here to upload" : "Arraste e solte os arquivos aqui para fazer upload",
+    "Uploading" : "Fazendo upload",
     "In page" : "Na página",
     "Not in page" : "Não na página",
     "Recently deleted" : "Recentemente excluídos",

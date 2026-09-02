@@ -300,6 +300,7 @@ OC.L10N.register(
     "Could not get attachments" : "Ek dosyalar alınamadı",
     "Upload" : "Yükle",
     "Drag and drop files here to upload" : "Yüklemek istediğiniz dosyaları sürükleyip buraya bırakın",
+    "Uploading" : "Yükleniyor",
     "In page" : "Sayfada",
     "Not in page" : "Sayfada değil",
     "Recently deleted" : "Son silinenler",

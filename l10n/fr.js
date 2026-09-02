@@ -300,6 +300,7 @@ OC.L10N.register(
     "Could not get attachments" : "Impossible d'obtenir les pièces jointes",
     "Upload" : "Téléverser",
     "Drag and drop files here to upload" : "Glissez-déposez les fichiers ici pour les téléverser",
+    "Uploading" : "Téléversement",
     "In page" : "Dans la page",
     "Not in page" : "Hors de la page",
     "Recently deleted" : "Supprimé récemment",

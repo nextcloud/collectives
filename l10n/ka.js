@@ -60,6 +60,7 @@ OC.L10N.register(
     "Update share" : "Update share",
     "Upload" : "Upload",
     "Drag and drop files here to upload" : "Drag and drop files here to upload",
+    "Uploading" : "Uploading",
     "No attachments" : "No attachments",
     "Current version" : "Current version",
     "Initial version" : "Initial version",

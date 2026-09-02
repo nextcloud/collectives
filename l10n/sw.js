@@ -272,6 +272,7 @@ OC.L10N.register(
     "Could not get attachments" : "Haikuweza kupata viambatisho",
     "Upload" : "Pakia",
     "Drag and drop files here to upload" : "Sogeza na udondoshe faili hapa ili upakie",
+    "Uploading" : "Inapakia",
     "Recently deleted" : "Hivi karibuni imefutwa",
     "No attachments" : "Hakuna viambatanisho",
     "No backlinks available" : "Hakuna viungo vya nyuma vinavyopatikana",

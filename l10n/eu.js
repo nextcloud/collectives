@@ -194,6 +194,7 @@ OC.L10N.register(
     "Could not get attachments" : "Ezin izan dira jaso eranskinak",
     "Upload" : "Igo",
     "Drag and drop files here to upload" : "Jaregin fitxategiak hemen igotzeko",
+    "Uploading" : "Igotzen",
     "Recently deleted" : "Berriki ezabatua",
     "No attachments" : "Eranskinik ez",
     "No backlinks available" : "Ez dago atzeko estekarik erabilgarri",

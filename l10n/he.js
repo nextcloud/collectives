@@ -51,6 +51,7 @@ OC.L10N.register(
     "Unshare" : "ביטול שיתוף",
     "Create a new share link" : "יצירת קישור שיתוף חדש",
     "Upload" : "העלאה",
+    "Uploading" : "מתבצעת העלאה",
     "No other versions available" : "אין גרסאות אחרות זמינות",
     "Current version" : "גרסה נוכחית",
     "Attachments" : "קבצים מצורפים",

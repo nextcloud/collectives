@@ -41,6 +41,7 @@ OC.L10N.register(
     "Create share" : "Tarqatish yaratish",
     "Unshare" : "Unshare",
     "Upload" : "Yuklash",
+    "Uploading" : "Yuklanmoqda",
     "No attachments" : "Qo‘shimchalar yo‘q",
     "Attachments" : "Qo'shimchalar",
     "Sharing" : "Ulashish",
