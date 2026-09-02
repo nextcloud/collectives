@@ -190,6 +190,7 @@ OC.L10N.register(
     "Could not get attachments" : "无法获取附件",
     "Upload" : "上传",
     "Drag and drop files here to upload" : "将文件拖放至此处以上传",
+    "Uploading" : "上传中",
     "Recently deleted" : "最近删除",
     "No attachments" : "无附件",
     "No backlinks available" : "没有可用的反向链接",

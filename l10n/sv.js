@@ -295,6 +295,7 @@ OC.L10N.register(
     "Could not get attachments" : "Det gick inte att hämta bilagor",
     "Upload" : "Ladda upp",
     "Drag and drop files here to upload" : "Dra och släpp filer här för att ladda upp",
+    "Uploading" : "Laddar upp",
     "In page" : "På sidan",
     "Not in page" : "Inte på sidan",
     "Recently deleted" : "Nyligen borttagna",

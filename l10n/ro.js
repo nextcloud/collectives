@@ -48,6 +48,7 @@ OC.L10N.register(
     "Unshare" : "Oprește partajarea",
     "Upload" : "Încărcare",
     "Drag and drop files here to upload" : "Faceți Drag and drop cu fișierele aici pentru upload",
+    "Uploading" : "Încărcare",
     "No attachments" : "Fără atașamente",
     "No other versions available" : "Nu există alte versiuni disponibile",
     "You" : "Tu",

@@ -217,6 +217,7 @@ OC.L10N.register(
     "Could not get attachments" : "Kunne ikke hente vedhæftede filer",
     "Upload" : "Upload",
     "Drag and drop files here to upload" : "Træk filer hertil for at uploade",
+    "Uploading" : "Uploader",
     "Recently deleted" : "Slettet for nylig ",
     "No attachments" : "Ingen vedhæftninger",
     "No backlinks available" : "Ingen tilgængelige backlinks",

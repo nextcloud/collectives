@@ -59,6 +59,7 @@ OC.L10N.register(
     "Update share" : "Actualizar recurso compartido",
     "Upload" : "Cargar",
     "Drag and drop files here to upload" : "Arrastre y suelte los archivos aquí para subirlos",
+    "Uploading" : "Cargando",
     "No attachments" : "Sin adjuntos",
     "No other versions available" : "No hay otras versiones disponibles",
     "Current version" : "Versión actual",

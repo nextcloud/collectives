@@ -191,6 +191,7 @@ OC.L10N.register(
     "Could not get attachments" : "No s'han pogut obtenir els fitxers adjunts",
     "Upload" : "Puja",
     "Drag and drop files here to upload" : "Arrossegueu i deixeu anar fitxers aquí per a pujar-los",
+    "Uploading" : "S'està pujant",
     "Recently deleted" : "Suprimit recentment",
     "No attachments" : "Sense fitxers adjunts",
     "No backlinks available" : "No hi ha enllaços d'entrada disponibles",

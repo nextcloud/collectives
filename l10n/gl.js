@@ -284,6 +284,7 @@ OC.L10N.register(
     "Could not get attachments" : "Non foi posíbel obter os anexos",
     "Upload" : "Enviar",
     "Drag and drop files here to upload" : "Arrastre e solte os ficheiros aquí para envialos",
+    "Uploading" : "Enviando",
     "In page" : "Na páxina",
     "Not in page" : "No está na páxina",
     "Recently deleted" : "Eliminado recentemente",

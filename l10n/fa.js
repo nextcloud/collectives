@@ -295,6 +295,7 @@ OC.L10N.register(
     "Could not get attachments" : "دریافت پیوست‌ها ممکن نبود",
     "Upload" : "آپلود",
     "Drag and drop files here to upload" : "فایل‌ها را برای آپلود اینجا بکشید و رها کنید",
+    "Uploading" : "در حال بارگذاری",
     "In page" : "در صفحه",
     "Not in page" : "در صفحه نیست",
     "Recently deleted" : "اخیراً حذف شده",

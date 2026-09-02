@@ -133,6 +133,7 @@ OC.L10N.register(
     "Could not get attachments" : "Ni mogoče pridobiti prilog",
     "Upload" : "Iz datoteke",
     "Drag and drop files here to upload" : "Za pošiljanje potegnite in spustite datoteke na to mesto",
+    "Uploading" : "Poteka pošiljanje",
     "Recently deleted" : "Nedavno izbrisano",
     "No attachments" : "Ni prilog",
     "No backlinks available" : "Ni povratnih povezav",

@@ -30,6 +30,7 @@ OC.L10N.register(
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
     "Upload" : "Cargar",
+    "Uploading" : "Cargando",
     "External shares" : "Compartir con el exterior",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",

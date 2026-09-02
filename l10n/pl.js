@@ -273,6 +273,7 @@ OC.L10N.register(
     "Could not get attachments" : "Nie można uzyskać załączników",
     "Upload" : "Wyślij",
     "Drag and drop files here to upload" : "Przeciągnij i upuść pliki tutaj, aby je przesłać",
+    "Uploading" : "Wysyłanie",
     "Recently deleted" : "Ostatnio usunięte",
     "No attachments" : "Brak załączników",
     "No backlinks available" : "Brak dostępnych linków wstecznych",

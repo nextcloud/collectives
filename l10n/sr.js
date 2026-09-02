@@ -267,6 +267,7 @@ OC.L10N.register(
     "Could not get attachments" : "Не могу да се преузму прилози",
     "Upload" : "Отпреми",
     "Drag and drop files here to upload" : "Да отпремите, превуците и отпустите фајлове овде",
+    "Uploading" : "Отпремање",
     "Recently deleted" : "Недавно обрисано",
     "No attachments" : "Без прилога",
     "No backlinks available" : "Нема доступних повратних линкова",

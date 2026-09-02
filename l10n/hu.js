@@ -166,6 +166,7 @@ OC.L10N.register(
     "Could not get attachments" : "Nem sikerült lekérni a mellékleteket",
     "Upload" : "Feltöltés",
     "Drag and drop files here to upload" : "Húzza ide a fájlokat a feltöltéshez",
+    "Uploading" : "Feltöltés",
     "Recently deleted" : "Nemrég törölve",
     "No attachments" : "Nincsenek mellékletek",
     "No backlinks available" : "Visszahivatkozások nem érhetők el",

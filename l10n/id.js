@@ -67,6 +67,7 @@ OC.L10N.register(
     "Update share" : "Perbarui berbagi",
     "Upload" : "Unggah",
     "Drag and drop files here to upload" : "Seret dan lepaskan file di sini untuk mengunggah",
+    "Uploading" : "Mengunggah",
     "No attachments" : "Tidak ada lampiran",
     "External shares" : "Berbagi eksternal",
     "External shares explanation" : "Penjelasan berbagi eksternal",

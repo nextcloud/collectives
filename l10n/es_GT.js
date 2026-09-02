@@ -31,6 +31,7 @@ OC.L10N.register(
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
     "Upload" : "Cargar",
+    "Uploading" : "Cargando",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Please reload the page." : "Por favor vuelve a cargar la página.",

@@ -300,6 +300,7 @@ OC.L10N.register(
     "Could not get attachments" : "Anhänge konnten nicht geladen werden",
     "Upload" : "Hochladen",
     "Drag and drop files here to upload" : "Dateien zum Hochladen hierher ziehen und ablegen",
+    "Uploading" : "Lade hoch",
     "In page" : "Auf der Seite",
     "Not in page" : "Nicht auf der Seite",
     "Recently deleted" : "Kürzlich gelöscht",

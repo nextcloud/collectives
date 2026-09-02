@@ -31,6 +31,7 @@ OC.L10N.register(
     "Advanced settings" : "Erweidert Astellungen",
     "Unshare" : "Net méi deelen",
     "Upload" : "Eroplueden",
+    "Uploading" : "Lued erop",
     "No other versions available" : "Keng aner Versiounen disponibel",
     "Sharing" : "Gedeelt",
     "Versions" : "Versiounen",

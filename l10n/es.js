@@ -268,6 +268,7 @@ OC.L10N.register(
     "Could not get attachments" : "No se pudieron obtener los adjuntos",
     "Upload" : "Subir",
     "Drag and drop files here to upload" : "Arrastre y suelte archivos aquí para subirlos",
+    "Uploading" : "Subiendo",
     "Recently deleted" : "Eliminados recientemente",
     "No attachments" : "Sin adjuntos",
     "No backlinks available" : "No hay enlaces entrantes",

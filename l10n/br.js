@@ -34,6 +34,7 @@ OC.L10N.register(
     "Add another link" : "Implij ul liamm all",
     "Unshare" : "Na eskemm ken",
     "Upload" : "Enporzhiañ",
+    "Uploading" : "O pellkasañ",
     "No other versions available" : "Stumm all ebet kavet",
     "Sharing" : "Rannan",
     "Versions" : "Stumm",

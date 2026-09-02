@@ -300,6 +300,7 @@ OC.L10N.register(
     "Could not get attachments" : "Níorbh fhéidir ceangaltáin a fháil",
     "Upload" : "Uaslódáil",
     "Drag and drop files here to upload" : "Tarraing agus scaoil comhaid anseo le huaslódáil",
+    "Uploading" : "Ag uaslódáil",
     "In page" : "Sa leathanach",
     "Not in page" : "Níl sé ar an leathanach",
     "Recently deleted" : "Scriosadh le déanaí",

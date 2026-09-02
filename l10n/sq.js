@@ -35,6 +35,7 @@ OC.L10N.register(
     "Advanced settings" : "Rregullime të mëtejshme",
     "Unshare" : "Hiqe ndarjen",
     "Upload" : "Ngarkoni",
+    "Uploading" : "Duke u ngarkuar",
     "No other versions available" : "Nuk ka versione të tjera të gatshme",
     "Attachments" : "Bashkangjitjet",
     "Sharing" : "Ndarje",

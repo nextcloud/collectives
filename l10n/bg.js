@@ -131,6 +131,7 @@ OC.L10N.register(
     "Could not get attachments" : "Неуспешно получаване на прикачени файлове",
     "Upload" : "Качване",
     "Drag and drop files here to upload" : "Плъзнете и пуснете файлове тук, за да ги качите",
+    "Uploading" : "Качване",
     "Recently deleted" : "Наскоро изтрити",
     "No attachments" : "Няма прикачени файлове",
     "No backlinks available" : "Няма налични обратни връзки",

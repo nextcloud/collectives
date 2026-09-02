@@ -291,6 +291,7 @@ OC.L10N.register(
     "Could not get attachments" : "Nedaří se získat přílohy",
     "Upload" : "Nahrát",
     "Drag and drop files here to upload" : "Soubory nahrajete jejich přetažením sem",
+    "Uploading" : "Nahrávání",
     "In page" : "Ve stránce",
     "Not in page" : "Ne ve stránce",
     "Recently deleted" : "Nedávno smazané",

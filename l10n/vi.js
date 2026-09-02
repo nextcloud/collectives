@@ -57,6 +57,7 @@ OC.L10N.register(
     "Update share" : "Cập nhật chia sẻ",
     "Upload" : "Tải lên",
     "Drag and drop files here to upload" : "Kéo thả file vào đây để tải lên",
+    "Uploading" : "Đang tải lên",
     "No other versions available" : "Không có các phiên bản khác có sẵn",
     "Current version" : "Phiên bản hiện tại",
     "Initial version" : "Phiên bản đầu tiên",

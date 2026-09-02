@@ -270,6 +270,7 @@ OC.L10N.register(
     "Could not get attachments" : "قوشۇمچە ھۆججەتلەرگە ئېرىشەلمىدى",
     "Upload" : "يۈكلەش",
     "Drag and drop files here to upload" : "ھۆججەتلەرنى بۇ يەرگە سۆرەپ تاشلاڭ",
+    "Uploading" : "يۈكلەش",
     "Recently deleted" : "يېقىندا ئۆچۈرۈلدى",
     "No attachments" : "قوشۇمچە ھۆججەت يوق",
     "No backlinks available" : "قايتا ئۇلىنىش يوق",
