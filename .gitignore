@@ -19,6 +19,7 @@ css/*
 
 # Cypress test artifacts
 cypress/downloads/
+cypress/results/
 cypress/screenshots/
 cypress/videos/
 

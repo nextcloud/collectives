@@ -24,7 +24,11 @@ export interface UserFixture {
  */
 export async function loginAsUser(browser: Browser, baseURL: string | undefined, account: Account): Promise<Page> {
 	// Important: make sure we authenticate in a clean environment by unsetting storage state.
-	const page = await browser.newPage({ storageState: undefined, baseURL })
+	const page = await browser.newPage({
+		storageState: undefined,
+		baseURL,
+		ignoreHTTPSErrors: baseURL?.startsWith('https://nextcloud.local') ?? false,
+	})
 	await login(page.request, account)
 	const tokenResponse = await page.request.get('./csrftoken', { failOnStatusCode: true })
 	const { token } = (await tokenResponse.json()) as { token: string }

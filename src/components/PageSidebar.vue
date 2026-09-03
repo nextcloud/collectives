@@ -39,7 +39,7 @@
 			<SidebarTabSharing v-if="showingSidebar" :pageId="currentPageId" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
-			v-if="!isPublic && currentCollectiveCanEdit"
+			v-if="!isPublic"
 			id="versions"
 			:order="3"
 			:name="t('collectives', 'Versions')">
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { showWarning } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
@@ -71,6 +72,11 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
 import { useVersionsStore } from '../stores/versions.js'
+import {
+	claimVersionComparisonRouteWarning,
+	parseVersionComparisonRoute,
+	rejectedVersionComparisonRoute,
+} from '../util/versionComparisonRoute.js'
 
 export default {
 	name: 'PageSidebar',
@@ -88,12 +94,15 @@ export default {
 		SidebarTabVersions,
 	},
 
+	data() {
+		return {
+			comparisonRouteHandling: false,
+		}
+	},
+
 	computed: {
 		...mapState(useRootStore, ['activeSidebarTab', 'isPublic', 'showingSidebar']),
-		...mapState(useCollectivesStore, [
-			'currentCollectiveCanEdit',
-			'currentCollectiveCanShare',
-		]),
+		...mapState(useCollectivesStore, ['currentCollectiveCanShare']),
 
 		...mapState(usePagesStore, ['currentPage', 'currentPageId', 'title']),
 
@@ -122,6 +131,15 @@ export default {
 		},
 	},
 
+	watch: {
+		'$route.fullPath': 'handleComparisonRoute',
+		currentPageId: 'handleComparisonRoute',
+	},
+
+	mounted() {
+		this.handleComparisonRoute()
+	},
+
 	methods: {
 		t,
 
@@ -139,6 +157,37 @@ export default {
 		close() {
 			this.selectVersion(null)
 			this.hideSidebar()
+		},
+
+		async handleComparisonRoute() {
+			if (this.comparisonRouteHandling || !this.currentPageId) {
+				return
+			}
+			const comparisonRoute = parseVersionComparisonRoute(this.$route.query)
+			if (comparisonRoute.kind === 'absent') {
+				return
+			}
+
+			if (comparisonRoute.kind === 'valid' && !this.isPublic) {
+				this.showSidebar()
+				this.setActiveSidebarTab('versions')
+				return
+			}
+
+			this.comparisonRouteHandling = true
+			const warning = claimVersionComparisonRouteWarning(this.$route.query)
+				? comparisonRoute.kind === 'invalid'
+					? t('collectives', 'This version comparison link is invalid.')
+					: t('collectives', 'Version comparison is not available for public links.')
+				: null
+			try {
+				await this.$router.replace(rejectedVersionComparisonRoute(this.$route))
+			} finally {
+				this.comparisonRouteHandling = false
+				if (warning) {
+					showWarning(warning)
+				}
+			}
 		},
 	},
 }

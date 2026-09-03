@@ -442,7 +442,7 @@ Cypress.Commands.add('stubClipboardAndVisit', (url) => {
 })
 
 Cypress.Commands.add('getClipboardText', () => {
-	cy.get('@clipboardWriteText')
+	return cy.get('@clipboardWriteText')
 		.should('have.been.called')
-		.its('lastCall.args[0]')
+		.then((writeText) => writeText.lastCall.args[0])
 })

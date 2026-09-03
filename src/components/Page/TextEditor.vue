@@ -77,6 +77,7 @@ export default {
 	data() {
 		return {
 			textEditWatcher: null,
+			unregisterCurrentSnapshotPreparer: null,
 		}
 	},
 
@@ -115,6 +116,7 @@ export default {
 	},
 
 	async mounted() {
+		this.unregisterCurrentSnapshotPreparer = this.registerCurrentSnapshotPreparer(() => this.prepareCurrentEditorSnapshot())
 		const readerPromise = this.setupReader(this.currentPage)
 		const editorPromise = this.setupEditor()
 		const pageContentPromise = this.getPageContent()
@@ -139,6 +141,7 @@ export default {
 	},
 
 	beforeUnmount() {
+		this.unregisterCurrentSnapshotPreparer?.()
 		unsubscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 		unsubscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		unsubscribe('collectives:attachment:insert', this.insertAttachment)
@@ -149,7 +152,7 @@ export default {
 		t,
 
 		...mapActions(useRootStore, ['load', 'done']),
-		...mapActions(useVersionsStore, ['getVersions']),
+		...mapActions(useVersionsStore, ['getVersions', 'registerCurrentSnapshotPreparer']),
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),
 		...mapActions(useCirclesStore, ['getCircleMembers']),
 
@@ -200,6 +203,13 @@ export default {
 			return this.editor.save()
 		},
 
+		async prepareCurrentEditorSnapshot() {
+			if (this.isTextEdit && this.editor && await this.saveEditor() !== true) {
+				throw new Error('Could not save the current page before comparison.')
+			}
+			return this.getVersions(this.currentPage.id)
+		},
+
 		async stopEdit() {
 			// switch back to edit if there's no content
 			if (!this.pageContent?.trim()) {
@@ -222,11 +232,6 @@ export default {
 
 				// Touch page to update last changed timestamp
 				this.touchPage()
-
-				// Update loaded versions
-				if (!this.isPublic && this.hasVersionsLoaded) {
-					this.getVersions(this.currentPage.id)
-				}
 			}
 		},
 

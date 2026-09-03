@@ -20,6 +20,17 @@ jobs:
             server-branch: ['stable32', 'master']
             shardIndex: [1, 2, 3, 4]
             shardTotal: [4]
+            include:
+              - server-branch: 'stable32'
+                project-args: '--project=chromium --project=comparison-viewer-chromium'
+                semantic-e2e: '0'
+                text-repository: 'nextcloud/text'
+                text-ref: 'stable32'
+              - server-branch: 'master'
+                project-args: '--project=chromium --project=comparison-chromium'
+                semantic-e2e: '1'
+                text-repository: 'nextcloud/text'
+                text-ref: 'b5ff1b0ce8d38b8a8dfdd6acf7b3f36c3fa2e272'
     steps:
       - name: Checkout app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -56,19 +67,24 @@ jobs:
           npm run build --if-present
 
       - name: Install Playwright Browsers
-        run: npx playwright install chromium --only-shell
+        run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: npx playwright test ${{ matrix.project-args }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         env:
+          COLLECTIVES_SEMANTIC_E2E: ${{ matrix.semantic-e2e }}
           PLAYWRIGHT_NC_SERVER_BRANCH: ${{ matrix.server-branch }}
+          PLAYWRIGHT_TEXT_REPOSITORY: ${{ matrix.text-repository }}
+          PLAYWRIGHT_TEXT_REF: ${{ matrix.text-ref }}
 
       - name: Upload results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ !cancelled() }}
         with:
           name: playwright-report_${{ matrix.server-branch }}_shard${{ matrix.shardIndex }}
-          path: test-results/
+          path: |
+            test-results/
+            blob-report/
           retention-days: 7
 
   summary:

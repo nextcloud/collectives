@@ -13,15 +13,17 @@ import * as davApi from '../apis/dav/index.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
 
+const preparers = new WeakMap()
+const requests = new WeakMap()
+
 export const useVersionsStore = defineStore('versions', {
 	state: () => ({
+		loadedPageId: null,
 		selectedVersion: null,
 		versions: [],
 	}),
 
 	getters: {
-		hasVersionsLoaded: (state) => !!state.versions.length,
-
 		currentVersion: () => {
 			const collectivesStore = useCollectivesStore()
 			const pagesStore = usePagesStore()
@@ -46,16 +48,42 @@ export const useVersionsStore = defineStore('versions', {
 	},
 
 	actions: {
+		registerCurrentSnapshotPreparer(preparer) {
+			preparers.set(this, preparer)
+			return () => {
+				if (preparers.get(this) === preparer) {
+					preparers.delete(this)
+				}
+			}
+		},
+
+		async prepareCurrentSnapshot() {
+			return preparers.get(this)?.()
+		},
+
 		selectVersion(version) {
 			this.selectedVersion = version
 		},
 
-		async getVersions(pageId) {
-			const response = await davApi.getVersions(pageId)
-			this.versions = response.data
-				// filter out root
-				.filter(({ mime }) => mime !== '')
-				.map((version) => this.formatVersion(version, pageId))
+		getVersions(pageId) {
+			const task = Promise.resolve()
+				.then(() => davApi.getVersions(pageId))
+				.then((response) => {
+					const versions = response.data
+						.filter(({ mime }) => mime !== '')
+						.map((version) => this.formatVersion(version, pageId))
+					const currentSnapshot = versions.reduce((latest, version) => !latest || version.mtime > latest.mtime ? version : latest, null)
+					if (currentSnapshot) {
+						currentSnapshot.isCurrentSnapshot = true
+					}
+					if (requests.get(this) === task) {
+						this.versions = versions
+						this.loadedPageId = pageId
+					}
+					return versions
+				})
+			requests.set(this, task)
+			return task
 		},
 
 		formatVersion(version, pageId) {
@@ -93,7 +121,8 @@ export const useVersionsStore = defineStore('versions', {
 			}
 
 			this.selectVersion(null)
-			this.getVersions(pagesStore.currentPage.id)
+			await this.getVersions(pagesStore.currentPage.id)
+				.catch((error) => console.error('Failed to refresh page versions', error))
 			showSuccess(t('collectives', 'Restored {basename} version of {page}.', {
 				basename: version.basename,
 				page: pagesStore.currentPage.title,
@@ -133,7 +162,8 @@ export const useVersionsStore = defineStore('versions', {
 			if (version.basename === this.selectedVersion?.basename) {
 				this.selectVersion(null)
 			}
-			this.getVersions(pagesStore.currentPage.id)
+			await this.getVersions(pagesStore.currentPage.id)
+				.catch((error) => console.error('Failed to refresh page versions', error))
 			showSuccess(t('collectives', 'Deleted {basename} version of {page}.', {
 				basename: version.basename,
 				page: pagesStore.currentPage.title,

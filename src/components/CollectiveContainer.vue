@@ -55,6 +55,7 @@ import { useSharesStore } from '../stores/shares.js'
 import { useTagsStore } from '../stores/tags.js'
 import { useVersionsStore } from '../stores/versions.js'
 import displayError from '../util/displayError.js'
+import { canonicalPathRoute } from '../util/versionComparisonRoute.js'
 
 export default {
 	name: 'CollectiveContainer',
@@ -163,13 +164,10 @@ export default {
 			if (this.currentCollective
 				&& this.isLandingPage
 				&& this.$route.path !== this.currentCollectivePath) {
-				this.$router.replace({ path: this.currentCollectivePath, hash: document.location.hash })
+				this.$router.replace(canonicalPathRoute(this.$route, this.currentCollectivePath))
 			} else if (this.currentPage
-				&& this.$route.fullPath !== this.currentPagePath) {
-				this.$router.replace({
-					path: this.currentPagePath,
-					hash: document.location.hash,
-				})
+				&& this.$route.path !== this.currentPagePath) {
+				this.$router.replace(canonicalPathRoute(this.$route, this.currentPagePath))
 			}
 		},
 	},
