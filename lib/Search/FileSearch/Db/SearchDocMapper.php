@@ -25,13 +25,13 @@ class SearchDocMapper extends QBMapper {
 		parent::__construct($db, 'collectives_s_docs', SearchDoc::class);
 	}
 
-	public function insertDoc(int $collectiveId, int $wordId, int $fileId, int $hitCount): SearchDoc {
-		$doc = new SearchDoc();
-		$doc->setCollectiveId($collectiveId);
-		$doc->setWordId($wordId);
-		$doc->setFileId($fileId);
-		$doc->setHitCount($hitCount);
-		return $this->insert($doc);
+	public function insertDoc(int $collectiveId, int $wordId, int $fileId, int $hitCount): int {
+		return $this->db->insertIgnoreConflict($this->tableName, [
+			'collective_id' => $collectiveId,
+			'word_id' => $wordId,
+			'file_id' => $fileId,
+			'hit_count' => $hitCount,
+		]);
 	}
 
 	public function deleteByCollective(int $collectiveId): void {

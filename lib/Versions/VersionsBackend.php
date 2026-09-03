@@ -109,6 +109,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 			$versionEntity->setDecodedMetadata([]);
 			try {
+				// fixme: replace with insertIgnoreConflict
 				$this->collectiveVersionMapper->insert($versionEntity);
 			} catch (DBException $e) {
 				if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
@@ -143,6 +144,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 				$versionEntity->setDecodedMetadata([]);
 				try {
+					// fixme: replace with insertIgnoreConflict
 					$this->collectiveVersionMapper->insert($versionEntity);
 				} catch (DBException $e) {
 					if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
@@ -406,6 +408,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$versionEntity->setMimetype($this->mimeTypeLoader->getId($file->getMimetype()));
 		$versionEntity->setDecodedMetadata([]);
 		try {
+			// fixme: replace with insertIgnoreConflict
 			$this->collectiveVersionMapper->insert($versionEntity);
 		} catch (DBException $e) {
 			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
@@ -482,6 +485,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			}
 
 			try {
+				// fixme: replace with insertIgnoreConflict
 				$this->collectiveVersionMapper->insert($versionEntity);
 			} catch (DBException $e) {
 				if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
