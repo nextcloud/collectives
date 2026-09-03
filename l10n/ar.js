@@ -216,6 +216,7 @@ OC.L10N.register(
     "Could not get attachments" : "تعذّر الحصول على المُرفَقات",
     "Upload" : "إرفَع",
     "Drag and drop files here to upload" : "إسحب وأفلت الملفات هنا لرفعها",
+    "Uploading" : "الرَّفْعُ جارٍ …",
     "Recently deleted" : "محذوفة مؤخّراً",
     "No attachments" : "لا توجد مرفقات",
     "No backlinks available" : "لا توجد روابط خلفيّة backlinks مُتاحةٌ",
