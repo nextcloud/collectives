@@ -77,6 +77,7 @@ OC.L10N.register(
     "Unshare" : "Cкасаваць абагульванне",
     "Upload" : "Запампаваць",
     "Drag and drop files here to upload" : "Перацягніце файлы сюды, каб запампаваць іх",
+    "Uploading" : "Запампоўванне",
     "Current version" : "Бягучая версія",
     "Initial version" : "Першапачатковая версія",
     "You" : "Вы",

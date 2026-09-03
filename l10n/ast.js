@@ -124,6 +124,7 @@ OC.L10N.register(
     "Update share" : "Anovar la compartición",
     "Upload" : "Xunir",
     "Drag and drop files here to upload" : "Arrastra y suelta los ficheros equí pa xubilos",
+    "Uploading" : "Xubiendo",
     "Could not get page versions" : "Nun se pudieron consiguir les versiones de la páxina",
     "No other versions available" : "Nun otres versiones disponibles",
     "Current version" : "Versión actual",
