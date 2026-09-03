@@ -27,14 +27,14 @@ class SearchFileMapper extends QBMapper {
 		parent::__construct($db, 'collectives_s_files', SearchFile::class);
 	}
 
-	public function insertFile(int $collectiveId, int $fileId, string $path, int $mtime, ?string $language = null): SearchFile {
-		$file = new SearchFile();
-		$file->setCollectiveId($collectiveId);
-		$file->setFileId($fileId);
-		$file->setPath($path);
-		$file->setMtime($mtime);
-		$file->setLanguage($language);
-		return $this->insert($file);
+	public function insertFile(int $collectiveId, int $fileId, string $path, int $mtime, ?string $language = null): int {
+		return $this->db->insertIgnoreConflict($this->tableName, [
+			'collective_id' => $collectiveId,
+			'file_id' => $fileId,
+			'path' => $path,
+			'mtime' => $mtime,
+			'language' => $language,
+		]);
 	}
 
 	public function findByCollectiveAndFileId(int $collectiveId, int $fileId): ?SearchFile {
