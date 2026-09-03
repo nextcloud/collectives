@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Search\FileSearch\Db;
 
 use Exception;
+use OCA\Collectives\Db\TInsertIgnoreConflict;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -23,18 +24,20 @@ use PDO;
  * @template-extends QBMapper<SearchFile>
  */
 class SearchFileMapper extends QBMapper {
+	use TInsertIgnoreConflict;
+
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'collectives_s_files', SearchFile::class);
 	}
 
-	public function insertFile(int $collectiveId, int $fileId, string $path, int $mtime, ?string $language = null): SearchFile {
+	public function insertFile(int $collectiveId, int $fileId, string $path, int $mtime, ?string $language = null): void {
 		$file = new SearchFile();
 		$file->setCollectiveId($collectiveId);
 		$file->setFileId($fileId);
 		$file->setPath($path);
 		$file->setMtime($mtime);
 		$file->setLanguage($language);
-		return $this->insert($file);
+		$this->insertIgnoreConflict($file);
 	}
 
 	public function findByCollectiveAndFileId(int $collectiveId, int $fileId): ?SearchFile {
