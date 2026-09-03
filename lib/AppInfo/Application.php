@@ -18,12 +18,15 @@ use OCA\Collectives\Db\CollectiveVersionMapper;
 use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Listeners\BeforeDirectFileDownloadListener;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
+use OCA\Collectives\Listeners\BeforeZipCreatedListener;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
 use OCA\Collectives\Listeners\CircleEditingEventListener;
 use OCA\Collectives\Listeners\CollectivesReferenceListener;
 use OCA\Collectives\Listeners\NodeRenamedListener;
 use OCA\Collectives\Listeners\NodeWrittenListener;
+use OCA\Collectives\Listeners\SabrePluginAddListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Listeners\TextMentionListener;
 use OCA\Collectives\Middleware\PublicOCSMiddleware;
@@ -40,6 +43,7 @@ use OCA\Collectives\Team\CollectiveTeamResourceProvider;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\Collectives\Trash\PageTrashManager;
 use OCA\Collectives\Versions\VersionsBackend;
+use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCA\Text\Event\MentionEvent;
 use OCP\App\IAppManager;
@@ -51,6 +55,8 @@ use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\Events\BeforeDirectFileDownloadEvent;
+use OCP\Files\Events\BeforeZipCreatedEvent;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\Files\IMimeTypeLoader;
@@ -83,6 +89,13 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(MentionEvent::class, TextMentionListener::class);
 
 		$context->registerNotifierService(Notifier::class);
+
+		// Negative priority so it runs after other listeners (e.g. files_sharing
+		// at priority 5) and has the final say on whether the download is allowed.
+		$context->registerEventListener(BeforeZipCreatedEvent::class, BeforeZipCreatedListener::class, -100);
+		$context->registerEventListener(BeforeDirectFileDownloadEvent::class, BeforeDirectFileDownloadListener::class, -100);
+
+		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginAddListener::class, 500);
 
 		$context->registerMiddleware(PublicOCSMiddleware::class);
 
