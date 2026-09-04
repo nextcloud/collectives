@@ -43,6 +43,8 @@ OC.L10N.register(
     "Upload" : "Yuklash",
     "Uploading" : "Yuklanmoqda",
     "No attachments" : "Qo‘shimchalar yo‘q",
+    "Later" : "Keyinchalik",
+    "Retry" : "Qayta urinish",
     "Attachments" : "Qo'shimchalar",
     "Sharing" : "Ulashish",
     "Versions" : "Versions",

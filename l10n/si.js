@@ -23,6 +23,8 @@ OC.L10N.register(
     "Upload" : "උඩුගත",
     "Uploading" : "උඩුගත වෙමින්",
     "No other versions available" : "වෙනත් අනුවාද නැත",
+    "Later" : "පසුව",
+    "Retry" : "නැවත උත්සාහ කරන්න",
     "Current version" : "වත්මන් අනුවාදය",
     "You" : "ඔබ",
     "Attachments" : "ඇමිණුම්",
