@@ -24,6 +24,8 @@ OC.L10N.register(
     "Unshare" : "Cessa de compartir",
     "Upload" : "Incargar",
     "No other versions available" : "Nulle altere versiones disponibile",
+    "Earlier" : "Ante",
+    "Later" : "Depost",
     "Attachments" : "Attachamentos",
     "Sharing" : "Compartente",
     "Versions" : "Versiones",

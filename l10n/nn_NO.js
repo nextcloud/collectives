@@ -35,6 +35,7 @@ OC.L10N.register(
     "Unshare" : "Fjern deling",
     "Upload" : "Last opp",
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
+    "Retry" : "Forsøk att",
     "Sharing" : "Deling",
     "Versions" : "Utgåver",
     "Link copied" : "Lenkje kopiert",

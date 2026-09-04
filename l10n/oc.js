@@ -52,6 +52,7 @@ OC.L10N.register(
     "Create a new share link" : "Crear un ligam de partatge novèl",
     "Upload" : "Telecargament",
     "No other versions available" : "Cap d’autra version pas disponibla",
+    "Retry" : "Tornar ensajar",
     "You" : "Vos",
     "Sharing" : "Partiment",
     "Versions" : "Versions",

@@ -40,6 +40,8 @@ OC.L10N.register(
     "Create a new share link" : "Krei novan kunhavan ligilon",
     "Upload" : "Alŝuti",
     "No other versions available" : "Neniu alia versio disponeblas",
+    "Later" : "Poste",
+    "Retry" : "Reprovi",
     "Current version" : "Nuna versio",
     "Attachments" : "Dosieraj aldonaĵoj",
     "Sharing" : "Kunhavigo",
