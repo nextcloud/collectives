@@ -128,6 +128,7 @@ OC.L10N.register(
     "Could not get page versions" : "Nun se pudieron consiguir les versiones de la páxina",
     "No other versions available" : "Nun otres versiones disponibles",
     "Download version" : "Baxar la versión",
+    "Retry" : "Retentar",
     "Current version" : "Versión actual",
     "Initial version" : "Versión inicial",
     "You" : "Tu",

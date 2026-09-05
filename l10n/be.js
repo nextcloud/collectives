@@ -79,6 +79,7 @@ OC.L10N.register(
     "Drag and drop files here to upload" : "Перацягніце файлы сюды, каб запампаваць іх",
     "Uploading" : "Запампоўванне",
     "Download version" : "Спампаваць версію",
+    "Retry" : "Паўтарыць спробу",
     "Current version" : "Бягучая версія",
     "Initial version" : "Першапачатковая версія",
     "You" : "Вы",
