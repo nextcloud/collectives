@@ -24,6 +24,8 @@ OC.L10N.register(
     "Advanced settings" : "Gevorderde instellings",
     "Unshare" : "Ontdeel",
     "Upload" : "Oplaai",
+    "Later" : "Later",
+    "Retry" : "Herprobeer",
     "Versions" : "Weergawes",
     "Link copied" : "Skakel gekopieer",
     "Please reload the page." : "Herlaai asseblief die bladsy.",
