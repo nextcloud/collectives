@@ -18,7 +18,6 @@
   "rangeStrategy": "bump",
   "minimumReleaseAge": "4 days",
   "rebaseWhen": "conflicted",
-  "ignoreUnstable": false,
   "baseBranchPatterns": [
     "main"
   ],
