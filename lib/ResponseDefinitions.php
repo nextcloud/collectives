@@ -44,6 +44,18 @@ namespace OCA\Collectives;
  *     hasPassword: bool,
  * }
  *
+ * @psalm-type CollectivesPublication = array{
+ *     id: int,
+ *     collectiveId: int,
+ *     staticSiteId: string,
+ *     selectedPageIds: list<int>,
+ *     publishedUrl: ?string,
+ *     status: string,
+ *     createdBy: string,
+ *     created: int,
+ *     lastUpdated: int,
+ * }
+ *
  * @psalm-type CollectivesPageInfo = array{
  *     id: int,
  *     slug?: string,
