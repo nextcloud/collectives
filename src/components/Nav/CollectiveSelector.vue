@@ -12,7 +12,7 @@
 			placement="bottom-start"
 			container="#app-navigation-vue"
 			popoverBaseClass="collective-selector-popover"
-			:noCloseOnClickOutside="pickingFolder"
+			:noCloseOnClickOutside="pickingFolder || trashDialogOpen"
 			@update:shown="showSelector = $event">
 			<template #trigger="{ attrs }">
 				<div class="collective-selector-trigger-row">
@@ -80,7 +80,8 @@
 							<CollectivesTrash
 								:networkOnline
 								@restoreCollective="onRestoreCollective"
-								@deleteCollective="onDeleteCollective" />
+								@deleteCollective="onDeleteCollective"
+								@update:dialogOpen="trashDialogOpen = $event" />
 							<CollectivesGlobalSettings
 								:networkOnline
 								class="collective-selector-global-settings"
@@ -165,6 +166,7 @@ export default {
 			showSelector: false,
 			collectiveSubmenu: null,
 			pickingFolder: false,
+			trashDialogOpen: false,
 		}
 	},
 

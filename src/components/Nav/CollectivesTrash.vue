@@ -178,6 +178,7 @@ export default {
 	emits: [
 		'deleteCollective',
 		'restoreCollective',
+		'update:dialogOpen',
 	],
 
 	setup() {
@@ -206,6 +207,17 @@ export default {
 
 		formattedDate() {
 			return (timestamp) => timestamp ? moment.unix(timestamp).fromNow() : ''
+		},
+
+		dialogOpen() {
+			return this.showModal || this.deleteModal
+		},
+	},
+
+	watch: {
+		dialogOpen(value) {
+			// Parent popover needs to take the open state into account for closeOnClickOutide.
+			this.$emit('update:dialogOpen', value)
 		},
 	},
 
