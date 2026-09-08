@@ -344,11 +344,20 @@ class CollectiveService extends CollectiveServiceBase {
 			$this->circleHelper->unflagCircleAsAppManaged($collective->getCircleId());
 		}
 
+		return $this->purgeCollective($collective);
+	}
+
+	/**
+	 * @throws NotFoundException
+	 */
+	public function purgeCollective(Collective $collective): Collective {
 		// Delete collective folder and its contents
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 			$collectiveFolder->delete();
-		} catch (InvalidPathException|FilesNotFoundException|FilesNotPermittedException $e) {
+		} catch (FilesNotFoundException) {
+			// Collective folder is already gone, continue with cleanup
+		} catch (InvalidPathException|FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder', 0, $e);
 		} finally {
 			// Delete leftovers in any case (also if collective folder is already gone)

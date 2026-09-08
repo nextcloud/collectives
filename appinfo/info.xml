@@ -55,6 +55,7 @@ to structure shared knowledge and cultivate trust.
 		<job>OCA\Collectives\BackgroundJob\ExpirePageVersions</job>
 		<job>OCA\Collectives\BackgroundJob\IndexCollectives</job>
 		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
+		<job>OCA\Collectives\BackgroundJob\PurgeOrphanedCollectives</job>
 	</background-jobs>
 
 	<repair-steps>
@@ -76,6 +77,7 @@ to structure shared knowledge and cultivate trust.
 		<command>OCA\Collectives\Command\IndexCollectives</command>
 		<command>OCA\Collectives\Command\PageTrashCleanup</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
+		<command>OCA\Collectives\Command\PurgeOrphanedCollectives</command>
 	</commands>
 
 	<settings>
