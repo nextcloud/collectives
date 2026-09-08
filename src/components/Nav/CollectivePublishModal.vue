@@ -36,7 +36,11 @@
 					@toggleExpand="onToggleExpand" />
 			</ul>
 			<div class="modal-publish__footer">
-				<NcButton variant="primary" @click="onPublishAsWebsite">
+				<NcButton
+					variant="primary"
+					:loading="publishing"
+					:disabled="publishing"
+					@click="onPublishAsWebsite">
 					{{ t('collectives', 'Publish as Website') }}
 				</NcButton>
 			</div>
@@ -45,6 +49,7 @@
 </template>
 
 <script>
+import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -52,6 +57,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PublishPageTreeItem from './PublishPageTreeItem.vue'
 import PublishTreeRow from './PublishTreeRow.vue'
+import { createStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
 
 export default {
@@ -74,13 +80,13 @@ export default {
 
 	emits: [
 		'close',
-		'publish',
 	],
 
 	data() {
 		return {
 			selectedPageIds: new Set(),
 			expandedPageIds: new Set(),
+			publishing: false,
 		}
 	},
 
@@ -153,10 +159,28 @@ export default {
 		},
 
 		onPublishAsWebsite() {
+			if (this.publishing) {
+				return
+			}
+
 			const pageIds = Array.from(this.selectedPageIds)
-			// TODO: replace with a real backend call once a publish API is available
-			console.info('Publish as website', { collectiveId: this.collective.id, pageIds })
-			this.$emit('publish', { collectiveId: this.collective.id, pageIds })
+			if (pageIds.length === 0) {
+				showError(t('collectives', 'Please select at least one page to publish'))
+				return
+			}
+
+			this.publishing = true
+			createStaticSite(this.collective.id, pageIds)
+				.then(() => {
+					this.onClose()
+				})
+				.catch((error) => {
+					console.error('Could not publish collective as website', error)
+					showError(t('collectives', 'Could not publish collective as website'))
+				})
+				.finally(() => {
+					this.publishing = false
+				})
 		},
 	},
 }
