@@ -91,13 +91,38 @@ test.describe('Collective publish', () => {
 			// All pages are pre-selected; click publish
 			await submitButton.click()
 
-			// The request must reach the backend
+			// The request must reach the backend and provide the website files
 			const response = await (await requestPromise).response()
-			expect(response?.status()).toBe(200)
+			expect(response).not.toBeNull()
+			expect(response!.status()).toBe(200)
+			expect((await response!.json()).ocs.data.status).toBe('provided')
 
 			// Modal closes after successful submission
 			await expect(modal).toHaveCount(0)
+			await expect(page.locator('.toast-success')).toContainText('Website publishing started')
 		})
+	})
+
+	test('keeps the modal open if the website files could not be provided', async ({ collective, navigation, page }) => {
+		// A failed archive build can't be provoked reliably, so the response is replaced
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'POST') {
+				return route.fallback()
+			}
+			await route.fulfill({ status: 500, json: { ocs: { meta: { status: 'failure', statuscode: 500, message: '' }, data: [] } } })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const titleField = modal.getByRole('textbox', { name: 'Website title' })
+		await titleField.fill('My website')
+		await modal.getByRole('button', { name: 'Publish website' }).click()
+
+		await expect(page.locator('.toast-error')).toContainText('Could not publish collective as website')
+		// Entered values remain for another attempt
+		await expect(modal).toBeVisible()
+		await expect(titleField).toHaveValue('My website')
 	})
 
 	test('regular members cannot see publish button', async ({ collective, member }) => {
