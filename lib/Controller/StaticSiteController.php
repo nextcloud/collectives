@@ -9,16 +9,20 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use Closure;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\ResponseDefinitions;
+use OCA\Collectives\Service\ServiceException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSBadRequestException;
+use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
+use OCP\IL10N;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
@@ -36,6 +40,7 @@ class StaticSiteController extends OCSController {
 		IRequest $request,
 		private StaticSiteService $staticSiteService,
 		private LoggerInterface $logger,
+		private IL10N $l10n,
 		private ?string $userId,
 	) {
 		parent::__construct($appName, $request);
@@ -74,15 +79,16 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSBadRequestException No pages selected, invalid title or slug, slug already in use
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
+	 * @throws OCSException Archive of the static site couldn't be provided
 	 *
 	 * 200: Static site created
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId, array $pageIds, ?string $title = null, ?string $slug = null): DataResponse {
 		$uid = $this->getUid();
-		$staticSite = $this->handleErrorResponse(
+		$staticSite = $this->handleArchiveErrorResponse(
 			fn (): StaticSite => $this->staticSiteService->create($collectiveId, $pageIds, $uid, $title, $slug),
-			$this->logger,
+			['collectiveId' => $collectiveId],
 		);
 		return new DataResponse($staticSite);
 	}
@@ -101,15 +107,16 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSBadRequestException No pages selected, invalid title or publication in progress
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, static site or page not found
+	 * @throws OCSException Archive of the static site couldn't be provided
 	 *
 	 * 200: Static site updated
 	 */
 	#[NoAdminRequired]
 	public function update(int $collectiveId, int $id, array $pageIds, string $title): DataResponse {
 		$uid = $this->getUid();
-		$staticSite = $this->handleErrorResponse(
+		$staticSite = $this->handleArchiveErrorResponse(
 			fn (): StaticSite => $this->staticSiteService->update($collectiveId, $id, $pageIds, $title, $uid),
-			$this->logger,
+			['collectiveId' => $collectiveId, 'id' => $id],
 		);
 		return new DataResponse($staticSite);
 	}
@@ -134,5 +141,25 @@ class StaticSiteController extends OCSController {
 			$this->logger,
 		);
 		return new DataResponse([]);
+	}
+
+	/**
+	 * Logs failures to provide the archive once with context and returns a translated error.
+	 *
+	 * @throws OCSBadRequestException
+	 * @throws OCSForbiddenException
+	 * @throws OCSNotFoundException
+	 * @throws OCSException
+	 */
+	private function handleArchiveErrorResponse(Closure $callback, array $context): StaticSite {
+		try {
+			return $this->handleErrorResponse($callback, $this->logger);
+		} catch (ServiceException $e) {
+			$this->logger->error('Failed to provide static site archive', $context + ['exception' => $e]);
+			throw new OCSException(
+				$this->l10n->t('The website could not be prepared. Please contact your administrator.'),
+				Http::STATUS_INTERNAL_SERVER_ERROR,
+			);
+		}
 	}
 }

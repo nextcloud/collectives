@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Db;
 
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -67,6 +68,7 @@ class StaticSiteMapper extends QBMapper {
 	/**
 	 * @param list<int> $pageIds
 	 *
+	 * @throws UnprocessableEntityException
 	 * @throws Exception
 	 */
 	public function create(int $collectiveId, array $pageIds, string $title, string $slug, string $createdBy): StaticSite {
@@ -87,18 +89,54 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Update title and page selection and reset the status for a new publication.
+	 * Set the status to pending, unless the static site was changed since it was read.
 	 *
-	 * @param list<int> $pageIds
+	 * Check and update happen in a single query, so concurrent requests can't start
+	 * a publication twice.
+	 *
+	 * @return bool False if the static site was changed meanwhile
 	 *
 	 * @throws Exception
 	 */
-	public function republish(StaticSite $staticSite, string $title, array $pageIds): StaticSite {
-		$staticSite->setTitle($title);
-		$staticSite->setSelectedPageIds($pageIds);
-		$staticSite->setStatus(StaticSite::STATUS_PENDING);
-		$staticSite->setUpdatedAt($this->timeFactory->getTime());
-		return $this->update($staticSite);
+	public function startPublication(StaticSite $staticSite): bool {
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->tableName)
+			->set('status', $qb->createNamedParameter(StaticSite::STATUS_PENDING, IQueryBuilder::PARAM_STR))
+			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter($staticSite->getStatus(), IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('updated_at', $qb->createNamedParameter($staticSite->getUpdatedAt(), IQueryBuilder::PARAM_INT)));
+
+		return $qb->executeStatement() > 0;
+	}
+
+	/**
+	 * Store title and page selection of a successfully provided publication.
+	 *
+	 * @param list<int> $pageIds
+	 *
+	 * @throws NotFoundException
+	 * @throws UnprocessableEntityException
+	 * @throws Exception
+	 */
+	public function finishPublication(StaticSite $staticSite, string $title, array $pageIds): StaticSite {
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->tableName)
+			->set('title', $qb->createNamedParameter($title, IQueryBuilder::PARAM_STR))
+			->set('selected_pages', $qb->createNamedParameter(StaticSite::encodePageIds($pageIds), IQueryBuilder::PARAM_STR))
+			->set('status', $qb->createNamedParameter(StaticSite::STATUS_PROVIDED, IQueryBuilder::PARAM_STR))
+			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)));
+
+		if ($qb->executeStatement() === 0) {
+			throw new NotFoundException('Static site not found');
+		}
+
+		try {
+			return $this->find($staticSite->getId());
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
+		}
 	}
 
 	/**

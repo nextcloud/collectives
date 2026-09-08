@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { showError } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -213,6 +213,7 @@ export default {
 			this.publishing = true
 			createStaticSite(this.collective.id, pageIds, this.title.trim(), this.slug)
 				.then(() => {
+					showSuccess(t('collectives', 'Website publishing started'))
 					this.onClose()
 				})
 				.catch(displayError('Could not publish collective as website'))
