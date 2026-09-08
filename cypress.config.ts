@@ -33,7 +33,4 @@ export default defineConfig({
 		openMode: 0,
 	},
 	numTestsKeptInMemory: 0,
-	allowCypressEnv: false,
-	experimentalMemoryManagement: true,
-	experimentalFastVisibility: true,
 })
