@@ -113,4 +113,28 @@ test.describe('Collective publish', () => {
 		const publishButton = actionsMenu.getByRole('button', { name: 'Publish website', exact: true })
 		await expect(publishButton).toHaveCount(0)
 	})
+
+	test('clicking "Publish as Website" closes the modal and creates a static site record', async ({ collective, navigation, page }) => {
+		await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true'])
+		await collective.openCollective()
+		await waitForPublishEnabledState(page, true)
+
+		// Intercept the API call to verify it is sent and succeeds
+		const requestPromise = page.waitForRequest((req) => req.url().includes('/static-sites') && req.method() === 'POST')
+
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish')
+		const modal = page.getByRole('dialog')
+		await expect(modal).toBeVisible()
+
+		// All pages are pre-selected; click publish
+		await modal.getByRole('button', { name: 'Publish as Website' }).click()
+
+		// The request must reach the backend
+		const request = await requestPromise
+		const response = await request.response()
+		expect(response?.status()).toBe(200)
+
+		// Modal closes after successful submission
+		await expect(modal).toHaveCount(0)
+	})
 })
