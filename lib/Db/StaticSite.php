@@ -9,8 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Db;
 
+use JsonException;
 use JsonSerializable;
+use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\Entity;
+use UnexpectedValueException;
 
 /**
  * Class StaticSite
@@ -41,15 +44,17 @@ use OCP\AppFramework\Db\Entity;
 class StaticSite extends Entity implements JsonSerializable {
 	public const STATUS_PENDING = 'pending';
 	public const STATUS_PROVIDED = 'provided';
-	public const STATUS_FETCHED = 'fetched';
 	public const STATUS_PUBLISHED = 'published';
+	// Only set by the publish service, a failed archive build doesn't change the status
 	public const STATUS_FAILED = 'failed';
 
-	private const IN_PROGRESS_STATUSES = [
+	// TODO: Add STATUS_PROVIDED once the publish service gets informed about the provided tar.gz
+	public const IN_PROGRESS_STATUSES = [
 		self::STATUS_PENDING,
-		self::STATUS_PROVIDED,
-		self::STATUS_FETCHED,
 	];
+
+	// Seconds after which a pending publication counts as aborted, e.g. after a PHP timeout
+	public const PENDING_TIMEOUT = 15 * 60;
 
 	protected ?int $collectiveId = null;
 	protected ?string $staticSiteId = null;
@@ -62,16 +67,42 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?int $createdAt = null;
 	protected ?int $updatedAt = null;
 
-	public function isInProgress(): bool {
-		return in_array($this->status, self::IN_PROGRESS_STATUSES, true);
+	public function isInProgress(int $now): bool {
+		return !($this->status === self::STATUS_PENDING && $this->updatedAt < $now - self::PENDING_TIMEOUT)
+			&& in_array($this->status, self::IN_PROGRESS_STATUSES, true);
 	}
 
+	/**
+	 * @throws UnexpectedValueException Stored page selection is corrupted
+	 */
 	public function getSelectedPageIds(): array {
-		return json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+		try {
+			$pageIds = json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+		} catch (JsonException $e) {
+			throw new UnexpectedValueException('Invalid page selection stored for static site ' . $this->id, 0, $e);
+		}
+		if (!is_array($pageIds)) {
+			throw new UnexpectedValueException('Invalid page selection stored for static site ' . $this->id);
+		}
+		return $pageIds;
 	}
 
+	/**
+	 * @throws UnprocessableEntityException
+	 */
 	public function setSelectedPageIds(array $pageIds): void {
-		$this->setSelectedPages(json_encode(array_values($pageIds), JSON_THROW_ON_ERROR));
+		$this->setSelectedPages(self::encodePageIds($pageIds));
+	}
+
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	public static function encodePageIds(array $pageIds): string {
+		try {
+			return json_encode(array_values($pageIds), JSON_THROW_ON_ERROR);
+		} catch (JsonException $e) {
+			throw new UnprocessableEntityException('Invalid page IDs: ' . $e->getMessage(), 0, $e);
+		}
 	}
 
 	public function jsonSerialize(): array {
