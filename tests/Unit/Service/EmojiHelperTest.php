@@ -31,6 +31,18 @@ class EmojiHelperTest extends TestCase {
 		self::assertTrue(true);
 	}
 
+	public function testFlagIsValid(): void {
+		EmojiHelper::assertValid('🇫🇷');
+		EmojiHelper::assertValid('🏴󠁧󠁢󠁳󠁣󠁴󠁿');
+		self::assertTrue(true);
+	}
+
+	public function testKeycapIsValid(): void {
+		EmojiHelper::assertValid('1️⃣');
+		EmojiHelper::assertValid('#⃣');
+		self::assertTrue(true);
+	}
+
 	public function testRejectsMultipleEmojis(): void {
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('single emoji');
@@ -65,5 +77,17 @@ class EmojiHelperTest extends TestCase {
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('invalid characters');
 		EmojiHelper::assertValid("👍\x07");
+	}
+
+	public function testRejectsSingleRegionalIndicator(): void {
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('not valid');
+		EmojiHelper::assertValid('🇫');
+	}
+
+	public function testRejectsSingleDigit(): void {
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('not valid');
+		EmojiHelper::assertValid('5');
 	}
 }
