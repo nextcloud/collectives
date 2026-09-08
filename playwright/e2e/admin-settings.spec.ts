@@ -29,6 +29,7 @@ async function setDefaultUserFolder(request: APIRequestContext, value: string) {
 test.describe('Admin settings', () => {
 	let defaultUserFolderInput: Locator
 	let defaultUserFolderHelperText: Locator
+	let publishFeatureSwitch: Locator
 
 	test.beforeEach(async ({ page }) => {
 		const admin: User = {
@@ -40,6 +41,9 @@ test.describe('Admin settings', () => {
 		await setDefaultUserFolder(page.request, '')
 		defaultUserFolderInput = page.getByRole('textbox', { name: 'Default user folder' })
 		defaultUserFolderHelperText = page.locator('#defaultUserFolder-helper-text')
+		publishFeatureSwitch = page.getByLabel('Enable publish feature')
+		await expect(defaultUserFolderInput).toBeVisible()
+		await expect(defaultUserFolderHelperText).not.toBeVisible()
 	})
 
 	test('Default user folder warns about invalid values', async ({ page }) => {
@@ -73,5 +77,19 @@ test.describe('Admin settings', () => {
 		const responsePromise = page.waitForResponse(/default_user_folder/)
 		await defaultUserFolderInput.blur()
 		expect((await responsePromise).ok()).toBe(true)
+	})
+
+	test('Publish feature can be enabled and disabled', async ({ page }) => {
+		await publishFeatureSwitch.setChecked(true, { force: true })
+		await page.waitForTimeout(100)
+		await page.reload()
+		publishFeatureSwitch = page.getByLabel('Enable publish feature')
+		await expect(publishFeatureSwitch).toBeChecked()
+
+		await publishFeatureSwitch.setChecked(false, { force: true })
+		await page.waitForTimeout(100)
+		await page.reload()
+		publishFeatureSwitch = page.getByLabel('Enable publish feature')
+		await expect(publishFeatureSwitch).not.toBeChecked()
 	})
 })
