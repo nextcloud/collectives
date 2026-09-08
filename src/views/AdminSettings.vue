@@ -17,6 +17,17 @@
 			@keydown.enter="saveDefaultUserFolder"
 			@blur="saveDefaultUserFolder" />
 	</NcSettingsSection>
+	<NcSettingsSection
+		:name="t('collectives', 'Publish feature')"
+		:description="t('collectives', 'Enable or disable the publish feature for collectives')">
+		<NcCheckboxRadioSwitch
+			id="isPublishFeatureEnabled"
+			v-model="isPublishFeatureEnabled"
+			type="switch"
+			@update:modelValue="savePublishFeatureToggle">
+			{{ t('collectives', 'Enable publish feature') }}
+		</NcCheckboxRadioSwitch>
+	</NcSettingsSection>
 </template>
 
 <script setup lang="ts">
@@ -24,12 +35,19 @@ import { showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
 import { t } from '@nextcloud/l10n'
 import { computed, ref } from 'vue'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 
-const adminSettings = loadState<{ default_user_folder: string }>('collectives', 'adminSettings')
+interface AdminSettingsState {
+	default_user_folder: string
+	publish_enabled: boolean
+}
+
+const adminSettings = loadState<AdminSettingsState>('collectives', 'adminSettings')
 let originalDefaultUserFolder = adminSettings.default_user_folder
 const defaultUserFolder = ref(adminSettings.default_user_folder)
+const isPublishFeatureEnabled = ref(adminSettings.publish_enabled)
 
 const defaultUserFolderError = computed(() => {
 	return defaultUserFolder.value !== ''
@@ -53,6 +71,17 @@ async function saveDefaultUserFolder() {
 		success() {
 			originalDefaultUserFolder = defaultUserFolder.value
 			showSuccess(t('collectives', 'Saved default user folder'))
+		},
+	})
+}
+
+/**
+ * Saves the publish_enabled setting to the server
+ */
+function savePublishFeatureToggle() {
+	globalThis.OCP.AppConfig.setValue('collectives', 'publish_enabled', isPublishFeatureEnabled.value ? 'true' : 'false', {
+		success() {
+			showSuccess(t('collectives', 'Publish feature setting saved'))
 		},
 	})
 }

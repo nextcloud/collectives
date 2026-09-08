@@ -24,6 +24,16 @@
 				<ShareVariantIcon :size="20" />
 			</template>
 		</NcActionButton>
+		<NcActionButton
+			v-if="isCollectiveAdmin(collective) && isPublishFeatureEnabled"
+			closeAfterClick
+			@click="openPublishDialog()">
+			<!-- TRANSLATORS 'Publish' means to publish a selection of your collective pages to a public website -->
+			{{ t('collectives', 'Publish') }}
+			<template #icon>
+				<WebIcon :size="20" />
+			</template>
+		</NcActionButton>
 		<NcActionSeparator v-if="isCollectiveAdmin(collective) || collectiveCanShare(collective)" />
 		<NcActionButton
 			v-if="!isPublic && collective.canEdit"
@@ -128,6 +138,7 @@ import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import WebIcon from 'vue-material-design-icons/Web.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import { notifyLevels } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
@@ -153,6 +164,7 @@ export default {
 		OpenInNewIcon,
 		PageTemplateIcon,
 		ShareVariantIcon,
+		WebIcon,
 	},
 
 	props: {
@@ -181,7 +193,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic']),
+		...mapState(useRootStore, ['isPublic', 'isPublishFeatureEnabled']),
 		...mapState(useCollectivesStore, [
 			'collectiveCanShare',
 			'collectivePrintPath',
@@ -232,6 +244,7 @@ export default {
 		...mapActions(useCollectivesStore, [
 			'markCollectiveDeleted',
 			'setMembersCollectiveId',
+			'setPublishCollectiveId',
 			'setSettingsCollectiveId',
 			'setCollectiveUserSettingNotify',
 			'setTemplatesCollectiveId',
@@ -262,6 +275,10 @@ export default {
 				notify: level,
 			})
 			this.$emit('update:submenu', null)
+		},
+
+		openPublishDialog() {
+			this.setPublishCollectiveId(this.collective.id)
 		},
 
 		leaveCollectiveWithUndo(collective) {
