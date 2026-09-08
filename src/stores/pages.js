@@ -24,7 +24,7 @@ export const usePagesStore = defineStore('pages', {
 		allPages: useLocalStorage(ALL_PAGES_STORE_NAME, {}),
 		allTrashPages: useLocalStorage(STORE_PREFIX + 'allTrashPages', {}),
 		allAttachments: useLocalStorage(STORE_PREFIX + 'allAttachments', {}),
-		textMode: useLocalStorage(STORE_PREFIX + 'textMode', {}),
+		textMode: {},
 		trashPagesLoaded: false,
 		newPage: undefined,
 		newPageParentId: null,
