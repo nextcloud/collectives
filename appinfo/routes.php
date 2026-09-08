@@ -67,6 +67,12 @@ return [
 		['name' => 'share#deleteCollectiveShare', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/shares/{token}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 
+		// Collective static sites API
+		['name' => 'static_site#index', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'static_site#create', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+
 		// Pages search API
 		['name' => 'search#searchRecentPages', 'url' => '/api/v{apiVersion}/collectives/search/recent', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
