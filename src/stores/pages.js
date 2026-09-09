@@ -18,6 +18,17 @@ const STORE_PREFIX = 'collectives/pinia/pages/'
 // used in `PagePicker.vue`
 export const ALL_PAGES_STORE_NAME = STORE_PREFIX + 'allPages'
 
+// Request sequences per page list index. Page list responses of superseded requests
+// must not be applied, otherwise they overwrite newer local state (e.g. a page that
+// was just created or renamed) until the next refetch.
+const getPagesSequences = {}
+
+function invalidatePagesRequests() {
+	for (const index of Object.keys(getPagesSequences)) {
+		getPagesSequences[index] = (getPagesSequences[index] ?? 0) + 1
+	}
+}
+
 export const usePagesStore = defineStore('pages', {
 	state: () => ({
 		// Uses `collectiveId` as index for internal collectives and `share_<shareToken>` for public ones
@@ -115,7 +126,7 @@ export const usePagesStore = defineStore('pages', {
 				|| rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage(state) {
-			return state.currentPage.fileName === INDEX_PAGE + PAGE_SUFFIX
+			return state.currentPage?.fileName === INDEX_PAGE + PAGE_SUFFIX
 		},
 
 		rootPage(state) {
@@ -141,6 +152,10 @@ export const usePagesStore = defineStore('pages', {
 			if (pageId) {
 				do {
 					const page = state.pageById(pageId)
+					if (!page) {
+						// Page is missing, e.g. while the page list is (re)loading
+						return []
+					}
 					pageIds.unshift(page.id)
 					pageId = page.parentId
 				} while (pageId)
@@ -151,6 +166,10 @@ export const usePagesStore = defineStore('pages', {
 			const parts = rootStore.pageParam.split('/').filter(Boolean)
 			let page = state.rootPage
 			for (const i in parts) {
+				if (!page) {
+					// Page is missing, e.g. while the page list is (re)loading
+					return []
+				}
 				page = state.pages.find((p) => (p.parentId === page.id && p.title === parts[i]))
 				if (page) {
 					pageIds.push(page.id)
@@ -175,8 +194,13 @@ export const usePagesStore = defineStore('pages', {
 		pagePath: (state) => (page) => {
 			const collectivesStore = useCollectivesStore()
 
+			if (!page) {
+				// Page is missing, e.g. while the page list is (re)loading
+				return ''
+			}
+
 			// Landing page
-			if (page.id === state.rootPage.id) {
+			if (page.id === state.rootPage?.id) {
 				return collectivesStore.currentCollectivePath
 			}
 
@@ -205,6 +229,10 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		pageFilePath: () => (page) => {
+			if (!page) {
+				// Page is missing, e.g. while the page list is (re)loading
+				return ''
+			}
 			return [
 				page.collectivePath,
 				page.filePath,
@@ -218,6 +246,10 @@ export const usePagesStore = defineStore('pages', {
 
 		pageDavPath: (state) => (page) => {
 			const rootStore = useRootStore()
+			if (!page) {
+				// Page is missing, e.g. while the page list is (re)loading
+				return ''
+			}
 			const parts = state.pageFilePath(page).split('/')
 			if (!rootStore.isPublic) {
 				parts.unshift(getCurrentUser().uid)
@@ -473,7 +505,7 @@ export const usePagesStore = defineStore('pages', {
 			const collectivesStore = useCollectivesStore()
 			return state.isLandingPage
 				? collectivesStore.currentCollective.name
-				: state.currentPage.title
+				: state.currentPage?.title
 		},
 
 		isDragoverTargetPage: (state) => state.dragoverTargetPageId !== null,
@@ -586,8 +618,17 @@ export const usePagesStore = defineStore('pages', {
 				collectiveId: collective.id,
 				shareTokenParam: null,
 			}
+			const index = this.indexForCollective(collective)
+			const sequence = (getPagesSequences[index] ?? 0) + 1
+			getPagesSequences[index] = sequence
 			const response = await api.getPages(context)
-			this.allPages[this.indexForCollective(collective)] = response.data.ocs.data.pages
+			if (sequence !== getPagesSequences[index]) {
+				// Superseded by a newer page list request or invalidated by a local
+				// mutation - drop the response to avoid overwriting newer state.
+				rootStore.done(`pagelist-${collective.id}`)
+				return
+			}
+			this.allPages[index] = response.data.ocs.data.pages
 			rootStore.done(`pagelist-${collective.id}`)
 		},
 
@@ -601,8 +642,17 @@ export const usePagesStore = defineStore('pages', {
 			if (setLoading && !this.pagesLoaded) {
 				rootStore.load('pagelist')
 			}
+			const index = this.collectiveIndex
+			const sequence = (getPagesSequences[index] ?? 0) + 1
+			getPagesSequences[index] = sequence
 			const response = await api.getPages(this.context)
-			this.allPages[this.collectiveIndex] = response.data.ocs.data.pages
+			if (sequence !== getPagesSequences[index]) {
+				// Superseded by a newer page list request or invalidated by a local
+				// mutation - drop the response to avoid overwriting newer state.
+				rootStore.done('pagelist')
+				return
+			}
+			this.allPages[index] = response.data.ocs.data.pages
 			rootStore.done('pagelist')
 		},
 
@@ -636,6 +686,9 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		_updatePageState(page, collectiveIndex = this.collectiveIndex) {
+			// The local page state is now newer than any page list request in flight:
+			// invalidate them to avoid overwriting this update with a stale response.
+			invalidatePagesRequests()
 			const index = this.allPages[collectiveIndex].findIndex((p) => p.id === page.id)
 			if (index > -1) {
 				this.allPages[collectiveIndex].splice(index, 1, page)
@@ -665,6 +718,8 @@ export const usePagesStore = defineStore('pages', {
 			rootStore.load('newPageContent')
 
 			const response = await api.createPage(this.context, page)
+			// The local page list is now newer than any page list request in flight
+			invalidatePagesRequests()
 			// Add new page to the beginning of pages array
 			const newPage = response.data.ocs.data.page
 			updateOrAddTo(this.allPages[this.collectiveIndex], newPage)
@@ -795,6 +850,8 @@ export const usePagesStore = defineStore('pages', {
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
+			// The local page list is now newer than any page list request in flight
+			invalidatePagesRequests()
 			removeFrom(this.allPages[this.collectiveIndex], page)
 			rootStore.done('pagelist-nodrag')
 
@@ -957,6 +1014,8 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async trashPage({ pageId }) {
 			const response = await api.trashPage(this.context, pageId)
+			// The local page list is now newer than any page list request in flight
+			invalidatePagesRequests()
 			const trashPage = response.data.ocs.data.page
 			removeFrom(this.allPages[this.collectiveIndex], trashPage)
 			if (this.allTrashPages[this.collectiveIndex]) {
@@ -972,6 +1031,8 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async restorePage({ pageId }) {
 			const response = await api.restorePage(this.context, pageId)
+			// The local page list is now newer than any page list request in flight
+			invalidatePagesRequests()
 			const trashPage = response.data.ocs.data.page
 			updateOrAddTo(this.allPages[this.collectiveIndex], trashPage)
 			removeFrom(this.allTrashPages[this.collectiveIndex], trashPage)
