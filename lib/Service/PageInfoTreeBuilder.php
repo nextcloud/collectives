@@ -138,7 +138,7 @@ class PageInfoTreeBuilder {
 	private function fileInfos(): array {
 		if ($this->fileInfos === null) {
 			try {
-				$this->fileInfos = $this->collectiveFolderManager->getFileCacheForCollective($this->collectiveId, $this->folder->getInternalPath());
+				$this->fileInfos = $this->collectiveFolderManager->getFileCacheForCollective($this->collectiveId, $this->folder->getId());
 			} catch (DBException $e) {
 				throw new NotFoundException($e->getMessage(), 0, $e);
 			}
