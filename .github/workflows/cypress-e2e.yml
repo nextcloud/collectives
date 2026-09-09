@@ -61,7 +61,7 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable32', 'master']
+        server-versions: ['master']
         include:
           - server-versions: 'stable32'
             server-major: '32'

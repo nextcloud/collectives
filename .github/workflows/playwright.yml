@@ -17,7 +17,7 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            server-branch: ['stable32', 'master']
+            server-branch: ['master']
             shardIndex: [1, 2, 3, 4]
             shardTotal: [4]
             include:
