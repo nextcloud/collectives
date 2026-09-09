@@ -229,6 +229,7 @@ OC.L10N.register(
     "No other versions available" : "Ingen andre versioner tilgængelige",
     "After editing you can find old versions of the page here." : "Efter redigering kan du finde gamle versioner af siden her.",
     "Earlier" : "Tidligere",
+    "Later" : "Senere",
     "Download version" : "Download version",
     "Retry" : "Prøv igen",
     "Current version" : "Nuværende version",

@@ -317,6 +317,7 @@ OC.L10N.register(
     "No other versions available" : "Δεν υπάρχουν άλλες εκδόσεις διαθέσιμες",
     "After editing you can find old versions of the page here." : "Μετά την επεξεργασία μπορείτε να βρείτε παλιές εκδόσεις της σελίδας εδώ.",
     "Earlier" : "Νωρίτερα",
+    "Later" : "Αργότερα",
     "Download version" : "Λήψη έκδοσης",
     "Retry" : "Δοκιμάστε ξανά",
     "Current version" : "Τρέχουσα έκδοση",

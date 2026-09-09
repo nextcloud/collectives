@@ -36,6 +36,7 @@ OC.L10N.register(
     "Upload" : "Enporzhiañ",
     "Uploading" : "O pellkasañ",
     "No other versions available" : "Stumm all ebet kavet",
+    "Retry" : "Klaskit en dro",
     "Sharing" : "Rannan",
     "Versions" : "Stumm",
     "Link copied" : "Liamm eilet",
