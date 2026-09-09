@@ -103,7 +103,7 @@
 	</div>
 
 	<!-- Filter tags -->
-	<div class="page-filter-tags">
+	<div v-if="filterTags.length > 0" class="page-filter-tags">
 		<ul class="page-tags">
 			<PageTag
 				v-for="tag in filterTags"
@@ -113,6 +113,9 @@
 				@remove="removeFilterTagId(tag.id)" />
 		</ul>
 	</div>
+
+	<!-- Home button (landing page) -->
+	<PageListHomeButton v-if="showHomeButton" />
 
 	<!-- Loading -->
 	<div v-if="!currentCollective || !rootPage || loading('pagelist')" class="page-list">
@@ -231,6 +234,7 @@ import SortClockDescendingIcon from 'vue-material-design-icons/SortClockDescendi
 import DraggableElement from './PageList/DraggableElement.vue'
 import NewPageDialog from './PageList/NewPageDialog.vue'
 import PageFavorites from './PageList/PageFavorites.vue'
+import PageListHomeButton from './PageList/PageListHomeButton.vue'
 import PageTrash from './PageList/PageTrash.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import PageTag from './PageTag.vue'
@@ -263,6 +267,7 @@ export default {
 		CloseIcon,
 		DraggableElement,
 		PageFavorites,
+		PageListHomeButton,
 		PageTag,
 		PageTrash,
 		PlusIcon,
@@ -373,6 +378,16 @@ export default {
 			} else {
 				return t('collectives', 'Sorted by least recently changed')
 			}
+		},
+
+		showHomeButton() {
+			// No landing page in page shares
+			if (this.currentCollectiveIsPageShare
+				|| this.filterString !== '') {
+				return false
+			}
+			// In filtered view, show the landing page only if it matches the tag filter.
+			return this.filterTags.every((t) => this.rootPage?.tags.includes(t.id))
 		},
 
 		showFavorites() {
@@ -558,7 +573,7 @@ export default {
 
 <style lang="scss">
 :root {
-	--page-list-header-height: calc(var(--default-clickable-area) + 14px);
+	--page-list-header-height: calc(var(--default-clickable-area));
 	--page-trash-height: calc(var(--default-clickable-area) + 24px);
 	--page-list-height: calc(100vh - var(--header-height) - var(--collective-selector-height) - var(--page-list-header-height) - var(--page-trash-height));
 	--navigation-caption-height: calc(var(--default-clickable-area) + 4px + (var(--default-clickable-area) / 2));
@@ -582,12 +597,16 @@ export default {
 	gap: 2px;
 	min-height: var(--page-list-header-height);
 	align-items: center;
-	padding-inline-start: 4px;
-	margin-inline-end: 4px;
+	padding-inline-start: var(--default-grid-baseline);
+	margin-inline-end: var(--default-grid-baseline);
 
 	.page-filter {
 		flex-grow: 1;
-		padding-bottom: 6px;
+
+		// NcInputFIeld reserves space above the input for a label outside of it, which we don't use.
+		:deep(.input-field) {
+			margin-block-start: 0;
+		}
 	}
 }
 
@@ -610,7 +629,7 @@ li.toggle-button.selected {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
-	padding: 0 4px;
+	padding: 0 var(--default-grid-baseline);
 }
 
 .page-list-dragarea {
@@ -668,10 +687,6 @@ li.toggle-button.selected {
 	max-width: 140px;
 	padding: var(--default-grid-baseline);
 	overflow-y: auto;
-}
-
-.page-filter-tags {
-	padding-bottom: var(--default-grid-baseline);
 }
 
 .page-tags {
