@@ -72,7 +72,7 @@ jobs:
             server-major: ''
             semantic-e2e: '1'
             text-app-repository: 'nextcloud/text'
-            text-app-ref: 'b5ff1b0ce8d38b8a8dfdd6acf7b3f36c3fa2e272'
+            text-app-ref: 'enh/snowflake-ids'
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
