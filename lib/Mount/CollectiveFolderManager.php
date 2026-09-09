@@ -20,6 +20,7 @@ use OCA\Richdocuments\Db\WopiMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
+use OCP\Files\IMimeTypeLoader;
 use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
@@ -50,6 +51,7 @@ class CollectiveFolderManager {
 		private readonly IUserSession $userSession,
 		private readonly IRequest $request,
 		private readonly IFactory $l10nFactory,
+		private readonly IMimeTypeLoader $mimeTypeLoader,
 	) {
 	}
 
@@ -253,52 +255,61 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * Load all filecache entries (files and folders) of a collective folder in a single query.
+	 * Load all filecache entries (files and folders) below a folder of a collective.
+	 * Skips hidden folders (starting with a dot).
+	 *
+	 * Walks the tree level by level via the `parent` column.
 	 *
 	 * @return CollectiveFileInfo[] Indexed by file id, with paths relative to the collective root folder
 	 *
 	 * @throws NotFoundException
 	 * @throws \OCP\DB\Exception
 	 */
-	public function getFileCacheForCollective(int $collectiveId, ?string $subdirectory = null): array {
-		$jailPath = $this->getJailPath($collectiveId);
+	public function getFileCacheForCollective(int $collectiveId, int $folderId): array {
+		$prefixLength = strlen($this->getJailPath($collectiveId) . '/');
 		$storageId = $this->getRootFolderStorageId();
+		$folderMimeTypeId = $this->mimeTypeLoader->getId(ICacheEntry::DIRECTORY_MIMETYPE);
 
 		$qb = $this->connection->getQueryBuilder();
-
-		// Trailing slash matters: it restricts to descendants and
-		// avoids matching siblings (e.g. `16` must not match `160`).
-		$likePath = $jailPath . '/' . ($subdirectory ? $subdirectory . '/' : '');
-		$likePath = $this->connection->escapeLikeParameter($likePath) . '%';
-
 		$qb->select('fileid', 'storage', 'path', 'parent', 'name', 'mimetype', 'mimepart',
 			'size', 'mtime', 'storage_mtime', 'encrypted', 'etag', 'permissions')
 			->from('filecache')
 			->where($qb->expr()->eq('storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->like('path', $qb->createNamedParameter($likePath)));
+			->andWhere($qb->expr()->in('parent', $qb->createParameter('parentIds')));
 
-		$prefixLength = strlen($jailPath . '/');
 		$result = [];
-		$cursor = $qb->executeQuery();
-		while ($row = $cursor->fetch()) {
-			$relativePath = substr($row['path'], $prefixLength);
-			$result[(int)$row['fileid']] = new CollectiveFileInfo(
-				fileId: (int)$row['fileid'],
-				storage: (int)$row['storage'],
-				path: $relativePath,
-				parent: (int)$row['parent'],
-				name: (string)$row['name'],
-				mimetype: (int)$row['mimetype'],
-				mimepart: (int)$row['mimepart'],
-				size: (int)$row['size'],
-				mtime: (int)$row['mtime'],
-				storageMtime: (int)$row['storage_mtime'],
-				encrypted: (int)$row['encrypted'],
-				etag: (string)$row['etag'],
-				permissions: (int)$row['permissions'],
-			);
+		$parentIds = [$folderId];
+		while ($parentIds !== []) {
+			$nextParentIds = [];
+			foreach (array_chunk($parentIds, 1000) as $chunk) {
+				$qb->setParameter('parentIds', $chunk, IQueryBuilder::PARAM_INT_ARRAY);
+				$cursor = $qb->executeQuery();
+				while ($row = $cursor->fetch()) {
+					$fileId = (int)$row['fileid'];
+					$result[$fileId] = new CollectiveFileInfo(
+						fileId: $fileId,
+						storage: (int)$row['storage'],
+						path: substr($row['path'], $prefixLength),
+						parent: (int)$row['parent'],
+						name: (string)$row['name'],
+						mimetype: (int)$row['mimetype'],
+						mimepart: (int)$row['mimepart'],
+						size: (int)$row['size'],
+						mtime: (int)$row['mtime'],
+						storageMtime: (int)$row['storage_mtime'],
+						encrypted: (int)$row['encrypted'],
+						etag: (string)$row['etag'],
+						permissions: (int)$row['permissions'],
+					);
+					// Descend into folders and skip hidden ones (e.g. `.attachments.*`)
+					if ((int)$row['mimetype'] === $folderMimeTypeId && !str_starts_with((string)$row['name'], '.')) {
+						$nextParentIds[] = $fileId;
+					}
+				}
+				$cursor->closeCursor();
+			}
+			$parentIds = $nextParentIds;
 		}
-		$cursor->closeCursor();
 
 		return $result;
 	}
