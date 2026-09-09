@@ -61,13 +61,8 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable32', 'master']
+        server-versions: ['master']
         include:
-          - server-versions: 'stable32'
-            server-major: '32'
-            semantic-e2e: '0'
-            text-app-repository: 'nextcloud/text'
-            text-app-ref: 'stable32'
           - server-versions: 'master'
             server-major: ''
             semantic-e2e: '1'
@@ -196,15 +191,11 @@ jobs:
         containers: [1, 2, 3, 4]
         php-versions: ['8.1', '8.4']
         databases: ['sqlite']
-        server-versions: ['stable32', 'master']
+        server-versions: ['master']
         include:
-          - server-versions: 'stable32'
-            semantic-e2e: '0'
           - server-versions: 'master'
             semantic-e2e: '1'
         exclude:
-          - php-versions: '8.1'
-            server-versions: 'stable32'
           - php-versions: '8.1'
             server-versions: 'master'
 
