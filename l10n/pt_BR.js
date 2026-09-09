@@ -351,7 +351,7 @@ OC.L10N.register(
     "Copy comparison link" : "Copiar link de comparação",
     "Some page versions could not be used for comparison." : "Algumas versões da página não puderam ser utilizadas para comparação.",
     "Select two different versions." : "Selecione duas versões diferentes.",
-    "Bounded version previews" : "Pré-visualizações de versões limitadas",
+    "Bounded version previews" : "Pré-visualizações limitadas de versões",
     "Could not load a preview for this version." : "Não foi possível carregar uma pré-visualização para esta versão.",
     "Open version" : "Abrir versão",
     "Download version" : "Baixar versão",
