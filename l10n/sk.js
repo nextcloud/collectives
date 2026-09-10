@@ -228,6 +228,7 @@ OC.L10N.register(
     "Pick a template" : "Vybrať šablónu",
     "Favorites" : "Obľúbené",
     "Toggle favorites" : "Prepnúť na obľúbené",
+    "Home" : "Domov",
     "Favorite" : "Obľúbené",
     "Add a subpage" : "Pridať podstránku",
     "Page permanently deleted" : "Stránka bola nevratne odstránená",

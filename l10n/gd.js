@@ -20,6 +20,7 @@ OC.L10N.register(
     "Download" : "Luchdaich a-nuas",
     "Open sidebar" : "Fosgail am bàr-taoibh",
     "Favorites" : "Annsachdan",
+    "Home" : "Dachaigh",
     "Favorite" : "Annsachd",
     "Share link ({index})" : "Ceangal co-roinnidh ({index})",
     "Set password" : "Suidhich facal-faire",

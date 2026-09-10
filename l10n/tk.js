@@ -19,6 +19,7 @@ OC.L10N.register(
     "Download" : "Göçürip almak",
     "Open sidebar" : "Gapdal paneli açyň",
     "Favorites" : "Halanýanlar",
+    "Home" : "Baş sahypa",
     "Favorite" : "Halaýan",
     "Share link ({index})" : "({index})Baglanyşyk paýlaş",
     "Set password" : "Paroly düzüň",

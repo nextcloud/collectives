@@ -223,6 +223,7 @@ OC.L10N.register(
     "Pick a template" : "انتخاب یک الگو",
     "Favorites" : "موارد دلخواه",
     "Toggle favorites" : "تغییر وضعیت موارد دلخواه",
+    "Home" : "خانه",
     "Favorite" : "مورد دلخواه",
     "Add a subpage" : "افزودن یک زیرصفحه",
     "Page permanently deleted" : "صفحه به طور دائمی حذف شد",

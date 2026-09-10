@@ -213,6 +213,7 @@ OC.L10N.register(
     "Pick a template" : "Загвар сонгох",
     "Favorites" : "–û–Ω—Ü–æ–ª—Å–æ–Ω",
     "Toggle favorites" : "Дуртайг асаах/унтраах",
+    "Home" : "–ù“Ø“Ø—Ä",
     "Favorite" : "–î—É—Ä—Ç–∞–π",
     "Add a subpage" : "Дэд хуудас нэмэх",
     "Page permanently deleted" : "Хуудас бүрмөсөн устгагдсан",

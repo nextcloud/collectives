@@ -28,6 +28,7 @@ OC.L10N.register(
     "Title" : "Titl",
     "Open sidebar" : "Digeriñ ar varrenn-gostez",
     "Favorites" : "Penndibaboù",
+    "Home" : "Degemer",
     "Favorite" : "Penndibab",
     "Can edit" : "Posuple eo embann",
     "Set password" : "Termeniñ ur ger-tremen",

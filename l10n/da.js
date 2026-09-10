@@ -169,6 +169,7 @@ OC.L10N.register(
     "Blank page" : "Blank side",
     "Favorites" : "Favoritter",
     "Toggle favorites" : "Skift favoritter",
+    "Home" : "Hjem",
     "Favorite" : "Favorit",
     "Add a subpage" : "Tilføj en underside",
     "Page permanently deleted" : "Side slettet permanent",

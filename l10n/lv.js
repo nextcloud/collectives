@@ -38,6 +38,7 @@ OC.L10N.register(
     "Open sidebar" : "Atvērt sānjoslu",
     "Clear search" : "Notīrīt meklēšanu",
     "Favorites" : "Izlases vienumi",
+    "Home" : "Sākums",
     "Favorite" : "Izlasē",
     "Page not found" : "Lapa nav atrasta",
     "Create public link" : "Izveidot publisku saiti",

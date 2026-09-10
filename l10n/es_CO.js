@@ -24,6 +24,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Open sidebar" : "Abrir barra lateral",
     "Favorites" : "Favoritos",
+    "Home" : "Inicio",
     "Page not found" : "Página no encontrada",
     "Can edit" : "Puede editar",
     "Add another link" : "Añadir otro enlace",

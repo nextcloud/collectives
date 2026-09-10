@@ -28,6 +28,7 @@ OC.L10N.register(
     "Title" : "Titolo",
     "Open sidebar" : "Malfermi flankopanelon",
     "Favorites" : "Plej ŝatataj",
+    "Home" : "Hejmo",
     "Favorite" : "Pliŝatati",
     "Page not found" : "Paĝo ne trovita",
     "Can edit" : "Povas redakti",

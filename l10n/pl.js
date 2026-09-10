@@ -212,6 +212,7 @@ OC.L10N.register(
     "Pick a template" : "Wybierz szablon",
     "Favorites" : "Ulubione",
     "Toggle favorites" : "Włącz ulubione",
+    "Home" : "Strona główna",
     "Favorite" : "Ulubiony",
     "Add a subpage" : "Dodaj podstronę",
     "Page permanently deleted" : "Strona trwale usunięta",

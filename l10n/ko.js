@@ -46,6 +46,7 @@ OC.L10N.register(
     "Clear search" : "찾기 초기화",
     "Tag name" : "태그 이름",
     "Favorites" : "즐겨찾기",
+    "Home" : "집",
     "Favorite" : "즐겨찾기",
     "Sort order" : "정렬 순서",
     "Page not found" : "페이지를 찾을 수 없음",

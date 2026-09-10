@@ -228,6 +228,7 @@ OC.L10N.register(
     "Pick a template" : "Vali mall",
     "Favorites" : "Lemmikud",
     "Toggle favorites" : "Lülita lemmikus sisse/välja",
+    "Home" : "Avaleht",
     "Favorite" : "Lemmik",
     "Add a subpage" : "Lisa alamleht",
     "Page permanently deleted" : "Leht on kustutatud jäädavalt",

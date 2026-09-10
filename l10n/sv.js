@@ -228,6 +228,7 @@ OC.L10N.register(
     "Pick a template" : "Välj en mall",
     "Favorites" : "Favoriter",
     "Toggle favorites" : "Växla favoriter",
+    "Home" : "Hem",
     "Favorite" : "Favorit",
     "Add a subpage" : "Lägg till en undersida",
     "Page permanently deleted" : "Sidan permanent borttagen",

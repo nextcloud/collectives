@@ -40,6 +40,7 @@ OC.L10N.register(
     "Clear search" : "წაშალე ძიების ისტორია",
     "Tag name" : "Tag name",
     "Favorites" : "Favorites",
+    "Home" : "მთავარი",
     "Favorite" : "Favorite",
     "Page not found" : "Page not found",
     "Show in Files" : "Show in Files",

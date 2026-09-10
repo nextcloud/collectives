@@ -56,6 +56,7 @@ OC.L10N.register(
     "Change tag color" : "Ubah warna tag",
     "Create new tag" : "Buat tag baru",
     "Favorites" : "Disukai",
+    "Home" : "Beranda",
     "Favorite" : "Favorit",
     "Sort order" : "Urutkan",
     "Page not found" : "Halaman tidak ditemukan",

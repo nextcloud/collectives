@@ -148,6 +148,7 @@ OC.L10N.register(
     "Create new tag" : "Crea una etiqueta nova",
     "Error saving the document. Please try again." : "S'ha produït un error en desar el document. Siusplau torneu-ho a provar.",
     "Favorites" : "Preferits",
+    "Home" : "Inici",
     "Favorite" : "En els preferits",
     "Add a subpage" : "Afegeix subpàgina",
     "Page permanently deleted" : "La pàgina s'ha suprimit permanentment",

@@ -43,6 +43,7 @@ OC.L10N.register(
     "Change tag color" : "Измени ја бојата на ознаката",
     "Create new tag" : "Креирај нова ознака",
     "Favorites" : "Омилени",
+    "Home" : "Дома",
     "Favorite" : "Омилени",
     "Page not found" : "Страницата не е пронајдена",
     "Show in Files" : "Прикажи во датотеките",

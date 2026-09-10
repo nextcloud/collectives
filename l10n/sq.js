@@ -28,6 +28,7 @@ OC.L10N.register(
     "Title" : "Titulli",
     "Open sidebar" : "Hapni sidebar-in",
     "Favorites" : "Favorites",
+    "Home" : "Kryefaqja",
     "Favorite" : "E parapëlqyer",
     "Page not found" : "Faqja nuk u gjet ",
     "Can edit" : "Mund të editojë",

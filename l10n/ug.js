@@ -210,6 +210,7 @@ OC.L10N.register(
     "Pick a template" : "بىر قېلىپ تاللاڭ",
     "Favorites" : "يىغقۇچ",
     "Toggle favorites" : "ياقتۇرىدىغانلارنى تاللاڭ",
+    "Home" : "ئۆي",
     "Favorite" : "يىغقۇچ",
     "Add a subpage" : "تارماق بەت قوشۇڭ",
     "Page permanently deleted" : "بەت مەڭگۈلۈك ئۆچۈرۈلدى",

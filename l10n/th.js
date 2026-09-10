@@ -30,6 +30,7 @@ OC.L10N.register(
     "Open sidebar" : "เปิดแถบด้านข้าง",
     "Clear search" : "ล้างการค้นหา",
     "Favorites" : "รายการโปรด",
+    "Home" : "หน้าหลัก",
     "Favorite" : "รายการโปรด",
     "Page not found" : "ไม่พบหน้า",
     "Create public link" : "สร้างลิงค์สาธารณะ",

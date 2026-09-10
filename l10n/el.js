@@ -222,6 +222,7 @@ OC.L10N.register(
     "Pick a template" : "Επιλογή προτύπου",
     "Favorites" : "Αγαπημένα",
     "Toggle favorites" : "Εναλλαγή αγαπημένων",
+    "Home" : "Οικία",
     "Favorite" : "Αγαπημένο",
     "Add a subpage" : "Προσθήκη υποσελίδας",
     "Page permanently deleted" : "Η σελίδα διαγράφηκε οριστικά",

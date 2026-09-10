@@ -228,6 +228,7 @@ OC.L10N.register(
     "Pick a template" : "Escolha um modelo",
     "Favorites" : "Favoritos",
     "Toggle favorites" : "Alternar os favoritos",
+    "Home" : "Página inicial",
     "Favorite" : "Favorito",
     "Add a subpage" : "Adicionar subpágina",
     "Page permanently deleted" : "Página excluída permanentemente",

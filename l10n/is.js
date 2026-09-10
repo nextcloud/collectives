@@ -46,6 +46,7 @@ OC.L10N.register(
     "Change tag color" : "Breyta lit merkis",
     "Create new tag" : "Búa til nýtt merki",
     "Favorites" : "Eftirlæti",
+    "Home" : "Heim",
     "Favorite" : "Eftirlæti",
     "Page not found" : "Síða fannst ekki",
     "Show in Files" : "Sýna í skrám",

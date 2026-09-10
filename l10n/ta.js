@@ -22,6 +22,7 @@ OC.L10N.register(
     "Download" : "பதிவிறக்குக",
     "Title" : "தலைப்பு",
     "Favorites" : "விருப்பங்கள்",
+    "Home" : "அகம்",
     "Favorite" : "விருப்பமான",
     "Add a page" : "ஒரு பக்கத்தைச் சேர்க்கவும்",
     "Show in Files" : "கோப்புகளில் காட்டவும்",

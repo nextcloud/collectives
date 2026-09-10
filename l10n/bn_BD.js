@@ -18,6 +18,7 @@ OC.L10N.register(
     "Download" : "ডাউনলোড",
     "Title" : "শিরোনাম",
     "Favorites" : "প্রিয়জন",
+    "Home" : "বাড়ি",
     "Favorite" : "প্রিয়জন",
     "Unshare" : "ভাগাভাগি বাতিল ",
     "Upload" : "আপলোড",

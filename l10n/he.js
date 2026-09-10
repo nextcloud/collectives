@@ -33,6 +33,7 @@ OC.L10N.register(
     "Title" : "תפקיד",
     "Open sidebar" : "פתיחת סרגל הצד",
     "Favorites" : "מועדפים",
+    "Home" : "בית",
     "Favorite" : "סימון כמועדף",
     "Sort order" : "סידור",
     "Page not found" : "העמוד לא נמצא",

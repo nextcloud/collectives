@@ -212,6 +212,7 @@ OC.L10N.register(
     "Pick a template" : "Chagua kiolezo",
     "Favorites" : "Vipendwa",
     "Toggle favorites" : "Geuza vipendwa",
+    "Home" : "Nyumbani",
     "Favorite" : "Kipendwa",
     "Add a subpage" : "Ongeza ukurasa mdogo",
     "Page permanently deleted" : "Ukurasa umefutwa kabisa",

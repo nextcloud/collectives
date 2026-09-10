@@ -24,6 +24,7 @@ OC.L10N.register(
     "Download" : "Descargar",
     "Title" : "Título",
     "Favorites" : "Favoritos",
+    "Home" : "Inicio",
     "Favorite" : "Favorito",
     "Page not found" : "Página no encontrada",
     "Advanced settings" : "Configuraciones avanzados",

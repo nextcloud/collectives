@@ -26,6 +26,7 @@ OC.L10N.register(
     "Download" : "Eroflueden",
     "Title" : "Titel",
     "Favorites" : "Favoriten",
+    "Home" : "Startsäit",
     "Favorite" : "Favorit",
     "Add another link" : "Füügt en anere Link",
     "Advanced settings" : "Erweidert Astellungen",

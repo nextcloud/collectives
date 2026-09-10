@@ -34,6 +34,7 @@ OC.L10N.register(
     "Clear search" : "Sfeḍ anadi",
     "Tag name" : "Isem n ticṛeṭ",
     "Favorites" : "Imenyafen",
+    "Home" : "Amager",
     "Favorite" : "Menyif",
     "Sort order" : "Amizzwer n wefran",
     "Page not found" : "Ulac asebter",
