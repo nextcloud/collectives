@@ -102,6 +102,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Open sidebar" : "Abrir barra lateral",
     "Favorites" : "Favoritos",
+    "Home" : "Inicio",
     "Favorite" : "Favorito",
     "Add a subpage" : "Añadir una subpágina",
     "Page permanently deleted" : "Página eliminada permanentemente",

@@ -226,6 +226,7 @@ OC.L10N.register(
     "Pick a template" : "Виберіть шаблон",
     "Favorites" : "Із зірочкою",
     "Toggle favorites" : "Переключити обране",
+    "Home" : "Домівка",
     "Favorite" : "Із зірочкою",
     "Add a subpage" : "Додати підсторінку",
     "Page permanently deleted" : "Сторінка вилучена назавжди",

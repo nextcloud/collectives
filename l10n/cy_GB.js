@@ -21,6 +21,7 @@ OC.L10N.register(
     "Title" : "Teitl",
     "Open sidebar" : "Agor y bar ochr",
     "Favorites" : "Ffefrynnau",
+    "Home" : "Cartref",
     "Favorite" : "Ffefryn",
     "Page not found" : "Heb ganfod y dudalen",
     "Add another link" : "Ychwanegu dolen arall",

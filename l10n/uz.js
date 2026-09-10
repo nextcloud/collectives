@@ -32,6 +32,7 @@ OC.L10N.register(
     "Title" : "Sarlavha",
     "Clear search" : "Qidiruvni tozalash",
     "Favorites" : "Favorites",
+    "Home" : "Uy",
     "Favorite" : "Favorite",
     "Sort order" : "Saralash tartibi",
     "Page not found" : "Sahifa topilmadi",

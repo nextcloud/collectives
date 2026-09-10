@@ -18,6 +18,7 @@ OC.L10N.register(
     "Title" : "Naslov",
     "Open sidebar" : "Otvori bočnu traku",
     "Favorites" : "Omiljene",
+    "Home" : "Početak",
     "Favorite" : "Omiljene",
     "Unshare" : "Ukini deljenje",
     "Upload" : "Otpremi",

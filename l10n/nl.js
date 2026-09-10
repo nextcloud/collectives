@@ -223,6 +223,7 @@ OC.L10N.register(
     "Pick a template" : "Kies een sjabloon",
     "Favorites" : "Favorieten",
     "Toggle favorites" : "Favorieten wisselen",
+    "Home" : "Startpagina",
     "Favorite" : "Favoriet",
     "Add a subpage" : "Een subpagina toevoegen",
     "Page permanently deleted" : "Pagina definitief verwijderd",

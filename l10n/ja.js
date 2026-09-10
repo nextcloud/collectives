@@ -96,6 +96,7 @@ OC.L10N.register(
     "Change tag color" : "タグの色を変更する",
     "Create new tag" : "新しいタグを作成",
     "Favorites" : "お気に入り",
+    "Home" : "ホーム",
     "Favorite" : "お気に入り",
     "Add a subpage" : "サブページの追加",
     "Sorted ascending by title" : "タイトルの昇順でソート",

@@ -207,6 +207,7 @@ OC.L10N.register(
     "Pick a template" : "Изаберите шаблон",
     "Favorites" : "Омиљене",
     "Toggle favorites" : "Укљ./Искљ. омиљене",
+    "Home" : "Почетна",
     "Favorite" : "Омиљени",
     "Add a subpage" : "Додај подстраницу",
     "Page permanently deleted" : "Страница је неповратно обрисана",

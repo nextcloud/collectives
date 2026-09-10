@@ -228,6 +228,7 @@ OC.L10N.register(
     "Pick a template" : "Bir kalıp seçin",
     "Favorites" : "Sık kullanılanlar",
     "Toggle favorites" : "Sık kullanılanları aç/kapat",
+    "Home" : "Giriş",
     "Favorite" : "Sık kullanılanlara ekle",
     "Add a subpage" : "Bir alt sayfa ekle",
     "Page permanently deleted" : "Sayfa kalıcı olarak silindi",

@@ -44,6 +44,7 @@ OC.L10N.register(
     "Clear search" : "Tyhjennä haku",
     "Tag name" : "Tunnisteen nimi",
     "Favorites" : "Suosikit",
+    "Home" : "Koti",
     "Favorite" : "Suosikki",
     "Page not found" : "Sivua ei löytynyt",
     "Create public link" : "Luo julkinen linkki",

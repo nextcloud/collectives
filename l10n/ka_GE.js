@@ -25,6 +25,7 @@ OC.L10N.register(
     "Download" : "ჩამოტვირთვა",
     "Title" : "სათაური",
     "Favorites" : "რჩეულები",
+    "Home" : "სახლი",
     "Favorite" : "რჩეული",
     "Page not found" : "გვერდი არაა ნაპოვნი",
     "Can edit" : "შეუძლია შეცვლა",

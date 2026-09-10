@@ -154,6 +154,7 @@ OC.L10N.register(
     "Create new tag" : "创建新标签",
     "Error saving the document. Please try again." : "保存文档时出错，请重试。",
     "Favorites" : "收藏",
+    "Home" : "首页",
     "Favorite" : "收藏",
     "Add a subpage" : "添加一个子页面",
     "Page permanently deleted" : "页面已永久删除",

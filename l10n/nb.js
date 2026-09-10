@@ -167,6 +167,7 @@ OC.L10N.register(
     "Create new tag" : "Opprett ny merkelapp",
     "Error saving the document. Please try again." : "Feil ved lagring av dokumentet. Vennligst forsøk igjen.",
     "Favorites" : "Favoritter",
+    "Home" : "Hjem",
     "Favorite" : "Favoritt",
     "Add a subpage" : "Legg til en underside",
     "Page permanently deleted" : "Side slettet permanent",

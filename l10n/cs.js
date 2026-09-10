@@ -220,6 +220,7 @@ OC.L10N.register(
     "Pick a template" : "Vybrat šablonu",
     "Favorites" : "Oblíbené",
     "Toggle favorites" : "Vyp/zap. zobrazování oblíbených",
+    "Home" : "Domů",
     "Favorite" : "Přidat do oblíbených",
     "Add a subpage" : "Přidat podstránku",
     "Page permanently deleted" : "Stránka trvale smazána.",

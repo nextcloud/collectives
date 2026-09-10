@@ -19,6 +19,7 @@ OC.L10N.register(
     "Download" : "Discargar",
     "Title" : "Titulo",
     "Favorites" : "Favoritos",
+    "Home" : "Initio",
     "Favorite" : "Favorite",
     "Advanced settings" : "Configurationes avantiate",
     "Unshare" : "Cessa de compartir",

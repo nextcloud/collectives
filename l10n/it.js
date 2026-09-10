@@ -100,6 +100,7 @@ OC.L10N.register(
     "Change tag color" : "Cambia colore etichetta",
     "Create new tag" : "Crea un nuovo tag",
     "Favorites" : "Preferiti",
+    "Home" : "Home",
     "Favorite" : "Preferito",
     "Add a subpage" : "Aggiungi una sottopagina",
     "Sorted by recently changed" : "Ordinati per modifiche recenti",

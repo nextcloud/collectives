@@ -37,6 +37,7 @@ OC.L10N.register(
     "Title" : "Tiêu đề",
     "Open sidebar" : "Mở thanh bên",
     "Favorites" : "Ưa thích",
+    "Home" : "Trang nhà",
     "Favorite" : "Ưa thích",
     "Page not found" : "Trang không tìm thấy",
     "Show in Files" : "Hiển thị trong Files",

@@ -54,6 +54,7 @@ OC.L10N.register(
     "Change tag color" : "Change tag color",
     "Create new tag" : "Create new tag",
     "Favorites" : "ລາຍການທີ່ມັກ",
+    "Home" : "ໜ້າຫຼັກ",
     "Favorite" : "ລາຍການທີ່ມັກ",
     "Sort order" : "ລຳດັບການຈັດລຽງ",
     "Page not found" : "ບໍ່ພົບຫນ້າ",

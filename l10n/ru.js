@@ -97,6 +97,7 @@ OC.L10N.register(
     "Change tag color" : "Изменить цвет метки",
     "Create new tag" : "Создать новый тег",
     "Favorites" : "Избранное",
+    "Home" : "Домашняя страница",
     "Favorite" : "В избранное",
     "Add a subpage" : "Добавить раздел",
     "Sorted by recently changed" : "Отсортировано по недавним изменениям",

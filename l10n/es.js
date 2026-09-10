@@ -207,6 +207,7 @@ OC.L10N.register(
     "Pick a template" : "Escoja una plantilla",
     "Favorites" : "Favoritos",
     "Toggle favorites" : "Alternar favoritos",
+    "Home" : "Inicio",
     "Favorite" : "Marcar como favorito",
     "Add a subpage" : "Añadir sub-página",
     "Page permanently deleted" : "Página eliminada permanentemente",

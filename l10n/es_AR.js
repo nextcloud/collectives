@@ -28,6 +28,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Open sidebar" : "Abrir barra lateral",
     "Favorites" : "Favoritos",
+    "Home" : "Casa",
     "Favorite" : "Favorito",
     "Page not found" : "Página no encontrada",
     "Share link ({index})" : "Compartir link ({index})",

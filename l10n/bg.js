@@ -103,6 +103,7 @@ OC.L10N.register(
     "Open sidebar" : "Отвори страничното меню",
     "Clear search" : "Изчисти търсенето",
     "Favorites" : "Любими",
+    "Home" : "Начало",
     "Favorite" : "Любими",
     "Add a subpage" : "Добавяне на подстраница",
     "Sorted by recently changed" : "Сортирано по последно променени",

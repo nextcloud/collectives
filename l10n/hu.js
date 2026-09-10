@@ -131,6 +131,7 @@ OC.L10N.register(
     "Change tag color" : "Címkeszín módosítása",
     "Create new tag" : "Új címke létrehozása",
     "Favorites" : "Kedvencek",
+    "Home" : "Kezdőlap",
     "Favorite" : "Kedvenc",
     "Add a subpage" : "Aloldal hozzáadása",
     "Page permanently deleted" : "Az oldal véglegesen törölve",

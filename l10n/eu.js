@@ -152,6 +152,7 @@ OC.L10N.register(
     "Create new tag" : "Sortu etiketa berria",
     "Error saving the document. Please try again." : "Errore bat gertatu da dokumentua gordetzean. Saiatu berriro mesedez.",
     "Favorites" : "Gogokoak",
+    "Home" : "Etxea",
     "Favorite" : "Egin gogoko",
     "Add a subpage" : "Gehitu azpi-orri bat",
     "Page permanently deleted" : "Orria behin betiko ezabatuta",

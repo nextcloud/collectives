@@ -228,6 +228,7 @@ OC.L10N.register(
     "Pick a template" : "Pasirinkite šabloną",
     "Favorites" : "Mėgstami",
     "Toggle favorites" : "Perjungti mėgstamiausius",
+    "Home" : "Pagrindinis",
     "Favorite" : "Mėgstamas",
     "Add a subpage" : "Pridėkite antrinį puslapį",
     "Page permanently deleted" : "Puslapis ištrintas visam laikui",

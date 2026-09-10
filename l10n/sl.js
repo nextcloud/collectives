@@ -104,6 +104,7 @@ OC.L10N.register(
     "Clear search" : "Počisti iskanje",
     "Tag name" : "Ime oznake",
     "Favorites" : "Priljubljeno",
+    "Home" : "Začetna stran",
     "Favorite" : "Priljubljeno",
     "Add a subpage" : "Dodaj podstran",
     "Sorted by recently changed" : "Razvrščeno po času zadnje spremembe",

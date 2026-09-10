@@ -38,6 +38,7 @@ OC.L10N.register(
     "Title" : "Tìtulu",
     "Open sidebar" : "Aberi s'istanca laterale",
     "Favorites" : "Preferidos",
+    "Home" : "Pàgina printzipale",
     "Favorite" : "Preferidu",
     "Page not found" : "Pàgina no agatada",
     "Show in Files" : "Mustra in Archìvios",
