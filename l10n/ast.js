@@ -95,6 +95,7 @@ OC.L10N.register(
     "Tag name" : "Nome de la etiqueta",
     "Error saving the document. Please try again." : "Hebo un error al guardar el documentu. Volvi tentalo.",
     "Favorites" : "Favoritos",
+    "Home" : "Aniciu",
     "Favorite" : "Meter en Favoritos",
     "Add a subpage" : "Amestar una sopáxina",
     "Page permanently deleted" : "La páxina desanicióse permanentemente",

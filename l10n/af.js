@@ -19,6 +19,7 @@ OC.L10N.register(
     "Title" : "Titel",
     "Open sidebar" : "Open kantbalk",
     "Favorites" : "Gunstelinge",
+    "Home" : "Tuis",
     "Page not found" : "Blad nie gevind nie",
     "Can edit" : "Kan redigeer",
     "Advanced settings" : "Gevorderde instellings",
