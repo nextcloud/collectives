@@ -318,6 +318,7 @@ OC.L10N.register(
     "Later" : "Později",
     "Download version" : "Stáhnout verzi",
     "Retry" : "Zkusit znovu",
+    "Compare" : "Porovnat",
     "Current version" : "Stávající verze",
     "Initial version" : "Počáteční verze",
     "You" : "Vy",

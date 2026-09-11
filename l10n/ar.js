@@ -168,6 +168,7 @@ OC.L10N.register(
     "Error saving the document. Please try again." : "حدث خطأ أثناء حفظ المستند. يُرجى المحاولة مرة أخرى.",
     "Favorites" : "المُفضّلة",
     "Toggle favorites" : "تبديل المفضلة",
+    "Home" : "الرئيسية",
     "Favorite" : "المفضلة",
     "Add a subpage" : "إضِف صفحةً فرعيّةً",
     "Page permanently deleted" : "تم حذف الصفحة نهائيًا",
