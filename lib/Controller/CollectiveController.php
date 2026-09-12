@@ -200,6 +200,30 @@ class CollectiveController extends OCSController {
 	}
 
 	/**
+	 * Set custom settings for an existing collective
+	 *
+	 * @param int $id ID of the collective
+	 * @param string $key Key of the setting
+	 * @param mixed $value Value of the setting
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{collective: CollectivesCollective}, array{}>
+	 * @throws OCSNotFoundException Collective not found
+	 * @throws OCSForbiddenException Not permitted
+	 *
+	 * 200: Collective updated
+	 */
+	#[NoAdminRequired]
+	public function customSettings(int $id, string $key, mixed $value): DataResponse {
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->setCustomSettings(
+			$id,
+			$this->userId,
+			$key,
+			$value,
+		), $this->logger);
+		return new DataResponse(['collective' => $collective]);
+	}
+
+	/**
 	 * Trash an existing collective
 	 *
 	 * @param int $id ID of the collective

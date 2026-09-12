@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Unit\Db;
 
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use RuntimeException;
 use Test\TestCase;
@@ -39,5 +40,24 @@ class CollectiveTest extends TestCase {
 		$this->expectException(RuntimeException::class);
 		$collective = new Collective();
 		$collective->setPageMode($mode);
+	}
+
+	public function testGetDownloadPermissionLevelDefaultsToAdmin(): void {
+		$collective = new Collective();
+		$this->assertEquals(Member::LEVEL_ADMIN, $collective->getDownloadPermissionLevel());
+	}
+
+	public function testCanDownload(): void {
+		$collective = new Collective();
+		$collective->setCustomSetting(Collective::CUSTOM_SETTINGS_DOWNLOAD_PERMISSION_LEVEL, Member::LEVEL_MODERATOR);
+
+		$collective->setLevel(Member::LEVEL_MEMBER);
+		$this->assertFalse($collective->canDownload());
+
+		$collective->setLevel(Member::LEVEL_MODERATOR);
+		$this->assertTrue($collective->canDownload());
+
+		$collective->setLevel(Member::LEVEL_ADMIN);
+		$this->assertTrue($collective->canDownload());
 	}
 }
