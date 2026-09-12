@@ -8,7 +8,7 @@ import { generateOcsUrl } from '@nextcloud/router'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { circlesMemberTypes } from '../constants.js'
-import { sortMembersByLevelAndType } from '../util/circles.ts'
+import { hasMembersManagementInCircles, sortMembersByLevelAndType } from '../util/circles.ts'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
 
@@ -127,7 +127,8 @@ export const useCirclesStore = defineStore('circles', {
 			}
 			this.circlesMembersPending[circleId] = true
 			try {
-				const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?fullDetails=true&limit=${limit}`))
+				const fullDetails = hasMembersManagementInCircles() ? '' : 'fullDetails=true&'
+				const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members?${fullDetails}limit=${limit}`))
 				this.circlesMembers[circleId] = response.data.ocs.data
 				if (limit === 0) {
 					this.circlesMembersFullyLoaded[circleId] = true
