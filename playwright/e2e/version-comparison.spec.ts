@@ -1378,6 +1378,23 @@ function davVersionEntries(body: string) {
 }
 
 test.describe('Version management and DAV authorization', () => {
+	test('Saved editor bytes persist through preview and reload', async ({ collective, user, page, editor }) => {
+		const collectivePage = await openVersionManagement(collective, user, page)
+		await collectivePage.switchMode(true)
+		await expect(page.locator('.text-menubar--ready')).toBeVisible()
+		editor.setMode(true)
+		const content = 'Persisted editing smoke bytes c599'
+		await editor.getContent().fill(content)
+		await page.getByRole('button', { name: 'Save document', exact: true }).click()
+		await expect.poll(async () => {
+			const response = await page.request.get(webdavUrl(user.account.userId, collectivePage.data.collectivePath, collectivePage.data.filePath, collectivePage.data.fileName), { failOnStatusCode: true })
+			return await response.text()
+		}).toContain(content)
+		await collectivePage.switchMode(false)
+		await page.reload()
+		await expect(collectivePage.getContent()).toContainText(content)
+	})
+
 	test('Version list contains four versions, opens initial and current bytes, and distinguishes labels to the second', async ({ collective, user, page }) => {
 		const collectivePage = await openVersionManagement(collective, user, page)
 		const versions = page.locator('.version-list .list-item')
