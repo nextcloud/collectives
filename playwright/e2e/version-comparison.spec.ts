@@ -111,19 +111,33 @@ async function openSeededVersionSelector(collective: Collective, user: User, pag
 	await seedVersionPair(collectivePage, user, page)
 	await collectivePage.open()
 	await openVersions(page)
+	const priorUrl = page.url()
 	const opener = page.getByRole('button', { name: 'Compare versions…' })
 	await opener.click()
 	const dialog = page.getByRole('dialog', { name: 'Compare versions' })
 	await expect(dialog).toBeVisible()
 	await expect.poll(() => dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true)
-	return { dialog, opener }
+	return { dialog, opener, priorUrl }
 }
 
 async function openSeededComparison(collective: Collective, user: User, page: Page, title: string) {
-	const { dialog, opener } = await openSeededVersionSelector(collective, user, page, title)
+	const { dialog, opener, priorUrl } = await openSeededVersionSelector(collective, user, page, title)
 	await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
 	await expect(page.locator('.text-comparison')).toBeVisible()
-	return { dialog, opener }
+	return { dialog, opener, priorUrl }
+}
+
+async function openRoutedComparison(collective: Collective, user: User, page: Page, title: string) {
+	const collectivePage = await collective.createPage({ title, user, page })
+	await seedVersionPair(collectivePage, user, page)
+	await page.goto(`${collectivePage.getPageUrl()}?view=grid#rollout`)
+	await collectivePage.waitForContent()
+	await openVersions(page)
+	const priorUrl = page.url()
+	await page.locator('.version-list .list-item').filter({ hasText: 'Initial version' }).locator('.list-item-content__actions').click()
+	await page.getByRole('menuitem', { name: 'Compare with current version', exact: true }).click()
+	await expect(page.locator('.text-comparison')).toBeVisible()
+	return { priorUrl }
 }
 
 function auditComparisonFailures(page: Page) {
@@ -244,17 +258,20 @@ test.describe('Version comparison route and current-byte contract', () => {
 	})
 
 	test('R01 encodes the exact ordered snapshot pair in the canonical route', async ({ user, page, collective }) => {
-		await openSeededComparison(collective, user, page, 'c599-e2e-canonical-route-page')
+		await openRoutedComparison(collective, user, page, 'c599-e2e-canonical-route-page')
 		const comparison = new URL(page.url())
 		expect(comparison.searchParams.get('compareFrom')).toMatch(/^version:[^/\\]+$/)
-		expect(comparison.searchParams.get('compareTo')).toMatch(/^current:[^/\\]+$/)
+		expect(comparison.searchParams.get('compareTo')).toMatch(/^current:\d+$/)
+		expect(comparison.searchParams.get('view')).toBe('grid')
+		expect(comparison.hash).toBe('#rollout')
+		expect(comparison.href).not.toContain('/remote.php/dav')
 		const selectors = page.locator('.version-comparison-dialog select')
 		await expect(selectors.nth(0)).toHaveValue(comparison.searchParams.get('compareFrom')!)
 		await expect(selectors.nth(1)).toHaveValue('current')
 	})
 
 	test('R02 reload restores the exact comparison pair and view', async ({ user, page, collective }) => {
-		await openSeededComparison(collective, user, page, 'c599-e2e-reload-route-page')
+		await openRoutedComparison(collective, user, page, 'c599-e2e-reload-route-page')
 		await page.getByRole('tab', { name: 'Full documents' }).click()
 		const comparisonUrl = page.url()
 		const comparison = new URL(comparisonUrl)
@@ -268,14 +285,17 @@ test.describe('Version comparison route and current-byte contract', () => {
 		const restored = new URL(page.url())
 		expect(restored.searchParams.get('compareFrom')).toBe(comparison.searchParams.get('compareFrom'))
 		expect(restored.searchParams.get('compareTo')).toBe(comparison.searchParams.get('compareTo'))
+		await expect(page).toHaveURL(comparisonUrl)
 	})
 
 	test('R03 Back closes the managed comparison and restores the prior route', async ({ user, page, collective }) => {
-		await openSeededComparison(collective, user, page, 'c599-e2e-back-route-page')
+		const { priorUrl } = await openRoutedComparison(collective, user, page, 'c599-e2e-back-route-page')
 
 		await page.goBack()
 
 		await expect(page.locator('.version-comparison-dialog')).toHaveCount(0)
+		await expect(page.locator('.text-comparison-root')).toHaveCount(0)
+		await expect(page).toHaveURL(priorUrl)
 		const restored = new URL(page.url())
 		expect(restored.searchParams.has('compareFrom')).toBe(false)
 		expect(restored.searchParams.has('compareTo')).toBe(false)
@@ -293,8 +313,8 @@ test.describe('Version comparison route and current-byte contract', () => {
 		await expect(page.locator('.text-comparison')).toBeVisible()
 	})
 
-	test('R05 copied link opens the exact pair in a fresh authenticated context', async ({ user, page, collective }) => {
-		await openSeededComparison(collective, user, page, 'c599-e2e-copied-route-page')
+	test('R05 copied link opens the exact pair after a fresh login', async ({ user, page, collective, account, browser, baseURL }) => {
+		await openRoutedComparison(collective, user, page, 'c599-e2e-copied-route-page')
 		const comparisonUrl = page.url()
 
 		await installClipboardCapture(page)
@@ -302,17 +322,27 @@ test.describe('Version comparison route and current-byte contract', () => {
 		const copiedUrl = await page.evaluate(() => sessionStorage.getItem('c599-copied-link'))
 		expect(copiedUrl).toBe(comparisonUrl)
 
-		const copiedContext = await freshAuthenticatedContext(page)
-		const copiedPage = await copiedContext.newPage()
-		await copiedPage.goto(copiedUrl!)
-		await expect(copiedPage.locator('.text-comparison')).toBeVisible()
-		await copiedPage.getByRole('tab', { name: 'Full documents' }).click()
-		await expect(copiedPage.locator('.text-comparison__document--before')).toContainText('Historical comparison bytes')
-		await expect(copiedPage.locator('.text-comparison__document--after')).toContainText('Current comparison bytes')
-		const copiedPair = new URL(copiedPage.url())
-		expect(copiedPair.searchParams.get('compareFrom')).toBe(new URL(comparisonUrl).searchParams.get('compareFrom'))
-		expect(copiedPair.searchParams.get('compareTo')).toBe(new URL(comparisonUrl).searchParams.get('compareTo'))
-		await copiedContext.close()
+		const copiedPage = await loginAsUser(browser, baseURL, account)
+		try {
+			expect(copiedPage.context()).not.toBe(page.context())
+			await copiedPage.goto(copiedUrl!)
+			await expect(copiedPage.locator('.text-comparison')).toBeVisible()
+			await copiedPage.getByRole('tab', { name: 'Full documents' }).click()
+			await expect(copiedPage.locator('.text-comparison__document--before')).toContainText('Historical comparison bytes')
+			await expect(copiedPage.locator('.text-comparison__document--after')).toContainText('Current comparison bytes')
+			await expect(copiedPage).toHaveURL(comparisonUrl)
+		} finally {
+			await copiedPage.context().close()
+		}
+	})
+
+	test('R10 close preserves the prior URL and clears the managed history marker', async ({ user, page, collective }) => {
+		const { priorUrl } = await openRoutedComparison(collective, user, page, 'c599-e2e-close-route-page')
+		await page.locator('.modal-mask:has(.version-comparison-dialog) button.modal-container__close').click()
+		await expect(page.locator('.version-comparison-dialog')).toHaveCount(0)
+		await expect(page.locator('.text-comparison-root')).toHaveCount(0)
+		await expect(page).toHaveURL(priorUrl)
+		expect(await page.evaluate(() => history.state?.collectivesVersionComparison)).not.toBe(true)
 	})
 
 	test('F11 completes comparison with no unexplained browser or network failures', async ({ user, page, collective }) => {
