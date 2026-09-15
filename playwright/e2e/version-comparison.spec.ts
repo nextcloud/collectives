@@ -9,13 +9,14 @@ import type { Collective } from '../support/fixtures/Collective.ts'
 import type { CollectivePage } from '../support/fixtures/CollectivePage.ts'
 
 import { docker, getContainer, runOcc } from '@nextcloud/e2e-test-server/docker'
-import { test as base, expect, mergeTests } from '@playwright/test'
+import { test as base, expect, mergeTests, request as requestApi } from '@playwright/test'
 import { randomUUID } from 'node:crypto'
+import { listVersions } from '../../src/apis/dav/davRequests.js'
 import { test as editorTest } from '../support/fixtures/editor.ts'
 import { loginAsUser } from '../support/fixtures/random-user.ts'
 import { User } from '../support/fixtures/User.ts'
 import { CURRENT_CONTENT, CURRENT_PHRASE, INITIAL_CONTENT, INITIAL_PHRASE, REVIEWED_CONTENT, SECOND_CONTENT } from '../support/fixtures/versionComparisonMarkdown.ts'
-import { apiUrl, circlesApiUrl, ocsHeaders } from '../support/helpers/urls.ts'
+import { apiUrl, circlesApiUrl, ocsHeaders, webdavUrl } from '../support/helpers/urls.ts'
 import {
 	createVersionComparisonAccount,
 	deleteVersionComparisonUser,
@@ -1346,4 +1347,178 @@ test('AUD-06 callable semantic factory works despite an unexpected advertised AP
 	await expect(dialog.locator('.text-comparison')).toBeVisible()
 	await expect(dialog.getByRole('tab', { name: 'Markdown source' })).toBeVisible()
 	await expect(page.locator('#viewer')).toHaveCount(0)
+})
+
+async function openVersionManagement(collective: Collective, user: User, page: Page) {
+	const collectivePage = await collective.createPage({ title: 'c599-e2e-version-management', user, page })
+	for (const [index, content] of ['Initial management bytes', 'Second management bytes', 'Third management bytes', 'Current management bytes'].entries()) {
+		if (index > 0) {
+			await page.waitForTimeout(1100)
+		}
+		await collectivePage.setContent({ content, user, page })
+	}
+	await collectivePage.open()
+	await openVersions(page)
+	await expect(page.locator('.version-list .list-item')).toHaveCount(4)
+	return collectivePage
+}
+
+function davVersionEntries(body: string) {
+	return (body.match(/<d:response>[\s\S]*?<\/d:response>/g) ?? [])
+		.filter((entry) => entry.includes('<d:getcontenttype>text/markdown</d:getcontenttype>'))
+		.map((entry) => ({
+			href: entry.match(/<d:href>([^<]+)<\/d:href>/)?.[1],
+			lastModified: Date.parse(entry.match(/<d:getlastmodified>([^<]+)<\/d:getlastmodified>/)?.[1] ?? ''),
+		}))
+		.filter(({ href, lastModified }) => href && Number.isFinite(lastModified))
+		.sort((first, second) => first.lastModified - second.lastModified)
+}
+
+test.describe('Version management and DAV authorization', () => {
+	test('Version list contains four versions, opens initial and current bytes, and distinguishes labels to the second', async ({ collective, user, page }) => {
+		const collectivePage = await openVersionManagement(collective, user, page)
+		const versions = page.locator('.version-list .list-item')
+		await expect(versions.first()).toContainText('Current version')
+		await expect(versions.last()).toContainText('Initial version')
+		await expect(collectivePage.getContent()).toContainText('Current management bytes')
+		await versions.filter({ hasText: 'Initial version' }).locator('a').click()
+		await expect(page.locator('.page-title-container .title-version')).toBeVisible()
+		await expect(collectivePage.getContent()).toContainText('Initial management bytes')
+		await versions.filter({ hasText: 'Current version' }).locator('a').click()
+		await expect(page.locator('.page-title-container .title-version')).toHaveCount(0)
+		await expect(collectivePage.getContent()).toContainText('Current management bytes')
+		await page.getByRole('button', { name: 'Compare versions…' }).click()
+		for (const selector of await page.locator('.version-comparison-dialog select').all()) {
+			const labels = await selector.locator('option').allTextContents()
+			expect(new Set(labels).size).toBe(labels.length)
+			expect(labels.every((label) => /\d{1,2}:\d{2}:\d{2}/.test(label))).toBe(true)
+		}
+	})
+
+	test('No-history page omits comparison and lists only the current version', async ({ collective, user, page }) => {
+		await openVersionManagement(collective, user, page)
+		const fresh = await collective.createPage({ title: 'c599-e2e-no-history', user, page })
+		await fresh.open()
+		await openVersions(page)
+		await expect(page.locator('.version-list .list-item')).toHaveCount(1)
+		await expect(page.getByRole('button', { name: 'Compare versions…' })).toHaveCount(0)
+	})
+
+	test('Version name persists through DAV and appears in the list', async ({ collective, user, page }) => {
+		await openVersionManagement(collective, user, page)
+		await page.locator('.version-list .list-item').nth(1).locator('.list-item-content__actions').click()
+		await page.getByRole('menuitem', { name: 'Name this version', exact: true }).click()
+		const named = page.waitForResponse((response) => response.request().method() === 'PROPPATCH' && /\/dav\/versions\//.test(response.url()))
+		await page.locator('.version-label-modal input[type="text"]').fill('v3')
+		await page.locator('.version-label-modal input[type="text"]').press('Enter')
+		expect((await named).ok()).toBe(true)
+		await expect(page.locator('.version-list')).toContainText('v3')
+		await page.reload()
+		await openVersions(page)
+		await expect(page.locator('.version-list')).toContainText('v3')
+	})
+
+	test('Owner restores the initial version through the DAV MOVE action', async ({ collective, user, page }) => {
+		const collectivePage = await openVersionManagement(collective, user, page)
+		await page.locator('.version-list .list-item').filter({ hasText: 'Initial version' }).locator('.list-item-content__actions').click()
+		const moved = page.waitForResponse((response) => response.request().method() === 'MOVE' && /\/dav\/versions\//.test(response.url()))
+		await page.getByRole('menuitem', { name: 'Restore version', exact: true }).click()
+		expect([201, 204]).toContain((await moved).status())
+		await expect(page.locator('.toast-success')).toContainText('Restored')
+		const content = await page.request.get(webdavUrl(user.account.userId, collectivePage.data.collectivePath, collectivePage.data.filePath, collectivePage.data.fileName), { failOnStatusCode: true })
+		expect(await content.text()).toContain('Initial management bytes')
+		expect(await content.text()).not.toContain('Current management bytes')
+	})
+
+	test('Deleting a historical version reaches DAV and removes exactly one list entry', async ({ collective, user, page }) => {
+		await openVersionManagement(collective, user, page)
+		const versions = page.locator('.version-list .list-item')
+		const count = await versions.count()
+		await versions.nth(1).locator('.list-item-content__actions').click()
+		const deleted = page.waitForResponse((response) => response.request().method() === 'DELETE' && /\/dav\/versions\//.test(response.url()))
+		await page.getByRole('menuitem', { name: 'Delete version', exact: true }).click()
+		expect((await deleted).ok()).toBe(true)
+		await expect(versions).toHaveCount(count - 1)
+	})
+
+	test('F10 anonymous direct DAV read denies a snapshot that its owner can read', async ({ collective, user, page, baseURL }) => {
+		await openVersionManagement(collective, user, page)
+		const snapshot = page.waitForResponse((response) => response.request().method() === 'GET' && /\/remote\.php\/dav\/versions\//.test(response.url()) && !new URL(response.url()).searchParams.has('timestamp'))
+		await page.locator('.version-list .list-item').filter({ hasText: 'Initial version' }).locator('.list-item-content__actions').click()
+		await page.getByRole('menuitem', { name: 'Compare with current version', exact: true }).click()
+		const authorized = await snapshot
+		expect(authorized.ok()).toBe(true)
+		const anonymous = await requestApi.newContext({ baseURL, storageState: undefined })
+		try {
+			expect((await anonymous.storageState()).cookies).toEqual([])
+			const denied = await anonymous.get(authorized.url(), { maxRedirects: 0 })
+			expect([401, 403]).toContain(denied.status())
+		} finally {
+			await anonymous.dispose()
+		}
+	})
+
+	test('Crafted reader restore is denied without changing bytes or versions; equivalent owner restore succeeds', async ({ collective, user, page, readerAccount, browser, baseURL }) => {
+		const collectivePage = await openVersionManagement(collective, user, page)
+		const memberResponse = await page.request.post(circlesApiUrl(collective.data.circleId, 'members'), {
+			headers: ocsHeaders,
+			data: { userId: readerAccount.userId, type: 1 },
+			failOnStatusCode: true,
+		})
+		const member = (await memberResponse.json()).ocs.data
+		await page.request.put(circlesApiUrl(collective.data.circleId, 'members', member.id, 'level'), {
+			headers: ocsHeaders,
+			data: { level: 4 },
+			failOnStatusCode: true,
+		})
+		await page.request.put(apiUrl('v1.0', 'collectives', collective.data.id, 'editLevel'), {
+			headers: ocsHeaders,
+			data: { level: 8 },
+			failOnStatusCode: true,
+		})
+		const readerPage = await loginAsUser(browser, baseURL, readerAccount)
+		try {
+			await readerPage.goto(collectivePage.getPageUrl())
+			await expect(readerPage.locator('[data-cy-collectives="reader"] .ProseMirror')).toContainText('Current management bytes')
+			const collectionResponse = readerPage.waitForResponse((response) => response.request().method() === 'PROPFIND' && /\/dav\/versions\//.test(response.url()))
+			await openVersions(readerPage)
+			const listing = await collectionResponse
+			const entries = davVersionEntries(await listing.text())
+			expect(entries.length).toBeGreaterThan(1)
+			const sourceUrl = new URL(entries[0].href!, listing.url()).href
+			const readerFile = webdavUrl(readerAccount.userId, collectivePage.data.collectivePath, collectivePage.data.filePath, collectivePage.data.fileName)
+			const before = await readerPage.request.get(readerFile, { failOnStatusCode: true })
+			const beforeBytes = await before.text()
+			const denied = await readerPage.request.fetch(sourceUrl, {
+				method: 'MOVE',
+				headers: { Destination: new URL(`/remote.php/dav/versions/${readerAccount.userId}/restore/target`, sourceUrl).href },
+			})
+			if (denied.status() === 500) {
+				const body = await denied.text()
+				expect(body).toContain('<s:exception>OCP\\Files\\NotPermittedException</s:exception>')
+				expect(body).toContain('<s:message>Failed to restore version</s:message>')
+			} else {
+				expect(denied.status()).toBe(403)
+			}
+			expect(await (await readerPage.request.get(readerFile, { failOnStatusCode: true })).text()).toBe(beforeBytes)
+			const afterList = await readerPage.request.fetch(listing.url(), { method: 'PROPFIND', headers: { Depth: '1', 'Content-Type': 'application/xml' }, data: listVersions(), failOnStatusCode: true })
+			expect(davVersionEntries(await afterList.text())).toEqual(entries)
+			const fileId = new URL(sourceUrl).pathname.split('/').slice(-2, -1)[0]
+			const ownerCollection = new URL(`/remote.php/dav/versions/${user.account.userId}/versions/${fileId}`, sourceUrl).href
+			const ownerList = await page.request.fetch(ownerCollection, { method: 'PROPFIND', headers: { Depth: '1', 'Content-Type': 'application/xml' }, data: listVersions(), failOnStatusCode: true })
+			const ownerEntries = davVersionEntries(await ownerList.text())
+			expect(ownerEntries.length).toBeGreaterThan(1)
+			const ownerSource = new URL(ownerEntries[0].href!, ownerCollection).href
+			const original = await (await page.request.get(ownerSource, { failOnStatusCode: true })).text()
+			const restored = await page.request.fetch(ownerSource, {
+				method: 'MOVE',
+				headers: { Destination: new URL(`/remote.php/dav/versions/${user.account.userId}/restore/target`, sourceUrl).href },
+			})
+			expect([201, 204]).toContain(restored.status())
+			const ownerFile = webdavUrl(user.account.userId, collectivePage.data.collectivePath, collectivePage.data.filePath, collectivePage.data.fileName)
+			expect(await (await page.request.get(ownerFile, { failOnStatusCode: true })).text()).toBe(original)
+		} finally {
+			await readerPage.context().close()
+		}
+	})
 })
