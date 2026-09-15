@@ -180,11 +180,14 @@ async function freshAuthenticatedContext(page: Page, serviceWorkers: 'allow' | '
 }
 
 test.describe('Version comparison route and current-byte contract', () => {
-	test('AUD-06 scheduled browser uses the compatible Text comparison API', async ({ user, page, collective }) => {
+	test('AUD-06 scheduled browser uses the compatible Text comparison API', async ({ user, page, collective }, testInfo) => {
 		const { dialog } = await openSeededComparison(collective, user, page, 'c599-e2e-text-api-page')
+		const initialTab = testInfo.config.metadata.comparisonInitialView === 'documents' ? 'Full documents' : 'Changes'
+		await expect(page.getByRole('tab', { name: initialTab, exact: true })).toHaveAttribute('aria-selected', 'true')
 		await expect(page.getByRole('tab', { name: 'Changes' })).toBeVisible()
 		await expect(page.getByRole('tab', { name: 'Full documents' })).toBeVisible()
 		const changesTab = page.locator('.text-comparison .view-tabs').getByRole('tab', { name: 'Changes' })
+		await changesTab.click()
 		const selectedBorderColor = await changesTab.evaluate((element) => getComputedStyle(element).borderBottomColor)
 		await changesTab.hover()
 		await expect(changesTab).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
@@ -380,6 +383,7 @@ test.describe('Version comparison route and current-byte contract', () => {
 
 	test('C16 rejects public comparison parameters without snapshot requests', async ({ user, page, collective }) => {
 		const collectivePage = await collective.createPage({ title: 'c599-e2e-public-comparison-page', user, page })
+		await seedVersionPair(collectivePage, user, page)
 		const share = await collective.createShare({ page })
 		try {
 			const snapshotRequests: string[] = []

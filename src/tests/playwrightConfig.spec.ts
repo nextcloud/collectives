@@ -9,6 +9,7 @@ const originalBaseURL = process.env.baseURL
 const originalSemanticE2E = process.env.COLLECTIVES_SEMANTIC_E2E
 
 afterEach(() => {
+	vi.unstubAllEnvs()
 	if (originalBaseURL === undefined) {
 		delete process.env.baseURL
 	} else {
@@ -33,11 +34,25 @@ async function loadConfig(baseURL: string | undefined, semanticE2E = false) {
 }
 
 describe('Playwright server selection', () => {
+	it.each(['changes', 'documents'])('records the explicit %s default for the pinned semantic runtime', async (initialView) => {
+		vi.stubEnv('CI', '1')
+		vi.stubEnv('COLLECTIVES_COMPARISON_INITIAL_VIEW', initialView)
+		const config = await loadConfig(undefined, true)
+		expect(config.metadata?.comparisonInitialView).toBe(initialView)
+	})
+
+	it.each([undefined, '', 'source'])('rejects a missing or invalid semantic CI default: %s', async (initialView) => {
+		vi.stubEnv('CI', '1')
+		vi.stubEnv('COLLECTIVES_COMPARISON_INITIAL_VIEW', initialView)
+		await expect(loadConfig(undefined, true)).rejects.toThrow('COLLECTIVES_COMPARISON_INITIAL_VIEW')
+	})
+
 	it.each([undefined, ''])('uses the managed server for %s baseURL', async (baseURL) => {
 		const config = await loadConfig(baseURL)
 
 		expect(config.use?.baseURL).toBe('http://localhost:8089/index.php/')
 		expect(config.webServer).toBeDefined()
+		expect(config.webServer).toMatchObject({ wait: { stdout: /Collectives test runtime ready/ } })
 	})
 
 	it('uses a non-empty external baseURL without the managed server', async () => {
@@ -56,6 +71,7 @@ describe('Playwright server selection', () => {
 	})
 
 	it('runs semantic comparison in Chromium without the Viewer fallback', async () => {
+		vi.stubEnv('COLLECTIVES_COMPARISON_INITIAL_VIEW', 'changes')
 		const config = await loadConfig(undefined, true)
 		const projects = config.projects?.filter(({ name }) => name?.startsWith('comparison-') && name !== 'comparison-viewer-chromium')
 

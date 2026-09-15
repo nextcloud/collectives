@@ -38,6 +38,10 @@ const CI_CONFIG = {
 const baseURL = process.env.baseURL || 'http://localhost:8089/index.php/'
 const externalServer = Boolean(process.env.baseURL)
 const SEMANTIC_E2E = process.env.COLLECTIVES_SEMANTIC_E2E === '1'
+const comparisonInitialView = process.env.COLLECTIVES_COMPARISON_INITIAL_VIEW ?? (process.env.CI ? undefined : 'changes')
+if (SEMANTIC_E2E && comparisonInitialView !== 'changes' && comparisonInitialView !== 'documents') {
+	throw new Error('Set COLLECTIVES_COMPARISON_INITIAL_VIEW to changes or documents for the pinned Text revision')
+}
 const VERSION_COMPARISON_TESTS = '**/version-comparison.spec.ts'
 const VIEWER_FALLBACK_TAG = /@viewer-fallback/
 
@@ -66,7 +70,6 @@ const webServer = externalServer
 			signal: 'SIGTERM' as const,
 			timeout: 10000,
 		},
-		// `start-nextcloud-server.mjs` only starts the server if not reachable yet.
 		reuseExistingServer: false,
 		stderr: 'pipe' as const,
 		stdout: 'pipe' as const,
@@ -74,7 +77,7 @@ const webServer = externalServer
 		timeout: 5 * 60 * 1000,
 		wait: {
 			// we wait for this line to appear in the output of the webserver until consider it done
-			stdout: /Nextcloud is now ready to use/,
+			stdout: /Collectives test runtime ready/,
 		},
 	}
 
@@ -83,6 +86,8 @@ const webServer = externalServer
  */
 export default defineConfig({
 	testDir: './playwright',
+	outputDir: './test-results/browser',
+	metadata: { comparisonInitialView },
 	...(process.env.CI ? CI_CONFIG : LOCAL_CONFIG),
 	use: {
 		// Base URL to use in actions like `await page.goto('./')`.
