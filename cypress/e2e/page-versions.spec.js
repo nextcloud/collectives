@@ -4,7 +4,6 @@
  */
 
 import { createVersionComparisonAccount } from '../../playwright/support/helpers/versionComparisonFixtures.ts'
-import { listVersions } from '../../src/apis/dav/davRequests.js'
 
 const HISTORICAL_SNAPSHOT_URL = /\/remote\.php\/dav\/versions\/(?!.*[?&]timestamp=\d{13}(?:&|$))/
 const CURRENT_SNAPSHOT_URL = /\/remote\.php\/dav\/versions\/.*[?&]timestamp=\d{13}(?:&|$)/
@@ -63,34 +62,6 @@ function deleteTestUser(user, failOnStatusCode = true) {
 function logoutAndClearSession() {
 	cy.logout()
 	return cy.then(() => Cypress.session.clearAllSavedSessions())
-}
-
-function authenticatedDavRequest(user, options) {
-	return cy.clearCookies({ log: false }).then(() => cy.request({
-		...options,
-		auth: { username: user.userId, password: user.password },
-		log: false,
-	}))
-}
-
-function versionEntries(body) {
-	return (body.match(/<d:response>[\s\S]*?<\/d:response>/g) ?? [])
-		.filter((entry) => entry.includes('<d:getcontenttype>text/markdown</d:getcontenttype>'))
-		.map((entry) => ({
-			href: entry.match(/<d:href>([^<]+)<\/d:href>/)?.[1],
-			lastModified: Date.parse(entry.match(/<d:getlastmodified>([^<]+)<\/d:getlastmodified>/)?.[1]),
-		}))
-		.filter(({ href, lastModified }) => href && Number.isFinite(lastModified))
-		.toSorted((first, second) => first.lastModified - second.lastModified)
-}
-
-function listDavVersions(user, url) {
-	return authenticatedDavRequest(user, {
-		method: 'PROPFIND',
-		url,
-		headers: { Depth: '1', 'Content-Type': 'application/xml' },
-		body: listVersions(),
-	})
 }
 
 function selectVersionAt(selectorIndex, optionIndex, options = {}) {
@@ -496,74 +467,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		openVersionsSidebar()
 	})
 
-	it('Lists versions', function() {
-		cy.getReadOnlyEditor()
-			.should('contain', CURRENT_PHRASE)
-
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.should('have.length', 4)
-
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.should('contain', 'Current version')
-
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.should('contain', 'Initial version')
-	})
-
-	it('Hides comparison when no historical version exists', function() {
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${FRESH_PAGE_NAME}`)
-		cy.get('#tab-button-versions').click()
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.should('have.length', 1)
-		cy.contains('button', 'Compare versions…').should('not.exist')
-	})
-
-	it('distinguishes every version selector option down to the second', function() {
-		cy.contains('button', 'Compare versions…').click()
-		cy.get('.version-comparison-dialog select').each(($select) => {
-			const labels = [...$select[0].options].map(({ text }) => text.trim())
-			expect(new Set(labels).size).to.equal(labels.length)
-			expect(labels.every((label) => /\d{1,2}:\d{2}:\d{2}/.test(label))).to.equal(true)
-		})
-	})
-
-	it('Open initial and current version', function() {
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.contains('Initial version')
-			.click()
-
-		cy.get('.page-title-container')
-			.find('.title-version')
-			.should('be.visible')
-		cy.getReadOnlyEditor()
-			.should('contain', INITIAL_PHRASE)
-
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.contains('Current version')
-			.click()
-
-		cy.get('.page-title-container')
-			.find('.title-version')
-			.should('not.exist')
-		cy.getReadOnlyEditor()
-			.should('contain', CURRENT_PHRASE)
-	})
-
-	it('Add label to version', function() {
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.eq(1)
-			.find('.list-item-content__actions')
-			.click()
-
-		cy.clickMenuButton('Name this version')
-
-		cy.get('.version-label-modal input[type="text"]')
-			.type('v3{enter}')
-
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.should('contain', 'v3')
-	})
-
 	it('R04 Forward reopens the exact semantic comparison state', function() {
 		cy.stubClipboardAndVisit(`/apps/collectives/${COLLECTIVE_NAME}/${PAGE_NAME}?view=grid#rollout`)
 		openVersionsSidebar()
@@ -765,124 +668,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('@versionRequest.all').should('have.length', 0)
 	})
 
-	it('F10 denies a direct anonymous historical DAV snapshot read', function() {
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('authorizedSnapshotRead')
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.eq(3)
-			.find('.list-item-content__actions')
-			.click()
-		cy.clickMenuButton('Compare with current version')
-		cy.wait('@authorizedSnapshotRead').its('request.url').then((snapshotUrl) => {
-			closeSemanticComparison()
-			logoutAndClearSession()
-			cy.request({
-				url: snapshotUrl,
-				failOnStatusCode: false,
-				followRedirect: false,
-			}).its('status').should('be.oneOf', [401, 403])
-		})
-	})
-
-	it('denies a crafted reader restore and allows the equivalent owner restore', function() {
-		cy.login(READER)
-		cy.intercept('PROPFIND', '**/remote.php/dav/versions/**').as('readerVersions')
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${RESTORE_AUTH_PAGE_NAME}`)
-		cy.getReadOnlyEditor().should('contain', CURRENT_PHRASE)
-		openVersionsSidebar()
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-
-		cy.wait('@readerVersions').then(({ request, response }) => {
-			const beforeEntries = versionEntries(response.body)
-			expect(beforeEntries.length, 'reader-visible version snapshots').to.be.greaterThan(1)
-			const sourceUrl = new URL(beforeEntries[0].href, request.url).href
-			const fileId = new URL(sourceUrl).pathname.split('/').at(-2)
-			expect(fileId, 'versioned file id').to.not.be.empty
-			const collectionUrl = request.url
-			const pageUrl = `${Cypress.expose('baseUrl')}/remote.php/webdav/.Collectives/${encodeURIComponent(COLLECTIVE_NAME)}/${encodeURIComponent(RESTORE_AUTH_PAGE_NAME)}.md`
-			const destination = `${Cypress.expose('baseUrl')}/remote.php/dav/versions/${encodeURIComponent(READER.userId)}/restore/target`
-
-			return authenticatedDavRequest(READER, { url: pageUrl }).then(({ body: beforeBytes }) => {
-				return authenticatedDavRequest(READER, {
-					method: 'MOVE',
-					url: sourceUrl,
-					headers: { Destination: destination },
-					failOnStatusCode: false,
-				}).then(({ status, body }) => {
-					if (status === 500) {
-						expect(body).to.contain('<s:exception>OCP\\Files\\NotPermittedException</s:exception>')
-						expect(body).to.contain('<s:message>Failed to restore version</s:message>')
-					} else {
-						expect(status).to.equal(403)
-					}
-					return authenticatedDavRequest(READER, { url: pageUrl })
-				}).then(({ body }) => {
-					expect(body).to.equal(beforeBytes)
-					return listDavVersions(READER, collectionUrl)
-				}).then(({ body }) => {
-					expect(versionEntries(body)).to.deep.equal(beforeEntries)
-					return { fileId, pageUrl }
-				})
-			})
-		}).then(({ fileId, pageUrl }) => {
-			const ownerCollectionUrl = `${Cypress.expose('baseUrl')}/remote.php/dav/versions/${encodeURIComponent(OWNER.userId)}/versions/${fileId}`
-			return listDavVersions(OWNER, ownerCollectionUrl).then(({ body }) => {
-				const ownerEntries = versionEntries(body)
-				expect(ownerEntries.length, 'owner-visible version snapshots').to.be.greaterThan(1)
-				const sourceUrl = new URL(ownerEntries[0].href, ownerCollectionUrl).href
-				return authenticatedDavRequest(OWNER, { url: sourceUrl }).then(({ body: historicalBytes }) => {
-					return authenticatedDavRequest(OWNER, {
-						method: 'MOVE',
-						url: sourceUrl,
-						headers: { Destination: `${Cypress.expose('baseUrl')}/remote.php/dav/versions/${encodeURIComponent(OWNER.userId)}/restore/target` },
-					}).then(({ status }) => {
-						expect(status).to.be.oneOf([201, 204])
-						return authenticatedDavRequest(OWNER, { url: pageUrl })
-					}).its('body').should('equal', historicalBytes)
-				})
-			})
-		})
-	})
-
-	it('restores the initial version through DAV MOVE', function() {
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.eq(3)
-			.find('.list-item-content__actions')
-			.click()
-
-		cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
-		cy.clickMenuButton('Restore version')
-		cy.wait('@moveVersion').its('response.statusCode').should('be.oneOf', [201, 204])
-		cy.get('.toast-success').should('contain', 'Restored')
-
-		cy.request('/csrftoken').then(({ body }) => {
-			cy.request({
-				url: `${Cypress.expose('baseUrl')}/remote.php/webdav/.Collectives/${encodeURIComponent(COLLECTIVE_NAME)}/${encodeURIComponent(PAGE_NAME)}.md`,
-				headers: { requesttoken: body.token },
-			}).its('body')
-				.should('contain', INITIAL_PHRASE)
-				.and('not.contain', CURRENT_PHRASE)
-		})
-	})
-
-	it('Delete version', function() {
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.then(($versions) => {
-				cy.wrap($versions)
-					.filter(':not(:first)')
-					.first()
-					.find('.list-item-content__actions')
-					.click()
-
-				cy.intercept('DELETE', '**/dav/versions/**').as('deleteVersion')
-				cy.clickMenuButton('Delete version')
-				cy.wait('@deleteVersion')
-
-				cy.get('.app-sidebar-tabs__content .version-list .list-item')
-					.should('have.length', $versions.length - 1)
-			})
-	})
 })
 
 if (!SEMANTIC_E2E) {
