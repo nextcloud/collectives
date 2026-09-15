@@ -1748,3 +1748,24 @@ test.describe('Comparison route recovery and immutable links', () => {
 		expect(requests).toEqual([])
 	})
 })
+
+test('AUD-06 legacy runtime opens original historical and current Viewer panes from the sidebar', { tag: '@viewer-fallback' }, async ({ collective, user, page }) => {
+	const collectivePage = await collective.createPage({ title: 'c599-e2e-legacy-sidebar', user, page })
+	await seedVersionPair(collectivePage, user, page)
+	await collectivePage.open()
+	const capabilities = await page.evaluate(() => ({
+		semantic: typeof window.OCA?.Text?.createMarkdownContentComparison,
+		viewer: typeof window.OCA?.Viewer?.compare,
+	}))
+	expect(capabilities).toEqual({ semantic: 'undefined', viewer: 'function' })
+	await openVersions(page)
+	await page.locator('.version-list .list-item').filter({ hasText: 'Initial version' }).locator('.list-item-content__actions').click()
+	await page.getByRole('menuitem', { name: 'Compare with current version', exact: true }).click()
+	const panes = page.locator('#viewer .viewer--split > .viewer__file-wrapper:visible')
+	await expect(panes).toHaveCount(2)
+	await expect(panes.nth(0)).toContainText('Historical comparison bytes')
+	await expect(panes.nth(1)).toContainText('Current comparison bytes')
+	await expect(page.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
+	await page.evaluate(() => window.OCA.Viewer.close())
+	await expect(page.locator('#viewer')).toHaveCount(0)
+})
