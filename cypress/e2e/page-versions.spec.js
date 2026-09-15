@@ -180,29 +180,6 @@ function openInitialCurrentSemanticComparison() {
 	cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
 }
 
-function insertEditorContent(content, appendParagraph = false) {
-	cy.getEditorContent(true).should('be.visible')
-	cy.window({ log: false }).then((window) => {
-		const components = window.OCA?.Text?.editorComponents
-		if (!components) {
-			throw new Error('Text editor components are unavailable')
-		}
-		const component = Array.from(components)
-			.find((candidate) => candidate.active)
-		if (!component) {
-			throw new Error('No active Text editor component is available')
-		}
-		cy.wrap(component.whenSynced, { log: false }).then(() => {
-			const command = appendParagraph
-				? component.editor.chain().focus('end').insertContent({
-						type: 'paragraph',
-						content: [{ type: 'text', text: content }],
-					}).run()
-				: component.editor.commands.insertContent(content)
-			expect(command, 'editor content command').to.equal(true)
-		})
-	})
-}
 
 
 function closeViewerComparison() {
@@ -607,92 +584,9 @@ describeSemantic('Page versions semantic comparison', function() {
 	})
 
 
-	it('C05 reuses a successful historical snapshot while the dialog remains open', function() {
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('cachedHistoricalSnapshot')
-		openInitialCurrentSemanticComparison()
-		cy.get('@cachedHistoricalSnapshot.all').should('have.length', 1)
 
-		selectVersionAt(0, 2)
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-		cy.get('@cachedHistoricalSnapshot.all').should('have.length', 2)
 
-		selectVersionAt(0, 3)
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-		cy.get('@cachedHistoricalSnapshot.all').should('have.length', 2)
-	})
 
-	it('C06 reloads the current snapshot for every comparison attempt', function() {
-		cy.intercept('GET', CURRENT_SNAPSHOT_URL).as('uncachedCurrentSnapshot')
-		openInitialCurrentSemanticComparison()
-		cy.get('@uncachedCurrentSnapshot.all').should('have.length', 1)
-
-		selectVersionAt(0, 2)
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-		cy.get('@uncachedCurrentSnapshot.all').should('have.length', 2)
-
-		selectVersionAt(0, 3)
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-		cy.get('@uncachedCurrentSnapshot.all').should('have.length', 3)
-	})
-
-	it('F11 completes comparison with no unexplained browser or snapshot failures', function() {
-		const unexpectedFailures = []
-		cy.window().then((window) => {
-			window.addEventListener('error', ({ message }) => {
-				if (!message.includes('ResizeObserver')) {
-					unexpectedFailures.push(`page error: ${message}`)
-				}
-			})
-			window.addEventListener('unhandledrejection', ({ reason }) => unexpectedFailures.push(`unhandled rejection: ${String(reason)}`))
-			cy.stub(window.console, 'error').callsFake((...args) => unexpectedFailures.push(`console error: ${args.join(' ')}`))
-		})
-		const recordFailedResponse = (request) => request.continue((response) => {
-			if (response.statusCode >= 400) {
-				unexpectedFailures.push(`${response.statusCode} ${request.url}`)
-			}
-		})
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL, recordFailedResponse)
-		cy.intercept('GET', CURRENT_SNAPSHOT_URL, recordFailedResponse)
-
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.eq(3)
-			.find('.list-item-content__actions')
-			.click()
-		cy.clickMenuButton('Compare with current version')
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-		closeSemanticComparison()
-		cy.then(() => expect(JSON.stringify(unexpectedFailures), 'unexplained comparison failures').to.equal('[]'))
-	})
-
-	it('C03 normalizes reversed selectors without swapping visible labels', function() {
-		let expectedEarlierLabel
-		let expectedLaterLabel
-		cy.contains('button', 'Compare versions…').click()
-		selectVersionFromEnd(0, 3)
-		selectVersionFromEnd(1, 1)
-		cy.get('.version-comparison-dialog select').eq(0).find('option:selected').invoke('text')
-			.then((label) => { expectedLaterLabel = label.trim() })
-		cy.get('.version-comparison-dialog select').eq(1).find('option:selected').invoke('text')
-			.then((label) => { expectedEarlierLabel = label.trim() })
-		getVersionComparisonModal().find('button[type="submit"]').click()
-
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
-		cy.get('.version-comparison-dialog .text-comparison__document--before')
-			.should('contain', INITIAL_PHRASE)
-		cy.get('.version-comparison-dialog .text-comparison__document--after')
-			.should('contain', REVIEWED_PHRASE)
-		cy.get('.version-comparison-dialog select').eq(0).should(($select) => {
-			expect($select.val()).to.match(/^version:[^/\\]+$/)
-			expect($select.find('option:selected').text().trim()).to.equal(expectedEarlierLabel)
-		})
-		cy.get('.version-comparison-dialog select').eq(1).should(($select) => {
-			expect($select.find('option:selected').text().trim()).to.equal(expectedLaterLabel)
-		})
-	})
 
 
 	it('R04 Forward reopens the exact semantic comparison state', function() {
@@ -914,228 +808,20 @@ describeSemantic('Page versions semantic comparison', function() {
 		})
 	})
 
-	it('C04 Blocks comparing a version with itself', function() {
-		cy.contains('button', 'Compare versions…').click()
-		selectVersionAt(0, 1)
-		selectVersionAt(1, 1)
-		cy.get('.version-comparison-dialog')
-			.should('contain', 'Select two different versions.')
-		getVersionComparisonModal().find('button[type="submit"]')
-			.should('be.disabled')
-	})
 
 
 
-	it('AUD-06 uses a callable semantic factory despite an unexpected Text API version', function() {
-		cy.window().then((window) => {
-			window.OCA.Text.apiVersion = 'unexpected'
-		})
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison').should('be.visible')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Markdown source').should('be.visible')
-		cy.get('#viewer').should('not.exist')
-	})
 
-	it('X03 falls back to Viewer when the advertised semantic factory is missing', function() {
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('viewerSnapshotRequest')
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${VIEWER_FALLBACK_PAGE_NAME}`)
-		cy.switchToEditMode()
-		cy.intercept('POST', '**/apps/text/session/*/save').as('viewerPreparationSave')
-		const typedBytes = 'No-wait Viewer fallback bytes 7f56c599'
-		insertEditorContent(typedBytes, true)
-		openVersionsSidebar()
-		cy.window().then((window) => {
-			window.OCA.Text.apiVersion = '1.5'
-			cy.stub(window.OCA.Text, 'createMarkdownContentComparison').value(undefined).as('missingSemanticFactory')
-		})
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@viewerPreparationSave')
-		cy.get('.version-comparison-dialog').should('not.exist')
-		cy.get('#viewer .viewer--split > .viewer__file-wrapper:visible')
-			.should('have.length', 2)
-			.eq(1)
-			.should('contain', typedBytes)
-		cy.get('@viewerSnapshotRequest.all').should('have.length', 1)
-		closeViewerComparison()
-		cy.get('@missingSemanticFactory').then((stub) => stub.restore())
-	})
 
-	it('prepares current bytes before Viewer fallback dispatch', function() {
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${VIEWER_FALLBACK_PAGE_NAME}`)
-		cy.switchToEditMode()
-		cy.intercept('POST', '**/apps/text/session/*/save', { statusCode: 500 }).as('failedViewerPreparationSave')
-		insertEditorContent('Viewer preparation must fail closed 7f56c599', true)
-		openVersionsSidebar()
-		cy.window().then((window) => {
-			cy.stub(window.OCA.Text, 'createMarkdownContentComparison').value(undefined).as('missingSemanticFactory')
-		})
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@failedViewerPreparationSave')
-		cy.get('#viewer').should('not.exist')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'Could not save current changes before comparison. Please try again.')
-		cy.get('@missingSemanticFactory').then((stub) => stub.restore())
-	})
 
-	it('C11 retry clears a removed-version error and publishes fresh comparison state', function() {
-		cy.intercept({
-			method: 'GET',
-			times: 1,
-			url: HISTORICAL_SNAPSHOT_URL,
-		}, { statusCode: 404 }).as('removedVersion')
 
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${REMOVED_VERSION_PAGE_NAME}`)
-		openVersionsSidebar()
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@removedVersion')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'One of the selected versions has expired or was removed.')
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
 
-		getVersionComparisonModal().contains('button', 'Retry').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-	})
 
-	it('C13 reports one removed version for a single 404 snapshot response', function() {
-		cy.intercept({
-			method: 'GET',
-			times: 1,
-			url: HISTORICAL_SNAPSHOT_URL,
-		}, { statusCode: 404 }).as('singleRemovedVersion')
 
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${SINGLE_REMOVED_VERSION_PAGE_NAME}`)
-		openVersionsSidebar()
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@singleRemovedVersion')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'One of the selected versions has expired or was removed.')
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-	})
 
-	it('C12 Shows a permission error when both snapshots are unavailable', function() {
-		cy.get('body').then(($body) => {
-			if ($body.find('.version-comparison-dialog').length > 0) {
-				closeSemanticComparison()
-			}
-		})
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL, { statusCode: 403 })
-			.as('deniedSnapshots')
 
-		cy.contains('button', 'Compare versions…').click()
-		selectVersionAt(0, 1)
-		selectVersionAt(1, 3)
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@deniedSnapshots')
-		cy.wait('@deniedSnapshots')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'You do not have permission to load the selected versions.')
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-		cy.get('#viewer').should('not.exist')
-	})
 
-	it('C12 Shows a permission error when one selected snapshot is unavailable', function() {
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL, { statusCode: 403 }).as('deniedSnapshot')
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@deniedSnapshot')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'You do not have permission to load one of the selected versions.')
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-	})
 
-	it('C13 Shows a two-version expiry error for 404 and 410 responses', function() {
-		let requestCount = 0
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL, (request) => {
-			request.reply({ statusCode: requestCount++ === 0 ? 410 : 404 })
-		}).as('expiredSnapshots')
-		cy.contains('button', 'Compare versions…').click()
-		selectVersionAt(0, 1)
-		selectVersionAt(1, 3)
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@expiredSnapshots')
-		cy.wait('@expiredSnapshots')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'The selected versions have expired or were removed.')
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-	})
-
-	it('C14 reports a network failure instead of treating it as cancellation', function() {
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL, (request) => {
-			request.destroy()
-		}).as('networkFailure')
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@networkFailure')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'Could not load the selected versions because of a network error.')
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-		cy.get('#viewer').should('not.exist')
-	})
-
-	it('C09 cancels a superseded request and prevents stale publication', function() {
-		const delayedSnapshot = Promise.withResolvers()
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL, (request) => {
-			return delayedSnapshot.promise.then(() => request.reply('Delayed snapshot'))
-		}).as('delayedSnapshot')
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog__loading').should('be.visible')
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${FRESH_PAGE_NAME}`)
-		cy.location('pathname').should('contain', `/${FRESH_PAGE_NAME}`)
-		cy.getReadOnlyEditor().should('be.visible')
-		cy.then(() => delayedSnapshot.resolve())
-		cy.wait('@delayedSnapshot')
-		cy.get('.version-comparison-dialog').should('not.exist')
-		cy.get('.text-comparison').should('not.exist')
-		cy.get('[role="alert"]').should('not.exist')
-	})
-
-	it('C10 publishes only the latest generation after rapid pair changes', function() {
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${RAPID_GENERATION_PAGE_NAME}`)
-		openVersionsSidebar()
-		const delayedSnapshot = Promise.withResolvers()
-		let delayedFirstSnapshot = false
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL, (request) => {
-			if (!delayedFirstSnapshot) {
-				delayedFirstSnapshot = true
-				request.alias = 'supersededSnapshot'
-				request.continue(() => delayedSnapshot.promise)
-			}
-		}).as('rapidHistoricalSnapshots')
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog__loading').should('be.visible')
-		selectVersionFromEnd(0, 1, { force: true })
-		selectVersionFromEnd(1, 2, { force: true })
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
-		cy.get('.version-comparison-dialog .text-comparison__document--before')
-			.should('contain', INITIAL_PHRASE)
-		cy.get('.version-comparison-dialog .text-comparison__document--after')
-			.should('contain', REVIEWED_PHRASE)
-		cy.then(() => delayedSnapshot.resolve())
-		cy.wait('@supersededSnapshot')
-		cy.get('.version-comparison-dialog .text-comparison__document--after')
-			.should('contain', REVIEWED_PHRASE)
-			.and('not.contain', CURRENT_PHRASE)
-	})
-
-	it('Reports semantic comparison initialization failures', function() {
-		cy.window().then((window) => {
-			cy.stub(window.OCA.Text, 'createMarkdownContentComparison')
-				.rejects(new Error('comparison failed'))
-		})
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'Could not initialize version comparison.')
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-	})
 
 	it('denies a crafted reader restore and allows the equivalent owner restore', function() {
 		cy.login(READER)
@@ -1199,50 +885,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		})
 	})
 
-	it('C07 saves no-wait editor bytes before fetching a current comparison', function() {
-		cy.login(OWNER)
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${RAPID_COMPARE_PAGE_NAME}`)
-		cy.switchToEditMode()
-		cy.intercept('POST', '**/apps/text/session/*/save').as('comparisonPreparationSave')
-		cy.intercept('GET', CURRENT_SNAPSHOT_URL).as('preparedCurrentSnapshot')
-		const typedBytes = 'No-wait current bytes 7f56c599'
-		insertEditorContent(typedBytes, true)
 
-		openVersionsSidebar()
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@comparisonPreparationSave')
-		cy.wait('@preparedCurrentSnapshot')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
-		cy.get('.version-comparison-dialog .text-comparison__document--after')
-			.should('contain', typedBytes)
-		cy.get('[data-cy-collectives="editor"] .ProseMirror').should('exist')
-		cy.location('search').should('match', /compareTo=current(?::|%3A)/)
-		cy.reload()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
-		cy.get('.version-comparison-dialog .text-comparison__document--after')
-			.should('contain', typedBytes)
-		closeSemanticComparison()
-	})
-
-	it('C08 prevents snapshot reads and reports an actionable preparation failure', function() {
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${RAPID_COMPARE_PAGE_NAME}`)
-		cy.switchToEditMode()
-		cy.intercept('POST', '**/apps/text/session/*/save', { statusCode: 500 }).as('failedPreparationSave')
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('historicalSnapshotRequest')
-		cy.intercept('GET', CURRENT_SNAPSHOT_URL).as('currentSnapshotRequest')
-		insertEditorContent('Preparation must fail before snapshot reads', true)
-		openVersionsSidebar()
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.wait('@failedPreparationSave')
-		cy.get('.version-comparison-dialog [role="alert"]')
-			.should('contain', 'Could not save current changes before comparison. Please try again.')
-		cy.get('@historicalSnapshotRequest.all').should('have.length', 0)
-		cy.get('@currentSnapshotRequest.all').should('have.length', 0)
-		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-	})
 
 	it('restores the initial version through DAV MOVE', function() {
 		cy.get('.app-sidebar-tabs__content .version-list .list-item')

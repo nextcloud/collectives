@@ -247,6 +247,17 @@ test.describe('Version comparison route and current-byte contract', () => {
 		await collectivePage.switchMode(true)
 		await expect(page.locator('.text-menubar--ready')).toBeVisible()
 		editor.setMode(true)
+		const ordering: string[] = []
+		page.on('response', (response) => {
+			if (response.request().method() === 'POST' && /\/apps\/text\/session\/.*\/save/.test(response.url()) && response.ok()) {
+				ordering.push('saved')
+			}
+		})
+		page.on('request', (request) => {
+			if (request.method() === 'GET' && /\/remote\.php\/dav\/versions\//.test(request.url()) && new URL(request.url()).searchParams.has('timestamp')) {
+				ordering.push('current')
+			}
+		})
 		const typedBytes = 'No-wait Playwright bytes 7f56c599'
 		await editor.getContent().fill(typedBytes)
 
@@ -256,6 +267,16 @@ test.describe('Version comparison route and current-byte contract', () => {
 		await page.getByRole('tab', { name: 'Full documents' }).click()
 		await expect(page.locator('.text-comparison__document--after')).toContainText(typedBytes)
 		await expect(collectivePage.getContent(true)).toBeAttached()
+		expect(ordering.indexOf('saved')).toBeGreaterThanOrEqual(0)
+		expect(ordering.indexOf('current')).toBeGreaterThan(ordering.indexOf('saved'))
+		const comparisonUrl = page.url()
+		expect(new URL(comparisonUrl).searchParams.get('compareTo')).toMatch(/^current:\d+$/)
+		await page.reload()
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		await expect(page.locator('.text-comparison__document--after')).toContainText(typedBytes)
+		await expect(page).toHaveURL(comparisonUrl)
+		await page.locator('.modal-mask:has(.version-comparison-dialog) button.modal-container__close').click()
+		await expect(page.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
 	})
 
 	test('R01 encodes the exact ordered snapshot pair in the canonical route', async ({ user, page, collective }) => {
@@ -349,6 +370,9 @@ test.describe('Version comparison route and current-byte contract', () => {
 	test('F11 completes comparison with no unexplained browser or network failures', async ({ user, page, collective }) => {
 		const assertNoFailures = auditComparisonFailures(page)
 		await openSeededComparison(collective, user, page, 'c599-e2e-clean-failures-page')
+		await page.waitForLoadState('networkidle')
+		await page.locator('.modal-mask:has(.version-comparison-dialog) button.modal-container__close').click()
+		await expect(page.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
 		await page.waitForLoadState('networkidle')
 
 		assertNoFailures()
@@ -1051,4 +1075,284 @@ test.describe('Rich comparison rendering and resources', () => {
 		await expectComparisonLayout(page, 'paired')
 		await closeComparison(page)
 	})
+})
+
+async function openTwoHistoricalSelector(collective: Collective, user: User, page: Page) {
+	const collectivePage = await collective.createPage({ title: 'c599-e2e-lifecycle', user, page })
+	await seedTwoHistoricalVersions(collectivePage, user, page)
+	await collectivePage.open()
+	await openVersions(page)
+	await page.getByRole('button', { name: 'Compare versions…' }).click()
+	return page.getByRole('dialog', { name: 'Compare versions' })
+}
+
+function countSnapshotReads(page: Page) {
+	const reads = { historical: [] as string[], current: [] as string[] }
+	page.on('request', (request) => {
+		if (request.method() === 'GET' && /\/remote\.php\/dav\/versions\//.test(request.url())) {
+			const url = new URL(request.url())
+			reads[url.searchParams.has('timestamp') ? 'current' : 'historical'].push(url.href)
+		}
+	})
+	return reads
+}
+
+test.describe('Comparison selection, caching and failure lifecycle', () => {
+	test('C03 reversed historical selectors normalize chronology and visible labels', async ({ collective, user, page }) => {
+		const dialog = await openTwoHistoricalSelector(collective, user, page)
+		const selectors = dialog.locator('select')
+		await selectors.nth(0).selectOption({ index: 1 })
+		await selectors.nth(1).selectOption({ index: 2 })
+		const laterLabel = await selectors.nth(0).locator('option:checked').textContent()
+		const earlierLabel = await selectors.nth(1).locator('option:checked').textContent()
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		await expect(page.locator('.text-comparison__document--before')).toContainText('First historical comparison bytes')
+		await expect(page.locator('.text-comparison__document--after')).toContainText('Second historical comparison bytes')
+		await expect(selectors.nth(0)).toHaveValue(/^version:[^/\\]+$/)
+		await expect(selectors.nth(0).locator('option:checked')).toHaveText(earlierLabel!)
+		await expect(selectors.nth(1).locator('option:checked')).toHaveText(laterLabel!)
+	})
+
+	test('C04 identical selectors disable comparison without snapshot reads', async ({ collective, user, page }) => {
+		const dialog = await openTwoHistoricalSelector(collective, user, page)
+		const reads = countSnapshotReads(page)
+		await dialog.locator('select').nth(0).selectOption({ index: 1 })
+		await dialog.locator('select').nth(1).selectOption({ index: 1 })
+		await expect(dialog).toContainText('Select two different versions.')
+		await expect(dialog.getByRole('button', { name: 'Compare', exact: true })).toBeDisabled()
+		expect(reads).toEqual({ historical: [], current: [] })
+	})
+
+	test('C05 C06 historical bytes cache within a dialog while each current comparison reads fresh bytes', async ({ collective, user, page }) => {
+		const dialog = await openTwoHistoricalSelector(collective, user, page)
+		const reads = countSnapshotReads(page)
+		for (const [attempt, index] of [2, 1, 2].entries()) {
+			await dialog.locator('select').nth(0).selectOption({ index })
+			await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+			await expect(dialog.locator('.text-comparison')).toBeVisible()
+			expect(reads.historical).toHaveLength(Math.min(attempt + 1, 2))
+			expect(reads.current).toHaveLength(attempt + 1)
+		}
+	})
+
+	for (const scenario of [
+		{ title: 'C13 one missing historical snapshot', statuses: [404], message: 'One of the selected versions has expired or was removed.' },
+		{ title: 'C12 both historical snapshots denied', statuses: [403, 403], message: 'You do not have permission to load the selected versions.' },
+		{ title: 'C12 one historical snapshot denied', statuses: [403], message: 'You do not have permission to load one of the selected versions.' },
+		{ title: 'C13 two historical snapshots expired with 410 and 404', statuses: [410, 404], message: 'The selected versions have expired or were removed.' },
+		{ title: 'C14 network failure is reported rather than treated as cancellation', statuses: [0], message: 'Could not load the selected versions because of a network error.' },
+	]) {
+		test(scenario.title, async ({ collective, user, page }) => {
+			const dialog = await openTwoHistoricalSelector(collective, user, page)
+			if (scenario.statuses.length === 2) {
+				await dialog.locator('select').nth(0).selectOption({ index: 2 })
+				await dialog.locator('select').nth(1).selectOption({ index: 1 })
+			}
+			let requests = 0
+			await page.route(/\/remote\.php\/dav\/versions\//, async (route) => {
+				if (route.request().method() !== 'GET' || new URL(route.request().url()).searchParams.has('timestamp')) {
+					await route.continue()
+					return
+				}
+				const status = scenario.statuses[Math.min(requests++, scenario.statuses.length - 1)]
+				if (status === 0) {
+					await route.abort('failed')
+				} else {
+					await route.fulfill({ status, body: '' })
+				}
+			})
+			await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+			await expect(dialog.getByRole('alert')).toContainText(scenario.message)
+			expect(requests).toBe(scenario.statuses.length)
+			await expect(dialog.locator('.text-comparison')).toHaveCount(0)
+			await expect(page.locator('#viewer')).toHaveCount(0)
+		})
+	}
+
+	test('C11 retry after a removed version publishes a fresh result and clears the error', async ({ collective, user, page }) => {
+		const { dialog } = await openSeededVersionSelector(collective, user, page, 'c599-e2e-retry')
+		let historicalReads = 0
+		await page.route(/\/remote\.php\/dav\/versions\//, async (route) => {
+			if (route.request().method() === 'GET' && !new URL(route.request().url()).searchParams.has('timestamp') && historicalReads++ === 0) {
+				await route.fulfill({ status: 404, body: '' })
+			} else {
+				await route.continue()
+			}
+		})
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await expect(dialog.getByRole('alert')).toContainText('One of the selected versions has expired or was removed.')
+		await expect(dialog.locator('.text-comparison')).toHaveCount(0)
+		await dialog.getByRole('button', { name: 'Retry' }).click()
+		await expect(dialog.locator('.text-comparison')).toBeVisible()
+		await expect(dialog.getByRole('alert')).toHaveCount(0)
+		expect(historicalReads).toBe(2)
+	})
+
+	test('Semantic factory rejection clears result and reports initialization failure', async ({ collective, user, page }) => {
+		const { dialog } = await openSeededVersionSelector(collective, user, page, 'c599-e2e-factory-reject')
+		await page.evaluate(() => {
+			Object.defineProperty(window.OCA.Text, 'createMarkdownContentComparison', {
+				configurable: true,
+				value: async () => {
+					throw new Error('comparison failed')
+				},
+			})
+		})
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await expect(dialog.getByRole('alert')).toContainText('Could not initialize version comparison.')
+		await expect(dialog.locator('.text-comparison')).toHaveCount(0)
+	})
+
+	test('C09 navigation cancels a pending snapshot and stale completion cannot publish', async ({ collective, user, page }) => {
+		const destination = await collective.createPage({ title: 'c599-e2e-cancel-destination', user, page })
+		await destination.setContent({ content: 'Cancellation destination bytes', user, page })
+		const { dialog } = await openSeededVersionSelector(collective, user, page, 'c599-e2e-cancel-source')
+		let release!: () => void
+		const delayed = new Promise<void>((resolve) => {
+			release = resolve
+		})
+		let started = false
+		let completed = false
+		await page.route(/\/remote\.php\/dav\/versions\//, async (route) => {
+			if (route.request().method() !== 'GET' || new URL(route.request().url()).searchParams.has('timestamp')) {
+				await route.continue()
+				return
+			}
+			started = true
+			await delayed
+			await route.fulfill({ body: 'Delayed snapshot' })
+			completed = true
+		})
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await expect(dialog.locator('.version-comparison-dialog__loading')).toBeVisible()
+		await expect.poll(() => started).toBe(true)
+		await destination.open()
+		release()
+		await expect.poll(() => completed).toBe(true)
+		await expect(page).toHaveURL(new RegExp(destination.getPageUrlPart()))
+		await expect(destination.getContent()).toBeVisible()
+		await expect(page.locator('.version-comparison-dialog, .text-comparison, [role="alert"]')).toHaveCount(0)
+	})
+
+	test('C10 only the latest pair can publish after a delayed superseded response', async ({ collective, user, page }) => {
+		const dialog = await openTwoHistoricalSelector(collective, user, page)
+		let release!: () => void
+		const delayed = new Promise<void>((resolve) => {
+			release = resolve
+		})
+		let started = false
+		let completed = false
+		await page.route(/\/remote\.php\/dav\/versions\//, async (route) => {
+			if (route.request().method() !== 'GET' || new URL(route.request().url()).searchParams.has('timestamp') || started) {
+				await route.continue()
+				return
+			}
+			started = true
+			const response = await route.fetch()
+			await delayed
+			await route.fulfill({ response })
+			completed = true
+		})
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await expect(dialog.locator('.version-comparison-dialog__loading')).toBeVisible()
+		await expect.poll(() => started).toBe(true)
+		// Deliver a selection change while the disabled control has an outstanding request.
+		for (const [side, index] of [2, 1].entries()) {
+			await dialog.locator('select').nth(side).evaluate((select: HTMLSelectElement, index) => {
+				select.selectedIndex = index
+				select.dispatchEvent(new Event('change', { bubbles: true }))
+			}, index)
+		}
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		await expect(page.locator('.text-comparison__document--before')).toContainText('First historical comparison bytes')
+		await expect(page.locator('.text-comparison__document--after')).toContainText('Second historical comparison bytes')
+		release()
+		await expect.poll(() => completed).toBe(true)
+		await expect(page.locator('.text-comparison__document--after')).toContainText('Second historical comparison bytes')
+		await expect(page.locator('.text-comparison__document--after')).not.toContainText('Current comparison bytes')
+		await expect(page.locator('.text-comparison-root')).toHaveCount(1)
+	})
+})
+
+for (const missingFactory of [false, true]) {
+	test(`C08 preparation fails before ${missingFactory ? 'Viewer fallback dispatch' : 'semantic snapshot reads'}`, async ({ collective, user, page, editor }) => {
+		const collectivePage = await collective.createPage({ title: 'c599-e2e-preparation-denial', user, page })
+		await seedVersionPair(collectivePage, user, page)
+		await collectivePage.open()
+		const sessionCreated = page.waitForResponse((response) => response.request().method() === 'PUT'
+			&& /\/apps\/text\/session\/.*\/create/.test(response.url()))
+		await collectivePage.switchMode(true)
+		await sessionCreated
+		await expect(page.locator('.text-menubar--ready')).toBeVisible()
+		let saves = 0
+		await page.route(/\/apps\/text\/session\/.*\/save/, async (route) => {
+			if (route.request().method() === 'POST') {
+				saves++
+				await route.fulfill({ status: 500, body: '' })
+			} else {
+				await route.continue()
+			}
+		})
+		const reads = countSnapshotReads(page)
+		editor.setMode(true)
+		await editor.getContent().fill('Preparation must fail before snapshot reads')
+		await openVersions(page)
+		if (missingFactory) {
+			await page.evaluate(() => {
+				Object.defineProperty(window.OCA.Text, 'createMarkdownContentComparison', { configurable: true, value: undefined })
+			})
+		}
+		await page.getByRole('button', { name: 'Compare versions…' }).click()
+		const dialog = page.getByRole('dialog', { name: 'Compare versions' })
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await expect(dialog.getByRole('alert')).toContainText('Could not save current changes before comparison. Please try again.')
+		expect(saves).toBeGreaterThan(0)
+		expect(reads).toEqual({ historical: [], current: [] })
+		await expect(page.locator('.text-comparison, #viewer')).toHaveCount(0)
+	})
+}
+
+test('X03 missing semantic factory saves current bytes before opening original Viewer panes', async ({ collective, user, page, editor }) => {
+	const collectivePage = await collective.createPage({ title: 'c599-e2e-viewer-unsaved', user, page })
+	await seedVersionPair(collectivePage, user, page)
+	await collectivePage.open()
+	const sessionCreated = page.waitForResponse((response) => response.request().method() === 'PUT'
+		&& /\/apps\/text\/session\/.*\/create/.test(response.url()))
+	await collectivePage.switchMode(true)
+	await sessionCreated
+	await expect(page.locator('.text-menubar--ready')).toBeVisible()
+	const saved = page.waitForResponse((response) => response.request().method() === 'POST'
+		&& /\/apps\/text\/session\/.*\/save/.test(response.url()) && response.ok())
+	editor.setMode(true)
+	const typedBytes = 'No-wait Viewer fallback bytes 7f56c599'
+	await editor.getContent().fill(typedBytes)
+	await openVersions(page)
+	await page.evaluate(() => {
+		Object.defineProperty(window.OCA.Text, 'apiVersion', { configurable: true, value: '1.5' })
+		Object.defineProperty(window.OCA.Text, 'createMarkdownContentComparison', { configurable: true, value: undefined })
+	})
+	const reads = countSnapshotReads(page)
+	await page.getByRole('button', { name: 'Compare versions…' }).click()
+	await page.getByRole('dialog', { name: 'Compare versions' }).getByRole('button', { name: 'Compare', exact: true }).click()
+	await saved
+	await expect(page.locator('.version-comparison-dialog')).toHaveCount(0)
+	const panes = page.locator('#viewer .viewer--split > .viewer__file-wrapper:visible')
+	await expect(panes).toHaveCount(2)
+	await expect(panes.nth(1)).toContainText(typedBytes)
+	expect(reads.historical).toHaveLength(1)
+	await page.evaluate(() => window.OCA.Viewer.close())
+	await expect(page.locator('#viewer')).toHaveCount(0)
+})
+
+test('AUD-06 callable semantic factory works despite an unexpected advertised API version', async ({ collective, user, page }) => {
+	const { dialog } = await openSeededVersionSelector(collective, user, page, 'c599-e2e-api-capability')
+	await page.evaluate(() => {
+		Object.defineProperty(window.OCA.Text, 'apiVersion', { configurable: true, value: 'unexpected' })
+	})
+	await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+	await expect(dialog.locator('.text-comparison')).toBeVisible()
+	await expect(dialog.getByRole('tab', { name: 'Markdown source' })).toBeVisible()
+	await expect(page.locator('#viewer')).toHaveCount(0)
 })
