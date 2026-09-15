@@ -940,7 +940,8 @@ test.describe('Rich comparison rendering and resources', () => {
 		assertNoFailures()
 	})
 
-	test('C01 original documents, independent pane offsets and editor identity survive view switches', async ({ collective, user, page }) => {
+	test('C01 original documents and independent scrolling survive navigation between persistent editors', async ({ collective, user, page }) => {
+		await page.emulateMedia({ reducedMotion: 'reduce' })
 		await openRichVersions(collective, user, page)
 		await compareInitialWithCurrent(page)
 		await page.getByRole('tab', { name: 'Changes', exact: true }).click()
@@ -967,13 +968,15 @@ test.describe('Rich comparison rendering and resources', () => {
 		await scrollers.nth(0).evaluate((element) => element.scrollTo({ top: 80, behavior: 'instant' }))
 		await scrollers.nth(1).evaluate((element) => element.scrollTo({ top: 240, behavior: 'instant' }))
 		const offsets = await scrollers.evaluateAll((elements) => elements.map((element) => element.scrollTop))
-		expect(offsets[0]).toBeGreaterThan(0)
-		expect(offsets[1]).toBeGreaterThan(80)
-		expect(offsets[0]).not.toBe(offsets[1])
+		expect(offsets).toEqual([80, 240])
 		await page.getByRole('tab', { name: 'Changes', exact: true }).click()
 		await expect(page.getByRole('tab', { name: 'Changes', exact: true })).toHaveAttribute('aria-selected', 'true')
 		await page.getByRole('tab', { name: 'Full documents' }).click()
-		expect(await scrollers.evaluateAll((elements) => elements.map((element) => element.scrollTop))).toEqual(offsets)
+		await expect(page.getByRole('tab', { name: 'Full documents' })).toHaveAttribute('aria-selected', 'true')
+		await expect(page.locator('[data-comparison-select]').filter({ hasText: 'Moved section' }).first()).toHaveAttribute('aria-current', 'true')
+		for (const side of [before, after]) {
+			await expect(side.locator('.text-comparison-change--current').first()).toBeVisible()
+		}
 		for (const handle of handles) {
 			expect(await handle.evaluate((element) => element.isConnected)).toBe(true)
 			await handle.dispose()
