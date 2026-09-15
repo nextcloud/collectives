@@ -1522,3 +1522,226 @@ test.describe('Version management and DAV authorization', () => {
 		}
 	})
 })
+
+function appendQuarantinedVersionEntries(body: string) {
+	const entries = body.match(/<d:response>[\s\S]*?<\/d:response>/g) ?? []
+	const historicalEntries = entries
+		.filter((entry) => entry.includes('<d:getcontenttype>text/markdown</d:getcontenttype>'))
+		.map((entry) => ({
+			entry,
+			href: entry.match(/<d:href>([^<]+)<\/d:href>/)?.[1],
+			lastModified: Date.parse(entry.match(/<d:getlastmodified>([^<]+)<\/d:getlastmodified>/)?.[1] ?? ''),
+		}))
+		.filter(({ href, lastModified }) => href && Number.isFinite(lastModified))
+		.sort((first, second) => first.lastModified - second.lastModified)
+	const { entry: duplicatedEntry, href } = historicalEntries[0] ?? {}
+	if (!duplicatedEntry || !href) {
+		throw new Error('Could not find a historical DAV version to duplicate')
+	}
+	const rawVersionId = href.split('/').slice(-1)[0]
+	const duplicateVersionId = decodeURIComponent(rawVersionId)
+	const encodedFirstCharacter = `%${rawVersionId.charCodeAt(0).toString(16).toUpperCase()}`
+	const duplicateEntry = duplicatedEntry.replace(
+		href,
+		`${href.slice(0, -rawVersionId.length)}${encodedFirstCharacter}${rawVersionId.slice(1)}`,
+	)
+	const reservedEntry = duplicatedEntry.replace(
+		/(<d:href>[^<]*\/)[^/<]+(<\/d:href>)/,
+		'$1current$2',
+	)
+	const mutatedBody = body.replace(
+		/(<\/(?:d:)?multistatus>)/i,
+		`${duplicateEntry}${reservedEntry}$1`,
+	)
+	if (mutatedBody === body) {
+		throw new Error('Could not append quarantined DAV versions')
+	}
+	return {
+		body: mutatedBody,
+		duplicateVersionId,
+	}
+}
+
+async function openRecoverableRoute(collective: Collective, user: User, page: Page) {
+	const collectivePage = await collective.createPage({ title: 'c599-e2e-route-recovery', user, page })
+	await seedTwoHistoricalVersions(collectivePage, user, page)
+	await page.goto(`${collectivePage.getPageUrl()}?view=grid#rollout`)
+	await collectivePage.waitForContent()
+	await openVersions(page)
+	const priorUrl = page.url()
+	await page.locator('.version-list .list-item').filter({ hasText: 'Initial version' }).locator('.list-item-content__actions').click()
+	await page.getByRole('menuitem', { name: 'Compare with current version', exact: true }).click()
+	await expect(page.locator('.text-comparison')).toBeVisible()
+	return { collectivePage, priorUrl }
+}
+
+async function closeRoutedComparison(page: Page) {
+	await page.locator('.modal-mask:has(.version-comparison-dialog) button.modal-container__close').click()
+	await expect(page.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
+}
+
+test.describe('Comparison route recovery and immutable links', () => {
+	test('R04 managed Forward, clipboard denial, selector invalidation and direct-route cleanup', async ({ collective, user, page }) => {
+		const { priorUrl } = await openRecoverableRoute(collective, user, page)
+		const comparisonUrl = page.url()
+		await page.goBack()
+		await expect(page.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
+		await expect(page).toHaveURL(priorUrl)
+		await page.goForward()
+		await expect(page.locator('.text-comparison')).toBeVisible()
+		await expect(page).toHaveURL(comparisonUrl)
+		await installClipboardCapture(page)
+		const copy = page.getByRole('button', { name: 'Copy comparison link' })
+		await expect(copy).toBeEnabled()
+		await copy.click()
+		expect(await page.evaluate(() => sessionStorage.getItem('c599-copied-link'))).toBe(comparisonUrl)
+		const success = page.locator('.toastify').filter({ hasText: 'Comparison link copied' })
+		await expect(success).toBeVisible()
+		await success.locator('.toast-close').click()
+		await page.evaluate(() => {
+			Object.defineProperty(navigator, 'clipboard', {
+				configurable: true,
+				value: { writeText: async () => { throw new Error('clipboard denied') } },
+			})
+		})
+		await copy.click()
+		const error = page.locator('.toast-error').filter({ hasText: 'Could not copy the comparison link.' })
+		await expect(error).toBeVisible()
+		await error.locator('.toast-close').click()
+		await expect(page).toHaveURL(comparisonUrl)
+		await page.reload()
+		await expect(page.locator('.text-comparison')).toBeVisible()
+		await expect(page).toHaveURL(comparisonUrl)
+		await closeRoutedComparison(page)
+		await expect(page).toHaveURL(priorUrl)
+		await page.goForward()
+		await expect(page.locator('.text-comparison')).toBeVisible()
+		await expect(page).toHaveURL(comparisonUrl)
+		await page.locator('.version-comparison-dialog select').nth(0).selectOption({ index: 1 })
+		await expect(page).toHaveURL(priorUrl)
+		await expect(page.locator('.version-comparison-dialog')).toBeVisible()
+		await expect(page.locator('.text-comparison-root')).toHaveCount(0)
+		expect(await page.evaluate(() => history.state?.collectivesVersionComparison)).toBe(true)
+		await closeRoutedComparison(page)
+		expect(await page.evaluate(() => history.state?.collectivesVersionComparison)).not.toBe(true)
+		const currentRequests: string[] = []
+		page.on('request', (request) => {
+			if (request.method() === 'GET' && /\/remote\.php\/dav\/versions\//.test(request.url()) && new URL(request.url()).searchParams.has('timestamp')) {
+				currentRequests.push(request.url())
+			}
+		})
+		await page.goto(comparisonUrl)
+		await expect(page.locator('.text-comparison')).toBeVisible()
+		expect(currentRequests).toHaveLength(1)
+		await closeRoutedComparison(page)
+		await expect(page).toHaveURL(priorUrl)
+		expect(await page.evaluate(() => history.state?.collectivesVersionComparison)).not.toBe(true)
+	})
+
+	test('Copied Current identity remains immutable after a later editor save', async ({ collective, user, page, editor }) => {
+		const { collectivePage } = await openRecoverableRoute(collective, user, page)
+		const comparisonUrl = page.url()
+		const pair = new URL(comparisonUrl)
+		expect(pair.searchParams.get('compareFrom')).toMatch(/^version:[^/\\]+$/)
+		expect(pair.searchParams.get('compareTo')).toMatch(/^current:\d+$/)
+		await closeRoutedComparison(page)
+		await page.waitForTimeout(1100)
+		await collectivePage.switchMode(true)
+		await expect(page.locator('.text-menubar--ready')).toBeVisible()
+		editor.setMode(true)
+		await editor.getContent().fill('Later page update')
+		await page.getByRole('button', { name: 'Stop editing', exact: true }).click()
+		await expect(collectivePage.getContent()).toContainText('Later page update')
+		await page.goto(comparisonUrl)
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		await expect(page.locator('.text-comparison__document--after')).toContainText('Current comparison bytes')
+		await expect(page.locator('.text-comparison__document--after')).not.toContainText('Later page update')
+	})
+
+	for (const missing of [['missing-version'], ['missing-one', 'missing-two']]) {
+		test(`${missing.length === 1 ? 'R07' : 'R08'} unavailable routed identities remain visible without snapshot reads`, async ({ collective, user, page }) => {
+			const collectivePage = await collective.createPage({ title: 'c599-e2e-unavailable-route', user, page })
+			await seedVersionPair(collectivePage, user, page)
+			const requests: string[] = []
+			page.on('request', (request) => {
+				if (request.method() === 'GET' && /\/remote\.php\/dav\/versions\//.test(request.url())) {
+					requests.push(request.url())
+				}
+			})
+			await page.goto(`${collectivePage.getPageUrl()}?compareFrom=${missing[0]}&compareTo=${missing[1] ?? 'current'}`)
+			const dialog = page.getByRole('dialog', { name: 'Compare versions' })
+			for (const identity of missing) {
+				await expect(dialog).toContainText(`Unavailable version (${identity})`)
+			}
+			await expect(dialog).toContainText(missing.length === 1 ? 'One of the selected versions has expired or was removed.' : 'The selected versions have expired or were removed.')
+			await expect(dialog.getByRole('button', { name: 'Retry' })).toBeVisible()
+			expect(requests).toEqual([])
+			await closeRoutedComparison(page)
+			expect(new URL(page.url()).search).toBe('')
+		})
+	}
+
+	test('R09 malformed pair is stripped while unrelated query and hash survive without snapshots', async ({ collective, user, page }) => {
+		const collectivePage = await collective.createPage({ title: 'c599-e2e-malformed-route', user, page })
+		await seedVersionPair(collectivePage, user, page)
+		const requests: string[] = []
+		page.on('request', (request) => {
+			if (request.method() === 'GET' && /\/remote\.php\/dav\/versions\//.test(request.url())) {
+				requests.push(request.url())
+			}
+		})
+		await page.goto(`${collectivePage.getPageUrl()}?compareFrom=versions%2F1&compareTo=current&view=grid#rollout`)
+		await collectivePage.waitForContent()
+		await expect(page).toHaveURL(/\?view=grid#rollout$/)
+		await expect(page.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
+		expect(requests).toEqual([])
+	})
+
+	test('R09 ambiguous DAV identities are quarantined while valid versions remain usable', async ({ collective, user, page }) => {
+		const collectivePage = await collective.createPage({ title: 'c599-e2e-quarantined-route', user, page })
+		await seedTwoHistoricalVersions(collectivePage, user, page)
+		let duplicateVersionId = ''
+		await page.route(/\/remote\.php\/dav\/versions\//, async (route) => {
+			if (route.request().method() !== 'PROPFIND') {
+				await route.continue()
+				return
+			}
+			const response = await route.fetch()
+			const mutated = appendQuarantinedVersionEntries(await response.text())
+			duplicateVersionId = mutated.duplicateVersionId
+			await route.fulfill({ response, body: mutated.body })
+		})
+		await collectivePage.open()
+		await openVersions(page)
+		await expect.poll(() => duplicateVersionId).not.toBe('')
+		const duplicates = page.locator(`.version-list .version[data-version-id="${duplicateVersionId}"]`)
+		await expect(duplicates).toHaveCount(2)
+		await duplicates.first().locator('.list-item-content__actions').click()
+		await page.getByRole('menuitem', { name: 'Compare with current version', exact: true }).click()
+		const toast = page.locator('.toast-error').filter({ hasText: 'This page version cannot be used for comparison.' })
+		await expect(toast).toBeVisible()
+		await toast.locator('.toast-close').click()
+		await expect(page.locator('.version-comparison-dialog')).toHaveCount(0)
+		await page.getByRole('button', { name: 'Compare versions…' }).click()
+		const dialog = page.getByRole('dialog', { name: 'Compare versions' })
+		await expect(dialog.getByRole('status').filter({ hasText: 'Some page versions could not be used for comparison.' })).toHaveCount(1)
+		for (const selector of await dialog.locator('select').all()) {
+			await expect(selector.locator('option')).toHaveCount(3)
+			await expect(selector.locator('option[value="version:current"]')).toHaveCount(1)
+		}
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		await expect(dialog.locator('.text-comparison')).toBeVisible()
+		await closeRoutedComparison(page)
+		const requests: string[] = []
+		page.on('request', (request) => {
+			if (request.method() === 'GET' && /\/remote\.php\/dav\/versions\//.test(request.url())) {
+				requests.push(request.url())
+			}
+		})
+		await page.goto(`${collectivePage.getPageUrl()}?compareFrom=${encodeURIComponent(`version:${duplicateVersionId}`)}&compareTo=current`)
+		await expect(dialog).toContainText('Ambiguous version')
+		await expect(dialog).toContainText('The version comparison link is ambiguous and could not be opened.')
+		await expect(dialog).not.toContainText(duplicateVersionId)
+		expect(requests).toEqual([])
+	})
+})
