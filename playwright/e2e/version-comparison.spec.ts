@@ -399,9 +399,13 @@ test.describe('Version comparison route and current-byte contract', () => {
 		})
 		await readerPage.goto(collectivePage.getPageUrl())
 		await expect(readerPage.locator('button.titleform-button')).toHaveCount(0)
+		await expect(readerPage.locator('[data-cy-collectives="reader"] .ProseMirror')).toContainText('Current comparison bytes')
 		await openVersions(readerPage)
-		await readerPage.getByRole('button', { name: 'Compare versions…' }).click()
-		await readerPage.getByRole('dialog').getByRole('button', { name: 'Compare', exact: true }).click()
+		await readerPage.locator('.version-list .list-item').filter({ hasText: 'Initial version' }).locator('.list-item-content__actions').click()
+		for (const name of ['Name this version', 'Restore version', 'Delete version']) {
+			await expect(readerPage.getByRole('menuitem', { name, exact: true })).toHaveCount(0)
+		}
+		await readerPage.getByRole('menuitem', { name: 'Compare with current version', exact: true }).click()
 		await expect(readerPage.locator('.text-comparison')).toBeVisible()
 		expect(snapshotStatuses.length).toBeGreaterThan(0)
 		expect(snapshotStatuses.every((status) => status >= 200 && status < 300)).toBe(true)
@@ -425,6 +429,33 @@ test.describe('Version comparison route and current-byte contract', () => {
 			await expect(page).toHaveURL(/\?view=grid#kept$/)
 			expect(snapshotRequests).toEqual([])
 		} finally {
+			await share.delete()
+		}
+	})
+
+	test('C16 anonymous public page explains unavailable comparison without snapshot reads', async ({ user, page, collective, browser, baseURL }) => {
+		const collectivePage = await collective.createPage({ title: 'c599-e2e-anonymous-comparison-page', user, page })
+		await seedVersionPair(collectivePage, user, page)
+		const share = await collective.createShare({ page })
+		const anonymous = await browser.newContext({ baseURL, storageState: undefined })
+		try {
+			expect(await anonymous.cookies()).toEqual([])
+			const publicPage = await anonymous.newPage()
+			const snapshots: string[] = []
+			publicPage.on('request', (request) => {
+				if (SNAPSHOT_URL.test(request.url())) {
+					snapshots.push(request.url())
+				}
+			})
+			await publicPage.goto(`${collectivePage.getPageUrl(share.data.token)}?compareFrom=missing-version&compareTo=current&view=grid#rollout`)
+			await expect(publicPage.locator('[data-cy-collectives="reader"] .ProseMirror')).toContainText('Current comparison bytes')
+			await expect(publicPage.locator('.toastify').filter({ hasText: 'Version comparison is not available for public links.' })).toBeVisible()
+			await expect(publicPage.locator('#tab-button-versions')).toHaveCount(0)
+			await expect(publicPage.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
+			await expect(publicPage).toHaveURL(/\?view=grid#rollout$/)
+			expect(snapshots).toEqual([])
+		} finally {
+			await anonymous.close()
 			await share.delete()
 		}
 	})

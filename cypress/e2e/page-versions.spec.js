@@ -4,7 +4,6 @@
  */
 
 import { createVersionComparisonAccount } from '../../playwright/support/helpers/versionComparisonFixtures.ts'
-import { createCollectiveShare, deleteShare } from '../../src/apis/collectives/shares.js'
 import { listVersions } from '../../src/apis/dav/davRequests.js'
 
 const HISTORICAL_SNAPSHOT_URL = /\/remote\.php\/dav\/versions\/(?!.*[?&]timestamp=\d{13}(?:&|$))/
@@ -216,9 +215,6 @@ function assertMeasuredComparisonLayout(expectedMode) {
 		expect(measuredMode, `expected mode for ${width}px container`).to.equal(expectedMode)
 	})
 }
-
-let publicSharePath = ''
-let publicShare = null
 
 function closeViewerComparison() {
 	cy.window().then((window) => window.OCA.Viewer.close())
@@ -533,18 +529,10 @@ describeSemantic('Page versions semantic comparison', function() {
 				.circleAddMember(READER_USER)
 				.circleSetMemberLevel(4))
 		cy.seedCollectivePermissions(COLLECTIVE_NAME, 'edit', 8)
-		cy.getCollectives()
-			.findBy({ name: COLLECTIVE_NAME })
-			.then(({ id }) => createCollectiveShare(id).then(({ data }) => {
-				const { token } = data.ocs.data
-				publicShare = { collectiveId: id, pageId: 0, token }
-				publicSharePath = `/apps/collectives/p/${token}/${COLLECTIVE_NAME}/${PAGE_NAME}`
-			}))
 	})
 
 	after(function() {
 		cy.login(OWNER)
-		cy.then(() => publicShare && deleteShare(publicShare))
 		cy.deleteCollective(COLLECTIVE_NAME)
 		deleteTestUser(READER)
 		deleteTestUser(OWNER)
@@ -1135,23 +1123,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('@versionRequest.all').should('have.length', 0)
 	})
 
-	it('C16 does not expose version comparison on public routes', function() {
-		logoutAndClearSession()
-		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('versionRequest')
-		cy.visit(`${publicSharePath}?compareFrom=missing-version&compareTo=current&view=grid#rollout`)
-		cy.getReadOnlyEditor().should('contain', CURRENT_PHRASE)
-		cy.location().should((location) => {
-			const query = new URLSearchParams(location.search)
-			expect(query.get('compareFrom')).to.be.null
-			expect(query.get('compareTo')).to.be.null
-			expect(query.get('view')).to.equal('grid')
-			expect(location.hash).to.equal('#rollout')
-		})
-		cy.contains('Version comparison is not available for public links.').should('be.visible')
-		cy.get('#tab-button-versions').should('not.exist')
-		cy.get('@versionRequest.all').should('have.length', 0)
-	})
-
 	it('F10 denies a direct anonymous historical DAV snapshot read', function() {
 		cy.intercept('GET', HISTORICAL_SNAPSHOT_URL).as('authorizedSnapshotRead')
 		cy.get('.app-sidebar-tabs__content .version-list .list-item')
@@ -1435,26 +1406,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('.version-comparison-dialog [role="alert"]')
 			.should('contain', 'Could not initialize version comparison.')
 		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-	})
-
-	it('C15 Compares versions for a read-only member', function() {
-		cy.login(READER)
-		cy.visit(`/apps/collectives/${COLLECTIVE_NAME}/${PAGE_NAME}`)
-		cy.get('button.titleform-button').should('not.exist')
-		cy.getReadOnlyEditor().should('contain', CURRENT_PHRASE)
-		cy.get('button.page-sidebar-button').click()
-		cy.get('#tab-button-versions').click()
-		cy.get('.app-sidebar-tabs__content .version-list .list-item')
-			.contains('Initial version')
-			.closest('.list-item')
-			.find('.list-item-content__actions')
-			.click()
-		cy.contains('button', 'Name this version').should('not.exist')
-		cy.contains('button', 'Restore version').should('not.exist')
-		cy.contains('button', 'Delete version').should('not.exist')
-		cy.clickMenuButton('Compare with current version')
-
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
 	})
 
 	it('denies a crafted reader restore and allows the equivalent owner restore', function() {
