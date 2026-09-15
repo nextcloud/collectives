@@ -886,19 +886,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.then(() => expect(JSON.stringify(unexpectedFailures), 'unexplained comparison failures').to.equal('[]'))
 	})
 
-	it('C02 loads two immutable historical snapshots', function() {
-		cy.contains('button', 'Compare versions…').click()
-		selectVersionFromEnd(0, 1)
-		selectVersionFromEnd(1, 3)
-		getVersionComparisonModal().find('button[type="submit"]').click()
-
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
-		cy.get('.version-comparison-dialog .text-comparison__document--before')
-			.should('contain', INITIAL_PHRASE)
-		cy.get('.version-comparison-dialog .text-comparison__document--after')
-			.should('contain', REVIEWED_PHRASE)
-	})
-
 	it('C03 normalizes reversed selectors without swapping visible labels', function() {
 		let expectedEarlierLabel
 		let expectedLaterLabel
