@@ -64,7 +64,7 @@ export class CollectivePage {
 			return
 		}
 
-		const label = edit ? 'Edit' : 'Preview'
+		const label = edit ? 'Start editing' : 'Stop editing'
 		await this.page.locator('.edit-button')
 			.getByLabel(label)
 			.click()
