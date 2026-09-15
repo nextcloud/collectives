@@ -60,6 +60,7 @@ OC.L10N.register(
     "Create new tag {tag}" : "Стварыць новы тэг {tag}",
     "Create new tag" : "Стварыць новы тэг",
     "Favorites" : "Абранае",
+    "Home" : "Дадому",
     "Favorite" : "Абранае",
     "Show deleted pages" : "Паказаць выдаленыя старонкі",
     "Page not found" : "Старонка не знойдзена",

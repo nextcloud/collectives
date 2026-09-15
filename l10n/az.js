@@ -19,6 +19,7 @@ OC.L10N.register(
     "Download" : "Yüklə",
     "Title" : "Başlıq",
     "Favorites" : "Sevimlilər",
+    "Home" : "Ev",
     "Favorite" : "İstəkli",
     "Add another link" : "Başqa link əlavə edin",
     "Advanced settings" : "İrəliləmiş quraşdırmalar",
