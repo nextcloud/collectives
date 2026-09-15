@@ -14,6 +14,7 @@ import { randomUUID } from 'node:crypto'
 import { test as editorTest } from '../support/fixtures/editor.ts'
 import { loginAsUser } from '../support/fixtures/random-user.ts'
 import { User } from '../support/fixtures/User.ts'
+import { CURRENT_CONTENT, CURRENT_PHRASE, INITIAL_CONTENT, INITIAL_PHRASE, REVIEWED_CONTENT, SECOND_CONTENT } from '../support/fixtures/versionComparisonMarkdown.ts'
 import { apiUrl, circlesApiUrl, ocsHeaders } from '../support/helpers/urls.ts'
 import {
 	createVersionComparisonAccount,
@@ -821,5 +822,233 @@ test.describe('Version comparison route and current-byte contract', () => {
 		await expect(viewerPanes.nth(0)).toContainText('Historical comparison bytes')
 		await expect(viewerPanes.nth(1)).toContainText('Current comparison bytes')
 		assertNoFailures()
+	})
+})
+
+async function openRichVersions(collective: Collective, user: User, page: Page) {
+	const collectivePage = await collective.createPage({ title: 'c599-e2e-rich-comparison', user, page })
+	for (const [index, content] of [INITIAL_CONTENT, SECOND_CONTENT, REVIEWED_CONTENT, CURRENT_CONTENT].entries()) {
+		if (index > 0) {
+			await page.waitForTimeout(1100)
+		}
+		await collectivePage.setContent({ content, user, page })
+	}
+	await collectivePage.open()
+	await openVersions(page)
+	await expect(page.locator('.version-list .list-item')).toHaveCount(4)
+	return collectivePage
+}
+
+async function compareInitialWithCurrent(page: Page) {
+	await page.locator('.version-list .list-item').filter({ hasText: 'Initial version' }).locator('.list-item-content__actions').click()
+	await page.getByRole('menuitem', { name: 'Compare with current version', exact: true }).click()
+	await expect(page.locator('.text-comparison')).toBeVisible()
+}
+
+async function closeComparison(page: Page) {
+	await page.locator('.modal-mask:has(.version-comparison-dialog) button.modal-container__close').click()
+	await expect(page.locator('.version-comparison-dialog, .text-comparison-root')).toHaveCount(0)
+}
+
+async function expectComparisonLayout(page: Page, mode: 'single' | 'paired') {
+	const comparison = page.locator('.text-comparison')
+	await expect(comparison).toHaveClass(new RegExp(`text-comparison--${mode}`))
+	const geometry = await comparison.evaluate((element) => ({
+		width: element.getBoundingClientRect().width,
+		overflow: element.scrollWidth - element.clientWidth,
+	}))
+	expect(geometry.width).toBeGreaterThan(0)
+	expect(geometry.width < 760 ? 'single' : 'paired').toBe(mode)
+	expect(geometry.overflow).toBeLessThanOrEqual(1)
+}
+
+test.describe('Rich comparison rendering and resources', () => {
+	test('C01 full application layout, meaningful summaries and selected highlights', async ({ collective, user, page }) => {
+		await openRichVersions(collective, user, page)
+		const assertNoFailures = auditComparisonFailures(page)
+		await expect(page.locator('.search-dialog-container')).toHaveCount(0)
+		await compareInitialWithCurrent(page)
+		const dialog = page.locator('.version-comparison-dialog')
+		await expect(page.locator('.modal-wrapper--full .version-comparison-dialog')).toBeVisible()
+		await expect(dialog.locator('button[type="submit"]')).toHaveCount(0)
+		await expect(dialog.getByRole('button', { name: 'Copy comparison link' })).toBeVisible()
+		for (const element of [dialog, page.locator('.version-comparison-dialog__comparison')]) {
+			await expect(element).toHaveCSS('display', 'flex')
+			await expect(element).toHaveCSS('overflow', 'hidden')
+		}
+		const remainingHeight = await page.locator('.version-comparison-dialog__comparison').evaluate((element) => (
+			Math.abs(element.getBoundingClientRect().bottom - element.parentElement!.getBoundingClientRect().bottom)
+		))
+		expect(remainingHeight).toBeLessThan(2)
+		await expect(dialog.locator('.version-comparison-dialog__selectors .text-comparison')).toHaveCount(0)
+		await expectComparisonLayout(page, 'paired')
+		await page.getByRole('tab', { name: 'Changes', exact: true }).click()
+		const records = dialog.locator('[data-comparison-select]')
+		const list = dialog.locator('.text-comparison__change-list')
+		for (const label of ['Moved section', 'Bold changed', 'Italic changed', 'Link changed', 'Task state changed', 'Callout type changed', 'Image description changed', 'Footnote changed', 'Quote changed']) {
+			await expect(list).toContainText(label)
+		}
+		await expect(list).not.toContainText('Unknown change')
+		const count = await records.count()
+		expect(count).toBeGreaterThan(10)
+		for (const record of await records.all()) {
+			await expect(record).toHaveAttribute('aria-label', /\S/)
+			await expect(record).toHaveText(/\S/)
+		}
+		const filter = dialog.getByLabel('Hide formatting-only changes')
+		await filter.check()
+		await expect(records).toHaveCount(count - 2)
+		await filter.uncheck()
+		await expect(records).toHaveCount(count)
+		const moved = records.filter({ hasText: 'Moved section' }).first()
+		await moved.click()
+		await expect(moved).toHaveAttribute('aria-current', 'true')
+		await expect(page.getByRole('tab', { name: 'Full documents' })).toHaveAttribute('aria-selected', 'true')
+		for (const side of ['before', 'after']) {
+			const selected = dialog.locator(`.text-comparison__document--${side} [data-comparison-change].text-comparison-change--current`).first()
+			await expect(selected).toBeVisible()
+			await expect(selected).toHaveCSS('outline-style', 'solid')
+			await expect(selected).toHaveCSS('outline-width', '2px')
+		}
+		await closeComparison(page)
+		await page.waitForLoadState('networkidle')
+		assertNoFailures()
+	})
+
+	test('C01 original documents, independent pane offsets and editor identity survive view switches', async ({ collective, user, page }) => {
+		await openRichVersions(collective, user, page)
+		await compareInitialWithCurrent(page)
+		await page.getByRole('tab', { name: 'Changes', exact: true }).click()
+		await page.locator('[data-comparison-select]').filter({ hasText: 'Moved section' }).first().click()
+		const before = page.locator('.text-comparison__document--before')
+		const after = page.locator('.text-comparison__document--after')
+		await expect(before).toContainText(INITIAL_PHRASE)
+		await expect(after).toContainText(CURRENT_PHRASE)
+		for (const side of [before, after]) {
+			await expect(side).toContainText('Audit archive')
+		}
+		const editors = page.locator('.version-comparison-dialog .ProseMirror')
+		await expect(editors).toHaveCount(2)
+		await expect(editors.locator('table')).toHaveCount(2)
+		await expect(before.locator('table tr')).toHaveCount(3)
+		await expect(after.locator('table tr')).toHaveCount(4)
+		await expect(before.locator('table')).toContainText('Pilot')
+		await expect(after.locator('table')).toContainText('Rollback rehearsal')
+		await expect(editors.locator('.text-comparison-change--empty, [data-comparison-empty], [data-comparison-placeholder]')).toHaveCount(0)
+		expect(await editors.locator('tr, tbody, table, ul, ol, li, p, span').evaluateAll((elements) => elements.some((element) => element.textContent?.includes('•')))).toBe(false)
+		const handles = await editors.elementHandles()
+		const scrollers = page.locator('.text-comparison__document-scroller')
+		await expect(scrollers).toHaveCount(2)
+		await scrollers.nth(0).evaluate((element) => element.scrollTo({ top: 80, behavior: 'instant' }))
+		await scrollers.nth(1).evaluate((element) => element.scrollTo({ top: 240, behavior: 'instant' }))
+		const offsets = await scrollers.evaluateAll((elements) => elements.map((element) => element.scrollTop))
+		expect(offsets[0]).toBeGreaterThan(0)
+		expect(offsets[1]).toBeGreaterThan(80)
+		expect(offsets[0]).not.toBe(offsets[1])
+		await page.getByRole('tab', { name: 'Changes', exact: true }).click()
+		await expect(page.getByRole('tab', { name: 'Changes', exact: true })).toHaveAttribute('aria-selected', 'true')
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		expect(await scrollers.evaluateAll((elements) => elements.map((element) => element.scrollTop))).toEqual(offsets)
+		for (const handle of handles) {
+			expect(await handle.evaluate((element) => element.isConnected)).toBe(true)
+			await handle.dispose()
+		}
+		await closeComparison(page)
+	})
+
+	test('C01 resources, literal Source and fresh requests across close and reopen', async ({ collective, user, page }) => {
+		await openRichVersions(collective, user, page)
+		const assertNoFailures = auditComparisonFailures(page)
+		const historical: string[] = []
+		const current: string[] = []
+		await page.route(/\/remote\.php\/dav\/versions\//, async (route) => {
+			if (route.request().method() !== 'GET') {
+				await route.continue()
+				return
+			}
+			const url = new URL(route.request().url())
+			;(url.searchParams.has('timestamp') ? current : historical).push(url.href)
+			const response = await route.fetch()
+			await route.fulfill({ response, headers: { ...response.headers(), 'cache-control': 'no-store' } })
+		})
+		await compareInitialWithCurrent(page)
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		await expect(page.locator('.text-comparison__document figure[data-component="image-view"][data-attachment-type="image"]')).toHaveCount(2)
+		expect(historical).toHaveLength(1)
+		expect(historical[0]).not.toContain('timestamp=')
+		expect(current).toHaveLength(1)
+		await page.getByRole('tab', { name: 'Markdown source' }).click()
+		await expect(page.locator('.text-source-comparison')).toContainText('status: draft')
+		await expect(page.locator('.text-source-comparison')).toContainText('status: launch-ready')
+		await page.setViewportSize({ width: 768, height: 900 })
+		await expectComparisonLayout(page, 'single')
+		await closeComparison(page)
+		await page.setViewportSize({ width: 1280, height: 900 })
+		await compareInitialWithCurrent(page)
+		await expectComparisonLayout(page, 'paired')
+		expect(historical).toHaveLength(2)
+		expect(current).toHaveLength(2)
+		await closeComparison(page)
+		await expect(page.locator('.search-dialog-container')).toHaveCount(0)
+		await page.locator('#tab-button-attachments').click()
+		await expect(page.locator('.app-sidebar-tabs__content')).toContainText('No attachments')
+		await page.waitForLoadState('networkidle')
+		assertNoFailures()
+	})
+
+	test('Syntax-only differences preserve literal Markdown and line endings in Source', async ({ collective, user, page }) => {
+		await openRichVersions(collective, user, page)
+		await page.getByRole('button', { name: 'Compare versions…' }).click()
+		const selectors = page.locator('.version-comparison-dialog select')
+		await selectors.nth(0).selectOption({ index: 3 })
+		await selectors.nth(1).selectOption({ index: 2 })
+		await page.getByRole('dialog').getByRole('button', { name: 'Compare', exact: true }).click()
+		await expect(page.locator('.text-comparison')).toContainText('No rendered differences — Markdown syntax differs.')
+		await expect(page.locator('.text-comparison')).not.toContainText('Moved section')
+		await page.getByRole('tab', { name: 'Markdown source' }).click()
+		const source = page.locator('.text-source-comparison')
+		for (const text of ['# Atlas 2.4 release plan #', 'Line endings changed: lf → crlf', 'crlf', 'No newline at end of file']) {
+			await expect(source).toContainText(text)
+		}
+		expect(await source.locator('.text-source-comparison__line--added code').evaluateAll((lines) => lines.some((line) => line.textContent!.endsWith(' ')))).toBe(true)
+		await closeComparison(page)
+	})
+
+	test('Document side keyboard controls and overflow work at mobile widths', async ({ collective, user, page }) => {
+		await openRichVersions(collective, user, page)
+		await page.setViewportSize({ width: 768, height: 900 })
+		await compareInitialWithCurrent(page)
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		await expectComparisonLayout(page, 'single')
+		await expect(page.locator('.text-comparison__documents')).toHaveCSS('display', 'flex')
+		await expect(page.locator('.text-comparison__document-grid')).toHaveCSS('display', 'block')
+		const tabs = page.locator('.text-comparison .side-tabs')
+		await tabs.getByRole('tab', { name: 'Before' }).press('ArrowRight')
+		await expect(tabs.getByRole('tab', { name: 'After' })).toHaveAttribute('aria-selected', 'true')
+		await expect(page.locator('.text-comparison__document--after')).toBeVisible()
+		await expect(page.locator('.text-comparison__document--after')).toContainText(CURRENT_PHRASE)
+		await page.setViewportSize({ width: 320, height: 900 })
+		await expectComparisonLayout(page, 'single')
+		await expect(page.locator('.text-comparison__document--after')).toBeVisible()
+		await closeComparison(page)
+	})
+
+	test('Document layout follows the comparison container independently of desktop width', async ({ collective, user, page }) => {
+		await page.setViewportSize({ width: 1440, height: 900 })
+		await openRichVersions(collective, user, page)
+		await compareInitialWithCurrent(page)
+		await page.getByRole('tab', { name: 'Full documents' }).click()
+		await expectComparisonLayout(page, 'paired')
+		await expect(page.locator('.text-comparison__document-grid')).toHaveCSS('display', 'grid')
+		const modal = page.locator('.modal-container:has(.version-comparison-dialog)')
+		await modal.evaluate((element: HTMLElement) => {
+			element.style.width = '700px'
+		})
+		await expectComparisonLayout(page, 'single')
+		await modal.evaluate((element: HTMLElement) => {
+			element.style.width = ''
+		})
+		await expectComparisonLayout(page, 'paired')
+		await closeComparison(page)
 	})
 })
