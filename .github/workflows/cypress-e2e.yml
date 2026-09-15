@@ -65,12 +65,12 @@ jobs:
         include:
           - server-versions: 'stable32'
             server-major: '32'
-            semantic-e2e: '0'
+            build-text: '0'
             text-app-repository: 'nextcloud/text'
             text-app-ref: 'stable32'
           - server-versions: 'master'
             server-major: ''
-            semantic-e2e: '1'
+            build-text: '1'
             text-app-repository: 'nextcloud/text'
             text-app-ref: 'b5ff1b0ce8d38b8a8dfdd6acf7b3f36c3fa2e272'
 
@@ -165,8 +165,8 @@ jobs:
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
         run: npm i -g 'npm@${{ steps.versions.outputs.npmVersion }}'
 
-      - name: Build compatible Text semantic API
-        if: matrix.semantic-e2e == '1'
+      - name: Build pinned Text assets
+        if: matrix.build-text == '1'
         working-directory: apps/text
         run: |
           npm ci
@@ -197,11 +197,6 @@ jobs:
         php-versions: ['8.1', '8.4']
         databases: ['sqlite']
         server-versions: ['stable32', 'master']
-        include:
-          - server-versions: 'stable32'
-            semantic-e2e: '0'
-          - server-versions: 'master'
-            semantic-e2e: '1'
         exclude:
           - php-versions: '8.1'
             server-versions: 'stable32'
@@ -289,7 +284,6 @@ jobs:
           npx cypress run --record false --config defaultCommandTimeout=20000,video=false
         env:
           CYPRESS_ncVersion: ${{ matrix.server-versions }}
-          CYPRESS_semanticE2E: ${{ matrix.semantic-e2e }}
           # `SPLIT` needs to match count of `containers` in the matrix above
           SPLIT: 4
           SPLIT_INDEX: ${{ env.container_index }}
