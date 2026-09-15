@@ -100,7 +100,7 @@ describe('Page details', function() {
 	})
 
 	it('Allows to download markdown file', function() {
-		cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
+		cy.intercept('PUT', '**/apps/text/session/**/create').as('textCreateSession')
 		cy.openPage('Day 1')
 		cy.wait('@textCreateSession')
 
