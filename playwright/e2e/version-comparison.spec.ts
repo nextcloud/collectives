@@ -1385,7 +1385,12 @@ test.describe('Version management and DAV authorization', () => {
 		editor.setMode(true)
 		const content = 'Persisted editing smoke bytes c599'
 		await editor.getContent().fill(content)
+		await expect(page.locator('.save-status')).toHaveClass(/\bsaving\b/)
+		const saved = page.waitForResponse((response) => response.request().method() === 'POST'
+			&& /\/apps\/text\/session\/.*\/save/.test(response.url())
+			&& response.request().postDataJSON()?.manualSave === true && response.ok())
 		await page.getByRole('button', { name: 'Save document', exact: true }).click()
+		await saved
 		await expect.poll(async () => {
 			const response = await page.request.get(webdavUrl(user.account.userId, collectivePage.data.collectivePath, collectivePage.data.filePath, collectivePage.data.fileName), { failOnStatusCode: true })
 			return await response.text()
