@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Model;
 
 use JsonSerializable;
-
 use OCP\Files\File;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;

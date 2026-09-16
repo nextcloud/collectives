@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use Closure;
-
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\UnprocessableEntityException;

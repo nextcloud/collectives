@@ -190,7 +190,6 @@ class FeatureContext implements Context {
 		}
 	}
 
-
 	/**
 	 * @Then user :user sees collective :collective
 	 * @Then user :user sees collective :collective in :trash
@@ -2335,7 +2334,6 @@ class FeatureContext implements Context {
 			Assert::assertNotContains($name, $collectiveNames);
 		}
 	}
-
 
 	private function assertCollectiveKeyValue(string $name, string $key, string $value, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
