@@ -229,10 +229,7 @@ test.describe('Version comparison route and current-byte contract', () => {
 		const collectivePage = await collective.createPage({ title: 'c599-e2e-comparison-page', user, page })
 		await seedVersionPair(collectivePage, user, page)
 		await collectivePage.open()
-		const sessionCreated = page.waitForResponse((response) => response.request().method() === 'PUT'
-			&& /\/apps\/text\/session\/.*\/create/.test(response.url()))
 		await collectivePage.switchMode(true)
-		await sessionCreated
 		await expect(page.locator('.text-menubar--ready')).toBeVisible()
 		editor.setMode(true)
 		const typedBytes = 'No-wait Playwright bytes 7f56c599'
@@ -429,10 +426,7 @@ test.describe('Version comparison route and current-byte contract', () => {
 		const collectivePage = await collective.createPage({ title: 'c599-e2e-committed-generation-page', user, page })
 		await seedVersionPair(collectivePage, user, page)
 		await collectivePage.open()
-		const sessionCreated = page.waitForResponse((response) => response.request().method() === 'PUT'
-			&& /\/apps\/text\/session\/.*\/create/.test(response.url()))
 		await collectivePage.switchMode(true)
-		await sessionCreated
 		await expect(page.locator('.text-menubar--ready')).toBeVisible()
 		editor.setMode(true)
 		const typedBytes = 'Committed generation bytes 7f56c599'
