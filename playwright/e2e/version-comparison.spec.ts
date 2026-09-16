@@ -1885,29 +1885,29 @@ for (const fixture of [
 }
 
 test('Installed Text serves the normal Source chunk and module worker with extractable row labels', async ({ collective, user, page }, testInfo) => {
-	const assets: Array<Promise<{ url: string, status: number, contentType: string, sha256: string }>> = []
-	page.on('response', (response) => {
-		if (/\/text\/js\/.*\.m?js(?:\?|$)/.test(response.url())) {
-			assets.push(response.body().then((body) => ({
-				url: response.url(),
-				status: response.status(),
-				contentType: response.headers()['content-type'] ?? '',
-				sha256: createHash('sha256').update(body).digest('hex'),
-			})))
-		}
-	})
 	await openSeededComparison(collective, user, page, 'c599-e2e-installed-source-assets')
+	const assets = Promise.all([
+		page.waitForResponse(/\/text\/js\/MarkdownSourceComparison-.*\.mjs/),
+		page.waitForResponse(/\/text\/js\/markdownSourceComparison\.worker-.*\.mjs/),
+	])
 	await page.getByRole('tab', { name: 'Markdown source' }).click()
+	const loaded = await Promise.all((await assets).map(async (response) => {
+		// Chromium does not always expose the body of a module worker response.
+		const served = await page.request.get(response.url(), { failOnStatusCode: true })
+		expect(served.status()).toBe(200)
+		return {
+			url: response.url(),
+			status: response.status(),
+			contentType: response.headers()['content-type'] ?? '',
+			sha256: createHash('sha256').update(await served.body()).digest('hex'),
+		}
+	}))
 	const source = page.locator('.text-source-comparison')
 	await expect(source.locator('[data-source-operation="removed"]').first()).toHaveAttribute('aria-label', /^Removed line \d+$/)
 	await expect(source.locator('[data-source-operation="added"]').first()).toHaveAttribute('aria-label', /^Added line \d+$/)
 	await expect(source.locator('.text-source-comparison__fallback')).toHaveCount(0)
 	await page.setViewportSize({ width: 620, height: 900 })
 	await expect(source.locator('[role="tab"]').filter({ hasText: 'After' })).toBeVisible()
-	await page.waitForLoadState('networkidle')
-	const loaded = await Promise.all(assets)
-	expect(loaded.some(({ url }) => /markdownSourceComparison\.worker-/.test(url))).toBe(true)
-	expect(loaded.some(({ url }) => /MarkdownSourceComparison-/.test(url))).toBe(true)
 	for (const asset of loaded) {
 		expect(asset.status, asset.url).toBe(200)
 		expect(asset.contentType, asset.url).toMatch(/(?:java|ecma)script/i)
