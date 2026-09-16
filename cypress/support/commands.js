@@ -132,9 +132,15 @@ Cypress.Commands.add('disableApp', (appName) => {
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 	const verb = value ? 'enable' : 'disable'
 	const url = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
+
+	const headers = {}
+	if (verb === 'enable') {
+		headers.Authorization = `Basic ${btoa('admin:admin')}`
+	}
 	return axios.post(
 		url,
 		{ appIds: [appName] },
+		{ headers },
 	)
 })
 
@@ -376,7 +382,7 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 			if (!circle) {
 				const response = await axios.post(
 					url,
-					{ name, personal: false, local: true },
+					{ name, personal: false },
 				)
 				circleId = response.data.ocs.data.id
 			} else {

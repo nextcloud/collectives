@@ -1012,13 +1012,21 @@ class FeatureContext implements Context {
 
 		$jsonData = ['appIds' => [$appId]];
 
+		$headers = [
+			'Authorization' => 'Basic ' . base64_encode('admin:admin'),
+		];
+
 		if ($status === 'enabled') {
-			$this->sendRequest('POST', '/settings/apps/enable', null, $jsonData);
+			$endpoint = 'enable';
 		} elseif ($status === 'disabled') {
-			$this->sendRequest('POST', '/settings/apps/disable', null, $jsonData);
+			$endpoint = 'disable';
 		} else {
 			throw new RuntimeException('Unknown app status: ' . $status);
 		}
+
+		$this->sendRequest('POST', '/settings/apps/' . $endpoint, null, $jsonData, $headers);
+
+		$this->assertStatusCode(200);
 	}
 
 	/**

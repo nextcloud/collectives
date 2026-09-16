@@ -16,7 +16,6 @@ use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\AppFramework\PublicShareController;
 use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\Files\Folder;
@@ -316,18 +315,7 @@ class CollectiveShareService {
 
 		$passwordHash = $share->getPassword();
 
-		// Until Nextcloud 32 (TODO: remove once we support only NC33+)
-		if ($this->session->get('public_link_authenticated_token') === $token
-			&& $this->session->get('public_link_authenticated_password_hash') === $passwordHash) {
-			return true;
-		}
-
-		// Since Nextcloud 33
-		$allowedTokensJSON = $this->session->get(PublicShareController::DAV_AUTHENTICATED_FRONTEND) ?? '[]';
-		$allowedTokens = json_decode($allowedTokensJSON, true);
-		if (!is_array($allowedTokens)) {
-			$allowedTokens = [];
-		}
-		return ($allowedTokens[$token] ?? '') === $passwordHash;
+		return $this->session->get('public_link_authenticated_token') === $token
+			&& $this->session->get('public_link_authenticated_password_hash') === $passwordHash;
 	}
 }
