@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.4.2 - 2026.09.16
+
+### 🐛Fixes
+* 😀 Fix validation of emojis without extended pictographic support.
+* 🧹 Only support Nextcloud 30. 3.6.x releases cover Nextcloud 31.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+
+
 ## 3.4.1 - 2026.05.28
 
 ### 🐛Fixes
