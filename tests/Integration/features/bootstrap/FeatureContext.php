@@ -2114,19 +2114,16 @@ class FeatureContext implements Context {
 			$this->cookieJars[$this->currentUser] = new CookieJar();
 		}
 
-		if ($auth === true) {
-			// Get request token for user (required due to CSRF checks)
-			if (!isset($this->requestTokens[$this->currentUser])) {
-				$this->getUserRequestToken($this->currentUser);
-			}
-
-			$options = ['cookies' => $this->cookieJars[$this->currentUser]];
-			$options['headers'] = array_merge($headers, [
-				'requesttoken' => $this->requestTokens[$this->currentUser],
-			]);
-		} else {
-			$options['headers'] = $headers;
+		// Get request token for user (required due to CSRF checks)
+		if ($auth === true && !isset($this->requestTokens[$this->currentUser])) {
+			$this->getUserRequestToken($this->currentUser);
 		}
+
+		$options = ['cookies' => $this->cookieJars[$this->currentUser]];
+
+		$options['headers'] = array_merge($headers, [
+			'requesttoken' => $this->requestTokens[$this->currentUser],
+		]);
 
 		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
