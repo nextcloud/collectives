@@ -39,6 +39,7 @@ describe('Playwright server selection', () => {
 		vi.stubEnv('COLLECTIVES_COMPARISON_INITIAL_VIEW', initialView)
 		const config = await loadConfig(undefined, true)
 		expect(config.metadata?.comparisonInitialView).toBe(initialView)
+		expect(config.webServer).toMatchObject({ timeout: 10 * 60 * 1000 })
 	})
 
 	it.each([undefined, '', 'source'])('rejects a missing or invalid semantic CI default: %s', async (initialView) => {
@@ -52,7 +53,7 @@ describe('Playwright server selection', () => {
 
 		expect(config.use?.baseURL).toBe('http://localhost:8089/index.php/')
 		expect(config.webServer).toBeDefined()
-		expect(config.webServer).toMatchObject({ wait: { stdout: /Collectives test runtime ready/ } })
+		expect(config.webServer).toMatchObject({ timeout: 5 * 60 * 1000, wait: { stdout: /Collectives test runtime ready/ } })
 	})
 
 	it('uses a non-empty external baseURL without the managed server', async () => {
