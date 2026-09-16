@@ -1384,13 +1384,29 @@ test.describe('Version management and DAV authorization', () => {
 		await expect(page.locator('.text-menubar--ready')).toBeVisible()
 		editor.setMode(true)
 		const content = 'Persisted editing smoke bytes c599'
-		await editor.getContent().fill(content)
-		await expect(page.locator('.save-status')).toHaveClass(/\bsaving\b/)
-		const saved = page.waitForResponse((response) => response.request().method() === 'POST'
-			&& /\/apps\/text\/session\/.*\/save/.test(response.url())
-			&& response.request().postDataJSON()?.manualSave === true && response.ok())
-		await page.getByRole('button', { name: 'Save document', exact: true }).click()
-		await saved
+		let releaseAutosave!: () => void
+		const manualSaveFinished = new Promise<void>((resolve) => {
+			releaseAutosave = resolve
+		})
+		await page.route(/\/apps\/text\/session\/.*\/save/, async (route) => {
+			// Keep the document dirty until the Save button sends its own request.
+			if (route.request().postDataJSON()?.manualSave === false) {
+				await manualSaveFinished
+			}
+			await route.continue()
+		})
+		try {
+			await editor.getContent().fill(content)
+			await expect(page.locator('.save-status')).toHaveClass(/\bsaving\b/)
+			const saved = page.waitForResponse((response) => response.request().method() === 'POST'
+				&& /\/apps\/text\/session\/.*\/save/.test(response.url())
+				&& response.request().postDataJSON()?.manualSave === true && response.ok())
+			await page.getByRole('button', { name: 'Save document', exact: true }).click()
+			await saved
+		} finally {
+			releaseAutosave()
+			await page.unrouteAll({ behavior: 'wait' })
+		}
 		await expect.poll(async () => {
 			const response = await page.request.get(webdavUrl(user.account.userId, collectivePage.data.collectivePath, collectivePage.data.filePath, collectivePage.data.fileName), { failOnStatusCode: true })
 			return await response.text()
