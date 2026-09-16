@@ -985,15 +985,12 @@ test.describe('Rich comparison rendering and resources', () => {
 		const assertNoFailures = auditComparisonFailures(page)
 		const historical: string[] = []
 		const current: string[] = []
-		await page.route(/\/remote\.php\/dav\/versions\//, async (route) => {
-			if (route.request().method() !== 'GET') {
-				await route.continue()
+		page.on('request', (request) => {
+			if (request.method() !== 'GET' || !request.url().includes('/remote.php/dav/versions/')) {
 				return
 			}
-			const url = new URL(route.request().url())
+			const url = new URL(request.url())
 			;(url.searchParams.has('timestamp') ? current : historical).push(url.href)
-			const response = await route.fetch()
-			await route.fulfill({ response, headers: { ...response.headers(), 'cache-control': 'no-store' } })
 		})
 		await compareInitialWithCurrent(page)
 		await page.getByRole('tab', { name: 'Full documents' }).click()
@@ -1281,10 +1278,7 @@ for (const missingFactory of [false, true]) {
 		const collectivePage = await collective.createPage({ title: 'c599-e2e-preparation-denial', user, page })
 		await seedVersionPair(collectivePage, user, page)
 		await collectivePage.open()
-		const sessionCreated = page.waitForResponse((response) => response.request().method() === 'PUT'
-			&& /\/apps\/text\/session\/.*\/create/.test(response.url()))
 		await collectivePage.switchMode(true)
-		await sessionCreated
 		await expect(page.locator('.text-menubar--ready')).toBeVisible()
 		let saves = 0
 		await page.route(/\/apps\/text\/session\/.*\/save/, async (route) => {
@@ -1318,10 +1312,7 @@ test('X03 missing semantic factory saves current bytes before opening original V
 	const collectivePage = await collective.createPage({ title: 'c599-e2e-viewer-unsaved', user, page })
 	await seedVersionPair(collectivePage, user, page)
 	await collectivePage.open()
-	const sessionCreated = page.waitForResponse((response) => response.request().method() === 'PUT'
-		&& /\/apps\/text\/session\/.*\/create/.test(response.url()))
 	await collectivePage.switchMode(true)
-	await sessionCreated
 	await expect(page.locator('.text-menubar--ready')).toBeVisible()
 	const saved = page.waitForResponse((response) => response.request().method() === 'POST'
 		&& /\/apps\/text\/session\/.*\/save/.test(response.url()) && response.ok())
