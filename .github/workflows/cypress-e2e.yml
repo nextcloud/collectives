@@ -72,7 +72,7 @@ jobs:
             server-major: ''
             build-text: '1'
             text-app-repository: 'nextcloud/text'
-            text-app-ref: 'b5ff1b0ce8d38b8a8dfdd6acf7b3f36c3fa2e272'
+            text-app-ref: '9d3b174bf8cad2a96f3bb95896db35eefb321e5c'
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
