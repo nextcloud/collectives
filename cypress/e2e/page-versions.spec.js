@@ -99,13 +99,6 @@ function selectVersionAt(selectorIndex, optionIndex, options = {}) {
 	})
 }
 
-function selectVersionFromEnd(selectorIndex, offset, options = {}) {
-	cy.get('.version-comparison-dialog select').eq(selectorIndex).then(($select) => {
-		const optionIndex = $select.find('option').length - offset
-		cy.wrap($select).select($select.find('option').eq(optionIndex).val(), options)
-	})
-}
-
 function getVersionComparisonModal() {
 	return cy.get('.modal-container').filter(':has(.version-comparison-dialog)')
 }
@@ -170,17 +163,6 @@ function openVersionsSidebar() {
 	})
 	cy.get('#tab-button-versions').should('be.visible').click()
 }
-
-function openInitialCurrentSemanticComparison() {
-	cy.get('.app-sidebar-tabs__content .version-list .list-item')
-		.eq(3)
-		.find('.list-item-content__actions')
-		.click()
-	cy.clickMenuButton('Compare with current version')
-	cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-}
-
-
 
 function closeViewerComparison() {
 	cy.window().then((window) => window.OCA.Viewer.close())
@@ -406,7 +388,6 @@ The image checksum is recorded separately.
 `
 
 const INITIAL_PHRASE = '10% pilot cohort'
-const REVIEWED_PHRASE = '15% reviewed cohort'
 const CURRENT_PHRASE = '25% progressive rollout'
 const STABLE_LINK_CURRENT = 'Stable comparison snapshot'
 const STABLE_LINK_UPDATED = 'Later page update'
@@ -582,12 +563,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('.app-sidebar-tabs__content .version-list .list-item')
 			.should('contain', 'v3')
 	})
-
-
-
-
-
-
 
 	it('R04 Forward reopens the exact semantic comparison state', function() {
 		cy.stubClipboardAndVisit(`/apps/collectives/${COLLECTIVE_NAME}/${PAGE_NAME}?view=grid#rollout`)
@@ -808,21 +783,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		})
 	})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	it('denies a crafted reader restore and allows the equivalent owner restore', function() {
 		cy.login(READER)
 		cy.intercept('PROPFIND', '**/remote.php/dav/versions/**').as('readerVersions')
@@ -884,8 +844,6 @@ describeSemantic('Page versions semantic comparison', function() {
 			})
 		})
 	})
-
-
 
 	it('restores the initial version through DAV MOVE', function() {
 		cy.get('.app-sidebar-tabs__content .version-list .list-item')
