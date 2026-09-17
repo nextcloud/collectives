@@ -38,6 +38,10 @@ const CI_CONFIG = {
 const baseURL = process.env.baseURL || 'http://localhost:8089/index.php/'
 const externalServer = Boolean(process.env.baseURL)
 const SEMANTIC_E2E = process.env.COLLECTIVES_SEMANTIC_E2E === '1'
+const comparisonInitialView = process.env.COLLECTIVES_COMPARISON_INITIAL_VIEW ?? (process.env.CI ? undefined : 'changes')
+if (SEMANTIC_E2E && comparisonInitialView !== 'changes' && comparisonInitialView !== 'documents') {
+	throw new Error('Set COLLECTIVES_COMPARISON_INITIAL_VIEW to changes or documents for the pinned Text revision')
+}
 const VERSION_COMPARISON_TESTS = '**/version-comparison.spec.ts'
 const VIEWER_FALLBACK_TAG = /@viewer-fallback/
 
@@ -59,30 +63,31 @@ const webServer = externalServer
 		// Don't set `url` as it would take precedence over `wait.stdout` and tests start too early
 		// url: 'http://127.0.0.1:8089',
 		// Starts the Nextcloud docker container
-		command: 'node playwright/start-nextcloud-server.js',
-		// we use sigterm to notify the script to stop the container
-		// if it does not respond, we force kill it after 10 seconds
-		gracefulShutdown: {
-			signal: 'SIGTERM' as const,
-			timeout: 10000,
-		},
-		// `start-nextcloud-server.mjs` only starts the server if not reachable yet.
-		reuseExistingServer: false,
-		stderr: 'pipe' as const,
-		stdout: 'pipe' as const,
-		// max. 5 minutes for creating the container
-		timeout: 5 * 60 * 1000,
-		wait: {
+			command: 'node playwright/start-nextcloud-server.js',
+			// we use sigterm to notify the script to stop the container
+			// if it does not respond, we force kill it after 10 seconds
+			gracefulShutdown: {
+				signal: 'SIGTERM' as const,
+				timeout: 10000,
+			},
+			reuseExistingServer: false,
+			stderr: 'pipe' as const,
+			stdout: 'pipe' as const,
+			// Semantic tests also install dependencies and compile the pinned Text revision.
+			timeout: (SEMANTIC_E2E ? 10 : 5) * 60 * 1000,
+			wait: {
 			// we wait for this line to appear in the output of the webserver until consider it done
-			stdout: /Nextcloud is now ready to use/,
-		},
-	}
+				stdout: /Collectives test runtime ready/,
+			},
+		}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
 	testDir: './playwright',
+	outputDir: './test-results/browser',
+	metadata: { comparisonInitialView },
 	...(process.env.CI ? CI_CONFIG : LOCAL_CONFIG),
 	use: {
 		// Base URL to use in actions like `await page.goto('./')`.
