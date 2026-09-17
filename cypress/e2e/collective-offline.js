@@ -27,6 +27,7 @@ describe('Collective offline', function() {
 	})
 
 	it('Shows offline indicator', function() {
+		cy.getEditorContent()
 		cy.get('.offline-indicator').should('not.exist')
 		cy.goOffline()
 		cy.get('.offline-indicator').should('be.visible')
