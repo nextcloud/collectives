@@ -38,6 +38,7 @@ OC.L10N.register(
     "Title" : "Títol",
     "Open sidebar" : "Dobrir lo panèl lateral",
     "Favorites" : "Favorits",
+    "Home" : "Acuèlh",
     "Favorite" : "Prefetit",
     "Page not found" : "Pagina pas trobada",
     "Share link ({index})" : "Ligam de partatge ({index})",
