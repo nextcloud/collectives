@@ -21,7 +21,6 @@ class PDOSQLiteDriverIsEnableCheck implements ISetupCheck {
 	) {
 	}
 
-
 	public function getCategory(): string {
 		return 'database';
 	}

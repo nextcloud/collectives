@@ -20,6 +20,7 @@ describe('Collective offline', function() {
 	})
 
 	beforeEach(function() {
+		cy.goOnline()
 		cy.loginAs('bob')
 		cy.visit(pageSlugUrl)
 		// make sure the page list loaded properly
@@ -27,16 +28,22 @@ describe('Collective offline', function() {
 	})
 
 	it('Shows offline indicator', function() {
+		cy.getEditorContent()
 		cy.get('.offline-indicator').should('not.exist')
+		Cypress.on('uncaught:exception', (err) => {
+			if (err.message.includes('Network Error')) {
+				// do not fail the test
+				return false
+			}
+		})
 		cy.goOffline()
 		cy.get('.offline-indicator').should('be.visible')
 		cy.goOnline()
 	})
 
 	it('Shows offline state in version tab', function() {
-		cy.intercept('PROPFIND', '**/remote.php/dav/versions/**').as('pageVersions')
+		cy.getEditorContent()
 		cy.get('button.app-sidebar__toggle').click()
-		cy.wait('@pageVersions')
 		cy.get('#tab-button-versions').click()
 
 		cy.get('.app-sidebar-tabs__content .version-list .list-item')

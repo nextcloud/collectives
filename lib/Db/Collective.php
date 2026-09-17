@@ -11,7 +11,6 @@ namespace OCA\Collectives\Db;
 
 use JsonSerializable;
 use OCA\Circles\Model\Member;
-
 use OCP\AppFramework\Db\Entity;
 use OCP\Constants;
 use RuntimeException;
