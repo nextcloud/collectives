@@ -27,6 +27,7 @@ OC.L10N.register(
     "Members" : "Участники",
     "No search results" : "Ничего не найдено",
     "admin" : "администратор",
+    "moderator" : "модератор",
     "Demote to moderator" : "Понизить до модератора",
     "Promote to moderator" : "Сделать модератором",
     "Demote to member" : "Понизить до участника",
