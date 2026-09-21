@@ -202,6 +202,7 @@ OC.L10N.register(
     "Create new collective" : "Új kollektíva létrehozása",
     "Link copied" : "Hivatkozás másolva",
     "Could not copy link to the clipboard:" : "A hivatkozást nem sikerült a vágólapra másolni:",
+    "New page" : "Új oldal",
     "Could not create the page" : "Az oldalt nem sikerült létrehozni",
     "Could not save emoji for page" : "Nem sikerült az oldal emodzsijának mentése",
     "Could not move page" : "Nem sikerült az oldal áthelyezése",
