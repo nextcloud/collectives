@@ -32,12 +32,28 @@ export class EditorSection {
 
 	public async switchMode(edit: boolean): Promise<void> {
 		const content = this.contentLocator(edit)
-		if (await content.isVisible()) {
-			this.isEdit = edit
-			return
-		}
-		await this.page.locator('.edit-button').click()
-		await content.waitFor({ state: 'visible' })
+		const button = this.page.locator('.edit-button')
+			.getByRole('button', { name: edit ? 'Start editing' : 'Stop editing' })
+
+		// Empty pages switch themselves into edito mode while loading, so the
+		// button can vanish between checking and clicking it. Retry until the
+		// wanted mode sticks.
+		await expect(async () => {
+			// The button is only present while the wanted mode is inactive,
+			// wait for whichever of the two shows up first.
+			await content
+				.or(button)
+				.filter({ visible: true })
+				.first()
+				.waitFor()
+
+			if (await content.isVisible()) {
+				return
+			}
+			await button.click({ timeout: 1_000 })
+			await content.waitFor({ state: 'visible', timeout: 5_000 })
+		}).toPass({ timeout: 20_000 })
+
 		this.isEdit = edit
 	}
 
