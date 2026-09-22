@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.7.0 - 2026.09.22
+
+### ✨New
+* 🔃 Add version comparison on Nextcloud 35.
+
+### 🐛Fixes
+* 🗑️ Collectives trash: fix delete modal. (#2744)
+* 🙂 Accept flag and keycap emojis as valid. (#2752)
+* ✏️ Don't sync page mode across browser tabs.
+* 🗑️ Cleanup orphaned collectives. (#2300)
+* 🚀 Improve page tree compilation logic. (#2733)
+* 💄 Add home button to access landing page. (#2742)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.6.1 - 2026.09.01
 
 ### 🐛Fixes
