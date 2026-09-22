@@ -10,7 +10,7 @@ import type { CollectivePage } from '../support/fixtures/CollectivePage.ts'
 
 import { docker, getContainer, runOcc } from '@nextcloud/e2e-test-server/docker'
 import { test as base, expect, mergeTests, request as requestApi } from '@playwright/test'
-import { randomUUID } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import { listVersions } from '../../src/apis/dav/davRequests.js'
 import { test as editorTest } from '../support/fixtures/editor.ts'
 import { loginAsUser } from '../support/fixtures/random-user.ts'
@@ -89,7 +89,12 @@ const test = mergeTests(provisionedTest, editorTest)
 async function openVersions(page: Page) {
 	const tab = page.locator('#tab-button-versions')
 	if (!await tab.isVisible()) {
-		await page.locator('button.page-sidebar-button').click()
+		const sidebar = page.locator('button.page-sidebar-button')
+		if (await sidebar.isVisible()) {
+			await sidebar.click()
+		} else {
+			await page.getByTitle('Open version history', { exact: true }).click()
+		}
 	}
 	await tab.click()
 }
@@ -1786,6 +1791,187 @@ test.describe('Comparison route recovery and immutable links', () => {
 		expect(requests).toEqual([])
 	})
 })
+
+for (const size of [{ width: 1280 }, { width: 620 }, { width: 1280, modalWidth: 700 }]) {
+	test(`Opening current target through the actual dialog transfer at ${size.width}px viewport and ${size.modalWidth ?? 'automatic'}px modal`, async ({ collective, user, page }, testInfo) => {
+		await page.setViewportSize({ width: size.width, height: 900 })
+		const collectivePage = await collective.createPage({ title: 'c599-e2e-initial-location', user, page })
+		const prefix = Array.from({ length: 65 }, (_, index) => `Unchanged paragraph ${index}. This paragraph precedes the first edit.`).join('\n\n')
+		await collectivePage.setContent({ content: `${prefix}\n\nThe target is old.`, user, page })
+		await page.waitForTimeout(1100)
+		await collectivePage.setContent({ content: `${prefix}\n\nThe target is new.`, user, page })
+		await collectivePage.open()
+		await openVersions(page)
+		await page.evaluate(() => {
+			const probeWindow = window as typeof window & { __c599Opening?: Array<{ milliseconds: number, connectedAtReturn: boolean }> }
+			probeWindow.__c599Opening = []
+			const factory = window.OCA.Text.createMarkdownContentComparison
+			Object.defineProperty(window.OCA.Text, 'createMarkdownContentComparison', {
+				configurable: true,
+				value: async (options: { el: HTMLElement }) => {
+					const started = performance.now()
+					const result = await factory(options)
+					probeWindow.__c599Opening!.push({ milliseconds: performance.now() - started, connectedAtReturn: options.el.isConnected })
+					return result
+				},
+			})
+		})
+		const expected = testInfo.config.metadata.comparisonInitialView === 'documents' ? 'Full documents' : 'Changes'
+		const opener = page.getByRole('button', { name: 'Compare versions…' })
+		for (let opening = 0; opening < 3; opening++) {
+			await opener.click()
+			const dialog = page.getByRole('dialog', { name: 'Compare versions' })
+			if (size.modalWidth) {
+				await page.locator('.modal-container:has(.version-comparison-dialog)').evaluate((element: HTMLElement, width) => {
+					element.style.width = `${width}px`
+				}, size.modalWidth)
+			}
+			await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+			await expect(dialog.getByRole('tab', { name: expected, exact: true })).toHaveAttribute('aria-selected', 'true')
+			await expect.poll(() => dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true)
+			if (expected === 'Changes') {
+				await dialog.getByRole('tab', { name: 'Full documents' }).click()
+			}
+			await expect.poll(() => dialog.locator('.text-comparison__document-scroller').evaluateAll((scrollers) => scrollers.some((scroller) => {
+				const pane = scroller.getBoundingClientRect()
+				if (pane.width <= 0 || pane.height <= 0) {
+					return false
+				}
+				return Array.from(scroller.querySelectorAll('.text-comparison-change--current')).some((target) => {
+					const rectangle = target.getBoundingClientRect()
+					return rectangle.height > 0 && rectangle.top >= pane.top - 2 && rectangle.bottom <= pane.bottom + 2
+				})
+			}))).toBe(true)
+			await expect(dialog.locator('.text-comparison__document--before')).toContainText('The target is old.')
+			await expect(dialog.locator('.text-comparison__document--after')).toContainText('The target is new.')
+			await expect(dialog.locator('.text-comparison')).toHaveClass(new RegExp(`text-comparison--${size.width < 760 || size.modalWidth ? 'single' : 'paired'}`))
+			await page.locator('.modal-mask:has(.version-comparison-dialog) button.modal-container__close').click()
+			await expect(dialog).toHaveCount(0)
+			await expect(opener).toBeFocused()
+		}
+		const measurements = await page.evaluate(() => (window as typeof window & { __c599Opening: Array<{ milliseconds: number, connectedAtReturn: boolean }> }).__c599Opening)
+		expect(measurements).toHaveLength(3)
+		await testInfo.attach('opening-measurements.json', { body: JSON.stringify({ size, expected, measurements }), contentType: 'application/json' })
+	})
+}
+
+for (const fixture of [
+	{ name: 'formatting only', before: 'Keep this text.', after: 'Keep **this** text.', edits: true },
+	{ name: 'identical', before: '# Same document', after: '# Same document', edits: false },
+	{ name: 'syntax only', before: '# Same document', after: '# Same document #', edits: false },
+]) {
+	test(`Initial comparison state in Collectives for ${fixture.name}`, async ({ collective, user, page }, testInfo) => {
+		const collectivePage = await collective.createPage({ title: 'c599-e2e-initial-state', user, page })
+		for (const [index, content] of [fixture.before, 'Intermediate historical revision', fixture.after].entries()) {
+			if (index > 0) {
+				await page.waitForTimeout(1100)
+			}
+			await collectivePage.setContent({ content, user, page })
+		}
+		await collectivePage.open()
+		await openVersions(page)
+		await page.getByRole('button', { name: 'Compare versions…' }).click()
+		const dialog = page.getByRole('dialog', { name: 'Compare versions' })
+		await dialog.locator('select').nth(0).selectOption({ index: 2 })
+		await dialog.getByRole('button', { name: 'Compare', exact: true }).click()
+		const documents = fixture.edits && testInfo.config.metadata.comparisonInitialView === 'documents'
+		await expect(dialog.getByRole('tab', { name: documents ? 'Full documents' : 'Changes', exact: true })).toHaveAttribute('aria-selected', 'true')
+		if (documents) {
+			await expect(dialog.locator('.text-comparison-change--formatting').first()).toBeVisible()
+		} else if (!fixture.edits) {
+			await expect(dialog).toContainText(fixture.name === 'syntax only' ? 'No rendered differences — Markdown syntax differs.' : 'No differences')
+		}
+	})
+}
+
+test('Installed Text serves the normal Source chunk and module worker with extractable row labels', async ({ collective, user, page }, testInfo) => {
+	await openSeededComparison(collective, user, page, 'c599-e2e-installed-source-assets')
+	const assets = Promise.all([
+		page.waitForResponse(/\/text\/js\/MarkdownSourceComparison-.*\.mjs/),
+		page.waitForResponse(/\/text\/js\/markdownSourceComparison\.worker-.*\.mjs/),
+	])
+	await page.getByRole('tab', { name: 'Markdown source' }).click()
+	const loaded = await Promise.all((await assets).map(async (response) => {
+		// Chromium does not always expose the body of a module worker response.
+		const served = await page.request.get(response.url(), { failOnStatusCode: true })
+		expect(served.status()).toBe(200)
+		return {
+			url: response.url(),
+			status: response.status(),
+			contentType: response.headers()['content-type'] ?? '',
+			sha256: createHash('sha256').update(await served.body()).digest('hex'),
+		}
+	}))
+	const source = page.locator('.text-source-comparison')
+	await expect(source.locator('[data-source-operation="removed"]').first()).toHaveAttribute('aria-label', /^Removed line \d+$/)
+	await expect(source.locator('[data-source-operation="added"]').first()).toHaveAttribute('aria-label', /^Added line \d+$/)
+	await expect(source.locator('.text-source-comparison__fallback')).toHaveCount(0)
+	await page.setViewportSize({ width: 620, height: 900 })
+	await expect(source.locator('[role="tab"]').filter({ hasText: 'After' })).toBeVisible()
+	for (const asset of loaded) {
+		expect(asset.status, asset.url).toBe(200)
+		expect(asset.contentType, asset.url).toMatch(/(?:java|ecma)script/i)
+	}
+	await testInfo.attach('served-text-assets.json', { body: JSON.stringify(loaded), contentType: 'application/json' })
+})
+
+for (const interrupted of [false, true]) {
+	test(`A late image preserves the reader position and explicit change navigation (reader interrupted: ${interrupted})`, async ({ collective, user, page: authenticatedPage, baseURL }, testInfo) => {
+		test.skip(testInfo.config.metadata.comparisonInitialView !== 'documents', 'Requires the adopted Documents default')
+		const collectivePage = await collective.createPage({ title: 'c599-e2e-opening-image', user, page: authenticatedPage })
+		const imageUrl = new URL('/comparison-opening-image.svg', baseURL).href
+		const prefix = `![Opening image](${imageUrl})\n\n${Array.from({ length: 4 }, (_, index) => `Unchanged paragraph ${index}.`).join('\n\n')}`
+		await collectivePage.setContent({ content: `${prefix}\n\nBefore ending.`, user, page: authenticatedPage })
+		await authenticatedPage.waitForTimeout(1100)
+		await collectivePage.setContent({ content: `${prefix}\n\nAfter ending.`, user, page: authenticatedPage })
+		const context = await freshAuthenticatedContext(authenticatedPage, 'block')
+		const page = await context.newPage()
+		let release!: () => void
+		const imageReady = new Promise<void>((resolve) => {
+			release = resolve
+		})
+		let imageRequested = false
+		await page.route('**/comparison-opening-image.svg', async (route) => {
+			imageRequested = true
+			await imageReady
+			await route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="1600"><rect width="300" height="1600" fill="blue"/></svg>' })
+		})
+		try {
+			await page.goto(collectivePage.getPageUrl(), { waitUntil: 'domcontentloaded' })
+			await expect(page.locator('[data-cy-collectives="reader"] .ProseMirror')).toBeVisible()
+			await openVersions(page)
+			await page.getByRole('button', { name: 'Compare versions…' }).click()
+			await page.getByRole('dialog', { name: 'Compare versions' }).getByRole('button', { name: 'Compare', exact: true }).click()
+			await expect(page.getByRole('tab', { name: 'Full documents' })).toHaveAttribute('aria-selected', 'true')
+			await expect.poll(() => imageRequested).toBe(true)
+			const scroller = page.locator('.text-comparison__document--before .text-comparison__document-scroller')
+			if (interrupted) {
+				await scroller.hover()
+				await page.mouse.wheel(0, -100_000)
+				await expect.poll(() => scroller.evaluate((element) => element.scrollTop)).toBe(0)
+			}
+			await page.evaluate(async () => {
+				for (let frame = 0; frame < 4; frame++) {
+					await new Promise(requestAnimationFrame)
+				}
+			})
+			const settledScroll = await scroller.evaluate((element) => element.scrollTop)
+			release()
+			await expect(page.locator('.text-comparison__document--before img').first()).toHaveJSProperty('naturalHeight', 1600)
+			await expect.poll(() => scroller.evaluate((element) => element.scrollTop)).toBe(settledScroll)
+			await page.getByRole('tab', { name: 'Changes', exact: true }).click()
+			await page.locator('[data-comparison-select]').first().click()
+			await expect.poll(() => scroller.evaluate((element) => {
+				const target = element.querySelector('[data-comparison-change][aria-current="true"]')!.getBoundingClientRect()
+				const viewport = element.getBoundingClientRect()
+				return target.top >= viewport.top && target.bottom <= viewport.bottom
+			})).toBe(true)
+		} finally {
+			release()
+			await context.close()
+		}
+	})
+}
 
 test('AUD-06 legacy runtime opens original historical and current Viewer panes from the sidebar', { tag: '@viewer-fallback' }, async ({ collective, user, page }) => {
 	const collectivePage = await collective.createPage({ title: 'c599-e2e-legacy-sidebar', user, page })
