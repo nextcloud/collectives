@@ -43,6 +43,7 @@ OC.L10N.register(
     "Open sidebar" : "Avaa sivupalkki",
     "Clear search" : "Tyhjennä haku",
     "Tag name" : "Tunnisteen nimi",
+    "Create new tag" : "Luo uusi tunniste",
     "Favorites" : "Suosikit",
     "Home" : "Koti",
     "Favorite" : "Suosikki",
