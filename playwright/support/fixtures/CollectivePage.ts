@@ -6,6 +6,7 @@
 import type { Page } from '@playwright/test'
 import type { User } from './User.ts'
 
+import { expect } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { webdavUrl } from '../helpers/urls.ts'
@@ -54,21 +55,38 @@ export class CollectivePage {
 			: `/index.php/apps/collectives/${this.collectiveUrlPart}/${this.getPageUrlPart()}`
 	}
 
+	getModeButton(edit: boolean) {
+		return this.page.locator('.edit-button')
+			.getByRole('button', { name: edit ? 'Start editing' : 'Stop editing' })
+	}
+
 	/**
 	 * Switch the page mode between edit and preview mode.
 	 *
 	 * @param edit whether to switch to edit or preview mode
 	 */
 	async switchMode(edit: boolean) {
-		if (await this.hasMode(edit)) {
-			return
-		}
+		const content = this.getContent(edit)
+		const button = this.getModeButton(edit)
 
-		const label = edit ? 'Edit' : 'Preview'
-		await this.page.locator('.edit-button')
-			.getByLabel(label)
-			.click()
-		await this.waitForContent(edit)
+		// Empty pages switch themselves into edito mode while loading, so the
+		// button can vanish between checking and clicking it. Retry until the
+		// wanted mode sticks.
+		await expect(async () => {
+			// The button is only present while the wanted mode is inactive,
+			// wait for whichever of the two shows up first.
+			await content
+				.or(button)
+				.filter({ visible: true })
+				.first()
+				.waitFor()
+
+			if (await content.isVisible()) {
+				return
+			}
+			await button.click({ timeout: 1_000 })
+			await content.waitFor({ state: 'visible', timeout: 5_000 })
+		}).toPass({ timeout: 20_000 })
 	}
 
 	/**
@@ -80,15 +98,6 @@ export class CollectivePage {
 	async open(edit: boolean = false, shareToken?: string) {
 		await this.page.goto(this.getPageUrl(shareToken))
 		await this.waitForContent(edit)
-	}
-
-	/**
-	 * Check if the page is in edit/preview mode.
-	 *
-	 * @param edit whether page is expected to be in edit or preview mode
-	 */
-	async hasMode(edit: boolean = false) {
-		return await this.getContent(edit).isVisible()
 	}
 
 	/**
