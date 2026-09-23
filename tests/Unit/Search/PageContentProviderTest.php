@@ -91,7 +91,6 @@ class PageContentProviderTest extends TestCase {
 			SearchQuery::LIMIT_DEFAULT,
 			null,
 			'collectives.'
-
 		);
 		$response = json_encode($this->provider->search($user, $query));
 		$result = json_decode($response, true);
