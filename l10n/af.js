@@ -18,6 +18,7 @@ OC.L10N.register(
     "Download" : "Laai af",
     "Title" : "Titel",
     "Open sidebar" : "Open kantbalk",
+    "Clear search" : "Maak soektog skoon",
     "Favorites" : "Gunstelinge",
     "Home" : "Tuis",
     "Page not found" : "Blad nie gevind nie",
