@@ -26,7 +26,8 @@ export type ViewerLinkTestCaseData = {
 	getLinkUrl: (params: { fileId: number }) => string
 	fixtureName: string
 	mimetype: string
-	getPath: (params: { sourcePage: CollectivePage }) => string
+	// Defaults to a new folder in the user's home
+	getPath?: (params: { sourcePage: CollectivePage }) => string
 }
 
 export type SameTabLinkTestCaseData = {
