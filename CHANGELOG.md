@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.7.1 - 2026.09.24
+
+### 🐛Fixes
+* 🗑️ Add a grace period before purging orphaned collectives. (#2813)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+
 ## 4.7.0 - 2026.09.22
 
 ### ✨New
