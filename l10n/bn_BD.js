@@ -17,6 +17,7 @@ OC.L10N.register(
     "Rename" : "পূনঃনামকরণ",
     "Download" : "ডাউনলোড",
     "Title" : "শিরোনাম",
+    "Clear search" : "Clear search",
     "Favorites" : "প্রিয়জন",
     "Home" : "বাড়ি",
     "Favorite" : "প্রিয়জন",

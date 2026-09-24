@@ -32,6 +32,7 @@ OC.L10N.register(
     "Download" : "הורדה",
     "Title" : "תפקיד",
     "Open sidebar" : "פתיחת סרגל הצד",
+    "Clear search" : "נקה חיפוש",
     "Favorites" : "מועדפים",
     "Home" : "בית",
     "Favorite" : "סימון כמועדף",
