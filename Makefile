@@ -138,15 +138,21 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/node_modules" \
 		--exclude="$(APP_NAME)/package-lock.json" \
 		--exclude="$(APP_NAME)/package.json" \
+		--exclude="$(APP_NAME)/playwright" \
+		--exclude="$(APP_NAME)/playwright-report" \
+		--exclude="$(APP_NAME)/playwright.config.ts" \
 		--exclude="$(APP_NAME)/psalm.xml" \
 		--exclude="$(APP_NAME)/rector.php" \
 		--exclude="$(APP_NAME)/renovate.json" \
 		--exclude="$(APP_NAME)/src" \
 		--exclude="$(APP_NAME)/stylelint.config.cjs" \
+		--exclude="$(APP_NAME)/test-results" \
 		--exclude="$(APP_NAME)/tests" \
 		--exclude="$(APP_NAME)/tsconfig.json" \
 		--exclude="$(APP_NAME)/vendor-bin" \
+		--exclude="$(APP_NAME)/vendor/wamania/php-stemmer/test" \
 		--exclude="$(APP_NAME)/vite.*" \
+		--exclude="$(APP_NAME)/vitest.config.ts" \
 		$(PROJECT_DIR) $(RELEASE_DIR)/
 	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \
 		echo "Signing code…"; \
