@@ -333,11 +333,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getVersionsFolder($folderId);
 			foreach ($versionsFolder->getDirectoryListing() as $fileFolder) {
-				if (!($fileFolder instanceof Folder)) {
-					continue;
-				}
-				foreach ($fileFolder->getDirectoryListing() as $file) {
-					$this->deleteAllVersionsForFile($folderId, $file->getId());
+				if ($fileFolder instanceof Folder) {
+					$this->collectiveVersionMapper->deleteAllVersionsForFileId((int)$fileFolder->getName());
 				}
 			}
 			$versionsFolder->delete();
