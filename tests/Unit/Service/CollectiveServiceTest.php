@@ -24,11 +24,14 @@ use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IL10N;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\String\UnicodeString;
@@ -38,6 +41,7 @@ class CollectiveServiceTest extends TestCase {
 	private string $userId = 'jane';
 	private CollectiveMapper $collectiveMapper;
 	private CollectiveHelper $collectiveHelper;
+	private CollectiveFolderManager $collectiveFolderManager;
 	private CircleHelper $circleHelper;
 	private IL10N $l10n;
 	private CollectiveService $service;
@@ -48,13 +52,13 @@ class CollectiveServiceTest extends TestCase {
 
 		$this->collectiveMapper = $this->createMock(CollectiveMapper::class);
 		$this->collectiveHelper = $this->createMock(CollectiveHelper::class);
-		$collectiveFolderManager = $this->createMock(CollectiveFolderManager::class);
+		$this->collectiveFolderManager = $this->createMock(CollectiveFolderManager::class);
 
 		$folder = $this->createMock(Folder::class);
 		$file = $this->createMock(File::class);
 		$folder->method('get')
 			->willReturn($file);
-		$collectiveFolderManager->method('initializeFolder')
+		$this->collectiveFolderManager->method('initializeFolder')
 			->willReturn($folder);
 
 		$this->circleHelper = $this->createMock(CircleHelper::class);
@@ -77,7 +81,7 @@ class CollectiveServiceTest extends TestCase {
 			$appManager,
 			$this->collectiveMapper,
 			$this->collectiveHelper,
-			$collectiveFolderManager,
+			$this->collectiveFolderManager,
 			$this->circleHelper,
 			$shareService,
 			$collectiveUserSettingsMapper,
@@ -208,5 +212,102 @@ class CollectiveServiceTest extends TestCase {
 			'userNotify' => 1,
 			'canLeave' => true,
 		], $collective->jsonSerialize());
+	}
+
+	private function mockTrashedCollective(): Collective {
+		$collective = new Collective();
+		$collective->setId(123);
+		$collective->setCircleId('CircleId');
+		$collective->setTrashTimestamp(1700000000);
+		$this->collectiveMapper->method('findTrashByIdAndUser')
+			->with(123, $this->userId)
+			->willReturn($collective);
+		return $collective;
+	}
+
+	public function testDeleteCollectiveDestroysCircleAfterPurge(): void {
+		$collective = $this->mockTrashedCollective();
+		$this->circleHelper->method('isOwner')
+			->willReturn(true);
+		$this->collectiveFolderManager->method('getFolder')
+			->willThrowException(new FilesNotFoundException());
+
+		$calls = [];
+		$this->collectiveMapper->expects(self::once())
+			->method('delete')
+			->with($collective)
+			->willReturnCallback(function (Collective $collective) use (&$calls): Collective {
+				$calls[] = 'purge';
+				return $collective;
+			});
+		$this->circleHelper->expects(self::once())
+			->method('destroyCircle')
+			->with('CircleId', $this->userId)
+			->willReturnCallback(function () use (&$calls): void {
+				$calls[] = 'destroyCircle';
+			});
+
+		$this->service->deleteCollective(123, $this->userId, true);
+		self::assertSame(['purge', 'destroyCircle'], $calls);
+	}
+
+	public function testDeleteCollectiveKeepCircleUnflagsCircleAfterPurge(): void {
+		$collective = $this->mockTrashedCollective();
+		$this->collectiveFolderManager->method('getFolder')
+			->willThrowException(new FilesNotFoundException());
+
+		$calls = [];
+		$this->collectiveMapper->expects(self::once())
+			->method('delete')
+			->with($collective)
+			->willReturnCallback(function (Collective $collective) use (&$calls): Collective {
+				$calls[] = 'purge';
+				return $collective;
+			});
+		$this->circleHelper->expects(self::never())
+			->method('destroyCircle');
+		$this->circleHelper->expects(self::once())
+			->method('unflagCircleAsAppManaged')
+			->with('CircleId')
+			->willReturnCallback(function () use (&$calls): void {
+				$calls[] = 'unflagCircle';
+			});
+
+		$this->service->deleteCollective(123, $this->userId, false);
+		self::assertSame(['purge', 'unflagCircle'], $calls);
+	}
+
+	public function testDeleteCollectiveKeepsCircleIfPurgeFails(): void {
+		$this->mockTrashedCollective();
+		$this->circleHelper->method('isOwner')
+			->willReturn(true);
+		$this->collectiveFolderManager->method('getFolder')
+			->willThrowException(new InvalidPathException());
+
+		$this->collectiveMapper->expects(self::never())
+			->method('delete');
+		$this->circleHelper->expects(self::never())
+			->method('destroyCircle');
+		$this->circleHelper->expects(self::never())
+			->method('unflagCircleAsAppManaged');
+
+		$this->expectException(NotFoundException::class);
+		$this->service->deleteCollective(123, $this->userId, true);
+	}
+
+	public function testDeleteCollectiveAndCircleAsNonOwnerFailsBeforePurge(): void {
+		$this->mockTrashedCollective();
+		$this->circleHelper->method('isOwner')
+			->willReturn(false);
+
+		$this->collectiveFolderManager->expects(self::never())
+			->method('getFolder');
+		$this->collectiveMapper->expects(self::never())
+			->method('delete');
+		$this->circleHelper->expects(self::never())
+			->method('destroyCircle');
+
+		$this->expectException(NotPermittedException::class);
+		$this->service->deleteCollective(123, $this->userId, true);
 	}
 }
