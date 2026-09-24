@@ -90,12 +90,18 @@ test.describe('Custom page picker - cross-collective search', () => {
 		editor.setMode(true)
 		await editor.clickMenu('Insert link', 'Link to page')
 		await page.waitForTimeout(200)
+
+		const filterMenu = editor.pagePicker.locator('.searchbar [aria-haspopup="menu"]')
+		await filterMenu.click()
+		await page.getByText('Limit to current collective').click()
+
+		// The menu stays open with focus on the checkbox. Close it, else typing
+		// a space into the search field may toggle the checkbox again.
+		await filterMenu.click()
+		await expect(page.getByText('Limit to current collective')).toBeHidden()
 	})
 
 	test('link to page from other collective', async ({ page, editor }) => {
-		await editor.pagePicker.locator('.searchbar [aria-haspopup="menu"]').click()
-		await page.getByText('Limit to current collective').click()
-
 		// Should already be listed without searching
 		const otherPageItem = editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Other collective page' })
 		await expect(otherPageItem).toBeVisible()
@@ -114,10 +120,7 @@ test.describe('Custom page picker - cross-collective search', () => {
 		await expect(pageWidget).toHaveAttribute('href', origin + otherTargetPage.getPageUrl())
 	})
 
-	test('searching "Landing page" lists landing page', async ({ page, editor }) => {
-		await editor.pagePicker.locator('.searchbar [aria-haspopup="menu"]').click()
-		await page.getByText('Limit to current collective').click()
-
+	test('searching "Landing page" lists landing page', async ({ editor }) => {
 		await editor.pagePickerSearch.fill('Landing page')
 		await expect(editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Source page' })).not.toBeVisible()
 
@@ -125,10 +128,7 @@ test.describe('Custom page picker - cross-collective search', () => {
 		await expect(landingPageItem).toHaveCount(2)
 	})
 
-	test('searching collective title lists landing page', async ({ page, collectives, editor }) => {
-		await editor.pagePicker.locator('.searchbar [aria-haspopup="menu"]').click()
-		await page.getByText('Limit to current collective').click()
-
+	test('searching collective title lists landing page', async ({ collectives, editor }) => {
 		await editor.pagePickerSearch.fill(collectives[1].data.name)
 		await expect(editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Source page' })).not.toBeVisible()
 
