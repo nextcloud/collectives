@@ -50,5 +50,10 @@
 				<referencedClass name="OCA\Guests\GuestManager" />
 			</errorLevel>
 		</UndefinedDocblockClass>
+		<UndefinedInterfaceMethod>
+			<errorLevel type="suppress">
+				<referencedMethod name="OCP\Files\Storage\IStorage::getWrapperStorage" />
+			</errorLevel>
+		</UndefinedInterfaceMethod>
 	</issueHandlers>
 </psalm>
