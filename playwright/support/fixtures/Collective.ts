@@ -13,7 +13,7 @@ import { apiUrl, circlesApiUrl, ocsHeaders } from '../helpers/urls.ts'
 import { CollectivePage } from './CollectivePage.ts'
 import { CollectiveShare } from './CollectiveShare.ts'
 
-type CollectiveData = {
+export type CollectiveData = {
 	id: number
 	slug?: string
 	circleId: string
@@ -210,8 +210,8 @@ export class Collective {
 		return json.ocs.data.map((s: CollectiveShareData) => new CollectiveShare(this.getCollectiveUrlPart(), s, page))
 	}
 
-	async addMember(): Promise<Account> {
-		const account = await createRandomUser()
+	async addMember(account?: Account): Promise<Account> {
+		account ??= await createRandomUser()
 		await this.page.request.post(
 			circlesApiUrl(this.data.circleId, 'members'),
 			{
@@ -233,6 +233,27 @@ export class Collective {
 			{ headers: ocsHeaders, data: { notify: level }, failOnStatusCode: true },
 		)
 	}
+}
+
+/**
+ * Find a collective of the current user by team (circle) ID.
+ *
+ * @param options options for the lookup
+ * @param options.circleId ID of the team (circle)
+ * @param options.page the Playwright page
+ * @return The collective, or null if no collective exists for the team
+ */
+export async function findCollectiveByCircleId({ circleId, page }: {
+	circleId: string
+	page: Page
+}): Promise<CollectiveData | null> {
+	const response = await page.request.get(
+		apiUrl('v1.0', 'collectives'),
+		{ headers: ocsHeaders, failOnStatusCode: true },
+	)
+	const data = await response.json()
+	return data.ocs.data.collectives
+		.find((collective: CollectiveData) => collective.circleId === circleId) ?? null
 }
 
 /**

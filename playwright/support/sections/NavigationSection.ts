@@ -14,6 +14,8 @@ export class NavigationSection {
 	public readonly filePickerDialog: Locator
 	public readonly filePickerBreadCrumbs: Locator
 	public readonly filePickerHomeButton: Locator
+	public readonly newCollectiveNameInput: Locator
+	public readonly newCollectiveNameError: Locator
 
 	constructor(public readonly page: Page) {
 		this.el = this.page.locator('#app-navigation-vue')
@@ -22,6 +24,8 @@ export class NavigationSection {
 		this.filePickerDialog = this.page.getByRole('dialog', { name: 'Select location for collectives' })
 		this.filePickerBreadCrumbs = this.filePickerDialog.locator('.breadcrumb__crumbs')
 		this.filePickerHomeButton = this.filePickerBreadCrumbs.getByRole('button', { name: 'All files' })
+		this.newCollectiveNameInput = this.page.getByRole('textbox', { name: 'Name of the collective' })
+		this.newCollectiveNameError = this.page.locator('.modal-collective-name-error')
 	}
 
 	public async open(): Promise<void> {
@@ -40,6 +44,39 @@ export class NavigationSection {
 		if (await this.page.locator('.collective-selector-list').count() === 0) {
 			await this.el.locator('.collective-selector-trigger').click()
 		}
+	}
+
+	public async openNewCollectiveModal(): Promise<void> {
+		await this.openCollectiveSelector()
+		await this.el.getByRole('button', { name: 'New collective' }).click()
+		await expect(this.newCollectiveNameInput).toBeFocused()
+	}
+
+	public async createCollective(name: string): Promise<void> {
+		await this.openNewCollectiveModal()
+		await this.newCollectiveNameInput.fill(name)
+		await this.submitNewCollectiveModal()
+	}
+
+	/**
+	 * Create a collective via the UI by picking an existing team, without adding members.
+	 *
+	 * @param teamName - name of the existing team
+	 */
+	public async createCollectiveForTeam(teamName: string): Promise<void> {
+		await this.openNewCollectiveModal()
+		await this.page.getByRole('button', { name: 'Select an existing team' }).click()
+		const teamSelector = this.page.locator('.circle-selector')
+		await teamSelector.click()
+		await teamSelector.getByRole('option', { name: teamName }).click()
+		await this.submitNewCollectiveModal()
+	}
+
+	private async submitNewCollectiveModal(): Promise<void> {
+		const dialogActions = this.page.locator('.dialog__actions')
+		await dialogActions.getByRole('button', { name: 'Add members' }).click()
+		// Without members selected, the button reads 'Create without members'
+		await dialogActions.getByRole('button', { name: /^Create/ }).click()
 	}
 
 	public getCollectiveItem(collectiveName: string): Locator {
