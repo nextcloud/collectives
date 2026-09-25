@@ -1673,7 +1673,8 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
 		cy.clickMenuButton('Restore version')
 		cy.wait('@moveVersion').its('response.statusCode').should('be.oneOf', [201, 204])
-		cy.get('.toast-success').should('contain', 'Restored')
+		cy.get('[role="status"]')
+			.should('contain', 'Restored')
 
 		cy.request('/csrftoken').then(({ body }) => {
 			cy.request({

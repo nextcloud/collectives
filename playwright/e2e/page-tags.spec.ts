@@ -26,8 +26,8 @@ test.describe('Page tags management', () => {
 		// Create and add tag
 		await page.getByLabel('Search or create tag').fill('initial')
 		await page.getByRole('button', { name: 'Create new tag' }).click()
-		await expect(page.locator('.toast-success').getByText('Created tag initial')).toBeVisible()
-		await expect(page.locator('.toast-success').getByText('Added tag initial to page')).toBeVisible()
+		await expect(page.getByRole('status').getByText('Created tag initial')).toBeVisible()
+		await expect(page.getByRole('status').getByText('Added tag initial to page')).toBeVisible()
 		await expect(page.locator('.page-tags-container .tag')).toContainText('initial')
 
 		// Choose tag color
@@ -36,14 +36,14 @@ test.describe('Page tags management', () => {
 		const colorPicker = page.locator('.color-picker')
 		await colorPicker.locator('.color-picker__simple-color-circle').first().click()
 		await colorPicker.getByRole('button', { name: 'Choose' }).click()
-		await expect(page.locator('.toast-success').getByText('Updated tag initial')).toBeVisible()
+		await expect(page.getByRole('status').getByText('Updated tag initial')).toBeVisible()
 
 		// Rename tag
 		await initialTagRow.getByRole('button', { name: 'Actions' }).click()
 		await page.getByRole('menuitem', { name: 'Rename' }).click()
 		await page.getByRole('textbox', { name: 'Tag name' }).fill('testing')
 		await page.getByRole('textbox', { name: 'Tag name' }).press('Enter')
-		await expect(page.locator('.toast-success').getByText('Updated tag testing')).toBeVisible()
+		await expect(page.getByRole('status').getByText('Updated tag testing')).toBeVisible()
 		await expect(page.locator('.page-tags-container .tag')).toContainText('testing')
 
 		// Mark tag as deleted, then close modal to really delete
@@ -52,7 +52,7 @@ test.describe('Page tags management', () => {
 		await page.getByRole('menuitem', { name: 'Delete' }).click()
 		await page.getByRole('dialog', { name: 'Manage Tags' })
 			.getByRole('button', { name: 'Close' }).click()
-		await expect(page.locator('.toast-success').getByText('Deleted 1 tag')).toBeVisible()
+		await expect(page.getByRole('status').getByText('Deleted 1 tag')).toBeVisible()
 		await expect(page.locator('.page-tags-container .tag')).toHaveCount(0)
 	})
 

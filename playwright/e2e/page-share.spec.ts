@@ -22,7 +22,7 @@ test.describe('Page share', () => {
 
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
 		await sharingTab.getByRole('button', { name: 'Create a new share' }).click()
-		await expect(page.locator('.toast-success')).toContainText(`Page "${collectivePage.data.title}" has been shared`)
+		await expect(page.getByRole('status')).toContainText(`Page "${collectivePage.data.title}" has been shared`)
 
 		// Open share
 		const shares = await collective.getShares(page)
@@ -83,7 +83,7 @@ test.describe('Page share enforced password protection', () => {
 	test('Create share and open share unauthenticated', async ({ page, collective, pageSidebar, sharePage, shareEditor }) => {
 		await shareActionsPanel.locator('input[autocomplete="new-password"]').fill('fiej2Ahl5pae')
 		await shareActionsPanel.getByRole('button', { name: 'Create share' }).click()
-		await expect(page.locator('.toast-success')).toContainText('has been shared')
+		await expect(page.getByRole('status')).toContainText('has been shared')
 
 		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
@@ -102,6 +102,6 @@ test.describe('Page share enforced password protection', () => {
 	test('Fails to create share with weak password', async ({ page }) => {
 		await shareActionsPanel.locator('input[autocomplete="new-password"]').fill('password')
 		await shareActionsPanel.getByRole('button', { name: 'Create share' }).click()
-		await expect(page.locator('.toast-error')).toContainText('most common')
+		await expect(page.getByRole('alert')).toContainText('most common')
 	})
 })

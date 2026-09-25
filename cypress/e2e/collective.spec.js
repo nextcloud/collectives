@@ -44,9 +44,9 @@ describe('Collective', function() {
 			.should('not.be.visible')
 
 		// Undo leave collective
-		cy.get('.toast-undo')
+		cy.get('[role="alert"]')
 			.should('contain', 'You left collective Preexisting Collective')
-		cy.get('.toast-undo button')
+		cy.get('[role="alert"] button')
 			.contains('Undo')
 			.click()
 
