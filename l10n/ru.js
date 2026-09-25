@@ -39,6 +39,7 @@ OC.L10N.register(
     "Loading…" : "Загрузка…",
     "Add groups" : "Добавить группы",
     "Add teams" : "Добавить команды",
+    "Remove {name}" : "Удалить {name}",
     "Select a collective" : "Выберите группу",
     "Change emoji" : "Выбрать эмодзи",
     "Add emoji" : "Добавить эмодзи",
