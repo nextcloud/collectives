@@ -13,6 +13,7 @@ use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SharePageService;
 use OCP\Collaboration\Reference\IPublicReferenceProvider;
@@ -78,10 +79,10 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			['http://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
 
 			// public
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457#h-heading1', 'spectre-slug-14457', 'h-heading1'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null, 'MsdwSCmP9F6jcQX'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457#h-heading1', 'spectre-slug-14457', 'h-heading1', 'MsdwSCmP9F6jcQX'],
 			// scheme mismatch: server reports https, link is http
-			['http://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
+			['http://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null, 'MsdwSCmP9F6jcQX'],
 		];
 	}
 
@@ -96,13 +97,13 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			['http://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
 
 			// public
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective', '', null],
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/abc', 'abc', null],
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
-			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective', '', null, 'MsdwSCmP9F6jcQX'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/abc', 'abc', null, 'MsdwSCmP9F6jcQX'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null, 'MsdwSCmP9F6jcQX'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1', 'MsdwSCmP9F6jcQX'],
+			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null, 'MsdwSCmP9F6jcQX'],
 			// scheme mismatch: server reports https, link is http
-			['http://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
+			['http://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null, 'MsdwSCmP9F6jcQX'],
 		];
 	}
 
@@ -114,9 +115,9 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			['https://nextcloud.local/index.php/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null],
 
 			// public
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null],
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
-			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null, 'MsdwSCmP9F6jcQX'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1', 'MsdwSCmP9F6jcQX'],
+			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null, 'MsdwSCmP9F6jcQX'],
 		];
 	}
 
@@ -131,7 +132,7 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	/**
 	 * @dataProvider slugUrlProvider
 	 */
-	public function testMatchSlugUrl(string $url, string $pagePath, ?string $fragment): void {
+	public function testMatchSlugUrl(string $url, string $pagePath, ?string $fragment, ?string $shareToken = null): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
@@ -139,6 +140,9 @@ class SearchablePageReferenceProviderTest extends TestCase {
 			'collectiveId' => 123,
 			'fragment' => $fragment,
 		];
+		if ($shareToken) {
+			$expectedPagePath['shareToken'] = $shareToken;
+		}
 
 		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));
 	}
@@ -146,12 +150,15 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	/**
 	 * @dataProvider urlProvider
 	 */
-	public function testMatchUrl(string $url, string $pagePath, ?string $fragment): void {
+	public function testMatchUrl(string $url, string $pagePath, ?string $fragment, ?string $shareToken = null): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
 			'fragment' => $fragment,
 		];
+		if ($shareToken) {
+			$expectedPagePath['shareToken'] = $shareToken;
+		}
 
 		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));
 	}
@@ -159,13 +166,16 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	/**
 	 * @dataProvider urlFileIdProvider
 	 */
-	public function testMatchUrlFileId(string $url, string $pagePath, ?string $fragment): void {
+	public function testMatchUrlFileId(string $url, string $pagePath, ?string $fragment, ?string $shareToken = null): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
 			'fileId' => 14457,
 			'fragment' => $fragment,
 		];
+		if ($shareToken) {
+			$expectedPagePath['shareToken'] = $shareToken;
+		}
 
 		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));
 	}
@@ -210,6 +220,7 @@ class SearchablePageReferenceProviderTest extends TestCase {
 		// server reports http://, link is http://
 		self::assertEquals($expected, $provider->matchUrl('http://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre'));
 		// public share: server reports http://, link is https://
+		$expected['shareToken'] = 'MsdwSCmP9F6jcQX';
 		self::assertEquals($expected, $provider->matchUrl('https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre'));
 	}
 
@@ -226,6 +237,29 @@ class SearchablePageReferenceProviderTest extends TestCase {
 		$this->provider->resolveReferencePublic(
 			'https://nextcloud.local/apps/collectives/p/sharetoken/supacollective',
 			'sharetoken'
+		);
+	}
+
+	public function testResolveReferenceShareLinkAsNonMember(): void {
+		$this->collectiveShareService->method('isShareAuthenticated')->with('linktoken')->willReturn(true);
+		$this->collectiveService->expects(self::once())
+			->method('findCollectiveByShare')
+			->with('linktoken')
+			->willThrowException(new NotFoundException('not found'));
+		$this->collectiveService->expects(self::never())->method('findCollectiveByName');
+
+		$this->provider->resolveReference('https://nextcloud.local/apps/collectives/p/linktoken/supacollective');
+	}
+
+	public function testResolveReferencePublicUsesLinkShareToken(): void {
+		$this->collectiveShareService->expects(self::once())
+			->method('isShareAuthenticated')
+			->with('linktoken')
+			->willReturn(false);
+
+		$this->provider->resolveReferencePublic(
+			'https://nextcloud.local/apps/collectives/p/linktoken/supacollective',
+			'othertoken'
 		);
 	}
 }
