@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Search\FileSearch\Db;
 
+use OCA\Collectives\Db\TInsertIgnoreConflict;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -21,17 +22,19 @@ use OCP\IDBConnection;
  * @template-extends QBMapper<SearchDoc>
  */
 class SearchDocMapper extends QBMapper {
+	use TInsertIgnoreConflict;
+
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'collectives_s_docs', SearchDoc::class);
 	}
 
-	public function insertDoc(int $collectiveId, int $wordId, int $fileId, int $hitCount): SearchDoc {
+	public function insertDoc(int $collectiveId, int $wordId, int $fileId, int $hitCount): void {
 		$doc = new SearchDoc();
 		$doc->setCollectiveId($collectiveId);
 		$doc->setWordId($wordId);
 		$doc->setFileId($fileId);
 		$doc->setHitCount($hitCount);
-		return $this->insert($doc);
+		$this->insertIgnoreConflict($doc);
 	}
 
 	public function deleteByCollective(int $collectiveId): void {
