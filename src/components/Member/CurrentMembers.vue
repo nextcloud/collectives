@@ -101,7 +101,7 @@ export default {
 		isCurrentUser() {
 			return (item) => {
 				return item.userId === this.currentUser
-					|| item.singleId === item.circle.initiator.singleId
+					|| item.singleId === item.circle?.initiator?.singleId
 			}
 		},
 	},
