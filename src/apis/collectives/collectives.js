@@ -151,3 +151,17 @@ export function updateCollectivePageMode(collectiveId, mode) {
 		{ mode },
 	)
 }
+
+/**
+ * Update a custom setting for the given collective
+ *
+ * @param {number} collectiveId - id of the collective to update
+ * @param {string} key - setting key to update
+ * @param {string} value - new value for the setting
+ */
+export function updateCollectiveCustomSettings(collectiveId, key, value) {
+	return axios.put(
+		collectivesApiUrl(collectiveId, 'customSettings'),
+		{ key, value },
+	)
+}

@@ -87,6 +87,24 @@
 					</template>
 				</NcRadioGroupButton>
 			</NcRadioGroup>
+
+			<NcRadioGroup v-model="downloadPermissions" :label="t('collectives', 'Allow download for')" class="download-permissions">
+				<NcRadioGroupButton :label="t('collectives', 'Admins only')" :value="String(memberLevels.LEVEL_ADMIN)">
+					<template #icon>
+						<CrownIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'Admins and moderators')" :value="String(memberLevels.LEVEL_MODERATOR)">
+					<template #icon>
+						<AccountCogIcon />
+					</template>
+				</NcRadioGroupButton>
+				<NcRadioGroupButton :label="t('collectives', 'All members')" :value="String(memberLevels.LEVEL_MEMBER)">
+					<template #icon>
+						<AccountIcon />
+					</template>
+				</NcRadioGroupButton>
+			</NcRadioGroup>
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="page-settings" :name="t('collectives', 'Page settings')">
@@ -185,6 +203,7 @@ export default {
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
 			pageMode: String(this.collective.pageMode),
+			downloadPermissions: String(this.collective.customSettings?.downloadPermissionLevel ?? memberLevels.LEVEL_ADMIN),
 			emoji: null,
 		}
 	},
@@ -259,6 +278,20 @@ export default {
 				throw error
 			})
 		},
+
+		downloadPermissions(val) {
+			const permission = String(val)
+			this.load('updateCollectiveDownloadPermissions_' + permission)
+			this.updateCollectiveCustomSettings({ id: this.collective.id, key: 'downloadPermissionLevel', value: parseInt(permission) }).then(() => {
+				showSuccess(t('collectives', 'Download permissions updated'))
+				this.done('updateCollectiveDownloadPermissions_' + permission)
+			}).catch((error) => {
+				this.downloadPermissions = String(this.collective.customSettings?.downloadPermissionLevel ?? memberLevels.LEVEL_ADMIN)
+				this.done('updateCollectiveDownloadPermissions_' + permission)
+				showError(t('collectives', 'Could not update download permissions'))
+				throw error
+			})
+		},
 	},
 
 	methods: {
@@ -278,6 +311,7 @@ export default {
 			'updateCollectiveEditPermissions',
 			'updateCollectiveSharePermissions',
 			'updateCollectivePageMode',
+			'updateCollectiveCustomSettings',
 		]),
 
 		/**
