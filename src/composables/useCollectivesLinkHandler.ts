@@ -92,9 +92,16 @@ export function createOpenCollectivesLink(router: Router, pinia: Pinia) {
 			}
 		} else {
 			if (publicShareMatch) {
-				// authenticated → public share link: strip /p/<token>
 				const rest = publicShareMatch[2] || '/'
-				router.push(rest + searchAndHash)
+				const collectiveSegment = rest.match(/^\/([^/]+)/)?.[1]
+				if (collectiveSegment
+					&& collectivesStore.collectives.some((collective: Collective) => isSegmentSameCollective(collectiveSegment, collective))) {
+					// authenticated → public share link of own collective: strip /p/<token>
+					router.push(rest + searchAndHash)
+				} else {
+					// Not a member of the linked collective — open public share in new tab
+					window.open(linkUrl.href, '_blank')
+				}
 			} else {
 				// authenticated → internal: navigate directly
 				router.push(pathInRouter + searchAndHash)
