@@ -41,8 +41,6 @@ export function webdavUrl(userId: string, ...parts: (string | number)[]): string
  * @param parts - URL parts to append - will be joined with `/`
  */
 export function circlesApiUrl(...parts: (string | number)[]): string {
-	const path = parts
-		.map((part) => encodeURI(String(part)))
+	return ['/ocs/v2.php/apps/circles/circles', ...parts.map((part) => encodeURI(String(part)))]
 		.join('/')
-	return `/ocs/v2.php/apps/circles/circles/${path}`
 }
