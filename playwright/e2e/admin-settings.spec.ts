@@ -12,6 +12,7 @@ import { expect, test } from '@playwright/test'
 test.describe('Admin settings', () => {
 	let defaultUserFolderInput: Locator
 	let defaultUserFolderHelperText: Locator
+	let publishFeatureSwitch: Locator
 
 	test.beforeEach(async ({ page }) => {
 		const admin: User = {
@@ -23,6 +24,7 @@ test.describe('Admin settings', () => {
 		await page.goto('/index.php/settings/admin/additional')
 		defaultUserFolderInput = page.getByRole('textbox', { name: 'Default user folder' })
 		defaultUserFolderHelperText = page.locator('#defaultUserFolder-helper-text')
+		publishFeatureSwitch = page.getByLabel('Enable publish feature')
 		await expect(defaultUserFolderInput).toBeVisible()
 		await expect(defaultUserFolderHelperText).not.toBeVisible()
 	})
@@ -53,5 +55,19 @@ test.describe('Admin settings', () => {
 		const requestPromise = page.waitForRequest(/default_user_folder/)
 		await defaultUserFolderInput.blur()
 		await requestPromise
+	})
+
+	test('Publish feature can be enabled and disabled', async ({ page }) => {
+		await publishFeatureSwitch.setChecked(true, { force: true })
+		await page.waitForTimeout(100)
+		await page.reload()
+		publishFeatureSwitch = page.getByLabel('Enable publish feature')
+		await expect(publishFeatureSwitch).toBeChecked()
+
+		await publishFeatureSwitch.setChecked(false, { force: true })
+		await page.waitForTimeout(100)
+		await page.reload()
+		publishFeatureSwitch = page.getByLabel('Enable publish feature')
+		await expect(publishFeatureSwitch).not.toBeChecked()
 	})
 })

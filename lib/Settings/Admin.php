@@ -26,6 +26,7 @@ class Admin implements ISettings {
 	public function getForm(): TemplateResponse {
 		$parameters = [
 			'default_user_folder' => $this->appConfig->getValueString('collectives', 'default_user_folder', ''),
+			'publish_enabled' => $this->appConfig->getValueString('collectives', 'publish_enabled', 'false') === 'true',
 		];
 		$this->initialState->provideInitialState('adminSettings', $parameters);
 
