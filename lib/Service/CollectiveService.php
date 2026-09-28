@@ -337,14 +337,23 @@ class CollectiveService extends CollectiveServiceBase {
 	 */
 	public function deleteCollective(int $id, string $userId, bool $deleteCircle): Collective {
 		$collective = $this->getCollectiveFromTrash($id, $userId);
+		$circleId = $collective->getCircleId();
 
-		if ($deleteCircle) {
-			$this->circleHelper->destroyCircle($collective->getCircleId(), $userId);
-		} else {
-			$this->circleHelper->unflagCircleAsAppManaged($collective->getCircleId());
+		// Check permission up front to not purge the collective and then fail to destroy the team
+		if ($deleteCircle && !$this->circleHelper->isOwner($circleId, $userId)) {
+			throw new NotPermittedException('Not allowed to destroy team ' . $circleId);
 		}
 
-		return $this->purgeCollective($collective);
+		// Purge before touching the team: the collective can only be found in trash while its team exists.
+		$collective = $this->purgeCollective($collective);
+
+		if ($deleteCircle) {
+			$this->circleHelper->destroyCircle($circleId, $userId);
+		} else {
+			$this->circleHelper->unflagCircleAsAppManaged($circleId);
+		}
+
+		return $collective;
 	}
 
 	/**

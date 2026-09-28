@@ -32,14 +32,12 @@ const links: ViewerLinkTestCaseData[] = [
 		getLinkUrl: ({ fileId }) => `/index.php/f/${fileId}`,
 		fixtureName: 'test.md',
 		mimetype: 'text/markdown',
-		getPath: () => '',
 	},
 	{
 		description: 'absolute files app path to image file',
 		getLinkUrl: ({ fileId }) => `/index.php/f/${fileId}`,
 		fixtureName: 'test.png',
 		mimetype: 'image/png',
-		getPath: () => '',
 	},
 	{
 		description: 'absolute files app path to PDF file',
@@ -57,9 +55,12 @@ test.describe('Links to viewer', () => {
 			test(`Opens link with ${linkData.description} in viewer (${modeLabel} mode)`, async ({ collective, editor, page, user }) => {
 				const sourcePage = collective.getPageByTitle('Link Source')
 
+				// Upload into a fresh folder, as the Text editor of a previous test may still hold a lock on a file with the same name.
+				const path = linkData.getPath?.({ sourcePage })
+					?? await user.createFolder({ path: randomString() }, page)
 				const fileId = await user.uploadFixture({
 					name: linkData.fixtureName,
-					path: linkData.getPath({ sourcePage }),
+					path,
 					mimetype: linkData.mimetype,
 				}, page)
 
