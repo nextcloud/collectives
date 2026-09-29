@@ -34,6 +34,14 @@ class Version040602Date20260908000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
+			$table->addColumn('title', Types::STRING, [
+				'notnull' => true,
+				'length' => 255,
+			]);
+			$table->addColumn('slug', Types::STRING, [
+				'notnull' => true,
+				'length' => 64,
+			]);
 			$table->addColumn('selected_pages', Types::TEXT, [
 				'notnull' => true,
 			]);

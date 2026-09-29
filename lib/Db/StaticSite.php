@@ -21,6 +21,10 @@ use OCP\AppFramework\Db\Entity;
  * @method void setCollectiveId(int $value)
  * @method string getStaticSiteId()
  * @method void setStaticSiteId(string $value)
+ * @method string getTitle()
+ * @method void setTitle(string $value)
+ * @method string getSlug()
+ * @method void setSlug(string $value)
  * @method string getSelectedPages()
  * @method void setSelectedPages(string $value)
  * @method string|null getPublishedUrl()
@@ -43,6 +47,8 @@ class StaticSite extends Entity implements JsonSerializable {
 
 	protected ?int $collectiveId = null;
 	protected ?string $staticSiteId = null;
+	protected ?string $title = null;
+	protected ?string $slug = null;
 	protected ?string $selectedPages = null;
 	protected ?string $publishedUrl = null;
 	protected string $status = self::STATUS_PENDING;
@@ -63,6 +69,8 @@ class StaticSite extends Entity implements JsonSerializable {
 			'id' => $this->id,
 			'collectiveId' => $this->collectiveId,
 			'staticSiteId' => $this->staticSiteId,
+			'title' => $this->title,
+			'slug' => $this->slug,
 			'selectedPageIds' => $this->getSelectedPageIds(),
 			'publishedUrl' => $this->publishedUrl,
 			'status' => $this->status,

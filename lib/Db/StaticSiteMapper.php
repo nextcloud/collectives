@@ -69,12 +69,14 @@ class StaticSiteMapper extends QBMapper {
 	 *
 	 * @throws Exception
 	 */
-	public function create(int $collectiveId, array $pageIds, string $createdBy): StaticSite {
+	public function create(int $collectiveId, array $pageIds, string $title, string $slug, string $createdBy): StaticSite {
 		$now = $this->timeFactory->getTime();
 
 		$staticSite = new StaticSite();
 		$staticSite->setCollectiveId($collectiveId);
 		$staticSite->setStaticSiteId(Uuid::v7()->toRfc4122());
+		$staticSite->setTitle($title);
+		$staticSite->setSlug($slug);
 		$staticSite->setSelectedPageIds($pageIds);
 		$staticSite->setStatus(StaticSite::STATUS_PENDING);
 		$staticSite->setCreatedBy($createdBy);
@@ -131,4 +133,3 @@ class StaticSiteMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 }
-

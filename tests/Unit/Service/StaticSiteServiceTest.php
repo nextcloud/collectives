@@ -17,9 +17,11 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\SlugService;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Test\TestCase;
 
 class StaticSiteServiceTest extends TestCase {
@@ -42,12 +44,14 @@ class StaticSiteServiceTest extends TestCase {
 			$this->staticSiteMapper,
 			$this->collectiveService,
 			$this->pageService,
+			new SlugService(new AsciiSlugger()),
 		);
 	}
 
-	private function makeCollective(bool $canEdit): Collective {
+	private function makeCollective(bool $canEdit, string $name = 'My Collective'): Collective {
 		$collective = $this->createMock(Collective::class);
 		$collective->method('canEdit')->willReturn($canEdit);
+		$collective->method('getName')->willReturn($name);
 		return $collective;
 	}
 
@@ -74,7 +78,7 @@ class StaticSiteServiceTest extends TestCase {
 		$staticSite = new StaticSite();
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, $pageIds, $this->userId)
+			->with($this->collectiveId, $pageIds, 'My Collective', 'my-collective', $this->userId)
 			->willReturn($staticSite);
 
 		$result = $this->service->create($this->collectiveId, $pageIds, $this->userId);
@@ -95,7 +99,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, [1, 2], $this->userId);
+			->with($this->collectiveId, [1, 2], $this->anything(), $this->anything(), $this->userId);
 
 		$this->service->create($this->collectiveId, $pageIds, $this->userId);
 	}
@@ -141,6 +145,79 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('create');
 
 		$this->service->create($this->collectiveId, [1, 99], $this->userId);
+	}
+
+	private function expectValidCollectiveWithPages(string $name = 'My Collective'): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true, name: $name));
+		$this->pageService->method('findAll')->willReturn([$this->makePageInfo(1)]);
+	}
+
+	public function testPublishUsesGivenTitleAndSlug(): void {
+		$this->expectValidCollectiveWithPages();
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('create')
+			->with($this->collectiveId, [1], 'Our Site', 'our-site-2026', $this->userId);
+
+		$this->service->create($this->collectiveId, [1], $this->userId, '  Our Site ', 'our-site-2026');
+	}
+
+	public function testPublishDefaultSlugIsTruncated(): void {
+		$name = str_repeat('a', 70);
+		$this->expectValidCollectiveWithPages($name);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('create')
+			->with($this->collectiveId, [1], $name, str_repeat('a', 64), $this->userId);
+
+		$this->service->create($this->collectiveId, [1], $this->userId);
+	}
+
+	public static function invalidTitleProvider(): array {
+		return [
+			'empty' => [''],
+			'whitespace only' => ['   '],
+			'too long' => [str_repeat('a', 256)],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidTitleProvider
+	 */
+	public function testPublishRejectsInvalidTitle(string $title): void {
+		$this->expectValidCollectiveWithPages();
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('create');
+
+		$this->service->create($this->collectiveId, [1], $this->userId, $title);
+	}
+
+	public static function invalidSlugProvider(): array {
+		return [
+			'empty' => [''],
+			'uppercase' => ['My-Site'],
+			'space' => ['my site'],
+			'underscore' => ['my_site'],
+			'non-ascii' => ['über'],
+			'leading hyphen' => ['-abc'],
+			'trailing hyphen' => ['abc-'],
+			'double hyphen' => ['a--b'],
+			'hyphen only' => ['-'],
+			'too long' => [str_repeat('a', 65)],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidSlugProvider
+	 */
+	public function testPublishRejectsInvalidSlug(string $slug): void {
+		$this->expectValidCollectiveWithPages();
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('create');
+
+		$this->service->create($this->collectiveId, [1], $this->userId, null, $slug);
 	}
 
 	// --- getStaticSites() ---

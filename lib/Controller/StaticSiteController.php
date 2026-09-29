@@ -67,19 +67,21 @@ class StaticSiteController extends OCSController {
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param list<int> $pageIds IDs of the pages to publish
+	 * @param ?string $title Title of the static site, defaults to the collective name
+	 * @param ?string $slug Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the slugified collective name
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>
-	 * @throws OCSBadRequestException No pages selected
+	 * @throws OCSBadRequestException No pages selected, invalid title or slug
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
 	 *
 	 * 200: Static site created
 	 */
 	#[NoAdminRequired]
-	public function create(int $collectiveId, array $pageIds): DataResponse {
+	public function create(int $collectiveId, array $pageIds, ?string $title = null, ?string $slug = null): DataResponse {
 		$uid = $this->getUid();
 		$staticSite = $this->handleErrorResponse(
-			fn (): StaticSite => $this->staticSiteService->create($collectiveId, $pageIds, $uid),
+			fn (): StaticSite => $this->staticSiteService->create($collectiveId, $pageIds, $uid, $title, $slug),
 			$this->logger,
 		);
 		return new DataResponse($staticSite);
