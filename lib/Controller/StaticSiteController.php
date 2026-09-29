@@ -113,4 +113,26 @@ class StaticSiteController extends OCSController {
 		);
 		return new DataResponse($staticSite);
 	}
+
+	/**
+	 * Delete a static site
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the static site
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @throws OCSForbiddenException Not permitted
+	 * @throws OCSNotFoundException Collective or static site not found
+	 *
+	 * 200: Static site deleted
+	 */
+	#[NoAdminRequired]
+	public function delete(int $collectiveId, int $id): DataResponse {
+		$uid = $this->getUid();
+		$this->handleErrorResponse(
+			fn () => $this->staticSiteService->delete($collectiveId, $id, $uid),
+			$this->logger,
+		);
+		return new DataResponse([]);
+	}
 }

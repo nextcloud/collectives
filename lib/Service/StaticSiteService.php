@@ -89,6 +89,18 @@ class StaticSiteService {
 	}
 
 	/**
+	 * @throws NotFoundException Collective or static site not found
+	 * @throws NotPermittedException User is not allowed to edit the collective
+	 * @throws DBException
+	 */
+	public function delete(int $collectiveId, int $id, string $userId): void {
+		$this->getEditableCollective($collectiveId, $userId);
+
+		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
+		$this->staticSiteMapper->delete($staticSite);
+	}
+
+	/**
 	 * @return StaticSite[]
 	 *
 	 * @throws NotFoundException Collective not found
