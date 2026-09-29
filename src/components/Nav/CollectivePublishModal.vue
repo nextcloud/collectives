@@ -8,7 +8,7 @@
 		size="normal"
 		class="collective-publish-modal"
 		@close="onClose">
-		<div class="modal-publish">
+		<div class="modal-publish" @keydown.esc="onEscape">
 			<h2 class="modal-publish__name">
 				{{ t('collectives', 'Publish website for collective {name}', { name: collective.name }) }}
 			</h2>
@@ -41,7 +41,7 @@
 					:loading="publishing"
 					:disabled="publishing"
 					@click="onPublishAsWebsite">
-					{{ t('collectives', 'Publish as Website') }}
+					{{ t('collectives', 'Publish website') }}
 				</NcButton>
 			</div>
 		</div>
@@ -127,6 +127,14 @@ export default {
 
 		onClose() {
 			this.$emit('close')
+		},
+
+		onEscape(event) {
+			// NcModal ignores Escape on all inputs, including checkboxes
+			if (event.target.type === 'checkbox') {
+				event.stopPropagation()
+				this.onClose()
+			}
 		},
 
 		onToggleSelect(pageId) {
@@ -223,7 +231,7 @@ export default {
 		display: flex;
 		justify-content: center;
 		flex: 0 0 auto;
-		padding-block: 8px 4px;
+		padding-block: 8px 12px;
 	}
 
 	&__collective-row {

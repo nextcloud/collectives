@@ -28,8 +28,8 @@
 			v-if="isCollectiveAdmin(collective) && isPublishFeatureEnabled"
 			closeAfterClick
 			@click="openPublishDialog()">
-			<!-- TRANSLATORS 'Publish' means to publish a selection of your collective pages to a public website -->
-			{{ t('collectives', 'Publish') }}
+			<!-- TRANSLATORS 'Publish website' means to publish a selection of your collective pages to a public website -->
+			{{ t('collectives', 'Publish website') }}
 			<template #icon>
 				<WebIcon :size="20" />
 			</template>
