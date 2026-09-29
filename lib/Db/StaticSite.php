@@ -45,6 +45,12 @@ class StaticSite extends Entity implements JsonSerializable {
 	public const STATUS_PUBLISHED = 'published';
 	public const STATUS_FAILED = 'failed';
 
+	private const IN_PROGRESS_STATUSES = [
+		self::STATUS_PENDING,
+		self::STATUS_PROVIDED,
+		self::STATUS_FETCHED,
+	];
+
 	protected ?int $collectiveId = null;
 	protected ?string $staticSiteId = null;
 	protected ?string $title = null;
@@ -55,6 +61,10 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?string $createdBy = null;
 	protected ?int $createdAt = null;
 	protected ?int $updatedAt = null;
+
+	public function isInProgress(): bool {
+		return in_array($this->status, self::IN_PROGRESS_STATUSES, true);
+	}
 
 	public function getSelectedPageIds(): array {
 		return json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);

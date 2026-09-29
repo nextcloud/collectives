@@ -87,6 +87,21 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
+	 * Update title and page selection and reset the status for a new publication.
+	 *
+	 * @param list<int> $pageIds
+	 *
+	 * @throws Exception
+	 */
+	public function republish(StaticSite $staticSite, string $title, array $pageIds): StaticSite {
+		$staticSite->setTitle($title);
+		$staticSite->setSelectedPageIds($pageIds);
+		$staticSite->setStatus(StaticSite::STATUS_PENDING);
+		$staticSite->setUpdatedAt($this->timeFactory->getTime());
+		return $this->update($staticSite);
+	}
+
+	/**
 	 * @throws NotFoundException
 	 * @throws Exception
 	 */
@@ -116,6 +131,23 @@ class StaticSiteMapper extends QBMapper {
 		$staticSite->setPublishedUrl($publishedUrl);
 		$staticSite->setUpdatedAt($this->timeFactory->getTime());
 		return $this->update($staticSite);
+	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
+	public function findByIdAndCollectiveId(int $id, int $collectiveId): StaticSite {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->tableName)
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)));
+		try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
+		}
 	}
 
 	/**

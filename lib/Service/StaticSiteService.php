@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Db\StaticSiteMapper;
 use OCP\DB\Exception as DBException;
@@ -39,15 +40,8 @@ class StaticSiteService {
 	 * @throws DBException
 	 */
 	public function create(int $collectiveId, array $pageIds, string $userId, ?string $title = null, ?string $slug = null): StaticSite {
-		$pageIds = array_map(intval(...), $pageIds);
-		if (empty($pageIds)) {
-			throw new UnprocessableEntityException('No pages selected for publishing');
-		}
-
-		$collective = $this->collectiveService->getCollective($collectiveId, $userId);
-		if (!$collective->canEdit()) {
-			throw new NotPermittedException('Not allowed to edit collective');
-		}
+		$pageIds = $this->normalizePageIds($pageIds);
+		$collective = $this->getEditableCollective($collectiveId, $userId);
 
 		$title = trim($title ?? $collective->getName());
 		$slug ??= $this->generateSlug($collective->getName());
@@ -67,6 +61,34 @@ class StaticSiteService {
 	}
 
 	/**
+	 * Update title and page selection of a static site and publish it again.
+	 *
+	 * The slug can't be changed as it is part of the public URL.
+	 *
+	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
+	 *
+	 * @throws NotFoundException Collective, static site or one of the pages not found
+	 * @throws NotPermittedException User is not allowed to edit the collective
+	 * @throws UnprocessableEntityException No pages selected, invalid title or publication in progress
+	 * @throws DBException
+	 */
+	public function update(int $collectiveId, int $id, array $pageIds, string $title, string $userId): StaticSite {
+		$pageIds = $this->normalizePageIds($pageIds);
+		$this->getEditableCollective($collectiveId, $userId);
+
+		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
+		if ($staticSite->isInProgress()) {
+			throw new UnprocessableEntityException('Publication of static site is already in progress');
+		}
+
+		$title = trim($title);
+		$this->validateTitle($title);
+		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
+
+		return $this->staticSiteMapper->republish($staticSite, $title, $pageIds);
+	}
+
+	/**
 	 * @return StaticSite[]
 	 *
 	 * @throws NotFoundException Collective not found
@@ -76,6 +98,31 @@ class StaticSiteService {
 		$this->collectiveService->getCollective($collectiveId, $userId);
 
 		return $this->staticSiteMapper->findByCollectiveId($collectiveId);
+	}
+
+	/**
+	 * @return list<int>
+	 *
+	 * @throws UnprocessableEntityException
+	 */
+	private function normalizePageIds(array $pageIds): array {
+		$pageIds = array_map(intval(...), array_values($pageIds));
+		if (empty($pageIds)) {
+			throw new UnprocessableEntityException('No pages selected for publishing');
+		}
+		return $pageIds;
+	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function getEditableCollective(int $collectiveId, string $userId): Collective {
+		$collective = $this->collectiveService->getCollective($collectiveId, $userId);
+		if (!$collective->canEdit()) {
+			throw new NotPermittedException('Not allowed to edit collective');
+		}
+		return $collective;
 	}
 
 	private function generateSlug(string $name): string {

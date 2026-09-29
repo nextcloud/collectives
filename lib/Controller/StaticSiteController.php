@@ -86,4 +86,31 @@ class StaticSiteController extends OCSController {
 		);
 		return new DataResponse($staticSite);
 	}
+
+	/**
+	 * Update title and page selection of a static site and publish it again
+	 *
+	 * Every call starts a new publication, even if nothing changed. The slug can't be changed.
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the static site
+	 * @param list<int> $pageIds IDs of the pages to publish
+	 * @param string $title Title of the static site
+	 *
+	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>
+	 * @throws OCSBadRequestException No pages selected, invalid title or publication in progress
+	 * @throws OCSForbiddenException Not permitted
+	 * @throws OCSNotFoundException Collective, static site or page not found
+	 *
+	 * 200: Static site updated
+	 */
+	#[NoAdminRequired]
+	public function update(int $collectiveId, int $id, array $pageIds, string $title): DataResponse {
+		$uid = $this->getUid();
+		$staticSite = $this->handleErrorResponse(
+			fn (): StaticSite => $this->staticSiteService->update($collectiveId, $id, $pageIds, $title, $uid),
+			$this->logger,
+		);
+		return new DataResponse($staticSite);
+	}
 }
