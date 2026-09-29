@@ -111,7 +111,7 @@ describe('Page details', function() {
 	})
 
 	it('Lists backlinks for a page', function() {
-		cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
+		cy.intercept('PUT', '**/apps/text/session/**/create').as('textCreateSession')
 		cy.openPage('Day 1')
 		cy.wait('@textCreateSession')
 		cy.get('button.page-sidebar-button').click()
