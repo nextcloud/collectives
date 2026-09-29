@@ -30,10 +30,12 @@ export function getStaticSites(collectiveId) {
  *
  * @param {number} collectiveId Id of the collective
  * @param {number[]} pageIds Ids of the pages to publish
+ * @param {string} title Title of the static site
+ * @param {string} slug Slug of the static site
  */
-export function createStaticSite(collectiveId, pageIds) {
+export function createStaticSite(collectiveId, pageIds, title, slug) {
 	return axios.post(
 		staticSitesApiUrl(collectiveId),
-		{ pageIds },
+		{ pageIds, title, slug },
 	)
 }

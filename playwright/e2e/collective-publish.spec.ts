@@ -58,8 +58,10 @@ test.describe('Collective publish', () => {
 			await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 			await expect(modal).toBeVisible()
 
-			// Escape must also work while the initially focused checkbox has the focus
-			await expect(modal.getByRole('checkbox').first()).toBeFocused()
+			// Escape must also work while a checkbox has the focus
+			const checkbox = modal.getByRole('checkbox').first()
+			await checkbox.focus()
+			await expect(checkbox).toBeFocused()
 			await page.keyboard.press('Escape')
 			await expect(modal).toHaveCount(0)
 		})
@@ -73,8 +75,21 @@ test.describe('Collective publish', () => {
 			await expect(modal).toBeVisible()
 			await expect(modal).toContainText(collective.data.name)
 
+			// Title and web address are prefilled from the collective name
+			const titleField = modal.getByRole('textbox', { name: 'Website title' })
+			const slugField = modal.getByRole('textbox', { name: 'Web address' })
+			const submitButton = modal.getByRole('button', { name: 'Publish website' })
+			await expect(titleField).toHaveValue(collective.data.name)
+			const suggestedSlug = await slugField.inputValue()
+			expect(suggestedSlug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
+
+			// Invalid web address prevents publishing
+			await slugField.fill('Not a valid slug')
+			await expect(submitButton).toBeDisabled()
+			await slugField.fill(suggestedSlug)
+
 			// All pages are pre-selected; click publish
-			await modal.getByRole('button', { name: 'Publish website' }).click()
+			await submitButton.click()
 
 			// The request must reach the backend
 			const response = await (await requestPromise).response()
