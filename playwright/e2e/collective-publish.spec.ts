@@ -31,31 +31,58 @@ test.beforeAll(async () => {
 })
 
 test.describe('Collective publish', () => {
-	test('admin can open publish modal', async ({ collective, navigation, page }) => {
+	test('admin can open the publish modal and publish the collective', async ({ collective, navigation, page }) => {
 		await collective.openCollective()
-		await page.getByRole('button', { name: 'Collective actions' }).click()
-
-		// Publish button is visible for admin
-		const publishButton = page.locator('.action-item__popper:visible')
-			.getByRole('button', { name: 'Publish', exact: true })
-		await expect(publishButton).toBeVisible()
-
-		// Publish modal opens on publish button click
-		await publishButton.click()
 		const modal = page.getByRole('dialog')
-		await expect(modal
-			.filter({ has: page.getByRole('heading', { name: `Publish website for Collective ${collective.data.name}` }) }))
-			.toBeVisible()
 
-		// Modal can be closed
-		await modal.getByRole('button', { name: 'Close' }).click()
-		await expect(modal).toHaveCount(0)
+		await test.step('open and close the publish modal', async () => {
+			await page.getByRole('button', { name: 'Collective actions' }).click()
 
-		// Modal can be opened again
-		await navigation.clickCollectiveMenu(collective.data.name, 'Publish')
-		const reopenedModal = page.getByRole('dialog')
-		await expect(reopenedModal).toBeVisible()
-		await expect(reopenedModal).toContainText(collective.data.name)
+			// Publish button is visible for admin
+			const publishButton = page.locator('.action-item__popper:visible')
+				.getByRole('button', { name: 'Publish website', exact: true })
+			await expect(publishButton).toBeVisible()
+
+			// Publish modal opens on publish button click
+			await publishButton.click()
+			await expect(modal
+				.filter({ has: page.getByRole('heading', { name: `Publish website for Collective ${collective.data.name}` }) }))
+				.toBeVisible()
+
+			// Modal can be closed
+			await modal.getByRole('button', { name: 'Close' }).click()
+			await expect(modal).toHaveCount(0)
+		})
+
+		await test.step('close the publish modal with Escape', async () => {
+			await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+			await expect(modal).toBeVisible()
+
+			// Escape must also work while the initially focused checkbox has the focus
+			await expect(modal.getByRole('checkbox').first()).toBeFocused()
+			await page.keyboard.press('Escape')
+			await expect(modal).toHaveCount(0)
+		})
+
+		await test.step('reopen the publish modal and publish', async () => {
+			// Intercept the API call to verify it is sent and succeeds
+			const requestPromise = page.waitForRequest((req) => req.url().includes('/static-sites') && req.method() === 'POST')
+
+			// Modal can be opened again
+			await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+			await expect(modal).toBeVisible()
+			await expect(modal).toContainText(collective.data.name)
+
+			// All pages are pre-selected; click publish
+			await modal.getByRole('button', { name: 'Publish website' }).click()
+
+			// The request must reach the backend
+			const response = await (await requestPromise).response()
+			expect(response?.status()).toBe(200)
+
+			// Modal closes after successful submission
+			await expect(modal).toHaveCount(0)
+		})
 	})
 
 	test('regular members cannot see publish button', async ({ collective, member }) => {
@@ -68,31 +95,7 @@ test.describe('Collective publish', () => {
 		const actionsMenu = member.page.locator('.action-item__popper:visible')
 		await expect(actionsMenu).toBeVisible()
 
-		const publishButton = actionsMenu.getByRole('button', { name: 'Publish', exact: true })
+		const publishButton = actionsMenu.getByRole('button', { name: 'Publish website', exact: true })
 		await expect(publishButton).toHaveCount(0)
-	})
-
-	test('clicking "Publish as Website" closes the modal and creates a static site record', async ({ collective, navigation, page }) => {
-		await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true'])
-		await collective.openCollective()
-		await waitForPublishEnabledState(page, true)
-
-		// Intercept the API call to verify it is sent and succeeds
-		const requestPromise = page.waitForRequest((req) => req.url().includes('/static-sites') && req.method() === 'POST')
-
-		await navigation.clickCollectiveMenu(collective.data.name, 'Publish')
-		const modal = page.getByRole('dialog')
-		await expect(modal).toBeVisible()
-
-		// All pages are pre-selected; click publish
-		await modal.getByRole('button', { name: 'Publish as Website' }).click()
-
-		// The request must reach the backend
-		const request = await requestPromise
-		const response = await request.response()
-		expect(response?.status()).toBe(200)
-
-		// Modal closes after successful submission
-		await expect(modal).toHaveCount(0)
 	})
 })

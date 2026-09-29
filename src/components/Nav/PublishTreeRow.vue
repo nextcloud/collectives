@@ -22,7 +22,6 @@
 		<span v-else class="publish-tree-row__expand-spacer" />
 		<NcCheckboxRadioSwitch
 			:modelValue="selected"
-			:indeterminate="indeterminate"
 			class="publish-tree-row__checkbox"
 			@update:modelValue="$emit('update:selected', $event)">
 			<span class="publish-tree-row__icon">
@@ -65,11 +64,6 @@ export default {
 		},
 
 		selected: {
-			type: Boolean,
-			default: false,
-		},
-
-		indeterminate: {
 			type: Boolean,
 			default: false,
 		},
