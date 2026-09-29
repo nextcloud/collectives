@@ -245,6 +245,116 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->create($this->collectiveId, [1], $this->userId);
 	}
 
+	// --- update() ---
+
+	private function makeStaticSite(string $status): StaticSite {
+		$staticSite = new StaticSite();
+		$staticSite->setId(7);
+		$staticSite->setCollectiveId($this->collectiveId);
+		$staticSite->setSlug('my-collective');
+		$staticSite->setStatus($status);
+		return $staticSite;
+	}
+
+	public static function finishedStatusProvider(): array {
+		return [
+			'published' => [StaticSite::STATUS_PUBLISHED],
+			'failed' => [StaticSite::STATUS_FAILED],
+		];
+	}
+
+	/**
+	 * @dataProvider finishedStatusProvider
+	 */
+	public function testUpdateRepublishesFinishedStaticSite(string $status): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite($status);
+
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')
+			->with(7, $this->collectiveId)
+			->willReturn($staticSite);
+		$this->staticSiteMapper->expects($this->once())
+			->method('republish')
+			->with($staticSite, 'New Title', [1])
+			->willReturn($staticSite);
+
+		$result = $this->service->update($this->collectiveId, 7, ['1'], ' New Title ', $this->userId);
+
+		$this->assertSame($staticSite, $result);
+	}
+
+	public static function inProgressStatusProvider(): array {
+		return [
+			'pending' => [StaticSite::STATUS_PENDING],
+			'provided' => [StaticSite::STATUS_PROVIDED],
+			'fetched' => [StaticSite::STATUS_FETCHED],
+		];
+	}
+
+	/**
+	 * @dataProvider inProgressStatusProvider
+	 */
+	public function testUpdateRejectsStaticSiteInProgress(string $status): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite($status));
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('republish');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	public function testUpdateThrowsWhenNoPageIdsGiven(): void {
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('republish');
+
+		$this->service->update($this->collectiveId, 7, [], 'Title', $this->userId);
+	}
+
+	public function testUpdateThrowsWhenUserCannotEdit(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: false));
+
+		$this->expectException(NotPermittedException::class);
+		$this->staticSiteMapper->expects($this->never())->method('findByIdAndCollectiveId');
+		$this->staticSiteMapper->expects($this->never())->method('republish');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	public function testUpdateThrowsWhenStaticSiteNotInCollective(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')
+			->willThrowException(new NotFoundException('Static site not found'));
+
+		$this->expectException(NotFoundException::class);
+		$this->staticSiteMapper->expects($this->never())->method('republish');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	/**
+	 * @dataProvider invalidTitleProvider
+	 */
+	public function testUpdateRejectsInvalidTitle(string $title): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('republish');
+
+		$this->service->update($this->collectiveId, 7, [1], $title, $this->userId);
+	}
+
+	public function testUpdateRejectsPageIdsFromOtherCollective(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+
+		$this->expectException(NotFoundException::class);
+		$this->staticSiteMapper->expects($this->never())->method('republish');
+
+		$this->service->update($this->collectiveId, 7, [1, 99], 'Title', $this->userId);
+	}
+
 	// --- getStaticSites() ---
 
 	public function testGetStaticSitesReturnsListForAccessibleCollective(): void {
