@@ -12,6 +12,20 @@
 			<h2 class="modal-publish__name">
 				{{ t('collectives', 'Publish website for collective {name}', { name: collective.name }) }}
 			</h2>
+			<div class="modal-publish__fields">
+				<NcTextField
+					v-model="title"
+					:label="t('collectives', 'Website title')"
+					:error="!isTitleValid"
+					:maxlength="titleMaxLength" />
+				<!-- TRANSLATORS The web address is the part of the website URL that identifies the published collective -->
+				<NcTextField
+					v-model="slug"
+					:label="t('collectives', 'Web address')"
+					:error="!isSlugValid"
+					:helperText="t('collectives', 'Lowercase letters, numbers and single hyphens')"
+					:maxlength="slugMaxLength" />
+			</div>
 			<ul class="modal-publish__tree">
 				<li v-if="rootPage" class="modal-publish__collective-row">
 					<PublishTreeRow
@@ -39,7 +53,7 @@
 				<NcButton
 					variant="primary"
 					:loading="publishing"
-					:disabled="publishing"
+					:disabled="publishing || !isTitleValid || !isSlugValid"
 					@click="onPublishAsWebsite">
 					{{ t('collectives', 'Publish website') }}
 				</NcButton>
@@ -54,11 +68,16 @@ import { t } from '@nextcloud/l10n'
 import { mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PublishPageTreeItem from './PublishPageTreeItem.vue'
 import PublishTreeRow from './PublishTreeRow.vue'
 import { createStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
+import displayError from '../../util/displayError.js'
+import { generateSlug, isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
+
+const TITLE_MAX_LENGTH = 255
 
 export default {
 	name: 'CollectivePublishModal',
@@ -66,6 +85,7 @@ export default {
 	components: {
 		NcButton,
 		NcModal,
+		NcTextField,
 		PageTemplateIcon,
 		PublishPageTreeItem,
 		PublishTreeRow,
@@ -87,6 +107,10 @@ export default {
 			selectedPageIds: new Set(),
 			expandedPageIds: new Set(),
 			publishing: false,
+			title: this.collective.name,
+			slug: generateSlug(this.collective.name),
+			titleMaxLength: TITLE_MAX_LENGTH,
+			slugMaxLength: SLUG_MAX_LENGTH,
 		}
 	},
 
@@ -113,6 +137,15 @@ export default {
 
 		isRootPageSelected() {
 			return !!this.rootPage && this.selectedPageIds.has(this.rootPage.id)
+		},
+
+		isTitleValid() {
+			const length = this.title.trim().length
+			return length > 0 && length <= TITLE_MAX_LENGTH
+		},
+
+		isSlugValid() {
+			return isValidSlug(this.slug)
 		},
 
 	},
@@ -178,14 +211,11 @@ export default {
 			}
 
 			this.publishing = true
-			createStaticSite(this.collective.id, pageIds)
+			createStaticSite(this.collective.id, pageIds, this.title.trim(), this.slug)
 				.then(() => {
 					this.onClose()
 				})
-				.catch((error) => {
-					console.error('Could not publish collective as website', error)
-					showError(t('collectives', 'Could not publish collective as website'))
-				})
+				.catch(displayError('Could not publish collective as website'))
 				.finally(() => {
 					this.publishing = false
 				})
@@ -218,6 +248,13 @@ export default {
 	&__name {
 		font-size: 21px;
 		text-align: center;
+	}
+
+	&__fields {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding-block-end: 8px;
 	}
 
 	&__tree {
