@@ -13,23 +13,30 @@ use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Db\StaticSiteMapper;
 
 class StaticSiteService {
+	private const TITLE_MAX_LENGTH = 255;
+	private const SLUG_MAX_LENGTH = 64;
+	private const SLUG_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
+
 	public function __construct(
 		private readonly StaticSiteMapper $staticSiteMapper,
 		private readonly CollectiveService $collectiveService,
 		private readonly PageService $pageService,
+		private readonly SlugService $slugService,
 	) {
 	}
 
 	/**
 	 * Create a selection of pages of a collective as a static site.
 	 *
+	 * Title and slug default to the collective name.
+	 *
 	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected
+	 * @throws UnprocessableEntityException No pages selected, invalid title or slug
 	 */
-	public function create(int $collectiveId, array $pageIds, string $userId): StaticSite {
+	public function create(int $collectiveId, array $pageIds, string $userId, ?string $title = null, ?string $slug = null): StaticSite {
 		$pageIds = array_map(intval(...), $pageIds);
 		if (empty($pageIds)) {
 			throw new UnprocessableEntityException('No pages selected for publishing');
@@ -40,9 +47,14 @@ class StaticSiteService {
 			throw new NotPermittedException('Not allowed to edit collective');
 		}
 
+		$title = trim($title ?? $collective->getName());
+		$slug ??= $this->generateSlug($collective->getName());
+		$this->validateTitle($title);
+		$this->validateSlug($slug);
+
 		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
 
-		return $this->staticSiteMapper->create($collectiveId, $pageIds, $userId);
+		return $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId);
 	}
 
 	/**
@@ -55,6 +67,29 @@ class StaticSiteService {
 		$this->collectiveService->getCollective($collectiveId, $userId);
 
 		return $this->staticSiteMapper->findByCollectiveId($collectiveId);
+	}
+
+	private function generateSlug(string $name): string {
+		$slug = strtolower($this->slugService->generateSlug($name));
+		return trim(substr($slug, 0, self::SLUG_MAX_LENGTH), '-');
+	}
+
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	private function validateTitle(string $title): void {
+		if ($title === '' || mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new UnprocessableEntityException('Title must be between 1 and ' . self::TITLE_MAX_LENGTH . ' characters');
+		}
+	}
+
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	private function validateSlug(string $slug): void {
+		if (strlen($slug) > self::SLUG_MAX_LENGTH || !preg_match(self::SLUG_PATTERN, $slug)) {
+			throw new UnprocessableEntityException('Slug must consist of 1 to ' . self::SLUG_MAX_LENGTH . ' lowercase ASCII letters and numbers, separated by single hyphens');
+		}
 	}
 
 	/**

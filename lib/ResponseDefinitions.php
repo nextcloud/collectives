@@ -48,6 +48,8 @@ namespace OCA\Collectives;
  *     id: int,
  *     collectiveId: int,
  *     staticSiteId: string,
+ *     title: string,
+ *     slug: string,
  *     selectedPageIds: list<int>,
  *     publishedUrl: ?string,
  *     status: string,

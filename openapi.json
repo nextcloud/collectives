@@ -338,6 +338,8 @@
                     "id",
                     "collectiveId",
                     "staticSiteId",
+                    "title",
+                    "slug",
                     "selectedPageIds",
                     "publishedUrl",
                     "status",
@@ -355,6 +357,12 @@
                         "format": "int64"
                     },
                     "staticSiteId": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "slug": {
                         "type": "string"
                     },
                     "selectedPageIds": {
@@ -3791,6 +3799,18 @@
                                             "type": "integer",
                                             "format": "int64"
                                         }
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Title of the static site, defaults to the collective name"
+                                    },
+                                    "slug": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the slugified collective name"
                                     }
                                 }
                             }
@@ -3863,7 +3883,7 @@
                         }
                     },
                     "400": {
-                        "description": "No pages selected",
+                        "description": "No pages selected, invalid title or slug",
                         "content": {
                             "application/json": {
                                 "schema": {
