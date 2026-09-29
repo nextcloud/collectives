@@ -68,6 +68,7 @@ class Version040602Date20260908000000 extends SimpleMigrationStep {
 			$table->setPrimaryKey(['id']);
 			$table->addIndex(['collective_id'], 'collectives_static_site_c_id_idx');
 			$table->addUniqueIndex(['static_site_id'], 'collectives_static_site_ssid_idx');
+			$table->addUniqueIndex(['slug'], 'collectives_static_site_slug_idx');
 			return $schema;
 		}
 

@@ -20,6 +20,7 @@ use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SlugService;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\DB\Exception as DBException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Test\TestCase;
@@ -218,6 +219,30 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('create');
 
 		$this->service->create($this->collectiveId, [1], $this->userId, null, $slug);
+	}
+
+	public function testPublishThrowsWhenSlugAlreadyInUse(): void {
+		$this->expectValidCollectiveWithPages();
+
+		$dbException = $this->createMock(DBException::class);
+		$dbException->method('getReason')->willReturn(DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION);
+		$this->staticSiteMapper->method('create')->willThrowException($dbException);
+
+		$this->expectException(UnprocessableEntityException::class);
+
+		$this->service->create($this->collectiveId, [1], $this->userId, null, 'taken');
+	}
+
+	public function testPublishRethrowsOtherDatabaseErrors(): void {
+		$this->expectValidCollectiveWithPages();
+
+		$dbException = $this->createMock(DBException::class);
+		$dbException->method('getReason')->willReturn(DBException::REASON_DRIVER);
+		$this->staticSiteMapper->method('create')->willThrowException($dbException);
+
+		$this->expectException(DBException::class);
+
+		$this->service->create($this->collectiveId, [1], $this->userId);
 	}
 
 	// --- getStaticSites() ---

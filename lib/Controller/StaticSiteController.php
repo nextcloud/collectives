@@ -71,7 +71,7 @@ class StaticSiteController extends OCSController {
 	 * @param ?string $slug Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the slugified collective name
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>
-	 * @throws OCSBadRequestException No pages selected, invalid title or slug
+	 * @throws OCSBadRequestException No pages selected, invalid title or slug, slug already in use
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
 	 *
