@@ -3883,7 +3883,7 @@
                         }
                     },
                     "400": {
-                        "description": "No pages selected, invalid title or slug",
+                        "description": "No pages selected, invalid title or slug, slug already in use",
                         "content": {
                             "application/json": {
                                 "schema": {

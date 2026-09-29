@@ -11,6 +11,7 @@ namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Db\StaticSiteMapper;
+use OCP\DB\Exception as DBException;
 
 class StaticSiteService {
 	private const TITLE_MAX_LENGTH = 255;
@@ -34,7 +35,8 @@ class StaticSiteService {
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected, invalid title or slug
+	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, slug already in use
+	 * @throws DBException
 	 */
 	public function create(int $collectiveId, array $pageIds, string $userId, ?string $title = null, ?string $slug = null): StaticSite {
 		$pageIds = array_map(intval(...), $pageIds);
@@ -54,7 +56,14 @@ class StaticSiteService {
 
 		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
 
-		return $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId);
+		try {
+			return $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId);
+		} catch (DBException $e) {
+			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw $e;
+			}
+			throw new UnprocessableEntityException('Slug is already in use: ' . $slug, 0, $e);
+		}
 	}
 
 	/**
