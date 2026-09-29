@@ -29,10 +29,10 @@ use OCP\AppFramework\Db\Entity;
  * @method void setStatus(string $value)
  * @method string getCreatedBy()
  * @method void setCreatedBy(string $value)
- * @method int getCreated()
- * @method void setCreated(int $value)
- * @method int getLastUpdated()
- * @method void setLastUpdated(int $value)
+ * @method int getCreatedAt()
+ * @method void setCreatedAt(int $value)
+ * @method int getUpdatedAt()
+ * @method void setUpdatedAt(int $value)
  */
 class StaticSite extends Entity implements JsonSerializable {
 	public const STATUS_PENDING = 'pending';
@@ -47,8 +47,8 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?string $publishedUrl = null;
 	protected string $status = self::STATUS_PENDING;
 	protected ?string $createdBy = null;
-	protected ?int $created = null;
-	protected ?int $lastUpdated = null;
+	protected ?int $createdAt = null;
+	protected ?int $updatedAt = null;
 
 	public function getSelectedPageIds(): array {
 		return json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);
@@ -67,8 +67,8 @@ class StaticSite extends Entity implements JsonSerializable {
 			'publishedUrl' => $this->publishedUrl,
 			'status' => $this->status,
 			'createdBy' => $this->createdBy,
-			'created' => $this->created,
-			'lastUpdated' => $this->lastUpdated,
+			'createdAt' => $this->createdAt,
+			'updatedAt' => $this->updatedAt,
 		];
 	}
 }

@@ -52,8 +52,8 @@ namespace OCA\Collectives;
  *     publishedUrl: ?string,
  *     status: string,
  *     createdBy: string,
- *     created: int,
- *     lastUpdated: int,
+ *     createdAt: int,
+ *     updatedAt: int,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{
