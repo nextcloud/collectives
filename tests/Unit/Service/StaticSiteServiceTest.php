@@ -355,6 +355,47 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->update($this->collectiveId, 7, [1, 99], 'Title', $this->userId);
 	}
 
+	// --- delete() ---
+
+	/**
+	 * @dataProvider finishedStatusProvider
+	 * @dataProvider inProgressStatusProvider
+	 */
+	public function testDeleteRemovesStaticSite(string $status): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$staticSite = $this->makeStaticSite($status);
+
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')
+			->with(7, $this->collectiveId)
+			->willReturn($staticSite);
+		$this->staticSiteMapper->expects($this->once())
+			->method('delete')
+			->with($staticSite);
+
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
+	public function testDeleteThrowsWhenUserCannotEdit(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: false));
+
+		$this->expectException(NotPermittedException::class);
+		$this->staticSiteMapper->expects($this->never())->method('findByIdAndCollectiveId');
+		$this->staticSiteMapper->expects($this->never())->method('delete');
+
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
+	public function testDeleteThrowsWhenStaticSiteNotInCollective(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')
+			->willThrowException(new NotFoundException('Static site not found'));
+
+		$this->expectException(NotFoundException::class);
+		$this->staticSiteMapper->expects($this->never())->method('delete');
+
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
 	// --- getStaticSites() ---
 
 	public function testGetStaticSitesReturnsListForAccessibleCollective(): void {

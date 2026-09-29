@@ -74,6 +74,8 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 		['name' => 'static_site#update', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'static_site#delete', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 
 		// Pages search API
 		['name' => 'search#searchRecentPages', 'url' => '/api/v{apiVersion}/collectives/search/recent', 'verb' => 'GET',
