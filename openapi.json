@@ -342,8 +342,8 @@
                     "publishedUrl",
                     "status",
                     "createdBy",
-                    "created",
-                    "lastUpdated"
+                    "createdAt",
+                    "updatedAt"
                 ],
                 "properties": {
                     "id": {
@@ -374,11 +374,11 @@
                     "createdBy": {
                         "type": "string"
                     },
-                    "created": {
+                    "createdAt": {
                         "type": "integer",
                         "format": "int64"
                     },
-                    "lastUpdated": {
+                    "updatedAt": {
                         "type": "integer",
                         "format": "int64"
                     }

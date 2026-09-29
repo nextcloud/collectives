@@ -51,10 +51,10 @@ class Version040602Date20260908000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('created', Types::BIGINT, [
+			$table->addColumn('created_at', Types::BIGINT, [
 				'notnull' => true,
 			]);
-			$table->addColumn('last_updated', Types::BIGINT, [
+			$table->addColumn('updated_at', Types::BIGINT, [
 				'notnull' => true,
 			]);
 			$table->setPrimaryKey(['id']);

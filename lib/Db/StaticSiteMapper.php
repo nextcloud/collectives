@@ -21,7 +21,7 @@ use OCP\IDBConnection;
 use Symfony\Component\Uid\Uuid;
 
 /**
-s * @method StaticSite insert(Entity $staticSite)
+ * @method StaticSite insert(Entity $staticSite)
  * @method StaticSite update(Entity $staticSite)
  * @method StaticSite delete(Entity $staticSite)
  * @method StaticSite findEntity(IQueryBuilder $query)
@@ -45,7 +45,7 @@ class StaticSiteMapper extends QBMapper {
 			->where(
 				$qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT))
 			)
-			->orderBy('created', 'DESC');
+			->orderBy('created_at', 'DESC');
 		return $this->findEntities($qb);
 	}
 
@@ -78,8 +78,8 @@ class StaticSiteMapper extends QBMapper {
 		$staticSite->setSelectedPageIds($pageIds);
 		$staticSite->setStatus(StaticSite::STATUS_PENDING);
 		$staticSite->setCreatedBy($createdBy);
-		$staticSite->setCreated($now);
-		$staticSite->setLastUpdated($now);
+		$staticSite->setCreatedAt($now);
+		$staticSite->setUpdatedAt($now);
 
 		return $this->insert($staticSite);
 	}
@@ -96,7 +96,7 @@ class StaticSiteMapper extends QBMapper {
 		}
 
 		$staticSite->setStatus($status);
-		$staticSite->setLastUpdated($this->timeFactory->getTime());
+		$staticSite->setUpdatedAt($this->timeFactory->getTime());
 		return $this->update($staticSite);
 	}
 
@@ -112,7 +112,7 @@ class StaticSiteMapper extends QBMapper {
 		}
 
 		$staticSite->setPublishedUrl($publishedUrl);
-		$staticSite->setLastUpdated($this->timeFactory->getTime());
+		$staticSite->setUpdatedAt($this->timeFactory->getTime());
 		return $this->update($staticSite);
 	}
 
@@ -131,3 +131,4 @@ class StaticSiteMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 }
+
