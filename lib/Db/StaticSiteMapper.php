@@ -74,7 +74,7 @@ class StaticSiteMapper extends QBMapper {
 
 		$staticSite = new StaticSite();
 		$staticSite->setCollectiveId($collectiveId);
-		$staticSite->setStaticSiteId(Uuid::v4()->toRfc4122());
+		$staticSite->setStaticSiteId(Uuid::v7()->toRfc4122());
 		$staticSite->setSelectedPageIds($pageIds);
 		$staticSite->setStatus(StaticSite::STATUS_PENDING);
 		$staticSite->setCreatedBy($createdBy);
