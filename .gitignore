@@ -3,6 +3,9 @@ node_modules/
 /vendor/
 /vendor-bin/*/vendor
 
+# Development tools
+dev-tools
+
 # Editor directories and files
 .idea/
 
@@ -25,3 +28,6 @@ cypress/videos/
 # Playwright test artifacts
 /playwright-report/
 /test-results/
+
+# AI
+CLAUDE.md
