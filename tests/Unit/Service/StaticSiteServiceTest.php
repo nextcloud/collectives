@@ -19,6 +19,7 @@ use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\AppFramework\Db\DoesNotExistException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -169,5 +170,69 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('findByCollectiveId');
 
 		$this->service->getStaticSites($this->collectiveId, $this->userId);
+	}
+
+	// --- updateStatus() ---
+
+	public function testUpdateStatusUpdatesStatus(): void {
+		$staticSiteId = 'a-uuid';
+		$found = $this->createMock(StaticSite::class);
+		$found->method('getId')->willReturn(7);
+		$updated = new StaticSite();
+
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->with($staticSiteId)
+			->willReturn($found);
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatus')
+			->with(7, StaticSite::STATUS_FETCHED)
+			->willReturn($updated);
+		$this->staticSiteMapper->expects($this->never())->method('updatePublishedUrl');
+
+		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_FETCHED);
+
+		$this->assertSame($updated, $result);
+	}
+
+	public function testUpdateStatusAlsoUpdatesPublishedUrlWhenGiven(): void {
+		$staticSiteId = 'a-uuid';
+		$found = $this->createMock(StaticSite::class);
+		$found->method('getId')->willReturn(7);
+		$afterStatus = $this->createMock(StaticSite::class);
+		$afterStatus->method('getId')->willReturn(7);
+		$afterUrl = new StaticSite();
+
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->with($staticSiteId)
+			->willReturn($found);
+		$this->staticSiteMapper->method('updateStatus')
+			->with(7, StaticSite::STATUS_PUBLISHED)
+			->willReturn($afterStatus);
+		$this->staticSiteMapper->expects($this->once())
+			->method('updatePublishedUrl')
+			->with(7, 'https://example.org/site')
+			->willReturn($afterUrl);
+
+		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, 'https://example.org/site');
+
+		$this->assertSame($afterUrl, $result);
+	}
+
+	public function testUpdateStatusThrowsWhenStaticSiteNotFound(): void {
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->willThrowException(new DoesNotExistException('not found'));
+
+		$this->expectException(NotFoundException::class);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatus');
+
+		$this->service->updateStatus('unknown-uuid', StaticSite::STATUS_FETCHED);
+	}
+
+	public function testUpdateStatusThrowsForInvalidStatus(): void {
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('findOneByStaticSiteId');
+		$this->staticSiteMapper->expects($this->never())->method('updateStatus');
+
+		$this->service->updateStatus('a-uuid', 'not-a-real-status');
 	}
 }

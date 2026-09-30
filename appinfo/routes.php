@@ -234,5 +234,9 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'publicTag#delete', 'url' => '/api/v{apiVersion}/p/collectives/{token}/tags/{id}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
+		// Public static site API (used by the external static site builder service)
+		['name' => 'publicStaticSite#updateStatus', 'url' => '/api/v{apiVersion}/p/static-sites/{staticSiteId}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)']],
 	]
 ];

@@ -11,8 +11,18 @@ namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Db\StaticSiteMapper;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 
 class StaticSiteService {
+	private const ALLOWED_STATUSES = [
+		StaticSite::STATUS_PENDING,
+		StaticSite::STATUS_PROVIDED,
+		StaticSite::STATUS_FETCHED,
+		StaticSite::STATUS_PUBLISHED,
+		StaticSite::STATUS_FAILED,
+	];
+
 	public function __construct(
 		private readonly StaticSiteMapper $staticSiteMapper,
 		private readonly CollectiveService $collectiveService,
@@ -55,6 +65,34 @@ class StaticSiteService {
 		$this->collectiveService->getCollective($collectiveId, $userId);
 
 		return $this->staticSiteMapper->findByCollectiveId($collectiveId);
+	}
+
+	/**
+	 * Update status (and optionally published URL) of a static site export.
+	 *
+	 * Called back by the external service building the static site, identifying the
+	 * export by its unguessable `staticSiteId` rather than a logged-in user.
+	 *
+	 * @throws NotFoundException Static site not found
+	 * @throws UnprocessableEntityException Invalid status
+	 */
+	public function updateStatus(string $staticSiteId, string $status, ?string $publishedUrl = null): StaticSite {
+		if (!in_array($status, self::ALLOWED_STATUSES, true)) {
+			throw new UnprocessableEntityException('Invalid status: ' . $status);
+		}
+
+		try {
+			$staticSite = $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
+		}
+
+		$staticSite = $this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
+		if ($publishedUrl !== null) {
+			$staticSite = $this->staticSiteMapper->updatePublishedUrl($staticSite->getId(), $publishedUrl);
+		}
+
+		return $staticSite;
 	}
 
 	/**
