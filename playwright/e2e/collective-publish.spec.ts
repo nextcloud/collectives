@@ -127,6 +127,55 @@ test.describe('Collective publish', () => {
 		await expect(titleField).toHaveValue('My website')
 	})
 
+	test('shows the published URL in the modal if the collective is already published', async ({ collective, navigation, page }) => {
+		const publishedUrl = 'https://example.org/published-site'
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [{ id: 1, publishedUrl }] } } })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await expect(modal.getByRole('link', { name: publishedUrl })).toBeVisible()
+	})
+
+	test('shows a toast once the published URL arrives, without the modal being open', async ({ collective, navigation, page }) => {
+		// Polling for the published URL takes a few seconds
+		test.slow()
+
+		const publishedUrl = 'https://example.org/freshly-published'
+		let publishedStaticSite: object | null = null
+		await page.route('**/static-sites', async (route) => {
+			const request = route.request()
+			if (request.method() === 'POST') {
+				// The publish service isn't part of this environment, so its result is mocked
+				const response = await route.fetch()
+				const staticSite = (await response.json()).ocs.data
+				publishedStaticSite = { ...staticSite, status: 'published', publishedUrl }
+				return route.fulfill({ response })
+			}
+			if (request.method() !== 'GET') {
+				return route.fallback()
+			}
+			const data = publishedStaticSite ? [publishedStaticSite] : []
+			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data } } })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await modal.getByRole('textbox', { name: 'Website title' }).fill('My website')
+		await modal.getByRole('button', { name: 'Publish website' }).click()
+		await expect(modal).toHaveCount(0)
+
+		// The published URL arrives in the background, no modal involved
+		await expect(page.locator('.toast-success').filter({ hasText: publishedUrl }))
+			.toContainText(`Website "My website" published at ${publishedUrl}`, { timeout: 45_000 })
+	})
+
 	test('regular members cannot see publish button', async ({ collective, member }) => {
 		await member.page.goto(`/index.php/apps/collectives/${collective.getCollectiveUrlPart()}`)
 
