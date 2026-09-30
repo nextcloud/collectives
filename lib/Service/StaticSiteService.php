@@ -30,6 +30,10 @@ class StaticSiteService {
 	private const SLUG_MAX_LENGTH = 64;
 	private const SLUG_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
 	private const LARGEST_FILES_IN_MESSAGE = 3;
+	private const ALLOWED_CALLBACK_STATUSES = [
+		StaticSite::STATUS_PUBLISHED,
+		StaticSite::STATUS_FAILED,
+	];
 
 	public function __construct(
 		private readonly StaticSiteMapper $staticSiteMapper,
@@ -189,6 +193,55 @@ class StaticSiteService {
 	}
 
 	/**
+	 * Called back by the external static site generator once publishing finished, identified by the unguessable
+	 * `staticSiteId` rather than a logged-in user (no bearer token so far). Only applied while
+	 * the build is still pending (status "provided"); late/duplicate callbacks are ignored,
+	 * though this can't distinguish a very late callback from a coincidentally-pending rebuild.
+	 *
+	 * @param array{publish_url?: string, error_message?: string} $data
+	 *
+	 * @throws NotFoundException Static site not found
+	 * @throws UnprocessableEntityException Invalid status
+	 * @throws DBException
+	 */
+	public function updateStatus(string $staticSiteId, string $status, array $data = []): StaticSite {
+		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
+			throw new UnprocessableEntityException('Invalid status: ' . $status);
+		}
+
+		try {
+			$staticSite = $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
+		}
+
+		if ($staticSite->getStatus() !== StaticSite::STATUS_PROVIDED) {
+			$this->logger->warning('Ignoring static site status callback for status ' . $staticSite->getStatus(), ['staticSiteId' => $staticSiteId]);
+			return $staticSite;
+		}
+
+		$staticSite = $this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
+
+		if ($status === StaticSite::STATUS_PUBLISHED && isset($data['publish_url'])) {
+			if ($this->isValidPublishUrl($data['publish_url'])) {
+				$staticSite = $this->staticSiteMapper->updatePublishedUrl($staticSite->getId(), $data['publish_url']);
+			} else {
+				$this->logger->warning('Ignoring static site publish callback with invalid publish_url', ['staticSiteId' => $staticSiteId]);
+			}
+		}
+
+		if ($status === StaticSite::STATUS_PUBLISHED) {
+			$this->deleteArchive($staticSite);
+		}
+
+		if ($status === StaticSite::STATUS_FAILED && isset($data['error_message'])) {
+			$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
+		}
+
+		return $staticSite;
+	}
+
+	/**
 	 * @throws UnprocessableEntityException Content can't be stored in the archive, e.g. too large or a path is too long
 	 * @throws ServiceException
 	 */
@@ -328,6 +381,10 @@ class StaticSiteService {
 		if (strlen($slug) > self::SLUG_MAX_LENGTH || !preg_match(self::SLUG_PATTERN, $slug)) {
 			throw new UnprocessableEntityException('Slug must consist of 1 to ' . self::SLUG_MAX_LENGTH . ' lowercase ASCII letters and numbers, separated by single hyphens');
 		}
+	}
+
+	private function isValidPublishUrl(string $url): bool {
+		return in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true);
 	}
 
 	/**

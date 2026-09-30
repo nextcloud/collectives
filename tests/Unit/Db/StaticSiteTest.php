@@ -30,7 +30,9 @@ class StaticSiteTest extends TestCase {
 			'recent pending' => [StaticSite::STATUS_PENDING, $now - 60, $now, true],
 			'pending at timeout' => [StaticSite::STATUS_PENDING, $now - StaticSite::PENDING_TIMEOUT, $now, true],
 			'aborted pending' => [StaticSite::STATUS_PENDING, $now - StaticSite::PENDING_TIMEOUT - 1, $now, false],
-			'provided' => [StaticSite::STATUS_PROVIDED, $now - 60, $now, false],
+			'provided' => [StaticSite::STATUS_PROVIDED, $now - 60, $now, true],
+			'provided at timeout' => [StaticSite::STATUS_PROVIDED, $now - StaticSite::PENDING_TIMEOUT, $now, true],
+			'aborted provided' => [StaticSite::STATUS_PROVIDED, $now - StaticSite::PENDING_TIMEOUT - 1, $now, false],
 			'published' => [StaticSite::STATUS_PUBLISHED, $now - 60, $now, false],
 			'failed' => [StaticSite::STATUS_FAILED, $now - 60, $now, false],
 		];
