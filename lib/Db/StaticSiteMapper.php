@@ -32,7 +32,7 @@ class StaticSiteMapper extends QBMapper {
 		IDBConnection $db,
 		private readonly ITimeFactory $timeFactory,
 	) {
-		parent::__construct($db, 'collectives_static_sites', StaticSite::class);
+		parent::__construct($db, 'collectives_st_sites', StaticSite::class);
 	}
 
 	/**
