@@ -246,7 +246,7 @@
         },
         {
             "name": "static_site_generator",
-            "description": "Provides admins access to the external static site generator."
+            "description": "Provides the external static site generator access to health checks and its build-status callback."
         },
         {
             "name": "search",

@@ -322,7 +322,6 @@ class StaticSiteServiceTest extends TestCase {
 
 	public static function finishedStatusProvider(): array {
 		return [
-			'provided' => [StaticSite::STATUS_PROVIDED],
 			'published' => [StaticSite::STATUS_PUBLISHED],
 			'failed' => [StaticSite::STATUS_FAILED],
 		];
@@ -368,9 +367,19 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
 
-	public function testUpdateRejectsStaticSiteInProgress(): void {
+	public static function inProgressStatusProvider(): array {
+		return [
+			'pending' => [StaticSite::STATUS_PENDING],
+			'provided' => [StaticSite::STATUS_PROVIDED],
+		];
+	}
+
+	/**
+	 * @dataProvider inProgressStatusProvider
+	 */
+	public function testUpdateRejectsStaticSiteInProgress(string $status): void {
 		$this->expectValidCollectiveWithPages();
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite($status));
 
 		$this->expectException(UnprocessableEntityException::class);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
@@ -779,5 +788,139 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->expectException(NotFoundException::class);
 		$this->service->getArchive($this->staticSiteId);
+	}
+
+	// --- updateStatus() ---
+
+	public function testUpdateStatusUpdatesPublishedUrlOnPublished(): void {
+		$staticSiteId = 'a-uuid';
+		$found = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
+		$afterStatus = new StaticSite();
+		$afterStatus->setId(7);
+		$afterUrl = new StaticSite();
+		$afterUrl->setStaticSiteId($staticSiteId);
+
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->with($staticSiteId)
+			->willReturn($found);
+		$this->staticSiteMapper->method('updateStatus')
+			->with(7, StaticSite::STATUS_PUBLISHED)
+			->willReturn($afterStatus);
+		$this->staticSiteMapper->expects($this->once())
+			->method('updatePublishedUrl')
+			->with(7, 'https://publish.schnubbel.com/publish/a-uuid')
+			->willReturn($afterUrl);
+		$this->archiver->expects($this->once())
+			->method('delete')
+			->with($staticSiteId);
+
+		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://publish.schnubbel.com/publish/a-uuid']);
+
+		$this->assertSame($afterUrl, $result);
+	}
+
+	public function testUpdateStatusIgnoresPublishUrlWithNonHttpScheme(): void {
+		$staticSiteId = 'a-uuid';
+		$found = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
+		$afterStatus = new StaticSite();
+		$afterStatus->setId(7);
+		$afterStatus->setStaticSiteId($staticSiteId);
+
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->with($staticSiteId)
+			->willReturn($found);
+		$this->staticSiteMapper->method('updateStatus')
+			->with(7, StaticSite::STATUS_PUBLISHED)
+			->willReturn($afterStatus);
+		$this->staticSiteMapper->expects($this->never())->method('updatePublishedUrl');
+		$this->archiver->expects($this->once())
+			->method('delete')
+			->with($staticSiteId);
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with($this->stringContains('invalid publish_url'));
+
+		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'javascript:alert(1)']);
+
+		$this->assertSame($afterStatus, $result);
+	}
+
+	public function testUpdateStatusLogsErrorMessageOnFailed(): void {
+		$staticSiteId = 'a-uuid';
+		$found = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
+		$updated = new StaticSite();
+
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->with($staticSiteId)
+			->willReturn($found);
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatus')
+			->with(7, StaticSite::STATUS_FAILED)
+			->willReturn($updated);
+		$this->staticSiteMapper->expects($this->never())->method('updatePublishedUrl');
+		$this->archiver->expects($this->never())->method('delete');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with($this->stringContains('something went wrong'));
+
+		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_FAILED, ['error_message' => 'something went wrong']);
+
+		$this->assertSame($updated, $result);
+	}
+
+	public static function nonProvidedStatusProvider(): array {
+		return [
+			'pending' => [StaticSite::STATUS_PENDING],
+			'published' => [StaticSite::STATUS_PUBLISHED],
+			'failed' => [StaticSite::STATUS_FAILED],
+		];
+	}
+
+	/**
+	 * @dataProvider nonProvidedStatusProvider
+	 */
+	public function testUpdateStatusIgnoresCallbackForConcludedStaticSite(string $currentStatus): void {
+		$staticSiteId = 'a-uuid';
+		$found = $this->makeStaticSite($currentStatus);
+
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->with($staticSiteId)
+			->willReturn($found);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatus');
+		$this->staticSiteMapper->expects($this->never())->method('updatePublishedUrl');
+		$this->archiver->expects($this->never())->method('delete');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with($this->stringContains('Ignoring static site status callback'));
+
+		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
+
+		$this->assertSame($found, $result);
+	}
+
+	public function testUpdateStatusThrowsWhenStaticSiteNotFound(): void {
+		$this->staticSiteMapper->method('findOneByStaticSiteId')
+			->willThrowException(new DoesNotExistException('not found'));
+
+		$this->expectException(NotFoundException::class);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatus');
+
+		$this->service->updateStatus('unknown-uuid', StaticSite::STATUS_FAILED);
+	}
+
+	public function testUpdateStatusThrowsForInvalidStatus(): void {
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('findOneByStaticSiteId');
+		$this->staticSiteMapper->expects($this->never())->method('updateStatus');
+
+		$this->service->updateStatus('a-uuid', 'not-a-real-status');
+	}
+
+	public function testUpdateStatusThrowsForInProgressStatus(): void {
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('findOneByStaticSiteId');
+		$this->staticSiteMapper->expects($this->never())->method('updateStatus');
+
+		$this->service->updateStatus('a-uuid', StaticSite::STATUS_PENDING);
 	}
 }
