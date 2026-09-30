@@ -20,8 +20,8 @@ class Version040602Date20260908000000 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable('collectives_static_sites')) {
-			$table = $schema->createTable('collectives_static_sites');
+		if (!$schema->hasTable('collectives_st_sites')) {
+			$table = $schema->createTable('collectives_st_sites');
 			$table->addColumn('id', Types::BIGINT, [
 				'autoincrement' => true,
 				'notnull' => true,
@@ -66,9 +66,9 @@ class Version040602Date20260908000000 extends SimpleMigrationStep {
 				'notnull' => true,
 			]);
 			$table->setPrimaryKey(['id']);
-			$table->addIndex(['collective_id'], 'collectives_static_site_c_id_idx');
-			$table->addUniqueIndex(['static_site_id'], 'collectives_static_site_ssid_idx');
-			$table->addUniqueIndex(['slug'], 'collectives_static_site_slug_idx');
+			$table->addIndex(['collective_id'], 'collectives_st_sites_c_id_idx');
+			$table->addUniqueIndex(['static_site_id'], 'collectives_st_sites_ssid_idx');
+			$table->addUniqueIndex(['slug'], 'collectives_st_sites_slug_idx');
 			return $schema;
 		}
 
