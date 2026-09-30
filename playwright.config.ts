@@ -70,8 +70,8 @@ const webServer = externalServer
 		reuseExistingServer: false,
 		stderr: 'pipe' as const,
 		stdout: 'pipe' as const,
-		// max. 5 minutes for creating the container
-		timeout: 5 * 60 * 1000,
+		// max. 15 minutes for creating the container
+		timeout: 15 * 60 * 1000,
 		wait: {
 			// we wait for this line to appear in the output of the webserver until consider it done
 			stdout: /Nextcloud is now ready to use/,
