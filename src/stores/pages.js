@@ -550,6 +550,16 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		// Collapse all pages of current collective except parents of current page
+		collapseAll() {
+			for (const page of this.pages) {
+				delete this.collapsed[page.id]
+			}
+			if (this.currentPage) {
+				this.expandParents(this.currentPage.parentId)
+			}
+		},
+
 		setNewPageParentId(id) {
 			this.newPageParentId = id
 		},
