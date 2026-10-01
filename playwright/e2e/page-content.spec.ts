@@ -7,11 +7,13 @@ import { runOcc } from '@nextcloud/e2e-test-server/docker'
 import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as editorTest } from '../support/fixtures/editor.ts'
+import { observeTextEditors, waitForTextEditors } from '../support/helpers/textEditor.ts'
 
 const test = mergeTests(createCollectiveTest, editorTest)
 
 test.describe('Page content', () => {
 	test('preview does not lock the page for WebDAV writers', async ({ user, page, collective }) => {
+		await observeTextEditors(page)
 		const collectivePage = await collective.createPage({
 			title: 'Preview without a writable Text session',
 			content: 'Original content',
@@ -20,9 +22,13 @@ test.describe('Page content', () => {
 		})
 		await collectivePage.open(false)
 		await expect(collectivePage.getContent()).toContainText('Original content')
-		await expect(collectivePage.getModeButton(true)).toBeEnabled()
+		await waitForTextEditors(page)
 		// A hidden writable editor would acquire a Text lock and reject this PUT.
 		await collectivePage.setContent({ content: 'Updated through WebDAV', user, page })
+		const writableCalls = await page.evaluate(() => {
+			return (window as any).collectivesTextProbe.calls.filter((call: { writable: boolean }) => call.writable).length
+		})
+		expect(writableCalls).toBe(0)
 		await page.reload()
 		await collectivePage.waitForContent(false)
 		await expect(collectivePage.getContent()).toContainText('Updated through WebDAV')
