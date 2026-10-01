@@ -62,9 +62,17 @@ export class PageListSection {
 		await this.page.getByRole('menuitem', { name: action, exact: true }).click()
 	}
 
-	public async sortBy(option: string): Promise<void> {
-		await this.page.getByRole('button', { name: 'Sort order', exact: true }).click()
+	public async clickPageListOption(option: string): Promise<void> {
+		await this.el.getByRole('button', { name: 'Page list options', exact: true }).click()
 		await this.page.getByRole('menuitem', { name: option, exact: true }).click()
+	}
+
+	public async sortBy(option: string): Promise<void> {
+		await this.clickPageListOption(option)
+	}
+
+	public async collapseAll(): Promise<void> {
+		await this.clickPageListOption('Collapse all pages')
 	}
 
 	public async addPage(parentTitle: string): Promise <void> {
