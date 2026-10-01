@@ -180,7 +180,6 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -201,6 +200,7 @@ import { editorApiAttachments } from '../../constants.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
+import { AttachmentSaveError } from '../../util/attachmentMutation.ts'
 
 export default {
 	name: 'SidebarTabAttachments',
@@ -246,6 +246,7 @@ export default {
 			'attachmentsError',
 			'attachmentsLoaded',
 			'editorEmbeddedAttachmentSrcs',
+			'isTextEdit',
 			'readerEmbeddedAttachmentSrcs',
 			'currentPage',
 			'deletedAttachments',
@@ -260,7 +261,7 @@ export default {
 		},
 
 		embeddedAttachmentSrcs() {
-			return this.currentCollectiveCanEdit
+			return this.currentCollectiveCanEdit && this.isTextEdit && !this.loading('editor')
 				? this.editorEmbeddedAttachmentSrcs
 				: this.readerEmbeddedAttachmentSrcs
 		},
@@ -387,36 +388,30 @@ export default {
 		},
 
 		async onRename(newName) {
-			const oldName = this.renamedAttachment.name
-			this.renamedAttachment.name = newName
+			const attachment = this.renamedAttachment
 			this.showRenameAttachmentsForm = false
-
 			try {
-				const newAttachment = await this.renameAttachment(this.renamedAttachment.id, newName)
-				this.renamedAttachment = null
-				emit('collectives:attachment:replaceFilename', {
-					pageId: this.currentPage.id,
-					oldName,
-					newName: newAttachment.name,
-				})
+				await this.renameAttachment(attachment.id, newName)
+				showSuccess(t('collectives', 'Renamed attachment'))
 			} catch (e) {
-				this.renamedAttachment.name = oldName
 				console.error('Failed to rename attachment', e)
-				showError(t('collectives', 'Failed to rename attachment', {}))
+				showError(e instanceof AttachmentSaveError
+					? t('collectives', 'The attachment was renamed, but the page could not be saved. Keep the editor open and try saving again.')
+					: t('collectives', 'Failed to rename attachment'))
+			} finally {
+				this.renamedAttachment = null
 			}
 		},
 
 		async onDelete(attachment) {
 			try {
 				await this.deleteAttachment(attachment.id)
-				emit('collectives:attachment:removeReferences', {
-					pageId: this.currentPage.id,
-					name: attachment.name,
-				})
 				showSuccess(t('collectives', 'Deleted attachment {name}', { name: attachment.name }))
 			} catch (e) {
 				console.error('Failed to delete attachment', e)
-				showError(t('collectives', 'Failed to delete attachment'))
+				showError(e instanceof AttachmentSaveError
+					? t('collectives', 'The attachment was deleted, but the page could not be saved. Keep the editor open and try saving again.')
+					: t('collectives', 'Failed to delete attachment'))
 			}
 		},
 
