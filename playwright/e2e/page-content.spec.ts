@@ -29,6 +29,11 @@ test.describe('Page content', () => {
 		// Lazy initialization must still allow switching from reading to editing.
 		await collectivePage.switchMode(true)
 		await expect(collectivePage.getContent(true)).toContainText('Updated through WebDAV')
+		await collectivePage.getContent(true).fill('Edited after entering edit mode')
+		await collectivePage.switchMode(false)
+		await expect(collectivePage.getContent()).toContainText('Edited after entering edit mode')
+		await collectivePage.switchMode(true)
+		await expect(collectivePage.getContent(true)).toContainText('Edited after entering edit mode')
 	})
 
 	test('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
