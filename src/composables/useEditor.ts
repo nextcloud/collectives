@@ -81,6 +81,20 @@ export function useEditor(davContent: Ref<string>) {
 			return
 		}
 
+		// Reading a page must not open a writable Text session or lock its file.
+		if (!pagesStore.isTextEdit) {
+			rootStore.done('editor')
+			return
+		}
+
+		// Switching back from preview reuses the existing editor.
+		if (editorPromise) {
+			await editorPromise
+			return
+		}
+
+		rootStore.load('editor')
+
 		// Define PageIcon as custom web component
 		if (!window.customElements.get('page-icon')) {
 			const PageIconCE = defineCustomElement({

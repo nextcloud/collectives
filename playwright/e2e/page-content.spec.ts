@@ -11,6 +11,26 @@ import { test as editorTest } from '../support/fixtures/editor.ts'
 const test = mergeTests(createCollectiveTest, editorTest)
 
 test.describe('Page content', () => {
+	test('preview does not lock the page for WebDAV writers', async ({ user, page, collective }) => {
+		const collectivePage = await collective.createPage({
+			title: 'Preview without a writable Text session',
+			content: 'Original content',
+			user,
+			page,
+		})
+		await collectivePage.open(false)
+		await expect(collectivePage.getContent()).toContainText('Original content')
+		await expect(collectivePage.getModeButton(true)).toBeEnabled()
+		// A hidden writable editor would acquire a Text lock and reject this PUT.
+		await collectivePage.setContent({ content: 'Updated through WebDAV', user, page })
+		await page.reload()
+		await collectivePage.waitForContent(false)
+		await expect(collectivePage.getContent()).toContainText('Updated through WebDAV')
+		// Lazy initialization must still allow switching from reading to editing.
+		await collectivePage.switchMode(true)
+		await expect(collectivePage.getContent(true)).toContainText('Updated through WebDAV')
+	})
+
 	test('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
 		test.slow()
 		await runOcc(['app:enable', '--force', 'whiteboard'])

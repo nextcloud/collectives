@@ -128,6 +128,7 @@ export default {
 			if (val === false) {
 				this.stopEdit()
 			} else if (val === true) {
+				await this.setupEditor()
 				// Load full circle members for autocomplete when entering edit mode
 				const circlesStore = useCirclesStore()
 				if (!circlesStore.currentCircleMembersFullyLoaded && !this.isPublic) {
