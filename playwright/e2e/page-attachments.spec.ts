@@ -26,6 +26,10 @@ for (const action of ['Rename', 'Delete']) {
 			await page.getByRole('textbox', { name: 'Attachment name' }).fill('renamed.png')
 			await page.getByRole('button', { name: 'Rename attachment', exact: true }).click()
 		}
+		// Eventual persistence alone can hide a failed save confirmation.
+		const success = action === 'Rename' ? 'Renamed attachment' : 'Deleted attachment test.png'
+		await expect(page.locator('.toastify').filter({ hasText: success })).toBeVisible()
+		await expect(page.locator('.toastify').filter({ hasText: 'but the page could not be saved' })).toHaveCount(0)
 		const markdownUrl = webdavUrl(user.account.userId, cp.data.collectivePath, cp.data.filePath, cp.data.fileName)
 		const oldUrl = webdavUrl(user.account.userId, cp.data.collectivePath, cp.data.filePath, src)
 		await expect.poll(async () => {

@@ -273,30 +273,36 @@ export function useEditor(davContent: Ref<string>) {
 		if (!instance || latestMarkdown === null) {
 			throw new Error('The editor is not ready to save.')
 		}
-		// Older Text versions may resolve save() before a pending sync is saved.
-		// Retry saving as well as reading, rather than confirming stale Markdown.
+		// Text may resolve before synchronization finishes, or return false while
+		// another save is in flight (attachment APIs also trigger their own save).
+		// Neither confirms persistence: retry, and require a matching DAV readback.
 		for (let attempt = 0; attempt < 5; attempt++) {
-			if (!instance || await instance.save() === false) {
+			if (!instance) {
 				throw new Error('The editor could not save the document.')
 			}
+			const saved = await instance.save()
 			updateEditorContentDebounced.flush()
-			const expected = latestMarkdown.trim()
-			try {
-				const response = await axios.get<string>(davUrl, {
-					params: { timestamp: Date.now() },
-					responseType: 'text',
-					transformResponse: [(data: string) => data],
-				})
-				if (response.data.trim() === expected) {
-					return true
-				}
-			} catch (error) {
-				// A concurrent save can briefly hold a DAV read lock.
-				if (!isAxiosError(error) || error.response?.status !== 423) {
-					throw error
+			if (saved !== false) {
+				const expected = latestMarkdown.trim()
+				try {
+					const response = await axios.get<string>(davUrl, {
+						params: { timestamp: Date.now() },
+						responseType: 'text',
+						transformResponse: [(data: string) => data],
+					})
+					if (response.data.trim() === expected && latestMarkdown.trim() === expected) {
+						return true
+					}
+				} catch (error) {
+					// A concurrent save can briefly hold a DAV read lock.
+					if (!isAxiosError(error) || error.response?.status !== 423) {
+						throw error
+					}
 				}
 			}
-			await new Promise((resolve) => setTimeout(resolve, 250))
+			if (attempt < 4) {
+				await new Promise((resolve) => setTimeout(resolve, 250))
+			}
 		}
 		throw new Error('The stored Markdown does not match the editor.')
 	}

@@ -267,3 +267,61 @@ describe('persisted editor content', () => {
 		await expect(saveEditor()).rejects.toThrow('stored Markdown')
 	})
 })
+
+describe('concurrent Text saves', () => {
+	function prepare() {
+		const instance = makeEditor()
+		mocks.createEditor.mockImplementation(async (options) => {
+			options.onCreate({ markdown: 'New content' })
+			options.onLoaded()
+			return instance
+		})
+		mocks.pages.isTextEdit = true
+		return instance
+	}
+
+	it('retries a false Text save and requires a fresh matching readback', async () => {
+		const instance = prepare()
+		instance.save.mockResolvedValueOnce(false).mockResolvedValue(true)
+		mocks.get.mockResolvedValue({ data: 'New content' })
+		const { setupEditor, saveEditor } = useEditor(ref('Old content'))
+		await setupEditor()
+		await expect(saveEditor()).resolves.toBe(true)
+		expect(instance.save).toHaveBeenCalledTimes(2)
+		expect(mocks.get).toHaveBeenCalledOnce()
+	})
+
+	it('rejects permanently false saves without claiming matching DAV content as success', async () => {
+		const instance = prepare()
+		instance.save.mockResolvedValue(false)
+		mocks.get.mockResolvedValue({ data: 'New content' })
+		const { setupEditor, saveEditor } = useEditor(ref('Old content'))
+		await setupEditor()
+		await expect(saveEditor()).rejects.toThrow('stored Markdown')
+		expect(instance.save).toHaveBeenCalledTimes(5)
+		expect(mocks.get).not.toHaveBeenCalled()
+	})
+
+	it('does not retry a rejected save as if it were a transient false result', async () => {
+		const instance = prepare()
+		instance.save.mockRejectedValue(new Error('offline'))
+		const { setupEditor, saveEditor } = useEditor(ref('Old content'))
+		await setupEditor()
+		await expect(saveEditor()).rejects.toThrow('offline')
+		expect(instance.save).toHaveBeenCalledOnce()
+		expect(mocks.get).not.toHaveBeenCalled()
+	})
+
+	it('saves again if editor content changes while DAV readback is pending', async () => {
+		const instance = prepare()
+		mocks.get.mockImplementationOnce(async () => {
+			mocks.createEditor.mock.calls[0][0].onUpdate({ markdown: 'Newer content' })
+			return { data: 'New content' }
+		}).mockResolvedValue({ data: 'Newer content' })
+		const { setupEditor, saveEditor } = useEditor(ref('Old content'))
+		await setupEditor()
+		await expect(saveEditor()).resolves.toBe(true)
+		expect(instance.save).toHaveBeenCalledTimes(2)
+		expect(mocks.get).toHaveBeenCalledTimes(2)
+	})
+})
