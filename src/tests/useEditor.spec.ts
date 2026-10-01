@@ -239,6 +239,21 @@ describe('persisted editor content', () => {
 		expect(mocks.get).toHaveBeenCalledOnce()
 	})
 
+	it('retries saving when Text initially resolves with stale persisted content', async () => {
+		const instance = makeEditor()
+		mocks.createEditor.mockImplementation(async (options) => {
+			options.onCreate({ markdown: 'New content' })
+			options.onLoaded()
+			return instance
+		})
+		mocks.get.mockResolvedValueOnce({ data: 'Old content' }).mockResolvedValue({ data: 'New content' })
+		mocks.pages.isTextEdit = true
+		const { setupEditor, saveEditor } = useEditor(ref('Old content'))
+		await setupEditor()
+		await expect(saveEditor()).resolves.toBe(true)
+		expect(instance.save).toHaveBeenCalledTimes(2)
+	})
+
 	it('rejects a resolved save when the persisted Markdown remains stale', async () => {
 		mocks.createEditor.mockImplementation(async (options) => {
 			options.onCreate({ markdown: 'Unsaved change' })

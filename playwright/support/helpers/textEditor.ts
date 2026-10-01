@@ -123,8 +123,8 @@ export async function waitForTextEditors(page: Page) {
 		return (window as any).collectivesTextProbe.calls.some((call: { writable: boolean }) => call.writable)
 	})
 	if (hasWriter) {
-		// Some Text releases broadcast onLoaded globally. A mounted editable
-		// document also proves the hidden session editor itself has initialized.
+		// Also wait for the editable document to mount in the hidden container;
+		// a ready callback alone does not prove that its DOM has rendered.
 		await page.locator('[data-cy-collectives="editor"] .ProseMirror[contenteditable="true"]').waitFor({ state: 'attached' })
 	}
 	await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))))

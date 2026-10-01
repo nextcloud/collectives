@@ -273,13 +273,14 @@ export function useEditor(davContent: Ref<string>) {
 		if (!instance || latestMarkdown === null) {
 			throw new Error('The editor is not ready to save.')
 		}
-		if (await instance.save() === false) {
-			throw new Error('The editor could not save the document.')
-		}
-		updateEditorContentDebounced.flush()
-		const expected = latestMarkdown.trim()
-		// A concurrent Text save may briefly finish after the explicit save call.
+		// Older Text versions may resolve save() before a pending sync is saved.
+		// Retry saving as well as reading, rather than confirming stale Markdown.
 		for (let attempt = 0; attempt < 5; attempt++) {
+			if (!instance || await instance.save() === false) {
+				throw new Error('The editor could not save the document.')
+			}
+			updateEditorContentDebounced.flush()
+			const expected = latestMarkdown.trim()
 			try {
 				const response = await axios.get<string>(davUrl, {
 					params: { timestamp: Date.now() },
@@ -295,7 +296,7 @@ export function useEditor(davContent: Ref<string>) {
 					throw error
 				}
 			}
-			await new Promise((resolve) => setTimeout(resolve, 100))
+			await new Promise((resolve) => setTimeout(resolve, 250))
 		}
 		throw new Error('The stored Markdown does not match the editor.')
 	}
