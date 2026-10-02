@@ -8,6 +8,7 @@ OC.L10N.register(
     "Members" : "Miembros",
     "Remove" : "Eliminar",
     "Loading…" : "Cargando…",
+    "Remove {name}" : "Eliminar {name}",
     "Permissions" : "Permisos",
     "Preview" : "Vista previa",
     "Edit" : "Editar",
