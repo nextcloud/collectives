@@ -9,10 +9,13 @@ import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import * as api from '../apis/collectives/index.js'
 import { INDEX_PAGE, PAGE_SUFFIX, pageModes, TEMPLATE_PATH } from '../constants.js'
+import { mutateAttachment } from '../util/attachmentMutation.ts'
 import * as sortOrders from '../util/sortOrders.js'
 import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
+
+const editorActions = new WeakMap()
 
 const STORE_PREFIX = 'collectives/pinia/pages/'
 // used in `PagePicker.vue`
@@ -480,6 +483,23 @@ export const usePagesStore = defineStore('pages', {
 	},
 
 	actions: {
+		registerEditorAction(handler) {
+			editorActions.set(this, handler)
+			return () => {
+				if (editorActions.get(this) === handler) {
+					editorActions.delete(this)
+				}
+			}
+		},
+
+		runEditorAction(action) {
+			const handler = editorActions.get(this)
+			if (!handler) {
+				return Promise.reject(new Error('No editor is available for the current page.'))
+			}
+			return handler(action)
+		},
+
 		updateSubpageOrder({ parentId, subpageOrder }) {
 			if (this.pageById(parentId)) {
 				this.pageById(parentId).subpageOrder = subpageOrder
@@ -1061,10 +1081,24 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {string} name - Target name of the attachment
 		 */
 		async renameAttachment(attachmentId, name) {
-			const response = await api.renameAttachment(this.context, this.currentPageId, attachmentId, name)
-			const index = this.attachments.findIndex((a) => a.id === attachmentId)
-			this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1, response.data.ocs.data.attachment)
-			return response.data.ocs.data.attachment
+			const pageId = this.currentPageId
+			const collectiveIndex = this.collectiveIndex
+			const context = this.context
+			return this.runEditorAction(async (editor, save) => {
+				const oldName = this.allAttachments[collectiveIndex][pageId].find((a) => a.id === attachmentId)?.name
+				if (!editor.replaceAttachmentFilename || oldName === undefined) {
+					throw new Error('Updating attachment references is unavailable.')
+				}
+				return mutateAttachment(save, async () => {
+					const response = await api.renameAttachment(context, pageId, attachmentId, name)
+					const attachments = this.allAttachments[collectiveIndex][pageId]
+					const index = attachments.findIndex((a) => a.id === attachmentId)
+					if (index !== -1) {
+						attachments.splice(index, 1, response.data.ocs.data.attachment)
+					}
+					return response.data.ocs.data.attachment
+				}, (attachment) => editor.replaceAttachmentFilename(pageId, oldName, attachment.name))
+			})
 		},
 
 		/**
@@ -1073,8 +1107,21 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {number} attachmentId ID of the attachment to delete
 		 */
 		async deleteAttachment(attachmentId) {
-			await api.deleteAttachment(this.context, this.currentPageId, attachmentId)
-			this.setAttachmentDeleted(attachmentId)
+			const pageId = this.currentPageId
+			const context = this.context
+			const collectiveIndex = this.collectiveIndex
+			return this.runEditorAction(async (editor, save) => {
+				const name = this.allAttachments[collectiveIndex][pageId].find((a) => a.id === attachmentId)?.name
+				if (!editor.removeAttachmentReferences || name === undefined) {
+					throw new Error('Updating attachment references is unavailable.')
+				}
+				return mutateAttachment(save, async () => {
+					await api.deleteAttachment(context, pageId, attachmentId)
+					if (this.currentPageId === pageId) {
+						this.setAttachmentDeleted(attachmentId)
+					}
+				}, () => editor.removeAttachmentReferences(pageId, name))
+			})
 		},
 
 		/**

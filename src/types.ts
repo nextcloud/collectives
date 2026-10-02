@@ -54,6 +54,10 @@ export interface PageInfo {
 
 // Minimal interface for the Text app editor/reader instance returned by window.OCA.Text.createEditor()
 export interface TextEditorInstance {
+	save(): Promise<boolean | void>
+	insertAtCursor(content: string): void
+	replaceAttachmentFilename?(pageId: number, oldName: string, newName: string): void
+	removeAttachmentReferences?(pageId: number, name: string): void
 	setContent(content: string): void
 	setSearchQuery(query: string, matchAll?: boolean): void
 	setShowOutline(show: boolean): void
