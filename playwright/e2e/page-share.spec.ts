@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { Locator } from '@playwright/test'
+import type { APIRequestContext, Locator } from '@playwright/test'
 
-import { runOcc } from '@nextcloud/e2e-test-server/docker'
 import { expect, mergeTests } from '@playwright/test'
 import { test as collectiveShareTest } from '../support/fixtures/collective-share.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
@@ -13,6 +12,23 @@ import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
 import { ocsHeaders } from '../support/helpers/urls.ts'
 
 const test = mergeTests(createCollectiveTest, pageSidebarTest, collectiveShareTest)
+
+async function setPasswordProtection(request: APIRequestContext, enabled: boolean) {
+	const headers = { ...ocsHeaders, Authorization: `Basic ${Buffer.from('admin:admin').toString('base64')}` }
+	// HTTP writes invalidate the web server's config cache; CLI writes use a separate cache.
+	for (const key of ['shareapi_enable_link_password_by_default', 'shareapi_enforce_links_password']) {
+		await request.post(`/ocs/v2.php/apps/provisioning_api/api/v1/config/apps/core/${key}`, {
+			headers,
+			data: { value: enabled ? 'yes' : 'no' },
+			failOnStatusCode: true,
+		})
+	}
+	await request.fetch('/ocs/v2.php/cloud/apps/password_policy', {
+		method: enabled ? 'POST' : 'DELETE',
+		headers,
+		failOnStatusCode: true,
+	})
+}
 
 test.describe('Page share', () => {
 	test('Create share and open share unauthenticated', async ({ user, page, collective, pageSidebar, sharePage, sharePageList, shareEditor }) => {
@@ -43,20 +59,15 @@ test.describe('Page share enforced password protection', () => {
 	let sharingTab: Locator
 	let shareActionsPanel: Locator
 
-	test.beforeAll(async () => {
-		await runOcc(['config:app:set', 'core', 'shareapi_enable_link_password_by_default', '--value', 'yes'])
-		await runOcc(['config:app:set', 'core', 'shareapi_enforce_links_password', '--value', 'yes'])
+	test.beforeAll(async ({ request }) => {
+		await setPasswordProtection(request, true)
 	})
 
-	test.afterAll(async () => {
-		await runOcc(['config:app:set', 'core', 'shareapi_enable_link_password_by_default', '--value', 'no'])
-		await runOcc(['config:app:set', 'core', 'shareapi_enforce_links_password', '--value', 'no'])
+	test.afterAll(async ({ request }) => {
+		await setPasswordProtection(request, false)
 	})
 
 	test.beforeEach(async ({ user, page, collective, pageSidebar }) => {
-		await runOcc(['app:enable', '--force', 'password_policy'])
-
-		// Dirty hack to wait for config changes to propagate through cache
 		await expect.poll(async () => {
 			const resp = await page.request.get('/ocs/v2.php/cloud/capabilities?format=json', { headers: ocsHeaders, failOnStatusCode: true })
 			const caps = await resp.json()
@@ -76,10 +87,6 @@ test.describe('Page share enforced password protection', () => {
 		await expect(shareActionsPanel.locator('input[autocomplete="new-password"]')).not.toHaveValue('')
 	})
 
-	test.afterEach(async () => {
-		await runOcc(['app:disable', 'password_policy'])
-	})
-
 	test('Create share and open share unauthenticated', async ({ page, collective, pageSidebar, sharePage, shareEditor }) => {
 		await shareActionsPanel.locator('input[autocomplete="new-password"]').fill('fiej2Ahl5pae')
 		await shareActionsPanel.getByRole('button', { name: 'Create share' }).click()
@@ -95,7 +102,7 @@ test.describe('Page share enforced password protection', () => {
 		await sharePage.goto(shares[0].getShareUrl())
 		await sharePage.getByRole('textbox', { name: 'Password' }).pressSequentially('fiej2Ahl5pae')
 		await sharePage.getByRole('button', { name: 'Submit' }).click()
-		await expect(shareEditor.getContent()).toBeVisible()
+		await shareEditor.getContent().waitFor({ state: 'visible' })
 		await expect(shareEditor.getContent()).toHaveText('Some content')
 	})
 
