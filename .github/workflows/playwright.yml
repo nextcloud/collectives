@@ -17,15 +17,15 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            server-branch: ['master']
+            server-branch: ['stable35']
             shardIndex: [1, 2, 3, 4]
             shardTotal: [4]
             include:
-              - server-branch: 'master'
+              - server-branch: 'stable35'
                 project-args: '--project=chromium --project=comparison-chromium'
                 semantic-e2e: '1'
                 text-repository: 'nextcloud/text'
-                text-ref: 'refactor/introduce-icontext'
+                text-ref: 'backport/stable35/9062-collaborate-in-deck'
     steps:
       - name: Checkout app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
