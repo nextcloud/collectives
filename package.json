@@ -37,7 +37,7 @@
     "@nextcloud/notify_push": "^1.4.0",
     "@nextcloud/paths": "^3.1.0",
     "@nextcloud/router": "^3.2.0",
-    "@nextcloud/vue": "^9.13.0",
+    "@nextcloud/vue": "^9.13.1",
     "@playwright/test": "^1.63.0",
     "@vueuse/core": "^15.0.0",
     "debounce": "^3.0.0",
