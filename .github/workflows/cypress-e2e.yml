@@ -67,7 +67,7 @@ jobs:
             server-major: ''
             semantic-e2e: '1'
             text-app-repository: 'nextcloud/text'
-            text-app-ref: 'backport/stable35/9062-collaborate-in-deck'
+            text-app-ref: 'stable35'
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true

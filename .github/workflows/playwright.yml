@@ -25,7 +25,7 @@ jobs:
                 project-args: '--project=chromium --project=comparison-chromium'
                 semantic-e2e: '1'
                 text-repository: 'nextcloud/text'
-                text-ref: 'backport/stable35/9062-collaborate-in-deck'
+                text-ref: 'stable35'
     steps:
       - name: Checkout app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
