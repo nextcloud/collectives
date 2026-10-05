@@ -99,10 +99,7 @@ class FileIndexer {
 			}
 		}
 
-		try {
-			$this->fileMapper->insertFile($collectiveId, $file->getId(), $file->getInternalPath(), $file->getMTime(), $language);
-		} catch (Exception) {
-		}
+		$this->fileMapper->insertFile($collectiveId, $file->getId(), $file->getInternalPath(), $file->getMTime(), $language);
 	}
 
 	private function getDirectoryFiles(Folder $folder, bool $recursive = false): array {
