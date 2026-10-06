@@ -13,17 +13,25 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Db\StaticSiteMapper;
 use OCP\DB\Exception as DBException;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use Psr\Log\LoggerInterface;
 
 class StaticSiteService {
 	private const TITLE_MAX_LENGTH = 255;
 	private const SLUG_MAX_LENGTH = 64;
 	private const SLUG_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
+	private const ALLOWED_CALLBACK_STATUSES = [
+		StaticSite::STATUS_PUBLISHED,
+		StaticSite::STATUS_FAILED,
+	];
 
 	public function __construct(
 		private readonly StaticSiteMapper $staticSiteMapper,
 		private readonly CollectiveService $collectiveService,
 		private readonly PageService $pageService,
 		private readonly SlugService $slugService,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -110,6 +118,42 @@ class StaticSiteService {
 		$this->collectiveService->getCollective($collectiveId, $userId);
 
 		return $this->staticSiteMapper->findByCollectiveId($collectiveId);
+	}
+
+	/**
+	 * Update status of a static site export.
+	 *
+	 * Called back by the external service building the static site, identifying the
+	 * export by its unguessable `staticSiteId` rather than a logged-in user. On success,
+	 * `data.publish_url` is stored; on failure, `data.error_message` is logged.
+	 *
+	 * @param array{publish_url?: string, error_message?: string} $data
+	 *
+	 * @throws NotFoundException Static site not found
+	 * @throws UnprocessableEntityException Invalid status
+	 */
+	public function updateStatus(string $staticSiteId, string $status, array $data = []): StaticSite {
+		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
+			throw new UnprocessableEntityException('Invalid status: ' . $status);
+		}
+
+		try {
+			$staticSite = $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
+		}
+
+		$staticSite = $this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
+
+		if ($status === StaticSite::STATUS_PUBLISHED && isset($data['publish_url'])) {
+			$staticSite = $this->staticSiteMapper->updatePublishedUrl($staticSite->getId(), $data['publish_url']);
+		}
+
+		if ($status === StaticSite::STATUS_FAILED && isset($data['error_message'])) {
+			$this->logger->warning('Static site export failed: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
+		}
+
+		return $staticSite;
 	}
 
 	/**
