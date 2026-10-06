@@ -90,6 +90,7 @@ OC.L10N.register(
     "Versions" : "Versiot",
     "Restore this version" : "Palauta tämä versio",
     "Link copied" : "Linkki kopioitu",
+    "New page" : "Uusi sivu",
     "Please reload the page." : "Päivitä sivu.",
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",

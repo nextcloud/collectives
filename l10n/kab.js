@@ -27,6 +27,7 @@ OC.L10N.register(
     "Templates" : "Timudmiwin",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
+    "Manage tags" : "Sefrek tibzimin",
     "Move or copy" : "Smutti neɣ nɣel",
     "Download" : "Sider",
     "Title" : "Azwel",
