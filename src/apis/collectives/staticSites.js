@@ -39,3 +39,10 @@ export function createStaticSite(collectiveId, pageIds, title, slug) {
 		{ pageIds, title, slug },
 	)
 }
+
+/**
+ * Check whether the static site generator is reachable with the saved settings (admin only)
+ */
+export function checkStaticSiteGeneratorHealth() {
+	return axios.get(apiUrl('v1.0', 'static-site-generator', 'health'))
+}

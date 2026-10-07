@@ -16,6 +16,7 @@ use OCP\Files\GenericFileException;
 use OCP\Files\IAppData;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
+use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\IL10N;
 use OCP\ITempManager;
@@ -76,6 +77,17 @@ class StaticSiteArchiver {
 		} finally {
 			// ITempManager only removes temporary files in a background job, archives may be too large to wait for the job
 			$this->removeDirectory($tempFolder);
+		}
+	}
+
+	/**
+	 * @throws NotFoundException No archive stored for the static site
+	 */
+	public function get(string $staticSiteId): ISimpleFile {
+		try {
+			return $this->appData->getFolder(self::APPDATA_FOLDER)->getFile($staticSiteId . self::ARCHIVE_SUFFIX);
+		} catch (FilesNotFoundException $e) {
+			throw new NotFoundException('Static site archive not found', 0, $e);
 		}
 	}
 

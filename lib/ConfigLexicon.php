@@ -31,6 +31,13 @@ class ConfigLexicon implements ILexicon {
 
 	public const USER_FOLDER = 'user_folder';
 
+	public const PUBLISH_ENABLED = 'publish_enabled';
+	public const PUBLISH_ENABLED_DEFAULT = 'false';
+	public const STATIC_SITE_MAX_SIZE = 'static_site_max_size';
+	public const STATIC_SITE_MAX_SIZE_DEFAULT = 100 * 1024 * 1024;
+	public const STATIC_SITE_GENERATOR_URL = 'static_site_generator_url';
+	public const STATIC_SITE_GENERATOR_TOKEN = 'static_site_generator_token';
+
 	#[\Override]
 	public function getStrictness(): Strictness {
 		return Strictness::IGNORE;
@@ -78,6 +85,35 @@ class ConfigLexicon implements ILexicon {
 				definition: 'Whether the user folder settings repair step has completed',
 				lazy: false,
 				flags: IAppConfig::FLAG_INTERNAL,
+			),
+			new Entry(
+				key: self::PUBLISH_ENABLED,
+				type: ValueType::STRING,
+				defaultRaw: self::PUBLISH_ENABLED_DEFAULT,
+				definition: 'Whether the publish feature is enabled (`true` or `false`)',
+				lazy: false,
+			),
+			new Entry(
+				key: self::STATIC_SITE_MAX_SIZE,
+				type: ValueType::INT,
+				defaultRaw: self::STATIC_SITE_MAX_SIZE_DEFAULT,
+				definition: 'Maximum size of all files of a static site in bytes',
+				lazy: true,
+			),
+			new Entry(
+				key: self::STATIC_SITE_GENERATOR_URL,
+				type: ValueType::STRING,
+				defaultRaw: '',
+				definition: 'Base URL of the external static site generator',
+				lazy: true,
+			),
+			new Entry(
+				key: self::STATIC_SITE_GENERATOR_TOKEN,
+				type: ValueType::STRING,
+				defaultRaw: '',
+				definition: 'Bearer token shared with the external static site generator',
+				lazy: true,
+				flags: IAppConfig::FLAG_SENSITIVE,
 			),
 		];
 	}

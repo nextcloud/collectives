@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Unit\Service;
 
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\ServiceException;
 use OCA\Collectives\Service\StaticSiteArchiver;
 use OCA\Collectives\Service\UnprocessableEntityException;
@@ -151,7 +152,7 @@ class StaticSiteArchiverTest extends TestCase {
 		$this->archiver->store($this->staticSiteId, ['Readme.md' => $this->makeFile('# Home')]);
 	}
 
-	public function testStoreCreatesMissingAppDataFolder(): void {
+	public function testStoreCreatesMissingStaticSitesFolder(): void {
 		$this->appData->method('getFolder')->willThrowException(new FilesNotFoundException());
 		$this->appData->expects($this->once())
 			->method('newFolder')
@@ -256,6 +257,30 @@ class StaticSiteArchiverTest extends TestCase {
 		$archiver->store($this->staticSiteId, ['Readme.md' => $this->makeFile('# Home')]);
 	}
 
+	public function testGetReturnsArchive(): void {
+		$file = $this->createMock(ISimpleFile::class);
+		$this->appData->method('getFolder')->with('static_sites')->willReturn($this->folder);
+		$this->folder->method('getFile')->with($this->staticSiteId . '.tar.gz')->willReturn($file);
+
+		$this->assertSame($file, $this->archiver->get($this->staticSiteId));
+	}
+
+	public function testGetThrowsIfArchiveDoesNotExist(): void {
+		$this->appData->method('getFolder')->willReturn($this->folder);
+		$this->folder->method('getFile')->willThrowException(new FilesNotFoundException());
+
+		$this->expectException(NotFoundException::class);
+		$this->archiver->get($this->staticSiteId);
+	}
+
+	public function testGetThrowsIfStaticSitesFolderDoesNotExist(): void {
+		$this->appData->method('getFolder')->willThrowException(new FilesNotFoundException());
+		$this->appData->expects($this->never())->method('newFolder');
+
+		$this->expectException(NotFoundException::class);
+		$this->archiver->get($this->staticSiteId);
+	}
+
 	public function testDeleteRemovesArchive(): void {
 		$file = $this->createMock(ISimpleFile::class);
 		$file->expects($this->once())->method('delete');
@@ -275,7 +300,7 @@ class StaticSiteArchiverTest extends TestCase {
 		$this->archiver->delete($this->staticSiteId);
 	}
 
-	public function testDeleteIgnoresMissingAppDataFolder(): void {
+	public function testDeleteIgnoresMissingStaticSitesFolder(): void {
 		$this->appData->method('getFolder')->willThrowException(new FilesNotFoundException());
 		$this->appData->expects($this->never())->method('newFolder');
 

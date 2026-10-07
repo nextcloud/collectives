@@ -13,6 +13,9 @@ use Closure;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\ServiceException;
+use OCA\Collectives\Service\StaticSiteGeneratorException;
+use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -79,7 +82,7 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSBadRequestException No pages selected, invalid title or slug, slug already in use
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
-	 * @throws OCSException Archive of the static site couldn't be provided
+	 * @throws OCSException Archive of the static site couldn't be provided or the publish service is not available or didn't accept it
 	 *
 	 * 200: Static site created
 	 */
@@ -107,7 +110,7 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSBadRequestException No pages selected, invalid title or publication in progress
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, static site or page not found
-	 * @throws OCSException Archive of the static site couldn't be provided
+	 * @throws OCSException Archive of the static site couldn't be provided or the publish service is not available or didn't accept it
 	 *
 	 * 200: Static site updated
 	 */
@@ -144,7 +147,9 @@ class StaticSiteController extends OCSController {
 	}
 
 	/**
-	 * Logs failures to provide the archive once with context and returns a translated error.
+	 * Returns a translated error for publish failures to tell the user whether trying again later may help. (e.g. publish service is not available)
+	 *
+	 * Requests to the static site generator are logged by its client, other failures are logged once with context.
 	 *
 	 * @throws OCSBadRequestException
 	 * @throws OCSForbiddenException
@@ -154,6 +159,22 @@ class StaticSiteController extends OCSController {
 	private function handleArchiveErrorResponse(Closure $callback, array $context): StaticSite {
 		try {
 			return $this->handleErrorResponse($callback, $this->logger);
+		} catch (StaticSiteGeneratorNotConfiguredException) {
+			$this->logger->warning('Static site generator is not configured', $context);
+			throw new OCSException(
+				$this->l10n->t('Publishing websites is not set up. Please contact your administrator.'),
+				Http::STATUS_SERVICE_UNAVAILABLE,
+			);
+		} catch (StaticSiteGeneratorUnavailableException) {
+			throw new OCSException(
+				$this->l10n->t('The publish service is currently not available. Please try again later.'),
+				Http::STATUS_SERVICE_UNAVAILABLE,
+			);
+		} catch (StaticSiteGeneratorException) {
+			throw new OCSException(
+				$this->l10n->t('The publish service rejected the website. Please contact your administrator.'),
+				Http::STATUS_BAD_GATEWAY,
+			);
 		} catch (ServiceException $e) {
 			$this->logger->error('Failed to provide static site archive', $context + ['exception' => $e]);
 			throw new OCSException(

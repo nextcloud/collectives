@@ -12,6 +12,9 @@ namespace Unit\Controller;
 use OCA\Collectives\Controller\StaticSiteController;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Service\ServiceException;
+use OCA\Collectives\Service\StaticSiteGeneratorException;
+use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Http;
@@ -80,6 +83,42 @@ class StaticSiteControllerTest extends TestCase {
 
 		$this->expectException(OCSException::class);
 		$this->controller->update(42, 7, [1], 'Title');
+	}
+
+	public static function generatorExceptionProvider(): array {
+		return [
+			'not configured' => [
+				new StaticSiteGeneratorNotConfiguredException('Not configured'),
+				Http::STATUS_SERVICE_UNAVAILABLE,
+				'Publishing websites is not set up. Please contact your administrator.',
+			],
+			'unavailable' => [
+				new StaticSiteGeneratorUnavailableException('Not reachable'),
+				Http::STATUS_SERVICE_UNAVAILABLE,
+				'The publish service is currently not available. Please try again later.',
+			],
+			'rejected' => [
+				new StaticSiteGeneratorException('Rejected'),
+				Http::STATUS_BAD_GATEWAY,
+				'The publish service rejected the website. Please contact your administrator.',
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider generatorExceptionProvider
+	 */
+	public function testCreateTellsWhetherTryingAgainMayHelpIfGeneratorFails(StaticSiteGeneratorException $exception, int $statusCode, string $message): void {
+		$this->staticSiteService->method('create')->willThrowException($exception);
+		$this->logger->expects($this->never())->method('error');
+
+		try {
+			$this->controller->create(42, [1]);
+			$this->fail('Expected OCSException');
+		} catch (OCSException $e) {
+			$this->assertSame($statusCode, $e->getCode());
+			$this->assertSame($message, $e->getMessage());
+		}
 	}
 
 	public function testCreateKeepsBadRequestForUnprocessableContent(): void {
