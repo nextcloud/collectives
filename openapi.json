@@ -16462,10 +16462,10 @@
             "name": "share",
             "description": "Provides access to collective and page shares."
         },
-		{
-			"name": "static_site",
-			"description": "Provides access to static site exports of a collective."
-		},
+        {
+            "name": "static_site",
+            "description": "Provides access to static site exports of a collective."
+        },
         {
             "name": "search",
             "description": "Allows to search collectives."
