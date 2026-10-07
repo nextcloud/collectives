@@ -362,6 +362,8 @@ class CollectiveService extends CollectiveServiceBase {
 		} finally {
 			// Delete leftovers in any case (also if collective folder is already gone)
 
+			// TODO(Publish): Delete static-sites and send delete request to publish service
+
 			// Delete shares and user settings
 			$this->shareService->deleteShareByCollectiveId($collective->getId());
 			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collective->getId());
