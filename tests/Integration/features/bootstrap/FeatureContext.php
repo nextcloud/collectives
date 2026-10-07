@@ -882,6 +882,93 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user publishes collective :collective as website with slug :slug
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCreatesStaticSite(string $user, string $collective, string $slug): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageIds = $this->allPageIds($collectiveId);
+
+		$this->sendOcsCollectivesRequest('POST', 'collectives/' . $collectiveId . '/static-sites', null, ['pageIds' => $pageIds, 'slug' => $slug]);
+		$this->assertStatusCode(200);
+		$data = $this->getJson()['ocs']['data'];
+		Assert::assertSame('provided', $data['status']);
+		Assert::assertSame($slug, $data['slug']);
+		Assert::assertSame($pageIds, $data['selectedPageIds']);
+	}
+
+	/**
+	 * @When user :user fails to publish collective :collective as website with slug :slug with status :statusCode
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userFailsToCreateStaticSite(string $user, string $collective, string $slug, int $statusCode): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageIds = $this->allPageIds($collectiveId);
+
+		$this->sendOcsCollectivesRequest('POST', 'collectives/' . $collectiveId . '/static-sites', null, ['pageIds' => $pageIds, 'slug' => $slug]);
+		$this->assertStatusCode($statusCode);
+	}
+
+	/**
+	 * @When user :user republishes website :slug of collective :collective with title :title
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUpdatesStaticSite(string $user, string $slug, string $collective, string $title): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$staticSiteId = $this->staticSiteIdBySlug($collectiveId, $slug);
+		$pageIds = $this->allPageIds($collectiveId);
+
+		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/static-sites/' . $staticSiteId, null, ['pageIds' => $pageIds, 'title' => $title]);
+		$this->assertStatusCode(200);
+		$data = $this->getJson()['ocs']['data'];
+		Assert::assertSame('provided', $data['status']);
+		Assert::assertSame($title, $data['title']);
+		Assert::assertSame($slug, $data['slug']);
+	}
+
+	/**
+	 * @When user :user deletes website :slug of collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDeletesStaticSite(string $user, string $slug, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$staticSiteId = $this->staticSiteIdBySlug($collectiveId, $slug);
+
+		$this->sendOcsCollectivesRequest('DELETE', 'collectives/' . $collectiveId . '/static-sites/' . $staticSiteId);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @Then user :user sees website :slug in collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSeesStaticSite(string $user, string $slug, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		Assert::assertNotNull($this->staticSiteIdBySlug($collectiveId, $slug, false));
+	}
+
+	/**
+	 * @Then user :user doesn't see website :slug in collective :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDoesntSeeStaticSite(string $user, string $slug, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		Assert::assertNull($this->staticSiteIdBySlug($collectiveId, $slug, false));
+	}
+
+	/**
 	 * @When we wait for :seconds seconds
 	 */
 	public function waitSeconds(int $seconds): void {
@@ -2277,6 +2364,34 @@ class FeatureContext implements Context {
 			if ($name === $collective['name']) {
 				return $collective['id'];
 			}
+		}
+		return null;
+	}
+
+	/**
+	 * @return list<int>
+	 *
+	 * @throws GuzzleException
+	 */
+	private function allPageIds(int $collectiveId): array {
+		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/pages');
+		$this->assertStatusCode(200);
+		return array_map(static fn (array $page): int => $page['id'], $this->getJson()['ocs']['data']['pages']);
+	}
+
+	/**
+	 * @throws GuzzleException
+	 */
+	private function staticSiteIdBySlug(int $collectiveId, string $slug, bool $required = true): ?int {
+		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/static-sites');
+		$this->assertStatusCode(200);
+		foreach ($this->getJson()['ocs']['data'] as $staticSite) {
+			if ($slug === $staticSite['slug']) {
+				return $staticSite['id'];
+			}
+		}
+		if ($required) {
+			throw new RuntimeException('Unable to find website ' . $slug . ' in collective ' . $collectiveId);
 		}
 		return null;
 	}
