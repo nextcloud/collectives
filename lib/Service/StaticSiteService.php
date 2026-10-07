@@ -9,12 +9,16 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Db\StaticSiteMapper;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\Exception as DBException;
 use OCP\Files\File;
+use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\Util;
@@ -25,9 +29,6 @@ class StaticSiteService {
 	private const TITLE_MAX_LENGTH = 255;
 	private const SLUG_MAX_LENGTH = 64;
 	private const SLUG_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
-	// App config key for the maximum size of all files of a static site in bytes
-	public const MAX_SIZE_CONFIG_KEY = 'static_site_max_size';
-	public const MAX_SIZE_DEFAULT = 100 * 1024 * 1024;
 	private const LARGEST_FILES_IN_MESSAGE = 3;
 
 	public function __construct(
@@ -37,6 +38,7 @@ class StaticSiteService {
 		private readonly SlugService $slugService,
 		private readonly StaticSiteContentCollector $contentCollector,
 		private readonly StaticSiteArchiver $archiver,
+		private readonly StaticSiteGeneratorClient $generatorClient,
 		private readonly LoggerInterface $logger,
 		private readonly ITimeFactory $timeFactory,
 		private readonly IAppConfig $appConfig,
@@ -45,16 +47,18 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Create a selection of pages of a collective as a static site and provide its archive.
+	 * Create a selection of pages of a collective as a static site, provide its archive and
+	 * ask the static site generator to build it.
 	 *
-	 * Title and slug default to the collective name. If the archive can't be provided,
-	 * the static site is removed again.
+	 * Title and slug default to the collective name. If the archive can't be provided or the
+	 * generator doesn't accept the build, the static site is removed again.
 	 *
 	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
 	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, slug already in use, path too long
+	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
 	 */
@@ -67,6 +71,7 @@ class StaticSiteService {
 		$this->validateTitle($title);
 		$this->validateSlug($slug);
 		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
+		$this->generatorClient->assertConfigured();
 
 		try {
 			$staticSite = $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId);
@@ -79,26 +84,30 @@ class StaticSiteService {
 
 		try {
 			$this->buildArchive($staticSite);
+			$this->generatorClient->build($staticSite, $title);
 		} catch (ServiceException $e) {
 			$this->staticSiteMapper->delete($staticSite);
 			$this->deleteArchive($staticSite);
 			throw $e;
 		}
 
-		return $this->finishPublication($staticSite, $title, $pageIds);
+		return $this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_PROVIDED);
 	}
 
 	/**
-	 * Update title and page selection of a static site and provide its archive again.
+	 * Update title and page selection of a static site, provide its archive again and
+	 * ask the static site generator to build it.
 	 *
 	 * The slug can't be changed as it is part of the public URL. If the archive can't be
-	 * provided, the static site and its previous archive remain unchanged.
+	 * provided, the static site and its previous archive remain unchanged. If the generator
+	 * doesn't accept the build, title and page selection are stored with status failed.
 	 *
 	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
 	 *
 	 * @throws NotFoundException Collective, static site or one of the pages not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
 	 * @throws UnprocessableEntityException No pages selected, invalid title, publication in progress, path too long
+	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
 	 */
@@ -114,9 +123,10 @@ class StaticSiteService {
 		$title = trim($title);
 		$this->validateTitle($title);
 		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
+		$this->generatorClient->assertConfigured();
 
 		$previousStatus = $staticSite->getStatus();
-		if (!$this->staticSiteMapper->startPublication($staticSite)) {
+		if (!$this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING)) {
 			throw new UnprocessableEntityException('Publication of static site is already in progress');
 		}
 
@@ -127,7 +137,14 @@ class StaticSiteService {
 			throw $e;
 		}
 
-		return $this->finishPublication($staticSite, $title, $pageIds);
+		try {
+			$this->generatorClient->build($staticSite, $title);
+		} catch (StaticSiteGeneratorException $e) {
+			$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED);
+			throw $e;
+		}
+
+		return $this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_PROVIDED);
 	}
 
 	/**
@@ -153,6 +170,22 @@ class StaticSiteService {
 		$this->collectiveService->getCollective($collectiveId, $userId);
 
 		return $this->staticSiteMapper->findByCollectiveId($collectiveId);
+	}
+
+	/**
+	 * Archives of static sites that were deleted meanwhile do not get returned.
+	 *
+	 * @throws NotFoundException Static site or its archive not found
+	 * @throws DBException
+	 */
+	public function getArchive(string $staticSiteId): ISimpleFile {
+		try {
+			$this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
+		}
+
+		return $this->archiver->get($staticSiteId);
 	}
 
 	/**
@@ -183,7 +216,7 @@ class StaticSiteService {
 	 * @throws UnprocessableEntityException
 	 */
 	private function validateSize(array $files): void {
-		$maxSize = $this->appConfig->getValueInt('collectives', self::MAX_SIZE_CONFIG_KEY, self::MAX_SIZE_DEFAULT);
+		$maxSize = $this->appConfig->getValueInt('collectives', ConfigLexicon::STATIC_SITE_MAX_SIZE, ConfigLexicon::STATIC_SITE_MAX_SIZE_DEFAULT);
 		$sizes = array_map(static fn (File $file): int|float => $file->getSize(), $files);
 		$totalSize = array_sum($sizes);
 		if ($totalSize <= $maxSize) {
@@ -211,9 +244,9 @@ class StaticSiteService {
 	 * @throws UnprocessableEntityException
 	 * @throws DBException
 	 */
-	private function finishPublication(StaticSite $staticSite, string $title, array $pageIds): StaticSite {
+	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status): StaticSite {
 		try {
-			return $this->staticSiteMapper->finishPublication($staticSite, $title, $pageIds);
+			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status);
 		} catch (NotFoundException $e) {
 			$this->deleteArchive($staticSite);
 			throw $e;

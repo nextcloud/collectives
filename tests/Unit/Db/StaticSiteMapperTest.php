@@ -81,10 +81,10 @@ class StaticSiteMapperTest extends TestCase {
 		return $staticSite;
 	}
 
-	public function testStartPublicationOnlyUpdatesUnchangedStaticSite(): void {
+	public function testUpdateStatusIfUnchangedOnlyUpdatesUnchangedStaticSite(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 
-		$this->assertTrue($this->mapper->startPublication($this->makeStaticSite()));
+		$this->assertTrue($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING));
 
 		$this->assertSame([
 			'id = 7',
@@ -97,33 +97,33 @@ class StaticSiteMapperTest extends TestCase {
 		], $this->values);
 	}
 
-	public function testStartPublicationReturnsFalseIfStaticSiteChangedMeanwhile(): void {
+	public function testUpdateStatusIfUnchangedReturnsFalseIfStaticSiteChangedMeanwhile(): void {
 		$this->qb->method('executeStatement')->willReturn(0);
 
-		$this->assertFalse($this->mapper->startPublication($this->makeStaticSite()));
+		$this->assertFalse($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING));
 	}
 
-	public function testFinishPublicationStoresTitleAndPages(): void {
+	public function testUpdateSettingsAndStatusStoresTitlePagesAndStatus(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 		$provided = new StaticSite();
 		$this->mapper->expects($this->once())->method('find')->with(7)->willReturn($provided);
 
-		$this->assertSame($provided, $this->mapper->finishPublication($this->makeStaticSite(), 'Title', [3, 1]));
+		$this->assertSame($provided, $this->mapper->updateSettingsAndStatus($this->makeStaticSite(), 'Title', [3, 1], StaticSite::STATUS_FAILED));
 
 		$this->assertSame(['id = 7'], $this->conditions);
 		$this->assertSame([
 			'title' => 'Title',
 			'selected_pages' => '[3,1]',
-			'status' => StaticSite::STATUS_PROVIDED,
+			'status' => StaticSite::STATUS_FAILED,
 			'updated_at' => $this->now,
 		], $this->values);
 	}
 
-	public function testFinishPublicationThrowsIfStaticSiteWasDeleted(): void {
+	public function testUpdateSettingsAndStatusThrowsIfStaticSiteWasDeleted(): void {
 		$this->qb->method('executeStatement')->willReturn(0);
 		$this->mapper->expects($this->never())->method('find');
 
 		$this->expectException(NotFoundException::class);
-		$this->mapper->finishPublication($this->makeStaticSite(), 'Title', [1]);
+		$this->mapper->updateSettingsAndStatus($this->makeStaticSite(), 'Title', [1], StaticSite::STATUS_PROVIDED);
 	}
 }

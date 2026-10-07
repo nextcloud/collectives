@@ -89,19 +89,19 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Set the status to pending, unless the static site was changed since it was read.
+	 * Set the status, unless the static site was changed since it was read.
 	 *
-	 * Check and update happen in a single query, so concurrent requests can't start
-	 * a publication twice.
+	 * Check and update happen in a single query, so of concurrent requests only one can
+	 * change the status, e.g. to pending when updating an existing static site.
 	 *
 	 * @return bool False if the static site was changed meanwhile
 	 *
 	 * @throws Exception
 	 */
-	public function startPublication(StaticSite $staticSite): bool {
+	public function updateStatusIfUnchanged(StaticSite $staticSite, string $status): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->tableName)
-			->set('status', $qb->createNamedParameter(StaticSite::STATUS_PENDING, IQueryBuilder::PARAM_STR))
+			->set('status', $qb->createNamedParameter($status, IQueryBuilder::PARAM_STR))
 			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter($staticSite->getStatus(), IQueryBuilder::PARAM_STR)))
@@ -111,7 +111,7 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Store title and page selection of a successfully provided publication.
+	 * Store title, page selection and the resulting status of a static site with a provided archive.
 	 *
 	 * @param list<int> $pageIds
 	 *
@@ -119,12 +119,12 @@ class StaticSiteMapper extends QBMapper {
 	 * @throws UnprocessableEntityException
 	 * @throws Exception
 	 */
-	public function finishPublication(StaticSite $staticSite, string $title, array $pageIds): StaticSite {
+	public function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status): StaticSite {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->tableName)
 			->set('title', $qb->createNamedParameter($title, IQueryBuilder::PARAM_STR))
 			->set('selected_pages', $qb->createNamedParameter(StaticSite::encodePageIds($pageIds), IQueryBuilder::PARAM_STR))
-			->set('status', $qb->createNamedParameter(StaticSite::STATUS_PROVIDED, IQueryBuilder::PARAM_STR))
+			->set('status', $qb->createNamedParameter($status, IQueryBuilder::PARAM_STR))
 			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)));
 
