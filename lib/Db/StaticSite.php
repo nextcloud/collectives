@@ -45,10 +45,11 @@ class StaticSite extends Entity implements JsonSerializable {
 	public const STATUS_PENDING = 'pending';
 	public const STATUS_PROVIDED = 'provided';
 	public const STATUS_PUBLISHED = 'published';
-	// Only set by the publish service, a failed archive build doesn't change the status
+	// The publish service didn't build the static site, e.g. it wasn't reachable or rejected it.
+	// A failed archive build keeps the previous status instead.
 	public const STATUS_FAILED = 'failed';
 
-	// TODO: Add STATUS_PROVIDED once the publish service gets informed about the provided tar.gz
+	// TODO(Publish): Add STATUS_PROVIDED once the publish service reports the build result via callback
 	public const IN_PROGRESS_STATUSES = [
 		self::STATUS_PENDING,
 	];

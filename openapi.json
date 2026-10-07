@@ -16467,6 +16467,10 @@
             "description": "Provides access to static site exports of a collective."
         },
         {
+            "name": "static_site_generator",
+            "description": "Provides admins access to the external static site generator."
+        },
+        {
             "name": "search",
             "description": "Allows to search collectives."
         },
