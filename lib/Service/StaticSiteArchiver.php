@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 use FilesystemIterator;
+use Generator;
 use OCP\Files\File;
 use OCP\Files\GenericFileException;
 use OCP\Files\IAppData;
@@ -149,15 +150,24 @@ class StaticSiteArchiver {
 			throw new ServiceException('Failed to create temporary folder for static site files');
 		}
 
+		$localPaths = [];
+		$index = 0;
+		foreach ($files as $path => $file) {
+			$localPath = $filesFolder . '/' . $index++;
+			$this->copyToLocal($file, $localPath);
+			$localPaths[$path] = $localPath;
+		}
+
 		try {
 			// PharData detects the archive format from the file extension
 			$tar = new PharData($tempFolder . '/site.tar');
-			$index = 0;
-			foreach ($files as $path => $file) {
-				$localPath = $filesFolder . '/' . $index++;
-				$this->copyToLocal($file, $localPath);
-				$tar->addFile($localPath, (string)$path);
-			}
+			// PharData rewrites the whole archive on every addFile(), so all files are added in one go.
+			// The generator casts keys to strings, as numeric paths become integer array keys and would get rejected by PharData.
+			$tar->buildFromIterator((static function () use ($localPaths): Generator {
+				foreach ($localPaths as $path => $localPath) {
+					yield (string)$path => $localPath;
+				}
+			})());
 			// Creates site.tar.gz next to uncompressed site.tar
 			$tar->compress(Phar::GZ);
 		} catch (\UnexpectedValueException|\BadMethodCallException|\PharException $e) {

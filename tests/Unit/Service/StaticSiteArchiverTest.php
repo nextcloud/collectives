@@ -111,10 +111,12 @@ class StaticSiteArchiverTest extends TestCase {
 			'Readme.md' => $this->makeFile('# Home'),
 			'.attachments.12/image.png' => $this->makeFile('png-data'),
 			'Subpage/Readme.md' => $this->makeFile('# Sub'),
+			'2024' => $this->makeFile('numeric'),
 		]);
 
 		$this->assertSame([
 			'.attachments.12/image.png' => 'png-data',
+			'2024' => 'numeric',
 			'Readme.md' => '# Home',
 			'Subpage/Readme.md' => '# Sub',
 		], $this->readStoredArchive());
