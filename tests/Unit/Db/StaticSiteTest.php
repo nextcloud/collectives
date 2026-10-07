@@ -47,9 +47,21 @@ class StaticSiteTest extends TestCase {
 		$this->assertSame($expected, $staticSite->isInProgress($now));
 	}
 
-	public function testGetSelectedPageIdsThrowsForCorruptedValue(): void {
+	public static function corruptedSelectedPagesProvider(): array {
+		return [
+			'invalid JSON' => ['[1,'],
+			'scalar' => ['5'],
+			'string' => ['"page"'],
+			'null' => ['null'],
+		];
+	}
+
+	/**
+	 * @dataProvider corruptedSelectedPagesProvider
+	 */
+	public function testGetSelectedPageIdsThrowsForCorruptedValue(string $selectedPages): void {
 		$staticSite = new StaticSite();
-		$staticSite->setSelectedPages('[1,');
+		$staticSite->setSelectedPages($selectedPages);
 
 		$this->expectException(UnexpectedValueException::class);
 		$staticSite->getSelectedPageIds();

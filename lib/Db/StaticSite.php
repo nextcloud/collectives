@@ -68,10 +68,8 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?int $updatedAt = null;
 
 	public function isInProgress(int $now): bool {
-		if ($this->status === self::STATUS_PENDING && $this->updatedAt < $now - self::PENDING_TIMEOUT) {
-			return false;
-		}
-		return in_array($this->status, self::IN_PROGRESS_STATUSES, true);
+		return !($this->status === self::STATUS_PENDING && $this->updatedAt < $now - self::PENDING_TIMEOUT)
+			&& in_array($this->status, self::IN_PROGRESS_STATUSES, true);
 	}
 
 	/**
@@ -79,10 +77,14 @@ class StaticSite extends Entity implements JsonSerializable {
 	 */
 	public function getSelectedPageIds(): array {
 		try {
-			return json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+			$pageIds = json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);
 		} catch (JsonException $e) {
 			throw new UnexpectedValueException('Invalid page selection stored for static site ' . $this->id, 0, $e);
 		}
+		if (!is_array($pageIds)) {
+			throw new UnexpectedValueException('Invalid page selection stored for static site ' . $this->id);
+		}
+		return $pageIds;
 	}
 
 	/**

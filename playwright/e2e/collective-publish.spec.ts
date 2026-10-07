@@ -93,9 +93,9 @@ test.describe('Collective publish', () => {
 
 			// The request must reach the backend and provide the website files
 			const response = await (await requestPromise).response()
-			expect(response?.status()).toBe(200)
-			// eslint-disable-next-line no-unsafe-optional-chaining
-			expect((await response?.json()).ocs.data.status).toBe('provided')
+			expect(response).not.toBeNull()
+			expect(response!.status()).toBe(200)
+			expect((await response!.json()).ocs.data.status).toBe('provided')
 
 			// Modal closes after successful submission
 			await expect(modal).toHaveCount(0)

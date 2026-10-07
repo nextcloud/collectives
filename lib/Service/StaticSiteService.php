@@ -191,11 +191,12 @@ class StaticSiteService {
 		}
 
 		arsort($sizes);
+		$largest = array_slice($sizes, 0, self::LARGEST_FILES_IN_MESSAGE, true);
 		$largestFiles = array_map(
 			// Numeric paths become integer array keys
 			static fn (int|string $path, int|float $size): string => $path . ' (' . Util::humanFileSize($size) . ')',
-			array_keys(array_slice($sizes, 0, self::LARGEST_FILES_IN_MESSAGE, true)),
-			array_slice($sizes, 0, self::LARGEST_FILES_IN_MESSAGE),
+			array_keys($largest),
+			$largest,
 		);
 		throw new UnprocessableEntityException($this->l10n->t(
 			'The website would be %1$s, but at most %2$s are allowed. Please remove or shrink large files, e.g. %3$s',
