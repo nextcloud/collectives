@@ -21,6 +21,10 @@ return [
 		['name' => 'publicStart#showShare', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],	'defaults' => ['path' => '']],
 
+		// Static site archive download route for the external static site generator (not ocs due to simple file download)
+		['name' => 'static_site_archive#download', 'url' => '/api/v{apiVersion}/p/static-sites/{staticSiteId}/archive', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
 		// Vue.js router route (Vue.js frontend)
 		['name' => 'start#indexPath', 'url' => '/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],
@@ -76,6 +80,10 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'static_site#delete', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+
+		// External static site generator API (admin only)
+		['name' => 'static_site_generator#health', 'url' => '/api/v{apiVersion}/static-site-generator/health', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
 
 		// Pages search API
 		['name' => 'search#searchRecentPages', 'url' => '/api/v{apiVersion}/collectives/search/recent', 'verb' => 'GET',
