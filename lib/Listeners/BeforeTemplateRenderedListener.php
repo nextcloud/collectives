@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Listeners;
 
 use OCA\Collectives\AppInfo\Application;
+use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -77,6 +78,6 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		$this->initialState->provideInitialState('is_guest', $isGuest);
 
 		// Provide admin settings as initial state
-		$this->initialState->provideInitialState('publish_enabled', $this->appConfig->getValueString('collectives', 'publish_enabled', 'false') === 'true');
+		$this->initialState->provideInitialState('publish_enabled', $this->appConfig->getValueString('collectives', ConfigLexicon::PUBLISH_ENABLED, ConfigLexicon::PUBLISH_ENABLED_DEFAULT) === 'true');
 	}
 }
