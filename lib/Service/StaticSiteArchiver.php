@@ -30,7 +30,7 @@ use RecursiveIteratorIterator;
 class StaticSiteArchiver {
 	private const APPDATA_FOLDER = 'static_sites';
 	private const ARCHIVE_SUFFIX = '.tar.gz';
-	// Path limits of the ustar header written by PharData, in bytes
+	// Path limits of the ustar header written by PharData (ustar is the standard tar format), in bytes
 	private const TAR_NAME_MAX_LENGTH = 100;
 	private const TAR_PREFIX_MAX_LENGTH = 155;
 
@@ -51,10 +51,14 @@ class StaticSiteArchiver {
 	 *
 	 * @param array<string, File> $files Files mapped to their relative path in the archive
 	 *
-	 * @throws UnprocessableEntityException A path is too long for the archive
+	 * @throws UnprocessableEntityException No files given or a path is too long for the archive
 	 * @throws ServiceException
 	 */
 	public function store(string $staticSiteId, array $files): void {
+		if ($files === []) {
+			throw new UnprocessableEntityException($this->l10n->t('There is no content to publish.'));
+		}
+
 		foreach (array_keys($files) as $path) {
 			$this->validateArchivePath((string)$path);
 			$this->validateArchivePathLength((string)$path);
@@ -69,7 +73,7 @@ class StaticSiteArchiver {
 			$archivePath = $this->buildArchive($tempFolder, $files);
 			$this->writeToAppData($staticSiteId, $archivePath);
 		} finally {
-			// ITempManager only removes temporary files in a background job, archives may be large
+			// ITempManager only removes temporary files in a background job, archives may be too large to wait for the job
 			$this->removeDirectory($tempFolder);
 		}
 	}
@@ -131,7 +135,7 @@ class StaticSiteArchiver {
 	}
 
 	/**
-	 * Source files are copied to flat local names, so archive paths never touch the local filesystem.
+	 * Source files are copied to flat local names, so the archive paths, set by the user, never get used as local paths in the filesystem.
 	 *
 	 * @param array<string, File> $files
 	 *
@@ -154,13 +158,17 @@ class StaticSiteArchiver {
 				$this->copyToLocal($file, $localPath);
 				$tar->addFile($localPath, (string)$path);
 			}
-			// Creates site.tar.gz next to site.tar
+			// Creates site.tar.gz next to uncompressed site.tar
 			$tar->compress(Phar::GZ);
 		} catch (\UnexpectedValueException|\BadMethodCallException|\PharException $e) {
 			throw new ServiceException('Failed to build static site archive: ' . $e->getMessage(), 0, $e);
 		}
 
-		return $tempFolder . '/site' . self::ARCHIVE_SUFFIX;
+		$archivePath = $tempFolder . '/site' . self::ARCHIVE_SUFFIX;
+		if (!is_file($archivePath)) {
+			throw new ServiceException('PharData did not create the compressed static site archive');
+		}
+		return $archivePath;
 	}
 
 	/**

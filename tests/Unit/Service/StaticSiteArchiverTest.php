@@ -222,6 +222,15 @@ class StaticSiteArchiverTest extends TestCase {
 		}
 	}
 
+	public function testStoreRejectsEmptyFileList(): void {
+		$this->tempManager->expects($this->never())->method('getTemporaryFolder');
+		$this->appData->expects($this->never())->method('getFolder');
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('There is no content to publish.');
+		$this->archiver->store($this->staticSiteId, []);
+	}
+
 	public function testStoreFailsAndCleansUpIfFileCannotBeRead(): void {
 		$file = $this->createMock(File::class);
 		$file->method('fopen')->willReturn(false);
