@@ -23,6 +23,14 @@ export class User {
 		return await trashAndDeleteCollective({ ...options, page })
 	}
 
+	async createFolder(options: { path: string }, page: Page) {
+		await page.request.fetch(
+			webdavUrl(this.account.userId, options.path),
+			{ method: 'MKCOL', failOnStatusCode: true },
+		)
+		return options.path
+	}
+
 	async uploadFixture(options: { name: string, path: string, mimetype: string }, page: Page) {
 		const filepath = resolve(import.meta.dirname, 'files', options.name)
 		await page.request.put(
