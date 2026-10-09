@@ -39,6 +39,11 @@ export class PageListSection {
 			.click()
 	}
 
+	public async collapseAll(): Promise<void> {
+		await this.el.getByRole('button', { name: 'Page list options' }).click()
+		await this.page.getByRole('menuitem', { name: 'Collapse all pages' }).click()
+	}
+
 	public async addPage(parentTitle: string): Promise <void> {
 		const item = this.getPageItem(parentTitle)
 		// The add-subpage button is only shown on hover

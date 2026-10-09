@@ -140,3 +140,25 @@ test.describe('Page list drag and drop', () => {
 		await editor.hasCollectiveLink(page1.data.title)
 	})
 })
+
+test.describe('Page list collapse all', () => {
+	test('Collapse all pages but keep current page visible', async ({ page, user, collective, pageList }) => {
+		const parent = await collective.createPage({ title: 'Parent', user, page })
+		const child = await collective.createPage({ title: 'Child', parentId: parent.data.id, user, page })
+		await collective.createPage({ title: 'Grandchild', parentId: child.data.id, user, page })
+		const other = await collective.createPage({ title: 'Other', user, page })
+		await collective.createPage({ title: 'Other child', parentId: other.data.id, user, page })
+
+		await child.open()
+		await expect(pageList.getPageItem('Grandchild')).toBeVisible()
+		await pageList.toggleExpandPage('Other')
+		await expect(pageList.getPageItem('Other child')).toBeVisible()
+
+		await pageList.collapseAll()
+
+		// Parent of current page stays expanded, everything else collapses
+		await expect(pageList.getPageItem('Child')).toBeVisible()
+		await expect(pageList.getPageItem('Grandchild')).toHaveCount(0)
+		await expect(pageList.getPageItem('Other child')).toHaveCount(0)
+	})
+})
