@@ -10,6 +10,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: playwright-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   playwright:
     timeout-minutes: 60
@@ -73,6 +77,7 @@ jobs:
         run: npx playwright test ${{ matrix.project-args }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         env:
           COLLECTIVES_SEMANTIC_E2E: ${{ matrix.semantic-e2e }}
+          COLLECTIVES_COMPARISON_INITIAL_VIEW: changes
           PLAYWRIGHT_NC_SERVER_BRANCH: ${{ matrix.server-branch }}
           PLAYWRIGHT_TEXT_REPOSITORY: ${{ matrix.text-repository }}
           PLAYWRIGHT_TEXT_REF: ${{ matrix.text-ref }}
@@ -87,11 +92,74 @@ jobs:
             blob-report/
           retention-days: 7
 
+  comparison-nc35:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check composer.json
+        id: check_composer
+        uses: andstor/file-existence-action@558493d6c74bf472d87c84eab196434afc2fa029 # v3.1.0
+        with:
+          files: 'composer.json'
+
+      - name: Install composer dependencies
+        if: steps.check_composer.outputs.files_exists == 'true'
+        run: composer install --no-dev
+
+      - name: Read package.json
+        uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
+        id: versions
+
+      - name: Set up node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ steps.versions.outputs.node-version }}
+
+      - name: Set up npm
+        run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
+
+      - name: Install node dependencies & build app
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+        run: |
+          npm ci
+          npm run build --if-present
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: ./node_modules/.bin/playwright test playwright/e2e/version-comparison.spec.ts --project=comparison-chromium --workers=1
+        env:
+          COLLECTIVES_SEMANTIC_E2E: '1'
+          COLLECTIVES_COMPARISON_INITIAL_VIEW: changes
+          NEXTCLOUD_E2E_LOG_FILE: test-results/nextcloud.log
+          PLAYWRIGHT_NC_SERVER_BRANCH: stable35
+          PLAYWRIGHT_TEXT_REPOSITORY: nextcloud/text
+          PLAYWRIGHT_TEXT_REF: 'b07c97d488f7a2c44edea8b2ad3b88a85f6612bf'
+
+      - name: Upload results
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report_stable35_comparison
+          path: |
+            test-results/
+            blob-report/
+          retention-days: 7
+
   summary:
     runs-on: ubuntu-latest-low
-    needs: playwright
+    needs: [playwright, comparison-nc35]
     if: always()
     name: playwright-summary
     steps:
       - name: Summary status
-        run: if ${{ needs.playwright.result != 'success' && needs.playwright.result != 'skipped' }}; then exit 1; fi
+        run: |
+          if ${{ needs.playwright.result != 'success' && needs.playwright.result != 'skipped' }}; then exit 1; fi
+          if ${{ needs.comparison-nc35.result != 'success' }}; then exit 1; fi
