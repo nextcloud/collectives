@@ -27,6 +27,7 @@ OC.L10N.register(
     "Download" : "Elŝuti",
     "Title" : "Titolo",
     "Open sidebar" : "Malfermi flankopanelon",
+    "Clear search" : "Viŝi serĉon",
     "Favorites" : "Plej ŝatataj",
     "Home" : "Hejmo",
     "Favorite" : "Pliŝatati",
