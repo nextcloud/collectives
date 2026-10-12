@@ -1995,11 +1995,14 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
 		$davPath = '/dav/files/' . $user . $userCollectivesPath . '/' . urlencode($collective) . '/' . $fileName;
-		$this->sendRemoteRequest('PROPFIND', $davPath, null, null, ['Depth' => '0']);
+		$body = '<d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns"><d:prop><oc:fileid/></d:prop></d:propfind>';
+		$this->sendRemoteRequest('PROPFIND', $davPath, $body, null, ['Depth' => '0', 'Content-Type' => 'application/xml']);
 		$this->assertStatusCode(207);
 		$xml = simplexml_load_string($this->response->getBody()->getContents());
 		$xml->registerXPathNamespace('oc', 'http://owncloud.org/ns');
-		$fileId = (int)$xml->xpath('//oc:fileid')[0];
+		$fileIds = $xml->xpath('//oc:fileid');
+		Assert::assertCount(1, $fileIds);
+		$fileId = (int)$fileIds[0];
 		Assert::assertGreaterThan(0, $fileId);
 		$this->sendOcsRequest('POST', '/apps/dav/api/v1/direct', null, ['fileId' => $fileId]);
 	}
@@ -2014,7 +2017,8 @@ class FeatureContext implements Context {
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/pages/' . $pageId);
 		$this->assertStatusCode(200);
-		$pagePath = $this->getJson()['ocs']['data']['page']['filePath'];
+		$pageInfo = $this->getJson()['ocs']['data']['page'];
+		$pagePath = $pageInfo['filePath'] ? $pageInfo['filePath'] . '/' . $pageInfo['fileName'] : $pageInfo['fileName'];
 		$this->setCurrentUser($user);
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
 		$this->sendRemoteRequest('GET', '/dav/files/' . $user . $userCollectivesPath . '/' . urlencode($collective) . '/' . $pagePath);
