@@ -17,15 +17,15 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            server-branch: ['stable32', 'master']
+            server-branch: ['stable33', 'master']
             shardIndex: [1, 2, 3, 4]
             shardTotal: [4]
             include:
-              - server-branch: 'stable32'
+              - server-branch: 'stable33'
                 project-args: '--project=chromium --project=comparison-viewer-chromium'
                 semantic-e2e: '0'
                 text-repository: 'nextcloud/text'
-                text-ref: 'stable32'
+                text-ref: 'stable33'
               - server-branch: 'master'
                 project-args: '--project=chromium --project=comparison-chromium'
                 semantic-e2e: '1'

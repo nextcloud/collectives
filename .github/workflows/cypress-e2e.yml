@@ -61,13 +61,13 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable32', 'master']
+        server-versions: ['stable33', 'master']
         include:
-          - server-versions: 'stable32'
-            server-major: '32'
+          - server-versions: 'stable33'
+            server-major: '33'
             semantic-e2e: '0'
             text-app-repository: 'nextcloud/text'
-            text-app-ref: 'stable32'
+            text-app-ref: 'stable33'
           - server-versions: 'master'
             server-major: ''
             semantic-e2e: '1'
@@ -194,19 +194,14 @@ jobs:
       fail-fast: false
       matrix:
         containers: [1, 2, 3, 4]
-        php-versions: ['8.1', '8.4']
+        php-versions: ['8.4']
         databases: ['sqlite']
-        server-versions: ['stable32', 'master']
+        server-versions: ['stable33', 'master']
         include:
-          - server-versions: 'stable32'
+          - server-versions: 'stable33'
             semantic-e2e: '0'
           - server-versions: 'master'
             semantic-e2e: '1'
-        exclude:
-          - php-versions: '8.1'
-            server-versions: 'stable32'
-          - php-versions: '8.1'
-            server-versions: 'master'
 
     name: runner ${{ matrix.containers }} (${{ matrix.server-versions }})
 

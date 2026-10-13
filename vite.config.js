@@ -17,13 +17,6 @@ export default createAppConfig(
 	},
 	{
 		config: {
-			build: {
-				rollupOptions: {
-					// Needed for Nextcloud >= 32. In 33 it got fixed
-					// with https://github.com/nextcloud/server/pull/56941
-					preserveEntrySignatures: 'strict',
-				},
-			},
 			css: {
 				modules: {
 					localsConvention: 'camelCase',

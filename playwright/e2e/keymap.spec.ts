@@ -20,7 +20,7 @@ test.describe('Keyboard shortcuts', () => {
 		await page.keyboard.press('Control+f')
 		await expect(pageFilter).toBeFocused()
 
-		if (hasServerVersion(32, 33, 34)) {
+		if (hasServerVersion(33, 34)) {
 			// Before NC 35: Second Ctrl-F: open unified search
 			await page.keyboard.press('Control+f')
 			await expect(pageFilter).not.toBeFocused()
@@ -48,7 +48,7 @@ test.describe('Keyboard shortcuts', () => {
 
 		// Second Ctrl-F
 		await page.keyboard.press('Control+f')
-		if (hasServerVersion(32, 33, 34)) {
+		if (hasServerVersion(33, 34)) {
 			// Before NC 35: open unified search
 			await expect(page.locator('.unified-search-modal-root')).toBeVisible()
 		} else {

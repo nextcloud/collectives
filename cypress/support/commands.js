@@ -98,7 +98,7 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 
 	cy.env(['ncVersion']).then(({ ncVersion }) => {
 		let url, data
-		if (['stable32', 'stable33'].includes(ncVersion)) {
+		if (['stable33'].includes(ncVersion)) {
 			url = `${Cypress.expose('baseUrl')}/index.php/settings/apps/${verb}`
 			data = { appIds: [appName] }
 		} else {

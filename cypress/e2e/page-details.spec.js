@@ -4,8 +4,6 @@
  */
 
 describe('Page details', function() {
-	const env = {}
-
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Our Garden')
@@ -15,10 +13,6 @@ describe('Page details', function() {
 				cy.seedPageContent('Our Garden/Day 2.md', `A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our-Garden-${collectiveId}/Day-1-${pageId}).`)
 			})
 		cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
-
-		cy.env(['ncVersion']).then(({ ncVersion }) => {
-			env.ncVersion = ncVersion
-		})
 	})
 
 	beforeEach(function() {
@@ -29,10 +23,7 @@ describe('Page details', function() {
 	})
 
 	it('Allows to display/close TOC and switch page modes in between', function() {
-		// TODO: Remove once we only support nc33+
-		const tocSelector = ['stable32'].includes(env.ncVersion)
-			? '.editor--toc .editor--toc__item'
-			: '.editor__toc .toc-list__item'
+		const tocSelector = '.editor__toc .toc-list__item'
 		cy.openPage('TableOfContents')
 		cy.getReadOnlyEditor()
 			.contains('Second-Level Heading')
@@ -43,12 +34,9 @@ describe('Page details', function() {
 		cy.getReadOnlyEditor()
 			.find(tocSelector)
 			.should('contain', 'Second-Level Heading')
-		// TODO Remove condition once we only support nc33+
-		if (!['stable32'].includes(env.ncVersion)) {
-			cy.getReadOnlyEditor()
-				.find('.editor__toc .pin-outline-icon')
-				.click()
-		}
+		cy.getReadOnlyEditor()
+			.find('.pin-outline-icon')
+			.click()
 
 		// Reload to test persistence of toc
 		cy.reload()
@@ -66,36 +54,27 @@ describe('Page details', function() {
 			.should('contain', 'Second-Level Heading')
 
 		cy.log('Close toc in edit mode')
-		// TODO Remove condition once we only support nc33+
-		if (['stable32'].includes(env.ncVersion)) {
-			cy.getEditor()
-				.find('.editor--outline__header .close-icon')
-				.click()
-		} else {
-			// TODO: Fix bug in text that toc is not pinned after reload
-			cy.getEditor()
-				.find('.editor__toc .pin-outline-icon')
-				.click()
+		// TODO: Fix bug in text that toc is not pinned after reload
+		cy.getEditor()
+			.find('.editor__toc .pin-outline-icon')
+			.click()
 
-			cy.getEditor()
-				.find('.editor__toc .close-icon')
-				.click()
+		cy.getEditor()
+			.find('.editor__toc .close-icon')
+			.click()
 
-			// Click outside toc to trigger `mouseleave`
-			cy.getEditor()
-				.click()
-		}
+		// Click outside toc to trigger `mouseleave`
+		cy.getEditor()
+			.click()
 
-		// TODO: Remove first selector once we only support nc33+
-		cy.get('.editor--toc, .editor__toc')
+		cy.get('.editor__toc')
 			.should('not.exist')
 
 		// Switch back to preview mode
 		cy.switchToPreviewMode()
 			.contains('Second-Level Heading')
 
-		// TODO: Remove first selector once we only support nc33+
-		cy.get('.editor--toc, .editor__toc')
+		cy.get('.editor__toc')
 			.should('not.exist')
 	})
 

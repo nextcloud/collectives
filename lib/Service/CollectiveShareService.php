@@ -335,13 +335,6 @@ class CollectiveShareService {
 			return true;
 		}
 
-		// Until Nextcloud 32 (TODO: remove once we support only NC33+)
-		if ($this->session->get('public_link_authenticated_token') === $token
-			&& $this->session->get('public_link_authenticated_password_hash') === $passwordHash) {
-			return true;
-		}
-
-		// Since Nextcloud 33
 		$allowedTokensJSON = $this->session->get(PublicShareController::DAV_AUTHENTICATED_FRONTEND) ?? '[]';
 		$allowedTokens = json_decode($allowedTokensJSON, true);
 		if (!is_array($allowedTokens)) {
