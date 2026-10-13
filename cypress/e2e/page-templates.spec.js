@@ -25,11 +25,11 @@ describe('Page templates', function() {
 			.contains('Add a template')
 			.click()
 
-		cy.get('#viewer .ProseMirror')
+		cy.get('.viewer__modal .ProseMirror')
 			.should('be.visible')
 			.type('## Template Heading{enter}Template body')
 
-		cy.get('#viewer button.header-close')
+		cy.get('.viewer__modal .modal-header button.header-close')
 			.click()
 
 		// Rename template

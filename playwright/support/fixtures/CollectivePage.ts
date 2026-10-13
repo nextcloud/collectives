@@ -114,7 +114,7 @@ export class CollectivePage {
 	}
 
 	getViewerContent() {
-		return this.page.locator('#viewer')
+		return this.page.locator('.viewer__modal')
 	}
 
 	/**

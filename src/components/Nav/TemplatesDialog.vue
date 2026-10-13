@@ -49,6 +49,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { useRootStore } from '../../stores/root.js'
 import { useTemplatesStore } from '../../stores/templates.js'
 import displayError from '../../util/displayError.js'
+import { openFileAt } from '../../util/viewer.ts'
 
 export default {
 	name: 'TemplatesDialog',
@@ -102,11 +103,13 @@ export default {
 			this.setTemplatesCollectiveId(undefined)
 		},
 
-		onOpen(template) {
-			window.OCA.Viewer.open({
-				path: `/${this.templateFilePath(template)}`,
-				list: [],
-			})
+		async onOpen(template) {
+			try {
+				await openFileAt(`/${this.templateFilePath(template)}`)
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not open template'))
+			}
 		},
 
 		async onCreate(parentId) {

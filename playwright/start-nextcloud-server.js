@@ -104,7 +104,7 @@ if (await isServerRunning()) {
 	if (process.env.COLLECTIVES_SEMANTIC_E2E === '1') {
 		buildText()
 	}
-	await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'notifications', 'text', 'viewer'])
+	await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'notifications', 'text'])
 }
 
 // Idle to wait for shutdown

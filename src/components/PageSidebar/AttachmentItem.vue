@@ -108,9 +108,11 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
 import { formatFileSize } from '@nextcloud/files'
+import { getRootPath } from '@nextcloud/files/dav'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { canView, getViewer } from '@nextcloud/viewer'
 import { NcActionButton, NcActionLink, NcListItem } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapState } from 'pinia'
@@ -127,6 +129,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
+import { fileNode } from '../../util/viewer.ts'
 
 export default {
 	name: 'AttachmentItem',
@@ -279,10 +282,16 @@ export default {
 		},
 
 		onClick(event) {
-			// Show in viewer if the mimetype is supported
-			if (window.OCA.Viewer?.availableHandlers.map((handler) => handler.mimes).flat().includes(this.attachment.mimetype)) {
+			// Show in viewer if the viewer can open the attachment
+			const node = fileNode({
+				id: this.attachment.id,
+				source: this.davUrl,
+				mime: this.attachment.mimetype,
+				root: getRootPath(),
+			})
+			if (canView(node)) {
 				event.preventDefault()
-				window.OCA.Viewer.open({ path: this.attachment.path })
+				getViewer().open([node], node)
 			}
 		},
 

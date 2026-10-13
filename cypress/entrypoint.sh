@@ -21,7 +21,6 @@ if [ $? -eq 0 ]; then
         php /var/www/html/occ user:add --password-from-env user1
         php /var/www/html/occ user:add --password-from-env user2
         php /var/www/html/occ app:enable circles
-        php /var/www/html/occ app:enable viewer
         php /var/www/html/occ app:enable text
         php /var/www/html/occ app:enable --force collectives
         php /var/www/html/occ app:list

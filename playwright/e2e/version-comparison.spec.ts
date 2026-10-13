@@ -751,7 +751,7 @@ test.describe('Version comparison route and current-byte contract', () => {
 			window.history.pushState({}, '', url)
 			window.dispatchEvent(new PopStateEvent('popstate', { state: window.history.state }))
 		}, comparisonUrl)
-		const viewerPanes = page.locator('#viewer .viewer--split > .viewer__file-wrapper:visible')
+		const viewerPanes = page.locator('.viewer__modal .viewer__comparison > *:visible')
 		await expect(viewerPanes).toHaveCount(2)
 		await expect(page.locator('.version-comparison-dialog')).toHaveCount(0)
 		const retained = new URL(page.url())

@@ -221,8 +221,8 @@ let publicSharePath = ''
 let publicShare = null
 
 function closeViewerComparison() {
-	cy.window().then((window) => window.OCA.Viewer.close())
-	cy.get('#viewer').should('not.exist')
+	cy.get('body').type('{esc}')
+	cy.get('.viewer__modal').should('not.exist')
 }
 
 const ROLLBACK_SECTION = `## Rollback ownership
@@ -1334,7 +1334,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		getVersionComparisonModal().find('button[type="submit"]').click()
 		cy.get('.version-comparison-dialog .text-comparison').should('be.visible')
 		cy.contains('.version-comparison-dialog [role="tab"]', 'Markdown source').should('be.visible')
-		cy.get('#viewer').should('not.exist')
+		cy.get('.viewer__modal').should('not.exist')
 	})
 
 	it('X03 falls back to Viewer when the advertised semantic factory is missing', function() {
@@ -1353,7 +1353,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		getVersionComparisonModal().find('button[type="submit"]').click()
 		cy.wait('@viewerPreparationSave')
 		cy.get('.version-comparison-dialog').should('not.exist')
-		cy.get('#viewer .viewer--split > .viewer__file-wrapper:visible')
+		cy.get('.viewer__modal .viewer__comparison > *:visible')
 			.should('have.length', 2)
 			.eq(1)
 			.should('contain', typedBytes)
@@ -1374,7 +1374,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.contains('button', 'Compare versions…').click()
 		getVersionComparisonModal().find('button[type="submit"]').click()
 		cy.wait('@failedViewerPreparationSave')
-		cy.get('#viewer').should('not.exist')
+		cy.get('.viewer__modal').should('not.exist')
 		cy.get('.version-comparison-dialog [role="alert"]')
 			.should('contain', 'Could not save current changes before comparison. Please try again.')
 		cy.get('@missingSemanticFactory').then((stub) => stub.restore())
@@ -1435,7 +1435,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('.version-comparison-dialog [role="alert"]')
 			.should('contain', 'You do not have permission to load the selected versions.')
 		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-		cy.get('#viewer').should('not.exist')
+		cy.get('.viewer__modal').should('not.exist')
 	})
 
 	it('C12 Shows a permission error when one selected snapshot is unavailable', function() {
@@ -1474,7 +1474,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('.version-comparison-dialog [role="alert"]')
 			.should('contain', 'Could not load the selected versions because of a network error.')
 		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
-		cy.get('#viewer').should('not.exist')
+		cy.get('.viewer__modal').should('not.exist')
 	})
 
 	it('C09 cancels a superseded request and prevents stale publication', function() {
@@ -1731,7 +1731,6 @@ if (!SEMANTIC_E2E) {
 					cy.stub(window.OCA.Text, 'createMarkdownContentComparison').value(undefined)
 				}
 				expect(window.OCA?.Text?.createMarkdownContentComparison).not.to.be.a('function')
-				expect(window.OCA?.Viewer?.compare).to.be.a('function')
 			})
 			openVersionsSidebar()
 			cy.contains('.app-sidebar-tabs__content .version-list .list-item', 'Initial version')
@@ -1739,11 +1738,11 @@ if (!SEMANTIC_E2E) {
 				.click()
 			cy.clickMenuButton('Compare with current version')
 
-			cy.get('#viewer .viewer--split > .viewer__file-wrapper:visible')
+			cy.get('.viewer__modal .viewer__comparison > *:visible')
 				.should('have.length', 2)
 				.first()
 				.should('contain', INITIAL_PHRASE)
-			cy.get('#viewer .viewer--split > .viewer__file-wrapper:visible')
+			cy.get('.viewer__modal .viewer__comparison > *:visible')
 				.eq(1)
 				.should('contain', CURRENT_PHRASE)
 			closeViewerComparison()
