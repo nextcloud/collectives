@@ -16,10 +16,10 @@ return RectorConfig::configure()
 		__DIR__ . '/lib',
 		__DIR__ . '/tests',
 	])
-	->withPhpSets(php81: true)
+	->withPhpSets(php82: true)
 	->withTypeCoverageLevel(0)
 	->withSets([
-		NextcloudSets::NEXTCLOUD_32,
+		NextcloudSets::NEXTCLOUD_33,
 	])
 	->withDeadCodeLevel(0)
 	->withCodeQualityLevel(0);

@@ -25,7 +25,7 @@ test.describe('Unified search', () => {
 		page2 = await collective.createPage({ title: 'Page 2', user, page })
 		await collective.openCollective()
 		unifiedSearchDialog = page.locator('.unified-search-modal-root')
-		if (hasServerVersion(32, 33)) {
+		if (hasServerVersion(33)) {
 			await page.getByRole('button', { name: 'Unified search' }).click()
 			unifiedSearchInput = unifiedSearchDialog.getByRole('textbox')
 		} else {

@@ -259,13 +259,6 @@ export default {
 	flex-grow: 1;
 }
 
-[data-collectives-el="reader"] {
-	// Set default width for reader, required for read-only shares on Nextcloud <= 32
-	:deep(.editor__content) {
-		max-width: var(--text-editor-max-width, var(--text-editor-max-width-default));
-	}
-}
-
 .page-content-skeleton {
 	padding-block-start: var(--default-clickable-area);
 }

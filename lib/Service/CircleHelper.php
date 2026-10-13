@@ -39,18 +39,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * Use `probeCircles()` on
-	 * - Nextcloud 31+
-	 * - Nextcloud 30 starting with 30.0.3
-	 */
-	private static function useProbeCircles(): bool {
-		[$major, $minor, $micro] = Util::getVersion();
-		$version = $major . '.' . $minor . '.' . $micro;
-		return $major >= 31
-			|| ($major === 30 && version_compare($version, '30.0.3', '>='));
-	}
-
-	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -108,9 +96,7 @@ class CircleHelper {
 			$dataProbe = new DataProbe();
 			$dataProbe->add(DataProbe::INITIATOR);
 			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
-			$circles = self::useProbeCircles()
-				? $this->circlesManager->probeCircles($circleProbe, $dataProbe)
-				: $this->circlesManager->getCircles($circleProbe, true);
+			$circles = $this->circlesManager->probeCircles($circleProbe, $dataProbe);
 		} catch (RequestBuilderException|
 				 FederatedItemException $e) {
 				 	throw new NotPermittedException($e->getMessage(), 0, $e);
@@ -171,9 +157,7 @@ class CircleHelper {
 		$this->startSuperSession();
 		try {
 			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
-			$circles = self::useProbeCircles()
-				? $this->circlesManager->probeCircles()
-				: $this->circlesManager->getCircles();
+			$circles = $this->circlesManager->probeCircles();
 		} catch (InitiatorNotFoundException|RequestBuilderException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}

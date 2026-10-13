@@ -13,7 +13,6 @@ import { test as createCollectiveTest } from '../support/fixtures/create-collect
 import { test as editorTest } from '../support/fixtures/editor.ts'
 import { testLinkOpensInSameTab } from '../support/helpers/links.ts'
 import { randomString } from '../support/helpers/randomString.ts'
-import { hasServerVersion } from '../support/helpers/server.ts'
 
 const triggers = ['preview', 'openLinkButton', 'ctrlClick'] as const
 
@@ -37,11 +36,6 @@ test.describe('Link handler: authenticated → public share URL', () => {
 		const modeLabel = editMode ? 'edit' : 'preview'
 		for (const trigger of triggers) {
 			test(`Opens public share URL link in same tab via ${trigger} (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
-				test.skip(
-					trigger === 'ctrlClick' && hasServerVersion(32),
-					'ctrlClick handler not implemented on stable32',
-				)
-
 				const sourcePage = collective.getPageByTitle('Link Source')
 				const targetPage = collective.getPageByTitle('Link Target')
 
@@ -81,11 +75,6 @@ test.describe('Link handler: public share → internal URL', () => {
 		const modeLabel = editMode ? 'edit' : 'preview'
 		for (const trigger of triggers) {
 			test(`Opens internal URL link in same tab via ${trigger} in share context (${modeLabel} mode)`, async ({ baseURL, collective, editor, page, user }) => {
-				test.skip(
-					trigger === 'ctrlClick' && hasServerVersion(32),
-					'ctrlClick handler not implemented on stable32',
-				)
-
 				const sourcePage = collective.getPageByTitle('Link Source')
 				const targetPage = collective.getPageByTitle('Link Target')
 

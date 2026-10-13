@@ -7,7 +7,7 @@
  * Test server runs one of the given nextcloud versions
  *
  * @param versions to check for
- * @example hasServerVersion(32, 33)
+ * @example hasServerVersion(34, 35)
  */
 export function hasServerVersion(...versions: number[]) {
 	return versions

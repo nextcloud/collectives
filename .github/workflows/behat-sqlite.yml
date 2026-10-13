@@ -48,8 +48,8 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.3']
-        server-versions: ['stable32', 'master']
+        php-versions: ['8.4']
+        server-versions: ['stable33', 'master']
 
     steps:
       - name: Set app env
@@ -72,7 +72,7 @@ jobs:
           repository: nextcloud/circles
           path: apps/circles
           ref: ${{ matrix.server-versions }}
-      
+
       - name: Checkout guests app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
