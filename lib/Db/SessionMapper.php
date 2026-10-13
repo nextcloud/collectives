@@ -31,7 +31,7 @@ class SessionMapper extends QBMapper {
 			->andWhere($qb->expr()->gt('last_contact', $qb->createNamedParameter(time() - SessionService::SESSION_VALID_TIME)))
 			->executeQuery();
 
-		$data = $result->fetch();
+		$data = $result->fetchAssociative();
 		$result->closeCursor();
 		if ($data === false) {
 			throw new NotFoundException('Session is invalid');

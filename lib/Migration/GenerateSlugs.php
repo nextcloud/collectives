@@ -73,7 +73,7 @@ class GenerateSlugs implements IRepairStep {
 			->set('slug', $update->createParameter('slug'))
 			->where($update->expr()->eq('id', $update->createParameter('id')));
 
-		while ($row = $result->fetch()) {
+		while ($row = $result->fetchAssociative()) {
 			try {
 				$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
 			} catch (NotFoundException|NotPermittedException) {
@@ -109,7 +109,7 @@ class GenerateSlugs implements IRepairStep {
 
 		$rootFolder = $this->collectiveFolderManager->getRootFolder();
 
-		while ($row = $result->fetch()) {
+		while ($row = $result->fetchAssociative()) {
 			$pageFile = $rootFolder->getFirstNodeById($row['file_id']);
 			if (!($pageFile instanceof File) || NodeHelper::isLandingPage($pageFile)) {
 				continue;

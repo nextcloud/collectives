@@ -56,7 +56,7 @@ class RecentPagesService {
 		$collectivesMap = $queryData['collectivesMap'];
 
 		$pages = [];
-		while ($row = $r->fetch()) {
+		while ($row = $r->fetchAssociative()) {
 			$collectiveId = (int)explode('/', $row['path'], 4)[2];
 			if (!isset($collectivesMap[$collectiveId])) {
 				continue;
@@ -142,7 +142,7 @@ class RecentPagesService {
 		$collectivesMap = $queryData['collectivesMap'];
 
 		$pages = [];
-		while ($row = $r->fetch()) {
+		while ($row = $r->fetchAssociative()) {
 			if (count($pages) >= $limit) {
 				break;
 			}

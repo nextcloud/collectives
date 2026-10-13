@@ -12,7 +12,6 @@ namespace OCA\Collectives\Db;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use PDO;
 
 class PageLinkMapper {
 	private const TABLE_NAME = 'collectives_page_links';
@@ -30,7 +29,7 @@ class PageLinkMapper {
 		$qb->select('linked_page_id')
 			->from(self::TABLE_NAME)
 			->where($qb->expr()->eq('page_id', $qb->createNamedParameter($pageId)));
-		return $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
+		return $qb->executeQuery()->fetchFirstColumn();
 	}
 
 	/**
@@ -51,7 +50,7 @@ class PageLinkMapper {
 				->where($qb->expr()->in('page_id', $qb->createNamedParameter($chunk, IQueryBuilder::PARAM_INT_ARRAY)));
 
 			$result = $qb->executeQuery();
-			while ($row = $result->fetch()) {
+			while ($row = $result->fetchAssociative()) {
 				$linkedPageIds[(int)$row['page_id']][] = (int)$row['linked_page_id'];
 			}
 			$result->closeCursor();

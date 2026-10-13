@@ -13,7 +13,6 @@ use Exception;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use PDO;
 
 /**
  * @method SearchFile insert(SearchFile $file)
@@ -72,7 +71,7 @@ class SearchFileMapper extends QBMapper {
 			->andWhere($qb->expr()->isNotNull('language'));
 
 		$result = $qb->executeQuery();
-		$languages = $result->fetchAll(PDO::FETCH_COLUMN);
+		$languages = $result->fetchFirstColumn();
 		$result->closeCursor();
 
 		return $languages;

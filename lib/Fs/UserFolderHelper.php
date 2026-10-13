@@ -10,11 +10,11 @@ declare(strict_types=1);
 namespace OCA\Collectives\Fs;
 
 use OC_Util;
+use OCP\Config\IUserConfig;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IAppConfig;
-use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 
@@ -23,21 +23,21 @@ class UserFolderHelper {
 		private readonly IRootFolder $rootFolder,
 		private readonly IUserManager $userManager,
 		private readonly IAppConfig $appConfig,
-		private readonly IConfig $config,
 		private readonly IFactory $l10nFactory,
+		private readonly IUserConfig $userConfig,
 	) {
 	}
 
 	public function getUserFolderSetting(string $userId): string {
 		$defaultUserFolder = $this->appConfig->getValueString('collectives', 'default_user_folder', '');
 		// Get collectives user folder from settings and default to translated 'Collectives'
-		$userCollectivesPath = $this->config->getUserValue($userId, 'collectives', 'user_folder', $defaultUserFolder);
+		$userCollectivesPath = $this->userConfig->getValueString($userId, 'collectives', 'user_folder', $defaultUserFolder);
 		if ($userCollectivesPath === '') {
 			$user = $this->userManager->get($userId);
 			$userLang = $this->l10nFactory->getUserLanguage($user);
 			$l10n = $this->l10nFactory->get('collectives', $userLang);
 			$userCollectivesPath = DIRECTORY_SEPARATOR . '.' . $l10n->t('Collectives');
-			$this->config->setUserValue($userId, 'collectives', 'user_folder', $userCollectivesPath);
+			$this->userConfig->setValueString($userId, 'collectives', 'user_folder', $userCollectivesPath);
 		}
 
 		return $userCollectivesPath;

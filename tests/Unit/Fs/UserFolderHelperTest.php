@@ -10,10 +10,10 @@ declare(strict_types=1);
 namespace Unit\Fs;
 
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCP\Config\IUserConfig;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\IAppConfig;
-use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -26,7 +26,7 @@ class UserFolderHelperTest extends TestCase {
 	private Folder $userFolder;
 	private IL10N $l10n;
 	private IAppConfig $appConfig;
-	private IConfig $config;
+	private IUserConfig $userConfig;
 	private UserFolderHelper $helper;
 
 	protected function setUp(): void {
@@ -60,7 +60,7 @@ class UserFolderHelperTest extends TestCase {
 			->willReturn($user);
 
 		$this->appConfig = $this->createMock(IAppConfig::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->userConfig = $this->createMock(IUserConfig::class);
 
 		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
@@ -71,31 +71,31 @@ class UserFolderHelperTest extends TestCase {
 		$l10nFactory->method('get')
 			->willReturn($this->l10n);
 
-		$this->helper = new UserFolderHelper($rootFolder, $userManager, $this->appConfig, $this->config, $l10nFactory);
+		$this->helper = new UserFolderHelper($rootFolder, $userManager, $this->appConfig, $l10nFactory, $this->userConfig);
 	}
 
 	public function testGetUserFolderSetting(): void {
-		$this->config->method('getAppValue')
+		$this->appConfig->method('getValueString')
 			->with('collectives', 'default_user_folder', '')
 			->willReturn('');
-		$this->config->method('getUserValue')
+		$this->userConfig->method('getValueString')
 			->willReturn('');
 
 		$this->l10n->method('t')
 			->willReturn('Collectif');
 		self::assertEquals('/.Collectif', $this->helper->getUserFolderSetting('jane'));
 
-		$this->config->method('setUserValue')
+		$this->userConfig->method('setValueString')
 			->willThrowException(new PreConditionNotMetException(''));
 		$this->expectException(PreConditionNotMetException::class);
 		$this->helper->getUserFolderSetting('jane');
 	}
 
 	public function testGetUserFolderSettingDefaultToAppSetting(): void {
-		$this->config->method('getAppValue')
+		$this->appConfig->method('getValueString')
 			->with('collectives', 'default_user_folder', '')
 			->willReturn('/custom_folder');
-		$this->config->method('getUserValue')
+		$this->userConfig->method('getValueString')
 			->willReturn('/custom_folder');
 		self::assertEquals('/custom_folder', $this->helper->getUserFolderSetting('jane'));
 	}

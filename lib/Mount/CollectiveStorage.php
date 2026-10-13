@@ -37,7 +37,7 @@ class CollectiveStorage extends Wrapper implements IConstructableStorage {
 	}
 
 	public function getOwner(string $path): string|false {
-		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
+		return $this->mountOwner?->getUID() ?? false;
 	}
 
 	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
