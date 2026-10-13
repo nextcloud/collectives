@@ -72,7 +72,7 @@ class Version020802Date20231004000000 extends SimpleMigrationStep {
 				->set('settings', $update->createParameter('newSettings'))
 				->where($update->expr()->eq('id', $update->createParameter('id')));
 
-			while ($row = $result->fetch()) {
+			while ($row = $result->fetchAssociative()) {
 				$newSettings = json_encode(['page_order' => (int)$row['page_order']], JSON_THROW_ON_ERROR);
 				$update
 					->setParameter('id', (int)$row['id'], IQueryBuilder::PARAM_INT)

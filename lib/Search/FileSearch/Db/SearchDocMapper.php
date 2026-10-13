@@ -54,7 +54,7 @@ class SearchDocMapper extends QBMapper {
 			->setMaxResults($limit);
 
 		$result = $qb->executeQuery();
-		return $result->fetchAll();
+		return $result->fetchAllAssociative();
 	}
 
 	public function findByCollectiveAndFileId(int $collectiveId, int $fileId): array {

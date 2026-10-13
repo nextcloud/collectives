@@ -24,7 +24,7 @@ class PageTrashManager {
 			->from('collectives_page_trash')
 			->orderBy('deleted_time')
 			->where($query->expr()->in('collective_id', $query->createNamedParameter($collectiveIds, IQueryBuilder::PARAM_INT_ARRAY)));
-		return $query->executeQuery()->fetchAll();
+		return $query->executeQuery()->fetchAllAssociative();
 	}
 
 	public function addTrashItem(int $collectiveId, string $name, int $deletedTime, string $originalLocation, int $fileId, string $deletedBy): void {
@@ -46,7 +46,7 @@ class PageTrashManager {
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'collective_id', 'deleted_by'])
 			->from('collectives_page_trash')
 			->where($query->expr()->eq('file_id', $query->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
-		return $query->executeQuery()->fetch() ?: null;
+		return $query->executeQuery()->fetchAssociative() ?: null;
 	}
 
 	public function removeItem(int $collectiveId, string $name, int $deletedTime): void {

@@ -236,12 +236,12 @@ class PageService {
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
-		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
-		$emoji = ($page !== null) ? $page->getEmoji() : null;
-		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
+		$lastUserId = $page?->getLastUserId();
+		$emoji = $page?->getEmoji();
+		$subpageOrder = $page?->getSubpageOrder();
 		$fullWidth = $page !== null && $page->getFullWidth();
-		$slug = ($page !== null) ? $page->getSlug() : null;
-		$tags = ($page !== null) ? $page->getTags() : null;
+		$slug = $page?->getSlug();
+		$tags = $page?->getTags();
 		$linkedPageIds = ($page !== null) ? $this->pageLinkMapper->findByPageId($page->getFileId()) : null;
 		$pageInfo = new PageInfo();
 		try {
@@ -266,12 +266,12 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	private function createTrashPageInfo(File $file, string $filename, string $timestamp, ?Page $page): PageInfo {
-		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
-		$emoji = ($page !== null) ? $page->getEmoji() : null;
-		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
+		$lastUserId = $page?->getLastUserId();
+		$emoji = $page?->getEmoji();
+		$subpageOrder = $page?->getSubpageOrder();
 		$fullWidth = $page !== null && $page->getFullWidth();
-		$slug = ($page !== null) ? $page->getSlug() : null;
-		$tags = ($page !== null) ? $page->getTags() : null;
+		$slug = $page?->getSlug();
+		$tags = $page?->getTags();
 		$trashTimestamp = ($page !== null) ? $page->getTrashTimestamp(): (int)$timestamp;
 		$linkedPageIds = ($page !== null) ? $this->pageLinkMapper->findByPageId($page->getId()) : null;
 		$pageInfo = new PageInfo();

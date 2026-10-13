@@ -14,7 +14,7 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCSController;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
 use OCP\IRequest;
 
 /**
@@ -27,7 +27,7 @@ class SettingsController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private IConfig $config,
+		private IUserConfig $userConfig,
 		private ?string $userId,
 	) {
 		parent::__construct($appName, $request);
@@ -79,7 +79,7 @@ class SettingsController extends OCSController {
 	#[NoAdminRequired]
 	public function getUserSetting(string $key): DataResponse {
 		$this->validateGetUserSetting($key);
-		return new DataResponse([$key => $this->config->getUserValue($this->getUid(), 'collectives', $key, '')]);
+		return new DataResponse([$key => $this->userConfig->getValueString($this->getUid(), 'collectives', $key, '')]);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class SettingsController extends OCSController {
 	#[NoAdminRequired]
 	public function setUserSetting(string $key, string $value): DataResponse {
 		$this->validateSetUserSetting($key, $value);
-		$this->config->setUserValue($this->getUid(), 'collectives', $key, $value);
+		$this->userConfig->setValueString($this->getUid(), 'collectives', $key, $value);
 		return new DataResponse([$key => $value]);
 	}
 }

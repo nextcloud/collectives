@@ -21,7 +21,6 @@ use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\Circles\Model\Probes\DataProbe;
 use OCA\Circles\Tools\Exceptions\InvalidItemException;
 use OCP\AutoloadNotAllowedException;
-use OCP\Util;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 

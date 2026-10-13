@@ -13,7 +13,7 @@ use OCA\Collectives\Controller\SettingsController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSBadRequestException;
-use OCP\IConfig;
+use OCP\Config\IUserConfig;
 use OCP\IRequest;
 use Test\TestCase;
 
@@ -26,14 +26,14 @@ class SettingsControllerTest extends TestCase {
 		$request = $this->getMockBuilder(IRequest::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$config = $this->getMockBuilder(IConfig::class)
+		$userConfig = $this->getMockBuilder(IUserConfig::class)
 			->disableOriginalConstructor()
 			->getMock();
 
 		$this->settingsController = new SettingsController(
 			'collectives',
 			$request,
-			$config,
+			$userConfig,
 			'jane'
 		);
 	}

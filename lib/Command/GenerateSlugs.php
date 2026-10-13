@@ -66,7 +66,7 @@ class GenerateSlugs extends Command {
 			->set('slug', $update->createParameter('slug'))
 			->where($update->expr()->eq('id', $update->createParameter('id')));
 
-		while ($row = $result->fetch()) {
+		while ($row = $result->fetchAssociative()) {
 			try {
 				$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
 			} catch (NotFoundException|NotPermittedException) {
@@ -95,7 +95,7 @@ class GenerateSlugs extends Command {
 			->set('slug', $update->createParameter('slug'))
 			->where($update->expr()->eq('file_id', $update->createParameter('file_id')));
 
-		while ($rowCollective = $resultCollectives->fetch()) {
+		while ($rowCollective = $resultCollectives->fetchAssociative()) {
 			try {
 				$circle = $this->circleHelper->getCircle($rowCollective['circle_unique_id'], null, true);
 				$pageInfos = $this->pageService->findAll($rowCollective['id'], $circle->getOwner()->getUserId());

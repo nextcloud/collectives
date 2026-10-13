@@ -78,7 +78,7 @@ class ImportService {
 			return;
 		}
 
-		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
+		$parentId = $parentPage?->getId() ?? 0;
 		$items = scandir($directory);
 		if ($items === false) {
 			throw new NotFoundException('Unable to read directory: ' . $directory);
@@ -127,7 +127,7 @@ class ImportService {
 
 	private function processFile(string $directory, string $item, ?PageInfo $parentPage, ?string $title = null): array {
 		$path = $directory . DIRECTORY_SEPARATOR . $item;
-		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
+		$parentId = $parentPage?->getId() ?? 0;
 		$title ??= basename($path, '.md');
 		if (!is_readable($path)) {
 			throw new NotFoundException('File not readable');
@@ -149,7 +149,7 @@ class ImportService {
 			if (strtolower($title) === 'readme' && $parentId === 0) {
 				// Special case: use parent directory name as title for README.md files
 				$title = basename($directory);
-				$parentId = $parentPage !== null ? $parentPage->getParentId() : 0;
+				$parentId = $parentPage?->getParentId() ?? 0;
 			}
 			$pageInfo = $this->pageService->createBase(
 				$this->collective->getId(),

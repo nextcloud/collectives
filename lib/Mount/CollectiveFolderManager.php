@@ -185,7 +185,7 @@ class CollectiveFolderManager {
 				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolderStorageId())))
 				->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
 
-			$this->rootFolderId = (int)$qb->executeQuery()->fetchColumn();
+			$this->rootFolderId = (int)$qb->executeQuery()->fetchOne();
 		}
 
 		return $this->rootFolderId;
@@ -245,7 +245,7 @@ class CollectiveFolderManager {
 			->where($qb->expr()->in('co.id', $qb->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->eq('fc.parent', $qb->createNamedParameter($this->getRootFolderId())))
 			->andWhere($qb->expr()->eq('fc.storage', $qb->createNamedParameter($this->getRootFolderStorageId(), IQueryBuilder::PARAM_INT)));
-		$rows = $qb->executeQuery()->fetchAll();
+		$rows = $qb->executeQuery()->fetchAllAssociative();
 		$result = [];
 		foreach ($rows as $row) {
 			$result[$row['folder_id']] = $row;
@@ -284,7 +284,7 @@ class CollectiveFolderManager {
 			foreach (array_chunk($parentIds, 1000) as $chunk) {
 				$qb->setParameter('parentIds', $chunk, IQueryBuilder::PARAM_INT_ARRAY);
 				$cursor = $qb->executeQuery();
-				while ($row = $cursor->fetch()) {
+				while ($row = $cursor->fetchAssociative()) {
 					$fileId = (int)$row['fileid'];
 					$result[$fileId] = new CollectiveFileInfo(
 						fileId: $fileId,

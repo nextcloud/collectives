@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Migration;
 
+use OCP\Config\IUserConfig;
 use OCP\IAppConfig;
-use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
@@ -19,10 +19,10 @@ use OCP\Migration\IRepairStep;
 
 class MigrateUserFolderSettings implements IRepairStep {
 	public function __construct(
-		private readonly IConfig $config,
 		private readonly IAppConfig $appConfig,
 		private readonly IUserManager $userManager,
 		private readonly IFactory $l10nFactory,
+		private readonly IUserConfig $userConfig,
 	) {
 	}
 
@@ -42,7 +42,7 @@ class MigrateUserFolderSettings implements IRepairStep {
 		$this->userManager->callForSeenUsers(function (IUser $user) use ($output): void {
 			$oldDefaultUserFolderPath = DIRECTORY_SEPARATOR . 'Collectives';
 			$newDefaultUserFolderPath = DIRECTORY_SEPARATOR . '.' . 'Collectives';
-			$userFolderPath = $this->config->getUserValue($user->getUID(), 'collectives', 'user_folder', '');
+			$userFolderPath = $this->userConfig->getValueString($user->getUID(), 'collectives', 'user_folder', '');
 			if ($userFolderPath === '') {
 				// No user folder path configured, doesn't use Collectives
 				return;
@@ -55,7 +55,7 @@ class MigrateUserFolderSettings implements IRepairStep {
 
 			if ($userFolderPath === $oldDefaultUserFolderPath) {
 				// Old default English user folder path, update setting
-				$this->config->setUserValue($user->getUID(), 'collectives', 'user_folder', $newDefaultUserFolderPath);
+				$this->userConfig->setValueString($user->getUID(), 'collectives', 'user_folder', $newDefaultUserFolderPath);
 				$output->advance();
 				return;
 			}
@@ -67,7 +67,7 @@ class MigrateUserFolderSettings implements IRepairStep {
 
 			if ($userFolderPath === $oldDefaultUserFolderPathL10n) {
 				// Old default localized user folder path, update setting
-				$this->config->setUserValue($user->getUID(), 'collectives', 'user_folder', $newDefaultUserFolderPathL10n);
+				$this->userConfig->setValueString($user->getUID(), 'collectives', 'user_folder', $newDefaultUserFolderPathL10n);
 				$output->advance();
 			}
 		});

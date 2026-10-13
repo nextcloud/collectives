@@ -52,7 +52,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select('co.id AS id', 'circle_unique_id')
 			->from('collectives', 'co');
-		$rows = $qb->executeQuery()->fetchAll();
+		$rows = $qb->executeQuery()->fetchAllAssociative();
 
 		$folderMap = [];
 		try {
