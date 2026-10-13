@@ -181,6 +181,7 @@ export default {
 			'editorApiFlags',
 			'isPublic',
 			'shareTokenParam',
+			'showingSidebar',
 		]),
 
 		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
@@ -281,7 +282,7 @@ export default {
 			event.dataTransfer.setData('text/html', html)
 		},
 
-		onClick(event) {
+		async onClick(event) {
 			// Show in viewer if the viewer can open the attachment
 			const node = fileNode({
 				id: this.attachment.id,
@@ -291,7 +292,11 @@ export default {
 			})
 			if (canView(node)) {
 				event.preventDefault()
-				getViewer().open([node], node)
+				const wasOpen = this.showingSidebar
+				const session = await getViewer().open([node], node)
+				if (!wasOpen) {
+					session.addEventListener('close', () => emit('collectives:page-sidebar', { open: false, tab: 'attachments' }), { once: true })
+				}
 			}
 		},
 

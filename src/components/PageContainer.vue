@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
 import { mapActions, mapState } from 'pinia'
 import LandingPageWidgets from './Page/LandingPageWidgets.vue'
@@ -60,6 +60,7 @@ export default {
 			'done',
 			'isTextEdit',
 			'load',
+			'showingSidebar',
 		]),
 
 		...mapState(useTagsStore, ['tagsLoaded']),
@@ -90,6 +91,14 @@ export default {
 				this.getAttachmentsForPage(false)
 			}
 		},
+
+		showingSidebar: {
+			handler(val) {
+				emit(val ? 'files:sidebar:opened' : 'files:sidebar:closed')
+			},
+
+			flush: 'post',
+		},
 	},
 
 	mounted() {
@@ -97,6 +106,7 @@ export default {
 		// Reload attachment list on event from Text
 		subscribe('text:image-node:add', this.onAttachmentsEvent)
 		subscribe('collectives:page-sidebar', this.toggleSidebar)
+		subscribe('viewer:sidebar:open', this.onViewerSidebarOpen)
 
 		// Reload attachment list on filesystem changes
 		listen('notify_file', this.onAttachmentsEvent.bind(this))
@@ -105,6 +115,7 @@ export default {
 	beforeUnmount() {
 		unsubscribe('text:image-node:add', this.onAttachmentsEvent)
 		unsubscribe('collectives:page-sidebar', this.toggleSidebar)
+		unsubscribe('viewer:sidebar:open', this.onViewerSidebarOpen)
 	},
 
 	methods: {
@@ -167,6 +178,10 @@ export default {
 				this.hideSidebar()
 			}
 			this.setActiveSidebarTab(tab)
+		},
+
+		onViewerSidebarOpen() {
+			this.toggleSidebar({ open: true, tab: 'attachments' })
 		},
 	},
 }
