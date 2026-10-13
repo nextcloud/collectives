@@ -82,5 +82,5 @@ export async function openFileAt(path: string): Promise<void> {
 	if (!(node instanceof File)) {
 		throw new Error(`${path} is not a file`)
 	}
-	await getViewer().open([node], node)
+	await getViewer().open([node], node, { enableSidebar: false })
 }
