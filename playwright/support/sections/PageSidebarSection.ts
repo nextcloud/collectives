@@ -8,6 +8,7 @@ import type { Locator, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 
 type SidebarTab = 'Attachments' | 'Backlinks' | 'Sharing' | 'Versions'
+type AttachmentList = 'embedded' | 'not-embedded' | 'deleted'
 
 export class PageSidebarSection {
 	public readonly el: Locator
@@ -38,8 +39,19 @@ export class PageSidebarSection {
 		return this.el.locator('.version-list .list-item').filter({ hasText: name })
 	}
 
+	public getAttachmentList(list: AttachmentList): Locator {
+		return this.el.locator(`.attachment-list-${list}`)
+	}
+
 	public getAttachmentListItem(name: string): Locator {
 		return this.el.locator('.attachment').filter({ hasText: name })
+	}
+
+	public async clickAttachmentAction(name: string, action: string): Promise<void> {
+		await this.getAttachmentListItem(name)
+			.getByRole('button', { name: 'Actions' })
+			.click()
+		await this.page.getByRole('menuitem', { name: action }).click()
 	}
 
 	public async clickShareMenuAction(sharingTab: Locator, actionName: string): Promise<void> {
