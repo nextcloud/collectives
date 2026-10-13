@@ -61,18 +61,13 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable32', 'master']
+        server-versions: ['stable35']
         include:
-          - server-versions: 'stable32'
-            server-major: '32'
-            semantic-e2e: '0'
-            text-app-repository: 'nextcloud/text'
-            text-app-ref: 'stable32'
-          - server-versions: 'master'
+          - server-versions: 'stable35'
             server-major: ''
             semantic-e2e: '1'
             text-app-repository: 'nextcloud/text'
-            text-app-ref: 'b5ff1b0ce8d38b8a8dfdd6acf7b3f36c3fa2e272'
+            text-app-ref: 'stable35'
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
@@ -194,19 +189,12 @@ jobs:
       fail-fast: false
       matrix:
         containers: [1, 2, 3, 4]
-        php-versions: ['8.1', '8.4']
+        php-versions: ['8.4']
         databases: ['sqlite']
-        server-versions: ['stable32', 'master']
+        server-versions: ['stable35']
         include:
-          - server-versions: 'stable32'
-            semantic-e2e: '0'
-          - server-versions: 'master'
+          - server-versions: 'stable35'
             semantic-e2e: '1'
-        exclude:
-          - php-versions: '8.1'
-            server-versions: 'stable32'
-          - php-versions: '8.1'
-            server-versions: 'master'
 
     name: runner ${{ matrix.containers }} (${{ matrix.server-versions }})
 
