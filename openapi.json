@@ -16484,12 +16484,10 @@
                                         "description": "Status-specific result payload",
                                         "properties": {
                                             "publish_url": {
-                                                "type": "string",
-                                                "description": "URL the static site was published to"
+                                                "type": "string"
                                             },
                                             "error_message": {
-                                                "type": "string",
-                                                "description": "Error message if the export failed"
+                                                "type": "string"
                                             }
                                         }
                                     }
