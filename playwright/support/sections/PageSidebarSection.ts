@@ -38,6 +38,10 @@ export class PageSidebarSection {
 		return this.el.locator('.version-list .list-item').filter({ hasText: name })
 	}
 
+	public getAttachmentListItem(name: string): Locator {
+		return this.el.locator('.attachment').filter({ hasText: name })
+	}
+
 	public async clickShareMenuAction(sharingTab: Locator, actionName: string): Promise<void> {
 		const entry = sharingTab.locator('.sharing-entry')
 		await entry.locator('.sharing-entry__actions')
