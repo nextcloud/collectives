@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ca2c2097f7bca4ef0dd26c96cc8c0c7",
+    "content-hash": "54b148e66b837d6c99e16fdb46eab65b",
     "packages": [],
     "packages-dev": [
         {
             "name": "nextcloud/ocp",
-            "version": "dev-stable32",
+            "version": "dev-stable33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "0a5c79ce655c957d0887842b48803f085f49aa70"
+                "reference": "2e0c4f33f8ea2861159700112abbd056a7b93583"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/0a5c79ce655c957d0887842b48803f085f49aa70",
-                "reference": "0a5c79ce655c957d0887842b48803f085f49aa70",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/2e0c4f33f8ea2861159700112abbd056a7b93583",
+                "reference": "2e0c4f33f8ea2861159700112abbd056a7b93583",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.1 || ~8.2 || ~8.3 || ~8.4",
+                "php": "~8.2 || ~8.3 || ~8.4 || ~8.5",
                 "psr/clock": "^1.0",
                 "psr/container": "^2.0.2",
                 "psr/event-dispatcher": "^1.0",
@@ -31,7 +31,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-stable32": "32.0.0-dev"
+                    "dev-stable33": "33.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -51,9 +51,9 @@
             "description": "Composer package containing Nextcloud's public OCP API and the unstable NCU API",
             "support": {
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
-                "source": "https://github.com/nextcloud-deps/ocp/tree/stable32"
+                "source": "https://github.com/nextcloud-deps/ocp/tree/stable33"
             },
-            "time": "2026-09-02T01:51:48+00:00"
+            "time": "2026-10-06T03:44:03+00:00"
         },
         {
             "name": "nextcloud/rector",
