@@ -97,7 +97,7 @@ export class EditorSection {
 	public async getLinkBubble(linkText: string): Promise<Locator> {
 		await this.getContent()
 			.getByRole('link', { name: linkText, exact: true })
-			.click()
+			.hover()
 		await this.page.locator('.link-view-bubble')
 			.waitFor({ state: 'visible' })
 		return this.page.locator('.link-view-bubble')
