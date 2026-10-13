@@ -42,13 +42,13 @@ function pair(first, second) {
 
 describe('version comparison pair model', () => {
 	it.each([
-		[false, vi.fn(), vi.fn(), 'semantic'],
-		[true, vi.fn(), vi.fn(), 'semantic'],
-		[false, undefined, vi.fn(), 'viewer'],
-		[true, undefined, vi.fn(), 'unsupported'],
-		[false, undefined, undefined, 'unsupported'],
-	])('selects supported renderers without breaking the desktop Viewer fallback', (isMobile, comparisonFactory, viewerCompare, expected) => {
-		expect(selectVersionComparisonRenderer({ comparisonFactory, viewerCompare, isMobile })).toBe(expected)
+		[false, vi.fn(), true, 'semantic'],
+		[true, vi.fn(), true, 'semantic'],
+		[false, undefined, true, 'viewer'],
+		[true, undefined, true, 'unsupported'],
+		[false, undefined, false, 'unsupported'],
+	])('selects supported renderers without breaking the desktop Viewer fallback', (isMobile, comparisonFactory, viewerCanCompare, expected) => {
+		expect(selectVersionComparisonRenderer({ comparisonFactory, viewerCanCompare, isMobile })).toBe(expected)
 	})
 
 	it('creates stable current and historical identities in newest-first selector order', () => {

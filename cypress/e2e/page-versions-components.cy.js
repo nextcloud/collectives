@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getRootPath } from '@nextcloud/files/dav'
+import { registerHandler } from '@nextcloud/viewer'
 import { createPinia, setActivePinia } from 'pinia'
 import { createApp, h, nextTick, ref } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -148,10 +150,21 @@ async function mountVersionComparisonDialog(currentVersion, versions) {
 }
 
 function comparisonFixture(size = 10) {
-	const currentVersion = { fileId: 7, mtime: 3000, size, source: '/current?file=7', url: '/current?file=7' }
+	const currentVersion = { fileId: 7, filename: '/Atlas/Page.md', mime: 'text/markdown', mtime: 3000, size, source: `${window.location.origin}/remote.php/dav${getRootPath()}/current?file=7`, url: `/remote.php/dav${getRootPath()}/current?file=7` }
 	const historical = { fileVersion: '1', label: 'Old', mtime: 1000, size, source: '/historical?file=7', url: '/historical?file=7' }
 	const currentSnapshot = { ...currentVersion, fileVersion: '3', isCurrentSnapshot: true }
 	return { currentVersion, historical, versions: [historical, currentSnapshot] }
+}
+
+function registerMarkdownViewerHandler() {
+	registerHandler({
+		id: 'component-markdown',
+		displayName: 'Markdown',
+		tagName: 'component-markdown-viewer',
+		enabled: (nodes) => nodes.every((node) => node.mime === 'text/markdown'),
+		onInit: () => {},
+		canCompare: () => true,
+	})
 }
 
 describe('Mounted page version components', () => {
@@ -265,7 +278,7 @@ describe('Mounted page version components', () => {
 			const fixture = comparisonFixture()
 			window.OCA ??= {}
 			window.OCA.Text = {}
-			window.OCA.Viewer = { compare: Cypress.sinon.stub() }
+			registerMarkdownViewerHandler()
 			const fetchSnapshot = Cypress.sinon.stub(window, 'fetch')
 			const mounted = await mountVersionComparisonDialog(fixture.currentVersion, fixture.versions)
 
@@ -274,7 +287,6 @@ describe('Mounted page version components', () => {
 			expect(document.querySelector('.version-comparison-dialog [role="alert"]').textContent)
 				.to.contain('Could not save current changes before comparison. Please try again.')
 			expect(fetchSnapshot).not.to.have.been.called
-			expect(window.OCA.Viewer.compare).not.to.have.been.called
 
 			mounted.app.unmount()
 			mounted.element.remove()

@@ -23,10 +23,10 @@ const CURRENT_ROUTE_NAMESPACE = 'current'
 const HISTORICAL_KIND = 'historical'
 const HISTORICAL_ROUTE_NAMESPACE = 'version'
 
-export function selectVersionComparisonRenderer({ comparisonFactory, viewerCompare, isMobile }) {
+export function selectVersionComparisonRenderer({ comparisonFactory, viewerCanCompare, isMobile }) {
 	return typeof comparisonFactory === 'function'
 		? 'semantic'
-		: !isMobile && typeof viewerCompare === 'function' ? 'viewer' : 'unsupported'
+		: !isMobile && viewerCanCompare ? 'viewer' : 'unsupported'
 }
 
 export function createVersionComparisonState(currentVersion, versions) {

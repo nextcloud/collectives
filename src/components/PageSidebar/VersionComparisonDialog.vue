@@ -118,6 +118,7 @@
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
+import { canCompare as canCompareViewer, getViewer } from '@nextcloud/viewer'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -153,6 +154,7 @@ import {
 	withoutVersionComparisonRoute as withoutRoute,
 	withVersionComparisonRoute as withRoute,
 } from '../../util/versionComparisonRoute.js'
+import { versionNode } from '../../util/viewer.ts'
 
 const props = defineProps({
 	currentVersion: { type: Object, required: true },
@@ -329,7 +331,7 @@ async function compareSelected() {
 		if (renderer === 'viewer') {
 			closeDialog()
 			await nextTick()
-			window.OCA.Viewer.compare({ ...pair.later.fileInfo }, { ...pair.earlier.fileInfo })
+			getViewer().compare(versionNode(pair.later.fileInfo), versionNode(pair.earlier.fileInfo))
 			return
 		}
 		const contents = await loadSnapshots(pair, fetchSnapshot, request.signal)
@@ -380,7 +382,11 @@ async function compareSelected() {
 	}
 }
 function comparisonRenderer() {
-	return selectRenderer({ comparisonFactory: window.OCA?.Text?.createMarkdownContentComparison, viewerCompare: window.OCA?.Viewer?.compare, isMobile: isMobile.value })
+	return selectRenderer({
+		comparisonFactory: window.OCA?.Text?.createMarkdownContentComparison,
+		viewerCanCompare: canCompareViewer(versionNode(props.currentVersion)),
+		isMobile: isMobile.value,
+	})
 }
 function onSelectionChange() {
 	resetResult()

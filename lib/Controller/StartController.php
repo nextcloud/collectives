@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Events\CollectivesLoadAdditionalScriptsEvent;
-use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -39,7 +38,6 @@ class StartController extends Controller {
 		if ($appsMissing = $this->checkDependencies()) {
 			return new TemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
-		$this->eventDispatcher->dispatchTyped(new LoadViewer());
 		$this->eventDispatcher->dispatchTyped(new CollectivesLoadAdditionalScriptsEvent());
 		$response = new TemplateResponse('collectives', 'main', [ // templates/main.php
 			'id-app-content' => '#app-content-vue',
@@ -79,7 +77,7 @@ class StartController extends Controller {
 	}
 
 	private function checkDependencies(): array {
-		$apps = ['circles', 'files_versions', 'text', 'viewer'];
+		$apps = ['circles', 'files_versions', 'text'];
 		$appsMissing = [];
 		foreach ($apps as $app) {
 			if (!$this->appManager->isEnabledForUser($app)) {

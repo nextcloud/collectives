@@ -126,14 +126,6 @@ jobs:
           path: apps/text
           ref: ${{ matrix.text-app-ref }}
 
-      - name: Checkout viewer app
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          repository: nextcloud/viewer
-          path: apps/viewer
-          ref: ${{ matrix.server-versions }}
-
       - name: Get contacts app from app store
         id: contacts_app
         uses: nextcloud/appstore-action@44639c5dea0995197cb2b2d987b66e2cdc8821ae # v1.0.2

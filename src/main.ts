@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { registerDefaultHandlers } from '@nextcloud/viewer'
 import { createPinia } from 'pinia'
 import { createApp, watchEffect } from 'vue'
 import CollectivesApp from './CollectivesApp.vue'
@@ -15,6 +16,10 @@ import registerServiceWorker from './util/registerServiceWorker.ts'
 if ('serviceWorker' in navigator) {
 	registerServiceWorker()
 }
+
+// Nextcloud 36 registers these on every page, older versions need them from here
+// Can be dropped once we only support Nextcloud >= 36
+registerDefaultHandlers()
 
 const pinia = createPinia()
 
