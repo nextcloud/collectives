@@ -127,6 +127,21 @@ test.describe('Collective publish', () => {
 		await expect(titleField).toHaveValue('My website')
 	})
 
+	test('shows the published URL in the modal if the collective is already published', async ({ collective, navigation, page }) => {
+		const publishedUrl = 'https://example.org/published-site'
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [{ id: 1, publishedUrl }] } } })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await expect(modal.getByRole('link', { name: publishedUrl })).toBeVisible()
+	})
+
 	test('regular members cannot see publish button', async ({ collective, member }) => {
 		await member.page.goto(`/index.php/apps/collectives/${collective.getCollectiveUrlPart()}`)
 
