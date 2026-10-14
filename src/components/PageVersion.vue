@@ -45,12 +45,15 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
-		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
 		<div
-			v-show="contentLoaded"
 			id="text-container"
 			:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
-			<div ref="readerEl" data-collectives-el="reader" data-cy-collectives="reader" />
+			<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
+			<div
+				v-show="contentLoaded"
+				ref="readerEl"
+				data-collectives-el="reader"
+				data-cy-collectives="reader" />
 		</div>
 	</div>
 </template>
