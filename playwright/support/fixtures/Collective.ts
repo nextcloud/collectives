@@ -152,6 +152,38 @@ export class Collective {
 		return collectivePage
 	}
 
+	async createTemplate({ title, emoji, content, user, page }: {
+		title: string
+		emoji?: string
+		content?: string
+		user: User
+		page: Page
+	}) {
+		const response = await page.request.post(
+			apiUrl('v1.0', 'collectives', this.data.id, 'pages', 'templates', 0),
+			{
+				headers: ocsHeaders,
+				data: { title, parentId: 0 },
+				failOnStatusCode: true,
+			},
+		)
+		const data = await response.json()
+		const template = new CollectivePage(this.data.id, this.getCollectiveUrlPart(), data.ocs.data.template, page)
+
+		if (emoji) {
+			await page.request.put(
+				apiUrl('v1.0', 'collectives', this.data.id, 'pages', 'templates', template.data.id, 'emoji'),
+				{ headers: ocsHeaders, data: { emoji }, failOnStatusCode: true },
+			)
+		}
+
+		if (content) {
+			await template.setContent({ content, user, page })
+		}
+
+		return template
+	}
+
 	async createTag({ name, color = '', page }: {
 		name: string
 		color?: string

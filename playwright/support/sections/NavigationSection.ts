@@ -60,6 +60,19 @@ export class NavigationSection {
 			.click()
 	}
 
+	public async openNewCollectiveDialog(): Promise<void> {
+		await this.openCollectiveSelector()
+		await this.page.getByRole('button', { name: 'New collective' }).click()
+		await expect(this.page.getByRole('textbox', { name: 'Name of the collective' })).toBeVisible()
+	}
+
+	public async createCollective(name: string): Promise<void> {
+		await this.openNewCollectiveDialog()
+		await this.page.getByRole('textbox', { name: 'Name of the collective' }).fill(name)
+		await this.page.getByRole('button', { name: 'Add members' }).click()
+		await this.page.getByRole('button', { name: 'Create without members' }).click()
+	}
+
 	public async openCollectivesSettings(): Promise<void> {
 		await this.openCollectiveSelector()
 		await this.collectivesSettingsButton.click()
