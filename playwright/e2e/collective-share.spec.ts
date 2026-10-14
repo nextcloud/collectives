@@ -7,6 +7,7 @@ import { expect, mergeTests } from '@playwright/test'
 import { test as collectiveShareTest } from '../support/fixtures/collective-share.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
+import { getToast } from '../support/helpers/toasts.ts'
 
 const test = mergeTests(createCollectiveTest, pageSidebarTest, collectiveShareTest)
 
@@ -18,7 +19,7 @@ test.describe('Collective share', () => {
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
 
 		await sharingTab.getByRole('button', { name: 'Create a new share' }).click()
-		await expect(page.locator('.toast-success')).toContainText(`Collective "${collective.data.name}" has been shared`)
+		await expect(getToast(page, 'success', `Collective "${collective.data.name}" has been shared`)).toBeVisible()
 
 		const shares = await collective.getShares(page)
 
@@ -40,7 +41,7 @@ test.describe('Collective share', () => {
 
 		await sharingTab.getByRole('button', { name: 'Create a new share' }).click()
 		await pageSidebar.selectShareDropdownOption(sharingTab, 'Can edit')
-		await expect(page.locator('.toast-success').filter({ hasText: /Share link .* has been updated/ })).toBeVisible()
+		await expect(getToast(page, 'success', /Share link .* has been updated/)).toBeVisible()
 
 		// Open share
 		const shares = await collective.getShares(page)
@@ -70,7 +71,7 @@ test.describe('Collective share', () => {
 
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
 		await pageSidebar.clickShareMenuAction(sharingTab, 'Unshare')
-		await expect(page.locator('.toast-success')).toContainText(/Collective .* has been unshared/)
+		await expect(getToast(page, 'success', /Collective .* has been unshared/)).toBeVisible()
 
 		const response = await sharePage.goto(share.getShareUrl())
 		expect(response?.status()).toBe(404)
@@ -131,7 +132,7 @@ test.describe('Collective share password protection', () => {
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
 		await pageSidebar.selectShareDropdownOption(sharingTab, 'Can edit')
 
-		await expect(page.locator('.toast-success')).toBeVisible()
+		await expect(getToast(page, 'success', /Share link .* has been updated/)).toBeVisible()
 
 		const updatedShare = await share.updateData()
 		expect(updatedShare.hasPassword).toBe(true)

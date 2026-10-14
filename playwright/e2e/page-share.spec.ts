@@ -10,6 +10,7 @@ import { expect, mergeTests } from '@playwright/test'
 import { test as collectiveShareTest } from '../support/fixtures/collective-share.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
+import { getToast } from '../support/helpers/toasts.ts'
 import { ocsHeaders } from '../support/helpers/urls.ts'
 
 const test = mergeTests(createCollectiveTest, pageSidebarTest, collectiveShareTest)
@@ -22,7 +23,7 @@ test.describe('Page share', () => {
 
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
 		await sharingTab.getByRole('button', { name: 'Create a new share' }).click()
-		await expect(page.locator('.toast-success')).toContainText(`Page "${collectivePage.data.title}" has been shared`)
+		await expect(getToast(page, 'success', `Page "${collectivePage.data.title}" has been shared`)).toBeVisible()
 
 		// Open share
 		const shares = await collective.getShares(page)
@@ -83,7 +84,7 @@ test.describe('Page share enforced password protection', () => {
 	test('Create share and open share unauthenticated', async ({ page, collective, pageSidebar, sharePage, shareEditor }) => {
 		await shareActionsPanel.locator('input[autocomplete="new-password"]').fill('fiej2Ahl5pae')
 		await shareActionsPanel.getByRole('button', { name: 'Create share' }).click()
-		await expect(page.locator('.toast-success')).toContainText('has been shared')
+		await expect(getToast(page, 'success', 'has been shared')).toBeVisible()
 
 		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
@@ -102,6 +103,6 @@ test.describe('Page share enforced password protection', () => {
 	test('Fails to create share with weak password', async ({ page }) => {
 		await shareActionsPanel.locator('input[autocomplete="new-password"]').fill('password')
 		await shareActionsPanel.getByRole('button', { name: 'Create share' }).click()
-		await expect(page.locator('.toast-error')).toContainText('most common')
+		await expect(getToast(page, 'error', 'most common')).toBeVisible()
 	})
 })
