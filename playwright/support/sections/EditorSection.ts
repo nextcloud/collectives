@@ -6,6 +6,7 @@
 import type { Locator, Page } from '@playwright/test'
 
 import { expect } from '@playwright/test'
+import { hasServerVersion } from '../helpers/server.ts'
 
 export class EditorSection {
 	public isEdit: boolean
@@ -95,9 +96,14 @@ export class EditorSection {
 	}
 
 	public async getLinkBubble(linkText: string): Promise<Locator> {
-		await this.getContent()
+		const link = this.getContent()
 			.getByRole('link', { name: linkText, exact: true })
-			.hover()
+		// Text on Nextcloud 33 opens the link bubble on click, newer version on hover
+		if (hasServerVersion(33)) {
+			await link.click()
+		} else {
+			await link.hover()
+		}
 		await this.page.locator('.link-view-bubble')
 			.waitFor({ state: 'visible' })
 		return this.page.locator('.link-view-bubble')

@@ -1065,16 +1065,16 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('@comparisonUrl').then((comparisonUrl) => {
 			cy.getClipboardText().should('eq', comparisonUrl)
 		})
-		cy.contains('.toastify', 'Comparison link copied')
-			.find('.toast-close')
+		cy.contains('[role="status"]', 'Comparison link copied')
+			.contains('button', 'Close')
 			.click()
 		cy.get('@clipboardWriteText').then((writeText) => {
 			writeText.rejects(new Error('clipboard denied'))
 		})
 		getVersionComparisonModal().contains('button', 'Copy comparison link').click()
-		cy.contains('.toast-error', 'Could not copy the comparison link.')
+		cy.contains('[role="alert"]', 'Could not copy the comparison link.')
 			.should('be.visible')
-			.find('.toast-close')
+			.contains('button', 'Close')
 			.click()
 		cy.reload()
 		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
@@ -1187,9 +1187,9 @@ describeSemantic('Page versions semantic comparison', function() {
 				.find('.list-item-content__actions')
 				.click()
 			cy.clickMenuButton('Compare with current version')
-			cy.contains('.toast-error', 'This page version cannot be used for comparison.')
+			cy.contains('[role="alert"]', 'This page version cannot be used for comparison.')
 				.should('be.visible')
-				.find('.toast-close')
+				.contains('button', 'Close')
 				.click()
 			cy.get('.version-comparison-dialog').should('not.exist')
 		})
@@ -1673,7 +1673,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
 		cy.clickMenuButton('Restore version')
 		cy.wait('@moveVersion').its('response.statusCode').should('be.oneOf', [201, 204])
-		cy.get('.toast-success').should('contain', 'Restored')
+		cy.contains('[role="status"]', 'Restored').should('be.visible')
 
 		cy.request('/csrftoken').then(({ body }) => {
 			cy.request({
