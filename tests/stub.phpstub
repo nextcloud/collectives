@@ -608,6 +608,10 @@ namespace OCA\Files_Sharing\Event {
 	}
 }
 
+namespace OCA\Viewer\Event {
+	class LoadViewer extends \OCP\EventDispatcher\Event {}
+}
+
 namespace OCA\Circles\Model {
 	class Member {
 		public const LEVEL_NONE = 0;

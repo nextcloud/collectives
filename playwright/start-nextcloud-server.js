@@ -104,7 +104,12 @@ if (await isServerRunning()) {
 	if (process.env.COLLECTIVES_SEMANTIC_E2E === '1') {
 		buildText()
 	}
-	await configureNextcloud(['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'notifications', 'text'])
+	const apps = ['collectives', 'circles', 'files_pdfviewer', 'files_lock', 'notifications', 'text']
+	// Nextcloud 35 and older ship the viewer as the separate Viewer app
+	if (['stable33', 'stable34', 'stable35'].includes(serverBranch)) {
+		apps.push('viewer')
+	}
+	await configureNextcloud(apps)
 }
 
 // Idle to wait for shutdown

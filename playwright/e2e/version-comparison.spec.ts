@@ -751,7 +751,10 @@ test.describe('Version comparison route and current-byte contract', () => {
 			window.history.pushState({}, '', url)
 			window.dispatchEvent(new PopStateEvent('popstate', { state: window.history.state }))
 		}, comparisonUrl)
-		const viewerPanes = page.locator('.viewer__modal .viewer__comparison > *:visible')
+		const viewerPanes = page.locator('.viewer__modal .viewer__comparison > *')
+			// `or` statement can be removed once we only support Nextcloud 36+
+			.or(page.locator('#viewer .viewer--split > .viewer__file-wrapper'))
+			.filter({ visible: true })
 		await expect(viewerPanes).toHaveCount(2)
 		await expect(page.locator('.version-comparison-dialog')).toHaveCount(0)
 		const retained = new URL(page.url())

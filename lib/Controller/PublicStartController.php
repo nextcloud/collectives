@@ -12,6 +12,7 @@ namespace OCA\Collectives\Controller;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\DAV\Connector\Sabre\PublicAuth;
 use OCA\Files_Sharing\Event\ShareLinkAccessedEvent;
+use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\AuthPublicShareController;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -111,6 +112,10 @@ class PublicStartController extends AuthPublicShareController {
 	public function showShare(): PublicTemplateResponse {
 		if ($appsMissing = $this->checkDependencies()) {
 			return new PublicTemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
+		}
+		// The Viewer app on Nextcloud 35 and older, newer versions have the viewer in server
+		if (class_exists(LoadViewer::class)) {
+			$this->eventDispatcher->dispatchTyped(new LoadViewer());
 		}
 		$this->eventDispatcher->dispatchTyped(new ShareLinkAccessedEvent($this->getShare(), 'show'));
 		$response = new PublicTemplateResponse('collectives', 'main', [ // templates/main.php
