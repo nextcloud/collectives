@@ -9,6 +9,10 @@
 
 .full-width-view {
 	--text-editor-max-width: calc(100% - 2 * 40px);
+
+	.page-content-skeleton {
+		margin-inline: calc((100% - var(--text-editor-max-width)) / 2);
+	}
 }
 
 .sheet-view {
