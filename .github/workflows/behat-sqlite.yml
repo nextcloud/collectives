@@ -79,7 +79,7 @@ jobs:
           persist-credentials: false
           repository: nextcloud/guests
           path: apps/guests
-          ref: main
+          ref: ${{ contains(fromJSON('["stable33", "stable34", "stable35"]'), matrix.server-versions) && 'stable-4.10' || 'main' }}
 
       - name: Checkout app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
