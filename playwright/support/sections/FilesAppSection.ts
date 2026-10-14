@@ -15,7 +15,7 @@ export class FilesAppSection {
 	}
 
 	public async open(): Promise<void> {
-		await this.page.goto('/apps/files/')
+		await this.page.goto('/index.php/apps/files/')
 	}
 
 	public getFileListEntry(fileName: string): Locator {
