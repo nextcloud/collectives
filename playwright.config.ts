@@ -89,6 +89,10 @@ export default defineConfig({
 		baseURL,
 		// record traces but only keep them when the test fails
 		trace: 'on-first-retry',
+		// Allow self-signed certificates of local instances
+		ignoreHTTPSErrors: true,
+		// Also for context the fixtures create with `browser.newPager()`, which don't inherit `use`
+		launchOptions: { args: ['--ignore-certificate-errors'] },
 	},
 
 	projects: [
