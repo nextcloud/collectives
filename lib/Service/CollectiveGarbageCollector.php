@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -16,7 +17,6 @@ use OCP\IAppConfig;
 use Psr\Log\LoggerInterface;
 
 class CollectiveGarbageCollector {
-	private const CONFIG_KEY = 'orphaned_collectives';
 	// Collectives need to be orphaned for at least a week before they get purged
 	public const GRACE_PERIOD = 60 * 60 * 24 * 7;
 
@@ -58,7 +58,7 @@ class CollectiveGarbageCollector {
 		}
 
 		/** @var array<string, int> $previouslyOrphaned */
-		$previouslyOrphaned = $this->appConfig->getValueArray('collectives', self::CONFIG_KEY, lazy: true);
+		$previouslyOrphaned = $this->appConfig->getValueArray('collectives', ConfigLexicon::ORPHANED_COLLECTIVES, lazy: true);
 		$now = $this->timeFactory->getTime();
 		$stillOrphaned = [];
 		$purgeCount = 0;
@@ -85,7 +85,7 @@ class CollectiveGarbageCollector {
 		}
 
 		// Only keep collectives that were orphaned in this run
-		$this->appConfig->setValueArray('collectives', self::CONFIG_KEY, $stillOrphaned, lazy: true);
+		$this->appConfig->setValueArray('collectives', ConfigLexicon::ORPHANED_COLLECTIVES, $stillOrphaned, lazy: true);
 
 		return $purgeCount;
 	}
