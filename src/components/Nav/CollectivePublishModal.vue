@@ -12,6 +12,10 @@
 			<h2 class="modal-publish__name">
 				{{ t('collectives', 'Publish website for collective {name}', { name: collective.name }) }}
 			</h2>
+			<NcNoteCard v-if="publishedUrl" type="success" class="modal-publish__published">
+				{{ t('collectives', 'Currently published at:') }}
+				<a :href="publishedUrl" target="_blank" rel="noopener noreferrer">{{ publishedUrl }}</a>
+			</NcNoteCard>
 			<div class="modal-publish__fields">
 				<NcTextField
 					v-model="title"
@@ -65,15 +69,17 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PublishPageTreeItem from './PublishPageTreeItem.vue'
 import PublishTreeRow from './PublishTreeRow.vue'
 import { createStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
+import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
 import { generateSlug, isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
 
@@ -85,6 +91,7 @@ export default {
 	components: {
 		NcButton,
 		NcModal,
+		NcNoteCard,
 		NcTextField,
 		PageTemplateIcon,
 		PublishPageTreeItem,
@@ -121,6 +128,12 @@ export default {
 			'visibleSubpagesForCollective',
 		]),
 
+		...mapState(useStaticSitesStore, ['publishedUrlForCollective']),
+
+		publishedUrl() {
+			return this.publishedUrlForCollective(this.collective.id)
+		},
+
 		allPageIds() {
 			return this.pagesTreeWalkForCollective(this.collective).map((page) => page.id)
 		},
@@ -153,13 +166,23 @@ export default {
 	created() {
 		// Preselect the whole collective (all pages) when the modal is opened
 		this.selectedPageIds = new Set(this.allPageIds)
+		this.loadStaticSites()
 	},
 
 	methods: {
 		t,
 
+		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication']),
+
 		onClose() {
 			this.$emit('close')
+		},
+
+		loadStaticSites() {
+			this.getStaticSites(this.collective.id)
+				.catch((e) => {
+					console.error('Could not load static sites for collective', e)
+				})
 		},
 
 		onEscape(event) {
@@ -212,8 +235,10 @@ export default {
 
 			this.publishing = true
 			createStaticSite(this.collective.id, pageIds, this.title.trim(), this.slug)
-				.then(() => {
+				.then(({ data }) => {
 					showSuccess(t('collectives', 'Website publishing started'))
+					// Wait for the published URL in the background, the modal isn't needed for that
+					this.watchPublication(this.collective.id, data.ocs.data)
 					this.onClose()
 				})
 				.catch(displayError('Could not publish collective as website'))
@@ -249,6 +274,11 @@ export default {
 	&__name {
 		font-size: 21px;
 		text-align: center;
+	}
+
+	&__published {
+		margin-block-end: 8px;
+		word-break: break-all;
 	}
 
 	&__fields {
