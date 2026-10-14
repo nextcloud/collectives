@@ -128,6 +128,7 @@ import { editorApiAttachments } from '../../constants.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
+import { attachmentDavUrl } from '../../util/attachmentDavUrl.ts'
 import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
 import { fileNode } from '../../util/viewer.ts'
 
@@ -188,6 +189,7 @@ export default {
 
 		...mapState(usePagesStore, [
 			'currentPage',
+			'currentPageDavUrl',
 			'isTextEdit',
 		]),
 
@@ -284,12 +286,19 @@ export default {
 
 		async onClick(event) {
 			// Show in viewer if the viewer can open the attachment
-			const node = fileNode({
-				id: this.attachment.id,
-				source: this.davUrl,
-				mime: this.attachment.mimetype,
-				root: getRootPath(),
-			})
+			let node
+			try {
+				node = fileNode({
+					id: this.attachment.id,
+					source: attachmentDavUrl(this.currentPageDavUrl, this.attachment),
+					mime: this.attachment.mimetype,
+					root: getRootPath(),
+				})
+			} catch (error) {
+				// Let the link handle the click
+				console.error('Failed to open attachment in viewer', error)
+				return
+			}
 			if (canView(node)) {
 				event.preventDefault()
 				const wasOpen = this.showingSidebar
