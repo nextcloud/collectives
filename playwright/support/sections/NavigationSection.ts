@@ -62,7 +62,7 @@ export class NavigationSection {
 
 	public async openNewCollectiveDialog(): Promise<void> {
 		await this.openCollectiveSelector()
-		await this.page.getByRole('button', { name: 'New collective' }).click()
+		await this.page.getByRole('button', { name: 'New collective', exact: true }).click()
 		await expect(this.page.getByRole('textbox', { name: 'Name of the collective' })).toBeVisible()
 	}
 
