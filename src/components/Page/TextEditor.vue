@@ -31,6 +31,7 @@ import { showError } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { useElementSize } from '@vueuse/core'
+import escapeHtml from 'escape-html'
 import { mapActions, mapState } from 'pinia'
 import { ref, watch } from 'vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
@@ -69,14 +70,16 @@ export default {
 			document.documentElement.style.setProperty('--text-container-width', value + 'px')
 		})
 		const davContent = ref('')
-		const { contentLoaded, editor, editorContent, editorEl, pageContent, setupEditor } = useEditor(davContent)
+		const { contentLoaded, editor, editorContent, editorEl, pageContent, setupEditor, saveEditor } = useEditor(davContent)
 		const { pageInfoBarPage, reader, readerEl, setupReader } = useReader(pageContent)
-		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, setupReader, textContainer, width }
+		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, saveEditor, setupReader, textContainer, width }
 	},
 
 	data() {
 		return {
 			textEditWatcher: null,
+			mountedPageId: null,
+			disposed: false,
 			unregisterCurrentSnapshotPreparer: null,
 		}
 	},
@@ -116,18 +119,35 @@ export default {
 	},
 
 	async mounted() {
+		this.mountedPageId = this.currentPage.id
 		this.unregisterCurrentSnapshotPreparer = this.registerCurrentSnapshotPreparer(() => this.prepareCurrentEditorSnapshot())
 		const readerPromise = this.setupReader(this.currentPage)
 		const editorPromise = this.setupEditor()
 		const pageContentPromise = this.getPageContent()
 		Promise.all([readerPromise, editorPromise, pageContentPromise]).then(() => {
-			this.initEditMode()
+			if (!this.disposed && this.currentPage.id === this.mountedPageId) {
+				this.initEditMode()
+			}
+		}).catch((error) => {
+			console.error('Failed to load page', error)
 		})
 
 		this.textEditWatcher = this.$watch('isTextEdit', async (val) => {
 			if (val === false) {
 				this.stopEdit()
 			} else if (val === true) {
+				try {
+					await this.setupEditor()
+				} catch {
+					if (!this.disposed && this.currentPage.id === this.mountedPageId) {
+						showError(t('collectives', 'Could not load the editor. Please try again.'))
+						this.setTextPreview()
+					}
+					return
+				}
+				if (this.disposed || this.currentPage.id !== this.mountedPageId) {
+					return
+				}
 				// Load full circle members for autocomplete when entering edit mode
 				const circlesStore = useCirclesStore()
 				if (!circlesStore.currentCircleMembersFullyLoaded && !this.isPublic) {
@@ -136,14 +156,11 @@ export default {
 			}
 		})
 		subscribe('collectives:attachment:insert', this.insertAttachment)
-		subscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
-		subscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 	},
 
 	beforeUnmount() {
+		this.disposed = true
 		this.unregisterCurrentSnapshotPreparer?.()
-		unsubscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
-		unsubscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		unsubscribe('collectives:attachment:insert', this.insertAttachment)
 		this.textEditWatcher()
 	},
@@ -153,31 +170,22 @@ export default {
 
 		...mapActions(useRootStore, ['load', 'done']),
 		...mapActions(useVersionsStore, ['getVersions', 'registerCurrentSnapshotPreparer']),
-		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),
+		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage', 'runEditorAction']),
 		...mapActions(useCirclesStore, ['getCircleMembers']),
 
-		insertAttachment({ name }) {
-			// inspired by the fixedEncodeURIComponent function suggested in
-			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+		async insertAttachment({ name }) {
 			const src = '.attachments.' + this.currentPage.id + '/' + encodeAttachmentFilename(name)
-			// simply get rid of brackets to make sure link text is valid
-			// as it does not need to be unique and matching the real file name
-			const alt = name.replaceAll(/[[\]]/g, '')
-
-			this.editor.insertAtCursor(`<img src="${src}" alt="${alt}" />`)
-		},
-
-		replaceAttachmentFilename({ pageId, oldName, newName }) {
-			// Only available since editorApi 1.4
-			if (this.editor.replaceAttachmentFilename) {
-				this.editor.replaceAttachmentFilename(pageId, oldName, newName)
-			}
-		},
-
-		removeAttachmentReferences({ pageId, name }) {
-			// Only available since editorApi 1.4
-			if (this.editor.removeAttachmentReferences) {
-				this.editor.removeAttachmentReferences(pageId, name)
+			const alt = escapeHtml(name.replaceAll(/[[\]]/g, ''))
+			try {
+				await this.runEditorAction(async (editor, save) => {
+					editor.insertAtCursor(`<img src="${src}" alt="${alt}" />`)
+					if (await save() !== true) {
+						throw new Error('Could not save the inserted attachment.')
+					}
+				})
+			} catch (error) {
+				console.error('Failed to insert attachment', error)
+				showError(t('collectives', 'Could not insert and save the attachment. Please try again.'))
 			}
 		},
 
@@ -198,11 +206,6 @@ export default {
 			this.editor?.focus()
 		},
 
-		// called from the parent component as well
-		saveEditor() {
-			return this.editor.save()
-		},
-
 		async prepareCurrentEditorSnapshot() {
 			if (this.isTextEdit && this.editor && await this.saveEditor() !== true) {
 				throw new Error('Could not save the current page before comparison.')
@@ -211,6 +214,9 @@ export default {
 		},
 
 		async stopEdit() {
+			if (!this.editor) {
+				return
+			}
 			// switch back to edit if there's no content
 			if (!this.pageContent?.trim()) {
 				this.setTextEdit()
@@ -220,24 +226,27 @@ export default {
 				return
 			}
 
-			const changed = this.editorContent && (this.editorContent !== this.davContent)
-			if (changed) {
-				// Save pending changes in editor
-				// TODO: detect missing connection and display warning
-				await this.saveEditor()
-					.catch(() => {
-						showError(t('collectives', 'Error saving the document. Please try again.'))
-						this.setTextEdit()
-					})
-
-				// Touch page to update last changed timestamp
-				this.touchPage()
+			try {
+				if (await this.saveEditor() !== true) {
+					throw new Error('The editor did not confirm saving.')
+				}
+				if (!this.disposed && this.currentPage.id === this.mountedPageId && this.editorContent !== this.davContent) {
+					this.touchPage()
+				}
+			} catch {
+				if (!this.disposed && this.currentPage.id === this.mountedPageId) {
+					showError(t('collectives', 'Error saving the document. Please try again.'))
+					this.setTextEdit()
+				}
 			}
 		},
 
 		async getPageContent() {
-			this.davContent = await this.fetchPageContent(this.currentPageDavUrl)
-			this.done('pageContent')
+			const content = await this.fetchPageContent(this.currentPageDavUrl)
+			if (!this.disposed && this.currentPage.id === this.mountedPageId) {
+				this.davContent = content
+				this.done('pageContent')
+			}
 		},
 	},
 }
