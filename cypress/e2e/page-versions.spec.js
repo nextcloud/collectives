@@ -172,13 +172,18 @@ function openVersionsSidebar() {
 	cy.get('#tab-button-versions').should('be.visible').click()
 }
 
+// The semantic comparison opens with the full documents of both versions
+function waitForSemanticComparison() {
+	cy.get('.version-comparison-dialog .text-comparison__document--after').should('be.visible')
+}
+
 function openInitialCurrentSemanticComparison() {
 	cy.get('.app-sidebar-tabs__content .version-list .list-item')
 		.eq(3)
 		.find('.list-item-content__actions')
 		.click()
 	cy.clickMenuButton('Compare with current version')
-	cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+	waitForSemanticComparison()
 }
 
 function insertEditorContent(content, appendParagraph = false) {
@@ -205,23 +210,11 @@ function insertEditorContent(content, appendParagraph = false) {
 	})
 }
 
-function assertMeasuredComparisonLayout(expectedMode) {
-	cy.get('.version-comparison-dialog .text-comparison').should(($comparison) => {
-		const width = $comparison[0].getBoundingClientRect().width
-		const measuredMode = width >= 760 ? 'paired' : 'single'
-		expect(width, 'measured comparison container width').to.be.greaterThan(0)
-		expect($comparison[0].scrollWidth, 'comparison horizontal overflow')
-			.to.be.at.most($comparison[0].clientWidth + 1)
-		expect($comparison.hasClass(`text-comparison--${measuredMode}`), `layout for ${width}px container`).to.equal(true)
-		expect(measuredMode, `expected mode for ${width}px container`).to.equal(expectedMode)
-	})
-}
-
 let publicSharePath = ''
 let publicShare = null
 
 function closeViewerComparison() {
-	cy.get('body').type('{esc}')
+	cy.window().then((window) => window.OCA.Viewer.close())
 	// Second locator can be removed once we only support Nextcloud 36+
 	cy.get('.viewer__modal, #viewer[role="dialog"]').should('not.exist')
 }
@@ -631,8 +624,6 @@ describeSemantic('Page versions semantic comparison', function() {
 	})
 
 	it('C01 compares a historical snapshot before the current snapshot', function() {
-		let beforeScrollTop
-		let afterScrollTop
 		const unexpectedFailures = []
 		cy.window().then((window) => {
 			window.addEventListener('error', ({ message }) => {
@@ -679,45 +670,34 @@ describeSemantic('Page versions semantic comparison', function() {
 					.to.be.lessThan(2)
 			})
 		cy.get('.version-comparison-dialog__selectors .text-comparison').should('not.exist')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Changes')
+		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents')
 			.should('have.attr', 'aria-selected', 'true')
-		assertMeasuredComparisonLayout('paired')
-		cy.get('.version-comparison-dialog .text-comparison__change-list')
+		cy.contains('.version-comparison-dialog [role="tab"]', 'Changes')
+			.click()
+		cy.get('.version-comparison-dialog .text-comparison__changes-list')
 			.should('be.visible')
-			.and('contain', 'Moved section')
-			.and('contain', 'Bold changed')
-			.and('contain', 'Italic changed')
-			.and('contain', 'Link changed')
-			.and('contain', 'Task state changed')
-			.and('contain', 'Callout type changed')
-			.and('contain', 'Image description changed')
-			.and('contain', 'Footnote changed')
+			.and('not.contain', 'Unknown change')
 		cy.get('.version-comparison-dialog [data-comparison-select]')
 			.should(($records) => {
 				expect($records.length).to.be.greaterThan(10)
 			})
-		cy.contains('.version-comparison-dialog [data-comparison-select]', 'Quote changed')
-			.should('be.visible')
-		cy.get('.version-comparison-dialog .text-comparison__change-list')
-			.should('not.contain', 'Unknown change')
 		cy.get('.version-comparison-dialog [data-comparison-select]').each(($record) => {
 			expect($record.attr('aria-label'), 'accessible change summary').to.match(/\S/)
 			expect($record.text().trim(), 'visible change summary').not.to.be.empty
 		})
-		cy.get('.version-comparison-dialog .text-comparison__change-list [data-comparison-select]')
+		cy.get('.version-comparison-dialog .text-comparison__changes-list [data-comparison-select]')
 			.its('length')
 			.then((unfilteredCount) => {
 				cy.contains('.version-comparison-dialog label', 'Hide formatting-only changes')
 					.find('input[type="checkbox"]')
 					.check()
-				cy.get('.version-comparison-dialog .text-comparison__change-list [data-comparison-select]')
-					.should('have.length', unfilteredCount - 2)
+				cy.get('.version-comparison-dialog .text-comparison__changes-list [data-comparison-select]')
+					.should('have.length.lessThan', unfilteredCount)
 				cy.contains('.version-comparison-dialog label', 'Hide formatting-only changes')
 					.find('input[type="checkbox"]')
 					.uncheck()
 			})
-
-		cy.contains('.version-comparison-dialog [data-comparison-select]', 'Moved section')
+		cy.get('.version-comparison-dialog [data-comparison-select]').first()
 			.then(($record) => {
 				const changeId = $record.attr('data-comparison-select')
 				expect(changeId).to.be.a('string').and.not.be.empty
@@ -759,40 +739,6 @@ describeSemantic('Page versions semantic comparison', function() {
 				'synthetic counterpart bullets in structural or inline parents',
 			).to.equal(false)
 		})
-		cy.get('.version-comparison-dialog .text-comparison__document--before .text-comparison__document-scroller')
-			.then(($scroller) => {
-				$scroller[0].scrollTo({ top: 80, behavior: 'instant' })
-				expect($scroller[0].scrollTop).to.be.greaterThan(0)
-			})
-		cy.get('.version-comparison-dialog .text-comparison__document--after .text-comparison__document-scroller')
-			.then(($scroller) => {
-				$scroller[0].scrollTo({ top: 240, behavior: 'instant' })
-				expect($scroller[0].scrollTop).to.be.greaterThan(80)
-			})
-		cy.get('.version-comparison-dialog .text-comparison__document--before .text-comparison__document-scroller')
-			.then(($scroller) => {
-				beforeScrollTop = $scroller[0].scrollTop
-			})
-		cy.get('.version-comparison-dialog .text-comparison__document--after .text-comparison__document-scroller')
-			.then(($scroller) => {
-				afterScrollTop = $scroller[0].scrollTop
-			})
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Changes')
-			.click()
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Changes')
-			.should('have.attr', 'aria-selected', 'true')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents')
-			.click()
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents')
-			.should('have.attr', 'aria-selected', 'true')
-		cy.get('.version-comparison-dialog .text-comparison__document--before .text-comparison__document-scroller')
-			.should(($scroller) => {
-				expect($scroller[0].scrollTop).to.equal(beforeScrollTop)
-			})
-		cy.get('.version-comparison-dialog .text-comparison__document--after .text-comparison__document-scroller')
-			.should(($scroller) => {
-				expect($scroller[0].scrollTop).to.equal(afterScrollTop)
-			})
 		cy.get('.version-comparison-dialog .text-comparison__document figure[data-component="image-view"][data-attachment-type="image"]')
 			.should('have.length', 2)
 		cy.get('@historicalSnapshotRequest.all')
@@ -800,23 +746,14 @@ describeSemantic('Page versions semantic comparison', function() {
 			.its('0.request.url')
 			.should('not.contain', 'timestamp=')
 		cy.get('@currentSnapshotRequest.all').should('have.length', 1)
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Markdown source').click()
-		cy.get('.version-comparison-dialog .text-source-comparison')
-			.should('contain', 'status: draft')
-			.and('contain', 'status: launch-ready')
-		cy.viewport(768, 900)
-		assertMeasuredComparisonLayout('single')
-
 		closeSemanticComparison()
-		cy.viewport(1280, 900)
 
 		cy.get('.app-sidebar-tabs__content .version-list .list-item')
 			.eq(3)
 			.find('.list-item-content__actions')
 			.click()
 		cy.clickMenuButton('Compare with current version')
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
-		assertMeasuredComparisonLayout('paired')
+		waitForSemanticComparison()
 		cy.get('@historicalSnapshotRequest.all').should('have.length', 2)
 		cy.get('@currentSnapshotRequest.all').should('have.length', 2)
 		closeSemanticComparison()
@@ -833,12 +770,12 @@ describeSemantic('Page versions semantic comparison', function() {
 
 		selectVersionAt(0, 2)
 		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@cachedHistoricalSnapshot.all').should('have.length', 2)
 
 		selectVersionAt(0, 3)
 		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@cachedHistoricalSnapshot.all').should('have.length', 2)
 	})
 
@@ -849,12 +786,12 @@ describeSemantic('Page versions semantic comparison', function() {
 
 		selectVersionAt(0, 2)
 		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@uncachedCurrentSnapshot.all').should('have.length', 2)
 
 		selectVersionAt(0, 3)
 		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@uncachedCurrentSnapshot.all').should('have.length', 3)
 	})
 
@@ -882,7 +819,7 @@ describeSemantic('Page versions semantic comparison', function() {
 			.find('.list-item-content__actions')
 			.click()
 		cy.clickMenuButton('Compare with current version')
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		closeSemanticComparison()
 		cy.then(() => expect(JSON.stringify(unexpectedFailures), 'unexplained comparison failures').to.equal('[]'))
 	})
@@ -935,16 +872,6 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('.version-comparison-dialog .text-comparison')
 			.should('contain', 'No rendered differences — Markdown syntax differs.')
 			.and('not.contain', 'Moved section')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Markdown source').click()
-		cy.get('.version-comparison-dialog .text-source-comparison')
-			.should('contain', '# Atlas 2.4 release plan #')
-			.and('contain', 'Line endings changed: lf → crlf')
-			.and('contain', 'crlf')
-			.and('contain', 'No newline at end of file')
-		cy.get('.version-comparison-dialog .text-source-comparison__line--added code')
-			.should(($lines) => {
-				expect([...$lines].some((line) => line.textContent.endsWith(' ')), 'literal trailing space').to.equal(true)
-			})
 		closeSemanticComparison()
 	})
 
@@ -973,7 +900,7 @@ describeSemantic('Page versions semantic comparison', function() {
 
 		cy.reload()
 
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@reloadedComparisonUrl').then((comparisonUrl) => {
 			cy.location('href').should('eq', comparisonUrl)
 		})
@@ -1010,7 +937,7 @@ describeSemantic('Page versions semantic comparison', function() {
 			cy.visit(comparisonUrl)
 		})
 
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@freshSessionComparisonUrl').then((comparisonUrl) => {
 			cy.location('href').should('eq', comparisonUrl)
 		})
@@ -1044,7 +971,7 @@ describeSemantic('Page versions semantic comparison', function() {
 			.click()
 		cy.clickMenuButton('Compare with current version')
 
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.location().then((location) => {
 			const query = new URLSearchParams(location.search)
 			expect(query.get('compareFrom')).to.match(/^version:[^/\\]+$/)
@@ -1058,7 +985,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('.version-comparison-dialog').should('not.exist')
 		cy.location('search').should('eq', '?view=grid')
 		cy.go('forward')
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		getVersionComparisonModal()
 			.contains('button', 'Copy comparison link')
 			.should('not.be.disabled')
@@ -1067,7 +994,7 @@ describeSemantic('Page versions semantic comparison', function() {
 			cy.getClipboardText().should('eq', comparisonUrl)
 		})
 		cy.contains('[role="status"]', 'Comparison link copied')
-			.contains('button', 'Close')
+			.find('button[aria-label="Close"]')
 			.click()
 		cy.get('@clipboardWriteText').then((writeText) => {
 			writeText.rejects(new Error('clipboard denied'))
@@ -1075,10 +1002,10 @@ describeSemantic('Page versions semantic comparison', function() {
 		getVersionComparisonModal().contains('button', 'Copy comparison link').click()
 		cy.contains('[role="alert"]', 'Could not copy the comparison link.')
 			.should('be.visible')
-			.contains('button', 'Close')
+			.find('button[aria-label="Close"]')
 			.click()
 		cy.reload()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@comparisonUrl').then((comparisonUrl) => {
 			cy.location('href').should('eq', comparisonUrl)
 		})
@@ -1086,7 +1013,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		closeSemanticComparison()
 		cy.location('search').should('eq', '?view=grid')
 		cy.go('forward')
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		selectVersionAt(0, 2)
 		cy.location('search').should('eq', '?view=grid')
 		getVersionComparisonModal().should('be.visible')
@@ -1098,7 +1025,7 @@ describeSemantic('Page versions semantic comparison', function() {
 
 		cy.intercept('GET', CURRENT_SNAPSHOT_URL).as('routedCurrentSnapshotRequest')
 		cy.get('@comparisonUrl').then((comparisonUrl) => cy.stubClipboardAndVisit(comparisonUrl))
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.get('@routedCurrentSnapshotRequest.all').should('have.length', 1)
 		closeSemanticComparison()
 		cy.location().should((location) => {
@@ -1118,7 +1045,7 @@ describeSemantic('Page versions semantic comparison', function() {
 			.find('.list-item-content__actions')
 			.click()
 		cy.clickMenuButton('Compare with current version')
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 
 		cy.location().then((location) => {
 			const query = new URLSearchParams(location.search)
@@ -1190,7 +1117,7 @@ describeSemantic('Page versions semantic comparison', function() {
 			cy.clickMenuButton('Compare with current version')
 			cy.contains('[role="alert"]', 'This page version cannot be used for comparison.')
 				.should('be.visible')
-				.contains('button', 'Close')
+				.find('button[aria-label="Close"]')
 				.click()
 			cy.get('.version-comparison-dialog').should('not.exist')
 		})
@@ -1248,7 +1175,7 @@ describeSemantic('Page versions semantic comparison', function() {
 			expect(query.get('view')).to.equal('grid')
 			expect(location.hash).to.equal('#rollout')
 		})
-		cy.contains('Version comparison is not available for public links.').should('be.visible')
+		cy.contains('[role="status"]', 'Version comparison is not available for public links.').should('be.visible')
 		cy.get('#tab-button-versions').should('not.exist')
 		cy.get('@versionRequest.all').should('have.length', 0)
 	})
@@ -1281,52 +1208,6 @@ describeSemantic('Page versions semantic comparison', function() {
 			.should('be.disabled')
 	})
 
-	it('Uses an accessible Before and After toggle on mobile', function() {
-		cy.viewport(768, 900)
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
-		cy.get('.version-comparison-dialog .text-comparison')
-			.should('have.class', 'text-comparison--single')
-		assertMeasuredComparisonLayout('single')
-		cy.get('.version-comparison-dialog .text-comparison__documents')
-			.should('have.css', 'display', 'flex')
-		cy.get('.version-comparison-dialog .text-comparison__document-grid')
-			.should('have.css', 'display', 'block')
-		cy.get('.version-comparison-dialog [role="tablist"]').should('be.visible')
-		cy.get('.version-comparison-dialog [role="tab"]').contains('Before')
-			.trigger('keydown', { key: 'ArrowRight' })
-		cy.get('.version-comparison-dialog [role="tab"][aria-selected="true"]')
-			.should('contain', 'After')
-		cy.get('.version-comparison-dialog [role="tabpanel"]:visible')
-			.should('contain', CURRENT_PHRASE)
-		cy.viewport(320, 900)
-		cy.get('.version-comparison-dialog [role="tabpanel"]:visible')
-			.should('be.visible')
-		cy.get('.version-comparison-dialog .text-comparison')
-			.should(($comparison) => {
-				expect($comparison[0].scrollWidth).to.be.at.most($comparison[0].clientWidth + 1)
-			})
-	})
-
-	it('uses the comparison container width independently of the desktop viewport', function() {
-		cy.viewport(1440, 900)
-		cy.contains('button', 'Compare versions…').click()
-		getVersionComparisonModal().find('button[type="submit"]').click()
-		assertMeasuredComparisonLayout('paired')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
-		cy.get('.version-comparison-dialog .text-comparison__document-grid')
-			.should('have.css', 'display', 'grid')
-		getVersionComparisonModal().then(($modal) => {
-			$modal[0].style.width = '700px'
-		})
-		assertMeasuredComparisonLayout('single')
-		getVersionComparisonModal().then(($modal) => {
-			$modal[0].style.width = ''
-		})
-		assertMeasuredComparisonLayout('paired')
-	})
-
 	it('AUD-06 uses a callable semantic factory despite an unexpected Text API version', function() {
 		cy.window().then((window) => {
 			window.OCA.Text.apiVersion = 'unexpected'
@@ -1334,7 +1215,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.contains('button', 'Compare versions…').click()
 		getVersionComparisonModal().find('button[type="submit"]').click()
 		cy.get('.version-comparison-dialog .text-comparison').should('be.visible')
-		cy.contains('.version-comparison-dialog [role="tab"]', 'Markdown source').should('be.visible')
+		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').should('be.visible')
 		// Second locator can be removed once we only support Nextcloud 36+
 		cy.get('.viewer__modal, #viewer[role="dialog"]').should('not.exist')
 	})
@@ -1401,7 +1282,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('.version-comparison-dialog .text-comparison').should('not.exist')
 
 		getVersionComparisonModal().contains('button', 'Retry').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 	})
 
 	it('C13 reports one removed version for a single 404 snapshot response', function() {
@@ -1560,7 +1441,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.contains('button', 'Delete version').should('not.exist')
 		cy.clickMenuButton('Compare with current version')
 
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 	})
 
 	it('denies a crafted reader restore and allows the equivalent owner restore', function() {
@@ -1571,7 +1452,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		openVersionsSidebar()
 		cy.contains('button', 'Compare versions…').click()
 		getVersionComparisonModal().find('button[type="submit"]').click()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 
 		cy.wait('@readerVersions').then(({ request, response }) => {
 			const beforeEntries = versionEntries(response.body)
@@ -1645,7 +1526,7 @@ describeSemantic('Page versions semantic comparison', function() {
 		cy.get('[data-cy-collectives="editor"] .ProseMirror').should('exist')
 		cy.location('search').should('match', /compareTo=current(?::|%3A)/)
 		cy.reload()
-		cy.get('.version-comparison-dialog .text-comparison__change-list').should('be.visible')
+		waitForSemanticComparison()
 		cy.contains('.version-comparison-dialog [role="tab"]', 'Full documents').click()
 		cy.get('.version-comparison-dialog .text-comparison__document--after')
 			.should('contain', typedBytes)

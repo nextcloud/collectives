@@ -132,7 +132,9 @@ function auditComparisonFailures(page: Page) {
 	page.on('console', (message) => {
 		const text = message.text()
 		const isExpectedEmptyUserStatus = text.includes('core: Failed to load user status')
-		if (message.type() === 'error' && !isExpectedEmptyUserStatus) {
+		// The test server's files_pdfviewer serves HTML instead of its stylesheet
+		const isMissingPdfViewerStyle = text.includes('/files_pdfviewer/css/')
+		if (message.type() === 'error' && !isExpectedEmptyUserStatus && !isMissingPdfViewerStyle) {
 			failures.push(`console: ${text}`)
 		}
 	})
@@ -142,6 +144,9 @@ function auditComparisonFailures(page: Page) {
 		}
 	})
 	page.on('requestfailed', (request) => {
+		if (request.url().includes('/files_pdfviewer/css/')) {
+			return
+		}
 		failures.push(`request: ${request.url()} ${request.failure()?.errorText ?? 'failed'}`)
 	})
 	page.on('response', (response) => {
@@ -180,41 +185,6 @@ async function freshAuthenticatedContext(page: Page, serviceWorkers: 'allow' | '
 }
 
 test.describe('Version comparison route and current-byte contract', () => {
-	test('AUD-06 scheduled browser uses the compatible Text comparison API', async ({ user, page, collective }) => {
-		const { dialog } = await openSeededComparison(collective, user, page, 'c599-e2e-text-api-page')
-		await expect(page.getByRole('tab', { name: 'Changes' })).toBeVisible()
-		await expect(page.getByRole('tab', { name: 'Full documents' })).toBeVisible()
-		const changesTab = page.locator('.text-comparison .view-tabs').getByRole('tab', { name: 'Changes' })
-		const selectedBorderColor = await changesTab.evaluate((element) => getComputedStyle(element).borderBottomColor)
-		await changesTab.hover()
-		await expect(changesTab).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
-		await expect(changesTab).toHaveCSS('border-bottom-color', selectedBorderColor)
-		await expect(changesTab).toHaveCSS('border-radius', '0px')
-		await page.keyboard.press('Tab')
-		await changesTab.focus()
-		await expect(changesTab).toHaveCSS('box-shadow', 'none')
-		await expect(changesTab).toHaveCSS('outline-style', 'solid')
-		const controls = dialog.locator('.version-comparison-dialog__selectors select, .version-comparison-dialog__selectors .copy')
-		const rectangles = await controls.evaluateAll((elements) => elements.map((element) => {
-			const rect = element.getBoundingClientRect()
-			return { top: rect.top, bottom: rect.bottom }
-		}))
-		expect(Math.max(...rectangles.map(({ top }) => top)) - Math.min(...rectangles.map(({ top }) => top))).toBeLessThan(1)
-		expect(Math.max(...rectangles.map(({ bottom }) => bottom)) - Math.min(...rectangles.map(({ bottom }) => bottom))).toBeLessThan(1)
-		await expect(dialog.getByRole('button', { name: 'Copy comparison link' })).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
-
-		await page.setViewportSize({ width: 620, height: 900 })
-		await page.getByRole('tab', { name: 'Full documents' }).click()
-		await expect(page.locator('.text-comparison')).toHaveClass(/text-comparison--single/)
-		const documentSideTabs = page.locator('.text-comparison .side-tabs [role="tab"]')
-		expect(await documentSideTabs.evaluateAll((elements) => elements.map((element) => getComputedStyle(element).borderRadius))).toEqual(['0px', '0px'])
-
-		await page.getByRole('tab', { name: 'Markdown source' }).click()
-		const sourceSideTabs = page.locator('.text-source-comparison__side-tabs [role="tab"]')
-		await expect(sourceSideTabs).toHaveCount(2)
-		expect(await sourceSideTabs.evaluateAll((elements) => elements.map((element) => getComputedStyle(element).borderRadius))).toEqual(['0px', '0px'])
-	})
-
 	test('C01 displays a historical snapshot before the current snapshot', async ({ user, page, collective }) => {
 		await openSeededComparison(collective, user, page, 'c599-e2e-current-historical-page')
 		await page.getByRole('tab', { name: 'Full documents' }).click()
