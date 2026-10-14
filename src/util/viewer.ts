@@ -6,7 +6,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { File, Permission } from '@nextcloud/files'
 import { getClient, getDefaultPropfind, getRootPath, resultToNode } from '@nextcloud/files/dav'
-import { getViewer } from '@nextcloud/viewer'
+import { canCompare, canView, getViewer } from '@nextcloud/viewer'
 
 interface FileNodeOptions {
 	id: number
@@ -69,6 +69,61 @@ export function versionNode(version: VersionInfo): File {
 	})
 }
 
+// Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
+interface LegacyViewer {
+	availableHandlers: { mimes: string[] }[]
+	open: (options: { path: string, list?: unknown[] }) => void
+	compare: (fileInfo: object, compareFileInfo: object) => void
+}
+
+/**
+ * The Viewer app, loaded on Nextcloud 35 and older
+ * Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
+ *
+ * Text and the PDF viewer register their handlers only with the Viewer app on
+ * these versions, so the `@nextcloud/viewer` library doesn't know about them.
+ * Newer versions provide an `OCA.Viewer` without `registerHandler`.
+ */
+export function legacyViewer(): LegacyViewer | undefined {
+	const viewer = window.OCA?.Viewer
+	return typeof viewer?.registerHandler === 'function' ? viewer : undefined
+}
+
+/**
+ * Whether the Viewer app can open files of the mimetype
+ * Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
+ *
+ * @param mime - Mimetype of the file
+ */
+export function legacyCanView(mime: string): boolean {
+	return legacyViewer()?.availableHandlers.some(({ mimes }) => mimes.includes(mime)) ?? false
+}
+
+/**
+ * Whether the viewer library or the Viewer app can compare versions of the page
+ * Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
+ *
+ * @param current - The current version of the page
+ */
+export function canCompareVersions(current: VersionInfo): boolean {
+	return canCompare(versionNode(current)) || typeof legacyViewer()?.compare === 'function'
+}
+
+/**
+ * Show two versions of the page side by side, preferably in the viewer library
+ * Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
+ *
+ * @param later - The later version
+ * @param earlier - The earlier version
+ */
+export async function compareVersions(later: VersionInfo, earlier: VersionInfo): Promise<void> {
+	if (canCompare(versionNode(later))) {
+		await getViewer().compare(versionNode(later), versionNode(earlier))
+		return
+	}
+	legacyViewer()?.compare({ ...later }, { ...earlier })
+}
+
 type DavStat = Parameters<typeof resultToNode>[0]
 
 /**
@@ -81,6 +136,12 @@ export async function openFileAt(path: string): Promise<void> {
 	const node = resultToNode(data)
 	if (!(node instanceof File)) {
 		throw new Error(`${path} is not a file`)
+	}
+	const legacy = legacyViewer()
+	if (!canView(node) && legacy) {
+		// Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
+		legacy.open({ path, list: [] })
+		return
 	}
 	await getViewer().open([node], node, { enableSidebar: false })
 }

@@ -115,7 +115,8 @@ export class CollectivePage {
 	}
 
 	getViewerContent() {
-		return this.page.locator('.viewer__modal')
+		// Second locator can be removed once we only support Nextcloud 36+
+		return this.page.locator('.viewer__modal, #viewer[role="dialog"]')
 	}
 
 	async createShare({ page }: { page: Page }) {

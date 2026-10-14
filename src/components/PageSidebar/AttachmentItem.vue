@@ -130,7 +130,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { attachmentDavUrl } from '../../util/attachmentDavUrl.ts'
 import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
-import { fileNode } from '../../util/viewer.ts'
+import { fileNode, legacyCanView, legacyViewer } from '../../util/viewer.ts'
 
 export default {
 	name: 'AttachmentItem',
@@ -306,6 +306,10 @@ export default {
 				if (!wasOpen) {
 					session.addEventListener('close', () => emit('collectives:page-sidebar', { open: false, tab: 'attachments' }), { once: true })
 				}
+			} else if (legacyCanView(this.attachment.mimetype)) {
+				// Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
+				event.preventDefault()
+				legacyViewer().open({ path: this.attachment.path })
 			}
 		},
 

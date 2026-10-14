@@ -25,11 +25,13 @@ describe('Page templates', function() {
 			.contains('Add a template')
 			.click()
 
-		cy.get('.viewer__modal .ProseMirror')
+		// Second locator can be removed once we only support Nextcloud 36+
+		cy.get('.viewer__modal .ProseMirror, #viewer[role="dialog"] .ProseMirror')
 			.should('be.visible')
 			.type('## Template Heading{enter}Template body')
 
-		cy.get('.viewer__modal .modal-header button.header-close')
+		// Second locator can be removed once we only support Nextcloud 36+
+		cy.get('.viewer__modal .modal-header button.header-close, #viewer[role="dialog"] button.header-close')
 			.click()
 
 		// Rename template
