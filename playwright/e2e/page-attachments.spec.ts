@@ -5,11 +5,13 @@
 
 import { expect, mergeTests } from '@playwright/test'
 import { resolve } from 'node:path'
+import { test as collectiveShareTest } from '../support/fixtures/collective-share.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as editorTest } from '../support/fixtures/editor.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
+import { PageSidebarSection } from '../support/sections/PageSidebarSection.ts'
 
-const test = mergeTests(createCollectiveTest, editorTest, pageSidebarTest)
+const test = mergeTests(createCollectiveTest, editorTest, pageSidebarTest, collectiveShareTest)
 
 const fixturePath = (name: string) => resolve(import.meta.dirname, '../support/fixtures/files', name)
 
@@ -107,4 +109,28 @@ test.describe('Page attachments', () => {
 			.toHaveAttribute('aria-selected', 'true')
 		await expect(viewer).toBeVisible()
 	})
+
+	for (const shareType of ['collective', 'page'] as const) {
+		test(`open an attachment in the viewer in a ${shareType} share`, async ({ user, page, collective, sharePage }) => {
+			// A subpage, so the attachment path differs between collective root and share root
+			const parentPage = await collective.createPage({ title: 'Parent', user, page })
+			const collectivePage = await collective.createPage({ title: 'Page with attachment', parentId: parentPage.data.id, user, page })
+			await collectivePage.uploadImage({ filename: 'test.png', user, page })
+			const share = shareType === 'collective'
+				? await collective.createShare({ page })
+				: await collectivePage.createShare({ page })
+
+			await sharePage.goto(collectivePage.getPageUrl(share.data.token))
+			const sharePageSidebar = new PageSidebarSection(sharePage)
+			await sharePageSidebar.openSidebarTab('Attachments')
+			await sharePageSidebar.getAttachmentListItem('test.png')
+				.getByRole('link', { name: 'test.png' })
+				.click()
+
+			const viewer = sharePage.locator('.viewer__modal')
+			await expect(viewer).toBeVisible()
+			await expect.poll(() => viewer.locator('img').first().evaluate((img: HTMLImageElement) => img.naturalWidth))
+				.toBeGreaterThan(0)
+		})
+	}
 })

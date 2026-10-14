@@ -9,7 +9,8 @@ import type { User } from './User.ts'
 import { expect } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { webdavUrl } from '../helpers/urls.ts'
+import { apiUrl, ocsHeaders, webdavUrl } from '../helpers/urls.ts'
+import { CollectiveShare } from './CollectiveShare.ts'
 
 type CollectivePageData = {
 	id: number
@@ -115,6 +116,19 @@ export class CollectivePage {
 
 	getViewerContent() {
 		return this.page.locator('.viewer__modal')
+	}
+
+	async createShare({ page }: { page: Page }) {
+		const response = await page.request.post(
+			apiUrl('v1.0', 'collectives', this.collectiveId, 'pages', this.data.id, 'shares'),
+			{
+				headers: ocsHeaders,
+				data: {},
+				failOnStatusCode: true,
+			},
+		)
+		const data = await response.json()
+		return new CollectiveShare(this.collectiveUrlPart, data.ocs.data, page)
 	}
 
 	/**
