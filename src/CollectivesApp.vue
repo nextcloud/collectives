@@ -22,6 +22,8 @@
 			<template #list>
 				<CollectiveSelector />
 				<PageList v-if="currentCollective" />
+			</template>
+			<template #footer>
 				<div
 					v-if="!isMobile"
 					class="app-navigation-resize-handle"
@@ -216,13 +218,14 @@ export default {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	inset-inline-end: 0;
+	// Straddle the navigation edge with most of the grabbable area outside of it,
+	// so it doesn't cover the page list scrollbar
+	inset-inline-end: -6px;
 	z-index: 100;
 	width: 4px;
 	cursor: col-resize;
 	// Widen the grabbable area without widening the visible line
 	background-clip: content-box;
-	border-inline-start: 4px solid transparent;
 	border-inline-end: 4px solid transparent;
 
 	&:hover, &:active {
