@@ -66,13 +66,9 @@ jobs:
           - server-versions: 'stable33'
             server-major: '33'
             semantic-e2e: '0'
-            text-app-repository: 'nextcloud/text'
-            text-app-ref: 'stable33'
           - server-versions: 'master'
             server-major: ''
             semantic-e2e: '1'
-            text-app-repository: 'nextcloud/text'
-            text-app-ref: 'b5ff1b0ce8d38b8a8dfdd6acf7b3f36c3fa2e272'
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
@@ -122,9 +118,9 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          repository: ${{ matrix.text-app-repository }}
+          repository: nextcloud/text
           path: apps/text
-          ref: ${{ matrix.text-app-ref }}
+          ref: ${{ matrix.server-versions == 'master' && 'main' || matrix.server-versions }}
 
       # Can be removed once we only support Nextcloud 36+
       - name: Checkout viewer app
@@ -166,13 +162,6 @@ jobs:
 
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
         run: npm i -g 'npm@${{ steps.versions.outputs.npmVersion }}'
-
-      - name: Build compatible Text semantic API
-        if: matrix.semantic-e2e == '1'
-        working-directory: apps/text
-        run: |
-          npm ci
-          npm run build
 
       - name: Install node dependencies & build app
         working-directory: apps/${{ env.APP_NAME }}
