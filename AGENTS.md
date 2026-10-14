@@ -88,9 +88,9 @@ npx playwright test --grep "pattern"
 
 1. Build first (`npm run dev`) if not already done, since the instance serves `js/` and `css/` from this checkout.
 2. Run the tests from a scratch copy whose `random-user.ts` and `Collective.ts` create users via OCS (`POST /ocs/v2.php/cloud/users` with `OCS-APIRequest: true` and admin credentials) instead of `createRandomUser()`.
-3. Set `baseURL`, plus `NODE_TLS_REJECT_UNAUTHORIZED=0` for a self-signed certificate:
+3. Set `baseURL`. If Node doesn't trust the instance's certificate, also set `NODE_TLS_REJECT_UNAUTHORIZED=0`:
    ```bash
-   baseURL=https://nextcloud.local/index.php/ NODE_TLS_REJECT_UNAUTHORIZED=0 \
+   baseURL=https://nextcloud.local/index.php/ \
      npx playwright test playwright/e2e/page-attachments.spec.ts --project=chromium
    ```
 
