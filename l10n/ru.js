@@ -2,6 +2,8 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Группы",
+    "{user} updated {page} in {collective}" : "{user} обновил(а) событие {page} в календаре {collective}",
+    "{user} deleted {page} from {collective}" : "{user} удалил(а) событие {page} из календаря {collective}",
     "Collectives - Page content" : "Группы - страница содержания",
     "Collectives - Pages" : "Группы - страницы",
     "Collective Share" : "Групповой доступ",
@@ -80,6 +82,7 @@ OC.L10N.register(
     "Templates" : "Шаблоны",
     "Stop editing" : "Прекратить редактирование",
     "Start editing" : "Начать редактирование",
+    "Show members" : "Показать участников",
     "Hide outline" : "Скрыть обрамление",
     "Show outline" : "Показать обрамление",
     "Remove from favorites" : "Убрать из избранного",
