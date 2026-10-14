@@ -91,7 +91,7 @@ export class EditorSection {
 	public async hasImage(filename: string): Promise<void> {
 		const srcRegex = new RegExp(`imageFileName=${filename}`)
 		await expect(this.getContent()
-			.locator('img'))
+			.locator('img.image__main'))
 			.toHaveAttribute('src', srcRegex)
 	}
 
