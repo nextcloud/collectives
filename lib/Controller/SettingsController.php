@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\ConfigLexicon;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -37,7 +38,7 @@ class SettingsController extends OCSController {
 	 * @throws OCSBadRequestException
 	 */
 	private function validateGetUserSetting(string $setting): void {
-		if ($setting === 'user_folder') {
+		if ($setting === ConfigLexicon::USER_FOLDER) {
 			return;
 		}
 
@@ -52,7 +53,7 @@ class SettingsController extends OCSController {
 			throw new OCSBadRequestException('Empty value for setting ' . $setting);
 		}
 
-		if ($setting === 'user_folder') {
+		if ($setting === ConfigLexicon::USER_FOLDER) {
 			// No root folder, has to start with `/`, not allowed to end with `/`
 			if ($value === '/'
 				|| !(str_starts_with($value, '/'))

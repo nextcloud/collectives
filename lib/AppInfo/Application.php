@@ -12,6 +12,7 @@ namespace OCA\Collectives\AppInfo;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Circles\Events\EditingCircleEvent;
 use OCA\Collectives\CacheListener;
+use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Dashboard\RecentPagesWidget;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveVersionMapper;
@@ -85,6 +86,8 @@ class Application extends App implements IBootstrap {
 		$context->registerNotifierService(Notifier::class);
 
 		$context->registerMiddleware(PublicOCSMiddleware::class);
+
+		$context->registerConfigLexicon(ConfigLexicon::class);
 
 		$context->registerService(MountProvider::class, fn (ContainerInterface $c) => new MountProvider(
 			$c->get(CollectiveHelper::class),

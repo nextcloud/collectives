@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Settings;
 
 use OCA\Collectives\AppInfo\Application;
+use OCA\Collectives\ConfigLexicon;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IAppConfig;
@@ -25,7 +26,7 @@ class Admin implements ISettings {
 
 	public function getForm(): TemplateResponse {
 		$parameters = [
-			'default_user_folder' => $this->appConfig->getValueString('collectives', 'default_user_folder', ''),
+			'default_user_folder' => $this->appConfig->getValueString('collectives', ConfigLexicon::DEFAULT_USER_FOLDER, ''),
 		];
 		$this->initialState->provideInitialState('adminSettings', $parameters);
 
