@@ -144,6 +144,7 @@
     "Select emoji for template" : "選取範本的表情符號",
     "Template title" : "範本標題",
     "Rename" : "重新命名",
+    "Could not open template" : "無法開啟範本",
     "Could not create template" : "無法建立範本",
     "Could not delete template" : "無法刪除範本",
     "Templates" : "範本",

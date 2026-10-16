@@ -146,6 +146,7 @@ OC.L10N.register(
     "Select emoji for template" : "Kalıp için bir emoji seçin",
     "Template title" : "Kalıp başlığı",
     "Rename" : "Yeniden adlandır",
+    "Could not open template" : "Kalıp açılamadı",
     "Could not create template" : "Kalıp oluşturulamadı",
     "Could not delete template" : "Kalıp silinemedi",
     "Templates" : "Kalıplar",

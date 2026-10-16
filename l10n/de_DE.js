@@ -146,6 +146,7 @@ OC.L10N.register(
     "Select emoji for template" : "Emoji für Vorlage auswählen",
     "Template title" : "Vorlagentitel",
     "Rename" : "Umbenennen",
+    "Could not open template" : "Vorlage konnte nicht geöffnet werden",
     "Could not create template" : "Vorlage konnte nicht erstellt werden",
     "Could not delete template" : "Vorlage konnte nicht gelöscht werden",
     "Templates" : "Vorlagen",
