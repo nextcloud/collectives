@@ -146,6 +146,7 @@ OC.L10N.register(
     "Select emoji for template" : "Vyberte emoji pre šablónu",
     "Template title" : "Názov šablóny",
     "Rename" : "Premenovať",
+    "Could not open template" : "Šablónu sa nepodarilo otvoriť",
     "Could not create template" : "Nepodarilo sa vytvoriť šablónu",
     "Could not delete template" : "Nepodarilo sa zmazať šablónu",
     "Templates" : "Šablóny",

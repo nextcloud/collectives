@@ -144,6 +144,7 @@
     "Select emoji for template" : "Selecione emoji para modelo",
     "Template title" : "Título do modelo",
     "Rename" : "Renomear",
+    "Could not open template" : "Não foi possível abrir o modelo",
     "Could not create template" : "Não foi possível criar o modelo",
     "Could not delete template" : "Não foi possível excluir o modelo",
     "Templates" : "Modelos",
