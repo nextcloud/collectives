@@ -43,7 +43,7 @@ describe('Page list', function() {
 	})
 	it('can sort pages by title/timestamp and sort order is persistent', function() {
 		// Select sorting by title
-		cy.get('span.sort-ascending-icon').click()
+		cy.get('button[aria-label="Page list options"]').click()
 		cy.get('.sort-alphabetical-ascending-icon').click()
 		cy.get('.page-list-item').last()
 			.should('contain', 'Target')
@@ -56,15 +56,15 @@ describe('Page list', function() {
 			.should('contain', 'Target')
 
 		// Select sorting by timestamp
-		cy.get('span.sort-alphabetical-ascending-icon').click()
+		cy.get('button[aria-label="Page list options"]').click()
 		cy.get('button.action-button > span.sort-clock-ascending-outline-icon').click()
 		cy.get('.page-list-item').last()
 			.should('contain', 'Target')
 
 		// Remove alternative sort order
 		cy.get('div.sort-order-chip > button').click()
-		cy.get('span.sort-ascending-icon')
-			.should('be.visible')
+		cy.get('div.sort-order-chip')
+			.should('not.exist')
 		cy.get('.page-list-item').eq(0)
 			.should('contain', '#% special chars')
 		cy.get('.page-list-item').last()

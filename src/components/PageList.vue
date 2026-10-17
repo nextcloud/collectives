@@ -47,13 +47,9 @@
 
 		<NcActions
 			class="toggle"
-			:aria-label="t('collectives', 'Sort order')">
+			:aria-label="t('collectives', 'Page list options')">
 			<template #icon>
-				<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
-				<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitleAsc')" :size="16" />
-				<SortAlphabeticalDescendingIcon v-else-if="sortedBy('byTitleDesc')" :size="16" />
-				<SortClockAscendingIcon v-else-if="sortedBy('byTimeAsc')" :size="16" />
-				<SortClockDescendingIcon v-else :size="16" />
+				<FilterVariantIcon :size="20" />
 			</template>
 			<NcActionButton
 				class="toggle-button"
@@ -87,6 +83,17 @@
 				</template>
 				{{ sortedBy('byTitleAsc') ? t('collectives', 'Sort descending by title') : t('collectives', 'Sort ascending by title') }}
 			</NcActionButton>
+			<template v-if="!isFilteredView">
+				<NcActionSeparator />
+				<NcActionButton
+					closeAfterClick
+					@click="collapseAllAndScroll">
+					<template #icon>
+						<UnfoldLessHorizontalIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Collapse all pages') }}
+				</NcActionButton>
+			</template>
 		</NcActions>
 
 		<NcButton
@@ -220,17 +227,20 @@ import { ref } from 'vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcAppNavigationCaption from '@nextcloud/vue/components/NcAppNavigationCaption'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
+import FilterVariantIcon from 'vue-material-design-icons/FilterVariant.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAlphabeticalDescendingIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortClockAscendingIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 import SortClockDescendingIcon from 'vue-material-design-icons/SortClockDescendingOutline.vue'
+import UnfoldLessHorizontalIcon from 'vue-material-design-icons/UnfoldLessHorizontal.vue'
 import DraggableElement from './PageList/DraggableElement.vue'
 import NewPageDialog from './PageList/NewPageDialog.vue'
 import PageFavorites from './PageList/PageFavorites.vue'
@@ -258,6 +268,7 @@ export default {
 	components: {
 		NcActionButton,
 		NcActions,
+		NcActionSeparator,
 		NcAppNavigationCaption,
 		NcButton,
 		NcPopover,
@@ -271,13 +282,15 @@ export default {
 		PageTag,
 		PageTrash,
 		PlusIcon,
+		RecycleScroller,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
 		SortAlphabeticalDescendingIcon,
 		SortAscendingIcon,
 		SortClockAscendingIcon,
 		SortClockDescendingIcon,
-		RecycleScroller,
+		FilterVariantIcon,
+		UnfoldLessHorizontalIcon,
 	},
 
 	mixins: [
@@ -486,7 +499,7 @@ export default {
 
 		...mapActions(useTagsStore, ['addFilterTagId', 'removeFilterTagId']),
 		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),
-		...mapActions(usePagesStore, ['contentSearch', 'setPageOrder']),
+		...mapActions(usePagesStore, ['collapseAll', 'contentSearch', 'setPageOrder']),
 		...mapActions(useSearchStore, ['setSearchQuery']),
 
 		clearFilterString() {
@@ -511,6 +524,13 @@ export default {
 						showError(t('collectives', 'Could not save page order for collective'))
 					})
 			}
+			this.$nextTick(() => {
+				scrollToPage(this.currentPageId)
+			})
+		},
+
+		collapseAllAndScroll() {
+			this.collapseAll()
 			this.$nextTick(() => {
 				scrollToPage(this.currentPageId)
 			})
