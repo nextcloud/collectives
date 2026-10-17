@@ -146,6 +146,7 @@ OC.L10N.register(
     "Select emoji for template" : "Välj emoji för mallen",
     "Template title" : "Malltitel",
     "Rename" : "Byt namn",
+    "Could not open template" : "Det gick inte att öppna mallen",
     "Could not create template" : "Det gick inte att skapa mallen",
     "Could not delete template" : "Det gick inte att ta bort mallen",
     "Templates" : "Mallar",
