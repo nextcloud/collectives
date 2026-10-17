@@ -146,6 +146,7 @@ OC.L10N.register(
     "Select emoji for template" : "Roghnaigh emoji don teimpléad",
     "Template title" : "Teideal an teimpléid",
     "Rename" : "Athainmnigh",
+    "Could not open template" : "Níorbh fhéidir an teimpléad a oscailt",
     "Could not create template" : "Níorbh fhéidir teimpléad a chruthú",
     "Could not delete template" : "Níorbh fhéidir an teimpléad a scriosadh",
     "Templates" : "Teimpléid",

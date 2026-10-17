@@ -146,6 +146,7 @@ OC.L10N.register(
     "Select emoji for template" : "Vali emoji malli jaoks",
     "Template title" : "Malli pealkiri",
     "Rename" : "Muuda nime",
+    "Could not open template" : "Malli avamine ei õnnestunud",
     "Could not create template" : "Malli loomine polnud võimalik",
     "Could not delete template" : "Malli kustutamine polnud võimalik",
     "Templates" : "Mallid",
