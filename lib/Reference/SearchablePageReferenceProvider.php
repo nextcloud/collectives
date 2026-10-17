@@ -83,7 +83,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return ['collectives-pages'];
 	}
 
-	private static function pagePathFromMatches(array $urlParts, string $collectivePart, string $pagePathPart): array {
+	private static function pagePathFromMatches(array $urlParts, string $collectivePart, string $pagePathPart, ?string $shareToken = null): array {
 		$pagePath = [
 			'collectiveName' => urldecode($collectivePart),
 			'pagePath' => urldecode(ltrim($pagePathPart, '/')),
@@ -115,6 +115,11 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			$pagePath['fragment'] = $urlParts['fragment'];
 		}
 
+		// Public share URL
+		if ($shareToken !== null) {
+			$pagePath['shareToken'] = $shareToken;
+		}
+
 		return $pagePath;
 	}
 
@@ -144,9 +149,9 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 		$matches = false;
 		foreach ($startPublicRegexes as $regex) {
-			preg_match('/^' . $regex . '\/\w+' . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
-			if ($matches && count($matches) > 1) {
-				return self::pagePathFromMatches($urlParts, $matches[1], $matches[2] ?? '');
+			preg_match('/^' . $regex . '\/(\w+)' . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
+			if ($matches && count($matches) > 2) {
+				return self::pagePathFromMatches($urlParts, $matches[2], $matches[3] ?? '', $matches[1]);
 			}
 		}
 
@@ -249,6 +254,13 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		$collectiveId = $pageReferenceInfo['collectiveId'] ?? null;
 		$collectiveName = $pageReferenceInfo['collectiveName'];
 
+		// Links to a public share carry their own share token. Resolve them via this token, so that
+		// users who are not member of the collective and viewers of other public shares get a preview.
+		if (isset($pageReferenceInfo['shareToken'])) {
+			$public = true;
+			$sharingToken = $pageReferenceInfo['shareToken'];
+		}
+
 		// Prepare empty reference object to return if we cannot resolve
 		$notFoundReference = new Reference($referenceText);
 		$notFoundReference->setAccessible(false);
@@ -337,6 +349,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 	private function getCollectiveIdPrefix(string $referenceId, ?string $sharingToken = null): string {
 		$pageReferenceInfo = $this->getPagePathFromDirectLink($referenceId);
+		$sharingToken = $pageReferenceInfo['shareToken'] ?? $sharingToken;
 		$collectiveId = $pageReferenceInfo['collectiveId'] ?? null;
 		if (!$collectiveId) {
 			try {
