@@ -11,6 +11,7 @@ import { test as createCollectivesTest } from '../support/fixtures/create-collec
 import { test as navigationTest } from '../support/fixtures/navigation.ts'
 import { loginAsUser } from '../support/fixtures/random-user.ts'
 import { User } from '../support/fixtures/User.ts'
+import { getToast } from '../support/helpers/toasts.ts'
 
 type MemberFixture = { page: Page, user: User }
 
@@ -100,7 +101,7 @@ test.describe('Collective publish', () => {
 
 			// Modal closes after successful submission
 			await expect(modal).toHaveCount(0)
-			await expect(page.locator('.toast-success')).toContainText('Website publishing started')
+			await expect(getToast(page, 'success', 'Website publishing started')).toBeVisible()
 		})
 	})
 
@@ -120,7 +121,7 @@ test.describe('Collective publish', () => {
 		await titleField.fill('My website')
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
-		await expect(page.locator('.toast-error')).toContainText('Could not publish collective as website')
+		await expect(getToast(page, 'error', 'Could not publish collective as website')).toBeVisible()
 		// Entered values remain for another attempt
 		await expect(modal).toBeVisible()
 		await expect(titleField).toHaveValue('My website')
