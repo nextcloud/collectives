@@ -12,21 +12,29 @@ declare module '@nextcloud/event-bus' {
 	}
 }
 
+const offlineSince = ref<number | null>(navigator.onLine ? null : Date.now())
+const networkOnline = computed(() => !offlineSince.value)
+let subscribed = false
+
 /**
  * Get network online/offline state
+ *
+ * The state is shared by all callers and updated by a single pair of
+ * event bus subscriptions.
  */
 export function useNetworkState() {
-	const offlineSince = ref(navigator.onLine ? null : Date.now())
-	const networkOnline = computed(() => !offlineSince.value)
+	if (!subscribed) {
+		subscribed = true
 
-	subscribe('networkOnline', (event) => {
-		if (event.success) {
-			offlineSince.value = null
-		}
-	})
-	subscribe('networkOffline', () => {
-		offlineSince.value = Date.now()
-	})
+		subscribe('networkOnline', (event) => {
+			if (event.success) {
+				offlineSince.value = null
+			}
+		})
+		subscribe('networkOffline', () => {
+			offlineSince.value = Date.now()
+		})
+	}
 
 	return { networkOnline, offlineSince }
 }
