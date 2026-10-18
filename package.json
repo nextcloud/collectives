@@ -73,7 +73,7 @@
     "cypress-vite": "^1.10.2",
     "eslint": "^10.10.0",
     "eslint-plugin-cypress": "^7.0.2",
-    "vite": "^7.3.6",
+    "vite": "^7.3.7",
     "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.2",
     "wait-on": "^9.5.1"
