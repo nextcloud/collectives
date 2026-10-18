@@ -20,7 +20,7 @@
 
 <script>
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { listen } from '@nextcloud/notify_push'
+import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
 import LandingPageWidgets from './Page/LandingPageWidgets.vue'
 import PageTags from './Page/PageTags.vue'
@@ -52,6 +52,7 @@ export default {
 	data() {
 		return {
 			loadPending: true,
+			onAttachmentsEvent: debounce(() => this.getAttachmentsForPage(false), 1000),
 		}
 	},
 
@@ -81,6 +82,7 @@ export default {
 
 	watch: {
 		currentPageId: function() {
+			this.onAttachmentsEvent.clear()
 			this.setAttachmentsError(false)
 			this.setAttachmentsLoaded(false)
 			this.getAttachmentsForPage(true)
@@ -107,12 +109,10 @@ export default {
 		subscribe('text:image-node:add', this.onAttachmentsEvent)
 		subscribe('collectives:page-sidebar', this.toggleSidebar)
 		subscribe('viewer:sidebar:open', this.onViewerSidebarOpen)
-
-		// Reload attachment list on filesystem changes
-		listen('notify_file', this.onAttachmentsEvent.bind(this))
 	},
 
 	beforeUnmount() {
+		this.onAttachmentsEvent.clear()
 		unsubscribe('text:image-node:add', this.onAttachmentsEvent)
 		unsubscribe('collectives:page-sidebar', this.toggleSidebar)
 		unsubscribe('viewer:sidebar:open', this.onViewerSidebarOpen)
@@ -165,10 +165,6 @@ export default {
 			} finally {
 				this.done('attachments')
 			}
-		},
-
-		onAttachmentsEvent() {
-			this.getAttachmentsForPage(false)
 		},
 
 		toggleSidebar({ open, tab }) {
