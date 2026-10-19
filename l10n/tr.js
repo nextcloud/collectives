@@ -282,7 +282,7 @@ OC.L10N.register(
     "Collective \"{name}\" has been unshared" : "\"{name}\" topluluğu paylaşımdan kaldırıldı",
     "Failed to unshare: {responseError}" : "Paylaşım kaldırılamadı: {responseError}",
     "Error generating password from password policy" : "Parola, parola ilkesine göre oluşturulurken sorun çıktı",
-    "Quick share options dropdown" : "Hızlı paylaş seçenekleri açılan kutusu",
+    "Quick share options dropdown" : "Hızlı paylaş seçenekleri açılan listesi",
     "Please enter the following required information before creating the share" : "Lütfen paylaşımı oluşturmadan önce aşağıdaki zorunlu bilgileri yazın",
     "Password protection (enforced)" : "Parola koruması (zorunlu kılınmış)",
     "Set password" : "Parola ayarla",
