@@ -65,6 +65,8 @@ test.describe('Notifications', () => {
 
 		await collective.openCollective()
 		await expectNotification(page, collective.data.name, testPage.data.title)
+		await expect(page.locator('#header-menu-notifications .notification').first())
+			.toContainText(`${member.user.account.userId} has mentioned you in ${collective.data.name} - ${testPage.data.title}`)
 	})
 
 	test('User does not receive notification when notify level is off', async ({ collective, page, member, user }) => {
