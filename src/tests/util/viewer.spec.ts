@@ -60,6 +60,19 @@ describe('compareVersions', () => {
 		)
 	})
 
+	it('uses the earlier version as base regardless of the order', async () => {
+		const compare = vi.fn()
+		vi.mocked(canCompare).mockReturnValue(true)
+		vi.mocked(getViewer).mockReturnValue({ compare } as never)
+
+		await compareVersions(version, current)
+
+		expect(compare).toHaveBeenCalledWith(
+			expect.objectContaining({ source: current.source }),
+			expect.objectContaining({ source: version.source }),
+		)
+	})
+
 	it('falls back to the Viewer app', async () => {
 		const compare = vi.fn()
 		vi.mocked(canCompare).mockReturnValue(false)
