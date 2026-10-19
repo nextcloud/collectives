@@ -177,7 +177,11 @@ export default {
 		},
 
 		onViewerSidebarOpen() {
-			this.toggleSidebar({ open: true, tab: 'attachments' })
+			// The viewer also asks for the sidebar when it shows a file next to the
+			// open sidebar, e.g. when comparing versions from the versions tab
+			if (!this.showingSidebar) {
+				this.toggleSidebar({ open: true, tab: 'attachments' })
+			}
 		},
 	},
 }
