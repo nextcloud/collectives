@@ -327,41 +327,6 @@ Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown'
 	})
 })
 
-/**
- * Create a team (optionally with given config)
- */
-Cypress.Commands.add('seedCircle', (name, config = null) => {
-	Cypress.log()
-	cy.circleFind(name)
-		.then(async (circle) => {
-			const url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/circles/circles`
-			let circleId
-			if (!circle) {
-				const response = await axios.post(
-					url,
-					{ name, personal: false },
-				)
-				circleId = response.data.ocs.data.id
-			} else {
-				circleId = circle.id
-			}
-			if (config) {
-				// For now we only set the visibility
-				const bits = [
-					['visible', 8],
-					['open', 16],
-				]
-				const value = bits
-					.filter(([k]) => config[k])
-					.reduce((sum, [, v]) => sum + v, 0)
-				await axios.put(
-					`${url}/${circleId}/config`,
-					{ value },
-				)
-			}
-		})
-})
-
 Cypress.Commands.add('getCircles', () => {
 	return axios.get(generateOcsUrl('apps/circles/circles'))
 		.then((response) => response.data.ocs.data)
@@ -403,24 +368,6 @@ Cypress.Commands.add(
 		)
 	},
 )
-
-/**
- * Fail the test on the initial run to check if retries work
- */
-Cypress.Commands.add('testRetry', () => {
-	cy.wrap(cy.state('test').currentRetry())
-		.should('be.equal', 2)
-})
-
-Cypress.Commands.add('setAppConfig', (app, key, value) => {
-	Cypress.log()
-	const url = `${Cypress.expose('baseUrl')}/ocs/v2.php/apps/provisioning_api/api/v1/config/apps/${app}/${key}`
-	return axios.post(url, { value }, {
-		headers: {
-			'OCS-APIRequest': true,
-		},
-	})
-})
 
 Cypress.Commands.add('stubClipboardAndVisit', (url) => {
 	cy.visit({
