@@ -151,9 +151,7 @@ export default {
 
 		loadAdminSettings() {
 			try {
-				const publishEnabledState = loadState('collectives', 'publish_enabled', true)
-				const isPublishEnabled = publishEnabledState === true || publishEnabledState === 'true'
-				this.setPublishFeatureEnabled(isPublishEnabled)
+				this.setPublishFeatureEnabled(loadState('collectives', 'publish_enabled', false))
 			} catch (e) {
 				console.error('Failed to load admin settings:', e)
 			}

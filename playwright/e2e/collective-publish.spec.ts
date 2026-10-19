@@ -28,7 +28,7 @@ const test = baseTest.extend<{ member: MemberFixture }>({
 })
 
 test.beforeAll(async () => {
-	await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true'])
+	await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true', '--type', 'boolean'])
 })
 
 test.describe('Collective publish', () => {
