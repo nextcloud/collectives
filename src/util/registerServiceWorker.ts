@@ -29,7 +29,7 @@ export default async function(app = 'collectives') {
 	})
 
 	try {
-		wb.register()
+		await wb.register()
 		console.debug('SW registered.')
 	} catch (registrationError) {
 		console.error('SW registration failed: ', { registrationError })
