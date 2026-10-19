@@ -32,7 +32,7 @@ class ConfigLexicon implements ILexicon {
 	public const USER_FOLDER = 'user_folder';
 
 	public const PUBLISH_ENABLED = 'publish_enabled';
-	public const PUBLISH_ENABLED_DEFAULT = 'false';
+	public const PUBLISH_ENABLED_DEFAULT = false;
 	public const STATIC_SITE_MAX_SIZE = 'static_site_max_size';
 	public const STATIC_SITE_MAX_SIZE_DEFAULT = 100 * 1024 * 1024;
 	public const STATIC_SITE_GENERATOR_URL = 'static_site_generator_url';
@@ -88,9 +88,9 @@ class ConfigLexicon implements ILexicon {
 			),
 			new Entry(
 				key: self::PUBLISH_ENABLED,
-				type: ValueType::STRING,
+				type: ValueType::BOOL,
 				defaultRaw: self::PUBLISH_ENABLED_DEFAULT,
-				definition: 'Whether the publish feature is enabled (`true` or `false`)',
+				definition: 'Whether the publish feature is enabled',
 				lazy: false,
 			),
 			new Entry(

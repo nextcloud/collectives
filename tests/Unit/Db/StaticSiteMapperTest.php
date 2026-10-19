@@ -12,6 +12,7 @@ namespace Unit\Db;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Db\StaticSiteMapper;
 use OCA\Collectives\Service\NotFoundException;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\DB\QueryBuilder\IExpressionBuilder;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -101,6 +102,31 @@ class StaticSiteMapperTest extends TestCase {
 		$this->qb->method('executeStatement')->willReturn(0);
 
 		$this->assertFalse($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING));
+	}
+
+	public function testRestoreStatusKeepsPreviousUpdateTime(): void {
+		$this->qb->method('executeStatement')->willReturn(1);
+		$current = new StaticSite();
+		$current->setId(7);
+		$current->setStatus(StaticSite::STATUS_PENDING);
+		$current->setUpdatedAt($this->now);
+		$current->resetUpdatedFields();
+		$this->mapper->expects($this->once())->method('find')->with(7)->willReturn($current);
+
+		$this->mapper->restoreStatus($this->makeStaticSite());
+
+		$this->assertSame(['id = 7'], $this->conditions);
+		$this->assertSame([
+			'status' => StaticSite::STATUS_PUBLISHED,
+			'updated_at' => 1700000000,
+		], $this->values);
+	}
+
+	public function testRestoreStatusThrowsIfStaticSiteWasDeleted(): void {
+		$this->mapper->method('find')->willThrowException(new DoesNotExistException('Not found'));
+
+		$this->expectException(NotFoundException::class);
+		$this->mapper->restoreStatus($this->makeStaticSite());
 	}
 
 	public function testUpdateSettingsAndStatusStoresTitlePagesAndStatus(): void {
