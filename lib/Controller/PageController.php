@@ -320,9 +320,11 @@ class PageController extends OCSController {
 	#[NoAdminRequired]
 	public function getAttachments(int $collectiveId, int $id): DataResponse {
 		$uid = $this->getUid();
-		$pageFile = $this->service->getPageFile($collectiveId, $id, $uid);
-		$userFolder = $this->rootFolder->getUserFolder($uid);
-		$attachments = $this->handleErrorResponse(fn (): array => $this->attachmentService->getAttachments($pageFile, $userFolder), $this->logger);
+		$attachments = $this->handleErrorResponse(function () use ($collectiveId, $id, $uid): array {
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $uid);
+			$userFolder = $this->rootFolder->getUserFolder($uid);
+			return $this->attachmentService->getAttachments($pageFile, $userFolder);
+		}, $this->logger);
 		return new DataResponse(['attachments' => $attachments]);
 	}
 
