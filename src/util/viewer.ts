@@ -101,12 +101,16 @@ export function legacyCanView(mime: string): boolean {
 
 /**
  * Show two versions of the page side by side, preferably in the viewer library
+ *
+ * The earlier version is the base of the comparison, regardless of the order
+ * of the arguments.
  * Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
  *
- * @param later - The later version
- * @param earlier - The earlier version
+ * @param first - One of the versions
+ * @param second - The other version
  */
-export async function compareVersions(later: VersionInfo, earlier: VersionInfo): Promise<void> {
+export async function compareVersions(first: VersionInfo, second: VersionInfo): Promise<void> {
+	const [earlier, later] = first.mtime <= second.mtime ? [first, second] : [second, first]
 	if (canCompare(versionNode(later))) {
 		await getViewer().compare(versionNode(later), versionNode(earlier))
 		return

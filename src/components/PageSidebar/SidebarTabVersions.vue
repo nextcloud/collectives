@@ -24,6 +24,16 @@
 
 		<!-- versions list -->
 		<div v-else-if="!loading('versions') && sortedVersions.length">
+			<NcButton
+				v-if="sortedVersions.length > 1"
+				wide
+				class="versions-container__compare"
+				@click="showCompareDialog = true">
+				<template #icon>
+					<FileCompareIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Compare versions…') }}
+			</NcButton>
 			<ul :aria-label="t('collectives', 'Page versions')" class="version-list">
 				<VersionEntry
 					v-for="version in sortedVersions"
@@ -58,17 +68,26 @@
 			v-model:open="showVersionLabelForm"
 			:versionLabel="editedVersion.label"
 			@labelUpdate="onLabelUpdate" />
+
+		<VersionCompareDialog
+			v-model:open="showCompareDialog"
+			:options="compareOptions"
+			@compare="compareVersions" />
 	</div>
 </template>
 
 <script>
 import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
+import FileCompareIcon from 'vue-material-design-icons/FileCompare.vue'
 import OfflineContent from './OfflineContent.vue'
+import VersionCompareDialog from './VersionCompareDialog.vue'
 import VersionEntry from './VersionEntry.vue'
 import VersionLabelDialog from './VersionLabelDialog.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
@@ -85,7 +104,10 @@ export default {
 		NcEmptyContent,
 		NcLoadingIcon,
 		BackupRestoreIcon,
+		FileCompareIcon,
+		NcButton,
 		OfflineContent,
+		VersionCompareDialog,
 		VersionEntry,
 		VersionLabelDialog,
 	},
@@ -113,6 +135,7 @@ export default {
 			error: '',
 			showVersionLabelForm: false,
 			editedVersion: null,
+			showCompareDialog: false,
 		}
 	},
 
@@ -145,6 +168,21 @@ export default {
 			return this.versions
 				.map((version) => version.mtime)
 				.reduce((a, b) => Math.min(a, b))
+		},
+
+		compareOptions() {
+			return this.sortedVersions.map((version) => {
+				const isCurrent = this.isCurrent(version.mtime)
+				const name = isCurrent
+					? t('collectives', 'Current version')
+					: version.label || (version.mtime === this.initialVersionMtime ? t('collectives', 'Initial version') : '')
+				// With seconds to tell apart versions of the same minute
+				const date = moment(version.mtime).format('LL LTS')
+				return {
+					label: name ? `${name} · ${date}` : date,
+					version: isCurrent ? this.currentVersion : version,
+				}
+			})
 		},
 
 		isCurrent() {
@@ -184,6 +222,7 @@ export default {
 
 	methods: {
 		t,
+		compareVersions,
 
 		...mapActions(useRootStore, ['load', 'done']),
 		...mapActions(useVersionsStore, [
@@ -256,3 +295,9 @@ export default {
 	},
 }
 </script>
+
+<style scoped lang="scss">
+.versions-container__compare {
+	margin-block-end: var(--default-grid-baseline);
+}
+</style>
