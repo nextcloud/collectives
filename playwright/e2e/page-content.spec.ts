@@ -11,7 +11,8 @@ import { test as editorTest } from '../support/fixtures/editor.ts'
 const test = mergeTests(createCollectiveTest, editorTest)
 
 test.describe('Page content', () => {
-	test('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
+	// Requires https://github.com/nextcloud/whiteboard/pull/1374 to succeed with latest Text
+	test.skip('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
 		test.slow()
 		await runOcc(['app:enable', '--force', 'whiteboard'])
 		const collectivePage = await collective.createPage({ title: 'Page with whiteboard', user, page })
