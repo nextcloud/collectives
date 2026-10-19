@@ -60,6 +60,20 @@ describe('compareVersions', () => {
 		)
 	})
 
+	it('passes decoded sources to the viewer library', async () => {
+		const compare = vi.fn()
+		vi.mocked(canCompare).mockReturnValue(true)
+		vi.mocked(getViewer).mockReturnValue({ compare } as never)
+		const source = 'https://cloud.example/remote.php/dav/files/alice/Collectives/Garden/My%20page%20%231.md'
+
+		await compareVersions({ ...current, source }, version)
+
+		expect(compare).toHaveBeenCalledWith(
+			expect.objectContaining({ source: 'https://cloud.example/remote.php/dav/files/alice/Collectives/Garden/My page #1.md' }),
+			expect.anything(),
+		)
+	})
+
 	it('uses the earlier version as base regardless of the order', async () => {
 		const compare = vi.fn()
 		vi.mocked(canCompare).mockReturnValue(true)

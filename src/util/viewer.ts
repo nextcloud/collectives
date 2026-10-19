@@ -52,7 +52,8 @@ interface VersionInfo {
  * A page version, or the current page, as the viewer compares it
  *
  * Old versions carry the page's own id and a `/versions/` root, which the
- * Text viewer relies on to keep the editor read-only.
+ * Text viewer relies on to keep the editor read-only. The versions store has
+ * encoded sources, while nodes take decoded ones and encode them for requests.
  *
  * @param version - Entry from the versions store, or the current version
  */
@@ -60,13 +61,23 @@ export function versionNode(version: VersionInfo): File {
 	const isVersion = version.filename?.startsWith('/versions/')
 	return fileNode({
 		id: version.fileId,
-		source: version.source,
+		source: decodeSource(version.source),
 		mime: version.mime,
 		root: isVersion ? `/versions/${getCurrentUser()?.uid}` : getRootPath(),
 		size: version.size,
 		mtime: new Date(version.mtime),
 		etag: version.etag,
 	})
+}
+
+/**
+ * Decode the path of an encoded URL, segment by segment
+ *
+ * @param source - URL with an encoded path
+ */
+function decodeSource(source: string): string {
+	const { origin, pathname } = new URL(source)
+	return origin + pathname.split('/').map(decodeURIComponent).join('/')
 }
 
 // Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
