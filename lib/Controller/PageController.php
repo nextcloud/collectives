@@ -13,6 +13,7 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\AttachmentService;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Http;
@@ -453,7 +454,12 @@ class PageController extends OCSController {
 			$results = $this->indexedSearchService->searchCollective($collective, $searchString);
 			$pages = [];
 			foreach ($results as $value) {
-				$pages[] = $this->service->find($collectiveId, $value['file_id'], $uid);
+				try {
+					$pages[] = $this->service->find($collectiveId, $value['file_id'], $uid);
+				} catch (NotFoundException) {
+					// Index may still contain pages that got removed since last indexing
+					continue;
+				}
 			}
 			return $pages;
 		}, $this->logger);
