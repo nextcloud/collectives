@@ -100,16 +100,6 @@ export function legacyCanView(mime: string): boolean {
 }
 
 /**
- * Whether the viewer library or the Viewer app can compare versions of the page
- * Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
- *
- * @param current - The current version of the page
- */
-export function canCompareVersions(current: VersionInfo): boolean {
-	return canCompare(versionNode(current)) || typeof legacyViewer()?.compare === 'function'
-}
-
-/**
  * Show two versions of the page side by side, preferably in the viewer library
  * Needed for Nextcloud 35 and below. Can be removed once we only support Nextcloud 36+
  *
