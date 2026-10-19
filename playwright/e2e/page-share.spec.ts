@@ -96,8 +96,8 @@ test.describe('Page share enforced password protection', () => {
 		await sharePage.goto(shares[0].getShareUrl())
 		await sharePage.getByRole('textbox', { name: 'Password' }).pressSequentially('fiej2Ahl5pae')
 		await sharePage.getByRole('button', { name: 'Submit' }).click()
-		await expect(shareEditor.getContent()).toBeVisible()
-		await expect(shareEditor.getContent()).toHaveText('Some content')
+		await sharePage.waitForURL(/\/p\/[^/]+\/(?!authenticate)/)
+		await expect(shareEditor.getContent()).toHaveText('Some content', { timeout: 15_000 })
 	})
 
 	test('Fails to create share with weak password', async ({ page }) => {
