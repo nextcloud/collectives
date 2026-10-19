@@ -60,12 +60,12 @@ export class Collective {
 			: encodeURIComponent(this.data.name)
 	}
 
-	getRootPageId() {
+	getRootPage() {
 		const rootPage = this.collectivePages.find((page) => page.data.parentId === 0)
 		if (!rootPage) {
 			throw new Error(`Root page not found for collective "${this.data.name}"`)
 		}
-		return rootPage.data.id
+		return rootPage
 	}
 
 	getPageByTitle(title: string) {
@@ -129,7 +129,7 @@ export class Collective {
 		page: Page
 	}) {
 		if (parentId === 0) {
-			parentId = this.getRootPageId()
+			parentId = this.getRootPage().data.id
 		}
 		const response = await page.request.post(
 			apiUrl('v1.0', 'collectives', this.data.id, 'pages', parentId),
