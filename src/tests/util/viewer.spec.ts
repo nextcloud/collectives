@@ -88,9 +88,10 @@ describe('compareVersions', () => {
 	})
 
 	it('falls back to the Viewer app', async () => {
+		const close = vi.fn()
 		const compare = vi.fn()
 		vi.mocked(canCompare).mockReturnValue(false)
-		vi.stubGlobal('window', { OCA: { Viewer: { registerHandler: vi.fn(), compare } } })
+		vi.stubGlobal('window', { OCA: { Viewer: { registerHandler: vi.fn(), close, compare } } })
 
 		await compareVersions(current, version)
 

@@ -95,6 +95,19 @@ test.describe('Page versions', () => {
 		await expect(viewer).not.toContainText('v3')
 	})
 
+	test('compares again while a comparison is open', async ({ page }) => {
+		await clickVersionAction(page, 1, 'Compare with current version')
+		// Second locator can be removed once we only support Nextcloud 36+
+		const viewer = page.locator('.viewer__modal, #viewer[role="dialog"]')
+		await expect(viewer).toContainText('v2')
+
+		// The page sidebar stays open next to the viewer
+		await clickVersionAction(page, 2, 'Compare with current version')
+		await expect(viewer).toContainText('v1')
+		await expect(viewer).toContainText('v3')
+		await expect(viewer).not.toContainText('v2')
+	})
+
 	test('restores a version', async ({ versionedPage, user, page }) => {
 		await clickVersionAction(page, 2, 'Restore version')
 		await expect(getToast(page, 'success', 'Restored')).toBeVisible()
