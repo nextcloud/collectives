@@ -85,6 +85,7 @@ interface LegacyViewer {
 	availableHandlers: { mimes: string[] }[]
 	open: (options: { path: string, list?: unknown[] }) => void
 	compare: (fileInfo: object, compareFileInfo: object) => void
+	close: () => void
 }
 
 /**
@@ -126,7 +127,13 @@ export async function compareVersions(first: VersionInfo, second: VersionInfo): 
 		await getViewer().compare(versionNode(later), versionNode(earlier))
 		return
 	}
-	legacyViewer()?.compare({ ...later }, { ...earlier })
+	const legacy = legacyViewer()
+	if (legacy) {
+		// The Viewer app keeps showing the first comparison. Re-open to workaround this.
+		legacy.close()
+		await new Promise((resolve) => setTimeout(resolve))
+		legacy.compare({ ...later }, { ...earlier })
+	}
 }
 
 type DavStat = Parameters<typeof resultToNode>[0]
