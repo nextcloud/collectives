@@ -23,12 +23,7 @@ const CI_CONFIG = {
 	// blob (so we can merge reports and download them for inspection),
 	// dot (so we have a quick overview in the logs while the tests are running)
 	// github (to have annotations in the PR)
-	reporter: [
-		['blob'],
-		['json', { outputFile: 'test-results/results.json' }],
-		['line'],
-		['github'],
-	] as ReporterDescription[],
+	reporter: [['blob'], ['line'], ['github']] as ReporterDescription[],
 	retries: 1,
 	timeout: 45_000,
 	// we shard to speed up the tests so no parallelism in workers
@@ -37,21 +32,6 @@ const CI_CONFIG = {
 
 const baseURL = process.env.baseURL || 'http://localhost:8089/index.php/'
 const externalServer = Boolean(process.env.baseURL)
-const SEMANTIC_E2E = process.env.COLLECTIVES_SEMANTIC_E2E === '1'
-const VERSION_COMPARISON_TESTS = '**/version-comparison.spec.ts'
-const VIEWER_FALLBACK_TAG = /@viewer-fallback/
-
-const semanticComparisonProjects = SEMANTIC_E2E
-	? [{
-			name: 'comparison-chromium',
-			testMatch: VERSION_COMPARISON_TESTS,
-			grepInvert: VIEWER_FALLBACK_TAG,
-			use: {
-				...devices['Desktop Chrome'],
-				ignoreHTTPSErrors: true,
-			},
-		}]
-	: []
 
 const webServer = externalServer
 	? undefined
@@ -98,21 +78,10 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'chromium',
-			testIgnore: VERSION_COMPARISON_TESTS,
 			use: {
 				...devices['Desktop Chrome'],
 			},
 		},
-		{
-			name: 'comparison-viewer-chromium',
-			testMatch: VERSION_COMPARISON_TESTS,
-			grep: VIEWER_FALLBACK_TAG,
-			use: {
-				...devices['Desktop Chrome'],
-				ignoreHTTPSErrors: true,
-			},
-		},
-		...semanticComparisonProjects,
 	],
 
 	webServer,

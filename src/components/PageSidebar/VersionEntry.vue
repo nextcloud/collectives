@@ -7,7 +7,6 @@
 	<NcListItem
 		:name="version.basename"
 		class="version"
-		:data-version-id="version.fileVersion"
 		:class="{ active: isSelected }"
 		:active="isSelected"
 		forceDisplayActions
@@ -79,7 +78,7 @@
 			<NcActionButton
 				v-if="!isCurrent"
 				closeAfterClick
-				@click="$emit('compare', $event)">
+				@click="$emit('compare')">
 				<template #icon>
 					<FileCompareIcon :size="22" />
 				</template>

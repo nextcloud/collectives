@@ -13,12 +13,8 @@ import * as davApi from '../apis/dav/index.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
 
-const preparers = new WeakMap()
-const requests = new WeakMap()
-
 export const useVersionsStore = defineStore('versions', {
 	state: () => ({
-		loadedPageId: null,
 		selectedVersion: null,
 		versions: [],
 	}),
@@ -48,42 +44,20 @@ export const useVersionsStore = defineStore('versions', {
 	},
 
 	actions: {
-		registerCurrentSnapshotPreparer(preparer) {
-			preparers.set(this, preparer)
-			return () => {
-				if (preparers.get(this) === preparer) {
-					preparers.delete(this)
-				}
-			}
-		},
-
-		async prepareCurrentSnapshot() {
-			return preparers.get(this)?.()
-		},
-
 		selectVersion(version) {
 			this.selectedVersion = version
 		},
 
-		getVersions(pageId) {
-			const task = Promise.resolve()
-				.then(() => davApi.getVersions(pageId))
-				.then((response) => {
-					const versions = response.data
-						.filter(({ mime }) => mime !== '')
-						.map((version) => this.formatVersion(version, pageId))
-					const currentSnapshot = versions.reduce((latest, version) => !latest || version.mtime > latest.mtime ? version : latest, null)
-					if (currentSnapshot) {
-						currentSnapshot.isCurrentSnapshot = true
-					}
-					if (requests.get(this) === task) {
-						this.versions = versions
-						this.loadedPageId = pageId
-					}
-					return versions
-				})
-			requests.set(this, task)
-			return task
+		async getVersions(pageId) {
+			const response = await davApi.getVersions(pageId)
+			// Another page may have been opened meanwhile
+			if (pageId !== usePagesStore().currentPageId) {
+				return
+			}
+			this.versions = response.data
+				// filter out root
+				.filter(({ mime }) => mime !== '')
+				.map((version) => this.formatVersion(version, pageId))
 		},
 
 		formatVersion(version, pageId) {

@@ -20,13 +20,6 @@ jobs:
             server-branch: ['stable33', 'master']
             shardIndex: [1, 2, 3, 4]
             shardTotal: [4]
-            include:
-              - server-branch: 'stable33'
-                project-args: '--project=chromium --project=comparison-viewer-chromium'
-                semantic-e2e: '0'
-              - server-branch: 'master'
-                project-args: '--project=chromium --project=comparison-chromium'
-                semantic-e2e: '1'
     steps:
       - name: Checkout app
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -63,12 +56,11 @@ jobs:
           npm run build --if-present
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium --only-shell
 
       - name: Run Playwright tests
-        run: npx playwright test ${{ matrix.project-args }} --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         env:
-          COLLECTIVES_SEMANTIC_E2E: ${{ matrix.semantic-e2e }}
           PLAYWRIGHT_NC_SERVER_BRANCH: ${{ matrix.server-branch }}
 
       - name: Upload results

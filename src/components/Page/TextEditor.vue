@@ -41,7 +41,6 @@ import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
-import { useVersionsStore } from '../../stores/versions.js'
 import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
 
 export default {
@@ -77,7 +76,6 @@ export default {
 	data() {
 		return {
 			textEditWatcher: null,
-			unregisterCurrentSnapshotPreparer: null,
 		}
 	},
 
@@ -116,7 +114,6 @@ export default {
 	},
 
 	async mounted() {
-		this.unregisterCurrentSnapshotPreparer = this.registerCurrentSnapshotPreparer(() => this.prepareCurrentEditorSnapshot())
 		const readerPromise = this.setupReader(this.currentPage)
 		const editorPromise = this.setupEditor()
 		const pageContentPromise = this.getPageContent()
@@ -141,7 +138,6 @@ export default {
 	},
 
 	beforeUnmount() {
-		this.unregisterCurrentSnapshotPreparer?.()
 		unsubscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 		unsubscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		unsubscribe('collectives:attachment:insert', this.insertAttachment)
@@ -152,7 +148,6 @@ export default {
 		t,
 
 		...mapActions(useRootStore, ['load', 'done']),
-		...mapActions(useVersionsStore, ['getVersions', 'registerCurrentSnapshotPreparer']),
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),
 		...mapActions(useCirclesStore, ['getCircleMembers']),
 
@@ -201,13 +196,6 @@ export default {
 		// called from the parent component as well
 		saveEditor() {
 			return this.editor.save()
-		},
-
-		async prepareCurrentEditorSnapshot() {
-			if (this.isTextEdit && this.editor && await this.saveEditor() !== true) {
-				throw new Error('Could not save the current page before comparison.')
-			}
-			return this.getVersions(this.currentPage.id)
 		},
 
 		async stopEdit() {
