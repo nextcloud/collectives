@@ -62,4 +62,20 @@ test.describe('Page content', () => {
 			...extraMemberIds.sort(),
 		])
 	})
+
+	test('edited content shows up in read mode', async ({ user, page, collective, editor }) => {
+		const collectivePage = await collective.createPage({ title: 'Page', user, page })
+		await collectivePage.open(true)
+
+		editor.setMode(true)
+		await editor.getContent().pressSequentially('## Heading')
+		await editor.getContent().press('Enter')
+		await editor.getContent().pressSequentially(`@${user.account.userId}`)
+		await editor.getMentionSuggestions().getByText(user.account.userId, { exact: true }).click()
+
+		await editor.switchMode(false)
+		await expect(editor.editor).toBeHidden()
+		await expect(editor.getContent().getByRole('heading', { name: 'Heading' })).toBeVisible()
+		await expect(editor.getContent().locator('.mention')).toContainText(user.account.userId)
+	})
 })
