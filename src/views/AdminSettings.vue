@@ -19,7 +19,7 @@
 	</NcSettingsSection>
 	<NcSettingsSection
 		:name="t('collectives', 'Publish feature')"
-		:description="t('collectives', 'Enable or disable the publish feature for collectives')">
+		:description="t('collectives', 'Enable or disable the publish feature for collectives. Disabling it prevents new publications, already published websites are not removed.')">
 		<div class="publish-settings">
 			<NcCheckboxRadioSwitch
 				id="isPublishFeatureEnabled"
