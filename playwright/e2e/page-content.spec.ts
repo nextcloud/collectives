@@ -11,7 +11,8 @@ import { test as editorTest } from '../support/fixtures/editor.ts'
 const test = mergeTests(createCollectiveTest, editorTest)
 
 test.describe('Page content', () => {
-	test('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
+	// Requires https://github.com/nextcloud/whiteboard/pull/1374 to succeed with latest Text
+	test.skip('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
 		test.slow()
 		await runOcc(['app:enable', '--force', 'whiteboard'])
 		const collectivePage = await collective.createPage({ title: 'Page with whiteboard', user, page })
@@ -60,5 +61,21 @@ test.describe('Page content', () => {
 			user.account.userId,
 			...extraMemberIds.sort(),
 		])
+	})
+
+	test('edited content shows up in read mode', async ({ user, page, collective, editor }) => {
+		const collectivePage = await collective.createPage({ title: 'Page', user, page })
+		await collectivePage.open(true)
+
+		editor.setMode(true)
+		await editor.getContent().pressSequentially('## Heading')
+		await editor.getContent().press('Enter')
+		await editor.getContent().pressSequentially(`@${user.account.userId}`)
+		await editor.getMentionSuggestions().getByText(user.account.userId, { exact: true }).click()
+
+		await editor.switchMode(false)
+		await expect(editor.editor).toBeHidden()
+		await expect(editor.getContent().getByRole('heading', { name: 'Heading' })).toBeVisible()
+		await expect(editor.getContent().locator('.mention')).toContainText(user.account.userId)
 	})
 })

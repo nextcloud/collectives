@@ -12,6 +12,7 @@ export class EditorSection {
 	public isEdit: boolean
 	public readonly editor: Locator
 	public readonly reader: Locator
+	public readonly readerInfobar: Locator
 	public readonly menubar: Locator
 	public readonly suggestionsContainer: Locator
 	public readonly pagePicker: Locator
@@ -21,6 +22,7 @@ export class EditorSection {
 		this.isEdit = false
 		this.editor = this.page.locator('[data-cy-collectives="editor"]')
 		this.reader = this.page.locator('[data-cy-collectives="reader"]')
+		this.readerInfobar = this.reader.locator('.infobar')
 		this.menubar = this.editor.getByRole('region')
 		this.suggestionsContainer = this.page.locator('.container-suggestions')
 		this.pagePicker = this.page.locator('.collectives-page-picker')

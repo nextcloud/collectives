@@ -25,11 +25,21 @@ export interface UserFixture {
 export async function loginAsUser(browser: Browser, baseURL: string | undefined, account: Account): Promise<Page> {
 	// Important: make sure we authenticate in a clean environment by unsetting storage state.
 	const page = await browser.newPage({ storageState: undefined, baseURL })
+	await authenticate(page, account)
+	return page
+}
+
+/**
+ * Log in as any account in an existing browser page.
+ *
+ * @param page - the browser page
+ * @param account - the user account
+ */
+async function authenticate(page: Page, account: Account): Promise<void> {
 	await login(page.request, account)
 	const tokenResponse = await page.request.get('./csrftoken', { failOnStatusCode: true })
 	const { token } = (await tokenResponse.json()) as { token: string }
 	await page.context().setExtraHTTPHeaders({ requesttoken: token })
-	return page
 }
 
 /**
@@ -41,10 +51,10 @@ export const test = base.extend<object, UserFixture>({
 		const account = await createRandomUser()
 		await use(account)
 	}, { scope: 'worker' }],
-	page: async ({ account, browser, baseURL }, use) => {
-		const page = await loginAsUser(browser, baseURL, account)
+	// Builds on the built-int `page` fixture, so options from `test.use()` apply
+	page: async ({ account, page }, use) => {
+		await authenticate(page, account)
 		await use(page)
-		await page.close()
 	},
 	user: [async ({ account }, use) => {
 		const user = new User(account)

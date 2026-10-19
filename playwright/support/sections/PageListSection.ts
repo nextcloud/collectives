@@ -13,6 +13,8 @@ export class PageListSection {
 	public readonly filter: Locator
 	public readonly filterTagSelect: Locator
 	public readonly activeFilterTags: Locator
+	public readonly favorites: Locator
+	public readonly favoritesList: Locator
 
 	constructor(public readonly page: Page) {
 		this.el = this.page.locator('.app-navigation__list')
@@ -20,6 +22,8 @@ export class PageListSection {
 		this.filter = this.el.getByRole('textbox', { name: 'Search pages' })
 		this.filterTagSelect = this.page.locator('.page-filter-tag-select')
 		this.activeFilterTags = this.el.locator('.page-filter-tags')
+		this.favorites = this.el.locator('.page-list-favorites')
+		this.favoritesList = this.favorites.locator('.page-list-favorites-list')
 	}
 
 	public getPageItem(title: string): Locator {
@@ -37,6 +41,30 @@ export class PageListSection {
 		await this.getPageItem(title)
 			.locator('.icon-collapse')
 			.click()
+	}
+
+	public getSubpageItems(title: string): Locator {
+		return this.getPageItem(title).locator('.app-navigation-entry__children .page-list-item')
+	}
+
+	public async openPage(title: string): Promise<void> {
+		await this.getPageItem(title)
+			.locator('> .app-navigation-entry .app-navigation-entry-link')
+			.click()
+	}
+
+	public async clickPageAction(title: string, action: string): Promise<void> {
+		// Favorite pages are listed twice, either entry has the same actions
+		const entry = this.getPageItem(title).first().locator('> .app-navigation-entry')
+		// The actions menu is only shown on hover
+		await entry.hover()
+		await entry.getByRole('button', { name: 'Actions' }).click()
+		await this.page.getByRole('menuitem', { name: action, exact: true }).click()
+	}
+
+	public async sortBy(option: string): Promise<void> {
+		await this.page.getByRole('button', { name: 'Sort order', exact: true }).click()
+		await this.page.getByRole('menuitem', { name: option, exact: true }).click()
 	}
 
 	public async addPage(parentTitle: string): Promise <void> {

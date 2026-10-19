@@ -3,27 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-Cypress.Commands.add('openApp', (appName) => {
-	Cypress.log()
-	cy.get(`nav.app-menu li[data-app-id="${appName}"] a`).click()
-})
-
 Cypress.Commands.add('openPage', (pageName) => {
 	Cypress.log()
 	cy.contains('.page-list-item .app-navigation-entry-link', pageName).click()
-})
-
-Cypress.Commands.add('getPageListItem', (title) => {
-	Cypress.log()
-	return cy.contains('.page-list-drag-item .app-navigation-entry__name', new RegExp(`^${title}$`))
-		.closest('.page-list-drag-item')
-})
-
-Cypress.Commands.add('openPageMenu', (pageName) => {
-	Cypress.log()
-	cy.contains('.page-list-item', pageName)
-		.find('> .app-navigation-entry .action-item__menutoggle')
-		.click({ force: true })
 })
 
 Cypress.Commands.add('openPageTitleMenu', () => {

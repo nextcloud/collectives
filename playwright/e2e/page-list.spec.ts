@@ -9,8 +9,152 @@ import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as editorTest } from '../support/fixtures/editor.ts'
 import { test as pageListTest } from '../support/fixtures/pageList.ts'
+import { randomString } from '../support/helpers/randomString.ts'
 
 const test = mergeTests(createCollectiveTest, editorTest, pageListTest)
+
+test.describe('Page list', () => {
+	test('sorts pages by custom order, title and time and persists the sort order', async ({ page, user, collective, pageList }) => {
+		await collective.createPage({ title: 'Apple', user, page })
+		// Page timestamps have a resolution of one second
+		await page.waitForTimeout(1100)
+		await collective.createPage({ title: 'Banana', user, page })
+		await collective.createPage({ title: 'Cherry', user, page })
+
+		await collective.openCollective()
+		await pageList.expectPageListOrder(['Cherry', 'Banana', 'Apple'])
+
+		const pageOrderSaved = page.waitForResponse((response) => response.url().includes('/userSettings/pageOrder') && response.ok())
+		await pageList.sortBy('Sort ascending by title')
+		await pageList.expectPageListOrder(['Apple', 'Banana', 'Cherry'])
+		await pageOrderSaved
+
+		await page.reload()
+		await pageList.expectPageListOrder(['Apple', 'Banana', 'Cherry'])
+
+		await pageList.sortBy('Sort recently changed first')
+		await expect(pageList.pageListItems.last()).toContainText('Apple')
+
+		await page.getByRole('button', { name: 'Switch back to default sort order' }).click()
+		await expect(page.getByRole('button', { name: 'Switch back to default sort order' })).toBeHidden()
+		await pageList.expectPageListOrder(['Cherry', 'Banana', 'Apple'])
+	})
+
+	for (const { action, keepsSource } of [{ action: 'Move', keepsSource: false }, { action: 'Copy', keepsSource: true }]) {
+		test(`${action.toLowerCase()} page to a subpage`, async ({ page, user, collective, pageList }) => {
+			const title = `${action} me`
+			const target = await collective.createPage({ title: 'Target', user, page })
+			await collective.createPage({ title: 'Target Subpage', parentId: target.data.id, user, page })
+			await collective.createPage({ title, user, page })
+
+			await collective.openCollective()
+			await pageList.clickPageAction(title, 'Move or copy')
+			const dialog = page.getByRole('dialog', { name: 'Copy or move page' })
+			await dialog.locator('.page-list').getByText('Target', { exact: true }).click()
+			await dialog.getByRole('button', { name: 'Move page down' }).click()
+			await dialog.getByRole('button', { name: `${action} page here` }).click()
+			await expect(dialog).toBeHidden()
+
+			await pageList.openPage('Target')
+			await expect(pageList.getSubpageItems('Target')).toContainText(['Target Subpage', title])
+			await expect(pageList.getPageItem(title)).toHaveCount(keepsSource ? 2 : 1)
+		})
+	}
+
+	test('shows only (sub)pages matching the filter string', async ({ page, user, collective, pageList }) => {
+		const day1 = await collective.createPage({ title: 'Day 1', user, page })
+		const subpage = await collective.createPage({ title: 'Subpage Title', parentId: day1.data.id, user, page })
+		await collective.createPage({ title: 'DeepSubpage Title', parentId: subpage.data.id, user, page })
+		await collective.createPage({ title: 'Day 2', user, page })
+		await collective.createPage({ title: 'Page Title', user, page })
+
+		await collective.openCollective()
+		await pageList.filter.fill('Title')
+		await expect(page.locator('.app-navigation-entry__name').filter({ visible: true }))
+			.toHaveText(['Page Title', 'Subpage Title', 'DeepSubpage Title'])
+	})
+
+	test('adds and removes page as favorite', async ({ page, user, collective, pageList }) => {
+		await collective.createPage({ title: 'Day 1', user, page })
+
+		await collective.openCollective()
+		await expect(pageList.favorites).toHaveCount(0)
+
+		await pageList.clickPageAction('Day 1', 'Add to favorites')
+		await expect(pageList.favoritesList).toContainText('Day 1')
+
+		const toggleButton = pageList.favorites.getByRole('button', { name: 'Toggle favorites' })
+		await toggleButton.click()
+		await expect(pageList.favoritesList).toBeHidden()
+		await toggleButton.click()
+		await expect(pageList.favoritesList).toBeVisible()
+
+		await pageList.clickPageAction('Day 1', 'Remove from favorites')
+		await expect(pageList.favorites).toHaveCount(0)
+	})
+
+	test('trashes and restores page with subpage and attachment', async ({ page, user, collective, pageList, editor }) => {
+		const created = await collective.createPage({ title: 'Day 1', user, page })
+		await collective.createPage({ title: 'Subpage', parentId: created.data.id, user, page })
+		// Adding a subpage turns the page into a folder, so reload its file path
+		collective.collectivePages = await collective.getPages()
+		const day1 = collective.getPageByTitle('Day 1')
+		const imagePath = await day1.uploadImage({ filename: 'test.png', user, page })
+		await day1.setContent({ content: `![test.png](${imagePath})`, user, page })
+
+		await collective.openCollective()
+		await pageList.clickPageAction('Day 1', 'Delete page and subpages')
+		await expect(pageList.getPageItem('Day 1')).toHaveCount(0)
+
+		await page.getByRole('button', { name: 'Show deleted pages' }).click()
+		const trash = page.getByRole('dialog', { name: 'Deleted pages' })
+		await trash.getByRole('row', { name: /Day 1/ })
+			.getByRole('button', { name: 'Restore page' })
+			.click()
+		await expect(trash.getByText('No deleted pages.')).toBeVisible()
+		await trash.getByRole('button', { name: 'Close' }).click()
+
+		await pageList.openPage('Day 1')
+		await expect(pageList.getSubpageItems('Day 1')).toContainText(['Subpage'])
+		await expect(editor.contentLocator(false).locator('img.image__main')).toBeVisible()
+	})
+})
+
+test.describe('Page list move and copy to another collective', () => {
+	test.use({
+		// eslint-disable-next-line no-empty-pattern
+		collectiveConfigs: async ({}, use) => use([
+			{ name: randomString() },
+			{ name: randomString() },
+		]),
+	})
+
+	for (const { action, keepsSource } of [{ action: 'Move', keepsSource: false }, { action: 'Copy', keepsSource: true }]) {
+		test(`${action.toLowerCase()} page to a subpage in another collective`, async ({ page, user, collectives, pageList }) => {
+			const [source, destination] = collectives
+			const title = `${action} me`
+			const target = await destination.createPage({ title: 'Target', user, page })
+			await destination.createPage({ title: 'Target Subpage', parentId: target.data.id, user, page })
+			await source.createPage({ title, user, page })
+
+			await source.openCollective()
+			await pageList.clickPageAction(title, 'Move or copy')
+			const dialog = page.getByRole('dialog', { name: 'Copy or move page' })
+			const browserList = dialog.locator('.page-list')
+			await dialog.getByRole('button', { name: 'Breadcrumb for list of collectives' }).click()
+			await browserList.getByText(destination.data.name, { exact: true }).click()
+			await browserList.getByText('Target', { exact: true }).click()
+			await dialog.getByRole('button', { name: 'Move page down' }).click()
+			await dialog.getByRole('button', { name: `${action} page to ${destination.data.name}` }).click()
+			await expect(dialog).toBeHidden()
+			await expect(pageList.getPageItem(title)).toHaveCount(keepsSource ? 1 : 0)
+
+			await destination.openCollective()
+			await pageList.openPage('Target')
+			await expect(pageList.getSubpageItems('Target')).toContainText(['Target Subpage', title])
+		})
+	}
+})
 
 test.describe('Page list drag and drop', () => {
 	let page1: CollectivePage
