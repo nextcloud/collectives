@@ -25,15 +25,18 @@ export class NavigationSection {
 	}
 
 	public async open(): Promise<void> {
-		if (!await this.el.isVisible()) {
-			await this.page.getByRole('button', { name: 'Open navigation' }).click()
+		// Check the toggle, as the closed navigation is moved out of the viewport rather than hidden on mobile
+		const openButton = this.page.getByRole('button', { name: 'Open navigation' })
+		if (await openButton.isVisible()) {
+			await openButton.click()
 		}
-		await expect(this.el).toBeVisible()
+		await expect(this.el).toBeInViewport()
 	}
 
 	public async close(): Promise<void> {
 		await this.page.getByRole('button', { name: 'Close navigation' }).click()
-		await expect(this.el).not.toBeVisible()
+		// The closed navigation is moved out of the viewport rather than hidden on mobile
+		await expect(this.el).not.toBeInViewport()
 	}
 
 	public async openCollectiveSelector(): Promise<void> {
