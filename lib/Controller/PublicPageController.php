@@ -643,7 +643,12 @@ class PublicPageController extends CollectivesPublicOCSController {
 						continue;
 					}
 				}
-				$pages[] = $this->service->find($collectiveId, $value['file_id'], $owner);
+				try {
+					$pages[] = $this->service->find($collectiveId, $value['file_id'], $owner);
+				} catch (NotFoundException) {
+					// Index may still contain pages that got removed since last indexing
+					continue;
+				}
 			}
 			return $pages;
 		}, $this->logger);

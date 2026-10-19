@@ -43,6 +43,12 @@ class FileIndexer {
 
 		$files = $this->getDirectoryFiles($folder, true);
 
+		// Every collective has a landing page, so an empty listing indicates a
+		// lookup failure. Keep the existing index rather than wiping it.
+		if ($incremental && $files !== []) {
+			$this->deleteRemovedFilesFromIndex($collectiveId, $files);
+		}
+
 		foreach ($files as $file) {
 			$this->indexFile($file, $collectiveId, $incremental);
 		}
@@ -143,5 +149,17 @@ class FileIndexer {
 		}
 
 		$this->fileMapper->deleteByCollectiveAndFileId($collectiveId, $fileId);
+	}
+
+	/**
+	 * @param File[] $files
+	 */
+	private function deleteRemovedFilesFromIndex(int $collectiveId, array $files): void {
+		$fileIds = array_map(static fn (File $file): int => $file->getId(), $files);
+		$indexedFileIds = $this->fileMapper->findFileIdsByCollective($collectiveId);
+
+		foreach (array_diff($indexedFileIds, $fileIds) as $fileId) {
+			$this->deleteFileFromIndex($collectiveId, $fileId);
+		}
 	}
 }

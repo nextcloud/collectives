@@ -50,6 +50,22 @@ class SearchFileMapper extends QBMapper {
 		}
 	}
 
+	/**
+	 * @return int[]
+	 */
+	public function findFileIdsByCollective(int $collectiveId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('file_id')
+			->from($this->tableName)
+			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)));
+
+		$result = $qb->executeQuery();
+		$fileIds = array_map(intval(...), $result->fetchFirstColumn());
+		$result->closeCursor();
+
+		return $fileIds;
+	}
+
 	public function getMaxMtimeByCollective(int $collectiveId): ?int {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select($qb->func()->max('mtime'))
