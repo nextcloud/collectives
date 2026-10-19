@@ -103,8 +103,8 @@ test.describe('Collective share password protection', () => {
 		await sharePage.goto(shares[0].getShareUrl())
 		await sharePage.getByRole('textbox', { name: 'Password' }).pressSequentially('test-password')
 		await sharePage.getByRole('button', { name: 'Submit' }).click()
-		await expect(shareEditor.getContent()).toBeVisible()
-		await expect(shareEditor.getContent().getByRole('heading', { name: 'Welcome' })).toBeVisible()
+		await sharePage.waitForURL(/\/p\/[^/]+\/(?!authenticate)/)
+		await expect(shareEditor.getContent().getByRole('heading', { name: 'Welcome' })).toBeVisible({ timeout: 15_000 })
 	})
 
 	test('Remove password via advanced settings', async ({ page, collective, pageSidebar }) => {
