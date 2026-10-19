@@ -197,7 +197,8 @@ class StaticSiteService {
 	 *
 	 * Called back by the external service building the static site, identifying the
 	 * export by its unguessable `staticSiteId` rather than a logged-in user. On success,
-	 * `data.publish_url` is stored; on failure, `data.error_message` is logged.
+	 * `data.publish_url` is stored and the archive is no longer needed, so it gets deleted;
+	 * on failure, `data.error_message` is logged.
 	 *
 	 * @param array{publish_url?: string, error_message?: string} $data
 	 *
@@ -220,6 +221,10 @@ class StaticSiteService {
 
 		if ($status === StaticSite::STATUS_PUBLISHED && isset($data['publish_url'])) {
 			$staticSite = $this->staticSiteMapper->updatePublishedUrl($staticSite->getId(), $data['publish_url']);
+		}
+
+		if ($status === StaticSite::STATUS_PUBLISHED) {
+			$this->deleteArchive($staticSite);
 		}
 
 		if ($status === StaticSite::STATUS_FAILED && isset($data['error_message'])) {

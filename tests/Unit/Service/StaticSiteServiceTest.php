@@ -790,6 +790,7 @@ class StaticSiteServiceTest extends TestCase {
 		$afterStatus = new StaticSite();
 		$afterStatus->setId(7);
 		$afterUrl = new StaticSite();
+		$afterUrl->setStaticSiteId($staticSiteId);
 
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
 			->with($staticSiteId)
@@ -801,6 +802,9 @@ class StaticSiteServiceTest extends TestCase {
 			->method('updatePublishedUrl')
 			->with(7, 'https://publish.schnubbel.com/publish/a-uuid')
 			->willReturn($afterUrl);
+		$this->archiver->expects($this->once())
+			->method('delete')
+			->with($staticSiteId);
 
 		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://publish.schnubbel.com/publish/a-uuid']);
 
@@ -821,6 +825,7 @@ class StaticSiteServiceTest extends TestCase {
 			->with(7, StaticSite::STATUS_FAILED)
 			->willReturn($updated);
 		$this->staticSiteMapper->expects($this->never())->method('updatePublishedUrl');
+		$this->archiver->expects($this->never())->method('delete');
 		$this->logger->expects($this->once())
 			->method('warning')
 			->with($this->stringContains('something went wrong'));
