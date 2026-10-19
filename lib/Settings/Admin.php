@@ -29,7 +29,7 @@ class Admin implements ISettings {
 	public function getForm(): TemplateResponse {
 		$parameters = [
 			'default_user_folder' => $this->appConfig->getValueString('collectives', ConfigLexicon::DEFAULT_USER_FOLDER, ''),
-			'publish_enabled' => $this->appConfig->getValueString('collectives', ConfigLexicon::PUBLISH_ENABLED, ConfigLexicon::PUBLISH_ENABLED_DEFAULT) === 'true',
+			'publish_enabled' => $this->appConfig->getValueBool('collectives', ConfigLexicon::PUBLISH_ENABLED, ConfigLexicon::PUBLISH_ENABLED_DEFAULT),
 			'static_site_generator_url' => $this->appConfig->getValueString('collectives', ConfigLexicon::STATIC_SITE_GENERATOR_URL),
 			// The token itself must not be rendered into the page, so a set token is replaced by a placeholder
 			'static_site_generator_token' => $this->appConfig->getValueString('collectives', ConfigLexicon::STATIC_SITE_GENERATOR_TOKEN) === '' ? '' : self::TOKEN_PLACEHOLDER,

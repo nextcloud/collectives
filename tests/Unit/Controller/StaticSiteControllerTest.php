@@ -100,7 +100,7 @@ class StaticSiteControllerTest extends TestCase {
 			'rejected' => [
 				new StaticSiteGeneratorException('Rejected'),
 				Http::STATUS_BAD_GATEWAY,
-				'The publish service rejected the website. Please contact your administrator.',
+				'The publish service could not process the request. Please contact your administrator.',
 			],
 		];
 	}

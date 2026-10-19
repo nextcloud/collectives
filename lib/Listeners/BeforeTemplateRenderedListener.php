@@ -78,6 +78,6 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		$this->initialState->provideInitialState('is_guest', $isGuest);
 
 		// Provide admin settings as initial state
-		$this->initialState->provideInitialState('publish_enabled', $this->appConfig->getValueString('collectives', ConfigLexicon::PUBLISH_ENABLED, ConfigLexicon::PUBLISH_ENABLED_DEFAULT) === 'true');
+		$this->initialState->provideInitialState('publish_enabled', $this->appConfig->getValueBool('collectives', ConfigLexicon::PUBLISH_ENABLED, ConfigLexicon::PUBLISH_ENABLED_DEFAULT));
 	}
 }

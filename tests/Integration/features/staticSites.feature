@@ -4,8 +4,13 @@
 Feature: staticSites
 
   # TODO(Publish): Enable the commented steps and scenarios once the CI provides a stub of the publish service, publishing fails without it
-  Scenario: Publish a collective as website
+  Scenario: Fail to publish a website if publish website feature is disabled
     When user "jane" creates collective "BehatStaticSiteCollective"
+    And occ command "config:app:set collectives publish_enabled --value false --type boolean" is run
+    Then user "jane" fails to publish collective "BehatStaticSiteCollective" as website with slug "behat-static-site" with status 403
+
+  Scenario: Publish a collective as website
+    When occ command "config:app:set collectives publish_enabled --value true --type boolean" is run
     # And user "jane" publishes collective "BehatStaticSiteCollective" as website with slug "behat-static-site"
     # Then user "jane" sees website "behat-static-site" in collective "BehatStaticSiteCollective"
     # TODO(Publish): Download the archive and check its content once it's provided via public API
@@ -24,4 +29,5 @@ Feature: staticSites
   #   Then user "jane" doesn't see website "behat-static-site" in collective "BehatStaticSiteCollective"
 
   Scenario: Trash and delete collective
+    When occ command "config:app:delete collectives publish_enabled" is run
     Then user "jane" trashes and deletes collective "BehatStaticSiteCollective"

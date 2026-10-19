@@ -104,6 +104,59 @@ test.describe('Collective publish', () => {
 		})
 	})
 
+	test('preselects pages created after the page list was loaded if the collective was never published', async ({ collective, navigation, page, user }) => {
+		await collective.openCollective()
+		// Created via API, so the page list in the browser doesn't contain it yet
+		await collective.createPage({ title: 'Page created meanwhile', user, page })
+
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await expect(modal.getByRole('checkbox', { name: 'Page created meanwhile' })).toBeChecked()
+		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
+	})
+
+	test('restores the page selection of an already published website without deleted and new pages', async ({ collective, navigation, page, user }) => {
+		const publishedPage = await collective.createPage({ title: 'Published page', user, page })
+		const rootPageId = collective.getRootPage().data.id
+		const deletedPageId = 999999
+		const staticSite = {
+			id: 1,
+			title: 'Published website',
+			slug: 'published-website',
+			selectedPageIds: [rootPageId, publishedPage.data.id, deletedPageId],
+			publishedUrl: 'https://example.org/published-website',
+			status: 'published',
+		}
+		let sentPageIds: number[] = []
+		await page.route('**/static-sites', async (route) => {
+			const request = route.request()
+			if (request.method() === 'POST') {
+				// The publish service isn't part of this environment, only the sent page selection matters
+				sentPageIds = request.postDataJSON().pageIds
+				return route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: staticSite } } })
+			}
+			if (request.method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [staticSite] } } })
+		})
+
+		await collective.openCollective()
+		await collective.createPage({ title: 'Page created after publication', user, page })
+
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await expect(modal.getByRole('textbox', { name: 'Website title' })).toHaveValue(staticSite.title)
+		await expect(modal.getByRole('textbox', { name: 'Web address' })).toHaveValue(staticSite.slug)
+		await expect(modal.getByRole('checkbox', { name: 'Published page' })).toBeChecked()
+		await expect(modal.getByRole('checkbox', { name: 'Page created after publication' })).not.toBeChecked()
+
+		await modal.getByRole('button', { name: 'Publish website' }).click()
+		await expect(modal).toHaveCount(0)
+		expect(sentPageIds).toHaveLength(2)
+		expect(sentPageIds).toEqual(expect.arrayContaining([rootPageId, publishedPage.data.id]))
+	})
+
 	test('keeps the modal open if the website files could not be provided', async ({ collective, navigation, page }) => {
 		// A failed archive build can't be provoked reliably, so the response is replaced
 		await page.route('**/static-sites', async (route) => {
@@ -132,7 +185,7 @@ test.describe('Collective publish', () => {
 			if (route.request().method() !== 'GET') {
 				return route.fallback()
 			}
-			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [{ id: 1, publishedUrl }] } } })
+			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [{ id: 1, title: 'Published website', slug: 'published-website', selectedPageIds: [], publishedUrl }] } } })
 		})
 
 		await collective.openCollective()
