@@ -63,10 +63,13 @@ class StaticSiteGeneratorClient {
 	 */
 	public function build(StaticSite $staticSite, string $title): void {
 		$staticSiteId = $staticSite->getStaticSiteId();
-		// TODO(Publish): Add callback_status_url to request
 		$response = $this->request('POST', '/build', [
 			'static_site_id' => $staticSiteId,
 			'content_download_url' => $this->urlGenerator->linkToRouteAbsolute('collectives.static_site_archive.download', [
+				'apiVersion' => '1.0',
+				'staticSiteId' => $staticSiteId,
+			]),
+			'callback_status_url' => $this->urlGenerator->linkToRouteAbsolute('ocs.collectives.publicstaticsite.updatestatus', [
 				'apiVersion' => '1.0',
 				'staticSiteId' => $staticSiteId,
 			]),

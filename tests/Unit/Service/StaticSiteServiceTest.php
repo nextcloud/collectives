@@ -322,7 +322,6 @@ class StaticSiteServiceTest extends TestCase {
 
 	public static function finishedStatusProvider(): array {
 		return [
-			'provided' => [StaticSite::STATUS_PROVIDED],
 			'published' => [StaticSite::STATUS_PUBLISHED],
 			'failed' => [StaticSite::STATUS_FAILED],
 		];
@@ -368,9 +367,19 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
 
-	public function testUpdateRejectsStaticSiteInProgress(): void {
+	public static function inProgressStatusProvider(): array {
+		return [
+			'pending' => [StaticSite::STATUS_PENDING],
+			'provided' => [StaticSite::STATUS_PROVIDED],
+		];
+	}
+
+	/**
+	 * @dataProvider inProgressStatusProvider
+	 */
+	public function testUpdateRejectsStaticSiteInProgress(string $status): void {
 		$this->expectValidCollectiveWithPages();
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite($status));
 
 		$this->expectException(UnprocessableEntityException::class);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');

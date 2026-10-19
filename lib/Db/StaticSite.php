@@ -49,9 +49,9 @@ class StaticSite extends Entity implements JsonSerializable {
 	// A failed archive build keeps the previous status instead.
 	public const STATUS_FAILED = 'failed';
 
-	// TODO(Publish): Add STATUS_PROVIDED once the publish service reports the build result via callback
 	public const IN_PROGRESS_STATUSES = [
 		self::STATUS_PENDING,
+		self::STATUS_PROVIDED,
 	];
 
 	// Seconds after which a pending publication counts as aborted, e.g. after a PHP timeout

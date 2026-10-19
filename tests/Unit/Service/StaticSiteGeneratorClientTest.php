@@ -49,8 +49,10 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			});
 		$urlGenerator = $this->createMock(IURLGenerator::class);
 		$urlGenerator->method('linkToRouteAbsolute')
-			->with('collectives.static_site_archive.download', ['apiVersion' => '1.0', 'staticSiteId' => $this->staticSiteId])
-			->willReturn('https://cloud.example.org/archive');
+			->willReturnMap([
+				['collectives.static_site_archive.download', ['apiVersion' => '1.0', 'staticSiteId' => $this->staticSiteId], 'https://cloud.example.org/archive'],
+				['ocs.collectives.publicstaticsite.updatestatus', ['apiVersion' => '1.0', 'staticSiteId' => $this->staticSiteId], 'https://cloud.example.org/callback'],
+			]);
 		$l10n = $this->createMock(IL10N::class);
 		$l10n->method('t')->willReturnCallback(static fn (string $text, array $parameters = []): string => vsprintf($text, $parameters));
 		$this->logger = $this->createMock(LoggerInterface::class);
@@ -141,12 +143,12 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	public function testBuildSendsStaticSiteWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			// TODO(Publish): Add callback_status_url to request
 			->with('POST', 'https://ssg.example.org/build', self::callback(fn (array $options): bool
 				=> $options['headers']['Authorization'] === 'Bearer secret-token'
 				&& $options['json'] === [
 					'static_site_id' => $this->staticSiteId,
 					'content_download_url' => 'https://cloud.example.org/archive',
+					'callback_status_url' => 'https://cloud.example.org/callback',
 					'slug' => 'my-site',
 					'title' => 'My Site',
 				]))

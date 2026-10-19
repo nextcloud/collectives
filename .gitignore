@@ -27,3 +27,6 @@ cypress/videos/
 # Playwright test artifacts
 /playwright-report/
 /test-results/
+
+# Development tools
+dev-tools
