@@ -43,6 +43,7 @@ OC.L10N.register(
     "Change tag color" : "Schimbă culoarea etichetei",
     "Create new tag" : "Creează o etichetă nouă",
     "Favorites" : "Favorite",
+    "Home" : "Acasă",
     "Favorite" : "Favorit",
     "Page not found" : "Pagina nu a fost găsită",
     "Show in Files" : "Arată în Fișiere",
