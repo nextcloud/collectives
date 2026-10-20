@@ -449,10 +449,10 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false, bool $forceIndex = false): array {
+	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false, bool $forceIndex = false, int $parentPageId = 0): array {
 		$builder = $this->pageInfoTreeBuilderFactory->create($collectiveId, $folder, $userId, $recurse, $forceIndex);
 		$pageInfos = [];
-		$builder->build($folder->getId(), 0, $pageInfos);
+		$builder->build($folder->getId(), $parentPageId, $pageInfos);
 
 		return $pageInfos;
 	}
@@ -471,7 +471,7 @@ class PageService {
 
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		try {
-			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true);
+			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true, parentPageId: $this->getParentPageId($parentFile, $folder));
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}

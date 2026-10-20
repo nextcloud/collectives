@@ -31,7 +31,9 @@ test.describe('Collective share', () => {
 		// Shows the collective in the header instead of the collective selector
 		await expect(sharePage.locator('#header .header-title')).toContainText(collective.data.name)
 		await expect(sharePage.locator('.collective-selector')).toHaveCount(0)
-		await expect(sharePage.getByRole('link', { name: 'Export or print' })).toBeVisible()
+		// Older Nextcloud versions expose the header action link with role "button"
+		await expect(sharePage.locator('#header a', { hasText: 'Export or print' }))
+			.toHaveAttribute('href', new RegExp(`/p/${shares[0].data.token}/print/`))
 
 		// Allows to filter pages
 		await expect(sharePageList.el).toBeVisible()

@@ -297,6 +297,32 @@ class PageServiceTest extends TestCase {
 		self::assertEquals($expected, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
 	}
 
+	public function testGetPagesFromFolderWithParentPageId(): void {
+		$collectivePath = '.Collectives/collective';
+
+		$mountPoint = $this->createMock(IMountPoint::class);
+		$mountPoint->method('getMountPoint')->willReturn('/files/user/.Collectives/collective/');
+
+		$folder = $this->createMock(Folder::class);
+		$folder->method('getId')->willReturn(102);
+		$folder->method('getInternalPath')->willReturn('subfolder');
+		$folder->method('getMountPoint')->willReturn($mountPoint);
+
+		$subfolderIndex = $this->fileInfo(103, 102, 'Readme.md', 'subfolder/Readme.md');
+		$subPage = $this->fileInfo(3, 102, 'page3.md', 'subfolder/page3.md');
+
+		$this->collectiveFolderManager->method('getFileCacheForCollective')
+			->willReturn([$subfolderIndex, $subPage]);
+
+		$pageInfos = $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true, parentPageId: 101);
+		self::assertEquals([
+			$this->buildExpectedPageInfo($subfolderIndex, 101, $collectivePath),
+			$this->buildExpectedPageInfo($subPage, 103, $collectivePath),
+		], $pageInfos);
+		// A subfolder's index page is titled after its folder, not as landing page
+		self::assertSame('subfolder', $pageInfos[0]->getTitle());
+	}
+
 	public function testGetPagesFromFolderWithMissingIndex(): void {
 		$collectivePath = '.Collectives/collective';
 

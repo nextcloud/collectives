@@ -16,7 +16,7 @@ import { ocsHeaders } from '../support/helpers/urls.ts'
 const test = mergeTests(createCollectiveTest, pageSidebarTest, collectiveShareTest)
 
 test.describe('Page share', () => {
-	test('Create share and open share unauthenticated', async ({ user, page, collective, pageSidebar, sharePage, sharePageList, shareEditor }) => {
+	test('Create share and open share unauthenticated', async ({ user, page, collective, pageSidebar, sharePage, shareTitleBar, sharePageList, shareEditor }) => {
 		const collectivePage = await collective.createPage({ title: 'Sharepage', content: 'Some content', user, page })
 		await collective.createPage({ title: 'Anotherone', user, page })
 		await collectivePage.open()
@@ -30,6 +30,7 @@ test.describe('Page share', () => {
 		await sharePage.goto(shares[0].getShareUrl())
 		await expect(shareEditor.getContent()).toBeVisible()
 		await expect(shareEditor.getContent()).toHaveText('Some content')
+		await expect(shareTitleBar.title).toHaveValue('Sharepage')
 
 		// Single page shares show the collective in the header and no navigation
 		await expect(sharePage.locator('#header .header-title')).toContainText(collective.data.name)
