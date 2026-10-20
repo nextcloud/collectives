@@ -170,17 +170,30 @@ export default {
 				.reduce((a, b) => Math.min(a, b))
 		},
 
+		versionName() {
+			return (version) => {
+				if (this.isCurrent(version.mtime)) {
+					return t('collectives', 'Current version')
+				}
+				if (version.label) {
+					return version.label
+				}
+				return version.mtime === this.initialVersionMtime
+					? t('collectives', 'Initial version')
+					// With seconds to tell apart versions of the same minute
+					: moment(version.mtime).format('LL LTS')
+			}
+		},
+
 		compareOptions() {
 			return this.sortedVersions.map((version) => {
 				const isCurrent = this.isCurrent(version.mtime)
-				const name = isCurrent
-					? t('collectives', 'Current version')
-					: version.label || (version.mtime === this.initialVersionMtime ? t('collectives', 'Initial version') : '')
+				const displayname = this.versionName(version)
 				// With seconds to tell apart versions of the same minute
 				const date = moment(version.mtime).format('LL LTS')
 				return {
-					label: name ? `${name} · ${date}` : date,
-					version: isCurrent ? this.currentVersion : version,
+					label: displayname === date ? date : `${displayname} · ${date}`,
+					version: { ...(isCurrent ? this.currentVersion : version), displayname },
 				}
 			})
 		},
@@ -282,7 +295,10 @@ export default {
 		},
 
 		onCompareVersion(version) {
-			compareVersions(this.currentVersion, version)
+			compareVersions(
+				{ ...this.currentVersion, displayname: this.versionName(this.currentVersion) },
+				{ ...version, displayname: this.versionName(version) },
+			)
 		},
 
 		async onRestoreVersion(version) {
