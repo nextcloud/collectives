@@ -40,8 +40,9 @@ export class CollectiveShare {
 	}
 
 	async setEditable(editable: boolean) {
+		const pagePath = this.data.pageId ? ['pages', this.data.pageId] : []
 		await this.page.request.put(
-			apiUrl('v1.0', 'collectives', this.data.collectiveId, 'shares', this.data.token),
+			apiUrl('v1.0', 'collectives', this.data.collectiveId, ...pagePath, 'shares', this.data.token),
 			{
 				headers: ocsHeaders,
 				data: JSON.stringify({

@@ -125,6 +125,14 @@ export const usePagesStore = defineStore('pages', {
 				: state.pages.find((p) => (p.parentId === 0))
 		},
 
+		isSinglePageShare(state) {
+			const collective = useCollectivesStore().currentCollective
+			// Editable page shares keep the navigation to allow adding subpages
+			return !!collective?.isPageShare
+				&& !collective.shareEditable
+				&& state.pages.length <= 1
+		},
+
 		currentPageIds(state) {
 			const rootStore = useRootStore()
 			// Return root page
