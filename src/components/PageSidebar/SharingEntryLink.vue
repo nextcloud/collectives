@@ -46,9 +46,10 @@
 								:key="option"
 								class="dropdown-item"
 								:class="{
-									'button--disabled': !networkOnline,
+									'button--disabled': !networkOnline || isOptionDisabled(option),
 									selected: option === selectedDropdownOption,
 								}"
+								:disabled="isOptionDisabled(option)"
 								:aria-selected="option === selectedDropdownOption"
 								@click="selectOption(option)">
 								{{ option }}
@@ -231,6 +232,7 @@ import serverCapabilities from '../../mixins/serverCapabilities.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useSharesStore } from '../../stores/shares.js'
+import { sharesCanBeEditable } from '../../util/sharePermissions.ts'
 
 export default {
 	name: 'SharingEntryLink',
@@ -454,6 +456,10 @@ export default {
 				this.onUpdate(share)
 			}
 			this.closeDropdown()
+		},
+
+		isOptionDisabled(option) {
+			return option === this.canEditText && !sharesCanBeEditable(this.currentCollective)
 		},
 
 		toggleDropdown() {
