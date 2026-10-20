@@ -14,7 +14,8 @@
 					:label="t('collectives', 'Search pages…')"
 					:showTrailingButton="!!query"
 					:trailingButtonLabel="t('collectives', 'Clear search')"
-					@trailingButtonClick="query = ''" />
+					@trailingButtonClick="query = ''"
+					@keydown.down.prevent="focusPage(0)" />
 				<NcActions v-if="!isPublic && collectiveId">
 					<template #icon>
 						<FilterCheckOutlineIcon v-if="filterCollective" :size="20" />
@@ -33,18 +34,18 @@
 			</div>
 
 			<div class="page-list">
-				<ul v-if="pages.length > 0">
-					<PagePreview
-						v-for="page in pages"
-						:key="page.id"
-						:title="page.title"
-						:description="description(page)"
-						:emoji="page.emoji!"
-						:lastUserId="page.lastUserId!"
-						:lastUserDisplayName="page.lastUserDisplayName!"
-						:small="true"
-						class="page-preview-item"
-						@click="onClickPage(page)" />
+				<ul v-if="pages.length > 0" @keydown="onPageListKeydown">
+					<li v-for="page in pages" :key="page.id">
+						<PagePreview
+							:title="page.title"
+							:description="description(page)"
+							:emoji="page.emoji!"
+							:lastUserId="page.lastUserId!"
+							:lastUserDisplayName="page.lastUserDisplayName!"
+							:small="true"
+							class="page-preview-item"
+							@click="onClickPage(page)" />
+					</li>
 				</ul>
 				<NcEmptyContent
 					v-else-if="searchedPagesLoading"
@@ -180,7 +181,8 @@ export default defineComponent({
 	mounted() {
 		this.initCurrentPages()
 
-		// Wait for NcModal enter transition and its focus trap
+		// NcModal activates its focus trap after its enter transition and keeps the
+		// focus if it is inside the modal already. So focus the search input early.
 		setTimeout(() => this.$refs.searchInput.focus(), 0)
 	},
 
@@ -240,6 +242,44 @@ export default defineComponent({
 			} else {
 				console.error('Cannot generate page link')
 			}
+		},
+
+		pageItems(): HTMLElement[] {
+			return Array.from(this.$el.querySelectorAll('.page-preview-item'))
+		},
+
+		focusPage(index: number) {
+			this.pageItems()[index]?.focus()
+		},
+
+		onPageListKeydown(event: KeyboardEvent) {
+			const items = this.pageItems()
+			const index = items.indexOf(document.activeElement as HTMLElement)
+			if (index === -1) {
+				return
+			}
+
+			switch (event.key) {
+				case 'ArrowDown':
+					this.focusPage(Math.min(index + 1, items.length - 1))
+					break
+				case 'ArrowUp':
+					if (index === 0) {
+						this.$refs.searchInput.focus()
+					} else {
+						this.focusPage(index - 1)
+					}
+					break
+				case 'Home':
+					this.focusPage(0)
+					break
+				case 'End':
+					this.focusPage(items.length - 1)
+					break
+				default:
+					return
+			}
+			event.preventDefault()
 		},
 
 		description(page: PageInfo) {
@@ -327,5 +367,15 @@ export default defineComponent({
 	border-radius: var(--border-radius-container);
 	margin-inline-end: calc(3 * var(--default-grid-baseline));
 	width: unset;
+
+	&:hover,
+	&:focus-visible {
+		background-color: var(--color-background-hover);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-main-text);
+		outline-offset: -2px;
+	}
 }
 </style>

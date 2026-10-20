@@ -7,10 +7,13 @@
 	<a
 		:href="link"
 		target="_blank"
+		:role="link ? undefined : 'button'"
+		:tabindex="link ? undefined : 0"
 		class="collective-page"
 		:class="{ 'not-found': notFound }"
 		:style="pageStyle"
-		@click="clickLink">
+		@click="onClickLink"
+		@keydown.enter.space="onKeyDown">
 		<div class="collective-page--image" :style="imageStyle">
 			<span
 				v-if="emoji"
@@ -141,7 +144,7 @@ export default defineComponent({
 	methods: {
 		t,
 
-		clickLink(event: Event) {
+		onClickLink(event: Event) {
 			if (!this.link) {
 				return false
 			}
@@ -150,6 +153,16 @@ export default defineComponent({
 				event.preventDefault()
 				window.OCA.Collectives.openLink(this.link)
 			}
+		},
+
+		onKeyDown(event: KeyboardEvent) {
+			// Anchors with `href` are activated by the browser already
+			if (this.link) {
+				return
+			}
+
+			event.preventDefault()
+			this.$el.click()
 		},
 	},
 })
