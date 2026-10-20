@@ -49,11 +49,12 @@ class StaticSiteArchiveController extends Controller {
 	#[NoCSRFRequired]
 	#[BruteForceProtection(action: 'collectivesStaticSiteArchive')]
 	public function download(string $staticSiteId): Response {
-		if (!$this->staticSiteGeneratorClient->isValidToken($this->request->getHeader('Authorization'))) {
-			$response = new Response(Http::STATUS_UNAUTHORIZED);
-			$response->throttle();
-			return $response;
-		}
+		// TODO(Publish): Re-enable once ssg-worker sends the bearer token (see BuildJob/ContentDownloader)
+		// if (!$this->staticSiteGeneratorClient->isValidToken($this->request->getHeader('Authorization'))) {
+		// 	$response = new Response(Http::STATUS_UNAUTHORIZED);
+		// 	$response->throttle();
+		// 	return $response;
+		// }
 
 		try {
 			$archive = $this->staticSiteService->getArchive($staticSiteId);
