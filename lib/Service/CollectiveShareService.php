@@ -235,6 +235,10 @@ class CollectiveShareService {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to edit %s', $collective->getName()));
 		}
 
+		if ($editable && !$collective->memberCanEdit()) {
+			throw new NotPermittedException($this->l10n->t('Share links of %s cannot be editable because editing is limited to admins or moderators', $collective->getName()));
+		}
+
 		$pageId = 0;
 		if ($pageInfo) {
 			$pageId = $pageInfo->getId();

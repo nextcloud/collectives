@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Unit\Service;
 
 use OC\Share20\Share;
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveShare;
@@ -17,6 +18,7 @@ use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -224,6 +226,18 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($permissions);
 		$collectiveShare->setEditable(true);
 		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collective, null, 'token', true, ''));
+	}
+
+	public function testUpdateShareEditableWithRestrictedEditing(): void {
+		$this->collective->setPermissions(Collective::defaultPermissions);
+		$this->collective->updatePermissionLevel(Member::LEVEL_ADMIN, Collective::editPermissions);
+		$this->collective->setLevel(Member::LEVEL_ADMIN);
+
+		$this->shareManager->expects(self::never())
+			->method('updateShare');
+
+		$this->expectException(NotPermittedException::class);
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', true);
 	}
 
 	public function testUpdateShareWithPassword(): void {

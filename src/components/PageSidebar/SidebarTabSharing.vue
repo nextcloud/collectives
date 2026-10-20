@@ -54,6 +54,11 @@
 					</NcPopover>
 				</div>
 
+				<NcNoteCard
+					v-if="showEditRestrictedNote"
+					type="warning"
+					:text="editRestrictedNoteText" />
+
 				<!-- loading -->
 				<NcEmptyContent v-if="loading('shares')">
 					<template #icon>
@@ -82,14 +87,17 @@ import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import SharingEntryLink from './SharingEntryLink.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { memberLevels } from '../../constants.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { useSharesStore } from '../../stores/shares.js'
+import { sharesCanBeEditable } from '../../util/sharePermissions.ts'
 
 export default {
 	name: 'SidebarTabSharing',
@@ -98,6 +106,7 @@ export default {
 		NcButton,
 		NcEmptyContent,
 		NcLoadingIcon,
+		NcNoteCard,
 		NcPopover,
 		SharingEntryLink,
 		InformationIcon,
@@ -135,6 +144,18 @@ export default {
 			return this.isLandingPage
 				? t('collectives', 'Share this collective with others outside your collective via public links. Anyone with the link can access the shared content.')
 				: t('collectives', 'Share this page with others outside your collective via public links. Anyone with the link can access the shared content.')
+		},
+
+		showEditRestrictedNote() {
+			return this.currentCollective.canEdit
+				&& this.currentCollective.canShare
+				&& !sharesCanBeEditable(this.currentCollective)
+		},
+
+		editRestrictedNoteText() {
+			return this.currentCollective.editPermissionLevel >= memberLevels.LEVEL_ADMIN
+				? t('collectives', 'Editing this collective is limited to admins. Share links are view only.')
+				: t('collectives', 'Editing this collective is limited to admins and moderators. Share links are view only.')
 		},
 	},
 
