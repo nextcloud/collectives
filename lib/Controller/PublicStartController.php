@@ -10,6 +10,10 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\CollectiveShareMapper;
+use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\MissingDependencyException;
+use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\DAV\Connector\Sabre\PublicAuth;
 use OCA\Files_Sharing\Event\ShareLinkAccessedEvent;
 use OCA\Viewer\Event\LoadViewer;
@@ -22,8 +26,10 @@ use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
+use OCP\AppFramework\Http\Template\SimpleMenuAction;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IL10N;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -42,8 +48,10 @@ class PublicStartController extends AuthPublicShareController {
 		IURLGenerator $urlGenerator,
 		private readonly ShareManager $shareManager,
 		private readonly CollectiveShareMapper $collectiveShareMapper,
+		private readonly CollectiveService $collectiveService,
 		private readonly IAppManager $appManager,
 		private readonly IEventDispatcher $eventDispatcher,
+		private readonly IL10N $l10n,
 	) {
 		parent::__construct($appName, $request, $session, $urlGenerator);
 	}
@@ -124,7 +132,31 @@ class PublicStartController extends AuthPublicShareController {
 			'token' => $this->getToken(),
 		]);
 		$response->setFooterVisible(false);
+		$this->setHeader($response);
 		return $response;
+	}
+
+	private function setHeader(PublicTemplateResponse $response): void {
+		try {
+			$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
+			$collective = $this->collectiveService->getCollective($share->getCollectiveId(), $share->getOwner());
+		} catch (DoesNotExistException|MultipleObjectsReturnedException|NotFoundException|NotPermittedException|MissingDependencyException) {
+			return;
+		}
+
+		$emoji = $collective->getEmoji();
+		$response->setHeaderTitle($emoji ? $emoji . ' ' . $collective->getName() : $collective->getName());
+		$response->setHeaderActions([
+			new SimpleMenuAction(
+				'print',
+				$this->l10n->t('Export or print'),
+				'icon-download',
+				$this->urlGenerator->linkToRoute('collectives.publicStart.showShare', [
+					'token' => $this->getToken(),
+					'path' => 'print/' . $collective->getUrlPath(),
+				]),
+			),
+		]);
 	}
 
 	private function checkDependencies(): array {
