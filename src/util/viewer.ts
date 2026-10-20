@@ -16,6 +16,7 @@ interface FileNodeOptions {
 	size?: number
 	mtime?: Date
 	etag?: string
+	displayname?: string
 }
 
 /**
@@ -24,7 +25,7 @@ interface FileNodeOptions {
  * @param options - Properties of the file
  */
 export function fileNode(options: FileNodeOptions): File {
-	const { id, source, mime, root, size, mtime, etag } = options
+	const { id, source, mime, root, size, mtime, etag, displayname } = options
 	return new File({
 		id,
 		source,
@@ -35,6 +36,7 @@ export function fileNode(options: FileNodeOptions): File {
 		size,
 		mtime,
 		attributes: { etag },
+		displayname,
 	})
 }
 
@@ -46,6 +48,8 @@ interface VersionInfo {
 	size: number
 	mtime: number
 	etag: string
+	/** Name of the version in the viewer's title */
+	displayname?: string
 }
 
 /**
@@ -67,6 +71,7 @@ export function versionNode(version: VersionInfo): File {
 		size: version.size,
 		mtime: new Date(version.mtime),
 		etag: version.etag,
+		displayname: version.displayname,
 	})
 }
 
