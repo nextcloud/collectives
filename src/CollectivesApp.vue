@@ -100,7 +100,7 @@ export default {
 			'settingsCollective',
 		]),
 
-		...mapState(usePagesStore, ['currentPage']),
+		...mapState(usePagesStore, ['currentPage', 'isSinglePageShare']),
 
 		showCollectiveSettings() {
 			return !!this.settingsCollective
@@ -109,6 +109,10 @@ export default {
 		showNavigation() {
 			if (this.printView) {
 				return false
+			}
+			// On public shares, wait for the collective to tell page shares apart
+			if (this.isPublic) {
+				return !!this.currentCollective && !this.isSinglePageShare
 			}
 			return true
 		},

@@ -31,9 +31,30 @@ test.describe('Page share', () => {
 		await expect(shareEditor.getContent()).toBeVisible()
 		await expect(shareEditor.getContent()).toHaveText('Some content')
 
-		// Single page shares show the collective in the header
+		// Single page shares show the collective in the header and no navigation
 		await expect(sharePage.locator('#header .header-title')).toContainText(collective.data.name)
 		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(0)
+		await expect(sharePageList.el).toBeHidden()
+	})
+
+	test('Show navigation in share of page with subpages', async ({ user, page, collective, sharePage, sharePageList, shareEditor }) => {
+		const collectivePage = await collective.createPage({ title: 'Sharepage', content: 'Some content', user, page })
+		await collective.createPage({ title: 'Subpage', parentId: collectivePage.data.id, user, page })
+		const share = await collectivePage.createShare({ page })
+
+		await sharePage.goto(share.getShareUrl())
+		await expect(shareEditor.getContent()).toHaveText('Some content')
+		await expect(sharePageList.el).toBeVisible()
+		await expect(sharePageList.getPageItem('Subpage')).toBeVisible()
+	})
+
+	test('Show navigation in editable share of page without subpages', async ({ user, page, collective, sharePage, sharePageList, shareEditor }) => {
+		const collectivePage = await collective.createPage({ title: 'Sharepage', content: 'Some content', user, page })
+		const share = await collectivePage.createShare({ page })
+		await share.setEditable(true)
+
+		await sharePage.goto(share.getShareUrl())
+		await expect(shareEditor.getContent()).toHaveText('Some content')
 		await expect(sharePageList.el).toBeVisible()
 	})
 })
