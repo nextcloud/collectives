@@ -22,7 +22,9 @@ test.describe('Custom page picker - local search', () => {
 
 		editor.setMode(true)
 		await editor.clickMenu('Insert link', 'Link to page')
-		await page.waitForTimeout(200)
+		// Wait for the modal enter transition, after which its focus trap gets activated
+		await expect(editor.pagePicker).toBeVisible()
+		await expect(page.locator('.modal-mask.fade-enter-active')).toHaveCount(0)
 	})
 
 	test('link to local page via search', async ({ page, editor }) => {
@@ -66,6 +68,44 @@ test.describe('Custom page picker - local search', () => {
 
 		const landingPageItem = editor.pagePicker.locator('.page-preview-item').filter({ hasText: 'Landing page' })
 		await expect(landingPageItem).toBeVisible()
+	})
+
+	test('select page with keyboard via Tab and Enter', async ({ page, editor }) => {
+		// Pages created within the same second have no stable order
+		const firstPageItem = editor.pagePicker.locator('.page-preview-item').first()
+		await expect(firstPageItem).toBeVisible()
+		// Initial focus can get lost while the modal opens
+		await editor.pagePickerSearch.focus()
+
+		// Search field -> filter menu -> first result
+		await page.keyboard.press('Tab')
+		await page.keyboard.press('Tab')
+		await expect(firstPageItem).toBeFocused()
+		await page.keyboard.press('Enter')
+
+		await expect(editor.getContent().locator('.widget-custom a.collective-page')).toBeVisible()
+	})
+
+	test('navigate results with arrow keys and select with Space', async ({ page, editor }) => {
+		const items = editor.pagePicker.locator('.page-preview-item')
+		await expect(items.first()).toBeVisible()
+		// Initial focus can get lost while the modal opens
+		await editor.pagePickerSearch.focus()
+
+		await page.keyboard.press('ArrowDown')
+		await expect(items.first()).toBeFocused()
+		await page.keyboard.press('ArrowDown')
+		await expect(items.nth(1)).toBeFocused()
+		await page.keyboard.press('ArrowUp')
+		await expect(items.first()).toBeFocused()
+		await page.keyboard.press('ArrowUp')
+		await expect(editor.pagePickerSearch).toBeFocused()
+
+		await page.keyboard.press('ArrowDown')
+		await page.keyboard.press(' ')
+		const pageWidget = editor.getContent().locator('.widget-custom a.collective-page')
+		await expect(pageWidget).toBeVisible()
+		await expect(pageWidget).not.toHaveAttribute('role')
 	})
 })
 
