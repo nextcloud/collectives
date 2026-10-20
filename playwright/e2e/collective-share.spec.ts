@@ -28,6 +28,11 @@ test.describe('Collective share', () => {
 		await expect(shareEditor.getContent()).toBeVisible()
 		await expect(shareEditor.getContent().getByRole('heading', { name: 'Welcome' })).toBeVisible()
 
+		// Shows the collective in the header instead of the collective selector
+		await expect(sharePage.locator('#header .header-title')).toContainText(collective.data.name)
+		await expect(sharePage.locator('.collective-selector')).toHaveCount(0)
+		await expect(sharePage.getByRole('link', { name: 'Export or print' })).toBeVisible()
+
 		// Allows to filter pages
 		await expect(sharePageList.el).toBeVisible()
 		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(2)

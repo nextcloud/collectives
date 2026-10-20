@@ -17,10 +17,10 @@
 			type="hidden"
 			:value="shareTokenParam">
 		<NcAppNavigation
-			v-if="!printView"
+			v-if="showNavigation"
 			:style="isMobile ? undefined : { width: `${navWidth}px`, '--collectives-nav-width': `${navWidth}px` }">
 			<template #list>
-				<CollectiveSelector />
+				<CollectiveSelector v-if="!isPublic" />
 				<PageList v-if="currentCollective" />
 			</template>
 			<template #footer>
@@ -104,6 +104,13 @@ export default {
 
 		showCollectiveSettings() {
 			return !!this.settingsCollective
+		},
+
+		showNavigation() {
+			if (this.printView) {
+				return false
+			}
+			return true
 		},
 	},
 
