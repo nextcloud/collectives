@@ -105,6 +105,17 @@ test.describe('Collective publish', () => {
 		})
 	})
 
+	test('preselects pages that were created after the page list was loaded', async ({ collective, navigation, page, user }) => {
+		await collective.openCollective()
+		// Created via API, so the page list in the browser doesn't contain it yet
+		await collective.createPage({ title: 'Page created meanwhile', user, page })
+
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await expect(modal.getByRole('checkbox', { name: 'Page created meanwhile' })).toBeChecked()
+		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
+	})
+
 	test('keeps the modal open if the website files could not be provided', async ({ collective, navigation, page }) => {
 		// A failed archive build can't be provoked reliably, so the response is replaced
 		await page.route('**/static-sites', async (route) => {
