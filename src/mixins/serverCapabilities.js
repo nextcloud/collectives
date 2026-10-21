@@ -16,5 +16,9 @@ export default {
 		passwordPolicy() {
 			return this.capabilities?.password_policy || {}
 		},
+
+		expireDatePolicy() {
+			return this.capabilities?.files_sharing?.public?.expire_date || {}
+		},
 	},
 }
