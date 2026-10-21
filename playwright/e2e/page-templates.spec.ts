@@ -42,10 +42,13 @@ test.describe('Page templates', () => {
 		const viewer = page.locator('.viewer__modal, #viewer[role="dialog"]')
 		const viewerEditor = viewer.locator('.ProseMirror[contenteditable="true"]')
 		await expect(viewerEditor).toBeVisible()
-		// Wait until the viewer stopped animating and the editor has focus,
-		// otherwise keystrokes reach the focused 'Add a template' button
-		await viewerEditor.click()
-		await expect(viewerEditor).toBeFocused()
+		// The viewer activates its focus trap only after the opning animation.
+		// Until then, focus may be pulled byck to the templtaes dialog or moved
+		// to the first viewer button, so retry until the ditor keeps focus.
+		await expect(async () => {
+			await viewerEditor.click()
+			await expect(viewerEditor).toBeFocused({ timeout: 1_000 })
+		}).toPass({ timeout: 10_000 })
 		await viewerEditor.pressSequentially('## Template Heading')
 		await viewerEditor.press('Enter')
 		await viewerEditor.pressSequentially('Template body')
