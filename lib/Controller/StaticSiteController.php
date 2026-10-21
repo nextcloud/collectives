@@ -172,7 +172,7 @@ class StaticSiteController extends OCSController {
 			);
 		} catch (StaticSiteGeneratorException) {
 			throw new OCSException(
-				$this->l10n->t('The publish service rejected the website. Please contact your administrator.'),
+				$this->l10n->t('The publish service could not process the request. Please contact your administrator.'),
 				Http::STATUS_BAD_GATEWAY,
 			);
 		} catch (ServiceException $e) {

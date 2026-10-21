@@ -140,18 +140,22 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
+	 * Reset status and update time to the values of the given static site as it was read before.
+	 *
+	 * Keeping the update time of an aborted publication allows the user to start the publish process again right away.
+	 *
 	 * @throws NotFoundException
 	 * @throws Exception
 	 */
-	public function updateStatus(int $id, string $status): StaticSite {
+	public function restoreStatus(StaticSite $previous): StaticSite {
 		try {
-			$staticSite = $this->find($id);
+			$staticSite = $this->find($previous->getId());
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 			throw new NotFoundException('Static site not found', 0, $e);
 		}
 
-		$staticSite->setStatus($status);
-		$staticSite->setUpdatedAt($this->timeFactory->getTime());
+		$staticSite->setStatus($previous->getStatus());
+		$staticSite->setUpdatedAt($previous->getUpdatedAt());
 		return $this->update($staticSite);
 	}
 

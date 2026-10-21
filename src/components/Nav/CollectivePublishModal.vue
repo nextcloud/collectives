@@ -26,7 +26,8 @@
 					:helperText="t('collectives', 'Lowercase letters, numbers and single hyphens')"
 					:maxlength="slugMaxLength" />
 			</div>
-			<ul class="modal-publish__tree">
+			<NcLoadingIcon v-if="loadingPages" class="modal-publish__loading" :size="32" />
+			<ul v-else class="modal-publish__tree">
 				<li v-if="rootPage" class="modal-publish__collective-row">
 					<PublishTreeRow
 						:selected="isRootPageSelected"
@@ -53,7 +54,7 @@
 				<NcButton
 					variant="primary"
 					:loading="publishing"
-					:disabled="publishing || !isTitleValid || !isSlugValid"
+					:disabled="loadingPages || publishing || !isTitleValid || !isSlugValid"
 					@click="onPublishAsWebsite">
 					{{ t('collectives', 'Publish website') }}
 				</NcButton>
@@ -65,8 +66,9 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
@@ -84,6 +86,7 @@ export default {
 
 	components: {
 		NcButton,
+		NcLoadingIcon,
 		NcModal,
 		NcTextField,
 		PageTemplateIcon,
@@ -106,6 +109,7 @@ export default {
 		return {
 			selectedPageIds: new Set(),
 			expandedPageIds: new Set(),
+			loadingPages: true,
 			publishing: false,
 			title: this.collective.name,
 			slug: generateSlug(this.collective.name),
@@ -150,13 +154,21 @@ export default {
 
 	},
 
-	created() {
+	async created() {
+		// The cached page list may be outdated or not loaded yet
+		try {
+			await this.getPagesForCollective(this.collective, false)
+		} catch (e) {
+			displayError('Could not fetch collective pages')(e)
+		}
 		// Preselect the whole collective (all pages) when the modal is opened
 		this.selectedPageIds = new Set(this.allPageIds)
+		this.loadingPages = false
 	},
 
 	methods: {
 		t,
+		...mapActions(usePagesStore, ['getPagesForCollective']),
 
 		onClose() {
 			this.$emit('close')
@@ -256,6 +268,10 @@ export default {
 		flex-direction: column;
 		gap: 8px;
 		padding-block-end: 8px;
+	}
+
+	&__loading {
+		flex: 1 1 auto;
 	}
 
 	&__tree {

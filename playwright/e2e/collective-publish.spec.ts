@@ -28,7 +28,7 @@ const test = baseTest.extend<{ member: MemberFixture }>({
 })
 
 test.beforeAll(async () => {
-	await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true'])
+	await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true', '--type', 'boolean'])
 })
 
 test.describe('Collective publish', () => {
@@ -103,6 +103,17 @@ test.describe('Collective publish', () => {
 			await expect(modal).toHaveCount(0)
 			await expect(getToast(page, 'success', 'Website publishing started')).toBeVisible()
 		})
+	})
+
+	test('preselects pages that were created after the page list was loaded', async ({ collective, navigation, page, user }) => {
+		await collective.openCollective()
+		// Created via API, so the page list in the browser doesn't contain it yet
+		await collective.createPage({ title: 'Page created meanwhile', user, page })
+
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await expect(modal.getByRole('checkbox', { name: 'Page created meanwhile' })).toBeChecked()
+		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
 	})
 
 	test('keeps the modal open if the website files could not be provided', async ({ collective, navigation, page }) => {

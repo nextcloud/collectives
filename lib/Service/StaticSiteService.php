@@ -56,13 +56,14 @@ class StaticSiteService {
 	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
-	 * @throws NotPermittedException User is not allowed to edit the collective
+	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
 	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, slug already in use, path too long
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
 	 */
 	public function create(int $collectiveId, array $pageIds, string $userId, ?string $title = null, ?string $slug = null): StaticSite {
+		$this->assertPublishFeatureEnabled();
 		$pageIds = $this->normalizePageIds($pageIds);
 		$collective = $this->getEditableCollective($collectiveId, $userId);
 
@@ -105,13 +106,14 @@ class StaticSiteService {
 	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
 	 *
 	 * @throws NotFoundException Collective, static site or one of the pages not found
-	 * @throws NotPermittedException User is not allowed to edit the collective
+	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
 	 * @throws UnprocessableEntityException No pages selected, invalid title, publication in progress, path too long
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
 	 */
 	public function update(int $collectiveId, int $id, array $pageIds, string $title, string $userId): StaticSite {
+		$this->assertPublishFeatureEnabled();
 		$pageIds = $this->normalizePageIds($pageIds);
 		$this->getEditableCollective($collectiveId, $userId);
 
@@ -125,7 +127,6 @@ class StaticSiteService {
 		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
-		$previousStatus = $staticSite->getStatus();
 		if (!$this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING)) {
 			throw new UnprocessableEntityException('Publication of static site is already in progress');
 		}
@@ -133,7 +134,7 @@ class StaticSiteService {
 		try {
 			$this->buildArchive($staticSite);
 		} catch (ServiceException $e) {
-			$this->restoreStatus($staticSite, $previousStatus);
+			$this->restoreStatus($staticSite);
 			throw $e;
 		}
 
@@ -156,6 +157,7 @@ class StaticSiteService {
 		$this->getEditableCollective($collectiveId, $userId);
 
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
+		// TODO(Publish): Send delete request to publish service once it provides an endpoint
 		$this->staticSiteMapper->delete($staticSite);
 		$this->deleteArchive($staticSite);
 	}
@@ -256,9 +258,9 @@ class StaticSiteService {
 	/**
 	 * @throws DBException
 	 */
-	private function restoreStatus(StaticSite $staticSite, string $status): void {
+	private function restoreStatus(StaticSite $previous): void {
 		try {
-			$this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
+			$this->staticSiteMapper->restoreStatus($previous);
 		} catch (NotFoundException) {
 			// Static site was deleted meanwhile, nothing to restore
 		}
@@ -293,6 +295,17 @@ class StaticSiteService {
 			throw new UnprocessableEntityException('No pages selected for publishing');
 		}
 		return $pageIds;
+	}
+
+	/**
+	 * Only creating and updating static sites is blocked, so editors can still list and delete existing ones.
+	 *
+	 * @throws NotPermittedException
+	 */
+	private function assertPublishFeatureEnabled(): void {
+		if (!$this->appConfig->getValueBool('collectives', ConfigLexicon::PUBLISH_ENABLED, ConfigLexicon::PUBLISH_ENABLED_DEFAULT)) {
+			throw new NotPermittedException('Publish feature is disabled');
+		}
 	}
 
 	/**
