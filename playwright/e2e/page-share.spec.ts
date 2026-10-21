@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { Locator } from '@playwright/test'
+import type { Locator, PlaywrightWorkerArgs } from '@playwright/test'
 
 import { runOcc } from '@nextcloud/e2e-test-server/docker'
 import { expect, mergeTests } from '@playwright/test'
@@ -14,6 +14,34 @@ import { getToast } from '../support/helpers/toasts.ts'
 import { ocsHeaders } from '../support/helpers/urls.ts'
 
 const test = mergeTests(createCollectiveTest, pageSidebarTest, collectiveShareTest)
+
+/**
+ * Set core app config through the web server, which clears its app config cache
+ *
+ * `occ` runs in a separate process and can't clear the web server's cache.
+ *
+ * @param playwright - Playwright worker fixture
+ * @param baseURL - Base URL of the Nextcloud instance
+ * @param values - Config keys and values to set
+ */
+async function setCoreConfig(playwright: PlaywrightWorkerArgs['playwright'], baseURL: string | undefined, values: Record<string, string>) {
+	const request = await playwright.request.newContext({
+		baseURL,
+		ignoreHTTPSErrors: true,
+		httpCredentials: { username: 'admin', password: 'admin', send: 'always' },
+	})
+	try {
+		for (const [key, value] of Object.entries(values)) {
+			await request.post(`/ocs/v2.php/apps/provisioning_api/api/v1/config/apps/core/${key}`, {
+				headers: ocsHeaders,
+				data: { value },
+				failOnStatusCode: true,
+			})
+		}
+	} finally {
+		await request.dispose()
+	}
+}
 
 test.describe('Page share', () => {
 	test('Create share and open share unauthenticated', async ({ user, page, collective, pageSidebar, sharePage, shareTitleBar, sharePageList, shareEditor }) => {
@@ -66,26 +94,24 @@ test.describe('Page share enforced password protection', () => {
 	let sharingTab: Locator
 	let shareActionsPanel: Locator
 
-	test.beforeAll(async () => {
-		await runOcc(['config:app:set', 'core', 'shareapi_enable_link_password_by_default', '--value', 'yes'])
-		await runOcc(['config:app:set', 'core', 'shareapi_enforce_links_password', '--value', 'yes'])
+	test.beforeAll(async ({ playwright }, testInfo) => {
+		// Enable the app first, so the config writes below also clear its cached enabled state
+		await runOcc(['app:enable', '--force', 'password_policy'], { verbose: true })
+		await setCoreConfig(playwright, testInfo.project.use.baseURL, {
+			shareapi_enable_link_password_by_default: 'yes',
+			shareapi_enforce_links_password: 'yes',
+		})
 	})
 
-	test.afterAll(async () => {
-		await runOcc(['config:app:set', 'core', 'shareapi_enable_link_password_by_default', '--value', 'no'])
-		await runOcc(['config:app:set', 'core', 'shareapi_enforce_links_password', '--value', 'no'])
+	test.afterAll(async ({ playwright }, testInfo) => {
+		await setCoreConfig(playwright, testInfo.project.use.baseURL, {
+			shareapi_enable_link_password_by_default: 'no',
+			shareapi_enforce_links_password: 'no',
+		})
+		await runOcc(['app:disable', 'password_policy'], { verbose: true })
 	})
 
 	test.beforeEach(async ({ user, page, collective, pageSidebar }) => {
-		await runOcc(['app:enable', '--force', 'password_policy'])
-
-		// Dirty hack to wait for config changes to propagate through cache
-		await expect.poll(async () => {
-			const resp = await page.request.get('/ocs/v2.php/cloud/capabilities?format=json', { headers: ocsHeaders, failOnStatusCode: true })
-			const caps = await resp.json()
-			return caps.ocs.data.capabilities.files_sharing?.public?.password?.enforced
-		}, { timeout: 15_000, intervals: [500] }).toBe(true)
-
 		const collectivePage = await collective.createPage({ title: 'Sharepage', content: 'Some content', user, page })
 		await collectivePage.open()
 
@@ -97,10 +123,6 @@ test.describe('Page share enforced password protection', () => {
 		await expect(shareActionsPanel).toBeVisible()
 		// password_policy pre-fills the password field
 		await expect(shareActionsPanel.locator('input[autocomplete="new-password"]')).not.toHaveValue('')
-	})
-
-	test.afterEach(async () => {
-		await runOcc(['app:disable', 'password_policy'])
 	})
 
 	test('Create share and open share unauthenticated', async ({ page, collective, pageSidebar, sharePage, shareEditor }) => {
