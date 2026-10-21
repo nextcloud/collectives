@@ -55,6 +55,7 @@ class StaticSiteServiceTest extends TestCase {
 	private string $staticSiteId = '01990000-0000-7000-8000-000000000000';
 	private int $now = 1800000000;
 	private int $maxSize = ConfigLexicon::STATIC_SITE_MAX_SIZE_DEFAULT;
+	private bool $publishFeatureEnabled = true;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -72,6 +73,9 @@ class StaticSiteServiceTest extends TestCase {
 		$appConfig->method('getValueInt')
 			->with('collectives', ConfigLexicon::STATIC_SITE_MAX_SIZE, ConfigLexicon::STATIC_SITE_MAX_SIZE_DEFAULT)
 			->willReturnCallback(fn (): int => $this->maxSize);
+		$appConfig->method('getValueBool')
+			->with('collectives', ConfigLexicon::PUBLISH_ENABLED, ConfigLexicon::PUBLISH_ENABLED_DEFAULT)
+			->willReturnCallback(fn (): bool => $this->publishFeatureEnabled);
 		$l10n = $this->createMock(IL10N::class);
 		$l10n->method('t')->willReturnCallback(static fn (string $text, array $parameters = []): string => vsprintf($text, $parameters));
 
@@ -659,6 +663,52 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->expectException(NotFoundException::class);
 		$this->service->create($this->collectiveId, [1], $this->userId);
+	}
+
+	// --- publish feature settings ---
+
+	public function testPublishRejectsIfPublishFeatureIsDisabled(): void {
+		$this->publishFeatureEnabled = false;
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->expects($this->never())->method('create');
+		$this->archiver->expects($this->never())->method('store');
+		$this->generatorClient->expects($this->never())->method('build');
+
+		$this->expectException(NotPermittedException::class);
+		$this->service->create($this->collectiveId, [1], $this->userId);
+	}
+
+	public function testUpdateRejectsIfPublishFeatureIsDisabled(): void {
+		$this->publishFeatureEnabled = false;
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->archiver->expects($this->never())->method('store');
+		$this->generatorClient->expects($this->never())->method('build');
+
+		$this->expectException(NotPermittedException::class);
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	public function testDeleteRemovesStaticSiteIfPublishFeatureIsDisabled(): void {
+		$this->publishFeatureEnabled = false;
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+
+		$this->staticSiteMapper->expects($this->once())->method('delete')->with($staticSite);
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
+
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
+	public function testGetStaticSitesReturnsListIfPublishFeatureIsDisabled(): void {
+		$this->publishFeatureEnabled = false;
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: false));
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
+
+		self::assertSame([$staticSite], $this->service->getStaticSites($this->collectiveId, $this->userId));
 	}
 
 	// --- static site generator ---
