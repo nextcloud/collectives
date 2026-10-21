@@ -22,6 +22,7 @@ use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\Files\Folder;
 use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\IDateTimeZone;
 use OCP\IL10N;
 use OCP\ISession;
 use OCP\Lock\ILockingProvider;
@@ -42,6 +43,7 @@ class CollectiveShareService {
 		private readonly PageService $pageService,
 		private readonly IL10N $l10n,
 		private readonly ISession $session,
+		private readonly IDateTimeZone $dateTimeZone,
 	) {
 	}
 
@@ -126,10 +128,7 @@ class CollectiveShareService {
 			return null;
 		}
 
-		$collectiveShare->setEditable($this->isShareEditable($folderShare, $collectiveShare));
-		if ($folderShare->getPassword()) {
-			$collectiveShare->setPassword($folderShare->getPassword());
-		}
+		$this->setFolderShareAttributes($collectiveShare, $folderShare);
 		return $collectiveShare;
 	}
 
@@ -152,10 +151,7 @@ class CollectiveShareService {
 			return null;
 		}
 
-		$collectiveShare->setEditable($this->isShareEditable($folderShare, $collectiveShare));
-		if ($folderShare->getPassword()) {
-			$collectiveShare->setPassword($folderShare->getPassword());
-		}
+		$this->setFolderShareAttributes($collectiveShare, $folderShare);
 		return $collectiveShare;
 	}
 
@@ -163,21 +159,51 @@ class CollectiveShareService {
 		$collectiveShares = $this->collectiveShareMapper->findByCollectiveIdAndUser($collectiveId, $userId);
 
 		$shares = [];
-		foreach ($collectiveShares as $share) {
+		foreach ($collectiveShares as $collectiveShare) {
 			try {
-				$folderShare = $this->shareManager->getShareByToken($share->getToken());
+				$folderShare = $this->shareManager->getShareByToken($collectiveShare->getToken());
 			} catch (ShareNotFound) {
 				// Corresponding folder share not found, delete the collective share as well.
-				$this->collectiveShareMapper->delete($share);
+				$this->collectiveShareMapper->delete($collectiveShare);
+				continue;
 			}
-			$share->setEditable($this->isShareEditable($folderShare, $share));
-			if ($folderShare->getPassword()) {
-				$share->setPassword($folderShare->getPassword());
-			}
-			$shares[] = $share;
+			$this->setFolderShareAttributes($collectiveShare, $folderShare);
+			$shares[] = $collectiveShare;
 		}
 
 		return $shares;
+	}
+
+	private function setFolderShareAttributes(CollectiveShare $collectiveShare, IShare $folderShare): void {
+		$collectiveShare->setEditable($this->isShareEditable($folderShare, $collectiveShare));
+		if ($folderShare->getPassword()) {
+			$collectiveShare->setPassword($folderShare->getPassword());
+		}
+		$collectiveShare->setExpirationDate($this->getExpirationDate($folderShare));
+	}
+
+	/**
+	 * Get the expiration date of a folder share in the user's timezone
+	 *
+	 * The share provider returns it in the server's default timezone.
+	 */
+	private function getExpirationDate(IShare $folderShare): ?\DateTime {
+		$expirationDate = $folderShare->getExpirationDate();
+		if ($expirationDate === null) {
+			return null;
+		}
+		return (clone $expirationDate)->setTimezone($this->dateTimeZone->getTimeZone());
+	}
+
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	private function parseExpirationDate(string $date): \DateTime {
+		$expirationDate = \DateTime::createFromFormat('!Y-m-d', $date, $this->dateTimeZone->getTimeZone());
+		if ($expirationDate === false) {
+			throw new UnprocessableEntityException($this->l10n->t('Invalid date. Format must be YYYY-MM-DD'));
+		}
+		return $expirationDate;
 	}
 
 	private function isShareEditable(IShare $folderShare, CollectiveShare $collectiveShare): bool {
@@ -213,9 +239,7 @@ class CollectiveShareService {
 			throw new NotPermittedException('Failed to create collective/page share for ' . $collective->getName(), 0, $e);
 		}
 
-		if ($password) {
-			$collectiveShare->setPassword($folderShare->getPassword());
-		}
+		$this->setFolderShareAttributes($collectiveShare, $folderShare);
 		return $collectiveShare;
 	}
 
@@ -225,8 +249,9 @@ class CollectiveShareService {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws UnprocessableEntityException
 	 */
-	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password = null): CollectiveShare {
+	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -267,12 +292,19 @@ class CollectiveShareService {
 			}
 		}
 
-		$this->shareManager->updateShare($folderShare);
-
-		$share->setEditable($this->isShareEditable($folderShare, $share));
-		if ($folderShare->getPassword()) {
-			$share->setPassword($folderShare->getPassword());
+		if ($expirationDate !== null) {
+			$folderShare->setExpirationDate($expirationDate === '' ? null : $this->parseExpirationDate($expirationDate));
 		}
+
+		try {
+			$this->shareManager->updateShare($folderShare);
+		} catch (GenericShareException $e) {
+			throw new UnprocessableEntityException($e->getHint(), 0, $e);
+		} catch (\InvalidArgumentException $e) {
+			throw new UnprocessableEntityException($e->getMessage(), 0, $e);
+		}
+
+		$this->setFolderShareAttributes($share, $folderShare);
 		return $share;
 	}
 

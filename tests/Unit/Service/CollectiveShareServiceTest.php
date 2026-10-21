@@ -20,15 +20,18 @@ use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\Folder;
+use OCP\IDateTimeZone;
 use OCP\IL10N;
 use OCP\ISession;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager as IShareManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class CollectiveShareServiceTest extends TestCase {
@@ -42,6 +45,7 @@ class CollectiveShareServiceTest extends TestCase {
 	private int $collectiveId = 123;
 	private string $collectiveName = 'Test Collective';
 	private Folder $collectiveFolder;
+	private \DateTimeZone $userTimeZone;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -65,6 +69,9 @@ class CollectiveShareServiceTest extends TestCase {
 		$collectiveMapper = $this->createMock(CollectiveMapper::class);
 		$pageService = $this->createMock(PageService::class);
 		$session = $this->createMock(ISession::class);
+		$this->userTimeZone = new \DateTimeZone('Europe/Berlin');
+		$dateTimeZone = $this->createMock(IDateTimeZone::class);
+		$dateTimeZone->method('getTimeZone')->willReturnCallback(fn (): \DateTimeZone => $this->userTimeZone);
 
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
@@ -73,7 +80,8 @@ class CollectiveShareServiceTest extends TestCase {
 			$collectiveMapper,
 			$pageService,
 			$l10n,
-			$session
+			$session,
+			$dateTimeZone,
 		);
 
 		$this->collective = new Collective();
@@ -255,6 +263,141 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn('passwordhash');
 		$collectiveShare = $this->service->updateShare($this->userId, $this->collective, null, 'token', false, 'password');
 		self::assertEquals('passwordhash', $collectiveShare->getPassword());
+	}
+
+	/**
+	 * Expiration date as returned by the share provider: end of the day in
+	 * the user's timezone, converted to the server's default timezone (UTC)
+	 */
+	private function providerExpirationDate(string $date): \DateTime {
+		return (new \DateTime($date . ' 23:59:59', $this->userTimeZone))
+			->setTimezone(new \DateTimeZone('UTC'));
+	}
+
+	public static function timeZoneProvider(): array {
+		return [
+			['UTC'],
+			['Europe/Berlin'],
+			['America/New_York'],
+			['Pacific/Honolulu'],
+			['Pacific/Kiritimati'],
+		];
+	}
+
+	private function prepareUpdateShare(?\DateTime $currentExpirationDate = null): Share&MockObject {
+		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setCollectiveId($this->collectiveId);
+		$collectiveShare->setOwner($this->userId);
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
+			->willReturn($collectiveShare);
+
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folderShare->method('getExpirationDate')
+			->willReturn($currentExpirationDate);
+		$this->shareManager->method('getShareByToken')
+			->willReturn($folderShare);
+
+		return $folderShare;
+	}
+
+	public function testUpdateShareSetsExpirationDate(): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::once())
+			->method('setExpirationDate')
+			->with(self::callback(static fn (?\DateTime $date): bool => $date?->format('Y-m-d H:i:s') === '2026-12-24 00:00:00'
+			&& $date->getTimezone()->getName() === 'Europe/Berlin'));
+		$this->shareManager->expects(self::once())
+			->method('updateShare');
+
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, '2026-12-24');
+	}
+
+	public function testUpdateShareRemovesExpirationDate(): void {
+		$folderShare = $this->prepareUpdateShare($this->providerExpirationDate('2026-12-24'));
+		$folderShare->expects(self::once())
+			->method('setExpirationDate')
+			->with(null);
+
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, '');
+	}
+
+	/**
+	 * @dataProvider timeZoneProvider
+	 */
+	public function testUpdateShareKeepsExpirationDate(string $timeZone): void {
+		$this->userTimeZone = new \DateTimeZone($timeZone);
+		$providerExpirationDate = $this->providerExpirationDate('2026-12-24');
+		$folderShare = $this->prepareUpdateShare($providerExpirationDate);
+		$folderShare->expects(self::never())
+			->method('setExpirationDate');
+
+		$share = $this->service->updateShare($this->userId, $this->collective, null, 'token', false);
+		self::assertEquals('2026-12-24', $share->jsonSerialize()['expirationDate']);
+		// The date of the folder share is not modified
+		self::assertEquals('UTC', $providerExpirationDate->getTimezone()->getName());
+	}
+
+	public static function invalidExpirationDateProvider(): array {
+		return [
+			['tomorrow'],
+			['24.12.2026'],
+			['2026-12'],
+			['2026-12-24 12:00'],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidExpirationDateProvider
+	 */
+	public function testUpdateShareInvalidExpirationDate(string $expirationDate): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::never())
+			->method('setExpirationDate');
+		$this->shareManager->expects(self::never())
+			->method('updateShare');
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('Invalid date. Format must be YYYY-MM-DD');
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, $expirationDate);
+	}
+
+	public function testUpdateShareExpirationDateEnforced(): void {
+		$this->prepareUpdateShare($this->providerExpirationDate('2026-12-24'));
+		$this->shareManager->method('updateShare')
+			->willThrowException(new \InvalidArgumentException('Expiration date is enforced'));
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('Expiration date is enforced');
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, '');
+	}
+
+	/**
+	 * @dataProvider timeZoneProvider
+	 */
+	public function testCreateShareReturnsExpirationDate(string $timeZone): void {
+		$this->userTimeZone = new \DateTimeZone($timeZone);
+		$this->prepareFolderShare();
+
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folderShare->method('getNode')
+			->willReturn($this->collectiveFolder);
+		$folderShare->method('getToken')
+			->willReturn('token');
+		$folderShare->method('getExpirationDate')
+			->willReturn($this->providerExpirationDate('2026-12-24'));
+		$this->shareManager->method('createShare')
+			->willReturn($folderShare);
+
+		$collectiveShare = new CollectiveShare();
+		$this->collectiveShareMapper->method('create')
+			->willReturn($collectiveShare);
+
+		$share = $this->service->createShare($this->userId, $this->collective, null);
+		self::assertEquals('2026-12-24', $share->jsonSerialize()['expirationDate']);
 	}
 
 	public function testIsShareNotAuthenticated(): void {

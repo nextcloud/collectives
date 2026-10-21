@@ -128,7 +128,8 @@
                     "token",
                     "owner",
                     "editable",
-                    "hasPassword"
+                    "hasPassword",
+                    "expirationDate"
                 ],
                 "properties": {
                     "id": {
@@ -154,6 +155,10 @@
                     },
                     "hasPassword": {
                         "type": "boolean"
+                    },
+                    "expirationDate": {
+                        "type": "string",
+                        "nullable": true
                     }
                 }
             },
@@ -2807,6 +2812,12 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Optional password for the share"
+                                    },
+                                    "expirationDate": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged"
                                     }
                                 }
                             }
@@ -2927,6 +2938,34 @@
                     },
                     "404": {
                         "description": "Collective, page or share not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid expiration date",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3200,6 +3239,12 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Optional password for the share"
+                                    },
+                                    "expirationDate": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged"
                                     }
                                 }
                             }
@@ -3310,6 +3355,34 @@
                     },
                     "404": {
                         "description": "Collective, page or share not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid expiration date",
                         "content": {
                             "application/json": {
                                 "schema": {
