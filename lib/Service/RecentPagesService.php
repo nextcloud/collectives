@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Model\RecentPage;
 use OCP\DB\Exception;
@@ -42,14 +43,25 @@ class RecentPagesService {
 	 * @throws Exception
 	 */
 	public function forUser(IUser $user, int $limit = 10): array {
+		return $this->forUserId($user->getUID(), $limit) ?? [];
+	}
+
+	/** @return list<RecentPage>|null */
+	public function forTeam(string $teamId, string $userId, int $limit = 7): ?array {
+		return $this->forUserId($userId, $limit, $teamId);
+	}
+
+	/** @return list<RecentPage>|null */
+	private function forUserId(string $userId, int $limit, ?string $teamId = null): ?array {
 		$queryData = $this->getRecentPagesQuery(
-			$user->getUID(),
+			$userId,
 			$limit,
-			['p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path']
+			['p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path'],
+			teamId: $teamId,
 		);
 
 		if ($queryData === null) {
-			return [];
+			return null;
 		}
 
 		$r = $queryData['result'];
@@ -204,11 +216,15 @@ class RecentPagesService {
 	 * @return array{result: \OCP\DB\IResult, collectivesMap: array, appData: string}|null
 	 * @throws Exception
 	 */
-	private function getRecentPagesQuery(string $userId, int $limit, array $selectFields, ?string $query = null): ?array {
+	private function getRecentPagesQuery(string $userId, int $limit, array $selectFields, ?string $query = null, ?string $teamId = null): ?array {
 		try {
 			$collectives = $this->collectiveService->getCollectives($userId);
 		} catch (NotFoundException|NotPermittedException) {
 			return null;
+		}
+
+		if ($teamId !== null) {
+			$collectives = array_filter($collectives, static fn (Collective $collective): bool => $collective->getCircleId() === $teamId && $collective->getTrashTimestamp() === null);
 		}
 
 		if (!$collectives) {
