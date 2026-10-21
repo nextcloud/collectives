@@ -5,12 +5,12 @@
 
 import type { Page } from '@playwright/test'
 
-import { runOcc } from '@nextcloud/e2e-test-server/docker'
 import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectivesTest } from '../support/fixtures/create-collectives.ts'
 import { test as navigationTest } from '../support/fixtures/navigation.ts'
 import { loginAsUser } from '../support/fixtures/random-user.ts'
 import { User } from '../support/fixtures/User.ts'
+import { pointAtMockStaticSiteGenerator } from '../support/helpers/staticSiteGenerator.ts'
 import { getToast } from '../support/helpers/toasts.ts'
 
 type MemberFixture = { page: Page, user: User }
@@ -27,8 +27,8 @@ const test = baseTest.extend<{ member: MemberFixture }>({
 	},
 })
 
-test.beforeAll(async () => {
-	await runOcc(['config:app:set', 'collectives', 'publish_enabled', '--value', 'true'])
+test.beforeAll(async ({ browser, baseURL }) => {
+	await pointAtMockStaticSiteGenerator(browser, baseURL)
 })
 
 test.describe('Collective publish', () => {
@@ -67,8 +67,7 @@ test.describe('Collective publish', () => {
 			await expect(modal).toHaveCount(0)
 		})
 
-		// TODO(Publish): Remove SKIP once the CI provides a stub of the publish service, publishing fails without it
-		await test.step.skip('reopen the publish modal and publish', async () => {
+		await test.step('reopen the publish modal and publish', async () => {
 			// Intercept the API call to verify it is sent and succeeds
 			const requestPromise = page.waitForRequest((req) => req.url().includes('/static-sites') && req.method() === 'POST')
 
@@ -172,7 +171,7 @@ test.describe('Collective publish', () => {
 		await expect(modal).toHaveCount(0)
 
 		// The published URL arrives in the background, no modal involved
-		await expect(page.locator('.toast-success').filter({ hasText: publishedUrl }))
+		await expect(getToast(page, 'success', publishedUrl))
 			.toContainText(`Website "My website" published at ${publishedUrl}`, { timeout: 45_000 })
 	})
 
