@@ -189,6 +189,19 @@
 				:minlength="passwordPolicy.minLength ?? 0"
 				:label="t('collectives', 'Password')"
 				@update:modelValue="onPasswordChange" />
+			<NcCheckboxRadioSwitch v-model="hasExpirationDate" :disabled="isExpireDateEnforced">
+				{{ isExpireDateEnforced
+					? t('collectives', 'Set expiration date (enforced)')
+					: t('collectives', 'Set expiration date') }}
+			</NcCheckboxRadioSwitch>
+			<NcDateTimePickerNative
+				v-if="hasExpirationDate"
+				type="date"
+				:modelValue="expirationDateObject"
+				:min="minExpirationDate"
+				:max="maxExpirationDate"
+				:label="t('collectives', 'Expiration date')"
+				@update:modelValue="onExpirationDateChange" />
 			<div class="button-group">
 				<NcButton :aria-label="t('collectives', 'Cancel')" @click="cancelSettings">
 					{{ t('collectives', 'Cancel') }}
@@ -205,6 +218,7 @@
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import { createFocusTrap } from 'focus-trap'
 import { mapActions, mapState } from 'pinia'
@@ -216,6 +230,7 @@ import NcActionText from '@nextcloud/vue/components/NcActionText'
 import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcPasswordField from '@nextcloud/vue/components/NcPasswordField'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -252,6 +267,7 @@ export default {
 		NcAvatar,
 		NcButton,
 		NcCheckboxRadioSwitch,
+		NcDateTimePickerNative,
 		NcLoadingIcon,
 		NcPasswordField,
 		PlusIcon,
@@ -292,6 +308,7 @@ export default {
 			isPendingPasswordProtected: true,
 			pendingPassword: '',
 			newPassword: null,
+			newExpirationDate: null,
 		}
 	},
 
@@ -399,6 +416,42 @@ export default {
 			return this.passwordError
 				? t('collectives', "Password field can't be empty")
 				: undefined
+		},
+
+		isExpireDateEnforced() {
+			return this.expireDatePolicy.enforced === true
+		},
+
+		expirationDate() {
+			return this.newExpirationDate === null
+				? (this.share.expirationDate ?? '')
+				: this.newExpirationDate
+		},
+
+		expirationDateObject() {
+			return moment(this.expirationDate, moment.HTML5_FMT.DATE, true).toDate()
+		},
+
+		hasExpirationDate: {
+			get() {
+				return !!this.expirationDate
+			},
+
+			set(enabled) {
+				this.newExpirationDate = enabled
+					? this.formatExpirationDate(moment().add(this.expireDatePolicy.default_days ?? 7, 'days'))
+					: ''
+			},
+		},
+
+		minExpirationDate() {
+			return moment().add(1, 'days').startOf('day').toDate()
+		},
+
+		maxExpirationDate() {
+			return this.isExpireDateEnforced
+				? moment().add(this.expireDatePolicy.days, 'days').startOf('day').toDate()
+				: null
 		},
 	},
 
@@ -564,8 +617,18 @@ export default {
 			this.newPassword = password || null
 		},
 
+		formatExpirationDate(date) {
+			// Force `en` locale, as .e.g. `ar` or `fa` would format non-latin digits
+			return moment(date).locale('en').format(moment.HTML5_FMT.DATE)
+		},
+
+		onExpirationDateChange(date) {
+			this.newExpirationDate = date ? this.formatExpirationDate(date) : ''
+		},
+
 		cancelSettings() {
 			this.newPassword = null
+			this.newExpirationDate = null
 			this.showSettings = false
 		},
 
@@ -577,8 +640,11 @@ export default {
 				// Don't update share with empty password
 				delete share.password
 			}
+			share.expirationDate = this.expirationDate
 
 			await this.onUpdate(share)
+			this.newPassword = null
+			this.newExpirationDate = null
 			this.showSettings = false
 		},
 
