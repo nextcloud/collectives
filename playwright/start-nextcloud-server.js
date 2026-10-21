@@ -6,14 +6,18 @@
 import {
 	configureNextcloud,
 	runExec,
+	runOcc,
 	startNextcloud,
 	stopNextcloud,
 	waitOnNextcloud,
 } from '@nextcloud/e2e-test-server/docker'
+import { startMockStaticSiteGenerator } from './support/staticSiteGenerator.js'
 
 const serverBranch = process.env.PLAYWRIGHT_NC_SERVER_BRANCH ?? 'master'
 // Text's development branch matching server master is `main`
 const textBranch = serverBranch === 'master' ? 'main' : serverBranch
+
+let stopMockStaticSiteGenerator
 
 /**
  *
@@ -37,10 +41,24 @@ async function start() {
 }
 
 /**
+ * Starts a mock of the external static site generator, so publishing a collective as a static
+ * website can succeed in tests without a real generator service configured.
+ *
+ * Only the system config this needs is set here; the app config (generator URL/token) is set
+ * later over HTTP, in collective-publish.spec.ts's own beforeAll — see staticSiteGenerator.ts
+ * for why `occ config:app:set` alone wouldn't actually reach the server process handling tests.
+ */
+async function configureStaticSiteGenerator() {
+	stopMockStaticSiteGenerator = await startMockStaticSiteGenerator()
+	await runOcc(['config:system:set', 'allow_local_remote_servers', '--value', 'true', '--type', 'boolean'])
+}
+
+/**
  * Stops the Nextcloud server and exits the process.
  */
 async function stop() {
 	process.stderr.write('Stopping Nextcloud server…\n')
+	await stopMockStaticSiteGenerator?.()
 	await stopNextcloud()
 	process.exit(0)
 }
@@ -63,6 +81,8 @@ if (await isServerRunning()) {
 	}
 	await configureNextcloud(apps)
 }
+
+await configureStaticSiteGenerator()
 
 // Idle to wait for shutdown
 while (true) {
