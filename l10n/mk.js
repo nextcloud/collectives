@@ -2,8 +2,11 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Не сте овластени да ја споделите %s",
+    "@-mentions only" : "само @-спомнување ",
+    "Off" : "Исклучено",
     "Share link" : "Сподели линк",
     "Settings" : "Параметри",
+    "Notifications" : "Известувања",
     "Back" : "Назад",
     "Members" : "Членови",
     "No search results" : "Нема резултати од пребарувањето",
