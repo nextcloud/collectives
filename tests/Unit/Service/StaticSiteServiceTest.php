@@ -404,15 +404,34 @@ class StaticSiteServiceTest extends TestCase {
 
 	public function testUpdateRestoresStatusIfArchiveCannotBeProvided(): void {
 		$this->expectValidCollectiveWithPages();
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
 
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateStatus')
-			->with(7, StaticSite::STATUS_PUBLISHED);
+			->method('restoreStatus')
+			->with($staticSite);
 		$this->staticSiteMapper->expects($this->never())->method('updateSettingsAndStatus');
 		$this->archiver->expects($this->never())->method('delete');
+
+		$this->expectException(ServiceException::class);
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	public function testUpdateRestoresAbortedPublicationIfArchiveCannotBeProvided(): void {
+		$this->expectValidCollectiveWithPages();
+		$updatedAt = $this->now - StaticSite::PENDING_TIMEOUT - 1;
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')
+			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING, StaticSite::PENDING_TIMEOUT + 1));
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('restoreStatus')
+			->with($this->callback(fn (StaticSite $previous): bool => $previous->getStatus() === StaticSite::STATUS_PENDING
+				&& $previous->getUpdatedAt() === $updatedAt
+				&& !$previous->isInProgress($this->now)));
 
 		$this->expectException(ServiceException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -423,7 +442,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
 		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
-		$this->staticSiteMapper->method('updateStatus')
+		$this->staticSiteMapper->method('restoreStatus')
 			->willThrowException(new NotFoundException('Static site not found'));
 
 		$this->expectException(ServiceException::class);
@@ -432,13 +451,14 @@ class StaticSiteServiceTest extends TestCase {
 
 	public function testUpdateRestoresStatusAndKeepsMessageIfPathIsTooLong(): void {
 		$this->expectValidCollectiveWithPages();
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new UnprocessableEntityException('The path is too long'));
 
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateStatus')
-			->with(7, StaticSite::STATUS_PUBLISHED);
+			->method('restoreStatus')
+			->with($staticSite);
 
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('The path is too long');

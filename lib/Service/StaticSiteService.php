@@ -131,7 +131,6 @@ class StaticSiteService {
 		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
-		$previousStatus = $staticSite->getStatus();
 		if (!$this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING)) {
 			throw new UnprocessableEntityException('Publication of static site is already in progress');
 		}
@@ -139,7 +138,7 @@ class StaticSiteService {
 		try {
 			$this->buildArchive($staticSite);
 		} catch (ServiceException $e) {
-			$this->restoreStatus($staticSite, $previousStatus);
+			$this->restoreStatus($staticSite);
 			throw $e;
 		}
 
@@ -312,9 +311,9 @@ class StaticSiteService {
 	/**
 	 * @throws DBException
 	 */
-	private function restoreStatus(StaticSite $staticSite, string $status): void {
+	private function restoreStatus(StaticSite $previous): void {
 		try {
-			$this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
+			$this->staticSiteMapper->restoreStatus($previous);
 		} catch (NotFoundException) {
 			// Static site was deleted meanwhile, nothing to restore
 		}
