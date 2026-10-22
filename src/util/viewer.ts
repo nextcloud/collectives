@@ -125,8 +125,11 @@ export function legacyCanView(mime: string): boolean {
  *
  * @param first - One of the versions
  * @param second - The other version
+ * @param page - The page, for the Viewer app to resolve attachments
+ * @param page.id - Id of the page
+ * @param page.filePath - Path of the page's file, relative to the user's files root
  */
-export async function compareVersions(first: VersionInfo, second: VersionInfo): Promise<void> {
+export async function compareVersions(first: VersionInfo, second: VersionInfo, page: { id: number, filePath: string }): Promise<void> {
 	const [earlier, later] = first.mtime <= second.mtime ? [first, second] : [second, first]
 	if (canCompare(versionNode(later))) {
 		await getViewer().compare(versionNode(later), versionNode(earlier))
@@ -137,7 +140,15 @@ export async function compareVersions(first: VersionInfo, second: VersionInfo): 
 		// The Viewer app keeps showing the first comparison. Re-open to workaround this.
 		legacy.close()
 		await new Promise((resolve) => setTimeout(resolve))
-		legacy.compare({ ...later }, { ...earlier })
+		// Text compares Markdown versions in the Viewer app since Nextcloud 35,
+		// and resolves attachments with the id and path of the later file. Before,
+		// the Viewer app shows the files as they are, and a file with an id would
+		// open as the page in an editor.
+		// This can be refactored once we only support Nextcloud 35 and above.
+		const fileInfo = typeof window.OCA?.Text?.createMarkdownContentComparison === 'function'
+			? { ...later, fileid: page.id, filename: page.filePath }
+			: { ...later }
+		legacy.compare(fileInfo, { ...earlier })
 	}
 }
 
