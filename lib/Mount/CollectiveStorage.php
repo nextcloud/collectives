@@ -68,4 +68,16 @@ class CollectiveStorage extends Wrapper implements IConstructableStorage {
 		}
 		return $storage->scanner;
 	}
+
+	public function touch(string $path, ?int $mtime = null): bool {
+		// Make sure the collective root directory exists on disk before writing.
+		// The physical directory can be missing while a filecache entry still exists.
+		$this->mkdir('');
+		return parent::touch($path, $mtime);
+	}
+
+	public function file_put_contents(string $path, mixed $data): int|float|false {
+		$this->mkdir('');
+		return parent::file_put_contents($path, $data);
+	}
 }

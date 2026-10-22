@@ -40,6 +40,8 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'collective#pageMode', 'url' => '/api/v{apiVersion}/collectives/{id}/pageMode', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#customSettings', 'url' => '/api/v{apiVersion}/collectives/{id}/customSettings', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'collective#trash', 'url' => '/api/v{apiVersion}/collectives/{id}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 
