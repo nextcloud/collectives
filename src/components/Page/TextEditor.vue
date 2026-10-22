@@ -132,6 +132,7 @@ export default {
 				}
 			}
 		})
+		subscribe('collectives:editor:save', this.onSaveRequest)
 		subscribe('collectives:attachment:insert', this.insertAttachment)
 		subscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		subscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
@@ -141,6 +142,7 @@ export default {
 		unsubscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 		unsubscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		unsubscribe('collectives:attachment:insert', this.insertAttachment)
+		unsubscribe('collectives:editor:save', this.onSaveRequest)
 		this.textEditWatcher()
 	},
 
@@ -191,6 +193,12 @@ export default {
 		// called from the parent component as well
 		focusEditor() {
 			this.editor?.focus()
+		},
+
+		onSaveRequest({ waitUntil }) {
+			if (this.isTextEdit && this.editor) {
+				waitUntil(this.saveEditor())
+			}
 		},
 
 		// called from the parent component as well
