@@ -72,11 +72,13 @@
 		<VersionCompareDialog
 			v-model:open="showCompareDialog"
 			:options="compareOptions"
-			@compare="compareVersions" />
+			@compare="onCompare" />
 	</div>
 </template>
 
 <script>
+import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { mapActions, mapState } from 'pinia'
@@ -235,7 +237,6 @@ export default {
 
 	methods: {
 		t,
-		compareVersions,
 
 		...mapActions(useRootStore, ['load', 'done']),
 		...mapActions(useVersionsStore, [
@@ -294,8 +295,22 @@ export default {
 			}
 		},
 
+		async onCompare(first, second) {
+			if ([first, second].some(({ mtime }) => this.isCurrent(mtime))) {
+				try {
+					const saves = []
+					emit('collectives:editor:save', { waitUntil: (save) => saves.push(save) })
+					await Promise.all(saves)
+				} catch (e) {
+					console.error('Failed to save the page before comparing', e)
+					showError(t('collectives', 'Could not save the current changes. The comparison shows the last saved version.'))
+				}
+			}
+			compareVersions(first, second)
+		},
+
 		onCompareVersion(version) {
-			compareVersions(
+			this.onCompare(
 				{ ...this.currentVersion, displayname: this.versionName(this.currentVersion) },
 				{ ...version, displayname: this.versionName(version) },
 			)

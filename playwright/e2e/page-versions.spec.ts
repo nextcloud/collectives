@@ -8,12 +8,13 @@ import type { CollectivePage } from '../support/fixtures/CollectivePage.ts'
 
 import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectivesTest } from '../support/fixtures/create-collectives.ts'
+import { test as editorTest } from '../support/fixtures/editor.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
 import { getToast } from '../support/helpers/toasts.ts'
 import { webdavUrl } from '../support/helpers/urls.ts'
 
 // A page with the versions v1 (initial), v2 and v3 (current)
-const test = mergeTests(createCollectivesTest, pageSidebarTest).extend<{ versionedPage: CollectivePage }>({
+const test = mergeTests(createCollectivesTest, editorTest, pageSidebarTest).extend<{ versionedPage: CollectivePage }>({
 	versionedPage: async ({ collective, user, page }, use) => {
 		const collectivePage = await collective.createPage({ title: 'Versioned page', content: 'v1', user, page })
 		for (const content of ['v2', 'v3']) {
@@ -76,6 +77,19 @@ test.describe('Page versions', () => {
 		const viewer = page.locator('.viewer__modal, #viewer[role="dialog"]')
 		await expect(viewer).toContainText('v1')
 		await expect(viewer).toContainText('v3')
+	})
+
+	test('compares unsaved changes with an older version', async ({ editor, page }) => {
+		await editor.switchMode(true)
+		await editor.getContent().getByText('v3').click()
+		await page.keyboard.press('End')
+		await page.keyboard.type(' unsaved')
+
+		await clickVersionAction(page, 2, 'Compare with current version')
+		// Second locator can be removed once we only support Nextcloud 36+
+		const viewer = page.locator('.viewer__modal, #viewer[role="dialog"]')
+		await expect(viewer).toContainText('v1')
+		await expect(viewer).toContainText('v3 unsaved')
 	})
 
 	test('compares two selected versions', async ({ page }) => {
