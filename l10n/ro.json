@@ -1,5 +1,6 @@
 { "translations": {
     "You are not allowed to share %s" : "Nu există permisiunea de partajare %s",
+    "@-mentions only" : "Doar @-mențiuni",
     "Off" : "Oprit",
     "Share link" : "Partajează link-ul",
     "Settings" : "Setări",
@@ -8,15 +9,20 @@
     "Offline" : "Offline",
     "Members" : "Membri",
     "No search results" : "Căutarea nu are rezultate",
+    "moderator" : "moderator",
     "Promote to moderator" : "Promovează la moderator",
     "Remove" : "Elimină",
+    "An error occurred while performing the search" : "A apărut o eroare la efectuarea căutării",
     "Loading…" : "Se încarcă...",
     "Add groups" : "Adaugă grupuri",
     "Add teams" : "Adaugă echipe",
     "Remove {name}" : "Elimină {name}",
+    "Add emoji" : "Adaugă un emoji",
     "Permissions" : "Permisiuni",
+    "Admins only" : "Doar administratorii",
     "Preview" : "Previzualizare",
     "Edit" : "Editează",
+    "Danger zone" : "Zonă periculoasă",
     "Choose" : "Alege",
     "Name" : "Nume",
     "Deleted" : "Șters",
@@ -102,6 +108,7 @@
     "View" : "Vizualizare",
     "Failed to revert {page} to revision {timestamp}." : "S-a eșuat restaurarea fișierului  {page} la revizia {timestamp}.",
     "Done" : "Realizat",
+    "Sort by title" : "Sortează după titlu",
     "_%n byte_::_%n bytes_" : ["%n octet","%n octeți","%n de octeți"]
 },"pluralForm" :"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));"
 }

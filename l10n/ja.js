@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "エクスポートまたは印刷",
     "Add a collective" : "コレクティブに追加",
     "Recent pages" : "最近のページ",
     "Collectives" : "Collectives",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Manage members" : "メンバーの管理",
     "Share link" : "共有リンク",
     "Manage templates" : "管理テンプレート",
-    "Export or print" : "エクスポートまたは印刷",
     "Settings" : "設定",
     "Notifications" : "通知",
     "Leave collective" : "コレクティブを去る",

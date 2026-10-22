@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Ekspordi või prindi",
     "Add a collective" : "Lisa vabaühendus",
     "Recent pages" : "Hiljutised lehed",
     "Collectives" : "Vabaühendused",
@@ -36,7 +37,6 @@ OC.L10N.register(
     "Manage members" : "Halda liikmeid",
     "Share link" : "Jaga link",
     "Manage templates" : "Halda malle",
-    "Export or print" : "Ekspordi või prindi",
     "Settings" : "Seadistused",
     "Notifications" : "Teavitused",
     "Leave collective" : "Lahku vabaühendusest",

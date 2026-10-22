@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Dışa aktar ya da yazdır",
     "Add a collective" : "Bir topluluk ekle",
     "Recent pages" : "Son sayfalar",
     "Collectives" : "Topluluklar",
@@ -36,7 +37,6 @@ OC.L10N.register(
     "Manage members" : "Üye yönetimi",
     "Share link" : "Bağlantıyı paylaş",
     "Manage templates" : "Kalıp yönetimi",
-    "Export or print" : "Dışa aktar ya da yazdır",
     "Settings" : "Ayarlar",
     "Notifications" : "Bildirimler",
     "Leave collective" : "Topluluktan ayrıl",

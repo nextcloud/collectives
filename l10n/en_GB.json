@@ -1,4 +1,5 @@
 { "translations": {
+    "Export or print" : "Export or print",
     "Add a collective" : "Add a collective",
     "Recent pages" : "Recent pages",
     "Collectives" : "Collectives",
@@ -34,7 +35,6 @@
     "Manage members" : "Manage members",
     "Share link" : "Share link",
     "Manage templates" : "Manage templates",
-    "Export or print" : "Export or print",
     "Settings" : "Settings",
     "Notifications" : "Notifications",
     "Leave collective" : "Leave collective",

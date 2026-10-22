@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Exportera eller skriv ut",
     "Add a collective" : "Lägg till ett kollektiv",
     "Recent pages" : "Senast använda sidor",
     "Collectives" : "Collectives",
@@ -36,7 +37,6 @@ OC.L10N.register(
     "Manage members" : "Hantera medlemmar",
     "Share link" : "Delningslänk",
     "Manage templates" : "Hantera mallar",
-    "Export or print" : "Exportera eller skriv ut",
     "Settings" : "Inställningar",
     "Notifications" : "Aviseringar",
     "Leave collective" : "Lämna kollektivet",

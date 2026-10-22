@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Esportatu edo inprimatu",
     "Add a collective" : "Gehitu kolektibo bat",
     "Recent pages" : "Azken orriak",
     "Collectives" : "Kolektiboak",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Ezin izan da kolektiboa utzi. {errorMessage}",
     "Manage members" : "Kideak kudeatu",
     "Share link" : "Partekatu esteka",
-    "Export or print" : "Esportatu edo inprimatu",
     "Settings" : "Ezarpenak",
     "Notifications" : "Jakinarazpenak",
     "Leave collective" : "Utzi kolektiboa",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Exportálás vagy nyomtatás",
     "Recent pages" : "Legutóbbi oldalak",
     "Collectives" : "Kollektívák",
     "Landing page" : "Érkező oldal",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Nem sikerült a kollektíva elhagyása. {errorMessage}",
     "Manage members" : "Tagok kezelése",
     "Share link" : "Megosztási hivatkozás",
-    "Export or print" : "Exportálás vagy nyomtatás",
     "Settings" : "Beállítások",
     "Notifications" : "Értesítések",
     "Leave collective" : "Kollektíva elhagyása",

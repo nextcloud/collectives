@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Izvezi ili ispiši",
     "Add a collective" : "Dodaj kolektiv",
     "Recent pages" : "Nedavne stranice",
     "Collectives" : "Kolektivi",
@@ -36,7 +37,6 @@ OC.L10N.register(
     "Manage members" : "Upravljaj članovima",
     "Share link" : "Dijeli poveznicu",
     "Manage templates" : "Upravljaj predlošcima",
-    "Export or print" : "Izvezi ili ispiši",
     "Settings" : "Postavke",
     "Notifications" : "Obavijesti",
     "Leave collective" : "Napusti kolektiv",

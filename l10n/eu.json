@@ -1,4 +1,5 @@
 { "translations": {
+    "Export or print" : "Esportatu edo inprimatu",
     "Add a collective" : "Gehitu kolektibo bat",
     "Recent pages" : "Azken orriak",
     "Collectives" : "Kolektiboak",
@@ -17,7 +18,6 @@
     "Could not leave the collective. {errorMessage}" : "Ezin izan da kolektiboa utzi. {errorMessage}",
     "Manage members" : "Kideak kudeatu",
     "Share link" : "Partekatu esteka",
-    "Export or print" : "Esportatu edo inprimatu",
     "Settings" : "Ezarpenak",
     "Notifications" : "Jakinarazpenak",
     "Leave collective" : "Utzi kolektiboa",

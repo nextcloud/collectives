@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Esporta o stampa",
     "Collectives" : "Collettivi",
     "Collectives - Page content" : "Collettivi - Contenuto della pagina",
     "Collectives - Pages" : "Collettivi - Pagine",
@@ -14,7 +15,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Impossibile abbandonare il collettivo. {errorMessage}",
     "Manage members" : "Gestisci membri",
     "Share link" : "Collegamento di condivisione",
-    "Export or print" : "Esporta o stampa",
     "Settings" : "Impostazioni",
     "Notifications" : "Notifiche",
     "Leave collective" : "Abbandona il collettivo",

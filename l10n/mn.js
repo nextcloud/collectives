@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Экспортлох эсвэл хэвлэх",
     "Add a collective" : "Коллектив нэмэх",
     "Recent pages" : "Сүүлийн хуудсууд",
     "Collectives" : "Коллективууд",
@@ -28,7 +29,6 @@ OC.L10N.register(
     "Manage members" : "Гишүүдийг удирдах",
     "Share link" : "–•–æ–ª–±–æ–æ—Å —Ö—É–≤–∞–∞–ª—Ü–∞—Ö",
     "Manage templates" : "Загваруудыг удирдах",
-    "Export or print" : "Экспортлох эсвэл хэвлэх",
     "Settings" : "–¢–æ—Ö–∏—Ä–≥–æ–æ",
     "Notifications" : "–ú—ç–¥—ç–≥–¥—ç–ª",
     "Leave collective" : "Коллективаас гарах",

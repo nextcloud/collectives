@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Εξαγωγή ή εκτύπωση",
     "Add a collective" : "Προσθήκη συλλογικότητας",
     "Recent pages" : "Πρόσφατες σελίδες",
     "Collectives" : "Συλλογικότητες",
@@ -31,7 +32,6 @@ OC.L10N.register(
     "Manage members" : "Διαχείριση μελών",
     "Share link" : "Διαμοιρασμός συνδέσμου",
     "Manage templates" : "Διαχείριση προτύπων",
-    "Export or print" : "Εξαγωγή ή εκτύπωση",
     "Settings" : "Ρυθμίσεις",
     "Notifications" : "Ειδοποιήσεις",
     "Leave collective" : "Αποχώρηση από τη συλλογικότητα",

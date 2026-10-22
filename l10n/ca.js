@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Exportar o imprimir",
     "Add a collective" : "Afegeix un col·lectiu",
     "Recent pages" : "Pàgines recents",
     "Collectives" : "Col·lectius",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "No es va poder abandonar el col·lectiu. {errorMessage}",
     "Manage members" : "Gestionar membres",
     "Share link" : "Comparteix l'enllaç",
-    "Export or print" : "Exportar o imprimir",
     "Settings" : "Paràmetres",
     "Notifications" : "Notificacions",
     "Leave collective" : "Sortir col·lectiu",

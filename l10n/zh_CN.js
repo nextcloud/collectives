@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "导出或打印",
     "Add a collective" : "添加一个知识库",
     "Recent pages" : "最近的页面",
     "Collectives" : "知识库",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "无法离开此知识库。{errorMessage}",
     "Manage members" : "管理成员",
     "Share link" : "共享链接",
-    "Export or print" : "导出或打印",
     "Settings" : "设置",
     "Notifications" : "通知",
     "Leave collective" : "离开知识库",

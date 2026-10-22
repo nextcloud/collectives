@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Izvozi ali natisni",
     "Collectives" : "Zbirke",
     "Collective pages" : "Strani zbirke",
     "In collective %1$s" : "V zbirki %1$s",
@@ -15,7 +16,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Ni mogoče zapustiti zbirke: {errorMessage}",
     "Manage members" : "Uredi člane",
     "Share link" : "Povezava za souporabo",
-    "Export or print" : "Izvozi ali natisni",
     "Settings" : "Nastavitve",
     "Notifications" : "Obvestila",
     "Leave collective" : "Zapusti zbirko",

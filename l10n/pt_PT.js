@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Exportar ou imprimir",
     "Add a collective" : "Adicionar um coletivo",
     "Recent pages" : "Páginas recentes",
     "Collectives" : "Coletivos",
@@ -31,7 +32,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Não poderia deixar o coletivo. {errorMessage}",
     "Share link" : "Partilhar ligação",
     "Manage templates" : "Gerenciar modelos",
-    "Export or print" : "Exportar ou imprimir",
     "Settings" : "Definições",
     "Notifications" : "Notificações",
     "Leave collective" : "Sair do coletivo",
