@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Easpórtáil nó priontáil",
     "Add a collective" : "Cuir comhchoiteann leis",
     "Recent pages" : "Leathanaigh le déanaí",
     "Collectives" : "Comhchoiteanna",
@@ -36,7 +37,6 @@ OC.L10N.register(
     "Manage members" : "Bainistigh baill",
     "Share link" : "Comhroinn nasc",
     "Manage templates" : "Bainistigh teimpléid",
-    "Export or print" : "Easpórtáil nó priontáil",
     "Settings" : "Socruithe",
     "Notifications" : "Fógraí",
     "Leave collective" : "Fág comhchoiteann",

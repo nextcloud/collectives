@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "خروجی یا چاپ",
     "Add a collective" : "افزودن یک مجموعه",
     "Recent pages" : "صفحات اخیر",
     "Collectives" : "مجموعه‌ها",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Manage members" : "مدیریت اعضا",
     "Share link" : "اشتراک‌گذاری پیوند",
     "Manage templates" : "مدیریت الگوها",
-    "Export or print" : "خروجی یا چاپ",
     "Settings" : "تنظیمات",
     "Notifications" : "هشدارها",
     "Leave collective" : "ترک مجموعه",

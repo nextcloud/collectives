@@ -1,4 +1,5 @@
 { "translations": {
+    "Export or print" : "Exportar ou imprimir",
     "Add a collective" : "Engadir un colectivo",
     "Recent pages" : "Páxinas recentes",
     "Collectives" : "Colectivos",
@@ -27,7 +28,6 @@
     "Manage members" : "Xestionar os membros",
     "Share link" : "Ligazón para compartir",
     "Manage templates" : "Xestionar modelos",
-    "Export or print" : "Exportar ou imprimir",
     "Settings" : "Axustes",
     "Notifications" : "Notificacións",
     "Leave collective" : "Abandonar o colectivo",

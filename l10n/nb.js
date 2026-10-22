@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Eksporter eller skriv ut",
     "Add a collective" : "Legg til et kollektiv",
     "Recent pages" : "Nylige sider",
     "Collectives" : "Kollektiver",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Kunne ikke forlate kollektivet. {errorMessage}",
     "Manage members" : "Administrer medlemmer",
     "Share link" : "Del lenke",
-    "Export or print" : "Eksporter eller skriv ut",
     "Settings" : "Innstillinger",
     "Notifications" : "Varsel",
     "Leave collective" : "Forlat kollektiv",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "چىقىرىش ياكى بېسىش",
     "Add a collective" : "كوللىكتىپ قوشۇڭ",
     "Recent pages" : "يېقىنقى بەتلەر",
     "Collectives" : "كوللىكتىپ",
@@ -27,7 +28,6 @@ OC.L10N.register(
     "Manage members" : "ئەزالارنى باشقۇرۇش",
     "Share link" : "Share link",
     "Manage templates" : "قېلىپلارنى باشقۇرۇش",
-    "Export or print" : "چىقىرىش ياكى بېسىش",
     "Settings" : "تەڭشەكلەر",
     "Notifications" : "ئۇقتۇرۇش",
     "Leave collective" : "كوللىكتىپتىن ئايرىلىش",

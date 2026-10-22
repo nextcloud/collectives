@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Eksportuoti ar spausdinti",
     "Add a collective" : "Pridėti rinkinį",
     "Recent pages" : "Paskiausi puslapiai",
     "Collectives" : "Rinkiniai",
@@ -36,7 +37,6 @@ OC.L10N.register(
     "Manage members" : "Tvarkyti narius",
     "Share link" : "Bendrinimo nuoroda",
     "Manage templates" : "Tvarkyti šablonus",
-    "Export or print" : "Eksportuoti ar spausdinti",
     "Settings" : "Nustatymai",
     "Notifications" : "Pranešimai",
     "Leave collective" : "Išeiti iš rinkinio",

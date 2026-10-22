@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "تصدير أو طباعة",
     "Add a collective" : "إضافة تجميعة",
     "Recent pages" : "الصفحات الحالية",
     "Collectives" : "تجميعات",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "تعذّرت مغادرة التجميعة {errorMessage}",
     "Manage members" : "إدارة الإعضاء",
     "Share link" : "مشاركة الرابط",
-    "Export or print" : "تصدير أو طباعة",
     "Settings" : "الإعدادات",
     "Notifications" : "الإشعارات",
     "Leave collective" : "غادر التجميعة",

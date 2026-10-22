@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Exportovat nebo vytisknout",
     "Add a collective" : "Přidat kolektiv",
     "Recent pages" : "Nedávné stránky",
     "Collectives" : "Kolektivy",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Manage members" : "Spravovat členy",
     "Share link" : "Odkaz na sdílení",
     "Manage templates" : "Spravovat šablony",
-    "Export or print" : "Exportovat nebo vytisknout",
     "Settings" : "Nastavení",
     "Notifications" : "Upozornění",
     "Leave collective" : "Opustit kolektiv",

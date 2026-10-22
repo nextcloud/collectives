@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Exportar ou imprimir",
     "Add a collective" : "Engadir un colectivo",
     "Recent pages" : "Páxinas recentes",
     "Collectives" : "Colectivos",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Manage members" : "Xestionar os membros",
     "Share link" : "Ligazón para compartir",
     "Manage templates" : "Xestionar modelos",
-    "Export or print" : "Exportar ou imprimir",
     "Settings" : "Axustes",
     "Notifications" : "Notificacións",
     "Leave collective" : "Abandonar o colectivo",

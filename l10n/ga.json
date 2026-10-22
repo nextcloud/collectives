@@ -1,4 +1,5 @@
 { "translations": {
+    "Export or print" : "Easpórtáil nó priontáil",
     "Add a collective" : "Cuir comhchoiteann leis",
     "Recent pages" : "Leathanaigh le déanaí",
     "Collectives" : "Comhchoiteanna",
@@ -34,7 +35,6 @@
     "Manage members" : "Bainistigh baill",
     "Share link" : "Comhroinn nasc",
     "Manage templates" : "Bainistigh teimpléid",
-    "Export or print" : "Easpórtáil nó priontáil",
     "Settings" : "Socruithe",
     "Notifications" : "Fógraí",
     "Leave collective" : "Fág comhchoiteann",

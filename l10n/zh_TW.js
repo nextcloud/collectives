@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "匯入或列印",
     "Add a collective" : "新增知識庫",
     "Recent pages" : "最近的頁面",
     "Collectives" : "知識庫",
@@ -36,7 +37,6 @@ OC.L10N.register(
     "Manage members" : "管理成員",
     "Share link" : "分享連結",
     "Manage templates" : "管理範本",
-    "Export or print" : "匯入或列印",
     "Settings" : "設定",
     "Notifications" : "通知",
     "Leave collective" : "離開知識庫",

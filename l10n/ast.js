@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Esportar o imprentar",
     "Recent pages" : "Páxines de recién",
     "Collectives" : "Coleutivos",
     "Landing page" : "Páxina d'acoyida",
@@ -14,7 +15,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Nun se pudo colar del coleutivu. {errorMessage}",
     "Manage members" : "Xestionar los miembros",
     "Share link" : "Compartir l'enllaz",
-    "Export or print" : "Esportar o imprentar",
     "Settings" : "Configuración",
     "Notifications" : "Avisos",
     "Leave collective" : "Colar del coleutivu",

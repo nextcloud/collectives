@@ -1,4 +1,5 @@
 { "translations": {
+    "Export or print" : "خروجی یا چاپ",
     "Add a collective" : "افزودن یک مجموعه",
     "Recent pages" : "صفحات اخیر",
     "Collectives" : "مجموعه‌ها",
@@ -30,7 +31,6 @@
     "Manage members" : "مدیریت اعضا",
     "Share link" : "اشتراک‌گذاری پیوند",
     "Manage templates" : "مدیریت الگوها",
-    "Export or print" : "خروجی یا چاپ",
     "Settings" : "تنظیمات",
     "Notifications" : "هشدارها",
     "Leave collective" : "ترک مجموعه",

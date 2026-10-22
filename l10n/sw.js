@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Hamisha au chapisha",
     "Add a collective" : "Ongeza mkusanyiko",
     "Recent pages" : "Kurasa za hivi karibuni",
     "Collectives" : "Mikusanyiko",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Manage members" : "Dhibiti wanachama",
     "Share link" : "Shirikisha kiungo",
     "Manage templates" : "Dhibiti violezo",
-    "Export or print" : "Hamisha au chapisha",
     "Settings" : "Mipangilio",
     "Notifications" : "Arifa",
     "Leave collective" : "Ondoka kwa pamoja",

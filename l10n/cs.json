@@ -1,4 +1,5 @@
 { "translations": {
+    "Export or print" : "Exportovat nebo vytisknout",
     "Add a collective" : "Přidat kolektiv",
     "Recent pages" : "Nedávné stránky",
     "Collectives" : "Kolektivy",
@@ -27,7 +28,6 @@
     "Manage members" : "Spravovat členy",
     "Share link" : "Odkaz na sdílení",
     "Manage templates" : "Spravovat šablony",
-    "Export or print" : "Exportovat nebo vytisknout",
     "Settings" : "Nastavení",
     "Notifications" : "Upozornění",
     "Leave collective" : "Opustit kolektiv",

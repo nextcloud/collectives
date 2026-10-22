@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Export or print" : "Експортиране или отпечатване",
     "Collectives" : "Колективи",
     "Collective pages" : "Колективни страници",
     "In collective %1$s" : "В колектив %1$s",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Не можа да се напусне колектива. {errorMessage}",
     "Manage members" : "Управление на членове",
     "Share link" : "Връзка за споделяне",
-    "Export or print" : "Експортиране или отпечатване",
     "Settings" : "Настройки",
     "Notifications" : "Известия",
     "Leave collective" : "Напускане на колектив",
