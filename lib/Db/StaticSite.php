@@ -1,0 +1,125 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+namespace OCA\Collectives\Db;
+
+use JsonException;
+use JsonSerializable;
+use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\AppFramework\Db\Entity;
+use UnexpectedValueException;
+
+/**
+ * Class StaticSite
+ *
+ * @method int getId()
+ * @method void setId(int $value)
+ * @method int getCollectiveId()
+ * @method void setCollectiveId(int $value)
+ * @method string getStaticSiteId()
+ * @method void setStaticSiteId(string $value)
+ * @method string getTitle()
+ * @method void setTitle(string $value)
+ * @method string getSlug()
+ * @method void setSlug(string $value)
+ * @method string getSelectedPages()
+ * @method void setSelectedPages(string $value)
+ * @method string|null getPublishedUrl()
+ * @method void setPublishedUrl(?string $value)
+ * @method string getStatus()
+ * @method void setStatus(string $value)
+ * @method string getCreatedBy()
+ * @method void setCreatedBy(string $value)
+ * @method int getCreatedAt()
+ * @method void setCreatedAt(int $value)
+ * @method int getUpdatedAt()
+ * @method void setUpdatedAt(int $value)
+ */
+class StaticSite extends Entity implements JsonSerializable {
+	public const STATUS_PENDING = 'pending';
+	public const STATUS_PROVIDED = 'provided';
+	public const STATUS_PUBLISHED = 'published';
+	// The publish service didn't build the static site, e.g. it wasn't reachable or rejected it.
+	// A failed archive build keeps the previous status instead.
+	public const STATUS_FAILED = 'failed';
+
+	public const IN_PROGRESS_STATUSES = [
+		self::STATUS_PENDING,
+		self::STATUS_PROVIDED,
+	];
+
+	// Seconds after which an in-progress publication counts as aborted, e.g. after a PHP timeout
+	// or an unreachable/crashed publish service that never sends its status callback
+	public const PENDING_TIMEOUT = 15 * 60;
+
+	protected ?int $collectiveId = null;
+	protected ?string $staticSiteId = null;
+	protected ?string $title = null;
+	protected ?string $slug = null;
+	protected ?string $selectedPages = null;
+	protected ?string $publishedUrl = null;
+	protected string $status = self::STATUS_PENDING;
+	protected ?string $createdBy = null;
+	protected ?int $createdAt = null;
+	protected ?int $updatedAt = null;
+
+	public function isInProgress(int $now): bool {
+		return in_array($this->status, self::IN_PROGRESS_STATUSES, true)
+			&& $this->updatedAt >= $now - self::PENDING_TIMEOUT;
+	}
+
+	/**
+	 * @throws UnexpectedValueException Stored page selection is corrupted
+	 */
+	public function getSelectedPageIds(): array {
+		try {
+			$pageIds = json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+		} catch (JsonException $e) {
+			throw new UnexpectedValueException('Invalid page selection stored for static site ' . $this->id, 0, $e);
+		}
+		if (!is_array($pageIds)) {
+			throw new UnexpectedValueException('Invalid page selection stored for static site ' . $this->id);
+		}
+		return $pageIds;
+	}
+
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	public function setSelectedPageIds(array $pageIds): void {
+		$this->setSelectedPages(self::encodePageIds($pageIds));
+	}
+
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	public static function encodePageIds(array $pageIds): string {
+		try {
+			return json_encode(array_values($pageIds), JSON_THROW_ON_ERROR);
+		} catch (JsonException $e) {
+			throw new UnprocessableEntityException('Invalid page IDs: ' . $e->getMessage(), 0, $e);
+		}
+	}
+
+	public function jsonSerialize(): array {
+		return [
+			'id' => $this->id,
+			'collectiveId' => $this->collectiveId,
+			'staticSiteId' => $this->staticSiteId,
+			'title' => $this->title,
+			'slug' => $this->slug,
+			'selectedPageIds' => $this->getSelectedPageIds(),
+			'publishedUrl' => $this->publishedUrl,
+			'status' => $this->status,
+			'createdBy' => $this->createdBy,
+			'createdAt' => $this->createdAt,
+			'updatedAt' => $this->updatedAt,
+		];
+	}
+}
