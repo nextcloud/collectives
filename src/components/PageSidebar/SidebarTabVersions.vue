@@ -94,6 +94,7 @@ import VersionEntry from './VersionEntry.vue'
 import VersionLabelDialog from './VersionLabelDialog.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
 import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { useVersionsStore } from '../../stores/versions.js'
 import { compareVersions } from '../../util/viewer.ts'
@@ -144,6 +145,7 @@ export default {
 	computed: {
 		...mapState(useRootStore, ['loading']),
 		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
+		...mapState(usePagesStore, ['currentPageFilePath']),
 		...mapState(useVersionsStore, [
 			'currentVersion',
 			'selectedVersion',
@@ -306,7 +308,7 @@ export default {
 					showError(t('collectives', 'Could not save the current changes. The comparison shows the last saved version.'))
 				}
 			}
-			compareVersions(first, second)
+			compareVersions(first, second, { id: this.pageId, filePath: `/${this.currentPageFilePath}` })
 		},
 
 		onCompareVersion(version) {

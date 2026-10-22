@@ -10,6 +10,7 @@ import { expect, mergeTests } from '@playwright/test'
 import { test as createCollectivesTest } from '../support/fixtures/create-collectives.ts'
 import { test as editorTest } from '../support/fixtures/editor.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
+import { hasServerVersion } from '../support/helpers/server.ts'
 import { getToast } from '../support/helpers/toasts.ts'
 import { webdavUrl } from '../support/helpers/urls.ts'
 
@@ -26,26 +27,26 @@ const test = mergeTests(createCollectivesTest, editorTest, pageSidebarTest).exte
 	},
 })
 
+/**
+ * Click an action of the version at the index, the current version being first
+ *
+ * @param page - The Playwright page
+ * @param index - Index in the versions list
+ * @param action - Name of the action
+ */
+async function clickVersionAction(page: Page, index: number, action: string) {
+	await page.locator('.version-list .list-item')
+		.nth(index)
+		.getByRole('button', { name: /^Actions for versions/ })
+		.click()
+	await page.getByRole('menuitem', { name: action }).click()
+}
+
 test.describe('Page versions', () => {
 	test.beforeEach(async ({ versionedPage, pageSidebar }) => {
 		await versionedPage.open()
 		await pageSidebar.openSidebarTab('Versions')
 	})
-
-	/**
-	 * Click an action of the version at the index, the current version being first
-	 *
-	 * @param page - The Playwright page
-	 * @param index - Index in the versions list
-	 * @param action - Name of the action
-	 */
-	async function clickVersionAction(page: Page, index: number, action: string) {
-		await page.locator('.version-list .list-item')
-			.nth(index)
-			.getByRole('button', { name: /^Actions for versions/ })
-			.click()
-		await page.getByRole('menuitem', { name: action }).click()
-	}
 
 	test('lists and opens versions', async ({ page, pageSidebar }) => {
 		const versions = page.locator('.version-list .list-item')
@@ -137,5 +138,42 @@ test.describe('Page versions', () => {
 		await clickVersionAction(page, 1, 'Delete version')
 
 		await expect(page.locator('.version-list .list-item')).toHaveCount(2)
+	})
+})
+
+// A page with an image in its versions v1 and v2 (current)
+const attachmentsTest = test.extend<{ pageWithImage: CollectivePage }>({
+	pageWithImage: async ({ collective, user, page }, use) => {
+		const collectivePage = await collective.createPage({ title: 'Page with image', user, page })
+		const src = await collectivePage.uploadImage({ filename: 'test.png', user, page })
+		for (const content of [`v1\n\n![test](${src})\n`, `v2\n\n![test](${src})\n`]) {
+			// Changes within the same second don't create a new version
+			await page.waitForTimeout(1100)
+			await collectivePage.setContent({ content, user, page })
+		}
+		await use(collectivePage)
+	},
+})
+
+attachmentsTest.describe('Page versions with attachments', () => {
+	attachmentsTest('shows the images of both versions compared', async ({ pageWithImage, pageSidebar, page }) => {
+		// Before Nextcloud 35, the Viewer app shows both versions as they are, without their images
+		attachmentsTest.skip(hasServerVersion(33, 34), 'Text compares versions only since Nextcloud 35')
+		await pageWithImage.open()
+		await pageSidebar.openSidebarTab('Versions')
+		await clickVersionAction(page, 1, 'Compare with current version')
+
+		// Second locator can be removed once we only support Nextcloud 36+
+		const viewer = page.locator('.viewer__modal, #viewer[role="dialog"]')
+		await expect(viewer).toContainText('v1')
+		await expect(viewer).toContainText('v2')
+		// One image on each side. Text shows an icon instead of an image it
+		// cannot load. The Viewer app on Nextcloud 35 and older keeps a hidden
+		// pane with the page as well.
+		const images = viewer.locator('img.image__main').filter({ visible: true })
+		await expect(images).toHaveCount(2)
+		for (const image of await images.all()) {
+			await expect.poll(() => image.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0)
+		}
 	})
 })

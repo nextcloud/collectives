@@ -52,7 +52,7 @@ describe('compareVersions', () => {
 		vi.mocked(canCompare).mockReturnValue(true)
 		vi.mocked(getViewer).mockReturnValue({ compare } as never)
 
-		await compareVersions(current, version)
+		await compareVersions(current, version, { id: 7, filePath: '/Collectives/Garden/Page.md' })
 
 		expect(compare).toHaveBeenCalledWith(
 			expect.objectContaining({ source: current.source }),
@@ -66,7 +66,7 @@ describe('compareVersions', () => {
 		vi.mocked(getViewer).mockReturnValue({ compare } as never)
 		const source = 'https://cloud.example/remote.php/dav/files/alice/Collectives/Garden/My%20page%20%231.md'
 
-		await compareVersions({ ...current, source }, version)
+		await compareVersions({ ...current, source }, version, { id: 7, filePath: '/Collectives/Garden/Page.md' })
 
 		expect(compare).toHaveBeenCalledWith(
 			expect.objectContaining({ source: 'https://cloud.example/remote.php/dav/files/alice/Collectives/Garden/My page #1.md' }),
@@ -79,7 +79,7 @@ describe('compareVersions', () => {
 		vi.mocked(canCompare).mockReturnValue(true)
 		vi.mocked(getViewer).mockReturnValue({ compare } as never)
 
-		await compareVersions(version, current)
+		await compareVersions(version, current, { id: 7, filePath: '/Collectives/Garden/Page.md' })
 
 		expect(compare).toHaveBeenCalledWith(
 			expect.objectContaining({ source: current.source }),
@@ -93,9 +93,26 @@ describe('compareVersions', () => {
 		vi.mocked(canCompare).mockReturnValue(false)
 		vi.stubGlobal('window', { OCA: { Viewer: { registerHandler: vi.fn(), close, compare } } })
 
-		await compareVersions(current, version)
+		await compareVersions(version, current, { id: 7, filePath: '/Collectives/Garden/Page.md' })
 
 		expect(getViewer).not.toHaveBeenCalled()
 		expect(compare).toHaveBeenCalledWith(current, version)
+	})
+
+	it('passes the page to the Viewer app when Text compares the versions', async () => {
+		const close = vi.fn()
+		const compare = vi.fn()
+		vi.mocked(canCompare).mockReturnValue(false)
+		vi.stubGlobal('window', {
+			OCA: {
+				Text: { createMarkdownContentComparison: vi.fn() },
+				Viewer: { registerHandler: vi.fn(), close, compare },
+			},
+		})
+
+		await compareVersions(current, version, { id: 7, filePath: '/Collectives/Garden/Page.md' })
+
+		// Text resolves attachments with the id and path of the later file
+		expect(compare).toHaveBeenCalledWith({ ...current, fileid: 7, filename: '/Collectives/Garden/Page.md' }, version)
 	})
 })
