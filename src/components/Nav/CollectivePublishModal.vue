@@ -169,30 +169,26 @@ export default {
 
 	async created() {
 		// The cached page list may be outdated or not loaded yet
-		try {
-			await this.getPagesForCollective(this.collective, false)
-		} catch (e) {
-			displayError('Could not fetch collective pages')(e)
-		}
-		// Preselect the whole collective (all pages) when the modal is opened
-		this.selectedPageIds = new Set(this.allPageIds)
-		this.loadingPages = false
-	},
+		await Promise.all([
+			this.getPagesForCollective(this.collective, false)
+				.catch(displayError('Could not fetch collective pages')),
+			this.getStaticSites(this.collective.id)
+				.catch(displayError('Could not load static sites for collective')),
+		])
 
-	created() {
-		// Preselect the whole collective (all pages) when the modal is opened
-		this.selectedPageIds = new Set(this.allPageIds)
-		this.getStaticSites(this.collective.id)
-			.then(() => {
-				// Prefill with the settings of an already published static site, if any
-				const staticSite = this.staticSiteForCollective(this.collective.id)
-				if (staticSite) {
-					this.title = staticSite.title
-					this.slug = staticSite.slug
-					this.selectedPageIds = new Set(staticSite.selectedPageIds)
-				}
-			})
-			.catch(displayError('Could not load static sites for collective'))
+		// Prefill with the settings of an already published static site, if any,
+		// otherwise preselect the whole collective (all pages)
+		const staticSite = this.staticSiteForCollective(this.collective.id)
+		if (staticSite) {
+			this.title = staticSite.title
+			this.slug = staticSite.slug
+			// Pages may have been deleted since the last publication
+			const pageIds = new Set(this.allPageIds)
+			this.selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+		} else {
+			this.selectedPageIds = new Set(this.allPageIds)
+		}
+		this.loadingPages = false
 	},
 
 	methods: {

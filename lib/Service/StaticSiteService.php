@@ -248,6 +248,7 @@ class StaticSiteService {
 	 * @throws ServiceException
 	 */
 	private function buildArchive(StaticSite $staticSite): void {
+		// TODO(Publish): Consider building the archive in a queued background job once the publish service reports the build result via callback
 		try {
 			$files = $this->contentCollector->collect($staticSite->getCollectiveId());
 			$this->validateSize($files);
