@@ -20,15 +20,18 @@ use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\Folder;
+use OCP\IDateTimeZone;
 use OCP\IL10N;
 use OCP\ISession;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager as IShareManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class CollectiveShareServiceTest extends TestCase {
@@ -65,6 +68,8 @@ class CollectiveShareServiceTest extends TestCase {
 		$collectiveMapper = $this->createMock(CollectiveMapper::class);
 		$pageService = $this->createMock(PageService::class);
 		$session = $this->createMock(ISession::class);
+		$dateTimeZone = $this->createMock(IDateTimeZone::class);
+		$dateTimeZone->method('getTimeZone')->willReturn(new \DateTimeZone('Europe/Berlin'));
 
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
@@ -73,7 +78,8 @@ class CollectiveShareServiceTest extends TestCase {
 			$collectiveMapper,
 			$pageService,
 			$l10n,
-			$session
+			$session,
+			$dateTimeZone,
 		);
 
 		$this->collective = new Collective();
@@ -255,6 +261,119 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn('passwordhash');
 		$collectiveShare = $this->service->updateShare($this->userId, $this->collective, null, 'token', false, 'password');
 		self::assertEquals('passwordhash', $collectiveShare->getPassword());
+	}
+
+	private function prepareUpdateShare(?\DateTime $currentExpirationDate = null): Share&MockObject {
+		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setCollectiveId($this->collectiveId);
+		$collectiveShare->setOwner($this->userId);
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
+			->willReturn($collectiveShare);
+
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folderShare->method('getExpirationDate')
+			->willReturn($currentExpirationDate);
+		$this->shareManager->method('getShareByToken')
+			->willReturn($folderShare);
+
+		return $folderShare;
+	}
+
+	public function testUpdateShareSetsExpirationDate(): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::once())
+			->method('setExpirationDate')
+			->with(self::callback(static fn (?\DateTime $date): bool => $date?->format('Y-m-d H:i:s') === '2026-12-24 00:00:00'
+			&& $date->getTimezone()->getName() === 'Europe/Berlin'));
+		$this->shareManager->expects(self::once())
+			->method('updateShare');
+
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, '2026-12-24');
+	}
+
+	public function testUpdateShareRemovesExpirationDate(): void {
+		$folderShare = $this->prepareUpdateShare(new \DateTime('2026-12-24 23:59:59'));
+		$folderShare->expects(self::once())
+			->method('setExpirationDate')
+			->with(null);
+
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, '');
+	}
+
+	public function testUpdateShareKeepsExpirationDate(): void {
+		$folderShare = $this->prepareUpdateShare(new \DateTime('2026-12-24 23:59:59'));
+		$folderShare->expects(self::never())
+			->method('setExpirationDate');
+
+		$share = $this->service->updateShare($this->userId, $this->collective, null, 'token', false);
+		self::assertEquals('2026-12-24', $share->jsonSerialize()['expirationDate']);
+	}
+
+	public function testUpdateShareUnchangedExpirationDate(): void {
+		$folderShare = $this->prepareUpdateShare(new \DateTime('2026-12-24 23:59:59'));
+		$folderShare->expects(self::never())
+			->method('setExpirationDate');
+
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, '2026-12-24');
+	}
+
+	public static function invalidExpirationDateProvider(): array {
+		return [
+			['tomorrow'],
+			['24.12.2026'],
+			['2026-12'],
+			['2026-12-24 12:00'],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidExpirationDateProvider
+	 */
+	public function testUpdateShareInvalidExpirationDate(string $expirationDate): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::never())
+			->method('setExpirationDate');
+		$this->shareManager->expects(self::never())
+			->method('updateShare');
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('Invalid date. Format must be YYYY-MM-DD');
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, $expirationDate);
+	}
+
+	public function testUpdateShareExpirationDateEnforced(): void {
+		$this->prepareUpdateShare(new \DateTime('2026-12-24 23:59:59'));
+		$this->shareManager->method('updateShare')
+			->willThrowException(new \InvalidArgumentException('Expiration date is enforced'));
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('Expiration date is enforced');
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, '');
+	}
+
+	public function testCreateShareReturnsExpirationDate(): void {
+		$this->prepareFolderShare();
+
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folderShare->method('getNode')
+			->willReturn($this->collectiveFolder);
+		$folderShare->method('getToken')
+			->willReturn('token');
+		$folderShare->method('getExpirationDate')
+			->willReturn(new \DateTime('2026-12-24 23:59:59'));
+		$this->shareManager->method('createShare')
+			->willReturn($folderShare);
+
+		$collectiveShare = new CollectiveShare();
+		$this->collectiveShareMapper->method('create')
+			->willReturn($collectiveShare);
+
+		$share = $this->service->createShare($this->userId, $this->collective, null);
+		self::assertEquals('2026-12-24', $share->jsonSerialize()['expirationDate']);
 	}
 
 	public function testIsShareNotAuthenticated(): void {

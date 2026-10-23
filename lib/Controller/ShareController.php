@@ -17,6 +17,7 @@ use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
@@ -89,16 +90,18 @@ class ShareController extends OCSController {
 	 * @param string $token Token of the share
 	 * @param bool $editable Whether share has edit permissions
 	 * @param string|null $password Optional password for the share
+	 * @param string|null $expirationDate Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, page or share not found
+	 * @throws OCSBadRequestException Invalid expiration date
 	 *
 	 * 200: Share updated
 	 */
 	#[NoAdminRequired]
-	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, ?string $password = null): DataResponse {
-		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password);
+	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null): DataResponse {
+		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password, $expirationDate);
 	}
 
 	/**
@@ -152,24 +155,26 @@ class ShareController extends OCSController {
 	 * @param int $pageId ID of the page
 	 * @param string $token Token of the share
 	 * @param bool $editable Whether share has edit permissions
-	 * @param ?string $password Optional password for the share
+	 * @param string|null $password Optional password for the share
+	 * @param string|null $expirationDate Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, page or share not found
+	 * @throws OCSBadRequestException Invalid expiration date
 	 *
 	 * 200: Share updated
 	 */
 	#[NoAdminRequired]
-	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null): DataResponse {
-		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): CollectiveShare {
+	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null): DataResponse {
+		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password, $expirationDate): CollectiveShare {
 			$uid = $this->getUid();
 			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $uid);
 			}
-			return $this->shareService->updateShare($uid, $collective, $pageInfo, $token, $editable, $password);
+			return $this->shareService->updateShare($uid, $collective, $pageInfo, $token, $editable, $password, $expirationDate);
 		}, $this->logger);
 		return new DataResponse($share);
 	}
