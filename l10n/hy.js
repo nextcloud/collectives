@@ -22,7 +22,6 @@ OC.L10N.register(
     "Unshare" : "Չկիսվել",
     "Upload" : "Բեռնել",
     "No other versions available" : "Այլ տարբերակներ չկան",
-    "Earlier" : "ավելի վաղ",
     "Versions" : "Տարբերակներ",
     "Done" : "Done"
 },

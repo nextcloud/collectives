@@ -47,8 +47,6 @@ OC.L10N.register(
     "Upload" : "Sili",
     "Uploading" : "Tuzzna n ifuyla",
     "External shares" : "Beṭṭu n uzγaray",
-    "Later" : "Ticki",
-    "Retry" : "Ɛreḍ tikkelt-nniḍen",
     "Current version" : "Lqem amiran",
     "You" : "Kemm·čč",
     "Attachments" : "Ticeqqufin",
