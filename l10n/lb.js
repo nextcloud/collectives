@@ -34,8 +34,6 @@ OC.L10N.register(
     "Upload" : "Eroplueden",
     "Uploading" : "Lued erop",
     "No other versions available" : "Keng aner Versiounen disponibel",
-    "Later" : "Spéider",
-    "Retry" : "Widderhuelen",
     "Sharing" : "Gedeelt",
     "Versions" : "Versiounen",
     "Link copied" : "Link kopéiert",
