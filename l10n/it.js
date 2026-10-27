@@ -33,6 +33,7 @@ OC.L10N.register(
     "Loading…" : "Caricamento…",
     "Add groups" : "Aggiungi gruppi",
     "Add teams" : "Aggiungi teams",
+    "Remove {name}" : "Rimuovi {name}",
     "Select a collective" : "Seleziona un collettivo",
     "Change emoji" : "Cambia emoji",
     "Add emoji" : "Aggiungi emoji",

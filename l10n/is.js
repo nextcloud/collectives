@@ -12,6 +12,7 @@ OC.L10N.register(
     "Loading…" : "Hleð inn…",
     "Add groups" : "Bæta við hópum",
     "Add teams" : "Bæta við teymum",
+    "Remove {name}" : "Fjarlægja {name}",
     "Add emoji" : "Bæta við tjáningartákni",
     "Permissions" : "Heimildir",
     "Preview" : "Forskoðun",

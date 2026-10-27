@@ -12,6 +12,7 @@ OC.L10N.register(
     "No search results" : "No hay resultados de búsqueda",
     "Remove" : "Borrar",
     "Loading…" : "Cargando...",
+    "Remove {name}" : "Quitar {name}",
     "Permissions" : "Permisos",
     "Preview" : "Previsualizar",
     "Edit" : "Editar",
