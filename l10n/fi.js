@@ -15,6 +15,7 @@ OC.L10N.register(
     "Loading…" : "Ladataan…",
     "Add groups" : "Lisää ryhmiä",
     "Add teams" : "Lisää tiimejä",
+    "Remove {name}" : "Poista {name}",
     "Add emoji" : "Lisää emoji",
     "Permissions" : "Oikeudet",
     "Admins only" : "Vain ylläpitäjät",

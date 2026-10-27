@@ -22,6 +22,7 @@ OC.L10N.register(
     "Go back" : "Regresar",
     "Delete" : "Eliminar",
     "Rename" : "Renombrar",
+    "Templates" : "Plantillas",
     "Remove from favorites" : "Quitar de favoritos",
     "Add to favorites" : "Añadir a favoritos",
     "Move or copy" : "Mover o Copiar",
