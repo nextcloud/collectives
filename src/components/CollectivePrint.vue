@@ -38,7 +38,14 @@
 				</ul>
 			</template>
 		</NcEmptyContent>
-		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
+		<NcEmptyContent
+			v-if="!loading && printPages.length === 0"
+			:name="t('collectives', 'No pages to export or print')">
+			<template #icon>
+				<DownloadIcon />
+			</template>
+		</NcEmptyContent>
+		<div v-for="page in printPages" v-show="!loading" :key="page.id">
 			<PagePrint
 				:page
 				@loading="waitingFor.push(page.id)"
@@ -59,6 +66,7 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
 import displayError from '../util/displayError.js'
+import { filterPrintPages } from '../util/printPages.ts'
 
 export default {
 	name: 'CollectivePrint',
@@ -91,7 +99,15 @@ export default {
 	computed: {
 		...mapState(useRootStore, ['isPublic', 'shareTokenParam']),
 		...mapState(useCollectivesStore, ['currentCollective']),
-		...mapState(usePagesStore, ['pagesTreeWalk']),
+		...mapState(usePagesStore, ['pagesTreeWalk', 'rootPage']),
+
+		/**
+		 * Pages to print: all pages, or only the ones selected by
+		 * the `pages` or `exclude` query parameter
+		 */
+		printPages() {
+			return filterPrintPages(this.pagesTreeWalk(this.rootPage?.parentId ?? 0), this.$route.query)
+		},
 
 		loadingCount() {
 			return this.loadPages.count + this.loadImages.count
@@ -121,7 +137,12 @@ export default {
 	async mounted() {
 		await this.getPages()
 			.catch(displayError('Could not fetch pages'))
-		this.loadPages.total = this.pagesTreeWalk().length
+		if (this.printPages.length === 0) {
+			// No page will report being ready
+			this.loading = false
+			return
+		}
+		this.loadPages.total = this.printPages.length
 	},
 
 	methods: {
