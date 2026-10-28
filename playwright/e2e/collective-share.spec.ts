@@ -97,7 +97,7 @@ test.describe('Collective share password protection', () => {
 		await expect(settingsPanel.getByRole('checkbox', { name: 'Set password' })).not.toBeChecked()
 
 		// Enable password protection
-		await settingsPanel.locator('.checkbox-radio-switch__content').click()
+		await settingsPanel.locator('.checkbox-radio-switch__content').filter({ hasText: 'Set password' }).click()
 		await settingsPanel.getByRole('textbox', { name: 'Password' }).fill('test-password')
 		await settingsPanel.getByRole('button', { name: 'Update Share' }).click()
 		await expect(settingsPanel).not.toBeVisible()
@@ -124,7 +124,7 @@ test.describe('Collective share password protection', () => {
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
 		await expect(settingsPanel.getByRole('checkbox', { name: 'Set password' })).toBeChecked()
 
-		await settingsPanel.locator('.checkbox-radio-switch__content').click()
+		await settingsPanel.locator('.checkbox-radio-switch__content').filter({ hasText: 'Set password' }).click()
 		await settingsPanel.getByRole('button', { name: 'Update Share' }).click()
 		await expect(settingsPanel).not.toBeVisible()
 
@@ -143,5 +143,30 @@ test.describe('Collective share password protection', () => {
 
 		const updatedShare = await share.updateData()
 		expect(updatedShare.hasPassword).toBe(true)
+	})
+
+	test('Set and remove expiration date via advanced settings', async ({ page, collective, pageSidebar }) => {
+		const share = await collective.createShare({ page })
+		await collective.openCollective()
+
+		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
+
+		const date = new Date()
+		date.setDate(date.getDate() + 3)
+		const expected = date.toLocaleDateString('sv') // YYYY-MM-DD
+
+		await settingsPanel.locator('.checkbox-radio-switch__content').filter({ hasText: 'Set expiration date' }).click()
+		await settingsPanel.getByLabel('Expiration date', { exact: true }).fill(expected)
+		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
+		await expect(settingsPanel).not.toBeVisible()
+		expect((await share.updateData()).expirationDate).toBe(expected)
+
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await settingsPanel.locator('.checkbox-radio-switch__content').filter({ hasText: 'Set expiration date' }).click()
+		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
+		await expect(settingsPanel).not.toBeVisible()
+		expect((await share.updateData()).expirationDate).toBeNull()
 	})
 })

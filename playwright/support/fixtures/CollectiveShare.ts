@@ -15,6 +15,7 @@ export type CollectiveShareData = {
 	owner: string
 	editable: boolean
 	hasPassword: boolean
+	expirationDate: string | null
 }
 
 export class CollectiveShare {
