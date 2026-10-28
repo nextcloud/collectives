@@ -32,8 +32,17 @@ test.describe('Collective share', () => {
 		await expect(sharePage.locator('#header .header-title')).toContainText(collective.data.name)
 		await expect(sharePage.locator('.collective-selector')).toHaveCount(0)
 		// Older Nextcloud versions expose the header action link with role "button"
-		await expect(sharePage.locator('#header a', { hasText: 'Export or print' }))
-			.toHaveAttribute('href', new RegExp(`/p/${shares[0].data.token}/print/`))
+		const exportLink = sharePage.locator('#header a', { hasText: 'Export or print' })
+		await expect(exportLink).toHaveAttribute('href', new RegExp(`/p/${shares[0].data.token}/.*\\?export=1`))
+
+		// The header action opens the export dialog and drops `export` from the URL
+		await sharePage.goto(await exportLink.getAttribute('href') as string)
+		const exportDialog = sharePage.getByRole('dialog', { name: 'Export or print' })
+		await expect(exportDialog).toBeVisible()
+		await expect(exportDialog.getByRole('checkbox', { name: 'Select all pages' })).toBeChecked()
+		await expect(sharePage).not.toHaveURL(/export=/)
+		await exportDialog.getByRole('button', { name: 'Close' }).click()
+		await expect(exportDialog).toBeHidden()
 
 		// Allows to filter pages
 		await expect(sharePageList.el).toBeVisible()
