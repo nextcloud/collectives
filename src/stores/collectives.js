@@ -27,6 +27,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		templatesCollectiveId: undefined,
 		membersCollectiveId: undefined,
 		settingsCollectiveId: undefined,
+		printCollectiveId: undefined,
 	}),
 
 	getters: {
@@ -173,6 +174,12 @@ export const useCollectivesStore = defineStore('collectives', {
 				: null
 		},
 
+		printCollective(state) {
+			return state.printCollectiveId
+				? state.collectives.find((c) => c.id === state.printCollectiveId)
+				: null
+		},
+
 		isFavoritePage: (state) => (id, pageId) => {
 			return state.collectives.find((c) => c.id === id).userFavoritePages.includes(pageId)
 		},
@@ -189,6 +196,10 @@ export const useCollectivesStore = defineStore('collectives', {
 
 		setSettingsCollectiveId(id) {
 			this.settingsCollectiveId = id
+		},
+
+		setPrintCollectiveId(id) {
+			this.printCollectiveId = id
 		},
 
 		setLastVisitedCollectiveId(id) {
