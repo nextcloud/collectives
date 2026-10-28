@@ -10,6 +10,7 @@ import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import * as api from '../apis/collectives/index.js'
 import { INDEX_PAGE, PAGE_SUFFIX, pageModes, TEMPLATE_PATH } from '../constants.js'
+import { buildPageTree, findRootPage } from '../util/pageTree.ts'
 import * as sortOrders from '../util/sortOrders.js'
 import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 import { useCollectivesStore } from './collectives.js'
@@ -124,9 +125,7 @@ export const usePagesStore = defineStore('pages', {
 
 		rootPage(state) {
 			const collectivesStore = useCollectivesStore()
-			return collectivesStore.currentCollectiveIsPageShare
-				? state.pages[0]
-				: state.pages.find((p) => (p.parentId === 0))
+			return findRootPage(state.pages, collectivesStore.currentCollectiveIsPageShare)
 		},
 
 		isSinglePageShare(state) {
@@ -325,6 +324,18 @@ export const usePagesStore = defineStore('pages', {
 
 		visibleSubpages: (state) => (parentId) => {
 			return state.sortedSubpages(parentId)
+		},
+
+		/**
+		 * Page tree of a collective below `parentId`
+		 *
+		 * @param {object} state Store state
+		 * @return {(collective: import('../types.ts').Collective, parentId?: number) => import('../util/pageTree.ts').PageTreeNode<import('../types.ts').PageInfo>[]}
+		 */
+		pageTreeForCollective(state) {
+			return (collective, parentId = 0) => {
+				return buildPageTree(state.pagesForCollective(collective), parentId, state.sortOrder)
+			}
 		},
 
 		pagesTreeWalkForCollective(state) {
