@@ -35,16 +35,15 @@
 			</template>
 			{{ t('collectives', 'Manage templates') }}
 		</NcActionButton>
-		<NcActionLink
+		<NcActionButton
 			closeAfterClick
-			:href="printLink"
-			:class="{ 'action-link--disabled': !networkOnline }"
-			target="_blank">
+			:disabled="!networkOnline"
+			@click="openPrintDialog()">
 			{{ t('collectives', 'Export or print') }}
 			<template #icon>
 				<DownloadIcon :size="20" />
 			</template>
-		</NcActionLink>
+		</NcActionButton>
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
 			closeAfterClick
@@ -116,7 +115,6 @@ import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-import NcActionLink from '@nextcloud/vue/components/NcActionLink'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
@@ -148,7 +146,6 @@ export default {
 		DownloadIcon,
 		LogoutIcon,
 		NcActionButton,
-		NcActionLink,
 		NcActionSeparator,
 		OpenInNewIcon,
 		PageTemplateIcon,
@@ -184,7 +181,6 @@ export default {
 		...mapState(useRootStore, ['isPublic']),
 		...mapState(useCollectivesStore, [
 			'collectiveCanShare',
-			'collectivePrintPath',
 			'isCollectiveAdmin',
 		]),
 
@@ -192,10 +188,6 @@ export default {
 
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
-		},
-
-		printLink() {
-			return generateUrl(`/apps/collectives${this.collectivePrintPath(this.collective)}`)
 		},
 
 		notifyOptions() {
@@ -234,6 +226,7 @@ export default {
 			'setMembersCollectiveId',
 			'setSettingsCollectiveId',
 			'setCollectiveUserSettingNotify',
+			'setPrintCollectiveId',
 			'setTemplatesCollectiveId',
 			'unmarkCollectiveDeleted',
 		]),
@@ -250,6 +243,10 @@ export default {
 
 		openCollectiveMembers() {
 			this.setMembersCollectiveId(this.collective.id)
+		},
+
+		openPrintDialog() {
+			this.setPrintCollectiveId(this.collective.id)
 		},
 
 		openCollectiveSettings() {
@@ -291,10 +288,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped lang="scss">
-.action-link--disabled {
-	pointer-events: none;
-	opacity: 0.5;
-}
-</style>
