@@ -1,0 +1,329 @@
+<!--
+  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<template>
+	<NcModal
+		size="normal"
+		class="collective-publish-modal"
+		@close="onClose">
+		<div class="modal-publish" @keydown.esc="onEscape">
+			<h2 class="modal-publish__name">
+				{{ t('collectives', 'Publish website for collective {name}', { name: collective.name }) }}
+			</h2>
+			<NcNoteCard v-if="publishedUrl" type="success" class="modal-publish__published">
+				{{ t('collectives', 'Currently published at:') }}
+				<a :href="publishedUrl" target="_blank" rel="noopener noreferrer">{{ publishedUrl }}</a>
+			</NcNoteCard>
+			<div class="modal-publish__fields">
+				<NcTextField
+					v-model="title"
+					:label="t('collectives', 'Website title')"
+					:error="!isTitleValid"
+					:maxlength="titleMaxLength" />
+				<!-- TRANSLATORS The web address is the part of the website URL that identifies the published collective -->
+				<NcTextField
+					v-model="slug"
+					:label="t('collectives', 'Web address')"
+					:error="!isSlugValid"
+					:helperText="t('collectives', 'Lowercase letters, numbers and single hyphens')"
+					:maxlength="slugMaxLength" />
+			</div>
+			<NcLoadingIcon v-if="loadingPages" class="modal-publish__loading" :size="32" />
+			<ul v-else class="modal-publish__tree">
+				<li v-if="rootPage" class="modal-publish__collective-row">
+					<PublishTreeRow
+						:selected="isRootPageSelected"
+						@update:selected="onToggleSelect(rootPage.id)">
+						<template #icon>
+							<span v-if="collective.emoji">{{ collective.emoji }}</span>
+							<PageTemplateIcon v-else :size="20" fillColor="var(--color-text-maxcontrast)" />
+						</template>
+						<strong>{{ collective.name }}</strong>
+					</PublishTreeRow>
+				</li>
+				<PublishPageTreeItem
+					v-for="page in topLevelPages"
+					:key="page.id"
+					:collective="collective"
+					:page="page"
+					:depth="1"
+					:selectedPageIds="selectedPageIds"
+					:expandedPageIds="expandedPageIds"
+					@toggleSelect="onToggleSelect"
+					@toggleExpand="onToggleExpand" />
+			</ul>
+			<div class="modal-publish__footer">
+				<NcButton
+					variant="primary"
+					:loading="publishing"
+					:disabled="loadingPages || publishing || !isTitleValid || !isSlugValid"
+					@click="onPublishAsWebsite">
+					{{ t('collectives', 'Publish website') }}
+				</NcButton>
+			</div>
+		</div>
+	</NcModal>
+</template>
+
+<script>
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import { mapActions, mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcModal from '@nextcloud/vue/components/NcModal'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
+import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import PublishPageTreeItem from './PublishPageTreeItem.vue'
+import PublishTreeRow from './PublishTreeRow.vue'
+import { createStaticSite } from '../../apis/collectives/index.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useStaticSitesStore } from '../../stores/staticSites.js'
+import displayError from '../../util/displayError.js'
+import { generateSlug, isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
+
+const TITLE_MAX_LENGTH = 255
+
+export default {
+	name: 'CollectivePublishModal',
+
+	components: {
+		NcButton,
+		NcLoadingIcon,
+		NcModal,
+		NcNoteCard,
+		NcTextField,
+		PageTemplateIcon,
+		PublishPageTreeItem,
+		PublishTreeRow,
+	},
+
+	props: {
+		collective: {
+			required: true,
+			type: Object,
+		},
+	},
+
+	emits: [
+		'close',
+	],
+
+	data() {
+		return {
+			selectedPageIds: new Set(),
+			expandedPageIds: new Set(),
+			loadingPages: true,
+			publishing: false,
+			title: this.collective.name,
+			slug: generateSlug(this.collective.name),
+			titleMaxLength: TITLE_MAX_LENGTH,
+			slugMaxLength: SLUG_MAX_LENGTH,
+		}
+	},
+
+	computed: {
+		...mapState(usePagesStore, [
+			'pagesForCollective',
+			'pagesTreeWalkForCollective',
+			'visibleSubpagesForCollective',
+		]),
+
+		...mapState(useStaticSitesStore, ['publishedUrlForCollective', 'staticSiteForCollective']),
+
+		publishedUrl() {
+			return this.publishedUrlForCollective(this.collective.id)
+		},
+
+		allPageIds() {
+			return this.pagesTreeWalkForCollective(this.collective).map((page) => page.id)
+		},
+
+		rootPage() {
+			return this.pagesForCollective(this.collective).find((page) => page.parentId === 0)
+		},
+
+		topLevelPages() {
+			return this.rootPage
+				? this.visibleSubpagesForCollective(this.collective, this.rootPage.id)
+				: []
+		},
+
+		isRootPageSelected() {
+			return !!this.rootPage && this.selectedPageIds.has(this.rootPage.id)
+		},
+
+		isTitleValid() {
+			const length = this.title.trim().length
+			return length > 0 && length <= TITLE_MAX_LENGTH
+		},
+
+		isSlugValid() {
+			return isValidSlug(this.slug)
+		},
+
+	},
+
+	async created() {
+		// The cached page list may be outdated or not loaded yet
+		await Promise.all([
+			this.getPagesForCollective(this.collective, false)
+				.catch(displayError('Could not fetch collective pages')),
+			this.getStaticSites(this.collective.id)
+				.catch(displayError('Could not load static sites for collective')),
+		])
+
+		// Prefill with the settings of an already published static site, if any,
+		// otherwise preselect the whole collective (all pages)
+		const staticSite = this.staticSiteForCollective(this.collective.id)
+		if (staticSite) {
+			this.title = staticSite.title
+			this.slug = staticSite.slug
+			// Pages may have been deleted since the last publication
+			const pageIds = new Set(this.allPageIds)
+			this.selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+		} else {
+			this.selectedPageIds = new Set(this.allPageIds)
+		}
+		this.loadingPages = false
+	},
+
+	methods: {
+		t,
+		...mapActions(usePagesStore, ['getPagesForCollective']),
+
+		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication']),
+
+		onClose() {
+			this.$emit('close')
+		},
+
+		onEscape(event) {
+			// NcModal ignores Escape on all inputs, including checkboxes
+			if (event.target.type === 'checkbox') {
+				event.stopPropagation()
+				this.onClose()
+			}
+		},
+
+		onToggleSelect(pageId) {
+			// Toggling a page also selects/deselects all of its subpages
+			const select = !this.selectedPageIds.has(pageId)
+			const affectedIds = [
+				pageId,
+				...this.pagesTreeWalkForCollective(this.collective, pageId).map((page) => page.id),
+			]
+
+			const selectedPageIds = new Set(this.selectedPageIds)
+			for (const id of affectedIds) {
+				if (select) {
+					selectedPageIds.add(id)
+				} else {
+					selectedPageIds.delete(id)
+				}
+			}
+			this.selectedPageIds = selectedPageIds
+		},
+
+		onToggleExpand(pageId) {
+			const expandedPageIds = new Set(this.expandedPageIds)
+			if (expandedPageIds.has(pageId)) {
+				expandedPageIds.delete(pageId)
+			} else {
+				expandedPageIds.add(pageId)
+			}
+			this.expandedPageIds = expandedPageIds
+		},
+
+		onPublishAsWebsite() {
+			if (this.publishing) {
+				return
+			}
+
+			const pageIds = Array.from(this.selectedPageIds)
+			if (pageIds.length === 0) {
+				showError(t('collectives', 'Please select at least one page to publish'))
+				return
+			}
+
+			this.publishing = true
+			createStaticSite(this.collective.id, pageIds, this.title.trim(), this.slug)
+				.then(({ data }) => {
+					showSuccess(t('collectives', 'Website publishing started'))
+					// Wait for the published URL in the background, the modal isn't needed for that
+					this.watchPublication(this.collective.id, data.ocs.data)
+					this.onClose()
+				})
+				.catch(displayError('Could not publish collective as website'))
+				.finally(() => {
+					this.publishing = false
+				})
+		},
+	},
+}
+</script>
+
+<style lang="scss" scoped>
+.collective-publish-modal {
+	:deep(.modal-wrapper .modal-container) {
+		display: flex !important;
+		padding-block: 4px 0;
+		padding-inline: 12px;
+	}
+
+	:deep(.modal-wrapper .modal-container__content) {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+}
+
+.modal-publish {
+	display: flex;
+	flex-direction: column;
+	height: 550px;
+	max-height: 80vh;
+
+	&__name {
+		font-size: 21px;
+		text-align: center;
+	}
+
+	&__published {
+		margin-block-end: 8px;
+		word-break: break-all;
+	}
+
+	&__fields {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding-block-end: 8px;
+	}
+
+	&__loading {
+		flex: 1 1 auto;
+	}
+
+	&__tree {
+		flex: 1 1 auto;
+		margin: 0;
+		padding: 0 0 8px;
+		overflow-y: auto;
+	}
+
+	&__footer {
+		display: flex;
+		justify-content: center;
+		flex: 0 0 auto;
+		padding-block: 8px 12px;
+	}
+
+	&__collective-row {
+		list-style: none;
+	}
+}
+</style>
