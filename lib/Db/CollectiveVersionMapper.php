@@ -16,6 +16,8 @@ use OCP\IDBConnection;
  * @extends QBMapper<CollectiveVersion>
  */
 class CollectiveVersionMapper extends QBMapper {
+	use TInsertIgnoreConflict;
+
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'collectives_p_versions', CollectiveVersion::class);
 	}
