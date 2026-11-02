@@ -6,7 +6,5 @@
 import { createApp } from 'vue'
 import AdminSettings from './views/AdminSettings.vue'
 
-import '@nextcloud/dialogs/style.css'
-
 const app = createApp(AdminSettings)
 app.mount('#collectives-admin-settings')
