@@ -50,10 +50,16 @@ export const useStaticSitesStore = defineStore('staticSites', {
 
 			let attemptsLeft = Math.ceil(staticSitePublicationTimeout / staticSitePollInterval)
 			this.pollIntervalId = setInterval(async () => {
+				// Failed requests count as well, e.g. after the user got logged out
+				const isLastAttempt = --attemptsLeft <= 0
 				try {
 					await this.getStaticSites(collectiveId)
 				} catch (e) {
 					console.error('Could not load static sites for collective', e)
+					if (isLastAttempt) {
+						console.debug(`Giving up on publication result of static site ${publication.id}, requests failed`)
+						this.stopWatching()
+					}
 					return
 				}
 
@@ -77,7 +83,7 @@ export const useStaticSitesStore = defineStore('staticSites', {
 					return
 				}
 
-				if (!staticSite || --attemptsLeft <= 0) {
+				if (!staticSite || isLastAttempt) {
 					console.debug(`Giving up on publication result of static site ${publication.id}, status ${staticSite?.status ?? 'deleted'}`)
 					this.stopWatching()
 				}
