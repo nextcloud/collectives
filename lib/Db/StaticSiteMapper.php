@@ -143,14 +143,12 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Set the status as reported by the static site generator. Status published also records the publication time.
-	 *
-	 * @param ?string $lastError One of the StaticSite::ERROR_* reasons if the status is failed
+	 * Store a successful publication reported by the static site generator, all in one query.
 	 *
 	 * @throws NotFoundException
 	 * @throws Exception
 	 */
-	public function updateStatus(int $id, string $status, ?string $lastError = null): StaticSite {
+	public function updateStatusPublished(int $id, string $publishedUrl): StaticSite {
 		try {
 			$staticSite = $this->find($id);
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
@@ -158,12 +156,32 @@ class StaticSiteMapper extends QBMapper {
 		}
 
 		$now = $this->timeFactory->getTime();
-		$staticSite->setStatus($status);
-		$staticSite->setLastError($lastError);
+		$staticSite->setStatus(StaticSite::STATUS_PUBLISHED);
+		$staticSite->setPublishedUrl($publishedUrl);
+		$staticSite->setPublishedAt($now);
+		$staticSite->setLastError(null);
 		$staticSite->setUpdatedAt($now);
-		if ($status === StaticSite::STATUS_PUBLISHED) {
-			$staticSite->setPublishedAt($now);
+		return $this->update($staticSite);
+	}
+
+	/**
+	 * Store a failed publication reported by the static site generator. The previous publication remains.
+	 *
+	 * @param string $lastError One of the StaticSite::ERROR_* reasons
+	 *
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
+	public function updateStatusFailed(int $id, string $lastError): StaticSite {
+		try {
+			$staticSite = $this->find($id);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
 		}
+
+		$staticSite->setStatus(StaticSite::STATUS_FAILED);
+		$staticSite->setLastError($lastError);
+		$staticSite->setUpdatedAt($this->timeFactory->getTime());
 		return $this->update($staticSite);
 	}
 
@@ -185,22 +203,6 @@ class StaticSiteMapper extends QBMapper {
 		$staticSite->setStatus($previous->getStatus());
 		$staticSite->setLastError($previous->getLastError());
 		$staticSite->setUpdatedAt($previous->getUpdatedAt());
-		return $this->update($staticSite);
-	}
-
-	/**
-	 * @throws NotFoundException
-	 * @throws Exception
-	 */
-	public function updatePublishedUrl(int $id, string $publishedUrl): StaticSite {
-		try {
-			$staticSite = $this->find($id);
-		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
-			throw new NotFoundException('Static site not found', 0, $e);
-		}
-
-		$staticSite->setPublishedUrl($publishedUrl);
-		$staticSite->setUpdatedAt($this->timeFactory->getTime());
 		return $this->update($staticSite);
 	}
 
