@@ -46,7 +46,8 @@ class StaticSiteMapper extends QBMapper {
 			->where(
 				$qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT))
 			)
-			->orderBy('created_at', 'DESC');
+			->orderBy('created_at', 'DESC')
+			->addOrderBy('id', 'DESC');
 		return $this->findEntities($qb);
 	}
 
@@ -89,7 +90,7 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Set the status, unless the static site was changed since it was read.
+	 * Set the status and clear the last error, unless the static site was changed since it was read.
 	 *
 	 * Check and update happen in a single query, so of concurrent requests only one can
 	 * change the status, e.g. to pending when updating an existing static site.
@@ -102,6 +103,7 @@ class StaticSiteMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->tableName)
 			->set('status', $qb->createNamedParameter($status, IQueryBuilder::PARAM_STR))
+			->set('last_error', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
 			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter($staticSite->getStatus(), IQueryBuilder::PARAM_STR)))
@@ -114,17 +116,19 @@ class StaticSiteMapper extends QBMapper {
 	 * Store title, page selection and the resulting status of a static site with a provided archive.
 	 *
 	 * @param list<int> $pageIds
+	 * @param ?string $lastError One of the StaticSite::ERROR_* reasons if the status is failed
 	 *
 	 * @throws NotFoundException
 	 * @throws UnprocessableEntityException
 	 * @throws Exception
 	 */
-	public function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status): StaticSite {
+	public function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status, ?string $lastError = null): StaticSite {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->tableName)
 			->set('title', $qb->createNamedParameter($title, IQueryBuilder::PARAM_STR))
 			->set('selected_pages', $qb->createNamedParameter(StaticSite::encodePageIds($pageIds), IQueryBuilder::PARAM_STR))
 			->set('status', $qb->createNamedParameter($status, IQueryBuilder::PARAM_STR))
+			->set('last_error', $qb->createNamedParameter($lastError, $lastError === null ? IQueryBuilder::PARAM_NULL : IQueryBuilder::PARAM_STR))
 			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)));
 
@@ -140,23 +144,61 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * @throws NotFoundException
+	 * Store a successful publication reported by the static site generator, unless the
+	 * static site changed since it was read. See updateIfStillProvided().
+	 *
+	 * @return bool False if the static site was changed or deleted meanwhile
+	 *
 	 * @throws Exception
 	 */
-	public function updateStatus(int $id, string $status): StaticSite {
-		try {
-			$staticSite = $this->find($id);
-		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
-			throw new NotFoundException('Static site not found', 0, $e);
-		}
+	public function updateStatusPublished(StaticSite $staticSite, string $publishedUrl): bool {
+		$now = $this->timeFactory->getTime();
+		$qb = $this->updateIfStillProvided($staticSite);
+		$qb->set('status', $qb->createNamedParameter(StaticSite::STATUS_PUBLISHED, IQueryBuilder::PARAM_STR))
+			->set('published_url', $qb->createNamedParameter($publishedUrl, IQueryBuilder::PARAM_STR))
+			->set('published_at', $qb->createNamedParameter($now, IQueryBuilder::PARAM_INT))
+			->set('last_error', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
+			->set('updated_at', $qb->createNamedParameter($now, IQueryBuilder::PARAM_INT));
 
-		$staticSite->setStatus($status);
-		$staticSite->setUpdatedAt($this->timeFactory->getTime());
-		return $this->update($staticSite);
+		return $qb->executeStatement() > 0;
 	}
 
 	/**
-	 * Reset status and update time to the values of the given static site as it was read before.
+	 * Store a failed publication reported by the static site generator, unless the static site
+	 * changed since it was read. The previous publication remains. See updateIfStillProvided().
+	 *
+	 * @param string $lastError One of the StaticSite::ERROR_* reasons
+	 *
+	 * @return bool False if the static site was changed or deleted meanwhile
+	 *
+	 * @throws Exception
+	 */
+	public function updateStatusFailed(StaticSite $staticSite, string $lastError): bool {
+		$qb = $this->updateIfStillProvided($staticSite);
+		$qb->set('status', $qb->createNamedParameter(StaticSite::STATUS_FAILED, IQueryBuilder::PARAM_STR))
+			->set('last_error', $qb->createNamedParameter($lastError, IQueryBuilder::PARAM_STR))
+			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT));
+
+		return $qb->executeStatement() > 0;
+	}
+
+	/**
+	 * Update query for a static site that is still provided as it was read.
+	 *
+	 * Check and update happen in a single query, so of concurrent callbacks only one can
+	 * conclude the publication, and none overwrites a publication started meanwhile.
+	 */
+	private function updateIfStillProvided(StaticSite $staticSite): IQueryBuilder {
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->tableName)
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter(StaticSite::STATUS_PROVIDED, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('updated_at', $qb->createNamedParameter($staticSite->getUpdatedAt(), IQueryBuilder::PARAM_INT)));
+		return $qb;
+	}
+
+	/**
+	 * Reset status, last error and update time to the values of the given static site as it was read before.
 	 *
 	 * Keeping the update time of an aborted publication allows the user to start the publish process again right away.
 	 *
@@ -171,23 +213,8 @@ class StaticSiteMapper extends QBMapper {
 		}
 
 		$staticSite->setStatus($previous->getStatus());
+		$staticSite->setLastError($previous->getLastError());
 		$staticSite->setUpdatedAt($previous->getUpdatedAt());
-		return $this->update($staticSite);
-	}
-
-	/**
-	 * @throws NotFoundException
-	 * @throws Exception
-	 */
-	public function updatePublishedUrl(int $id, string $publishedUrl): StaticSite {
-		try {
-			$staticSite = $this->find($id);
-		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
-			throw new NotFoundException('Static site not found', 0, $e);
-		}
-
-		$staticSite->setPublishedUrl($publishedUrl);
-		$staticSite->setUpdatedAt($this->timeFactory->getTime());
 		return $this->update($staticSite);
 	}
 

@@ -64,5 +64,5 @@ export const sessionUpdateInterval = 90 // in seconds
 // The publish service reports the published URL back to the server asynchronously,
 // so the static sites of the current collective get polled to notice it.
 export const staticSitePollInterval = 10 // in seconds
-// Matches StaticSite::PENDING_TIMEOUT: after that, a publication counts as aborted
-export const staticSitePublicationTimeout = 15 * 60 // in seconds
+// Polling stops at the latest after that, e.g. if requests keep failing
+export const staticSitePollTimeout = 15 * 60 // in seconds

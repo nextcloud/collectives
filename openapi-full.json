@@ -342,7 +342,6 @@
                 "required": [
                     "id",
                     "collectiveId",
-                    "staticSiteId",
                     "title",
                     "slug",
                     "selectedPageIds",
@@ -350,7 +349,10 @@
                     "status",
                     "createdBy",
                     "createdAt",
-                    "updatedAt"
+                    "updatedAt",
+                    "lastError",
+                    "publishedAt",
+                    "isInProgress"
                 ],
                 "properties": {
                     "id": {
@@ -360,9 +362,6 @@
                     "collectiveId": {
                         "type": "integer",
                         "format": "int64"
-                    },
-                    "staticSiteId": {
-                        "type": "string"
                     },
                     "title": {
                         "type": "string"
@@ -394,6 +393,24 @@
                     "updatedAt": {
                         "type": "integer",
                         "format": "int64"
+                    },
+                    "lastError": {
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                            "generator_unavailable",
+                            "generator_rejected",
+                            "generator_failed",
+                            "generator_invalid_url"
+                        ]
+                    },
+                    "publishedAt": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true
+                    },
+                    "isInProgress": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -3955,8 +3972,46 @@
                             }
                         }
                     },
+                    "409": {
+                        "description": "Slug is already taken by another static site, also of another collective",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "message"
+                                                    ],
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "400": {
-                        "description": "No pages selected, invalid title or slug, slug already in use",
+                        "description": "No pages selected, invalid title or slug",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4509,7 +4564,7 @@
                                     "data": {
                                         "type": "object",
                                         "default": {},
-                                        "description": "Status-specific result payload",
+                                        "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed",
                                         "properties": {
                                             "publish_url": {
                                                 "type": "string"
@@ -4578,9 +4633,7 @@
                                                 "meta": {
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
-                                                "data": {
-                                                    "$ref": "#/components/schemas/StaticSite"
-                                                }
+                                                "data": {}
                                             }
                                         }
                                     }

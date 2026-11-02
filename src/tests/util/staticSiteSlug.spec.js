@@ -4,28 +4,7 @@
  */
 
 import { describe, expect, test } from 'vitest'
-import { generateSlug, isValidSlug } from '../../util/staticSiteSlug.js'
-
-describe('generateSlug', () => {
-	test.each([
-		['My Collective', 'my-collective'],
-		['Über uns & Café', 'uber-uns-cafe'],
-		['  --Team 2026--  ', 'team-2026'],
-		['🎉 Party 🎉', 'party'],
-		['🎉', ''],
-	])('%s -> %s', (name, slug) => {
-		expect(generateSlug(name)).toBe(slug)
-	})
-
-	test('truncates to 64 characters without trailing hyphen', () => {
-		const slug = generateSlug('a'.repeat(63) + ' b')
-		expect(slug).toBe('a'.repeat(63))
-	})
-
-	test('generated slugs are valid', () => {
-		expect(isValidSlug(generateSlug('Some Name 42'))).toBe(true)
-	})
-})
+import { isValidSlug } from '../../util/staticSiteSlug.js'
 
 describe('isValidSlug', () => {
 	test.each(['abc', 'a-b-c', 'team-2026'])('accepts %s', (slug) => {

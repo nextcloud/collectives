@@ -49,7 +49,6 @@ namespace OCA\Collectives;
  * @psalm-type CollectivesStaticSite = array{
  *     id: int,
  *     collectiveId: int,
- *     staticSiteId: string,
  *     title: string,
  *     slug: string,
  *     selectedPageIds: list<int>,
@@ -58,6 +57,9 @@ namespace OCA\Collectives;
  *     createdBy: string,
  *     createdAt: int,
  *     updatedAt: int,
+ *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_failed'|'generator_invalid_url'|null,
+ *     publishedAt: ?int,
+ *     isInProgress: bool,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{

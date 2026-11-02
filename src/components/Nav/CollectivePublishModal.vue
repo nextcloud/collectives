@@ -12,23 +12,75 @@
 			<h2 class="modal-publish__name">
 				{{ t('collectives', 'Publish website for collective {name}', { name: collective.name }) }}
 			</h2>
-			<NcNoteCard v-if="publishedUrl" type="success" class="modal-publish__published">
-				{{ t('collectives', 'Currently published at:') }}
-				<a :href="publishedUrl" target="_blank" rel="noopener noreferrer">{{ publishedUrl }}</a>
+			<div v-if="staticSites.length" class="modal-publish__sites">
+				<div class="modal-publish__sites-header">
+					<h3>{{ t('collectives', 'Websites') }}</h3>
+					<NcButton
+						:variant="selectedStaticSite ? 'secondary' : 'primary'"
+						:disabled="loadingPages"
+						@click="selectNewStaticSite">
+						<template #icon>
+							<PlusIcon :size="20" />
+						</template>
+						{{ t('collectives', 'New website') }}
+					</NcButton>
+				</div>
+				<ul class="modal-publish__site-list">
+					<li
+						v-for="staticSite in staticSites"
+						:key="staticSite.id"
+						class="modal-publish__site"
+						:class="{ 'modal-publish__site--selected': staticSite.id === selectedStaticSiteId }">
+						<button
+							type="button"
+							class="modal-publish__site-select"
+							:aria-pressed="staticSite.id === selectedStaticSiteId ? 'true' : 'false'"
+							:disabled="loadingPages"
+							@click="selectStaticSite(staticSite)">
+							<strong>{{ staticSite.title }}</strong>
+							<span>{{ staticSite.slug }} · {{ staticSiteStatusLabel(staticSite) }}</span>
+						</button>
+						<a
+							v-if="staticSite.publishedUrl"
+							class="modal-publish__site-url"
+							:href="staticSite.publishedUrl"
+							target="_blank"
+							rel="noopener noreferrer">{{ staticSite.publishedUrl }}</a>
+						<p v-if="staticSite.status === 'failed'" class="modal-publish__site-error">
+							{{ staticSiteErrorMessage(staticSite.lastError) }}
+							<template v-if="staticSite.publishedUrl">
+								{{ t('collectives', 'The previous version is still online.') }}
+							</template>
+						</p>
+						<span
+							v-if="staticSite.publishedAt"
+							class="modal-publish__site-published-at"
+							:title="formatAbsoluteTime(staticSite.publishedAt)">
+							{{ t('collectives', 'Last published {time}', { time: formatRelativeTime(staticSite.publishedAt) }) }}
+						</span>
+					</li>
+				</ul>
+			</div>
+			<NcNoteCard v-if="isSelectedStaticSiteInProgress" type="info">
+				{{ t('collectives', 'This website is being published. You can update it once publishing finished.') }}
 			</NcNoteCard>
 			<div class="modal-publish__fields">
 				<NcTextField
 					v-model="title"
 					:label="t('collectives', 'Website title')"
 					:error="!isTitleValid"
-					:maxlength="titleMaxLength" />
+					:disabled="loadingPages"
+					:maxlength="titleMaxLength"
+					required />
 				<!-- TRANSLATORS The web address is the part of the website URL that identifies the published collective -->
 				<NcTextField
 					v-model="slug"
 					:label="t('collectives', 'Web address')"
-					:error="!isSlugValid"
-					:helperText="t('collectives', 'Lowercase letters, numbers and single hyphens')"
-					:maxlength="slugMaxLength" />
+					:error="slug !== '' && !isSlugValid"
+					:disabled="loadingPages || !!selectedStaticSite"
+					:helperText="slugHelperText"
+					:maxlength="slugMaxLength"
+					required />
 			</div>
 			<NcLoadingIcon v-if="loadingPages" class="modal-publish__loading" :size="32" />
 			<ul v-else class="modal-publish__tree">
@@ -59,9 +111,9 @@
 				<NcButton
 					variant="primary"
 					:loading="publishing"
-					:disabled="loadingPages || publishing || !isTitleValid || !isSlugValid"
+					:disabled="loadingPages || publishing || isSelectedStaticSiteInProgress || !isTitleValid || !isSlugValid"
 					@click="onPublishAsWebsite">
-					{{ t('collectives', 'Publish website') }}
+					{{ selectedStaticSite ? t('collectives', 'Update website') : t('collectives', 'Publish website') }}
 				</NcButton>
 			</div>
 		</div>
@@ -71,20 +123,23 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PublishPageTreeItem from './PublishPageTreeItem.vue'
 import PublishTreeRow from './PublishTreeRow.vue'
-import { createStaticSite } from '../../apis/collectives/index.js'
+import { createStaticSite, updateStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
-import { generateSlug, isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
+import { staticSiteErrorMessage } from '../../util/staticSiteError.js'
+import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
 
 const TITLE_MAX_LENGTH = 255
 
@@ -98,6 +153,7 @@ export default {
 		NcNoteCard,
 		NcTextField,
 		PageTemplateIcon,
+		PlusIcon,
 		PublishPageTreeItem,
 		PublishTreeRow,
 	},
@@ -119,8 +175,12 @@ export default {
 			expandedPageIds: new Set(),
 			loadingPages: true,
 			publishing: false,
+			/** @type {?number} null for a new website */
+			selectedStaticSiteId: null,
+			/** @type {string[]} slugs the backend reported as taken by websites of other collectives */
+			takenSlugs: [],
 			title: this.collective.name,
-			slug: generateSlug(this.collective.name),
+			slug: '',
 			titleMaxLength: TITLE_MAX_LENGTH,
 			slugMaxLength: SLUG_MAX_LENGTH,
 		}
@@ -134,10 +194,18 @@ export default {
 			'visibleSubpagesForCollective',
 		]),
 
-		...mapState(useStaticSitesStore, ['publishedUrlForCollective', 'staticSiteForCollective']),
+		...mapState(useStaticSitesStore, ['staticSitesForCollective']),
 
-		publishedUrl() {
-			return this.publishedUrlForCollective(this.collective.id)
+		staticSites() {
+			return this.staticSitesForCollective(this.collective.id)
+		},
+
+		selectedStaticSite() {
+			return this.staticSites.find(({ id }) => id === this.selectedStaticSiteId) ?? null
+		},
+
+		isSelectedStaticSiteInProgress() {
+			return !!this.selectedStaticSite?.isInProgress
 		},
 
 		allPageIds() {
@@ -169,10 +237,26 @@ export default {
 			return length > 0 && length <= TITLE_MAX_LENGTH
 		},
 
-		isSlugValid() {
-			return isValidSlug(this.slug)
+		// Slugs are unique across all collectives, websites of other collectives are only known after a conflict
+		isSlugTaken() {
+			return this.staticSites.some(({ slug }) => slug === this.slug)
+				|| this.takenSlugs.includes(this.slug)
 		},
 
+		isSlugValid() {
+			// The slug of an existing website can't be changed
+			return !!this.selectedStaticSite || (isValidSlug(this.slug) && !this.isSlugTaken)
+		},
+
+		slugHelperText() {
+			if (this.selectedStaticSite) {
+				return t('collectives', 'The web address can\'t be changed after publishing')
+			}
+			if (this.isSlugTaken) {
+				return t('collectives', 'This web address is already taken by another website')
+			}
+			return t('collectives', 'Lowercase letters, numbers and single hyphens')
+		},
 	},
 
 	async created() {
@@ -183,31 +267,29 @@ export default {
 			this.getStaticSites(this.collective.id)
 				.catch(displayError('Could not load static sites for collective')),
 		])
-
-		// Prefill with the settings of an already published static site, if any,
-		// otherwise preselect the whole collective (all pages)
-		const staticSite = this.staticSiteForCollective(this.collective.id)
-		if (staticSite) {
-			this.title = staticSite.title
-			this.slug = staticSite.slug
-			// Pages may have been deleted or moved since the last publication:
-			// drop deleted ones and add ancestor pages of the remaining ones
-			const pageIds = new Set(this.allPageIds)
-			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
-			for (const id of Array.from(selectedPageIds)) {
-				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, id)) {
-					selectedPageIds.add(ancestorId)
-				}
-			}
-			this.selectedPageIds = selectedPageIds
+		// Preselect the website the user updated last
+		const mostRecentStaticSite = this.staticSites
+			.reduce((recent, staticSite) => (!recent || staticSite.updatedAt > recent.updatedAt ? staticSite : recent), null)
+		if (mostRecentStaticSite) {
+			this.selectStaticSite(mostRecentStaticSite)
 		} else {
-			this.selectedPageIds = new Set(this.allPageIds)
+			this.selectNewStaticSite()
 		}
 		this.loadingPages = false
 	},
 
 	methods: {
 		t,
+		staticSiteErrorMessage,
+
+		formatRelativeTime(timestamp) {
+			return moment.unix(timestamp).fromNow()
+		},
+
+		formatAbsoluteTime(timestamp) {
+			return moment.unix(timestamp).format('LLL')
+		},
+
 		...mapActions(usePagesStore, ['getPagesForCollective']),
 
 		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication']),
@@ -222,6 +304,55 @@ export default {
 				event.stopPropagation()
 				this.onClose()
 			}
+		},
+
+		/**
+		 * @param {object} staticSite static site as returned by the backend
+		 * @return {string} translated publication status
+		 */
+		staticSiteStatusLabel(staticSite) {
+			if (staticSite.isInProgress) {
+				return t('collectives', 'Publishing')
+			}
+			switch (staticSite.status) {
+				case 'published':
+					return t('collectives', 'Published')
+				case 'failed':
+					return t('collectives', 'Publishing failed')
+				default:
+					return t('collectives', 'Publishing aborted')
+			}
+		},
+
+		/**
+		 * Prefill the form with the settings of an existing website to update it
+		 *
+		 * @param {object} staticSite static site to update
+		 */
+		selectStaticSite(staticSite) {
+			this.selectedStaticSiteId = staticSite.id
+			this.title = staticSite.title
+			this.slug = staticSite.slug
+			// Pages may have been deleted or moved since the last publication:
+			// drop deleted ones and add ancestor pages of the remaining ones
+			const pageIds = new Set(this.allPageIds)
+			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			for (const id of Array.from(selectedPageIds)) {
+				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, id)) {
+					selectedPageIds.add(ancestorId)
+				}
+			}
+			this.selectedPageIds = selectedPageIds
+		},
+
+		/**
+		 * Prefill the form for a new website of the whole collective (all pages)
+		 */
+		selectNewStaticSite() {
+			this.selectedStaticSiteId = null
+			this.title = this.collective.name
+			this.slug = ''
+			this.selectedPageIds = new Set(this.allPageIds)
 		},
 
 		onToggleSelect(pageId) {
@@ -274,14 +405,26 @@ export default {
 			}
 
 			this.publishing = true
-			createStaticSite(this.collective.id, pageIds, this.title.trim(), this.slug)
+			const title = this.title.trim()
+			const slug = this.slug
+			const request = this.selectedStaticSite
+				? updateStaticSite(this.collective.id, this.selectedStaticSite.id, pageIds, title)
+				: createStaticSite(this.collective.id, pageIds, title, slug)
+			request
 				.then(({ data }) => {
 					showSuccess(t('collectives', 'Website publishing started'))
 					// Wait for the published URL in the background, the modal isn't needed for that
-					this.watchPublication(this.collective.id, data.ocs.data)
+					this.watchPublication(this.collective, data.ocs.data)
 					this.onClose()
 				})
-				.catch(displayError('Could not publish collective as website'))
+				.catch((e) => {
+					if (e.response?.status === 409) {
+						// Shown at the web address field
+						this.takenSlugs = [...this.takenSlugs, slug]
+						return
+					}
+					displayError('Could not publish collective as website')(e)
+				})
 				.finally(() => {
 					this.publishing = false
 				})
@@ -316,9 +459,78 @@ export default {
 		text-align: center;
 	}
 
-	&__published {
-		margin-block-end: 8px;
+	&__sites {
+		flex: 0 0 auto;
+		padding-block-end: 16px;
+	}
+
+	&__sites-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+
+		h3 {
+			margin: 0;
+			font-size: 16px;
+		}
+	}
+
+	&__site-list {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		max-height: 160px;
+		margin: 0;
+		padding: 4px 0 0;
+		overflow-y: auto;
+	}
+
+	&__site {
+		list-style: none;
+		padding: 4px 8px;
+		border: 2px solid var(--color-border);
+		border-radius: var(--border-radius-large);
+
+		&--selected {
+			border-color: var(--color-primary-element);
+		}
+	}
+
+	&__site-url {
 		word-break: break-all;
+	}
+
+	&__site-error {
+		color: var(--color-error-text);
+	}
+
+	&__site-published-at {
+		color: var(--color-text-maxcontrast);
+	}
+
+	&__site-select {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 100%;
+		min-height: auto;
+		margin: 0;
+		padding: 0;
+		border: none;
+		background: none;
+		color: var(--color-main-text);
+		font-weight: normal;
+		text-align: start;
+		cursor: pointer;
+
+		&:disabled {
+			cursor: default;
+		}
+
+		span {
+			color: var(--color-text-maxcontrast);
+		}
 	}
 
 	&__fields {

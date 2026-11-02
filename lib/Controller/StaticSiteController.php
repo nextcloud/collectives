@@ -17,6 +17,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteService;
+use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -78,21 +79,29 @@ class StaticSiteController extends OCSController {
 	 * @param ?string $title Title of the static site, defaults to the collective name
 	 * @param ?string $slug Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the slugified collective name
 	 *
-	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>
-	 * @throws OCSBadRequestException No pages selected, invalid title or slug, slug already in use
+	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>|DataResponse<Http::STATUS_CONFLICT, array{message: string}, array{}>
+	 * @throws OCSBadRequestException No pages selected, invalid title or slug
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
 	 * @throws OCSException Archive of the static site couldn't be provided or the publish service is not available or didn't accept it
 	 *
 	 * 200: Static site created
+	 * 409: Slug is already taken by another static site, also of another collective
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId, array $pageIds, ?string $title = null, ?string $slug = null): DataResponse {
 		$uid = $this->getUid();
-		$staticSite = $this->handleArchiveErrorResponse(
-			fn (): StaticSite => $this->staticSiteService->create($collectiveId, $pageIds, $uid, $title, $slug),
-			['collectiveId' => $collectiveId],
-		);
+		try {
+			$staticSite = $this->handleArchiveErrorResponse(
+				fn (): StaticSite => $this->staticSiteService->create($collectiveId, $pageIds, $uid, $title, $slug),
+				['collectiveId' => $collectiveId],
+			);
+		} catch (StaticSiteSlugTakenException) {
+			return new DataResponse(
+				['message' => $this->l10n->t('This web address is already taken by another website')],
+				Http::STATUS_CONFLICT,
+			);
+		}
 		return new DataResponse($staticSite);
 	}
 
@@ -155,10 +164,13 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSForbiddenException
 	 * @throws OCSNotFoundException
 	 * @throws OCSException
+	 * @throws StaticSiteSlugTakenException Handled by the caller, as only creating a static site sets a slug
 	 */
 	private function handleArchiveErrorResponse(Closure $callback, array $context): StaticSite {
 		try {
 			return $this->handleErrorResponse($callback, $this->logger);
+		} catch (StaticSiteSlugTakenException $e) {
+			throw $e;
 		} catch (StaticSiteGeneratorNotConfiguredException) {
 			$this->logger->warning('Static site generator is not configured', $context);
 			throw new OCSException(

@@ -41,6 +41,21 @@ export function createStaticSite(collectiveId, pageIds, title, slug) {
 }
 
 /**
+ * Publish an existing static site again to update content, page-selection, title
+ *
+ * @param {number} collectiveId Id of the collective
+ * @param {number} id Id of the static site
+ * @param {number[]} pageIds Ids of the pages to publish
+ * @param {string} title Title of the static site
+ */
+export function updateStaticSite(collectiveId, id, pageIds, title) {
+	return axios.put(
+		staticSitesApiUrl(collectiveId, id),
+		{ pageIds, title },
+	)
+}
+
+/**
  * Check whether the static site generator is reachable with the saved settings (admin only)
  */
 export function checkStaticSiteGeneratorHealth() {

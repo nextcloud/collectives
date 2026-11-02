@@ -29,6 +29,8 @@ class StaticSiteService {
 	private const TITLE_MAX_LENGTH = 255;
 	private const SLUG_MAX_LENGTH = 64;
 	private const SLUG_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
+	// Length of the published_url column
+	private const PUBLISHED_URL_MAX_LENGTH = 255;
 	private const LARGEST_FILES_IN_MESSAGE = 3;
 	private const ALLOWED_CALLBACK_STATUSES = [
 		StaticSite::STATUS_PUBLISHED,
@@ -62,7 +64,8 @@ class StaticSiteService {
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, slug already in use, path too long
+	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, path too long
+	 * @throws StaticSiteSlugTakenException Slug is already used by another static site
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
@@ -79,13 +82,14 @@ class StaticSiteService {
 		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
+		// TODO(Publish): Also check the slug against the publish service once it provides an endpoint
 		try {
 			$staticSite = $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId);
 		} catch (DBException $e) {
 			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw $e;
 			}
-			throw new UnprocessableEntityException('Slug is already in use: ' . $slug, 0, $e);
+			throw new StaticSiteSlugTakenException('Slug is already taken: ' . $slug, 0, $e);
 		}
 
 		try {
@@ -147,7 +151,10 @@ class StaticSiteService {
 		try {
 			$this->generatorClient->build($staticSite, $title);
 		} catch (StaticSiteGeneratorException $e) {
-			$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED);
+			$lastError = $e instanceof StaticSiteGeneratorUnavailableException
+				? StaticSite::ERROR_GENERATOR_UNAVAILABLE
+				: StaticSite::ERROR_GENERATOR_REJECTED;
+			$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED, $lastError);
 			throw $e;
 		}
 
@@ -202,17 +209,19 @@ class StaticSiteService {
 	 * the build is still pending (status "provided"); late/duplicate callbacks are ignored,
 	 * though this can't distinguish a very late callback from a coincidentally-pending rebuild.
 	 *
+	 * Status published without a valid `publish_url` is stored as failed, so a published static site
+	 * always has one. The archive isn't needed anymore once the result is stored, whatever it is.
+	 *
 	 * @param array{publish_url?: string, error_message?: string} $data
 	 *
 	 * @throws NotFoundException Static site not found
 	 * @throws UnprocessableEntityException Invalid status
 	 * @throws DBException
 	 */
-	public function updateStatus(string $staticSiteId, string $status, array $data = []): StaticSite {
+	public function updateStatus(string $staticSiteId, string $status, array $data = []): void {
 		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
 			throw new UnprocessableEntityException('Invalid status: ' . $status);
 		}
-
 		try {
 			$staticSite = $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
@@ -221,28 +230,30 @@ class StaticSiteService {
 
 		if ($staticSite->getStatus() !== StaticSite::STATUS_PROVIDED) {
 			$this->logger->warning('Ignoring static site status callback for status ' . $staticSite->getStatus(), ['staticSiteId' => $staticSiteId]);
-			return $staticSite;
-		}
-
-		$staticSite = $this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
-
-		if ($status === StaticSite::STATUS_PUBLISHED && isset($data['publish_url'])) {
-			if ($this->isValidPublishUrl($data['publish_url'])) {
-				$staticSite = $this->staticSiteMapper->updatePublishedUrl($staticSite->getId(), $data['publish_url']);
-			} else {
-				$this->logger->warning('Ignoring static site publish callback with invalid publish_url', ['staticSiteId' => $staticSiteId]);
-			}
+			return;
 		}
 
 		if ($status === StaticSite::STATUS_PUBLISHED) {
-			$this->deleteArchive($staticSite);
+			$publishedUrl = $data['publish_url'] ?? null;
+			if (is_string($publishedUrl) && $this->isValidPublishUrl($publishedUrl)) {
+				$concluded = $this->staticSiteMapper->updateStatusPublished($staticSite, $publishedUrl);
+			} else {
+				$this->logger->warning('Static site generator reported an invalid publish_url', $this->getLogContext($staticSite) + ['publishUrl' => $publishedUrl]);
+				$concluded = $this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_INVALID_URL);
+			}
+		} else {
+			if (isset($data['error_message'])) {
+				$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
+			}
+			$concluded = $this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_FAILED);
 		}
 
-		if ($status === StaticSite::STATUS_FAILED && isset($data['error_message'])) {
-			$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
+		if (!$concluded) {
+			// Another callback concluded the publication or a new one started meanwhile, which needs the archive
+			$this->logger->warning('Ignoring static site status callback, the static site changed meanwhile', $this->getLogContext($staticSite));
+			return;
 		}
-
-		return $staticSite;
+		$this->deleteArchive($staticSite);
 	}
 
 	/**
@@ -304,9 +315,9 @@ class StaticSiteService {
 	 * @throws UnprocessableEntityException
 	 * @throws DBException
 	 */
-	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status): StaticSite {
+	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status, ?string $lastError = null): StaticSite {
 		try {
-			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status);
+			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status, $lastError);
 		} catch (NotFoundException $e) {
 			$this->deleteArchive($staticSite);
 			throw $e;
@@ -402,7 +413,9 @@ class StaticSiteService {
 	}
 
 	private function isValidPublishUrl(string $url): bool {
-		return in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true);
+		return strlen($url) <= self::PUBLISHED_URL_MAX_LENGTH
+			&& in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)
+			&& (string)parse_url($url, PHP_URL_HOST) !== '';
 	}
 
 	/**
