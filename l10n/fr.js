@@ -332,6 +332,8 @@ OC.L10N.register(
     "No other versions available" : "Aucune autre version disponible",
     "After editing you can find old versions of the page here." : "Après l'avoir modifiée, vous trouverez les anciennes versions de cette page ici.",
     "Compare versions" : "Comparer les versions",
+    "Earlier version" : "Version d'avant",
+    "Later version" : "Version d'après",
     "Compare" : "Comparer",
     "You" : "Vous",
     "Actions for versions from {versionHumanExplicitDate}" : "Actions pour les versions datant du {versionHumanExplicitDate}",
