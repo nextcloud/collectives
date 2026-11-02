@@ -4452,10 +4452,11 @@
                                     "data": {
                                         "type": "object",
                                         "default": {},
-                                        "description": "Status-specific result payload",
+                                        "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters",
                                         "properties": {
                                             "publish_url": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "minLength": 1
                                             },
                                             "error_message": {
                                                 "type": "string"
@@ -4532,7 +4533,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid or missing status",
+                        "description": "Invalid or missing status, or status published without a valid publish_url",
                         "content": {
                             "application/json": {
                                 "schema": {

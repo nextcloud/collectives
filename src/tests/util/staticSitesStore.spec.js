@@ -126,21 +126,6 @@ describe('static sites publication watching', () => {
 		expect(showSuccess).toHaveBeenLastCalledWith('Website "New website" published at https://example.org/new-site')
 	})
 
-	it('waits for the published URL if the status arrived first', async () => {
-		vi.mocked(api.getStaticSites)
-			.mockResolvedValueOnce(response(staticSite({ status: 'published' })))
-			.mockResolvedValue(response(staticSite({ status: 'published', publishedUrl })))
-		const store = useStaticSitesStore()
-
-		store.watchPublication(1, staticSite())
-		await poll()
-		expect(showSuccess).not.toHaveBeenCalled()
-
-		await poll()
-		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
-		expect(store.pollIntervalId).toBeNull()
-	})
-
 	it('gives up on a publication that stays quiet for too long', async () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite()))
 		const store = useStaticSitesStore()

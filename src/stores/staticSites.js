@@ -64,8 +64,7 @@ export const useStaticSitesStore = defineStore('staticSites', {
 				}
 
 				const staticSite = this.staticSites[collectiveId].find(({ id }) => id === publication.id)
-				// The status and the published URL get stored one after the other
-				if (staticSite?.status === 'published' && staticSite.publishedUrl) {
+				if (staticSite?.status === 'published') {
 					this.stopWatching()
 					showSuccess(t('collectives', 'Website "{title}" published at {url}', {
 						title: staticSite.title,
