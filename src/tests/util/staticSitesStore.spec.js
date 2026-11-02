@@ -185,4 +185,20 @@ describe('static sites publication watching', () => {
 		expect(consoleError).toHaveBeenCalledWith('Could not load static sites for collective', expect.any(Error))
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
 	})
+
+	it('stops polling if requests keep failing', async () => {
+		vi.mocked(api.getStaticSites).mockRejectedValue(new Error('request failed'))
+		vi.spyOn(console, 'error').mockImplementation(() => {})
+		const store = useStaticSitesStore()
+
+		store.watchPublication(1, staticSite())
+		await vi.advanceTimersByTimeAsync(staticSitePublicationTimeout * 1000)
+		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
+
+		expect(store.pollIntervalId).toBeNull()
+		expect(attempts).toBe(staticSitePublicationTimeout / staticSitePollInterval)
+
+		await poll(5)
+		expect(api.getStaticSites).toHaveBeenCalledTimes(attempts)
+	})
 })
