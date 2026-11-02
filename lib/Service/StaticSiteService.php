@@ -147,7 +147,10 @@ class StaticSiteService {
 		try {
 			$this->generatorClient->build($staticSite, $title);
 		} catch (StaticSiteGeneratorException $e) {
-			$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED);
+			$lastError = $e instanceof StaticSiteGeneratorUnavailableException
+				? StaticSite::ERROR_GENERATOR_UNAVAILABLE
+				: StaticSite::ERROR_GENERATOR_REJECTED;
+			$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED, $lastError);
 			throw $e;
 		}
 
@@ -224,7 +227,8 @@ class StaticSiteService {
 			return $staticSite;
 		}
 
-		$staticSite = $this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
+		$lastError = $status === StaticSite::STATUS_FAILED ? StaticSite::ERROR_GENERATOR_FAILED : null;
+		$staticSite = $this->staticSiteMapper->updateStatus($staticSite->getId(), $status, $lastError);
 
 		if ($status === StaticSite::STATUS_PUBLISHED && isset($data['publish_url'])) {
 			if ($this->isValidPublishUrl($data['publish_url'])) {
@@ -304,9 +308,9 @@ class StaticSiteService {
 	 * @throws UnprocessableEntityException
 	 * @throws DBException
 	 */
-	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status): StaticSite {
+	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status, ?string $lastError = null): StaticSite {
 		try {
-			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status);
+			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status, $lastError);
 		} catch (NotFoundException $e) {
 			$this->deleteArchive($staticSite);
 			throw $e;
