@@ -44,9 +44,10 @@ function searchApiUrl(context, ...parts) {
  * Get all pages in the given context (collective or public share)
  *
  * @param {object} context - either the current collective or a share context
+ * @param {object} config - optional axios request config, e.g. an abort `signal`
  */
-export function getPages(context) {
-	return axios.get(pagesApiUrl(context))
+export function getPages(context, config = {}) {
+	return axios.get(pagesApiUrl(context), config)
 }
 
 /**
