@@ -345,7 +345,9 @@
                     "status",
                     "createdBy",
                     "createdAt",
-                    "updatedAt"
+                    "updatedAt",
+                    "lastError",
+                    "publishedAt"
                 ],
                 "properties": {
                     "id": {
@@ -389,6 +391,20 @@
                     "updatedAt": {
                         "type": "integer",
                         "format": "int64"
+                    },
+                    "lastError": {
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                            "generator_unavailable",
+                            "generator_rejected",
+                            "generator_failed"
+                        ]
+                    },
+                    "publishedAt": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true
                     }
                 }
             },

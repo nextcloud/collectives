@@ -40,6 +40,10 @@ use UnexpectedValueException;
  * @method void setCreatedAt(int $value)
  * @method int getUpdatedAt()
  * @method void setUpdatedAt(int $value)
+ * @method string|null getLastError()
+ * @method void setLastError(?string $value)
+ * @method int|null getPublishedAt()
+ * @method void setPublishedAt(?int $value)
  */
 class StaticSite extends Entity implements JsonSerializable {
 	public const STATUS_PENDING = 'pending';
@@ -48,6 +52,11 @@ class StaticSite extends Entity implements JsonSerializable {
 	// The publish service didn't build the static site, e.g. it wasn't reachable or rejected it.
 	// A failed archive build keeps the previous status instead.
 	public const STATUS_FAILED = 'failed';
+
+	// Reasons for status failed, translated by the frontend
+	public const ERROR_GENERATOR_UNAVAILABLE = 'generator_unavailable';
+	public const ERROR_GENERATOR_REJECTED = 'generator_rejected';
+	public const ERROR_GENERATOR_FAILED = 'generator_failed';
 
 	public const IN_PROGRESS_STATUSES = [
 		self::STATUS_PENDING,
@@ -68,6 +77,8 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?string $createdBy = null;
 	protected ?int $createdAt = null;
 	protected ?int $updatedAt = null;
+	protected ?string $lastError = null;
+	protected ?int $publishedAt = null;
 
 	public function isInProgress(int $now): bool {
 		return in_array($this->status, self::IN_PROGRESS_STATUSES, true)
@@ -120,6 +131,8 @@ class StaticSite extends Entity implements JsonSerializable {
 			'createdBy' => $this->createdBy,
 			'createdAt' => $this->createdAt,
 			'updatedAt' => $this->updatedAt,
+			'lastError' => $this->lastError,
+			'publishedAt' => $this->publishedAt,
 		];
 	}
 }

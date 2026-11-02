@@ -25,6 +25,7 @@ use OCA\Collectives\Service\StaticSiteContentCollector;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -353,7 +354,7 @@ class StaticSiteServiceTest extends TestCase {
 		$provided = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateSettingsAndStatus')
-			->with($staticSite, 'New Title', [1], StaticSite::STATUS_PROVIDED)
+			->with($staticSite, 'New Title', [1], StaticSite::STATUS_PROVIDED, null)
 			->willReturn($provided);
 
 		$result = $this->service->update($this->collectiveId, 7, ['1'], ' New Title ', $this->userId);
@@ -795,10 +796,25 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateSettingsAndStatus')
-			->with($staticSite, 'Title', [1], StaticSite::STATUS_FAILED);
+			->with($staticSite, 'Title', [1], StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_REJECTED);
 		$this->archiver->expects($this->never())->method('delete');
 
 		$this->expectException(StaticSiteGeneratorException::class);
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	public function testUpdateStoresStatusFailedIfGeneratorIsUnavailable(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->generatorClient->method('build')->willThrowException(new StaticSiteGeneratorUnavailableException('Unavailable'));
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateSettingsAndStatus')
+			->with($staticSite, 'Title', [1], StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_UNAVAILABLE);
+
+		$this->expectException(StaticSiteGeneratorUnavailableException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
 
@@ -874,7 +890,7 @@ class StaticSiteServiceTest extends TestCase {
 			->with($staticSiteId)
 			->willReturn($found);
 		$this->staticSiteMapper->method('updateStatus')
-			->with(7, StaticSite::STATUS_PUBLISHED)
+			->with(7, StaticSite::STATUS_PUBLISHED, null)
 			->willReturn($afterStatus);
 		$this->staticSiteMapper->expects($this->once())
 			->method('updatePublishedUrl')
@@ -925,7 +941,7 @@ class StaticSiteServiceTest extends TestCase {
 			->willReturn($found);
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateStatus')
-			->with(7, StaticSite::STATUS_FAILED)
+			->with(7, StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_FAILED)
 			->willReturn($updated);
 		$this->staticSiteMapper->expects($this->never())->method('updatePublishedUrl');
 		$this->archiver->expects($this->never())->method('delete');

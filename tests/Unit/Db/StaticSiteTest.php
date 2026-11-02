@@ -75,4 +75,15 @@ class StaticSiteTest extends TestCase {
 
 		$this->assertSame([3, 1, 2], $staticSite->getSelectedPageIds());
 	}
+
+	public function testJsonSerializeContainsLastErrorAndPublicationTime(): void {
+		$staticSite = new StaticSite();
+		$staticSite->setLastError(StaticSite::ERROR_GENERATOR_FAILED);
+		$staticSite->setPublishedAt(1700000000);
+
+		$json = $staticSite->jsonSerialize();
+
+		$this->assertSame(StaticSite::ERROR_GENERATOR_FAILED, $json['lastError']);
+		$this->assertSame(1700000000, $json['publishedAt']);
+	}
 }
