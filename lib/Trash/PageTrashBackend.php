@@ -140,27 +140,11 @@ class PageTrashBackend implements ITrashBackend {
 		}
 
 		if ($targetFolder->nodeExists($originalLocation)) {
-			$info = pathinfo($originalLocation);
+			$location = $originalLocation;
 			$i = 1;
 
-			$gen = static function ($info, int $i): string {
-				$target = $info['dirname'];
-				if ($target === '.') {
-					$target = '';
-				}
-
-				$target .= $info['filename'];
-				$target .= ' (' . $i . ')';
-
-				if (isset($info['extension'])) {
-					$target .= $info['extension'];
-				}
-
-				return $target;
-			};
-
 			do {
-				$originalLocation = $gen($info, $i);
+				$originalLocation = self::numberedLocation($location, $i);
 				$i++;
 			} while ($targetFolder->nodeExists($originalLocation));
 		}
@@ -199,6 +183,19 @@ class PageTrashBackend implements ITrashBackend {
 				'trashPath' => $item->getPath(),
 			],
 		);
+	}
+
+	/**
+	 * Location with a number appended to the filename, e.g. `Page/a (1).png` for `Page/a.png`
+	 */
+	private static function numberedLocation(string $location, int $i): string {
+		$info = pathinfo($location);
+		$target = $info['dirname'] === '.' ? '' : $info['dirname'] . '/';
+		$target .= $info['filename'] . ' (' . $i . ')';
+		if (isset($info['extension'])) {
+			$target .= '.' . $info['extension'];
+		}
+		return $target;
 	}
 
 	/**
