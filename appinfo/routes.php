@@ -21,6 +21,11 @@ return [
 		['name' => 'publicStart#showShare', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],	'defaults' => ['path' => '']],
 
+		// Static site archive download for the external static site generator (not ocs due to simple file download)
+		// See the "External static site generator API" section in the ocs routes for its sibling endpoints.
+		['name' => 'staticSiteArchive#download', 'url' => '/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}/archive', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
 		// Vue.js router route (Vue.js frontend)
 		['name' => 'start#indexPath', 'url' => '/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],
@@ -66,6 +71,24 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 		['name' => 'share#deleteCollectiveShare', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/shares/{token}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+
+		// Collective static sites API
+		['name' => 'staticSite#index', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'staticSite#create', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'staticSite#update', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'staticSite#delete', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+
+		// External static site generator API: health is admin-only; updateStatus is the generator's build-progress
+		// callback, unauthenticated but authorized by the unguessable staticSiteId. See also staticSiteArchive#download
+		// in the non-ocs routes above.
+		['name' => 'staticSiteGenerator#health', 'url' => '/api/v{apiVersion}/static-site-generator/health', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'staticSiteGenerator#updateStatus', 'url' => '/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)']],
 
 		// Pages search API
 		['name' => 'search#searchRecentPages', 'url' => '/api/v{apiVersion}/collectives/search/recent', 'verb' => 'GET',
