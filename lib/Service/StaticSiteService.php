@@ -57,7 +57,8 @@ class StaticSiteService {
 	 * Title and slug default to the collective name. If the archive can't be provided or the
 	 * generator doesn't accept the build, the static site is removed again.
 	 *
-	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
+	 * @param list<int> $pageIds IDs of the pages to publish; their ancestor pages (incl. the
+	 *                           collective's root page) are added automatically if missing
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
@@ -75,7 +76,7 @@ class StaticSiteService {
 		$slug ??= $this->generateSlug($collective->getName());
 		$this->validateTitle($title);
 		$this->validateSlug($slug);
-		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
+		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
 		try {
@@ -88,7 +89,7 @@ class StaticSiteService {
 		}
 
 		try {
-			$this->buildArchive($staticSite);
+			$this->buildArchive($staticSite, $pageIds);
 			$this->generatorClient->build($staticSite, $title);
 		} catch (ServiceException $e) {
 			$this->staticSiteMapper->delete($staticSite);
@@ -107,7 +108,8 @@ class StaticSiteService {
 	 * provided, the static site and its previous archive remain unchanged. If the generator
 	 * doesn't accept the build, title and page selection are stored with status failed.
 	 *
-	 * @param list<int> $pageIds IDs of the pages to publish, incl. the collective's root page
+	 * @param list<int> $pageIds IDs of the pages to publish; their ancestor pages (incl. the
+	 *                           collective's root page) are added automatically if missing
 	 *
 	 * @throws NotFoundException Collective, static site or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
@@ -128,7 +130,7 @@ class StaticSiteService {
 
 		$title = trim($title);
 		$this->validateTitle($title);
-		$this->verifyPagesBelongToCollective($collectiveId, $pageIds, $userId);
+		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
 		if (!$this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING)) {
@@ -136,7 +138,7 @@ class StaticSiteService {
 		}
 
 		try {
-			$this->buildArchive($staticSite);
+			$this->buildArchive($staticSite, $pageIds);
 		} catch (ServiceException $e) {
 			$this->restoreStatus($staticSite);
 			throw $e;
@@ -244,13 +246,15 @@ class StaticSiteService {
 	}
 
 	/**
+	 * @param list<int> $pageIds IDs of the pages to include in the archive, incl. the collective's root page
+	 *
 	 * @throws UnprocessableEntityException Content can't be stored in the archive, e.g. too large or a path is too long
 	 * @throws ServiceException
 	 */
-	private function buildArchive(StaticSite $staticSite): void {
+	private function buildArchive(StaticSite $staticSite, array $pageIds): void {
 		// TODO(Publish): Consider building the archive in a queued background job once the publish service reports the build result via callback
 		try {
-			$files = $this->contentCollector->collect($staticSite->getCollectiveId());
+			$files = $this->contentCollector->collect($staticSite->getCollectiveId(), $pageIds);
 			$this->validateSize($files);
 			$this->archiver->store($staticSite->getStaticSiteId(), $files);
 		} catch (UnprocessableEntityException $e) {
@@ -402,20 +406,37 @@ class StaticSiteService {
 	}
 
 	/**
+	 * Validate that all given page IDs belong to the collective and add any missing ancestor
+	 * pages (incl. the collective's root page), so a subpage can never end up selected without
+	 * its parent pages, keeping the hierarchical structure intact.
+	 *
 	 * @param list<int> $pageIds
+	 *
+	 * @return list<int>
 	 *
 	 * @throws NotFoundException If a page doesn't belong to the collective
 	 * @throws NotPermittedException
 	 */
-	private function verifyPagesBelongToCollective(int $collectiveId, array $pageIds, string $userId): void {
-		$validPageIds = array_map(
-			static fn ($pageInfo) => $pageInfo->getId(),
-			$this->pageService->findAll($collectiveId, $userId)
-		);
+	private function resolvePageIdsWithAncestors(int $collectiveId, array $pageIds, string $userId): array {
+		$parentIds = [];
+		foreach ($this->pageService->findAll($collectiveId, $userId) as $pageInfo) {
+			$parentIds[$pageInfo->getId()] = $pageInfo->getParentId();
+		}
 
-		$unknownPageIds = array_diff($pageIds, $validPageIds);
+		$unknownPageIds = array_diff($pageIds, array_keys($parentIds));
 		if (!empty($unknownPageIds)) {
 			throw new NotFoundException('Page(s) not found in collective: ' . implode(', ', $unknownPageIds));
 		}
+
+		$resolvedPageIds = [];
+		foreach ($pageIds as $pageId) {
+			// Walk up to the root page, stop early at an ancestor that was resolved before
+			while ($pageId !== 0 && !isset($resolvedPageIds[$pageId])) {
+				$resolvedPageIds[$pageId] = $pageId;
+				$pageId = $parentIds[$pageId] ?? 0;
+			}
+		}
+
+		return array_values($resolvedPageIds);
 	}
 }

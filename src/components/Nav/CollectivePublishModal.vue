@@ -209,6 +209,25 @@ export default {
 			}
 		},
 
+		/**
+		 * IDs of all parent pages of a page, up to and including the collective's root page
+		 *
+		 * @param {number} pageId ID of the page
+		 */
+		parentPageIds(pageId) {
+			const pages = this.pagesForCollective(this.collective)
+			const parentIdOf = (id) => pages.find((page) => page.id === id)?.parentId
+
+			const parentIds = []
+			// The root page is the only one without a parent
+			let parentId = parentIdOf(pageId)
+			while (parentId) {
+				parentIds.push(parentId)
+				parentId = parentIdOf(parentId)
+			}
+			return parentIds
+		},
+
 		onToggleSelect(pageId) {
 			// Toggling a page also selects/deselects all of its subpages
 			const select = !this.selectedPageIds.has(pageId)
@@ -225,6 +244,15 @@ export default {
 					selectedPageIds.delete(id)
 				}
 			}
+
+			// Selecting a page also selects its parent pages, so a subpage is never
+			// published without the pages it is nested in
+			if (select) {
+				for (const parentId of this.parentPageIds(pageId)) {
+					selectedPageIds.add(parentId)
+				}
+			}
+
 			this.selectedPageIds = selectedPageIds
 		},
 
