@@ -125,7 +125,7 @@ class AttachmentService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function uploadAttachment(File $pageFile, string $name, $resource): array {
+	public function uploadAttachment(File $pageFile, string $name, $resource, Folder $folder): array {
 		$attachmentFolder = $this->getAttachmentDirectory($pageFile, true);
 		if ($attachmentFolder->nodeExists($name)) {
 			$pathinfo = pathinfo($name);
@@ -135,7 +135,7 @@ class AttachmentService {
 			} while ($attachmentFolder->nodeExists($name));
 		}
 		$file = $attachmentFolder->newFile($name, $resource);
-		return $this->fileToInfo($file, $attachmentFolder);
+		return $this->fileToInfo($file, $folder);
 	}
 
 	/**
@@ -143,7 +143,7 @@ class AttachmentService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function renameAttachment(File $pageFile, int $attachmentId, string $targetName): array {
+	public function renameAttachment(File $pageFile, int $attachmentId, string $targetName, Folder $folder): array {
 		$attachmentFolder = $this->getAttachmentDirectory($pageFile);
 		$node = $attachmentFolder->getById($attachmentId);
 		if (count($node) === 0) {
@@ -165,7 +165,7 @@ class AttachmentService {
 			throw new NotFoundException('Node not a file: ' . $newNode->getId());
 		}
 
-		return $this->fileToInfo($newNode, $attachmentFolder);
+		return $this->fileToInfo($newNode, $folder);
 	}
 
 	/**

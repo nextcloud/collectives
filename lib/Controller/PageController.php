@@ -357,7 +357,8 @@ class PageController extends OCSController {
 					throw new OCSBadRequestException('Failed to open uploaded file.');
 				}
 				$name = $file['name'];
-				return $this->attachmentService->uploadAttachment($pageFile, $name, $resource);
+				$userFolder = $this->rootFolder->getUserFolder($this->userId);
+				return $this->attachmentService->uploadAttachment($pageFile, $name, $resource, $userFolder);
 			}
 			throw new OCSBadRequestException('Invalid file upload.');
 		}, $this->logger);
@@ -383,7 +384,8 @@ class PageController extends OCSController {
 		$attachment = $this->handleErrorResponse(function () use ($collectiveId, $id, $attachmentId, $name): array {
 			$this->service->verifyEditPermissions($collectiveId, $this->userId);
 			$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
-			return $this->attachmentService->renameAttachment($pageFile, $attachmentId, $name);
+			$userFolder = $this->rootFolder->getUserFolder($this->userId);
+			return $this->attachmentService->renameAttachment($pageFile, $attachmentId, $name, $userFolder);
 		}, $this->logger);
 		return new DataResponse(['attachment' => $attachment]);
 	}
