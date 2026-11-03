@@ -14,16 +14,18 @@ test.describe('Page content', () => {
 	test('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
 		test.slow()
 		await runOcc(['app:enable', '--force', 'whiteboard'])
-		const collectivePage = await collective.createPage({ title: 'Page with whiteboard', user, page })
-		await collectivePage.open(true)
+		try {
+			const collectivePage = await collective.createPage({ title: 'Page with whiteboard', user, page })
+			await collectivePage.open(true)
 
-		editor.setMode(true)
-		await editor.clickMenu('attachment', 'New whiteboard')
-		await expect(editor.getContent()
-			.locator('.widget-file.whiteboard'))
-			.toBeVisible()
-
-		await runOcc(['app:disable', 'whiteboard'])
+			editor.setMode(true)
+			await editor.clickMenu('attachment', 'New whiteboard')
+			await expect(editor.getContent()
+				.locator('.widget-file .whiteboard'))
+				.toBeVisible()
+		} finally {
+			await runOcc(['app:disable', 'whiteboard'])
+		}
 	})
 
 	test('editor container grows vertically', async ({ user, page, collective, editor }) => {
