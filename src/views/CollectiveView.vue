@@ -17,7 +17,6 @@
 
 <script>
 
-import { listen } from '@nextcloud/notify_push'
 import { mapActions, mapState } from 'pinia'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -34,6 +33,7 @@ import { useSessionsStore } from '../stores/sessions.js'
 import { useTagsStore } from '../stores/tags.js'
 import { useTemplatesStore } from '../stores/templates.js'
 import displayError from '../util/displayError.js'
+import { listenPageListUpdates } from '../util/notifyPush.ts'
 
 export default {
 	name: 'CollectiveView',
@@ -48,9 +48,10 @@ export default {
 
 	setup() {
 		const { networkOnline } = useNetworkState()
+		const rootStore = useRootStore()
 		const pagesStore = usePagesStore()
 		const templatesStore = useTemplatesStore()
-		const listenPush = listen('collectives_pagelist', (_, message) => {
+		const listenPush = listenPageListUpdates(rootStore.isPublic, (_, message) => {
 			pagesStore.updatePages(message.collectiveId, message)
 			templatesStore.updateTemplates(message.collectiveId, message)
 		})
@@ -127,10 +128,8 @@ export default {
 			if (this.listenPush) {
 				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
 				this.pollIntervalBase = 15 * 60 * 1000
-				if (!this.isPublic) {
-					this.createSession()
-					this.updateSessionIntervalId = setInterval(this.updateSession, sessionUpdateInterval * 1000)
-				}
+				this.createSession()
+				this.updateSessionIntervalId = setInterval(this.updateSession, sessionUpdateInterval * 1000)
 			}
 		},
 
