@@ -431,7 +431,8 @@ class PageController extends OCSController {
 		$attachment = $this->handleErrorResponse(function () use ($collectiveId, $id, $attachmentId): array {
 			$this->service->verifyEditPermissions($collectiveId, $this->userId);
 			$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
-			return $this->attachmentService->restoreAttachment($collectiveId, $pageFile, $attachmentId, $this->userId);
+			$userFolder = $this->rootFolder->getUserFolder($this->userId);
+			return $this->attachmentService->restoreAttachment($collectiveId, $pageFile, $attachmentId, $this->userId, $userFolder);
 		}, $this->logger);
 		return new DataResponse(['attachment' => $attachment]);
 	}

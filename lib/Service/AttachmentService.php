@@ -192,7 +192,7 @@ class AttachmentService {
 	 * @throws NotPermittedException
 	 * @throws NotFoundException
 	 */
-	public function restoreAttachment(int $collectiveId, File $pageFile, int $attachmentId, string $userId): array {
+	public function restoreAttachment(int $collectiveId, File $pageFile, int $attachmentId, string $userId, Folder $folder): array {
 		$this->initTrashBackend();
 		if (!$this->trashBackend) {
 			throw new NotPermittedException('Failed to restore page. Trash is disabled.');
@@ -215,7 +215,12 @@ class AttachmentService {
 			throw new NotFoundException('Failed to restore attachment ' . $attachmentId . ':' . $e->getMessage(), 0, $e);
 		}
 
-		return $this->getAttachmentDirectory($pageFile)->getById($attachmentId);
+		$attachment = $this->getAttachmentDirectory($pageFile)->getFirstNodeById($attachmentId);
+		if (!($attachment instanceof File)) {
+			throw new NotFoundException('Failed to restore attachment ' . $attachmentId . '. Not found after restore.');
+		}
+
+		return $this->fileToInfo($attachment, $folder);
 	}
 
 	/**
