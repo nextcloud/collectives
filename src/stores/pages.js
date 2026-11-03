@@ -1157,8 +1157,8 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {number} attachmentId ID of the attachment to restore
 		 */
 		async restoreAttachment(attachmentId) {
-			await api.restoreAttachment(this.context, this.currentPageId, attachmentId)
-			this.setAttachmentUndeleted(attachmentId)
+			const response = await api.restoreAttachment(this.context, this.currentPageId, attachmentId)
+			this.setAttachmentUndeleted(attachmentId, response.data.ocs.data.attachment)
 		},
 
 		setAttachmentDeleted(attachmentId) {
@@ -1169,11 +1169,11 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		setAttachmentUndeleted(attachmentId) {
+		setAttachmentUndeleted(attachmentId, restoredAttachment) {
 			const index = this.deletedAttachments.findIndex((a) => a.id === attachmentId)
 			if (index !== -1) {
-				const [attachment] = this.deletedAttachments.splice(index, 1)
-				this.allAttachments[this.collectiveIndex][this.currentPageId].push(attachment)
+				this.deletedAttachments.splice(index, 1)
+				this.allAttachments[this.collectiveIndex][this.currentPageId].push(restoredAttachment)
 			}
 		},
 
