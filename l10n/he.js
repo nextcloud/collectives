@@ -52,6 +52,8 @@ OC.L10N.register(
     "Advanced settings" : "הגדרות מתקדמות",
     "Unshare" : "ביטול שיתוף",
     "Create a new share link" : "יצירת קישור שיתוף חדש",
+    "Set expiration date" : "הגדרת תאריך תפוגה",
+    "Expiration date" : "תאריך תפוגה",
     "Upload" : "העלאה",
     "Uploading" : "מתבצעת העלאה",
     "Current version" : "גרסה נוכחית",

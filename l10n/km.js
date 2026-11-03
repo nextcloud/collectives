@@ -19,6 +19,8 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Home" : "ទំព័រដើម",
     "Unshare" : "លែង​ចែក​រំលែក",
+    "Set expiration date" : "កំណត់​ពេល​ផុត​កំណត់",
+    "Expiration date" : "ពេល​ផុត​កំណត់",
     "Upload" : "ផ្ទុក​ឡើង",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
     "Sharing" : "ការ​ចែក​រំលែក",

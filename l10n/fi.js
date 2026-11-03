@@ -65,6 +65,8 @@ OC.L10N.register(
     "Advanced settings" : "Lisäasetukset",
     "Unshare" : "Poista jako",
     "Create a new share link" : "Luo uusi jakolinkki",
+    "Set expiration date" : "Aseta vanhenemispäivä",
+    "Expiration date" : "Vanhenemispäivä",
     "Update share" : "Päivitä jako",
     "Upload" : "Lähetä",
     "Drag and drop files here to upload" : "Vedä ja pudota tiedostot tähän lähettääksesi",

@@ -41,6 +41,8 @@ OC.L10N.register(
     "Password" : "Password",
     "Create share" : "Tarqatish yaratish",
     "Unshare" : "Unshare",
+    "Set expiration date" : "Yaroqlilik muddatini belgilang",
+    "Expiration date" : "Tugash muddati",
     "Upload" : "Yuklash",
     "Uploading" : "Yuklanmoqda",
     "No attachments" : "Qo‘shimchalar yo‘q",

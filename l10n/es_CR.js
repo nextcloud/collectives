@@ -29,6 +29,8 @@ OC.L10N.register(
     "Can edit" : "Puede editar",
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
+    "Set expiration date" : "Establecer fecha de expiración",
+    "Expiration date" : "Fecha de expiración",
     "Upload" : "Cargar",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",

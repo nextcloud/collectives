@@ -58,6 +58,8 @@ OC.L10N.register(
     "Advanced settings" : "Advanced settings",
     "Unshare" : "Unshare",
     "Create a new share link" : "Create a new share link",
+    "Set expiration date" : "Set expiration date",
+    "Expiration date" : "Expiration date",
     "Update share" : "Update share",
     "Upload" : "Upload",
     "Drag and drop files here to upload" : "Drag and drop files here to upload",

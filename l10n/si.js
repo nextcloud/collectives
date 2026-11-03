@@ -21,6 +21,7 @@ OC.L10N.register(
     "Favorite" : "ප්‍රියතම",
     "Add a page" : "පිටුවක් එකතු කරන්න",
     "Add another link" : "තවත් සබැඳියක් එකතු කරන්න",
+    "Expiration date" : "Expiration date",
     "Upload" : "උඩුගත",
     "Uploading" : "උඩුගත වෙමින්",
     "Current version" : "වත්මන් අනුවාදය",

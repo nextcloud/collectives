@@ -53,6 +53,8 @@ OC.L10N.register(
     "Advanced settings" : "Paplašināti iestatījumi",
     "Unshare" : "Pārtraukt koplietošanu",
     "Create a new share link" : "Izveidot jaunu kopīgošanas saiti",
+    "Set expiration date" : "Iestatīt beigu datumu",
+    "Expiration date" : "Derīguma beigu datums",
     "Upload" : "Augšupielādēt",
     "Drag and drop files here to upload" : "Vilkt un iemest datnes šeit, lai augšupielādētu",
     "Uploading" : "Augšupielāde",

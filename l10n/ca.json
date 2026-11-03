@@ -11,6 +11,7 @@
     "Collectives - Pages" : "Col·lectius - Pàgines",
     "Created collective \"%s\" for existing team." : "S'ha creat el col·lectiu \"%s\" per l'equip existent.",
     "Collective Share" : "Compartició col·lectiva",
+    "Invalid date. Format must be YYYY-MM-DD" : "Data no vàlida. El format ha de ser AAAA-MM-DD",
     "You are not allowed to share %s" : "No se us permet compartir %s",
     "You are not allowed to edit %s" : "No teniu permís per editar %s",
     "Share not found for user" : "No s'ha trobat la compartició per a l'usuari",

@@ -40,6 +40,8 @@ OC.L10N.register(
     "Add another link" : "เพิ่มลิงก์อื่น",
     "Advanced settings" : "การตั้งค่าขั้นสูง",
     "Unshare" : "เลิกแชร์",
+    "Set expiration date" : "กำหนดวันหมดอายุ",
+    "Expiration date" : "วันหมดอายุ",
     "Upload" : "อัปโหลด",
     "No other versions available" : "ไม่มีรุ่นอื่นที่ใช้งานได้",
     "Attachments" : "ไฟล์แนบ",

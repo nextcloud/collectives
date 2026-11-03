@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Invalid date. Format must be YYYY-MM-DD" : "Невалиден датум. Форматот мора да биде ГГГГ-ММ-ДД",
     "You are not allowed to share %s" : "Не сте овластени да ја споделите %s",
     "@-mentions only" : "само @-спомнување ",
     "Off" : "Исклучено",
@@ -70,6 +71,8 @@ OC.L10N.register(
     "Advanced settings" : "Напредни параметри",
     "Unshare" : "Отстрани споделување",
     "Create a new share link" : "Креирајте нов линк за споделување",
+    "Set expiration date" : "Постави рок на траење",
+    "Expiration date" : "Рок на траење",
     "Update share" : "Ажурирај споделување",
     "Upload" : "Прикачи",
     "Drag and drop files here to upload" : "Повлечи и испушти датотеки за прикачување",

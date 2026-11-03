@@ -30,6 +30,8 @@ OC.L10N.register(
     "Page not found" : "Página no encontrada",
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
+    "Set expiration date" : "Establecer fecha de expiración",
+    "Expiration date" : "Fecha de expiración",
     "Upload" : "Cargar",
     "Uploading" : "Cargando",
     "Sharing" : "Compartiendo",

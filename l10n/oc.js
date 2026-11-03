@@ -51,6 +51,8 @@ OC.L10N.register(
     "Advanced settings" : "Paramètres avançats",
     "Unshare" : "Partejar pas mai",
     "Create a new share link" : "Crear un ligam de partatge novèl",
+    "Set expiration date" : "Especificar una data d'expiracion",
+    "Expiration date" : "Data d'expiracion",
     "Upload" : "Telecargament",
     "No other versions available" : "Cap d’autra version pas disponibla",
     "You" : "Vos",

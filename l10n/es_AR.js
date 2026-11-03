@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Invalid date. Format must be YYYY-MM-DD" : "La fecha es inválida, por favor use el formato AAAA-MM-DD",
     "You are not allowed to share %s" : "No tiene permitido compartir %s",
     "Share link" : "Compartir enlace",
     "Settings" : "Ajustes",
@@ -41,6 +42,8 @@ OC.L10N.register(
     "Add another link" : "Agregar otro enlace",
     "Advanced settings" : "Configuraciones avanzadas",
     "Unshare" : "No compartir",
+    "Set expiration date" : "Establecer fecha de caducidad",
+    "Expiration date" : "Fecha de expiración",
     "Upload" : "Cargar",
     "No other versions available" : "No hay más versiones disponibles",
     "Attachments" : "Adjuntos",

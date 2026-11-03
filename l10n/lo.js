@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "ຄໍເລກທີບ",
+    "Invalid date. Format must be YYYY-MM-DD" : "ວັນທີບໍ່ຖືກຕ້ອງ. ຮູບແບບຕ້ອງເປັນ ປີ-ເດືອນ-ວັນ (YYYY-MM-DD)",
     "You are not allowed to share %s" : "You are not allowed to share %s",
     "@-mentions only" : "@-mentions only",
     "Off" : "ປິດ",
@@ -74,6 +75,8 @@ OC.L10N.register(
     "Advanced settings" : "ການຕັ້ງຄ່າຂັ້ນສູງ",
     "Unshare" : "ຍົກເລີກການແບ່ງປັນ",
     "Create a new share link" : "ສ້າງລິງແບ່ງປັນໃໝ່",
+    "Set expiration date" : "ກຳນົດວັນທີໝົດອາຍຸ",
+    "Expiration date" : "ວັນໝົດອາຍຸ",
     "Update share" : "ອັບເດດການແບ່ງປັນ",
     "Upload" : "ອັບໂຫລດ",
     "Drag and drop files here to upload" : "Drag and drop files here to upload",
