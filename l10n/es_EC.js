@@ -129,6 +129,8 @@ OC.L10N.register(
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
     "Create a new share link" : "Crear un nuevo enlace compartido",
+    "Set expiration date" : "Establecer fecha de expiración",
+    "Expiration date" : "Fecha de expiración",
     "Could not get attachments" : "No se pudieron obtener los archivos adjuntos",
     "Upload" : "Cargar",
     "Uploading" : "Cargando",

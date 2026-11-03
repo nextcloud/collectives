@@ -32,6 +32,8 @@ OC.L10N.register(
     "Password" : "პაროლ",
     "Advanced settings" : "დამატებითი პარამეტრები",
     "Unshare" : "გაზიარების შეწყვეტა",
+    "Set expiration date" : "მიუთითეთ ვადის გასვლის დრო",
+    "Expiration date" : "გაუქმების თარიღი",
     "Upload" : "ატვირთვა",
     "Uploading" : "ხდება ატვირთვა",
     "Sharing" : "გაზიარება",

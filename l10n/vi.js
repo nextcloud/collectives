@@ -55,6 +55,8 @@ OC.L10N.register(
     "Advanced settings" : "Cài đặt nâng cao",
     "Unshare" : "Bỏ chia sẻ",
     "Create a new share link" : "Tạo liên kết chia sẻ mới",
+    "Set expiration date" : "Đặt ngày hết hạn",
+    "Expiration date" : "Ngày kết thúc",
     "Update share" : "Cập nhật chia sẻ",
     "Upload" : "Tải lên",
     "Drag and drop files here to upload" : "Kéo thả file vào đây để tải lên",

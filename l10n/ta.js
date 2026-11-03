@@ -28,6 +28,7 @@ OC.L10N.register(
     "Show in Files" : "கோப்புகளில் காட்டவும்",
     "Password" : "கடவுச்சொல்",
     "Unshare" : "பகிர்வதை நீக்கு",
+    "Expiration date" : "காலவதியாகும் திகதி",
     "Upload" : "பதிவேற்றுக",
     "Uploading" : "Uploading",
     "Current version" : "தற்போதைய பதிப்பு",

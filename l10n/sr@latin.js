@@ -25,6 +25,8 @@ OC.L10N.register(
     "Home" : "Početak",
     "Favorite" : "Omiljene",
     "Unshare" : "Ukini deljenje",
+    "Set expiration date" : "Postavi datum isteka",
+    "Expiration date" : "Datum isteka",
     "Upload" : "Otpremi",
     "Attachments" : "Prilozi",
     "Link copied" : "Veza iskopirana",

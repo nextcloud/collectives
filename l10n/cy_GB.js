@@ -26,6 +26,8 @@ OC.L10N.register(
     "Page not found" : "Heb ganfod y dudalen",
     "Add another link" : "Ychwanegu dolen arall",
     "Unshare" : "Dad-rannu",
+    "Set expiration date" : "Gosod dyddiad dod i ben",
+    "Expiration date" : "Dyddiad dod i ben",
     "Upload" : "Llwytho i fyny",
     "Link copied" : "Dolen wedi'i gopïo",
     "Copied" : "Copïwyd",

@@ -1,4 +1,5 @@
 { "translations": {
+    "Invalid date. Format must be YYYY-MM-DD" : "잘못된 날짜입니다. 형식은 YYYY-MM-DD이어야 합니다.",
     "You are not allowed to share %s" : "%s을(를) 공유할 수 있는 권한이 없습니다.",
     "@-mentions only" : "@-언급만",
     "Share link" : "링크 공유",
@@ -65,6 +66,8 @@
     "Advanced settings" : "고급 설정",
     "Unshare" : "공유 해제",
     "Create a new share link" : "새로운 공유 링크 생성",
+    "Set expiration date" : "만료기한 설정",
+    "Expiration date" : "만료 일자",
     "Update share" : "공유 업데이트",
     "Upload" : "업로드",
     "Drag and drop files here to upload" : "이곳에 파일을 드래그 앤 드롭해 업로드",

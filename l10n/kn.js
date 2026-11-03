@@ -18,6 +18,8 @@ OC.L10N.register(
     "Favorite" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
     "Password" : "ಗುಪ್ತಪದ",
     "Unshare" : "ಹಂಚಿಕೆಯನ್ನು ಹಿಂತೆಗೆ",
+    "Set expiration date" : "ಮುಕ್ತಾಯ ದಿನಾಂಕವನ್ನು ನಿರ್ದರಿಸಿ",
+    "Expiration date" : "ಮುಕ್ತಾಯ ದಿನಾಂಕ",
     "Upload" : "ವರ್ಗಾಯಿಸಿ",
     "No other versions available" : "ಇನ್ನಿತರೆ ಯಾವುದೇ ಆವೃತ್ತಿಗಳು ಲಭ್ಯವಿಲ್ಲ",
     "Sharing" : "﻿ಹಂಚಿಕೆ",

@@ -56,6 +56,8 @@ OC.L10N.register(
     "Advanced settings" : "Cunfiguratzione avantzada",
     "Unshare" : "Annulla sa cumpartzidura",
     "Create a new share link" : "Crea unu ligòngiu de cumpartzidura nou",
+    "Set expiration date" : "Cunfigura una data de iscadèntzia",
+    "Expiration date" : "Data de iscadèntzia",
     "Update share" : "Agiorna sa cumpartzidura",
     "Upload" : "Càrriga",
     "Drag and drop files here to upload" : "Traga archìvios inoghe pro ddos carrigare",

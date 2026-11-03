@@ -27,6 +27,8 @@ OC.L10N.register(
     "Password" : "Facal-faire",
     "Add another link" : "Cuir ceangal eile ris",
     "Unshare" : "Na co-roinn tuilleadh",
+    "Set expiration date" : "Suidhich gum falbh an ùine air",
+    "Expiration date" : "Expiration date",
     "Upload" : "Luchdaich suas",
     "Sharing" : "Co-roinneadh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh"

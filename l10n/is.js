@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Invalid date. Format must be YYYY-MM-DD" : "Ógild dagsetning. Sniðið verður að vera ÁÁÁÁ-MM-DD",
     "You are not allowed to share %s" : "Þú hefur ekki heimild til að deila %s",
     "Share link" : "Deila tengli",
     "Settings" : "Stillingar",
@@ -66,6 +67,8 @@ OC.L10N.register(
     "Advanced settings" : "Ítarlegri valkostir",
     "Unshare" : "Hætta deilingu",
     "Create a new share link" : "Búa til nýjan tengil á sameign",
+    "Set expiration date" : "Setja gildistíma",
+    "Expiration date" : "Gildir til",
     "Update share" : "Uppfæra sameign",
     "Upload" : "Senda inn",
     "Drag and drop files here to upload" : "Dragðu og slepptu hér skrám til að senda inn",

@@ -131,6 +131,8 @@ OC.L10N.register(
     "Advanced settings" : "Napredne nastavitve",
     "Unshare" : "Odstrani povezavo",
     "Create a new share link" : "Ustvari novo povezavo za souporabo",
+    "Set expiration date" : "Nastavi datum preteka",
+    "Expiration date" : "Datum preteka",
     "Could not get attachments" : "Ni mogoče pridobiti prilog",
     "Upload" : "Iz datoteke",
     "Drag and drop files here to upload" : "Za pošiljanje potegnite in spustite datoteke na to mesto",

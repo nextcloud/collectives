@@ -40,6 +40,8 @@ OC.L10N.register(
     "Advanced settings" : "Altanivela agordo",
     "Unshare" : "Malkunhavigi",
     "Create a new share link" : "Krei novan kunhavan ligilon",
+    "Set expiration date" : "Uzi limdaton",
+    "Expiration date" : "Limdato",
     "Upload" : "Alŝuti",
     "Current version" : "Nuna versio",
     "No other versions available" : "Neniu alia versio disponeblas",

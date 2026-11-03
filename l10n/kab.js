@@ -44,6 +44,7 @@ OC.L10N.register(
     "Set password" : "Sbadu awal uffir",
     "Password" : "Awal n uɛeddi",
     "Add another link" : "Rnu aseɣwen-nniḍen",
+    "Expiration date" : "Azemz n tagara",
     "Upload" : "Sili",
     "Uploading" : "Tuzzna n ifuyla",
     "External shares" : "Beṭṭu n uzγaray",

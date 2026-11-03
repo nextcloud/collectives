@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Collectives",
+    "Invalid date. Format must be YYYY-MM-DD" : "Tanggal tidak valid. Format harus YYYY-MM-DD",
     "You are not allowed to share %s" : "Anda tidak diizinkan untuk membagikan %s",
     "@-mentions only" : "Hanya @-mention",
     "Off" : "Mati",
@@ -82,6 +83,8 @@ OC.L10N.register(
     "Advanced settings" : "Pengaturan Lanjutan",
     "Unshare" : "Batalkan berbagi",
     "Create a new share link" : "Buat tautan berbagi baru",
+    "Set expiration date" : "Atur tanggal kedaluwarsa",
+    "Expiration date" : "Tanggal kedaluwarsa",
     "Update share" : "Perbarui berbagi",
     "Upload" : "Unggah",
     "Drag and drop files here to upload" : "Seret dan lepaskan file di sini untuk mengunggah",

@@ -20,6 +20,8 @@ OC.L10N.register(
     "Home" : "Սկիզբ",
     "Password" : "գախտնաբառ",
     "Unshare" : "Չկիսվել",
+    "Set expiration date" : "Սահմանել վավերականության ժամկետ",
+    "Expiration date" : "Վավերականության ժամկետ",
     "Upload" : "Բեռնել",
     "No other versions available" : "Այլ տարբերակներ չկան",
     "Versions" : "Տարբերակներ",

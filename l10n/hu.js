@@ -163,6 +163,8 @@ OC.L10N.register(
     "Advanced settings" : "Speciális beállítások",
     "Unshare" : "Megosztás visszavonása",
     "Create a new share link" : "Új megosztási hivatkozás létrehozása",
+    "Set expiration date" : "Lejárati idő beállítása",
+    "Expiration date" : "Lejárati idő",
     "Update share" : "Megosztás frissítése",
     "Could not get attachments" : "Nem sikerült lekérni a mellékleteket",
     "Upload" : "Feltöltés",

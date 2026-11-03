@@ -30,6 +30,8 @@ OC.L10N.register(
     "Add another link" : "Añadir otro enlace",
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
+    "Set expiration date" : "Establecer fecha de expiración",
+    "Expiration date" : "Fecha de expiración",
     "Upload" : "Cargar",
     "Uploading" : "Cargando",
     "External shares" : "Compartir con el exterior",

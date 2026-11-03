@@ -31,6 +31,8 @@ OC.L10N.register(
     "Add another link" : "Füügt en anere Link",
     "Advanced settings" : "Erweidert Astellungen",
     "Unshare" : "Net méi deelen",
+    "Set expiration date" : "Verfallsdatum setzen",
+    "Expiration date" : "Verfallsdatum",
     "Upload" : "Eroplueden",
     "Uploading" : "Lued erop",
     "No other versions available" : "Keng aner Versiounen disponibel",

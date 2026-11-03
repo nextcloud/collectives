@@ -293,6 +293,7 @@ OC.L10N.register(
     "Advanced settings" : "Erweiterte Einstellungen",
     "Unshare" : "Freigabe aufheben",
     "Create a new share link" : "Neuen Freigabe-Link erstellen",
+    "Expiration date" : "Ablaufdatum",
     "Update share" : "Freigabe aktualisieren",
     "Add attachments using drag and drop or via \"Insert attachment\" in the formatting menu." : "Anhänge per Drag & Drop oder über \"Anhang einfügen\" im Formatierungsmenü hinzufügen.",
     "Failed to upload attachment {name}" : "Anhang {name} konnte nicht hochgeladen werden",
