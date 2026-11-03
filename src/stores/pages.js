@@ -4,6 +4,7 @@
  */
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { isCancel } from '@nextcloud/axios'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
@@ -17,6 +18,9 @@ import { useRootStore } from './root.js'
 const STORE_PREFIX = 'collectives/pinia/pages/'
 // used in `PagePicker.vue`
 export const ALL_PAGES_STORE_NAME = STORE_PREFIX + 'allPages'
+
+// In-flight page list requests per page list index, with a function to repeat them
+const pagesRequests = {}
 
 export const usePagesStore = defineStore('pages', {
 	state: () => ({
@@ -579,6 +583,31 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		/**
+		 * Fetch a page list, superseding a request in flight for the same index
+		 *
+		 * @param {number|string} index Page list index
+		 * @param {object} context Context for the API request
+		 * @param {() => Promise<void>} refetch Repeats the request after invalidation
+		 */
+		async _fetchPages(index, context, refetch) {
+			pagesRequests[index]?.controller.abort()
+			const controller = new AbortController()
+			pagesRequests[index] = { controller, refetch }
+			try {
+				const response = await api.getPages(context, { signal: controller.signal })
+				this.allPages[index] = response.data.ocs.data.pages
+			} catch (e) {
+				if (!isCancel(e)) {
+					throw e
+				}
+			} finally {
+				if (pagesRequests[index]?.controller === controller) {
+					delete pagesRequests[index]
+				}
+			}
+		},
+
+		/**
 		 * Get list of all pages for a collective
 		 *
 		 * @param {object} collective The collective
@@ -594,9 +623,15 @@ export const usePagesStore = defineStore('pages', {
 				collectiveId: collective.id,
 				shareTokenParam: null,
 			}
-			const response = await api.getPages(context)
-			this.allPages[this.indexForCollective(collective)] = response.data.ocs.data.pages
-			rootStore.done(`pagelist-${collective.id}`)
+			try {
+				await this._fetchPages(
+					this.indexForCollective(collective),
+					context,
+					() => this.getPagesForCollective(collective, false),
+				)
+			} finally {
+				rootStore.done(`pagelist-${collective.id}`)
+			}
 		},
 
 		/**
@@ -609,9 +644,25 @@ export const usePagesStore = defineStore('pages', {
 			if (setLoading && !this.pagesLoaded) {
 				rootStore.load('pagelist')
 			}
-			const response = await api.getPages(this.context)
-			this.allPages[this.collectiveIndex] = response.data.ocs.data.pages
-			rootStore.done('pagelist')
+			try {
+				await this._fetchPages(this.collectiveIndex, this.context, () => this.getPages(false))
+			} finally {
+				rootStore.done('pagelist')
+			}
+		},
+
+		/**
+		 * Discard a page list request in flight, as its response might predate a local change,
+		 * and fetch the page list again.
+		 *
+		 * @param {number|string} index Page list index
+		 */
+		invalidatePages(index = this.collectiveIndex) {
+			const request = pagesRequests[index]
+			if (request) {
+				request.controller.abort()
+				request.refetch().catch((e) => console.error('coult not refetch the page list', e))
+			}
 		},
 
 		/**
@@ -633,9 +684,15 @@ export const usePagesStore = defineStore('pages', {
 
 			const rootStore = useRootStore()
 			rootStore.load('pageTrash')
+			// Remember this.collectiveIndex from before the await to avoid a race condition.
+			// Another collective may have been opened in the meantime.
+			const collectiveIndex = this.collectiveIndex
 			const response = await api.getTrashPages(this.context)
-			this.allTrashPages[this.collectiveIndex] = response.data.ocs.data.pages
-			this.setTrashPagesLoaded(true)
+			this.allTrashPages[collectiveIndex] = response.data.ocs.data.pages
+			// the flag is not per collective, so only set it for the current one
+			if (collectiveIndex === this.collectiveIndex) {
+				this.setTrashPagesLoaded(true)
+			}
 			rootStore.done('pageTrash')
 		},
 
@@ -644,6 +701,7 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		_updatePageState(page, collectiveIndex = this.collectiveIndex) {
+			this.invalidatePages(collectiveIndex)
 			const index = this.allPages[collectiveIndex].findIndex((p) => p.id === page.id)
 			if (index > -1) {
 				this.allPages[collectiveIndex].splice(index, 1, page)
@@ -673,6 +731,7 @@ export const usePagesStore = defineStore('pages', {
 			rootStore.load('newPageContent')
 
 			const response = await api.createPage(this.context, page)
+			this.invalidatePages()
 			// Add new page to the beginning of pages array
 			const newPage = response.data.ocs.data.page
 			updateOrAddTo(this.allPages[this.collectiveIndex], newPage)
@@ -803,6 +862,7 @@ export const usePagesStore = defineStore('pages', {
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
+			this.invalidatePages()
 			removeFrom(this.allPages[this.collectiveIndex], page)
 			rootStore.done('pagelist-nodrag')
 
@@ -965,6 +1025,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async trashPage({ pageId }) {
 			const response = await api.trashPage(this.context, pageId)
+			this.invalidatePages()
 			const trashPage = response.data.ocs.data.page
 			removeFrom(this.allPages[this.collectiveIndex], trashPage)
 			if (this.allTrashPages[this.collectiveIndex]) {
@@ -980,6 +1041,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async restorePage({ pageId }) {
 			const response = await api.restorePage(this.context, pageId)
+			this.invalidatePages()
 			const trashPage = response.data.ocs.data.page
 			updateOrAddTo(this.allPages[this.collectiveIndex], trashPage)
 			removeFrom(this.allTrashPages[this.collectiveIndex], trashPage)
@@ -1009,6 +1071,7 @@ export const usePagesStore = defineStore('pages', {
 				// only handle changes to the current collective
 				return
 			}
+			this.invalidatePages()
 			for (const page of (pages || [])) {
 				if (page.filePath === TEMPLATE_PATH || page.filePath.startsWith(TEMPLATE_PATH + '/')) {
 					// template pages are handled in the ... templates store.
@@ -1035,11 +1098,14 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {object} page Page to get attachments for
 		 */
 		async getAttachments(page) {
+			// Remember this.collectiveIndex from before the await to avoid a race condition.
+			// Another collective may have been opened in the meantime.
+			const collectiveIndex = this.collectiveIndex
 			const response = await api.getPageAttachments(this.context, page.id)
-			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
-				this.allAttachments[this.collectiveIndex] = {}
+			if (typeof this.allAttachments[collectiveIndex] !== 'object') {
+				this.allAttachments[collectiveIndex] = {}
 			}
-			this.allAttachments[this.collectiveIndex][page.id] = response.data.ocs.data.attachments
+			this.allAttachments[collectiveIndex][page.id] = response.data.ocs.data.attachments
 				// Disregard deletedAttachments when updating attachments
 				.filter((a) => !this.deletedAttachments.map((a) => a.name).includes(a.name))
 			this.deletedAttachments = this.deletedAttachments
