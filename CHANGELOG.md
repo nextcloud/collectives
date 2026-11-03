@@ -1,5 +1,47 @@
 # Changelog
 
+## 4.8.0 - 2026.11.04
+
+### ✨New
+* 🔒 Shares: allow setting an expiration date for share links.
+* 🔃 Versions: compare any two page versions side by side (Nextcloud 35+).
+* 💄 Page list: add a "collapse all pages" action.
+* 🧹 Drop support for Nextcloud 32 and PHP8.1.
+
+### 🐛Fixes
+* 🔒 Shares: prevent editable share links when editing is restricted.
+* 💄 Shares: show the collective name in the header and hide the collective selector.
+* 💄 Shares: hide navigation for single-page shares.
+* 💄 Shares: show the page title instead of "Landing page" in page shares.
+* 📎 Attachments: fix opening from page sidebar. (#2900)
+* 📎 Attachments: open in viewer on public shares.
+* 📎 Attachments: return 404 when listing attachments of inaccessible page.
+* 🚀 Performance: fix a memory leak with many attachments.
+* 🚀 Performance: don't listen to notify_push in public shares.
+* 🐛 Viewer: allow opening the page sidebar from the viewer.
+* 🔎 Page picker: insert text-only links with the link title. (#1583)
+* 🔎 Page picker: make search results keyboard accessible. (#2880)
+* 🔎 Search: don't show deleted pages in search results.
+* 🔎 References: fix resolving share links in some scenarios. (#2475)
+* 🗑️ Trash: fix restoring pages when a page with the same name exists.
+* 🗑️ Trash: delete page versions when permanently deleting a collective.
+* 🗑️ Trash: delete a collective's data before deleting its team.
+* 🐛 Page list: don't let stale responses revert local changes. (#2167)
+* 💄 Page list: keep the sideb resize handle off the scrollbar. (#2821)
+* 🚚 Fix DB duplicate entries errors on index and version inserts. Thanks @Koc.
+* 💄 Page: loading placeholder now matches the page layout.
+* 💄 Restore styling of notifications. Thanks @kjoscha.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⚙️ Register app settings in Nextcloud's config lexicon.
+* 🧹 Exclude development files from the release tarball.
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 4.7.1 - 2026.09.24
 
 ### 🐛Fixes
