@@ -72,9 +72,12 @@ export const useTagsStore = defineStore('tags', {
 		 * Get tags of a collective
 		 */
 		async getTags() {
+			// Remember this.collectiveId from before the await to avoid a race condition.
+			// Another collective may have been opened in the meantime.
+			const collectiveId = this.collectiveId
 			const response = await api.getTags(this.context)
-			this.allTags[this.collectiveId] = response.data.ocs.data.tags
-			this.allTagsLoaded[this.collectiveId] = true
+			this.allTags[collectiveId] = response.data.ocs.data.tags
+			this.allTagsLoaded[collectiveId] = true
 		},
 
 		_addOrUpdateTagState(tag) {

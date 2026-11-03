@@ -684,9 +684,15 @@ export const usePagesStore = defineStore('pages', {
 
 			const rootStore = useRootStore()
 			rootStore.load('pageTrash')
+			// Remember this.collectiveIndex from before the await to avoid a race condition.
+			// Another collective may have been opened in the meantime.
+			const collectiveIndex = this.collectiveIndex
 			const response = await api.getTrashPages(this.context)
-			this.allTrashPages[this.collectiveIndex] = response.data.ocs.data.pages
-			this.setTrashPagesLoaded(true)
+			this.allTrashPages[collectiveIndex] = response.data.ocs.data.pages
+			// the flag is not per collective, so only set it for the current one
+			if (collectiveIndex === this.collectiveIndex) {
+				this.setTrashPagesLoaded(true)
+			}
 			rootStore.done('pageTrash')
 		},
 
@@ -1092,11 +1098,14 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {object} page Page to get attachments for
 		 */
 		async getAttachments(page) {
+			// Remember this.collectiveIndex from before the await to avoid a race condition.
+			// Another collective may have been opened in the meantime.
+			const collectiveIndex = this.collectiveIndex
 			const response = await api.getPageAttachments(this.context, page.id)
-			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
-				this.allAttachments[this.collectiveIndex] = {}
+			if (typeof this.allAttachments[collectiveIndex] !== 'object') {
+				this.allAttachments[collectiveIndex] = {}
 			}
-			this.allAttachments[this.collectiveIndex][page.id] = response.data.ocs.data.attachments
+			this.allAttachments[collectiveIndex][page.id] = response.data.ocs.data.attachments
 				// Disregard deletedAttachments when updating attachments
 				.filter((a) => !this.deletedAttachments.map((a) => a.name).includes(a.name))
 			this.deletedAttachments = this.deletedAttachments

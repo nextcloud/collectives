@@ -38,8 +38,11 @@ export const useSharesStore = defineStore('shares', {
 		async getShares() {
 			const rootStore = useRootStore()
 			rootStore.load('shares')
-			const response = await api.getShares(this.collectiveId)
-			this.allShares[this.collectiveId] = response.data.ocs.data
+			// Remember this.collectiveId from before the await to avoid a race condition.
+			// Another collective may have been opened in the meantime.
+			const collectiveId = this.collectiveId
+			const response = await api.getShares(collectiveId)
+			this.allShares[collectiveId] = response.data.ocs.data
 			rootStore.done('shares')
 		},
 
