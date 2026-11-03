@@ -15,6 +15,7 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\IPreview;
 use OCP\IUserManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class AttachmentServiceTest extends TestCase {
@@ -22,6 +23,9 @@ class AttachmentServiceTest extends TestCase {
 	private string $userId = 'jane';
 	private File $pageFile;
 	private Folder $parentFolder;
+	private Folder&MockObject $attachmentFolder;
+	private File&MockObject $attachmentFile;
+	private Folder&MockObject $userFolder;
 	private string $attachmentFolderName = '.attachments.' . 1;
 
 	protected function setUp(): void {
@@ -38,29 +42,37 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn(true);
 		$this->parentFolder->method('getRelativePath')
 			->willReturn('/.Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
-		$attachmentFolder = $this->createMock(Folder::class);
-		$attachmentFolder->method('getName')
+		$this->attachmentFolder = $this->createMock(Folder::class);
+		$this->attachmentFolder->method('getName')
 			->willReturn($this->attachmentFolderName);
-		$attachmentFile = $this->createMock(File::class);
-		$attachmentFile->method('getId')
+		$this->attachmentFolder->method('getPath')
+			->willReturn('/' . $this->userId . '/files/.Collectives/x/path/to/' . $this->attachmentFolderName);
+		$this->attachmentFolder->method('getRelativePath')
+			->willReturnCallback(fn (string $path): string => substr($path, strlen('/' . $this->userId . '/files/.Collectives/x/path/to/' . $this->attachmentFolderName)));
+		$this->attachmentFile = $this->createMock(File::class);
+		$this->attachmentFile->method('getId')
 			->willReturn(2);
-		$attachmentFile->method('getPath')
+		$this->attachmentFile->method('getPath')
 			->willReturn('/' . $this->userId . '/files/.Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
-		$attachmentFile->method('getParent')
-			->willReturn($attachmentFolder);
-		$attachmentFile->method('getInternalPath')
+		$this->attachmentFile->method('getParent')
+			->willReturn($this->attachmentFolder);
+		$this->attachmentFile->method('getInternalPath')
 			->willReturn('/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
-		$attachmentFile->method('getName')
+		$this->attachmentFile->method('getName')
 			->willReturn('attachmentFile1');
-		$attachmentFolder->method('getDirectoryListing')
-			->willReturn([$attachmentFile]);
+		$this->attachmentFolder->method('getDirectoryListing')
+			->willReturn([$this->attachmentFile]);
 		$this->parentFolder->method('get')
 			->with($this->attachmentFolderName)
-			->willReturn($attachmentFolder);
+			->willReturn($this->attachmentFolder);
 		$this->pageFile->method('getParent')
 			->willReturn($this->parentFolder);
 		$this->pageFile->method('getId')
 			->willReturn(1);
+
+		$this->userFolder = $this->createMock(Folder::class);
+		$this->userFolder->method('getRelativePath')
+			->willReturnCallback(fn (string $path): string => substr($path, strlen('/' . $this->userId . '/files')));
 
 		$this->service = new AttachmentService($appManager, $userManager, $preview);
 	}
@@ -80,5 +92,43 @@ class AttachmentServiceTest extends TestCase {
 		];
 
 		self::assertEquals([$attachmentInfo], $this->service->getAttachments($this->pageFile, $this->parentFolder));
+	}
+
+	public function testUploadAttachmentPathRelativeToFolder(): void {
+		$this->attachmentFolder->method('nodeExists')
+			->with('attachmentFile1')
+			->willReturn(false);
+		$this->attachmentFolder->expects(self::once())
+			->method('newFile')
+			->with('attachmentFile1', 'content')
+			->willReturn($this->attachmentFile);
+
+		$attachment = $this->service->uploadAttachment($this->pageFile, 'attachmentFile1', 'content', $this->userFolder);
+
+		self::assertEquals('/.Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1', $attachment['path']);
+	}
+
+	public function testRenameAttachmentPathRelativeToFolder(): void {
+		$renamedFile = $this->createMock(File::class);
+		$renamedFile->method('getId')
+			->willReturn(2);
+		$renamedFile->method('getName')
+			->willReturn('renamed');
+		$renamedFile->method('getPath')
+			->willReturn('/' . $this->userId . '/files/.Collectives/x/path/to/' . $this->attachmentFolderName . '/renamed');
+		$renamedFile->method('getParent')
+			->willReturn($this->attachmentFolder);
+		$this->attachmentFolder->method('getById')
+			->with(2)
+			->willReturn([$this->attachmentFile]);
+		$this->attachmentFile->expects(self::once())
+			->method('move')
+			->with('/' . $this->userId . '/files/.Collectives/x/path/to/' . $this->attachmentFolderName . '/renamed')
+			->willReturn($renamedFile);
+
+		$attachment = $this->service->renameAttachment($this->pageFile, 2, 'renamed', $this->userFolder);
+
+		self::assertEquals('renamed', $attachment['name']);
+		self::assertEquals('/.Collectives/x/path/to/' . $this->attachmentFolderName . '/renamed', $attachment['path']);
 	}
 }

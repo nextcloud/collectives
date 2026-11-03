@@ -523,7 +523,8 @@ class PublicPageController extends CollectivesPublicOCSController {
 					throw new OCSBadRequestException('Failed to open uploaded file.');
 				}
 				$name = $file['name'];
-				return $this->attachmentService->uploadAttachment($pageFile, $name, $resource);
+				$shareFolder = $this->getShare()->getNode();
+				return $this->attachmentService->uploadAttachment($pageFile, $name, $resource, $shareFolder);
 			}
 			throw new OCSBadRequestException('Invalid file upload.');
 		}, $this->logger);
@@ -554,7 +555,8 @@ class PublicPageController extends CollectivesPublicOCSController {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
 			$pageFile = $this->service->getPageFile($collectiveId, $id, $owner);
-			return $this->attachmentService->renameAttachment($pageFile, $attachmentId, $name);
+			$shareFolder = $this->getShare()->getNode();
+			return $this->attachmentService->renameAttachment($pageFile, $attachmentId, $name, $shareFolder);
 		}, $this->logger);
 		return new DataResponse(['attachment' => $attachment]);
 	}
