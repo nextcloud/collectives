@@ -61,16 +61,14 @@ class StaticSiteGeneratorControllerTest extends TestCase {
 		self::assertSame(['message' => 'The static site generator is not reachable'], $response->getData());
 	}
 
-	public function testUpdateStatusReturnsStaticSite(): void {
-		$staticSite = new StaticSite();
-		$this->staticSiteService->method('updateStatus')
-			->with('01990000-0000-7000-8000-000000000000', 'published', ['publish_url' => 'https://example.org'])
-			->willReturn($staticSite);
+	public function testUpdateStatusReturnsEmptyResponse(): void {
+		$this->staticSiteService->expects(self::once())->method('updateStatus')
+			->with('01990000-0000-7000-8000-000000000000', 'published', ['publish_url' => 'https://example.org']);
 
 		$response = $this->controller->updateStatus('01990000-0000-7000-8000-000000000000', 'published', ['publish_url' => 'https://example.org']);
 
 		self::assertSame(Http::STATUS_OK, $response->getStatus());
-		self::assertSame($staticSite, $response->getData());
+		self::assertSame([], $response->getData());
 	}
 
 	public function testUpdateStatusWithUnknownStaticSiteThrowsNotFound(): void {

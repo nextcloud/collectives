@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\StaticSite;
-use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteService;
@@ -26,8 +25,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Provides the external static site generator access to health checks and its build-status callback.
- *
- * @psalm-import-type CollectivesStaticSite from ResponseDefinitions
  */
 class StaticSiteGeneratorController extends OCSController {
 	use OCSExceptionHelper;
@@ -72,7 +69,7 @@ class StaticSiteGeneratorController extends OCSController {
 	 * @param string $status New status ("published" or "failed")
 	 * @param array{publish_url?: non-empty-string, error_message?: string} $data Status-specific result payload, `publish_url` is required for status "published": an http(s) URL of at most 255 characters
 	 *
-	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
 	 * @throws OCSBadRequestException Invalid or missing status, or status published without a valid publish_url
 	 * @throws OCSNotFoundException Static site not found
 	 *
@@ -81,10 +78,10 @@ class StaticSiteGeneratorController extends OCSController {
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function updateStatus(string $staticSiteId, string $status = '', array $data = []): DataResponse {
-		$staticSite = $this->handleErrorResponse(
+		$this->handleErrorResponse(
 			fn (): StaticSite => $this->staticSiteService->updateStatus($staticSiteId, $status, $data),
 			$this->logger,
 		);
-		return new DataResponse($staticSite);
+		return new DataResponse([]);
 	}
 }
