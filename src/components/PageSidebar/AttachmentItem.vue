@@ -204,7 +204,7 @@ export default {
 		attachmentPreview() {
 			const searchParams = '&x=64&y=64&a=true'
 			return this.isPublic
-				? generateUrl(`/apps/files_sharing/publicpreview/${this.shareTokenParam}?fileId=${this.attachment.id}&file=${encodeURI(this.attachment.internalPath)}${searchParams}`)
+				? generateUrl(`/apps/files_sharing/publicpreview/${this.shareTokenParam}?fileId=${this.attachment.id}&file=${encodeURI(this.attachment.path)}${searchParams}`)
 				: generateUrl(`/core/preview?fileId=${this.attachment.id}${searchParams}`)
 		},
 
@@ -228,10 +228,16 @@ export default {
 		},
 
 		davUrl() {
-			const [path, filename] = this.pathSplit(this.attachment.internalPath)
-			return this.isPublic
-				? generateUrl(`s/${this.shareTokenParam}/download?path=/${path}&files=${filename}`)
-				: generateRemoteUrl(`dav/files/${getCurrentUser()?.uid}/${this.currentPage.collectivePath}/${encodeURI(this.attachment.internalPath)}`)
+			if (this.isPublic) {
+				// Share endpoints take paths relative to the share root, not the collective root
+				const [path, filename] = this.pathSplit(this.attachment.path)
+				return generateUrl('s/{token}/download?path=/{path}&files={filename}', {
+					token: this.shareTokenParam,
+					path: path || '/',
+					filename,
+				})
+			}
+			return generateRemoteUrl(`dav/files/${getCurrentUser()?.uid}/${this.currentPage.collectivePath}/${encodeURI(this.attachment.internalPath)}`)
 		},
 
 		formattedFilesize() {
