@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Unit\Controller;
 
 use OCA\Collectives\Controller\StaticSiteGeneratorController;
-use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;

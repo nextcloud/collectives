@@ -879,26 +879,18 @@ class StaticSiteServiceTest extends TestCase {
 	// --- updateStatus() ---
 
 	public function testUpdateStatusStoresPublishedUrlOnPublished(): void {
-		$staticSiteId = 'a-uuid';
-		$found = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
-		$published = new StaticSite();
-		$published->setStaticSiteId($staticSiteId);
-
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
-			->with($staticSiteId)
-			->willReturn($found);
+			->with($this->staticSiteId)
+			->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateStatusPublished')
-			->with(7, 'https://publish.schnubbel.com/publish/a-uuid')
-			->willReturn($published);
+			->with(7, 'https://publish.schnubbel.com/publish/a-uuid');
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
 		$this->archiver->expects($this->once())
 			->method('delete')
-			->with($staticSiteId);
+			->with($this->staticSiteId);
 
-		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://publish.schnubbel.com/publish/a-uuid']);
-
-		$this->assertSame($published, $result);
+		$this->service->updateStatus($this->staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://publish.schnubbel.com/publish/a-uuid']);
 	}
 
 	public static function invalidPublishUrlProvider(): array {
@@ -928,33 +920,27 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findOneByStaticSiteId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateStatusPublished')
-			->with(7, $url)
-			->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+			->with(7, $url);
 
 		$this->service->updateStatus('a-uuid', StaticSite::STATUS_PUBLISHED, ['publish_url' => $url]);
 	}
 
 	public function testUpdateStatusStoresLastErrorAndLogsErrorMessageOnFailed(): void {
 		$staticSiteId = 'a-uuid';
-		$found = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
-		$failed = new StaticSite();
 
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
 			->with($staticSiteId)
-			->willReturn($found);
+			->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateStatusFailed')
-			->with(7, StaticSite::ERROR_GENERATOR_FAILED)
-			->willReturn($failed);
+			->with(7, StaticSite::ERROR_GENERATOR_FAILED);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
 		$this->archiver->expects($this->never())->method('delete');
 		$this->logger->expects($this->once())
 			->method('warning')
 			->with($this->stringContains('something went wrong'));
 
-		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_FAILED, ['error_message' => 'something went wrong']);
-
-		$this->assertSame($failed, $result);
+		$this->service->updateStatus($staticSiteId, StaticSite::STATUS_FAILED, ['error_message' => 'something went wrong']);
 	}
 
 	public static function nonProvidedStatusProvider(): array {
@@ -970,11 +956,10 @@ class StaticSiteServiceTest extends TestCase {
 	 */
 	public function testUpdateStatusIgnoresCallbackForConcludedStaticSite(string $currentStatus): void {
 		$staticSiteId = 'a-uuid';
-		$found = $this->makeStaticSite($currentStatus);
 
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
 			->with($staticSiteId)
-			->willReturn($found);
+			->willReturn($this->makeStaticSite($currentStatus));
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
 		$this->archiver->expects($this->never())->method('delete');
@@ -982,9 +967,7 @@ class StaticSiteServiceTest extends TestCase {
 			->method('warning')
 			->with($this->stringContains('Ignoring static site status callback'));
 
-		$result = $this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
-
-		$this->assertSame($found, $result);
+		$this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
 	}
 
 	public function testUpdateStatusThrowsWhenStaticSiteNotFound(): void {

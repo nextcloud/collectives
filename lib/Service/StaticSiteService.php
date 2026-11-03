@@ -212,7 +212,7 @@ class StaticSiteService {
 	 * @throws UnprocessableEntityException Invalid status or missing/invalid publish_url
 	 * @throws DBException
 	 */
-	public function updateStatus(string $staticSiteId, string $status, array $data = []): StaticSite {
+	public function updateStatus(string $staticSiteId, string $status, array $data = []): void {
 		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
 			throw new UnprocessableEntityException('Invalid status: ' . $status);
 		}
@@ -229,19 +229,19 @@ class StaticSiteService {
 
 		if ($staticSite->getStatus() !== StaticSite::STATUS_PROVIDED) {
 			$this->logger->warning('Ignoring static site status callback for status ' . $staticSite->getStatus(), ['staticSiteId' => $staticSiteId]);
-			return $staticSite;
+			return;
 		}
 
 		if ($status === StaticSite::STATUS_PUBLISHED) {
-			$staticSite = $this->staticSiteMapper->updateStatusPublished($staticSite->getId(), $publishedUrl);
+			$this->staticSiteMapper->updateStatusPublished($staticSite->getId(), $publishedUrl);
 			$this->deleteArchive($staticSite);
-			return $staticSite;
+			return;
 		}
 
 		if (isset($data['error_message'])) {
 			$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
 		}
-		return $this->staticSiteMapper->updateStatusFailed($staticSite->getId(), StaticSite::ERROR_GENERATOR_FAILED);
+		$this->staticSiteMapper->updateStatusFailed($staticSite->getId(), StaticSite::ERROR_GENERATOR_FAILED);
 	}
 
 	/**
