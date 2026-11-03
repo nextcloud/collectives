@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
-use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteService;
@@ -78,10 +77,9 @@ class StaticSiteGeneratorController extends OCSController {
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function updateStatus(string $staticSiteId, string $status = '', array $data = []): DataResponse {
-		$this->handleErrorResponse(
-			fn (): StaticSite => $this->staticSiteService->updateStatus($staticSiteId, $status, $data),
-			$this->logger,
-		);
+		$this->handleErrorResponse(function () use ($staticSiteId, $status, $data): void {
+			$this->staticSiteService->updateStatus($staticSiteId, $status, $data);
+		}, $this->logger);
 		return new DataResponse([]);
 	}
 }
