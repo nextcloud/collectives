@@ -4522,9 +4522,7 @@
                                                 "meta": {
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
-                                                "data": {
-                                                    "$ref": "#/components/schemas/StaticSite"
-                                                }
+                                                "data": {}
                                             }
                                         }
                                     }
