@@ -47,7 +47,6 @@ namespace OCA\Collectives;
  * @psalm-type CollectivesStaticSite = array{
  *     id: int,
  *     collectiveId: int,
- *     staticSiteId: string,
  *     title: string,
  *     slug: string,
  *     selectedPageIds: list<int>,

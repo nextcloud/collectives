@@ -118,11 +118,13 @@ class StaticSite extends Entity implements JsonSerializable {
 		}
 	}
 
+	/**
+	 * Omits `staticSiteId`, it authorizes the static site generator's callback and archive download
+	 */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
 			'collectiveId' => $this->collectiveId,
-			'staticSiteId' => $this->staticSiteId,
 			'title' => $this->title,
 			'slug' => $this->slug,
 			'selectedPageIds' => $this->getSelectedPageIds(),

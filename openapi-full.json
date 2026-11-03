@@ -337,7 +337,6 @@
                 "required": [
                     "id",
                     "collectiveId",
-                    "staticSiteId",
                     "title",
                     "slug",
                     "selectedPageIds",
@@ -357,9 +356,6 @@
                     "collectiveId": {
                         "type": "integer",
                         "format": "int64"
-                    },
-                    "staticSiteId": {
-                        "type": "string"
                     },
                     "title": {
                         "type": "string"

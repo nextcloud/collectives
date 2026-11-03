@@ -86,4 +86,11 @@ class StaticSiteTest extends TestCase {
 		$this->assertSame(StaticSite::ERROR_GENERATOR_FAILED, $json['lastError']);
 		$this->assertSame(1700000000, $json['publishedAt']);
 	}
+
+	public function testJsonSerializeOmitsStaticSiteId(): void {
+		$staticSite = new StaticSite();
+		$staticSite->setStaticSiteId('01990000-0000-7000-8000-000000000000');
+
+		$this->assertArrayNotHasKey('staticSiteId', $staticSite->jsonSerialize());
+	}
 }
