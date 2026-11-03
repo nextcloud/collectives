@@ -112,9 +112,10 @@ class StaticSiteServiceTest extends TestCase {
 		return $staticSite;
 	}
 
-	private function makePageInfo(int $id): PageInfo {
+	private function makePageInfo(int $id, int $parentId = 0): PageInfo {
 		$page = $this->createMock(PageInfo::class);
 		$page->method('getId')->willReturn($id);
+		$page->method('getParentId')->willReturn($parentId);
 		return $page;
 	}
 
@@ -141,7 +142,7 @@ class StaticSiteServiceTest extends TestCase {
 		$files = ['Readme.md' => $this->makeFileWithSize(1)];
 		$this->contentCollector->expects($this->once())
 			->method('collect')
-			->with($this->collectiveId)
+			->with($this->collectiveId, $pageIds)
 			->willReturn($files);
 		$this->archiver->expects($this->once())
 			->method('store')
@@ -221,6 +222,24 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('create');
 
 		$this->service->create($this->collectiveId, [1, 99], $this->userId);
+	}
+
+	public function testPublishAddsMissingAncestorPagesToKeepHierarchyIntact(): void {
+		$collective = $this->makeCollective(canEdit: true);
+		$this->collectiveService->method('getCollective')->willReturn($collective);
+		$this->pageService->method('findAll')->willReturn([
+			$this->makePageInfo(1),
+			$this->makePageInfo(2, parentId: 1),
+			$this->makePageInfo(3, parentId: 2),
+		]);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('create')
+			->with($this->collectiveId, [3, 2, 1], 'My Collective', 'my-collective', $this->userId)
+			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
+
+		// Only the deepest subpage was explicitly selected
+		$this->service->create($this->collectiveId, [3], $this->userId);
 	}
 
 	private function expectValidCollectiveWithPages(string $name = 'My Collective'): void {
@@ -504,6 +523,28 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
 
 		$this->service->update($this->collectiveId, 7, [1], $title, $this->userId);
+	}
+
+	public function testUpdateProvidesArchiveForNewPageSelectionNotThePreviouslyStoredOne(): void {
+		$collective = $this->makeCollective(canEdit: true);
+		$this->collectiveService->method('getCollective')->willReturn($collective);
+		$this->pageService->method('findAll')->willReturn([
+			$this->makePageInfo(1),
+			$this->makePageInfo(2),
+		]);
+
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$staticSite->setSelectedPageIds([1]);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+
+		$this->contentCollector->expects($this->once())
+			->method('collect')
+			->with($this->collectiveId, [2, 1])
+			->willReturn([]);
+
+		// The page selection just changed from [1] to [2, 1]
+		$this->service->update($this->collectiveId, 7, [2, 1], 'Title', $this->userId);
 	}
 
 	public function testUpdateRejectsPageIdsFromOtherCollective(): void {
