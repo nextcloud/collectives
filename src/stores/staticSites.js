@@ -10,6 +10,8 @@ import * as api from '../apis/collectives/index.js'
 import { staticSitePollInterval, staticSitePublicationTimeout } from '../constants.js'
 import { staticSiteErrorMessage } from '../util/staticSiteError.js'
 
+const IN_PROGRESS_STATUSES = ['pending', 'provided']
+
 export const useStaticSitesStore = defineStore('staticSites', {
 	state: () => ({
 		/** @type {Object<number, object[]>} collective ID -> static sites */
@@ -19,12 +21,16 @@ export const useStaticSitesStore = defineStore('staticSites', {
 	}),
 
 	getters: {
-		publishedUrlForCollective: (state) => (collectiveId) => {
-			return state.staticSites[collectiveId]?.find((staticSite) => staticSite.publishedUrl)?.publishedUrl ?? null
+		// Most recently updated first
+		staticSitesForCollective: (state) => (collectiveId) => {
+			return [...(state.staticSites[collectiveId] ?? [])]
+				.sort((a, b) => b.updatedAt - a.updatedAt)
 		},
 
-		staticSiteForCollective: (state) => (collectiveId) => {
-			return state.staticSites[collectiveId]?.[0] ?? null
+		// Mirrors StaticSite::isInProgress()
+		isStaticSiteInProgress: () => (staticSite, now = Date.now()) => {
+			return IN_PROGRESS_STATUSES.includes(staticSite.status)
+				&& staticSite.updatedAt >= now / 1000 - staticSitePublicationTimeout
 		},
 	},
 
