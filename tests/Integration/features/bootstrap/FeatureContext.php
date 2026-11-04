@@ -62,11 +62,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates collective :collective
-	 * @When user :user :fails to create collective :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user creates collective :collective')]
+	#[\Behat\Step\When('user :user :fails to create collective :collective')]
 	public function userCreatesCollective(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$formData = new TableNode([['name', $collective]]);
@@ -80,10 +80,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets :type level in collective :collective to :level
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets :type level in collective :collective to :level')]
 	public function userUpdatesCollectivePermissionLevel(string $user, string $type, string $collective, string $level): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -102,11 +101,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets pageMode for collective :collective to :mode
-	 * @When user :user :fails to set pageMode for collective :collective to :mode
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets pageMode for collective :collective to :mode')]
+	#[\Behat\Step\When('user :user :fails to set pageMode for collective :collective to :mode')]
 	public function userUpdatesCollectivePageMode(string $user, string $collective, string $mode, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -130,11 +129,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates page :page with parentPath :parentPath in :collective
-	 * @When user :user :fails to create page :page with parentPath :parentPath in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user creates page :page with parentPath :parentPath in :collective')]
+	#[\Behat\Step\When('user :user :fails to create page :page with parentPath :parentPath in :collective')]
 	public function userCreatesPage(string $user, string $page, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -151,11 +150,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates page :page with parentPath :parentPath from template :template in :collective
-	 * @When user :user :fails to create page :page with parentPath :parentPath from template :template in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user creates page :page with parentPath :parentPath from template :template in :collective')]
+	#[\Behat\Step\When('user :user :fails to create page :page with parentPath :parentPath from template :template in :collective')]
 	public function userCreatesFromTemplate(string $user, string $page, string $parentPath, string $template, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -173,10 +172,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user fails to create page :page with parentPath :parentPath using page :sourcePage as template in :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user fails to create page :page with parentPath :parentPath using page :sourcePage as template in :collective')]
 	public function userFailsToCreateFromNonTemplate(string $user, string $page, string $parentPath, string $sourcePage, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -189,11 +187,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates template :template in :collective
-	 * @When user :user :fails to create template :template in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user creates template :template in :collective')]
+	#[\Behat\Step\When('user :user :fails to create template :template in :collective')]
 	public function userCreatesTemplate(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -209,11 +207,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user sees collective :collective
-	 * @Then user :user sees collective :collective in :trash
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('user :user sees collective :collective')]
+	#[\Behat\Step\Then('user :user sees collective :collective in :trash')]
 	public function userSeesCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
 		if ($trash) {
@@ -226,11 +224,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user sees pagePath :pagePath in :collective
-	 * @Then user :user :fails to see pagePath :pagePath in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('user :user sees pagePath :pagePath in :collective')]
+	#[\Behat\Step\Then('user :user :fails to see pagePath :pagePath in :collective')]
 	public function userSeesPagePath(string $user, string $pagePath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -244,11 +242,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user sees templateName :templateName in :collective
-	 * @Then user :user :fails to see templateName :templateName in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('user :user sees templateName :templateName in :collective')]
+	#[\Behat\Step\Then('user :user :fails to see templateName :templateName in :collective')]
 	public function userSeesTemplatePath(string $user, string $templateName, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -261,11 +259,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user doesn't see collective :collective
-	 * @Then user :user doesn't see collective :collective in :trash
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('user :user doesn\'t see collective :collective')]
+	#[\Behat\Step\Then('user :user doesn\'t see collective :collective in :trash')]
 	public function userDoesntSeeCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
 		if ($trash) {
@@ -278,10 +276,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user doesn't see pagePath :pagePath in :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('user :user doesn\'t see pagePath :pagePath in :collective')]
 	public function userDoesntSeePagePath(string $user, string $pagePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -291,11 +288,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user sees attachment :name with mimetype :mimetype for :page in :collective
-	 * @Then user :user :fails to see attachment :name with mimetype :mimetype for :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('user :user sees attachment :name with mimetype :mimetype for :page in :collective')]
+	#[\Behat\Step\Then('user :user :fails to see attachment :name with mimetype :mimetype for :page in :collective')]
 	public function userSeesAttachment(string $user, string $name, ?string $mimetype, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -311,10 +308,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user last edited page :page in :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('user :user last edited page :page in :collective')]
 	public function userLastEditedPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -324,22 +320,21 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user trashes and deletes collective :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user trashes and deletes collective :collective')]
 	public function userTrashesAndDeletesCollectiveAndTeam(string $user, string $collective): void {
 		$this->userTrashesCollective($user, $collective);
 		$this->userDeletesCollectiveAndTeam($user, $collective);
 	}
 
 	/**
-	 * @When user :user trashes collective :collective
-	 * @When user :user :fails to trash collective :collective
-	 * @When user :user :fails to trash foreign collective :collective with member :member
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user trashes collective :collective')]
+	#[\Behat\Step\When('user :user :fails to trash collective :collective')]
+	#[\Behat\Step\When('user :user :fails to trash foreign collective :collective with member :member')]
 	public function userTrashesCollective(string $user, string $collective, ?string $fail = null, ?string $member = null): void {
 		$this->setCurrentUser($member ?: $user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -357,12 +352,12 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes collective :collective
-	 * @When user :user :fails to delete collective :collective
-	 * @When user :user :fails to delete collective :collective with admin :admin
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes collective :collective')]
+	#[\Behat\Step\When('user :user :fails to delete collective :collective')]
+	#[\Behat\Step\When('user :user :fails to delete collective :collective with admin :admin')]
 	public function userDeletesCollective(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
 		$this->setCurrentUser($admin ?: $user);
 		$collectiveId = $this->collectiveIdByName($collective, true);
@@ -381,13 +376,13 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes collective+team :collective
-	 * @When user :user :fails to delete collective+team :collective
-	 * @When user :user :fails to delete collective+team :collective with admin :admin
-	 * @When user :user :fails to delete :selfadmin collective+team :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes collective+team :collective')]
+	#[\Behat\Step\When('user :user :fails to delete collective+team :collective')]
+	#[\Behat\Step\When('user :user :fails to delete collective+team :collective with admin :admin')]
+	#[\Behat\Step\When('user :user :fails to delete :selfadmin collective+team :collective')]
 	public function userDeletesCollectiveAndTeam(string $user, string $collective, ?string $fail = null, ?string $admin = null, ?string $selfadmin = null): void {
 		$this->setCurrentUser($admin ?: $user);
 		$collectiveId = $this->collectiveIdByName($collective, true);
@@ -405,11 +400,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user restores collective :collective
-	 * @When user :user :fails to restore collective :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user restores collective :collective')]
+	#[\Behat\Step\When('user :user :fails to restore collective :collective')]
 	public function userRestoresCollective(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective, true);
@@ -426,10 +421,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user collective :collective property :property is :value
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user collective :collective property :property is :value')]
 	public function userCollectiveProperty(string $user, string $collective, string $property, string $value): void {
 		$this->setCurrentUser($user);
 		$this->sendOcsCollectivesRequest('GET', 'collectives');
@@ -440,10 +434,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets userSetting :userSetting for collective :collective to :value
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets userSetting :userSetting for collective :collective to :value')]
 	public function userSetsCollectiveUserSetting(string $user, string $userSetting, string $collective, string $value): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -457,11 +450,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user trashes page :page in :collective
-	 * @When user :user :fails to trash page :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user trashes page :page in :collective')]
+	#[\Behat\Step\When('user :user :fails to trash page :page in :collective')]
 	public function userTrashesPage(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -475,11 +468,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user restores page :page from trash in :collective
-	 * @When user :user :fails to restore page :page from trash in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user restores page :page from trash in :collective')]
+	#[\Behat\Step\When('user :user :fails to restore page :page from trash in :collective')]
 	public function userRestoresPage(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -494,11 +487,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes page :page from trash in :collective
-	 * @When user :user :fails to delete page :page from trash in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes page :page from trash in :collective')]
+	#[\Behat\Step\When('user :user :fails to delete page :page from trash in :collective')]
 	public function userDeletesPage(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -513,10 +506,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes template :template from :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes template :template from :collective')]
 	public function userDeletesTemplate(string $user, string $template, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -526,11 +518,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user touches page :page in :collective
-	 * @When user :user :fails to touch page :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user touches page :page in :collective')]
+	#[\Behat\Step\When('user :user :fails to touch page :page in :collective')]
 	public function userTouchesPage(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -544,11 +536,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user moves page :page to :newtitle with parentPath :parentPath in :collective
-	 * @When user :user :fails to move page :page to :newtitle with parentPath :parentPath in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user moves page :page to :newtitle with parentPath :parentPath in :collective')]
+	#[\Behat\Step\When('user :user :fails to move page :page to :newtitle with parentPath :parentPath in :collective')]
 	public function userMovesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -564,11 +556,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user copies page :page to :newtitle with parentPath :parentPath in :collective
-	 * @When user :user :fails to copy page :page to :newtitle with parentPath :parentPath in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user copies page :page to :newtitle with parentPath :parentPath in :collective')]
+	#[\Behat\Step\When('user :user :fails to copy page :page to :newtitle with parentPath :parentPath in :collective')]
 	public function userCopiesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -588,10 +580,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user renames template :template to :newtitle in :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user renames template :template to :newtitle in :collective')]
 	public function userRenamesTemplate(string $user, string $template, string $newtitle, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -604,11 +595,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId
-	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId')]
+	#[\Behat\Step\When('user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath')]
 	public function userMovesPageToCollective(string $user, string $page, string $oldCollective, string $newCollective, ?string $parentPath = null): void {
 		$this->setCurrentUser($user);
 		$oldCollectiveId = $this->collectiveIdByName($oldCollective);
@@ -625,11 +616,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId
-	 * @When user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId')]
+	#[\Behat\Step\When('user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath')]
 	public function userCopiesPageToCollective(string $user, string $page, string $oldCollective, string $newCollective, ?string $parentPath = null): void {
 		$this->setCurrentUser($user);
 		$oldCollectiveId = $this->collectiveIdByName($oldCollective);
@@ -646,12 +637,12 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets emoji for page :page to :emoji in :collective
-	 * @When user :user :fails to set emoji for page :page to :emoji in :collective
-	 * @When user :user :fails to set emoji for page :page to :invalid :emoji in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets emoji for page :page to :emoji in :collective')]
+	#[\Behat\Step\When('user :user :fails to set emoji for page :page to :emoji in :collective')]
+	#[\Behat\Step\When('user :user :fails to set emoji for page :page to :invalid :emoji in :collective')]
 	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $collective, ?string $fail = null, ?string $invalid = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -671,10 +662,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sees emoji :emoji for page :page in :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sees emoji :emoji for page :page in :collective')]
 	public function userSeesPageEmoji(string $user, string $page, string $emoji, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -685,11 +675,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets emoji for template :template to :emoji in :collective
-	 * @When user :user :fails to set emoji for template :template to :emoji in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets emoji for template :template to :emoji in :collective')]
+	#[\Behat\Step\When('user :user :fails to set emoji for template :template to :emoji in :collective')]
 	public function userSetsTemplateEmoji(string $user, string $template, string $emoji, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -705,11 +695,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets full width for page :page to :fullWidth in :collective
-	 * @When user :user :fails to set full width for page :page to :fullWidth in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets full width for page :page to :fullWidth in :collective')]
+	#[\Behat\Step\When('user :user :fails to set full width for page :page to :fullWidth in :collective')]
 	public function userSetsFullWidth(string $user, string $page, string $fullWidth, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -726,11 +716,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets subpageOrder for page :page to :subpageOrder in :collective
-	 * @When user :user :fails to set subpageOrder for page :page to :subpageOrder in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets subpageOrder for page :page to :subpageOrder in :collective')]
+	#[\Behat\Step\When('user :user :fails to set subpageOrder for page :page to :subpageOrder in :collective')]
 	public function userSetsPageSubpageOrder(string $user, string $page, string $subpageOrder, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -745,9 +735,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user sets content of file :filePath to :content in collective :collective
-	 */
+	#[\Behat\Step\When('user :user sets content of file :filePath to :content in collective :collective')]
 	public function userSetsCollectiveFileContent(string $user, string $filePath, string $content, string $collective): void {
 		$this->setCurrentUser($user);
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
@@ -757,11 +745,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user uploads attachment :fileName to page :page in :collective
-	 * @When user :user :fails to upload attachment :fileName to page :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user uploads attachment :fileName to page :page in :collective')]
+	#[\Behat\Step\When('user :user :fails to upload attachment :fileName to page :page in :collective')]
 	public function userUploadsAttachment(string $user, string $fileName, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -782,11 +770,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user renames attachment :fileName to :newFileName for page :page in :collective
-	 * @When user :user :fails to rename attachment :fileName to :newFileName for page :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user renames attachment :fileName to :newFileName for page :page in :collective')]
+	#[\Behat\Step\When('user :user :fails to rename attachment :fileName to :newFileName for page :page in :collective')]
 	public function userRenamesAttachment(string $user, string $fileName, string $newFileName, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -802,11 +790,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes attachment :fileName for page :page in :collective
-	 * @When user :user :fails to delete attachment :fileName for page :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes attachment :fileName for page :page in :collective')]
+	#[\Behat\Step\When('user :user :fails to delete attachment :fileName for page :page in :collective')]
 	public function userDeletesAttachment(string $user, string $fileName, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -822,11 +810,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user restores deleted attachment for page :page in :collective
-	 * @When user :user :fails to restore deleted attachment for page :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user restores deleted attachment for page :page in :collective')]
+	#[\Behat\Step\When('user :user :fails to restore deleted attachment for page :page in :collective')]
 	public function userRestoresAttachment(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -842,10 +830,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user gets setting :key with value :value
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user gets setting :key with value :value')]
 	public function userGetsSetting(string $user, string $key, ?string $value = null): string {
 		$this->setCurrentUser($user);
 
@@ -861,11 +848,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets setting :key to value :value
-	 * @When user :user :fails to set setting :key to value :value
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets setting :key to value :value')]
+	#[\Behat\Step\When('user :user :fails to set setting :key to value :value')]
 	public function userSetsSetting(string $user, string $key, string $value, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 
@@ -881,17 +868,13 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When we wait for :seconds seconds
-	 */
+	#[\Behat\Step\When('we wait for :seconds seconds')]
 	public function waitSeconds(int $seconds): void {
 		sleep($seconds);
 	}
 
-	/**
-	 * @When user :user creates session for :collective
-	 * @When user :user :fails to create session for :collective
-	 */
+	#[\Behat\Step\When('user :user creates session for :collective')]
+	#[\Behat\Step\When('user :user :fails to create session for :collective')]
 	public function userCreatesSession(string $user, string $collective, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -905,12 +888,10 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user updates session for :collective
-	 * @When user :user updates session for :collective with token :token
-	 * @When user :user :fails to update session for :collective
-	 * @When user :user :fails to update session for :collective with token :token
-	 */
+	#[\Behat\Step\When('user :user updates session for :collective')]
+	#[\Behat\Step\When('user :user updates session for :collective with token :token')]
+	#[\Behat\Step\When('user :user :fails to update session for :collective')]
+	#[\Behat\Step\When('user :user :fails to update session for :collective with token :token')]
 	public function userUpdatesSession(string $user, string $collective, ?string $fails = null, ?string $token = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -930,12 +911,10 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user closes session for :collective
-	 * @When user :user closes session for :collective with token :token
-	 * @When user :user :fails to close session for :collective
-	 * @When user :user :fails to close session for :collective with token :token
-	 */
+	#[\Behat\Step\When('user :user closes session for :collective')]
+	#[\Behat\Step\When('user :user closes session for :collective with token :token')]
+	#[\Behat\Step\When('user :user :fails to close session for :collective')]
+	#[\Behat\Step\When('user :user :fails to close session for :collective with token :token')]
 	public function userClosesSession(string $user, string $collective, ?string $fails = null, ?string $token = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -955,12 +934,10 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user creates tag :tag with color :color for collective :collective
-	 * @When user :user :fails to create tag :tag with color :color for collective :collective
-	 * @When user :user :fails to create tag :tag with invalid color :invalidColor for collective :collective
-	 * @When user :user :fails to create :existing tag :tag with color :color for collective :collective
-	 */
+	#[\Behat\Step\When('user :user creates tag :tag with color :color for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to create tag :tag with color :color for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to create tag :tag with invalid color :invalidColor for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to create :existing tag :tag with color :color for collective :collective')]
 	public function userCreatesTag(string $user, string $collective, string $tag, ?string $color = null, ?string $fails = null, ?string $invalidColor = null, ?string $existing = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -980,11 +957,9 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user updates tag :tag with color :color for collective :collective
-	 * @When user :user :fails to update tag :tag with color :color for collective :collective
-	 * @When user :user :fails to update tag :tag with invalid color :invalidColor for collective :collective
-	 */
+	#[\Behat\Step\When('user :user updates tag :tag with color :color for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to update tag :tag with color :color for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to update tag :tag with invalid color :invalidColor for collective :collective')]
 	public function userUpdatesTag(string $user, string $collective, string $tag, ?string $color = null, ?string $fails = null, ?string $invalidColor = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1005,10 +980,8 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user deletes tag :tag for collective :collective
-	 * @When user :user :fails to delete tag :tag for collective :collective
-	 */
+	#[\Behat\Step\When('user :user deletes tag :tag for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to delete tag :tag for collective :collective')]
 	public function userDeletesTag(string $user, string $collective, string $tag, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1021,11 +994,9 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user sees tag :tag with color :color for collective :collective
-	 * @When user :user :fails to see tag :tag for collective :collective
-	 * @When user :user :fails to see tag :tag with color :color for collective :collective
-	 */
+	#[\Behat\Step\When('user :user sees tag :tag with color :color for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to see tag :tag for collective :collective')]
+	#[\Behat\Step\When('user :user :fails to see tag :tag with color :color for collective :collective')]
 	public function userSeesTag(string $user, string $collective, string $tag, ?string $color = null, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1037,11 +1008,9 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user adds tag :tag to page :page in collective :collective
-	 * @When user :user :fails to add tag :tag to page :page in collective :collective
-	 * @When user :user :fails to add tagId :tagId to page :page in collective :collective
-	 */
+	#[\Behat\Step\When('user :user adds tag :tag to page :page in collective :collective')]
+	#[\Behat\Step\When('user :user :fails to add tag :tag to page :page in collective :collective')]
+	#[\Behat\Step\When('user :user :fails to add tagId :tagId to page :page in collective :collective')]
 	public function userAddsTagToPage(string $user, string $collective, string $page, ?string $tag = null, ?string $tagId = null, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1060,10 +1029,8 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user removes tag :tag from page :page in collective :collective
-	 * @When user :user :fails to remove tag :tag from page :page in collective :collective
-	 */
+	#[\Behat\Step\When('user :user removes tag :tag from page :page in collective :collective')]
+	#[\Behat\Step\When('user :user :fails to remove tag :tag from page :page in collective :collective')]
 	public function userRemovesTagFromPage(string $user, string $collective, string $page, string $tag, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1078,11 +1045,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user joins team :name with owner :owner
-	 * @When user :user joins team :name with owner :owner with level :level
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user joins team :name with owner :owner')]
+	#[\Behat\Step\When('user :user joins team :name with owner :owner with level :level')]
 	public function userJoinsTeam(string $user, string $name, string $owner, ?string $level = null): void {
 		$this->setCurrentUser($owner);
 		$circleId = $this->circleIdByName($name);
@@ -1108,9 +1075,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user leaves team :name with owner :owner
-	 */
+	#[\Behat\Step\When('user :user leaves team :name with owner :owner')]
 	public function userLeavesTeam(string $user, string $name, string $owner): void {
 		$this->setCurrentUser($owner);
 		$circleId = $this->circleIdByName($name);
@@ -1123,10 +1088,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user is member of team :name
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user is member of team :name')]
 	public function userIsMemberOfTeam(string $user, string $name): void {
 		$this->setCurrentUser($user);
 		$circleId = $this->circleIdByName($name);
@@ -1134,11 +1098,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes team :name
-	 * @When user :user :fails to delete team :name
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes team :name')]
+	#[\Behat\Step\When('user :user :fails to delete team :name')]
 	public function userDeletesTeam(string $user, string $name, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$circleId = $this->circleIdByName($name);
@@ -1152,10 +1116,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When app :appId is :status
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('app :appId is :status')]
 	public function toggleApp(string $appId, string $status): void {
 		$this->setCurrentUser('admin');
 
@@ -1183,10 +1146,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user has quota :quota
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user has quota :quota')]
 	public function setUserQuota(string $user, string $quota): void {
 		$this->setCurrentUser('admin');
 		$data = new TableNode([
@@ -1198,11 +1160,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates public share for :collective
-	 * @When user :user :fails to create public share for :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user creates public share for :collective')]
+	#[\Behat\Step\When('user :user :fails to create public share for :collective')]
 	public function userCreatesPublicShare(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1217,11 +1179,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates public page share for page :page in :collective
-	 * @When user :user :fails to create public page share for page :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user creates public page share for page :page in :collective')]
+	#[\Behat\Step\When('user :user :fails to create public page share for page :page in :collective')]
 	public function userCreatesPublicPageShare(string $user, string $collective, string $page, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1237,10 +1199,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets editing permissions for collective share :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets editing permissions for collective share :collective')]
 	public function userSetsPublicShareEditPermissions(string $user, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1251,10 +1212,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets editing permissions for page share :page in collective :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sets editing permissions for page share :page in collective :collective')]
 	public function userSetsPublicFileShareEditPermissions(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1266,10 +1226,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user unsets editing permissions for collective share :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user unsets editing permissions for collective share :collective')]
 	public function userUnsetsPublicShareEditPermissions(string $user, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1280,10 +1239,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user unsets editing permissions for page share :page in collective :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user unsets editing permissions for page share :page in collective :collective')]
 	public function userUnsetsPublicFileShareEditPermissions(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1295,11 +1253,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user stores token for public share :collective
-	 * @When user :user stores token for public page share :pageShare in collective :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user stores token for public share :collective')]
+	#[\Behat\Step\When('user :user stores token for public page share :pageShare in collective :collective')]
 	public function userStoresPublicShareToken(string $user, string $collective, ?string $pageShare = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1311,11 +1269,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes public share for :collective
-	 * @When user :user deletes public page share :pageShare in collective :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes public share for :collective')]
+	#[\Behat\Step\When('user :user deletes public page share :pageShare in collective :collective')]
 	public function userDeletesPublicShare(string $user, string $collective, ?string $pageShare = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1333,10 +1291,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous sees public collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous sees public collective :collective with owner :owner')]
 	public function anonymousSeesPublicCollective(string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1348,10 +1305,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous sees public page share :page in collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous sees public page share :page in collective :collective with owner :owner')]
 	public function anonymousSeesPublicPageShare(string $page, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1364,10 +1320,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous fails to see public share with stored token
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous fails to see public share with stored token')]
 	public function anonymousFailsToSeePublicCollective(): void {
 		Assert::assertArrayHasKey('shareToken', $this->store);
 		Assert::assertNotEmpty($this->store['shareToken']);
@@ -1376,10 +1331,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous sees pagePath :path in public collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous sees pagePath :path in public collective :collective with owner :owner')]
 	public function anonymousSeesPublicCollectivePages(string $path, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1390,10 +1344,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous sees pagePath :path in public page share :pageShare in collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous sees pagePath :path in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousSeesPublicPagePages(string $path, string $pageShare, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1405,10 +1358,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous doesn't see pagePath :path in public collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous doesn\'t see pagePath :path in public collective :collective with owner :owner')]
 	public function anonymousDoesntSeePublicCollectivePages(string $path, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1419,10 +1371,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous doesn't see pagePath :path in public page share :pageShare in collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous doesn\'t see pagePath :path in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousDoesntSeePublicPageSharePages(string $path, string $pageShare, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1434,11 +1385,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous creates page :page with parentPath :parentPath in public collective :collective with owner :owner
-	 * @When anonymous :fails to create page :page with parentPath :parentPath in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous creates page :page with parentPath :parentPath in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to create page :page with parentPath :parentPath in public collective :collective with owner :owner')]
 	public function anonymousCreatesPublicCollectivePage(string $page, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1455,11 +1406,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous creates page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
-	 * @When anonymous :fails to create page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous creates page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to create page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousCreatesPublicPagePage(string $page, string $parentPath, string $pageShare, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1477,10 +1428,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous fails to create page :page with parentPath :parentPath from template :template in public page share :pageShare in collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous fails to create page :page with parentPath :parentPath from template :template in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousFailsToCreatePublicPagePageFromTemplate(string $page, string $parentPath, string $template, string $pageShare, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1495,11 +1445,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous moves page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
-	 * @When anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous moves page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner')]
 	public function anonymousMovesPage(string $page, string $newtitle, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1516,11 +1466,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous moves page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
-	 * @When anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous moves page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousMovesPageInPageShare(string $page, string $newtitle, string $parentPath, string $pageShare, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1538,11 +1488,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous copies page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
-	 * @When anonymous :fails to copy page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous copies page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to copy page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner')]
 	public function anonymousCopiesPage(string $page, string $newtitle, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1563,11 +1513,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous sets emoji for page :page to :emoji in public collective :collective with owner :owner
-	 * @When anonymous :fails to set emoji for page :page to :emoji in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous sets emoji for page :page to :emoji in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to set emoji for page :page to :emoji in public collective :collective with owner :owner')]
 	public function anonymousSetsPublicCollectivePageEmoji(string $page, string $emoji, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1585,11 +1535,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous sets emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner
-	 * @When anonymous :fails to set emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous sets emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to set emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousSetsPublicPageSharePageEmoji(string $page, string $emoji, string $pageShare, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1608,11 +1558,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous trashes page :page in public collective :collective with owner :owner
-	 * @When anonymous :fails to trash page :page in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous trashes page :page in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to trash page :page in public collective :collective with owner :owner')]
 	public function anonymousTrashesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1628,10 +1578,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous fails to trash page :page in public page share :pageShare in collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous fails to trash page :page in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousTrashesPublicPageSharePage(string $page, string $pageShare, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1644,11 +1593,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous restores page :page from trash in public collective :collective with owner :owner
-	 * @When anonymous :fails to restore page :page from trash in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous restores page :page from trash in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to restore page :page from trash in public collective :collective with owner :owner')]
 	public function anonymousRestoresPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1665,11 +1614,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous deletes page :page from trash in public collective :collective with owner :owner
-	 * @When anonymous :fails to delete page :page from trash in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous deletes page :page from trash in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to delete page :page from trash in public collective :collective with owner :owner')]
 	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1686,11 +1635,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous uploads attachment :fileName to page :page in public collective :collective with owner :owner
-	 * @When anonymous :fails to upload attachment :fileName to page :page in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous uploads attachment :fileName to page :page in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to upload attachment :fileName to page :page in public collective :collective with owner :owner')]
 	public function anonymousUploadsAttachment(string $fileName, string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1713,11 +1662,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous renames attachment :fileName to :newFileName for page :page in public collective :collective with owner :owner
-	 * @When anonymous :fails to rename attachment :fileName to :newFileName for page :page in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous renames attachment :fileName to :newFileName for page :page in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to rename attachment :fileName to :newFileName for page :page in public collective :collective with owner :owner')]
 	public function anonymousRenamesAttachment(string $fileName, string $newFileName, string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1734,11 +1683,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous deletes attachment :fileName for page :page in public collective :collective with owner :owner
-	 * @When anonymous :fails to delete attachment :fileName for page :page in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous deletes attachment :fileName for page :page in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to delete attachment :fileName for page :page in public collective :collective with owner :owner')]
 	public function anonymousDeletesAttachment(string $fileName, string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1755,11 +1704,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous restores deleted attachment for page :page in public collective :collective with owner :owner
-	 * @When anonymous :fails to restore deleted attachment for page :page in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous restores deleted attachment for page :page in public collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to restore deleted attachment for page :page in public collective :collective with owner :owner')]
 	public function anonymousRestoresAttachment(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1776,11 +1725,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner
-	 * @Then anonymous :fails to see attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('anonymous sees attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner')]
+	#[\Behat\Step\Then('anonymous :fails to see attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner')]
 	public function anonymousSeesAttachment(string $name, string $mimetype, string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1797,10 +1746,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public page share :pageShare in collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\Then('anonymous sees attachment :name with mimetype :mimetype for :page in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousSeesPageShareAttachments(string $name, string $mimetype, string $page, string $pageShare, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1812,13 +1760,11 @@ class FeatureContext implements Context {
 		$this->assertAttachment($name, $mimetype);
 	}
 
-	/**
-	 * @When anonymous creates tag :tag with color :color for collective :collective with owner :owner
-	 * @When anonymous :fails to create tag :tag with color :color for collective :collective with owner :owner
-	 * @When anonymous :fails to create :existing tag :tag with color :color for collective :collective with owner :owner
-	 * @When anonymous creates tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
-	 * @When anonymous :fails to create tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
-	 */
+	#[\Behat\Step\When('anonymous creates tag :tag with color :color for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to create tag :tag with color :color for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to create :existing tag :tag with color :color for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous creates tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to create tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner')]
 	public function anonymousCreatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null, ?string $existing = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1839,12 +1785,10 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When anonymous updates tag :tag with color :color for collective :collective with owner :owner
-	 * @When anonymous :fails to update tag :tag with color :color for collective :collective with owner :owner
-	 * @When anonymous updates tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
-	 * @When anonymous :fails to update tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
-	 */
+	#[\Behat\Step\When('anonymous updates tag :tag with color :color for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to update tag :tag with color :color for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous updates tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to update tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner')]
 	public function anonymousUpdatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1862,12 +1806,10 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When anonymous deletes tag :tag for collective :collective with owner :owner
-	 * @When anonymous :fails to delete tag :tag for collective :collective with owner :owner
-	 * @When anonymous deletes tag :tag in public page share :pageShare for collective :collective with owner :owner
-	 * @When anonymous :fails to delete tag :tag in public page share :pageShare for collective :collective with owner :owner
-	 */
+	#[\Behat\Step\When('anonymous deletes tag :tag for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to delete tag :tag for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous deletes tag :tag in public page share :pageShare for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to delete tag :tag in public page share :pageShare for collective :collective with owner :owner')]
 	public function anonymousDeletesTag(string $collective, string $tag, string $owner, ?string $fails = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1881,13 +1823,11 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When anonymous sees tag :tag with color :color for collective :collective with owner :owner
-	 * @When anonymous :fails to see tag :tag for collective :collective with owner :owner
-	 * @When anonymous :fails to see tag :tag with color :color for collective :collective with owner :owner
-	 * @When anonymous sees tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
-	 * @When anonymous :fails to see tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner
-	 */
+	#[\Behat\Step\When('anonymous sees tag :tag with color :color for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to see tag :tag for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to see tag :tag with color :color for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous sees tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to see tag :tag with color :color in public page share :pageShare for collective :collective with owner :owner')]
 	public function anonymousSeesTag(string $collective, string $tag, string $owner, ?string $color = null, ?string $fails = null, ?string $pageShare = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1900,11 +1840,9 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When anonymous adds tag :tag to page :page in collective :collective with owner :owner
-	 * @When anonymous :fails to add tag :tag to page :page in collective :collective with owner :owner
-	 * @When anonymous :fails to add tagId :tagId to page :page in collective :collective with owner :owner
-	 */
+	#[\Behat\Step\When('anonymous adds tag :tag to page :page in collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to add tag :tag to page :page in collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to add tagId :tagId to page :page in collective :collective with owner :owner')]
 	public function anonymousAddsTagToPage(string $collective, string $page, string $owner, ?string $tag = null, ?string $tagId = null, ?string $fails = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1924,10 +1862,8 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When anonymous removes tag :tag from page :page in collective :collective with owner :owner
-	 * @When anonymous :fails to remove tag :tag from page :page in collective :collective with owner :owner
-	 */
+	#[\Behat\Step\When('anonymous removes tag :tag from page :page in collective :collective with owner :owner')]
+	#[\Behat\Step\When('anonymous :fails to remove tag :tag from page :page in collective :collective with owner :owner')]
 	public function anonymousRemovesTagFromPage(string $collective, string $page, string $owner, string $tag, ?string $fails = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -1956,11 +1892,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sees webdav node :path
-	 * @When user :user :fails to see webdav node :path
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user sees webdav node :path')]
+	#[\Behat\Step\When('user :user :fails to see webdav node :path')]
 	public function webdavNodeExists(string $user, string $path, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . trim($path, '/'), null, null, ['Depth' => '0']);
@@ -1972,10 +1908,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user has webdav access to :collective with permissions :permissions
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user has webdav access to :collective with permissions :permissions')]
 	public function hasCollectiveWebdavAccess(string $collective, string $user, string $permissions): void {
 		$this->setCurrentUser($user);
 		$headers = [
@@ -2001,10 +1936,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When public share with owner :user has webdav access to :collective with permissions :permissions
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('public share with owner :user has webdav access to :collective with permissions :permissions')]
 	public function hasCollectivePublicWebdavAccess(string $collective, string $user, string $permissions): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -2082,10 +2016,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates folder :folder
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user creates folder :folder')]
 	public function createsFolder(string $user, string $folderName): void {
 		$this->setCurrentUser($user);
 		$folderPath = '/dav/files/' . $user . '/' . $folderName;
@@ -2095,11 +2028,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes folder :folder
-	 * @When user :user deletes folder :folder if it :exists
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes folder :folder')]
+	#[\Behat\Step\When('user :user deletes folder :folder if it :exists')]
 	public function deletesFolder(string $user, string $folderName, ?string $noFail = null): void {
 		$this->setCurrentUser($user);
 		$folderPath = '/dav/files/' . $user . '/' . $folderName;
@@ -2111,10 +2044,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user uploads attachment :fileName via webdav to :page with file path :filePath in :collective
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user uploads attachment :fileName via webdav to :page with file path :filePath in :collective')]
 	public function uploadsAttachmentWebdav(string $user, string $fileName, string $page, string $filePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -2131,11 +2063,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user trashes page :page via webdav in :collective
-	 * @When user :user :fails to trash page :page via webdav in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user trashes page :page via webdav in :collective')]
+	#[\Behat\Step\When('user :user :fails to trash page :page via webdav in :collective')]
 	public function webdavTrashFile(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
@@ -2151,11 +2083,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user restores page :page from trash via webdav in :collective
-	 * @When user :user :fails to restore page :page from trash via webdav in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user restores page :page from trash via webdav in :collective')]
+	#[\Behat\Step\When('user :user :fails to restore page :page from trash via webdav in :collective')]
 	public function webdavRestoreFile(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 
@@ -2176,11 +2108,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes page :page from trash via webdav in :collective
-	 * @When user :user :fails to delete page :page from trash via webdav in :collective
 	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user deletes page :page from trash via webdav in :collective')]
+	#[\Behat\Step\When('user :user :fails to delete page :page from trash via webdav in :collective')]
 	public function webdavDeleteFile(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 
@@ -2731,18 +2663,15 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @When user :user waits for :seconds seconds
-	 */
+	#[\Behat\Step\When('user :user waits for :seconds seconds')]
 	public function userWaitsForSeconds(string $user, int $seconds): void {
 		sleep($seconds);
 	}
 
 	/**
-	 * @When user :user searches recent pages with query :query
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user searches recent pages with query :query')]
 	public function userSearchesRecentPages(string $user, string $query): void {
 		$this->setCurrentUser($user);
 		$this->sendOcsCollectivesRequest('GET', 'collectives/search/recent?query=' . urlencode($query));
@@ -2750,44 +2679,35 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user searches recent pages with query :query and limit :limit
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('user :user searches recent pages with query :query and limit :limit')]
 	public function userSearchesRecentPagesWithLimit(string $user, string $query, int $limit): void {
 		$this->setCurrentUser($user);
 		$this->sendOcsCollectivesRequest('GET', 'collectives/search/recent?query=' . urlencode($query) . '&limit=' . $limit);
 		$this->assertStatusCode(200);
 	}
 
-	/**
-	 * @Then user :user sees :count search results
-	 */
+	#[\Behat\Step\Then('user :user sees :count search results')]
 	public function userSeesSearchResultCount(string $user, int $count): void {
 		$this->setCurrentUser($user);
 		$jsonBody = $this->getJson();
 		Assert::assertCount($count, $jsonBody['ocs']['data']['pages'], "Expected $count search results but got " . count($jsonBody['ocs']['data']['pages']));
 	}
 
-	/**
-	 * @Then user :user sees page :title in search results
-	 */
+	#[\Behat\Step\Then('user :user sees page :title in search results')]
 	public function userSeesPageInResults(string $user, string $title): void {
 		$this->setCurrentUser($user);
 		$this->assertPageInSearchResults($title, false);
 	}
 
-	/**
-	 * @Then user :user doesn't see page :title in search results
-	 */
+	#[\Behat\Step\Then('user :user doesn\'t see page :title in search results')]
 	public function userDoesntSeePageInResults(string $user, string $title): void {
 		$this->setCurrentUser($user);
 		$this->assertPageInSearchResults($title, true);
 	}
 
-	/**
-	 * @Then the first search result is page :title
-	 */
+	#[\Behat\Step\Then('the first search result is page :title')]
 	public function firstResultIsPage(string $title): void {
 		$jsonBody = $this->getJson();
 		Assert::assertGreaterThan(0, count($jsonBody['ocs']['data']['pages']), 'No search results found');
@@ -2810,9 +2730,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @Then user :user sees page :title with collectiveName :collective in search results
-	 */
+	#[\Behat\Step\Then('user :user sees page :title with collectiveName :collective in search results')]
 	public function userSeesPageWithCollectiveName(string $user, string $title, string $collective): void {
 		$this->setCurrentUser($user);
 		$jsonBody = $this->getJson();
@@ -2827,10 +2745,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous searches :title in public page share :pageShare in collective :collective with owner :owner
-	 *
 	 * @throws GuzzleException
 	 */
+	#[\Behat\Step\When('anonymous searches :title in public page share :pageShare in collective :collective with owner :owner')]
 	public function anonymousSearchesInPublicShare(string $title, string $pageShare, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
@@ -2840,16 +2757,12 @@ class FeatureContext implements Context {
 		$this->assertStatusCode(200);
 	}
 
-	/**
-	 * @Then anonymous sees page :title in search results
-	 */
+	#[\Behat\Step\Then('anonymous sees page :title in search results')]
 	public function anonymousSeesPageInResults(string $title): void {
 		$this->assertPageInSearchResults($title, false);
 	}
 
-	/**
-	 * @When occ command :command is run
-	 */
+	#[\Behat\Step\When('occ command :command is run')]
 	public function runOccCommand(string $command): void {
 		exec($this->occPath . ' ' . escapeshellcmd($command), $output, $returnCode);
 		Assert::assertEquals(0, $returnCode, 'OCC command failed: ' . implode('\n', $output));
