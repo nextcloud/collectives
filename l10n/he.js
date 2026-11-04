@@ -36,7 +36,6 @@ OC.L10N.register(
     "Favorites" : "מועדפים",
     "Home" : "בית",
     "Favorite" : "סימון כמועדף",
-    "Sort order" : "סידור",
     "Page not found" : "העמוד לא נמצא",
     "Show in Files" : "הצגה בקבצים",
     "Create public link" : "יצירת קישור ציבורי",
@@ -69,6 +68,7 @@ OC.L10N.register(
     "Failed to revert {page} to revision {timestamp}." : "נכשל אחזור {page} לגרסה {timestamp}.",
     "Template" : "תבנית",
     "Done" : "הסתיים",
+    "Sort order" : "סידור",
     "_%n byte_::_%n bytes_" : ["%n בייט","%n בייטים","%n בייטים"]
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

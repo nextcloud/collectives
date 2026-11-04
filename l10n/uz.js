@@ -34,7 +34,6 @@ OC.L10N.register(
     "Favorites" : "Favorites",
     "Home" : "Uy",
     "Favorite" : "Favorite",
-    "Sort order" : "Saralash tartibi",
     "Page not found" : "Sahifa topilmadi",
     "Share link ({index})" : "Havolani ulashish ({index})",
     "Can edit" : "Can edit",
@@ -52,6 +51,7 @@ OC.L10N.register(
     "Link copied" : "Havola nusxalandi",
     "Please reload the page." : "Iltimos, sahifani qayta yuklang.",
     "View" : "Ko'rish",
-    "Done" : "Done"
+    "Done" : "Done",
+    "Sort order" : "Saralash tartibi"
 },
 "nplurals=1; plural=0;");

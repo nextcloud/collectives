@@ -76,6 +76,7 @@ OC.L10N.register(
     "Password" : "Пароль",
     "Advanced settings" : "Пашыраныя налады",
     "Unshare" : "Cкасаваць абагульванне",
+    "Expiration date" : "Expiration date",
     "Upload" : "Запампаваць",
     "Drag and drop files here to upload" : "Перацягніце файлы сюды, каб запампаваць іх",
     "Uploading" : "Запампоўванне",

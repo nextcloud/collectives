@@ -22,6 +22,8 @@ OC.L10N.register(
     "Home" : "বাড়ি",
     "Favorite" : "প্রিয়জন",
     "Unshare" : "ভাগাভাগি বাতিল ",
+    "Set expiration date" : "মেয়াদোত্তীর্ণ হওয়ার তারিখ নির্ধারণ করুন",
+    "Expiration date" : "মেয়াদোত্তীর্ণ হওয়ার তারিখ",
     "Upload" : "আপলোড",
     "No other versions available" : "আর কোন সংষ্করণ প্রাপ্তব্য নয়",
     "Sharing" : "ভাগাভাগিরত",

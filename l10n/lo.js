@@ -57,7 +57,6 @@ OC.L10N.register(
     "Favorites" : "ລາຍການທີ່ມັກ",
     "Home" : "ໜ້າຫຼັກ",
     "Favorite" : "ລາຍການທີ່ມັກ",
-    "Sort order" : "ລຳດັບການຈັດລຽງ",
     "Page not found" : "ບໍ່ພົບຫນ້າ",
     "Show in Files" : "Show in Files",
     "Create public link" : "ສ້າງລິງສາທາລະນະ",
@@ -107,6 +106,7 @@ OC.L10N.register(
     "View" : "ເບິ່ງ",
     "Template" : "ແມ່ແບບ",
     "Done" : "ສໍາເລັດ",
+    "Sort order" : "ລຳດັບການຈັດລຽງ",
     "Sort by title" : "ຈັດຮຽງຕາມຫົວຂໍ້",
     "_%n byte_::_%n bytes_" : ["%n bytes"]
 },

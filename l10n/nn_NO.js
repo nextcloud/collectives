@@ -31,7 +31,6 @@ OC.L10N.register(
     "Favorites" : "Favorittar",
     "Home" : "Heim",
     "Favorite" : "Favoritt",
-    "Sort order" : "Sortering",
     "Page not found" : "Fann ikkje sida",
     "Add another link" : "Legg til ei anna lenkje",
     "Advanced settings" : "Avanserte innstillingar",
@@ -46,6 +45,7 @@ OC.L10N.register(
     "Please reload the page." : "Ver venleg og last sida på nytt.",
     "View" : "Vis",
     "Failed to revert {page} to revision {timestamp}." : "Klarte ikkje å tilbakestilla {page} til utgåva {timestamp}.",
-    "Done" : "Ferdig"
+    "Done" : "Ferdig",
+    "Sort order" : "Sortering"
 },
 "nplurals=2; plural=(n != 1);");

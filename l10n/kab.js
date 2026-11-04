@@ -37,7 +37,6 @@ OC.L10N.register(
     "Favorites" : "Imenyafen",
     "Home" : "Amager",
     "Favorite" : "Menyif",
-    "Sort order" : "Amizzwer n wefran",
     "Page not found" : "Ulac asebter",
     "Share link ({index})" : "Bḍu aseɣwen ({index})",
     "View only" : "Askan kan",
@@ -56,6 +55,7 @@ OC.L10N.register(
     "Copied" : "Yettwanɣel",
     "View" : "Askan",
     "Template" : "Taneɣruft n temsisɣelt",
-    "Done" : "Immed"
+    "Done" : "Immed",
+    "Sort order" : "Amizzwer n wefran"
 },
 "nplurals=2; plural=(n != 1);");

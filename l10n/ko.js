@@ -49,7 +49,6 @@ OC.L10N.register(
     "Favorites" : "즐겨찾기",
     "Home" : "집",
     "Favorite" : "즐겨찾기",
-    "Sort order" : "정렬 순서",
     "Page not found" : "페이지를 찾을 수 없음",
     "Show in Files" : "파일로 표시",
     "Create public link" : "공개 링크 만들기",
@@ -103,6 +102,7 @@ OC.L10N.register(
     "Failed to revert {page} to revision {timestamp}." : "{page}을(를) 리비전 {timestamp}(으)로 되돌리는 데 실패했습니다.",
     "Template" : "템플릿",
     "Done" : "완료",
+    "Sort order" : "정렬 순서",
     "Sort by title" : "제목순으로 정렬"
 },
 "nplurals=1; plural=0;");
