@@ -40,7 +40,7 @@ CYPRESS_ncVersion='master' CYPRESS_baseUrl=https://nextcloud.local/index.php npx
 ### Behat API integration tests
 
 In order to run the integration tests you might need to change the `default` config for behat in
-`tests/Integration/features/config/behat.yml` to use a different `baseUrl`.
+`tests/Integration/behat.php` to use a different `baseUrl`.
 
 The integration tests rely on test users being available in the server. They're auto-created when
 using [nextcloud-docker-dev](https://github.com/juliusknorr/nextcloud-docker-dev).

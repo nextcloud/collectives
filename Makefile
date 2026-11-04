@@ -86,7 +86,7 @@ test-php-unit:
 	$(CURDIR)/vendor/bin/phpunit --configuration tests/phpunit.xml
 
 test-php-integration:
-	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
+	$(CURDIR)/vendor/bin/behat --config=tests/Integration/behat.php
 
 test-js:
 	$(NPM) test

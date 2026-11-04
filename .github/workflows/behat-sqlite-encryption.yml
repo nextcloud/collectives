@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Location of the behat.yml file
-  BEHAT_CONFIG: ./tests/Integration/config/behat.yml
+  # Location of the behat.php file
+  BEHAT_CONFIG: ./tests/Integration/behat.php
 
 jobs:
   changes:
