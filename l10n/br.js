@@ -34,6 +34,8 @@ OC.L10N.register(
     "Set password" : "Termeniñ ur ger-tremen",
     "Add another link" : "Implij ul liamm all",
     "Unshare" : "Na eskemm ken",
+    "Set expiration date" : "Lakaat un deizat termen",
+    "Expiration date" : "Deizat termen",
     "Upload" : "Enporzhiañ",
     "Uploading" : "O pellkasañ",
     "No other versions available" : "Stumm all ebet kavet",

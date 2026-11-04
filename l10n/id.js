@@ -65,7 +65,6 @@ OC.L10N.register(
     "Home" : "Beranda",
     "Favorite" : "Favorit",
     "Search pages" : "Cari halaman",
-    "Sort order" : "Urutkan",
     "Page not found" : "Halaman tidak ditemukan",
     "Show in Files" : "Tampilkan di Berkas",
     "Create public link" : "Buat tautan publik",
@@ -122,6 +121,7 @@ OC.L10N.register(
     "Failed to revert {page} to revision {timestamp}." : "Gagal mengembalikan {page} ke revisi {timestamp}.",
     "Template" : "Templat",
     "Done" : "Selesai",
+    "Sort order" : "Urutkan",
     "Sort by title" : "Urutkan berdasarkan judul",
     "_%n byte_::_%n bytes_" : ["%n byte"]
 },

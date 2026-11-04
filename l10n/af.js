@@ -25,6 +25,8 @@ OC.L10N.register(
     "Can edit" : "Kan redigeer",
     "Advanced settings" : "Gevorderde instellings",
     "Unshare" : "Ontdeel",
+    "Set expiration date" : "Stel vervaldatum",
+    "Expiration date" : "Vervaldatum",
     "Upload" : "Oplaai",
     "Versions" : "Weergawes",
     "Link copied" : "Skakel gekopieer",

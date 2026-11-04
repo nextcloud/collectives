@@ -24,6 +24,7 @@ OC.L10N.register(
     "Add another link" : "Başqa link əlavə edin",
     "Advanced settings" : "İrəliləmiş quraşdırmalar",
     "Unshare" : "Paylaşımı durdur",
+    "Expiration date" : "Expiration date",
     "Upload" : "Serverə yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
     "Download version" : "Versiyanı yüklə",

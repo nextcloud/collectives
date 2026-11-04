@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Oikeutesi eivät riitä kohteen %s jakamiseen.",
+    "Off" : "Pois",
     "Share link" : "Jaa linkki",
     "Settings" : "Asetukset",
     "Notifications" : "Ilmoitukset",

@@ -35,7 +35,6 @@
     "Favorites" : "Imenyafen",
     "Home" : "Amager",
     "Favorite" : "Menyif",
-    "Sort order" : "Amizzwer n wefran",
     "Page not found" : "Ulac asebter",
     "Share link ({index})" : "Bḍu aseɣwen ({index})",
     "View only" : "Askan kan",
@@ -54,6 +53,7 @@
     "Copied" : "Yettwanɣel",
     "View" : "Askan",
     "Template" : "Taneɣruft n temsisɣelt",
-    "Done" : "Immed"
+    "Done" : "Immed",
+    "Sort order" : "Amizzwer n wefran"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
