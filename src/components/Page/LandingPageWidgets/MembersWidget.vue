@@ -38,6 +38,8 @@
 					variant="tertiary"
 					:title="showMembersTitle"
 					:aria-label="showMembersAriaLabel"
+					:href="circlesMembersUrl"
+					:target="circlesMembersUrl ? '_blank' : undefined"
 					@click="openCollectiveMembers()">
 					<template #icon>
 						<AccountMultiplePlusIcon v-if="isAdmin" :size="16" />
@@ -67,6 +69,7 @@ import { CIRCLE_MEMBERS_PARTIAL_LIMIT, circlesMemberTypes } from '../../../const
 import { useCirclesStore } from '../../../stores/circles.js'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
+import { hasMembersManagementInCircles } from '../../../util/circles.ts'
 import { circleMemberType } from '../../../util/circles.ts'
 
 export default {
@@ -96,7 +99,6 @@ export default {
 
 	computed: {
 		...mapState(useCirclesStore, [
-			'circleMembers',
 			'circleMembersSorted',
 		]),
 
@@ -163,16 +165,11 @@ export default {
 				: t('collectives', 'Show all members of the collective')
 		},
 
-		teamUrl() {
-			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.currentCollective.circleId })
-		},
-
-		hasContactsApp() {
-			return 'contacts' in window.OC.appswebroots
-		},
-
-		showTeamOverviewButton() {
-			return this.hasContactsApp && this.circleMembers(this.currentCollective.circleId).length > 1
+		circlesMembersUrl() {
+			if (!this.isAdmin || !hasMembersManagementInCircles()) {
+				return null
+			}
+			return generateUrl('/apps/circles/teams/team/{circleId}/settings', { circleId: this.currentCollective.circleId })
 		},
 	},
 
@@ -221,6 +218,9 @@ export default {
 		},
 
 		openCollectiveMembers() {
+			if (this.circlesMembersUrl) {
+				return
+			}
 			this.setMembersCollectiveId(this.currentCollective.id)
 		},
 
