@@ -311,6 +311,30 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setCustomSettings(int $id,
+		string $userId,
+		string $key,
+		mixed $value): Collective {
+		if (!in_array($key, Collective::CUSTOM_SETTINGS)) {
+			throw new NotFoundException('Invalid custom setting key: ' . $key);
+		}
+
+		$collective = $this->getCollective($id, $userId);
+
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
+			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
+		}
+
+		$collective->setCustomSetting($key, $value);
+
+		return $this->collectiveMapper->update($collective);
+	}
+
+	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException

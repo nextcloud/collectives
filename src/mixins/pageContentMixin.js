@@ -35,6 +35,7 @@ export default {
 				return content.request.responseText
 			} catch (e) {
 				console.error('Failed to fetch content of page', e)
+				return ''
 			}
 		},
 	},
