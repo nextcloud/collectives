@@ -35,6 +35,9 @@
 		<CollectiveSettings
 			v-if="showCollectiveSettings"
 			:collective="settingsCollective" />
+		<CollectivePrintDialog
+			v-if="printCollective"
+			:collective="printCollective" />
 		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
 	</NcContent>
 </template>
@@ -45,6 +48,7 @@ import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcContent from '@nextcloud/vue/components/NcContent'
+import CollectivePrintDialog from './components/Collective/CollectivePrintDialog.vue'
 import CollectiveSelector from './components/Nav/CollectiveSelector.vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import NewCollectiveModal from './components/Nav/NewCollectiveModal.vue'
@@ -62,6 +66,7 @@ export default {
 	name: 'CollectivesApp',
 
 	components: {
+		CollectivePrintDialog,
 		CollectiveSelector,
 		CollectiveSettings,
 		NcAppNavigation,
@@ -81,6 +86,7 @@ export default {
 	data() {
 		return {
 			loadPending: true,
+			exportPending: false,
 			showNewCollectiveModal: false,
 			navWidth: NAV_WIDTH_DEFAULT,
 			resizeStartX: 0,
@@ -97,6 +103,7 @@ export default {
 
 		...mapState(useCollectivesStore, [
 			'currentCollective',
+			'printCollective',
 			'settingsCollective',
 		]),
 
@@ -127,6 +134,23 @@ export default {
 				this.rootStore.pageId = val.params.pageId ? parseInt(val.params.pageId) : null
 				this.rootStore.shareTokenParam = val.params.token
 				this.rootStore.fileIdQuery = val.query.fileId ? parseInt(val.query.fileId) : ''
+
+				// `?export` (e.g. from the public share header action) opens the export dialog
+				if (val.query.export !== undefined) {
+					const query = { ...val.query }
+					delete query.export
+					this.$router.replace({ path: val.path, query, hash: val.hash })
+					this.exportPending = true
+					this.openPendingExport()
+				}
+			},
+
+			immediate: true,
+		},
+
+		currentCollective: {
+			handler() {
+				this.openPendingExport()
 			},
 
 			immediate: true,
@@ -154,7 +178,15 @@ export default {
 		...mapActions(useSettingsStore, ['getCollectivesFolder']),
 		...mapActions(useCollectivesStore, [
 			'getCollectives',
+			'setPrintCollectiveId',
 		]),
+
+		openPendingExport() {
+			if (this.exportPending && this.currentCollective) {
+				this.exportPending = false
+				this.setPrintCollectiveId(this.currentCollective.id)
+			}
+		},
 
 		onOpenNewCollectiveModal() {
 			this.showNewCollectiveModal = true

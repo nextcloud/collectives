@@ -153,7 +153,8 @@ class PublicStartController extends AuthPublicShareController {
 				'icon-download',
 				$this->urlGenerator->linkToRoute('collectives.publicStart.showShare', [
 					'token' => $this->getToken(),
-					'path' => 'print/' . $collective->getUrlPath(),
+					'path' => $collective->getUrlPath(),
+					'export' => 1,
 				]),
 			),
 		]);
