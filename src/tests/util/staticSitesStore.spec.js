@@ -13,7 +13,7 @@ import { useStaticSitesStore } from '../../stores/staticSites.js'
 vi.mock('../../apis/collectives/index.js', () => ({ getStaticSites: vi.fn() }))
 vi.mock('@nextcloud/dialogs', () => ({ showError: vi.fn(), showSuccess: vi.fn() }))
 vi.mock('@nextcloud/l10n', () => ({
-	t: (_app, message, parameters = {}) => message.replace(/\{(\w+)\}/g, (match, name) => parameters[name] ?? match),
+	t: (_app, message, parameters = {}) => message.replace(/\{(\w+)}/g, (match, name) => parameters[name] ?? match),
 }))
 
 const publishedUrl = 'https://example.org/site'
