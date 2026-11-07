@@ -45,6 +45,15 @@
 							:href="staticSite.publishedUrl"
 							target="_blank"
 							rel="noopener noreferrer">{{ staticSite.publishedUrl }}</a>
+						<p v-if="staticSite.status === 'failed'" class="modal-publish__site-error">
+							{{ staticSiteErrorMessage(staticSite.lastError) }}
+							<template v-if="staticSite.publishedUrl">
+								{{ t('collectives', 'The previous version is still online.') }}
+							</template>
+						</p>
+						<span v-if="staticSite.publishedAt" class="modal-publish__site-published-at">
+							{{ t('collectives', 'Last published {date}', { date: formatTimestamp(staticSite.publishedAt) }) }}
+						</span>
 					</li>
 				</ul>
 			</div>
@@ -107,6 +116,7 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
@@ -121,6 +131,7 @@ import { createStaticSite, updateStaticSite } from '../../apis/collectives/index
 import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
+import { staticSiteErrorMessage } from '../../util/staticSiteError.js'
 import { generateSlug, isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
 
 const TITLE_MAX_LENGTH = 255
@@ -250,6 +261,12 @@ export default {
 
 	methods: {
 		t,
+		staticSiteErrorMessage,
+
+		formatTimestamp(timestamp) {
+			return moment.unix(timestamp).format('LLL')
+		},
+
 		...mapActions(usePagesStore, ['getPagesForCollective']),
 
 		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication']),
@@ -432,6 +449,14 @@ export default {
 		&--selected {
 			border-color: var(--color-primary-element);
 		}
+	}
+
+	&__site-error {
+		color: var(--color-error-text);
+	}
+
+	&__site-published-at {
+		color: var(--color-text-maxcontrast);
 	}
 
 	&__site-select {

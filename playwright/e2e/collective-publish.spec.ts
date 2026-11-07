@@ -319,6 +319,59 @@ test.describe('Collective publish', () => {
 		await expect(modal.getByRole('link', { name: publishedUrl })).toBeVisible()
 	})
 
+	test('shows why publishing a website failed', async ({ collective, navigation, page }) => {
+		const rootPageId = collective.getRootPage().data.id
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({
+				json: ocsResponse([
+					{
+						id: 1,
+						title: 'Previously published website',
+						slug: 'previously-published-website',
+						selectedPageIds: [rootPageId],
+						publishedUrl: 'https://example.org/previously-published-website',
+						publishedAt: timestamp(7200),
+						status: 'failed',
+						lastError: 'generator_unavailable',
+						updatedAt: timestamp(3600),
+					},
+					{
+						id: 2,
+						title: 'Never published website',
+						slug: 'never-published-website',
+						selectedPageIds: [rootPageId],
+						publishedUrl: null,
+						publishedAt: null,
+						status: 'failed',
+						lastError: 'generator_failed',
+						updatedAt: timestamp(7200),
+					},
+				]),
+			})
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const previouslyPublished = modal.getByRole('listitem').filter({ hasText: 'Previously published website' })
+		const neverPublished = modal.getByRole('listitem').filter({ hasText: 'Never published website' })
+
+		await expect(previouslyPublished).toContainText('Publishing failed')
+		await expect(previouslyPublished).toContainText('The publish service is currently not available. Please try again later.')
+		await expect(previouslyPublished).toContainText('The previous version is still online.')
+		await expect(previouslyPublished).toContainText('Last published')
+
+		await expect(neverPublished).toContainText('The publish service could not build the website. Please contact your administrator.')
+		await expect(neverPublished).not.toContainText('The previous version is still online.')
+		await expect(neverPublished).not.toContainText('Last published')
+
+		// A failed website can be published again
+		await expect(modal.getByRole('button', { name: 'Update website' })).toBeEnabled()
+	})
+
 	test('shows a toast once the published URL arrives, without the modal being open', async ({ collective, navigation, page }) => {
 		// Polling for the published URL takes a few seconds
 		test.slow()
