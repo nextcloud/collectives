@@ -82,6 +82,14 @@ class StaticSiteMapperTest extends TestCase {
 		return $staticSite;
 	}
 
+	private function makeProvidedStaticSite(): StaticSite {
+		$staticSite = $this->makeStaticSite();
+		$staticSite->setStatus(StaticSite::STATUS_PROVIDED);
+		$staticSite->setPublishedAt(1600000000);
+		$staticSite->resetUpdatedFields();
+		return $staticSite;
+	}
+
 	public function testUpdateStatusIfUnchangedOnlyUpdatesUnchangedStaticSite(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 
@@ -94,6 +102,7 @@ class StaticSiteMapperTest extends TestCase {
 		], $this->conditions);
 		$this->assertSame([
 			'status' => StaticSite::STATUS_PENDING,
+			'last_error' => null,
 			'updated_at' => $this->now,
 		], $this->values);
 	}
@@ -122,6 +131,27 @@ class StaticSiteMapperTest extends TestCase {
 		], $this->values);
 	}
 
+	public function testRestoreStatusRestoresLastError(): void {
+		$this->qb->method('executeStatement')->willReturn(1);
+		$current = new StaticSite();
+		$current->setId(7);
+		$current->setStatus(StaticSite::STATUS_PENDING);
+		$current->setUpdatedAt($this->now);
+		$current->resetUpdatedFields();
+		$this->mapper->method('find')->willReturn($current);
+		$previous = $this->makeStaticSite();
+		$previous->setStatus(StaticSite::STATUS_FAILED);
+		$previous->setLastError(StaticSite::ERROR_GENERATOR_FAILED);
+
+		$this->mapper->restoreStatus($previous);
+
+		$this->assertSame([
+			'status' => StaticSite::STATUS_FAILED,
+			'last_error' => StaticSite::ERROR_GENERATOR_FAILED,
+			'updated_at' => 1700000000,
+		], $this->values);
+	}
+
 	public function testRestoreStatusThrowsIfStaticSiteWasDeleted(): void {
 		$this->mapper->method('find')->willThrowException(new DoesNotExistException('Not found'));
 
@@ -141,8 +171,18 @@ class StaticSiteMapperTest extends TestCase {
 			'title' => 'Title',
 			'selected_pages' => '[3,1]',
 			'status' => StaticSite::STATUS_FAILED,
+			'last_error' => null,
 			'updated_at' => $this->now,
 		], $this->values);
+	}
+
+	public function testUpdateSettingsAndStatusStoresLastError(): void {
+		$this->qb->method('executeStatement')->willReturn(1);
+		$this->mapper->method('find')->willReturn(new StaticSite());
+
+		$this->mapper->updateSettingsAndStatus($this->makeStaticSite(), 'Title', [1], StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_REJECTED);
+
+		$this->assertSame(StaticSite::ERROR_GENERATOR_REJECTED, $this->values['last_error']);
 	}
 
 	public function testUpdateSettingsAndStatusThrowsIfStaticSiteWasDeleted(): void {
@@ -151,5 +191,51 @@ class StaticSiteMapperTest extends TestCase {
 
 		$this->expectException(NotFoundException::class);
 		$this->mapper->updateSettingsAndStatus($this->makeStaticSite(), 'Title', [1], StaticSite::STATUS_PROVIDED);
+	}
+
+	public function testUpdateStatusPublishedStoresUrlAndPublicationTimeInOneUpdate(): void {
+		$this->mapper->method('find')->with(7)->willReturn($this->makeProvidedStaticSite());
+
+		$staticSite = $this->mapper->updateStatusPublished(7, 'https://example.org/site');
+
+		$this->assertSame(StaticSite::STATUS_PUBLISHED, $staticSite->getStatus());
+		$this->assertSame('https://example.org/site', $staticSite->getPublishedUrl());
+		$this->assertSame($this->now, $staticSite->getPublishedAt());
+		$this->assertNull($staticSite->getLastError());
+		$this->assertSame([
+			'status' => StaticSite::STATUS_PUBLISHED,
+			'published_url' => 'https://example.org/site',
+			'published_at' => $this->now,
+			'updated_at' => $this->now,
+		], $this->values);
+	}
+
+	public function testUpdateStatusFailedStoresLastErrorAndKeepsPreviousPublication(): void {
+		$this->mapper->method('find')->with(7)->willReturn($this->makeProvidedStaticSite());
+
+		$staticSite = $this->mapper->updateStatusFailed(7, StaticSite::ERROR_GENERATOR_FAILED);
+
+		$this->assertSame(StaticSite::STATUS_FAILED, $staticSite->getStatus());
+		$this->assertSame(StaticSite::ERROR_GENERATOR_FAILED, $staticSite->getLastError());
+		$this->assertSame(1600000000, $staticSite->getPublishedAt());
+		$this->assertSame([
+			'status' => StaticSite::STATUS_FAILED,
+			'last_error' => StaticSite::ERROR_GENERATOR_FAILED,
+			'updated_at' => $this->now,
+		], $this->values);
+	}
+
+	public function testUpdateStatusPublishedThrowsIfStaticSiteWasDeleted(): void {
+		$this->mapper->method('find')->willThrowException(new DoesNotExistException('Not found'));
+
+		$this->expectException(NotFoundException::class);
+		$this->mapper->updateStatusPublished(7, 'https://example.org/site');
+	}
+
+	public function testUpdateStatusFailedThrowsIfStaticSiteWasDeleted(): void {
+		$this->mapper->method('find')->willThrowException(new DoesNotExistException('Not found'));
+
+		$this->expectException(NotFoundException::class);
+		$this->mapper->updateStatusFailed(7, StaticSite::ERROR_GENERATOR_FAILED);
 	}
 }

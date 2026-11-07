@@ -337,7 +337,6 @@
                 "required": [
                     "id",
                     "collectiveId",
-                    "staticSiteId",
                     "title",
                     "slug",
                     "selectedPageIds",
@@ -345,7 +344,9 @@
                     "status",
                     "createdBy",
                     "createdAt",
-                    "updatedAt"
+                    "updatedAt",
+                    "lastError",
+                    "publishedAt"
                 ],
                 "properties": {
                     "id": {
@@ -355,9 +356,6 @@
                     "collectiveId": {
                         "type": "integer",
                         "format": "int64"
-                    },
-                    "staticSiteId": {
-                        "type": "string"
                     },
                     "title": {
                         "type": "string"
@@ -389,6 +387,20 @@
                     "updatedAt": {
                         "type": "integer",
                         "format": "int64"
+                    },
+                    "lastError": {
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                            "generator_unavailable",
+                            "generator_rejected",
+                            "generator_failed"
+                        ]
+                    },
+                    "publishedAt": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true
                     }
                 }
             },
@@ -4436,10 +4448,11 @@
                                     "data": {
                                         "type": "object",
                                         "default": {},
-                                        "description": "Status-specific result payload",
+                                        "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters",
                                         "properties": {
                                             "publish_url": {
-                                                "type": "string"
+                                                "type": "string",
+                                                "minLength": 1
                                             },
                                             "error_message": {
                                                 "type": "string"
@@ -4505,9 +4518,7 @@
                                                 "meta": {
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
-                                                "data": {
-                                                    "$ref": "#/components/schemas/StaticSite"
-                                                }
+                                                "data": {}
                                             }
                                         }
                                     }
@@ -4516,7 +4527,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid or missing status",
+                        "description": "Invalid or missing status, or status published without a valid publish_url",
                         "content": {
                             "application/json": {
                                 "schema": {

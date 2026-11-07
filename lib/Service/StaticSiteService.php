@@ -29,6 +29,7 @@ class StaticSiteService {
 	private const TITLE_MAX_LENGTH = 255;
 	private const SLUG_MAX_LENGTH = 64;
 	private const SLUG_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
+	private const PUBLISHED_URL_MAX_LENGTH = 255;
 	private const LARGEST_FILES_IN_MESSAGE = 3;
 	private const ALLOWED_CALLBACK_STATUSES = [
 		StaticSite::STATUS_PUBLISHED,
@@ -145,7 +146,10 @@ class StaticSiteService {
 		try {
 			$this->generatorClient->build($staticSite, $title);
 		} catch (StaticSiteGeneratorException $e) {
-			$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED);
+			$lastError = $e instanceof StaticSiteGeneratorUnavailableException
+				? StaticSite::ERROR_GENERATOR_UNAVAILABLE
+				: StaticSite::ERROR_GENERATOR_REJECTED;
+			$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED, $lastError);
 			throw $e;
 		}
 
@@ -200,15 +204,21 @@ class StaticSiteService {
 	 * the build is still pending (status "provided"); late/duplicate callbacks are ignored,
 	 * though this can't distinguish a very late callback from a coincidentally-pending rebuild.
 	 *
+	 * Status published requires a valid `publish_url`, so a published static site always has one.
+	 *
 	 * @param array{publish_url?: string, error_message?: string} $data
 	 *
 	 * @throws NotFoundException Static site not found
-	 * @throws UnprocessableEntityException Invalid status
+	 * @throws UnprocessableEntityException Invalid status or missing/invalid publish_url
 	 * @throws DBException
 	 */
-	public function updateStatus(string $staticSiteId, string $status, array $data = []): StaticSite {
+	public function updateStatus(string $staticSiteId, string $status, array $data = []): void {
 		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
 			throw new UnprocessableEntityException('Invalid status: ' . $status);
+		}
+		$publishedUrl = is_string($data['publish_url'] ?? null) ? $data['publish_url'] : '';
+		if ($status === StaticSite::STATUS_PUBLISHED && !$this->isValidPublishUrl($publishedUrl)) {
+			throw new UnprocessableEntityException('Invalid or missing publish_url');
 		}
 
 		try {
@@ -219,28 +229,19 @@ class StaticSiteService {
 
 		if ($staticSite->getStatus() !== StaticSite::STATUS_PROVIDED) {
 			$this->logger->warning('Ignoring static site status callback for status ' . $staticSite->getStatus(), ['staticSiteId' => $staticSiteId]);
-			return $staticSite;
-		}
-
-		$staticSite = $this->staticSiteMapper->updateStatus($staticSite->getId(), $status);
-
-		if ($status === StaticSite::STATUS_PUBLISHED && isset($data['publish_url'])) {
-			if ($this->isValidPublishUrl($data['publish_url'])) {
-				$staticSite = $this->staticSiteMapper->updatePublishedUrl($staticSite->getId(), $data['publish_url']);
-			} else {
-				$this->logger->warning('Ignoring static site publish callback with invalid publish_url', ['staticSiteId' => $staticSiteId]);
-			}
+			return;
 		}
 
 		if ($status === StaticSite::STATUS_PUBLISHED) {
+			$this->staticSiteMapper->updateStatusPublished($staticSite->getId(), $publishedUrl);
 			$this->deleteArchive($staticSite);
+			return;
 		}
 
-		if ($status === StaticSite::STATUS_FAILED && isset($data['error_message'])) {
+		if (isset($data['error_message'])) {
 			$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
 		}
-
-		return $staticSite;
+		$this->staticSiteMapper->updateStatusFailed($staticSite->getId(), StaticSite::ERROR_GENERATOR_FAILED);
 	}
 
 	/**
@@ -300,9 +301,9 @@ class StaticSiteService {
 	 * @throws UnprocessableEntityException
 	 * @throws DBException
 	 */
-	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status): StaticSite {
+	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status, ?string $lastError = null): StaticSite {
 		try {
-			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status);
+			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status, $lastError);
 		} catch (NotFoundException $e) {
 			$this->deleteArchive($staticSite);
 			throw $e;
@@ -398,7 +399,9 @@ class StaticSiteService {
 	}
 
 	private function isValidPublishUrl(string $url): bool {
-		return in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true);
+		return strlen($url) <= self::PUBLISHED_URL_MAX_LENGTH
+			&& in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)
+			&& (string)parse_url($url, PHP_URL_HOST) !== '';
 	}
 
 	/**

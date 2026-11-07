@@ -17,6 +17,24 @@ type MemberFixture = { page: Page, user: User }
 
 const baseTest = mergeTests(createCollectivesTest, navigationTest)
 
+/**
+ * Wrap data in an OCS response body
+ *
+ * @param data - response data
+ */
+function ocsResponse(data: unknown) {
+	return { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data } }
+}
+
+/**
+ * Seconds since the epoch, as used by the backend for timestamps
+ *
+ * @param secondsAgo - how long ago
+ */
+function timestamp(secondsAgo = 0) {
+	return Math.floor(Date.now() / 1000) - secondsAgo
+}
+
 // Extend fixture to add a logged-in member user for permission tests
 const test = baseTest.extend<{ member: MemberFixture }>({
 	member: async ({ collective, browser, baseURL }, use) => {
@@ -115,30 +133,42 @@ test.describe('Collective publish', () => {
 		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
 	})
 
-	test('restores the page selection of an already published website without deleted and new pages', async ({ collective, navigation, page, user }) => {
+	test('updates the most recently updated website with its page selection, without deleted and new pages', async ({ collective, navigation, page, user }) => {
 		const publishedPage = await collective.createPage({ title: 'Published page', user, page })
 		const rootPageId = collective.getRootPage().data.id
 		const deletedPageId = 999999
-		const staticSite = {
+		const olderStaticSite = {
 			id: 1,
+			title: 'Older website',
+			slug: 'older-website',
+			selectedPageIds: [rootPageId],
+			publishedUrl: 'https://example.org/older-website',
+			status: 'published',
+			updatedAt: timestamp(7200),
+		}
+		const staticSite = {
+			id: 2,
 			title: 'Published website',
 			slug: 'published-website',
 			selectedPageIds: [rootPageId, publishedPage.data.id, deletedPageId],
 			publishedUrl: 'https://example.org/published-website',
 			status: 'published',
+			updatedAt: timestamp(3600),
 		}
-		let sentPageIds: number[] = []
 		await page.route('**/static-sites', async (route) => {
-			const request = route.request()
-			if (request.method() === 'POST') {
-				// The publish service isn't part of this environment, only the sent page selection matters
-				sentPageIds = request.postDataJSON().pageIds
-				return route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: staticSite } } })
-			}
-			if (request.method() !== 'GET') {
+			if (route.request().method() !== 'GET') {
 				return route.fallback()
 			}
-			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [staticSite] } } })
+			await route.fulfill({ json: ocsResponse([olderStaticSite, staticSite]) })
+		})
+		let sentBody: { pageIds: number[], title: string, slug?: string } | null = null
+		await page.route(`**/static-sites/${staticSite.id}`, async (route) => {
+			if (route.request().method() !== 'PUT') {
+				return route.fallback()
+			}
+			// The publish service isn't part of this environment, only the sent settings matter
+			sentBody = route.request().postDataJSON()
+			await route.fulfill({ json: ocsResponse({ ...staticSite, status: 'provided', updatedAt: timestamp() }) })
 		})
 
 		await collective.openCollective()
@@ -146,15 +176,110 @@ test.describe('Collective publish', () => {
 
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		await expect(modal.getByRole('textbox', { name: 'Website title' })).toHaveValue(staticSite.title)
-		await expect(modal.getByRole('textbox', { name: 'Web address' })).toHaveValue(staticSite.slug)
+		const titleField = modal.getByRole('textbox', { name: 'Website title' })
+		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+
+		// Both websites are listed, the most recently updated one is preselected
+		await expect(modal.getByRole('button', { name: /Older website/ })).toHaveAttribute('aria-pressed', 'false')
+		await expect(modal.getByRole('button', { name: /Published website/ })).toHaveAttribute('aria-pressed', 'true')
+		await expect(modal.getByRole('link', { name: staticSite.publishedUrl })).toBeVisible()
+		await expect(titleField).toHaveValue(staticSite.title)
+		await expect(slugField).toHaveValue(staticSite.slug)
+		await expect(slugField).toBeDisabled()
 		await expect(modal.getByRole('checkbox', { name: 'Published page' })).toBeChecked()
 		await expect(modal.getByRole('checkbox', { name: 'Page created after publication' })).not.toBeChecked()
 
-		await modal.getByRole('button', { name: 'Publish website' }).click()
+		// Selecting another website prefills its settings
+		await modal.getByRole('button', { name: /Older website/ }).click()
+		await expect(titleField).toHaveValue(olderStaticSite.title)
+		await expect(modal.getByRole('checkbox', { name: 'Published page' })).not.toBeChecked()
+		await modal.getByRole('button', { name: /Published website/ }).click()
+
+		await titleField.fill('New website title')
+		await modal.getByRole('button', { name: 'Update website' }).click()
 		await expect(modal).toHaveCount(0)
-		expect(sentPageIds).toHaveLength(2)
-		expect(sentPageIds).toEqual(expect.arrayContaining([rootPageId, publishedPage.data.id]))
+		await expect(getToast(page, 'success', 'Website publishing started')).toBeVisible()
+		await expect(getToast(page, 'error', 'Could not publish collective as website')).toHaveCount(0)
+		expect(sentBody).not.toBeNull()
+		expect(sentBody!.title).toBe('New website title')
+		expect(sentBody!.slug).toBeUndefined()
+		expect(sentBody!.pageIds).toHaveLength(2)
+		expect(sentBody!.pageIds).toEqual(expect.arrayContaining([rootPageId, publishedPage.data.id]))
+	})
+
+	test('creates a new website with a web address not used in the collective yet', async ({ collective, navigation, page }) => {
+		const staticSite = {
+			id: 1,
+			title: 'Published website',
+			slug: 'published-website',
+			selectedPageIds: [collective.getRootPage().data.id],
+			publishedUrl: 'https://example.org/published-website',
+			status: 'published',
+			updatedAt: timestamp(3600),
+		}
+		let sentBody: { slug: string } | null = null
+		await page.route('**/static-sites', async (route) => {
+			const request = route.request()
+			if (request.method() === 'POST') {
+				sentBody = request.postDataJSON()
+				return route.fulfill({ json: ocsResponse({ ...staticSite, id: 2, slug: sentBody!.slug, status: 'provided', publishedUrl: null }) })
+			}
+			if (request.method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: ocsResponse([staticSite]) })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const submitButton = modal.getByRole('button', { name: 'Publish website' })
+
+		await modal.getByRole('button', { name: 'New website' }).click()
+		await expect(modal.getByRole('button', { name: /Published website/ })).toHaveAttribute('aria-pressed', 'false')
+		await expect(modal.getByRole('textbox', { name: 'Website title' })).toHaveValue(collective.data.name)
+		await expect(slugField).toBeEnabled()
+
+		// The web address of the existing website can't be used for a new one
+		await slugField.fill(staticSite.slug)
+		await expect(modal).toContainText('This web address is already used by another website of this collective')
+		await expect(submitButton).toBeDisabled()
+
+		await slugField.fill('second-website')
+		await submitButton.click()
+		await expect(modal).toHaveCount(0)
+		expect(sentBody!.slug).toBe('second-website')
+	})
+
+	test('prevents updating a website while it is being published', async ({ collective, navigation, page }) => {
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({
+				json: ocsResponse([{
+					id: 1,
+					title: 'Website in progress',
+					slug: 'website-in-progress',
+					selectedPageIds: [collective.getRootPage().data.id],
+					publishedUrl: null,
+					status: 'provided',
+					updatedAt: timestamp(60),
+				}]),
+			})
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await expect(modal.getByRole('button', { name: /Website in progress/ })).toContainText('Publishing')
+		await expect(modal.getByRole('button', { name: 'Update website' })).toBeDisabled()
+
+		// Another website can be created meanwhile
+		await modal.getByRole('button', { name: 'New website' }).click()
+		await modal.getByRole('textbox', { name: 'Web address' }).fill('another-website')
+		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
 	})
 
 	test('keeps the modal open if the website files could not be provided', async ({ collective, navigation, page }) => {
@@ -185,13 +310,66 @@ test.describe('Collective publish', () => {
 			if (route.request().method() !== 'GET') {
 				return route.fallback()
 			}
-			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [{ id: 1, title: 'Published website', slug: 'published-website', selectedPageIds: [], publishedUrl }] } } })
+			await route.fulfill({ json: ocsResponse([{ id: 1, title: 'Published website', slug: 'published-website', selectedPageIds: [], publishedUrl, status: 'published', updatedAt: timestamp(3600) }]) })
 		})
 
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
 		await expect(modal.getByRole('link', { name: publishedUrl })).toBeVisible()
+	})
+
+	test('shows why publishing a website failed', async ({ collective, navigation, page }) => {
+		const rootPageId = collective.getRootPage().data.id
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({
+				json: ocsResponse([
+					{
+						id: 1,
+						title: 'Previously published website',
+						slug: 'previously-published-website',
+						selectedPageIds: [rootPageId],
+						publishedUrl: 'https://example.org/previously-published-website',
+						publishedAt: timestamp(7200),
+						status: 'failed',
+						lastError: 'generator_unavailable',
+						updatedAt: timestamp(3600),
+					},
+					{
+						id: 2,
+						title: 'Never published website',
+						slug: 'never-published-website',
+						selectedPageIds: [rootPageId],
+						publishedUrl: null,
+						publishedAt: null,
+						status: 'failed',
+						lastError: 'generator_failed',
+						updatedAt: timestamp(7200),
+					},
+				]),
+			})
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const previouslyPublished = modal.getByRole('listitem').filter({ hasText: 'Previously published website' })
+		const neverPublished = modal.getByRole('listitem').filter({ hasText: 'Never published website' })
+
+		await expect(previouslyPublished).toContainText('Publishing failed')
+		await expect(previouslyPublished).toContainText('The publish service is currently not available. Please try again later.')
+		await expect(previouslyPublished).toContainText('The previous version is still online.')
+		await expect(previouslyPublished).toContainText('Last published')
+
+		await expect(neverPublished).toContainText('The publish service could not build the website. Please contact your administrator.')
+		await expect(neverPublished).not.toContainText('The previous version is still online.')
+		await expect(neverPublished).not.toContainText('Last published')
+
+		// A failed website can be published again
+		await expect(modal.getByRole('button', { name: 'Update website' })).toBeEnabled()
 	})
 
 	test('shows a toast once the published URL arrives, without the modal being open', async ({ collective, navigation, page }) => {

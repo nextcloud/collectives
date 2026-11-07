@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { createPinia, setActivePinia } from 'pinia'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import * as api from '../../apis/collectives/index.js'
@@ -11,9 +11,9 @@ import { staticSitePollInterval, staticSitePublicationTimeout } from '../../cons
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 
 vi.mock('../../apis/collectives/index.js', () => ({ getStaticSites: vi.fn() }))
-vi.mock('@nextcloud/dialogs', () => ({ showSuccess: vi.fn() }))
+vi.mock('@nextcloud/dialogs', () => ({ showError: vi.fn(), showSuccess: vi.fn() }))
 vi.mock('@nextcloud/l10n', () => ({
-	t: (_app, message, parameters = {}) => message.replace(/\{(\w+)\}/g, (match, name) => parameters[name] ?? match),
+	t: (_app, message, parameters = {}) => message.replace(/\{(\w+)}/g, (match, name) => parameters[name] ?? match),
 }))
 
 const publishedUrl = 'https://example.org/site'
@@ -29,6 +29,44 @@ function staticSite(properties = {}) {
 async function poll(times = 1) {
 	await vi.advanceTimersByTimeAsync(staticSitePollInterval * 1000 * times)
 }
+
+describe('static sites of a collective', () => {
+	beforeEach(() => {
+		setActivePinia(createPinia())
+	})
+
+	it('lists the most recently updated static site first', async () => {
+		vi.mocked(api.getStaticSites).mockResolvedValue(response(
+			staticSite({ id: 1, updatedAt: 100 }),
+			staticSite({ id: 2, updatedAt: 300 }),
+			staticSite({ id: 3, updatedAt: 200 }),
+		))
+		const store = useStaticSitesStore()
+
+		await store.getStaticSites(1)
+
+		expect(store.staticSitesForCollective(1).map(({ id }) => id)).toEqual([2, 3, 1])
+	})
+
+	it('lists no static sites for an unknown collective', () => {
+		expect(useStaticSitesStore().staticSitesForCollective(1)).toEqual([])
+	})
+
+	const now = 1_700_000_000_000
+	const recently = now / 1000 - 60
+	const longAgo = now / 1000 - staticSitePublicationTimeout - 1
+
+	it.each([
+		['pending', recently, true],
+		['provided', recently, true],
+		['pending', longAgo, false],
+		['provided', longAgo, false],
+		['published', recently, false],
+		['failed', recently, false],
+	])('considers status %j updated at %j in progress: %j', (status, updatedAt, expected) => {
+		expect(useStaticSitesStore().isStaticSiteInProgress({ status, updatedAt }, now)).toBe(expected)
+	})
+})
 
 describe('static sites publication watching', () => {
 	beforeEach(() => {
@@ -55,38 +93,52 @@ describe('static sites publication watching', () => {
 		await poll()
 		expect(showSuccess).toHaveBeenCalledOnce()
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
-		expect(store.publishedUrlForCollective(1)).toBe(publishedUrl)
+		expect(store.staticSitesForCollective(1)[0].publishedUrl).toBe(publishedUrl)
 
 		await poll(5)
 		expect(api.getStaticSites).toHaveBeenCalledTimes(2)
 	})
 
-	it('notifies about a republication that got a different URL', async () => {
+	it('notifies about a republication that kept its URL', async () => {
+		// An update keeps the URL of the previous publication while in progress
 		vi.mocked(api.getStaticSites)
-			.mockResolvedValue(response(staticSite({ status: 'published', publishedUrl: 'https://example.org/new-site' })))
+			.mockResolvedValueOnce(response(staticSite({ publishedUrl })))
+			.mockResolvedValue(response(staticSite({ status: 'published', publishedUrl })))
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite({ status: 'published', publishedUrl }))
+		store.watchPublication(1, staticSite({ publishedUrl }))
 		await poll()
+		expect(showSuccess).not.toHaveBeenCalled()
 
-		expect(showSuccess).toHaveBeenCalledWith('Website "Website" published at https://example.org/new-site')
+		await poll()
+		expect(showSuccess).toHaveBeenCalledOnce()
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
 	})
 
-	it('stops polling without a toast if the publication failed or vanished', async () => {
+	it('shows the reason and stops polling if the publication failed', async () => {
 		vi.mocked(api.getStaticSites)
-			.mockResolvedValueOnce(response(staticSite({ status: 'failed' })))
-			.mockResolvedValue(response())
+			.mockResolvedValue(response(staticSite({ status: 'failed', lastError: 'generator_failed' })))
 		const store = useStaticSitesStore()
 
 		store.watchPublication(1, staticSite())
 		await poll(5)
-		expect(api.getStaticSites).toHaveBeenCalledTimes(1)
 
-		store.watchPublication(2, staticSite())
+		expect(api.getStaticSites).toHaveBeenCalledOnce()
+		expect(showError).toHaveBeenCalledOnce()
+		expect(showError).toHaveBeenCalledWith('Website "Website" could not be published: The publish service could not build the website. Please contact your administrator.')
+		expect(showSuccess).not.toHaveBeenCalled()
+	})
+
+	it('stops polling without a toast if the publication vanished', async () => {
+		vi.mocked(api.getStaticSites).mockResolvedValue(response())
+		const store = useStaticSitesStore()
+
+		store.watchPublication(1, staticSite())
 		await poll(5)
 
-		expect(api.getStaticSites).toHaveBeenCalledTimes(2)
+		expect(api.getStaticSites).toHaveBeenCalledOnce()
 		expect(showSuccess).not.toHaveBeenCalled()
+		expect(showError).not.toHaveBeenCalled()
 	})
 
 	it('restarts for a new publication next to an already published site', async () => {
@@ -110,17 +162,6 @@ describe('static sites publication watching', () => {
 
 		expect(showSuccess).toHaveBeenCalledTimes(2)
 		expect(showSuccess).toHaveBeenLastCalledWith('Website "New website" published at https://example.org/new-site')
-	})
-
-	it('notifies even if the status was not updated along with the published URL', async () => {
-		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite({ status: 'provided', publishedUrl })))
-		const store = useStaticSitesStore()
-
-		store.watchPublication(1, staticSite())
-		await poll()
-
-		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
-		expect(store.pollIntervalId).toBeNull()
 	})
 
 	it('gives up on a publication that stays quiet for too long', async () => {
@@ -166,5 +207,21 @@ describe('static sites publication watching', () => {
 
 		expect(consoleError).toHaveBeenCalledWith('Could not load static sites for collective', expect.any(Error))
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
+	})
+
+	it('stops polling if requests keep failing', async () => {
+		vi.mocked(api.getStaticSites).mockRejectedValue(new Error('request failed'))
+		vi.spyOn(console, 'error').mockImplementation(() => {})
+		const store = useStaticSitesStore()
+
+		store.watchPublication(1, staticSite())
+		await vi.advanceTimersByTimeAsync(staticSitePublicationTimeout * 1000)
+		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
+
+		expect(store.pollIntervalId).toBeNull()
+		expect(attempts).toBe(staticSitePublicationTimeout / staticSitePollInterval)
+
+		await poll(5)
+		expect(api.getStaticSites).toHaveBeenCalledTimes(attempts)
 	})
 })
