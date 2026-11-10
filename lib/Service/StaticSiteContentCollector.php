@@ -30,10 +30,13 @@ class StaticSiteContentCollector {
 	}
 
 	/**
-	 * Collect the selected pages of the collective with their attachments, except templates.
+	 * Collect the selected pages of the collective with their attachments.
 	 *
 	 * Unselected pages are left out, including their subpages and attachments. The selection
 	 * has to contain the ancestors of every selected page, see `StaticSiteService`.
+	 *
+	 * Hidden files and folders are left out as well, e.g. `.templates` or `.git`. They are not
+	 * pages, so they cannot be selected. Attachment folders are the only exception.
 	 *
 	 * Files are accessed without user context, permissions have to be checked by the caller.
 	 *
@@ -76,11 +79,13 @@ class StaticSiteContentCollector {
 
 		$files = [];
 		foreach ($nodes as $node) {
-			$path = $prefix . $node->getName();
-			if ($path === TemplateService::TEMPLATE_FOLDER) {
+			$name = $node->getName();
+			// Skip hidden entries like `.templates`, `.git` or `.DS_Store`, but keep attachment folders
+			if (self::isHidden($node) && !str_starts_with($name, self::ATTACHMENT_FOLDER_PREFIX)) {
 				continue;
 			}
 
+			$path = $prefix . $name;
 			if ($node instanceof File) {
 				// Everything but a subpage is an attachment of this page
 				if (!NodeHelper::isPage($node) || isset($selectedPageIds[$node->getId()])) {
@@ -127,6 +132,10 @@ class StaticSiteContentCollector {
 	private function collectAllFiles(array $nodes, string $prefix): array {
 		$files = [];
 		foreach ($nodes as $node) {
+			if (self::isHidden($node)) {
+				continue;
+			}
+
 			$path = $prefix . $node->getName();
 			if ($node instanceof Folder) {
 				$files += $this->collectAllFiles($node->getDirectoryListing(), $path . '/');
@@ -135,6 +144,13 @@ class StaticSiteContentCollector {
 			}
 		}
 		return $files;
+	}
+
+	/**
+	 * Hidden entries are never pages (see `PageInfoTreeBuilder`), so they cannot be selected.
+	 */
+	private static function isHidden(Node $node): bool {
+		return str_starts_with($node->getName(), '.');
 	}
 
 	/**

@@ -131,27 +131,52 @@ class StaticSiteContentCollectorTest extends TestCase {
 		], array_keys($files));
 	}
 
-	public function testCollectSkipsTemplateFolderOnlyAtTopLevel(): void {
+	public function testCollectSkipsHiddenFilesAndFolders(): void {
 		$readme = $this->makeFile('Readme.md', 1);
 		$subReadme = $this->makeFile('Readme.md', 2);
-		$nestedNote = $this->makeFile('note.txt');
+		$attachment = $this->makeFile('image.png');
 
 		$this->collectiveFolderManager->method('getFolder')
 			->willReturn($this->makeFolder('42', [
 				$readme,
+				$this->makeFile('.DS_Store'),
 				$this->makeFolder('.templates', [$this->makeFile('Readme.md')]),
+				$this->makeFolder('.attachments.1', [$attachment, $this->makeFile('.DS_Store')]),
 				$this->makeFolder('Subpage', [
 					$subReadme,
-					// Not the reserved template folder, since that only exists at the top level
-					$this->makeFolder('.templates', [$nestedNote]),
+					$this->makeFile('._Readme.md'),
+					// Hidden folders are skipped at every level, not just the top one
+					$this->makeFolder('.templates', [$this->makeFile('note.txt')]),
+					$this->makeFolder('.obsidian', [$this->makeFile('workspace.json')]),
 				]),
 			]));
 
 		$this->assertSame([
 			'Readme.md' => $readme,
+			'.attachments.1/image.png' => $attachment,
 			'Subpage/Readme.md' => $subReadme,
-			'Subpage/.templates/note.txt' => $nestedNote,
 		], $this->collector->collect($this->collectiveId, [1, 2]));
+	}
+
+	public function testCollectSkipsHiddenEntriesInFoldersWithoutIndexPage(): void {
+		$readme = $this->makeFile('Readme.md', 1);
+		$upload = $this->makeFile('slides.pdf');
+
+		$this->collectiveFolderManager->method('getFolder')
+			->willReturn($this->makeFolder('42', [
+				$readme,
+				// Not a page folder, so its content is kept as is - except hidden entries
+				$this->makeFolder('Uploads', [
+					$upload,
+					$this->makeFile('.DS_Store'),
+					$this->makeFolder('.git', [$this->makeFile('config')]),
+				]),
+			]));
+
+		$this->assertSame([
+			'Readme.md' => $readme,
+			'Uploads/slides.pdf' => $upload,
+		], $this->collector->collect($this->collectiveId, [1]));
 	}
 
 	public function testCollectThrowsIfCollectiveFolderIsMissing(): void {
