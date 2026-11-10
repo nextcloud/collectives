@@ -68,7 +68,7 @@ class AttachmentService {
 		if (!isset($this->attachmentDirectory[$id])) {
 			try {
 				$parentFolder = $pageFile->getParent();
-				$attachmentFolderName = '.attachments.' . $id;
+				$attachmentFolderName = NodeHelper::getAttachmentFolderName($id);
 				if ($parentFolder->nodeExists($attachmentFolderName)) {
 					$attachmentFolder = $parentFolder->get($attachmentFolderName);
 					if ($attachmentFolder instanceof Folder) {
@@ -232,6 +232,6 @@ class AttachmentService {
 
 		$filename = NodeHelper::generateFilename($attachmentDir, $attachmentName);
 		$attachmentDir->newFile($filename, $content);
-		return '.attachments.' . $pageFile->getId() . DIRECTORY_SEPARATOR . $filename;
+		return NodeHelper::getAttachmentFolderName($pageFile->getId()) . DIRECTORY_SEPARATOR . $filename;
 	}
 }

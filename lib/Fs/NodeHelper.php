@@ -24,6 +24,8 @@ use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
 
 class NodeHelper {
+	public const ATTACHMENT_FOLDER_PREFIX = '.attachments.';
+
 	private readonly bool $db4ByteSupport;
 
 	public function __construct(
@@ -192,6 +194,29 @@ class NodeHelper {
 		return ($name === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 	}
 
+	/**
+	 * Attachment folders are named after the ID of the page they belong to.
+	 */
+	public static function getAttachmentFolderName(int $pageId): string {
+		return self::ATTACHMENT_FOLDER_PREFIX . $pageId;
+	}
+
+	public static function isAttachmentFolderName(string $name): bool {
+		return self::getAttachmentFolderPageId($name) !== null;
+	}
+
+	/**
+	 * @return int|null ID of the page the attachments belong to, null if not an attachment folder name
+	 */
+	public static function getAttachmentFolderPageId(string $name): ?int {
+		if (!str_starts_with($name, self::ATTACHMENT_FOLDER_PREFIX)) {
+			return null;
+		}
+
+		$pageId = substr($name, strlen(self::ATTACHMENT_FOLDER_PREFIX));
+		return ctype_digit($pageId) ? (int)$pageId : null;
+	}
+
 	public static function indexPageHasOtherContent(File $file): bool {
 		try {
 			foreach ($file->getParent()->getDirectoryListing() as $node) {
@@ -203,7 +228,7 @@ class NodeHelper {
 				}
 				// True if not index page or corresponding attachments folder
 				if (!($node instanceof File && self::isIndexPage($node))
-					&& $node->getName() !== '.attachments.' . $file->getId()) {
+					&& $node->getName() !== self::getAttachmentFolderName($file->getId())) {
 					return true;
 				}
 			}

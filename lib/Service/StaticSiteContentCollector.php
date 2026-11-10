@@ -9,15 +9,17 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 
 /**
- * Collects the files of a collective that are part of its static site.
+ * Collects the files of the selected pages of a collective that are part of its static site.
  */
 class StaticSiteContentCollector {
 	public function __construct(
@@ -26,9 +28,17 @@ class StaticSiteContentCollector {
 	}
 
 	/**
-	 * Collect all pages, attachments, and other files of the collective, except templates.
+	 * Collect the selected pages of the collective with their attachments.
+	 *
+	 * Unselected pages are left out, including their subpages and attachments. The selection
+	 * has to contain the ancestors of every selected page, see `StaticSiteService`.
+	 *
+	 * Hidden files and folders are left out as well, e.g. `.templates` or `.git`. They are not
+	 * pages, so they cannot be selected. Attachment folders are the only exception.
 	 *
 	 * Files are accessed without user context, permissions have to be checked by the caller.
+	 *
+	 * @param list<int> $pageIds IDs of the pages to collect
 	 *
 	 * @return array<string, File> Files mapped to their path relative to the collective folder
 	 *
@@ -36,30 +46,119 @@ class StaticSiteContentCollector {
 	 * @throws FilesNotPermittedException
 	 * @throws InvalidPathException
 	 */
-	public function collect(int $collectiveId): array {
-		return $this->collectFiles($this->collectiveFolderManager->getFolder($collectiveId));
+	public function collect(int $collectiveId, array $pageIds): array {
+		$collectiveFolder = $this->collectiveFolderManager->getFolder($collectiveId);
+
+		return $this->collectFiles($collectiveFolder, array_fill_keys($pageIds, true));
 	}
 
 	/**
+	 * A page is stored as a folder with an index page if it has subpages, as a single file otherwise.
+	 *
+	 * @param array<int, true> $selectedPageIds Selected page IDs as a lookup set
+	 *
 	 * @return array<string, File>
 	 *
 	 * @throws FilesNotFoundException
 	 * @throws FilesNotPermittedException
 	 */
-	private function collectFiles(Folder $folder, string $prefix = ''): array {
+	private function collectFiles(Folder $folder, array $selectedPageIds, string $prefix = ''): array {
+		$nodes = $folder->getDirectoryListing();
+
+		$indexPage = self::findIndexPage($nodes);
+		if ($indexPage === null) {
+			// Not a page folder, e.g. one uploaded via the Files app: keep its content as is
+			return $this->collectAllFiles($nodes, $prefix);
+		}
+		if (!isset($selectedPageIds[$indexPage->getId()])) {
+			// Unselected page, skip it with all its subpages and attachments
+			return [];
+		}
+
 		$files = [];
-		foreach ($folder->getDirectoryListing() as $node) {
-			$path = $prefix . $node->getName();
-			if ($path === TemplateService::TEMPLATE_FOLDER) {
+		foreach ($nodes as $node) {
+			$name = $node->getName();
+			// Skip hidden entries like `.templates`, `.git` or `.DS_Store`, but keep attachment folders
+			if (self::isHidden($node) && !NodeHelper::isAttachmentFolderName($name)) {
 				continue;
 			}
 
+			$path = $prefix . $name;
+			if ($node instanceof File) {
+				// Page files are the index page of this folder and subpages without subpages
+				// of their own, every other file is an attachment of this page
+				if (!NodeHelper::isPage($node) || isset($selectedPageIds[$node->getId()])) {
+					$files[$path] = $node;
+				}
+			} elseif ($node instanceof Folder) {
+				$files += $this->collectSubFolder($node, $selectedPageIds, $path);
+			}
+		}
+
+		return $files;
+	}
+
+	/**
+	 * A subfolder either holds the attachments of a page of the parent folder or a subpage.
+	 *
+	 * @param array<int, true> $selectedPageIds
+	 *
+	 * @return array<string, File>
+	 *
+	 * @throws FilesNotFoundException
+	 * @throws FilesNotPermittedException
+	 */
+	private function collectSubFolder(Folder $folder, array $selectedPageIds, string $path): array {
+		$attachedToPageId = NodeHelper::getAttachmentFolderPageId($folder->getName());
+		if ($attachedToPageId === null) {
+			return $this->collectFiles($folder, $selectedPageIds, $path . '/');
+		}
+
+		return isset($selectedPageIds[$attachedToPageId])
+			? $this->collectAllFiles($folder->getDirectoryListing(), $path . '/')
+			: [];
+	}
+
+	/**
+	 * @param Node[] $nodes
+	 *
+	 * @return array<string, File>
+	 *
+	 * @throws FilesNotFoundException
+	 */
+	private function collectAllFiles(array $nodes, string $prefix): array {
+		$files = [];
+		foreach ($nodes as $node) {
+			if (self::isHidden($node)) {
+				continue;
+			}
+
+			$path = $prefix . $node->getName();
 			if ($node instanceof Folder) {
-				$files += $this->collectFiles($node, $path . '/');
+				$files += $this->collectAllFiles($node->getDirectoryListing(), $path . '/');
 			} elseif ($node instanceof File) {
 				$files[$path] = $node;
 			}
 		}
 		return $files;
+	}
+
+	/**
+	 * Hidden entries are never pages (see `PageInfoTreeBuilder`), so they cannot be selected.
+	 */
+	private static function isHidden(Node $node): bool {
+		return str_starts_with($node->getName(), '.');
+	}
+
+	/**
+	 * @param Node[] $nodes
+	 */
+	private static function findIndexPage(array $nodes): ?File {
+		foreach ($nodes as $node) {
+			if ($node instanceof File && NodeHelper::isIndexPage($node)) {
+				return $node;
+			}
+		}
+		return null;
 	}
 }
