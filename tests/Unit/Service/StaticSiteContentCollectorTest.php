@@ -158,6 +158,22 @@ class StaticSiteContentCollectorTest extends TestCase {
 		], $this->collector->collect($this->collectiveId, [1, 2]));
 	}
 
+	public function testCollectSkipsHiddenFoldersWithAttachmentLikeName(): void {
+		$readme = $this->makeFile('Readme.md', 1);
+
+		$this->collectiveFolderManager->method('getFolder')
+			->willReturn($this->makeFolder('42', [
+				$readme,
+				// Not an attachment folder: the suffix is not a page ID
+				$this->makeFolder('.attachments.1backup', [$this->makeFile('image.png')]),
+				$this->makeFolder('.attachments.', [$this->makeFile('image.png')]),
+			]));
+
+		$this->assertSame([
+			'Readme.md' => $readme,
+		], $this->collector->collect($this->collectiveId, [1]));
+	}
+
 	public function testCollectSkipsHiddenEntriesInFoldersWithoutIndexPage(): void {
 		$readme = $this->makeFile('Readme.md', 1);
 		$upload = $this->makeFile('slides.pdf');

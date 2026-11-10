@@ -22,8 +22,6 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
  * Collects the files of the selected pages of a collective that are part of its static site.
  */
 class StaticSiteContentCollector {
-	private const ATTACHMENT_FOLDER_PREFIX = '.attachments.';
-
 	public function __construct(
 		private readonly CollectiveFolderManager $collectiveFolderManager,
 	) {
@@ -81,7 +79,7 @@ class StaticSiteContentCollector {
 		foreach ($nodes as $node) {
 			$name = $node->getName();
 			// Skip hidden entries like `.templates`, `.git` or `.DS_Store`, but keep attachment folders
-			if (self::isHidden($node) && !str_starts_with($name, self::ATTACHMENT_FOLDER_PREFIX)) {
+			if (self::isHidden($node) && !NodeHelper::isAttachmentFolderName($name)) {
 				continue;
 			}
 
@@ -110,13 +108,11 @@ class StaticSiteContentCollector {
 	 * @throws FilesNotPermittedException
 	 */
 	private function collectSubFolder(Folder $folder, array $selectedPageIds, string $path): array {
-		$name = $folder->getName();
-		if (!str_starts_with($name, self::ATTACHMENT_FOLDER_PREFIX)) {
+		$attachedToPageId = NodeHelper::getAttachmentFolderPageId($folder->getName());
+		if ($attachedToPageId === null) {
 			return $this->collectFiles($folder, $selectedPageIds, $path . '/');
 		}
 
-		// Attachment folders are named after the ID of the page they belong to
-		$attachedToPageId = (int)substr($name, strlen(self::ATTACHMENT_FOLDER_PREFIX));
 		return isset($selectedPageIds[$attachedToPageId])
 			? $this->collectAllFiles($folder->getDirectoryListing(), $path . '/')
 			: [];
