@@ -85,7 +85,8 @@ class StaticSiteContentCollector {
 
 			$path = $prefix . $name;
 			if ($node instanceof File) {
-				// Everything but a subpage is an attachment of this page
+				// Page files are the index page of this folder and subpages without subpages
+				// of their own, every other file is an attachment of this page
 				if (!NodeHelper::isPage($node) || isset($selectedPageIds[$node->getId()])) {
 					$files[$path] = $node;
 				}
