@@ -373,6 +373,23 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		// IDs of all ancestor pages of a page, up to and including the collective's root page
+		pageAncestorIdsForCollective(state) {
+			return (collective, pageId) => {
+				const pages = state.pagesForCollective(collective)
+				const parentIdOf = (id) => pages.find((page) => page.id === id)?.parentId
+
+				const ancestorIds = []
+				// The root page is the only one without a parent
+				let parentId = parentIdOf(pageId)
+				while (parentId) {
+					ancestorIds.push(parentId)
+					parentId = parentIdOf(parentId)
+				}
+				return ancestorIds
+			}
+		},
+
 		// Whether a page is in the subtree of another page
 		isInSubtreeOf(state) {
 			return (pageId, subtreeRootId) => state.pageParents(pageId).some((page) => page.id === subtreeRootId)

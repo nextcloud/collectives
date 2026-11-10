@@ -127,6 +127,7 @@ export default {
 
 	computed: {
 		...mapState(usePagesStore, [
+			'pageAncestorIdsForCollective',
 			'pagesForCollective',
 			'pagesTreeWalkForCollective',
 			'visibleSubpagesForCollective',
@@ -183,12 +184,12 @@ export default {
 			this.title = staticSite.title
 			this.slug = staticSite.slug
 			// Pages may have been deleted or moved since the last publication:
-			// drop deleted ones and add parent pages of the remaining ones
+			// drop deleted ones and add ancestor pages of the remaining ones
 			const pageIds = new Set(this.allPageIds)
 			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
 			for (const id of Array.from(selectedPageIds)) {
-				for (const parentId of this.parentPageIds(id)) {
-					selectedPageIds.add(parentId)
+				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, id)) {
+					selectedPageIds.add(ancestorId)
 				}
 			}
 			this.selectedPageIds = selectedPageIds
@@ -216,25 +217,6 @@ export default {
 			}
 		},
 
-		/**
-		 * IDs of all parent pages of a page, up to and including the collective's root page
-		 *
-		 * @param {number} pageId ID of the page
-		 */
-		parentPageIds(pageId) {
-			const pages = this.pagesForCollective(this.collective)
-			const parentIdOf = (id) => pages.find((page) => page.id === id)?.parentId
-
-			const parentIds = []
-			// The root page is the only one without a parent
-			let parentId = parentIdOf(pageId)
-			while (parentId) {
-				parentIds.push(parentId)
-				parentId = parentIdOf(parentId)
-			}
-			return parentIds
-		},
-
 		onToggleSelect(pageId) {
 			// Toggling a page also selects/deselects all of its subpages
 			const select = !this.selectedPageIds.has(pageId)
@@ -252,11 +234,11 @@ export default {
 				}
 			}
 
-			// Selecting a page also selects its parent pages, so a subpage is never
+			// Selecting a page also selects its ancestor pages, so a subpage is never
 			// published without the pages it is nested in
 			if (select) {
-				for (const parentId of this.parentPageIds(pageId)) {
-					selectedPageIds.add(parentId)
+				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, pageId)) {
+					selectedPageIds.add(ancestorId)
 				}
 			}
 
