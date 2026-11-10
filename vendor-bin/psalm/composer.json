@@ -7,6 +7,6 @@
     },
     "require-dev": {
         "nextcloud/ocp": "dev-stable33",
-        "vimeo/psalm": "^6.12"
+        "vimeo/psalm": "^7.0"
     }
 }
