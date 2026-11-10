@@ -242,6 +242,24 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->create($this->collectiveId, [3], $this->userId);
 	}
 
+	public function testPublishResolvesAncestorsOfAnUnorderedSelectionWithoutDuplicates(): void {
+		$collective = $this->makeCollective(canEdit: true);
+		$this->collectiveService->method('getCollective')->willReturn($collective);
+		$this->pageService->method('findAll')->willReturn([
+			$this->makePageInfo(1),
+			$this->makePageInfo(2, parentId: 1),
+			$this->makePageInfo(3, parentId: 2),
+		]);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('create')
+			->with($this->collectiveId, [3, 2, 1], 'My Collective', 'my-collective', $this->userId)
+			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
+
+		// The root page is selected after its grandchild, which already pulled it in
+		$this->service->create($this->collectiveId, [3, 1], $this->userId);
+	}
+
 	private function expectValidCollectiveWithPages(string $name = 'My Collective'): void {
 		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true, name: $name));
 		$this->pageService->method('findAll')->willReturn([$this->makePageInfo(1)]);

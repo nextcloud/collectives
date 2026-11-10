@@ -31,6 +31,26 @@ test.beforeAll(async ({ browser, baseURL }) => {
 	await pointAtMockStaticSiteGenerator(browser, baseURL)
 })
 
+/**
+ * Row of the page tree in the publish modal, the collective row included.
+ *
+ * @param page the Playwright page
+ * @param title title of the page or name of the collective
+ */
+function publishTreeRow(page: Page, title: string) {
+	return page.getByRole('dialog').locator('.publish-tree-row').filter({ hasText: title })
+}
+
+/**
+ * Toggle the selection of a page tree row. Its checkbox itself is not clickable.
+ *
+ * @param page the Playwright page
+ * @param title title of the page or name of the collective
+ */
+async function clickPublishTreeCheckbox(page: Page, title: string) {
+	await publishTreeRow(page, title).locator('.checkbox-radio-switch__content').click()
+}
+
 test.describe('Collective publish', () => {
 	test('admin can open the publish modal and publish the collective', async ({ collective, navigation, page }) => {
 		await collective.openCollective()
@@ -113,6 +133,67 @@ test.describe('Collective publish', () => {
 		const modal = page.getByRole('dialog')
 		await expect(modal.getByRole('checkbox', { name: 'Page created meanwhile' })).toBeChecked()
 		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
+	})
+
+	test('selects ancestor pages with a subpage and deselects a subtree with its parent', async ({ collective, navigation, page, user }) => {
+		const parentPage = await collective.createPage({ title: 'Parent page', user, page })
+		await collective.createPage({ title: 'Child page', parentId: parentPage.data.id, user, page })
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const collectiveCheckbox = modal.getByRole('checkbox', { name: collective.data.name })
+		const parentCheckbox = modal.getByRole('checkbox', { name: 'Parent page' })
+		const childCheckbox = modal.getByRole('checkbox', { name: 'Child page' })
+
+		// Subpages are collapsed by default
+		await publishTreeRow(page, 'Parent page').getByRole('button', { name: 'Expand subpages' }).click()
+		await expect(childCheckbox).toBeChecked()
+
+		// Deselecting a page also deselects its subpages, but leaves its ancestors alone
+		await clickPublishTreeCheckbox(page, 'Parent page')
+		await expect(parentCheckbox).not.toBeChecked()
+		await expect(childCheckbox).not.toBeChecked()
+		await expect(collectiveCheckbox).toBeChecked()
+
+		// Deselecting the collective clears the whole tree
+		await clickPublishTreeCheckbox(page, collective.data.name)
+		await expect(collectiveCheckbox).not.toBeChecked()
+
+		// Selecting a subpage pulls its parent page and the collective back in
+		await clickPublishTreeCheckbox(page, 'Child page')
+		await expect(childCheckbox).toBeChecked()
+		await expect(parentCheckbox).toBeChecked()
+		await expect(collectiveCheckbox).toBeChecked()
+	})
+
+	test('preselects the current ancestors of a page that was moved since the last publication', async ({ collective, navigation, page, user }) => {
+		const newParentPage = await collective.createPage({ title: 'New parent page', user, page })
+		const movedPage = await collective.createPage({ title: 'Moved page', parentId: newParentPage.data.id, user, page })
+		const staticSite = {
+			id: 1,
+			title: 'Published website',
+			slug: 'published-website',
+			// The page was published as a top level page, so its new parent page is missing
+			selectedPageIds: [collective.getRootPage().data.id, movedPage.data.id],
+			publishedUrl: 'https://example.org/published-website',
+			status: 'published',
+		}
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: { ocs: { meta: { status: 'ok', statuscode: 200, message: 'OK' }, data: [staticSite] } } })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await publishTreeRow(page, 'New parent page').getByRole('button', { name: 'Expand subpages' }).click()
+
+		await expect(modal.getByRole('checkbox', { name: 'Moved page' })).toBeChecked()
+		await expect(modal.getByRole('checkbox', { name: 'New parent page' })).toBeChecked()
+		await expect(modal.getByRole('checkbox', { name: collective.data.name })).toBeChecked()
 	})
 
 	test('restores the page selection of an already published website without deleted and new pages', async ({ collective, navigation, page, user }) => {

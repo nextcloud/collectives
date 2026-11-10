@@ -131,6 +131,33 @@ class StaticSiteContentCollectorTest extends TestCase {
 		], array_keys($files));
 	}
 
+	public function testCollectHandlesAttachmentsOfTheIndexPageOfASubpageFolder(): void {
+		$readme = $this->makeFile('Readme.md', 1);
+		$subReadme = $this->makeFile('Readme.md', 2);
+		$attachment = $this->makeFile('image.png');
+
+		$this->collectiveFolderManager->method('getFolder')
+			->willReturn($this->makeFolder('42', [
+				$readme,
+				$this->makeFolder('Subpage', [
+					$subReadme,
+					// Attachments of the index page of the folder, not of a sibling page
+					$this->makeFolder('.attachments.2', [$attachment]),
+				]),
+			]));
+
+		$this->assertSame([
+			'Readme.md' => $readme,
+			'Subpage/Readme.md' => $subReadme,
+			'Subpage/.attachments.2/image.png' => $attachment,
+		], $this->collector->collect($this->collectiveId, [1, 2]));
+
+		// Without the index page, its attachments are left out as well
+		$this->assertSame([
+			'Readme.md' => $readme,
+		], $this->collector->collect($this->collectiveId, [1]));
+	}
+
 	public function testCollectSkipsHiddenFilesAndFolders(): void {
 		$readme = $this->makeFile('Readme.md', 1);
 		$subReadme = $this->makeFile('Readme.md', 2);
