@@ -228,7 +228,7 @@ class NodeHelper {
 				}
 				// True if not index page or corresponding attachments folder
 				if (!($node instanceof File && self::isIndexPage($node))
-					&& $node->getName() !== '.attachments.' . $file->getId()) {
+					&& $node->getName() !== self::getAttachmentFolderName($file->getId())) {
 					return true;
 				}
 			}
