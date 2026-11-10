@@ -187,7 +187,7 @@ class NodeHelperTest extends TestCase {
 		$file->method('getParent')
 			->willReturn($parentFolder);
 		$file->method('getId')
-			->willReturn('123');
+			->willReturn(123);
 
 		// Test `indexPageHasOtherContent()` with page in children
 		$parentFolder->method('getDirectoryListing')

@@ -10,6 +10,7 @@
 			:expandable="hasSubpages"
 			:expanded="isExpanded"
 			:selected="isSelected"
+			:indeterminate="isIndeterminate"
 			@toggleExpand="$emit('toggleExpand', page.id)"
 			@update:selected="$emit('toggleSelect', page.id)">
 			<template #icon>
@@ -80,7 +81,10 @@ export default {
 	],
 
 	computed: {
-		...mapState(usePagesStore, ['visibleSubpagesForCollective']),
+		...mapState(usePagesStore, [
+			'pagesTreeWalkForCollective',
+			'visibleSubpagesForCollective',
+		]),
 
 		subpages() {
 			return this.visibleSubpagesForCollective(this.collective, this.page.id)
@@ -92,6 +96,13 @@ export default {
 
 		isSelected() {
 			return this.selectedPageIds.has(this.page.id)
+		},
+
+		// Marks partially selected subtrees, especially useful while they're collapsed
+		isIndeterminate() {
+			return this.isSelected
+				&& this.pagesTreeWalkForCollective(this.collective, this.page.id)
+					.some((subpage) => !this.selectedPageIds.has(subpage.id))
 		},
 
 		isExpanded() {

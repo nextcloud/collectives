@@ -35,6 +35,7 @@
 				<li v-if="rootPage" class="modal-publish__collective-row">
 					<PublishTreeRow
 						:selected="isRootPageSelected"
+						:indeterminate="isRootPageIndeterminate"
 						@update:selected="onToggleSelect(rootPage.id)">
 						<template #icon>
 							<span v-if="collective.emoji">{{ collective.emoji }}</span>
@@ -127,6 +128,7 @@ export default {
 
 	computed: {
 		...mapState(usePagesStore, [
+			'pageAncestorIdsForCollective',
 			'pagesForCollective',
 			'pagesTreeWalkForCollective',
 			'visibleSubpagesForCollective',
@@ -156,6 +158,12 @@ export default {
 			return !!this.rootPage && this.selectedPageIds.has(this.rootPage.id)
 		},
 
+		// Marks a partially selected collective, especially useful while its pages are collapsed
+		isRootPageIndeterminate() {
+			return this.isRootPageSelected
+				&& this.allPageIds.some((id) => !this.selectedPageIds.has(id))
+		},
+
 		isTitleValid() {
 			const length = this.title.trim().length
 			return length > 0 && length <= TITLE_MAX_LENGTH
@@ -182,9 +190,16 @@ export default {
 		if (staticSite) {
 			this.title = staticSite.title
 			this.slug = staticSite.slug
-			// Pages may have been deleted since the last publication
+			// Pages may have been deleted or moved since the last publication:
+			// drop deleted ones and add ancestor pages of the remaining ones
 			const pageIds = new Set(this.allPageIds)
-			this.selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			for (const id of Array.from(selectedPageIds)) {
+				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, id)) {
+					selectedPageIds.add(ancestorId)
+				}
+			}
+			this.selectedPageIds = selectedPageIds
 		} else {
 			this.selectedPageIds = new Set(this.allPageIds)
 		}
@@ -225,6 +240,15 @@ export default {
 					selectedPageIds.delete(id)
 				}
 			}
+
+			// Selecting a page also selects its ancestor pages, so a subpage is never
+			// published without the pages it is nested in
+			if (select) {
+				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, pageId)) {
+					selectedPageIds.add(ancestorId)
+				}
+			}
+
 			this.selectedPageIds = selectedPageIds
 		},
 
