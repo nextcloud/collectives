@@ -11,20 +11,21 @@ import { test as editorTest } from '../support/fixtures/editor.ts'
 const test = mergeTests(createCollectiveTest, editorTest)
 
 test.describe('Page content', () => {
-	// Requires https://github.com/nextcloud/whiteboard/pull/1374 to succeed with latest Text
-	test.skip('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
+	test('create whiteboard from attachments menu', async ({ user, page, collective, editor }) => {
 		test.slow()
 		await runOcc(['app:enable', '--force', 'whiteboard'])
-		const collectivePage = await collective.createPage({ title: 'Page with whiteboard', user, page })
-		await collectivePage.open(true)
+		try {
+			const collectivePage = await collective.createPage({ title: 'Page with whiteboard', user, page })
+			await collectivePage.open(true)
 
-		editor.setMode(true)
-		await editor.clickMenu('attachment', 'New whiteboard')
-		await expect(editor.getContent()
-			.locator('.widget-file.whiteboard'))
-			.toBeVisible()
-
-		await runOcc(['app:disable', 'whiteboard'])
+			editor.setMode(true)
+			await editor.clickMenu('attachment', 'New whiteboard')
+			await expect(editor.getContent()
+				.locator('.widget-file .whiteboard'))
+				.toBeVisible()
+		} finally {
+			await runOcc(['app:disable', 'whiteboard'])
+		}
 	})
 
 	test('editor container grows vertically', async ({ user, page, collective, editor }) => {
