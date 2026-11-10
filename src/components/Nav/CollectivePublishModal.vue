@@ -35,6 +35,7 @@
 				<li v-if="rootPage" class="modal-publish__collective-row">
 					<PublishTreeRow
 						:selected="isRootPageSelected"
+						:indeterminate="isRootPageIndeterminate"
 						@update:selected="onToggleSelect(rootPage.id)">
 						<template #icon>
 							<span v-if="collective.emoji">{{ collective.emoji }}</span>
@@ -155,6 +156,12 @@ export default {
 
 		isRootPageSelected() {
 			return !!this.rootPage && this.selectedPageIds.has(this.rootPage.id)
+		},
+
+		// Marks a partially selected collective, especially useful while its pages are collapsed
+		isRootPageIndeterminate() {
+			return this.isRootPageSelected
+				&& this.allPageIds.some((id) => !this.selectedPageIds.has(id))
 		},
 
 		isTitleValid() {
