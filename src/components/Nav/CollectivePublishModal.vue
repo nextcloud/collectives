@@ -182,9 +182,16 @@ export default {
 		if (staticSite) {
 			this.title = staticSite.title
 			this.slug = staticSite.slug
-			// Pages may have been deleted since the last publication
+			// Pages may have been deleted or moved since the last publication:
+			// drop deleted ones and add parent pages of the remaining ones
 			const pageIds = new Set(this.allPageIds)
-			this.selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			for (const id of Array.from(selectedPageIds)) {
+				for (const parentId of this.parentPageIds(id)) {
+					selectedPageIds.add(parentId)
+				}
+			}
+			this.selectedPageIds = selectedPageIds
 		} else {
 			this.selectedPageIds = new Set(this.allPageIds)
 		}
