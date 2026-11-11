@@ -130,7 +130,7 @@ test.describe('Page share enforced password protection', () => {
 		await shareActionsPanel.getByRole('button', { name: 'Create share' }).click()
 		await expect(getToast(page, 'success', 'has been shared')).toBeVisible()
 
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
 		await expect(settingsPanel.getByRole('checkbox', { name: 'Set password' })).toBeChecked()
 		await expect(settingsPanel.getByRole('checkbox', { name: 'Set password' })).toBeDisabled()
