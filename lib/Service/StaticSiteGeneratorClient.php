@@ -69,7 +69,7 @@ class StaticSiteGeneratorClient {
 				'apiVersion' => '1.0',
 				'staticSiteId' => $staticSiteId,
 			]),
-			'callback_status_url' => $this->urlGenerator->linkToRouteAbsolute('ocs.collectives.staticsitegenerator.updatestatus', [
+			'callback_status_url' => $this->urlGenerator->linkToOCSRouteAbsolute('collectives.staticsitegenerator.updatestatus', [
 				'apiVersion' => '1.0',
 				'staticSiteId' => $staticSiteId,
 			]),
