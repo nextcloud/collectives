@@ -58,6 +58,7 @@ namespace OCA\Collectives;
  *     updatedAt: int,
  *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_failed'|null,
  *     publishedAt: ?int,
+ *     isInProgress: bool,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{

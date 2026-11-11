@@ -87,6 +87,25 @@ class StaticSiteTest extends TestCase {
 		$this->assertSame(1700000000, $json['publishedAt']);
 	}
 
+	public static function jsonInProgressProvider(): array {
+		return [
+			'recently provided' => [StaticSite::STATUS_PROVIDED, 60, true],
+			'aborted provided' => [StaticSite::STATUS_PROVIDED, StaticSite::PENDING_TIMEOUT + 60, false],
+			'published' => [StaticSite::STATUS_PUBLISHED, 60, false],
+		];
+	}
+
+	/**
+	 * @dataProvider jsonInProgressProvider
+	 */
+	public function testJsonSerializeEvaluatesInProgressWithServerTime(string $status, int $updatedAgo, bool $expected): void {
+		$staticSite = new StaticSite();
+		$staticSite->setStatus($status);
+		$staticSite->setUpdatedAt(time() - $updatedAgo);
+
+		$this->assertSame($expected, $staticSite->jsonSerialize()['isInProgress']);
+	}
+
 	public function testJsonSerializeOmitsStaticSiteId(): void {
 		$staticSite = new StaticSite();
 		$staticSite->setStaticSiteId('01990000-0000-7000-8000-000000000000');

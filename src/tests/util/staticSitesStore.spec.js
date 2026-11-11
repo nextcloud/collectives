@@ -7,7 +7,7 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { createPinia, setActivePinia } from 'pinia'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import * as api from '../../apis/collectives/index.js'
-import { staticSitePollInterval, staticSitePublicationTimeout } from '../../constants.js'
+import { staticSitePollInterval, staticSitePollTimeout } from '../../constants.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 
 vi.mock('../../apis/collectives/index.js', () => ({ getStaticSites: vi.fn() }))
@@ -23,7 +23,7 @@ function response(...staticSites) {
 }
 
 function staticSite(properties = {}) {
-	return { id: 1, title: 'Website', status: 'provided', publishedUrl: null, ...properties }
+	return { id: 1, title: 'Website', status: 'provided', isInProgress: true, publishedUrl: null, ...properties }
 }
 
 async function poll(times = 1) {
@@ -50,21 +50,6 @@ describe('static sites of a collective', () => {
 
 	it('lists no static sites for an unknown collective', () => {
 		expect(useStaticSitesStore().staticSitesForCollective(1)).toEqual([])
-	})
-
-	const now = 1_700_000_000_000
-	const recently = now / 1000 - 60
-	const longAgo = now / 1000 - staticSitePublicationTimeout - 1
-
-	it.each([
-		['pending', recently, true],
-		['provided', recently, true],
-		['pending', longAgo, false],
-		['provided', longAgo, false],
-		['published', recently, false],
-		['failed', recently, false],
-	])('considers status %j updated at %j in progress: %j', (status, updatedAt, expected) => {
-		expect(useStaticSitesStore().isStaticSiteInProgress({ status, updatedAt }, now)).toBe(expected)
 	})
 })
 
@@ -129,6 +114,19 @@ describe('static sites publication watching', () => {
 		expect(showSuccess).not.toHaveBeenCalled()
 	})
 
+	it('notifies about a publication the backend considers aborted', async () => {
+		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite({ isInProgress: false })))
+		const store = useStaticSitesStore()
+
+		store.watchPublication(1, staticSite())
+		await poll(5)
+
+		expect(api.getStaticSites).toHaveBeenCalledOnce()
+		expect(showError).toHaveBeenCalledOnce()
+		expect(showError).toHaveBeenCalledWith('Website "Website" could not be published: The publish service didn\'t respond in time.')
+		expect(showSuccess).not.toHaveBeenCalled()
+	})
+
 	it('stops polling without a toast if the publication vanished', async () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response())
 		const store = useStaticSitesStore()
@@ -164,16 +162,16 @@ describe('static sites publication watching', () => {
 		expect(showSuccess).toHaveBeenLastCalledWith('Website "New website" published at https://example.org/new-site')
 	})
 
-	it('gives up on a publication that stays quiet for too long', async () => {
+	it('stops polling after the poll timeout although the publication is still in progress', async () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite()))
 		const store = useStaticSitesStore()
 
 		store.watchPublication(1, staticSite())
-		await vi.advanceTimersByTimeAsync(staticSitePublicationTimeout * 1000)
+		await vi.advanceTimersByTimeAsync(staticSitePollTimeout * 1000)
 		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
 
 		expect(store.pollIntervalId).toBeNull()
-		expect(attempts).toBe(staticSitePublicationTimeout / staticSitePollInterval)
+		expect(attempts).toBe(staticSitePollTimeout / staticSitePollInterval)
 
 		await poll(5)
 		expect(api.getStaticSites).toHaveBeenCalledTimes(attempts)
@@ -215,11 +213,11 @@ describe('static sites publication watching', () => {
 		const store = useStaticSitesStore()
 
 		store.watchPublication(1, staticSite())
-		await vi.advanceTimersByTimeAsync(staticSitePublicationTimeout * 1000)
+		await vi.advanceTimersByTimeAsync(staticSitePollTimeout * 1000)
 		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
 
 		expect(store.pollIntervalId).toBeNull()
-		expect(attempts).toBe(staticSitePublicationTimeout / staticSitePollInterval)
+		expect(attempts).toBe(staticSitePollTimeout / staticSitePollInterval)
 
 		await poll(5)
 		expect(api.getStaticSites).toHaveBeenCalledTimes(attempts)

@@ -119,7 +119,8 @@ class StaticSite extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * Omits `staticSiteId`, it authorizes the static site generator's callback and archive download
+	 * Omits `staticSiteId`, it authorizes the static site generator's callback and archive download.
+	 * `isInProgress` is evaluated with the server time, so clients don't need to know the timeout.
 	 */
 	public function jsonSerialize(): array {
 		return [
@@ -135,6 +136,7 @@ class StaticSite extends Entity implements JsonSerializable {
 			'updatedAt' => $this->updatedAt,
 			'lastError' => $this->lastError,
 			'publishedAt' => $this->publishedAt,
+			'isInProgress' => $this->isInProgress(time()),
 		];
 	}
 }

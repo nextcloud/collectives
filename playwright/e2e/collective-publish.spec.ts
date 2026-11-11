@@ -351,6 +351,7 @@ test.describe('Collective publish', () => {
 					selectedPageIds: [collective.getRootPage().data.id],
 					publishedUrl: null,
 					status: 'provided',
+					isInProgress: true,
 					updatedAt: timestamp(60),
 				}]),
 			})

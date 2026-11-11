@@ -188,7 +188,7 @@ export default {
 			'visibleSubpagesForCollective',
 		]),
 
-		...mapState(useStaticSitesStore, ['isStaticSiteInProgress', 'staticSitesForCollective']),
+		...mapState(useStaticSitesStore, ['staticSitesForCollective']),
 
 		staticSites() {
 			return this.staticSitesForCollective(this.collective.id)
@@ -199,7 +199,7 @@ export default {
 		},
 
 		isSelectedStaticSiteInProgress() {
-			return !!this.selectedStaticSite && this.isStaticSiteInProgress(this.selectedStaticSite)
+			return !!this.selectedStaticSite?.isInProgress
 		},
 
 		allPageIds() {
@@ -297,7 +297,7 @@ export default {
 		 * @return {string} translated publication status
 		 */
 		staticSiteStatusLabel(staticSite) {
-			if (this.isStaticSiteInProgress(staticSite)) {
+			if (staticSite.isInProgress) {
 				return t('collectives', 'Publishing')
 			}
 			switch (staticSite.status) {
