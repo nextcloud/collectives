@@ -114,18 +114,21 @@ test.describe('Collective publish', () => {
 			await expect(modal).toBeVisible()
 			await expect(modal).toContainText(collective.data.name)
 
-			// Title and web address are prefilled from the collective name
+			// The title is prefilled from the collective name, the web address has to be entered
 			const titleField = modal.getByRole('textbox', { name: 'Website title' })
 			const slugField = modal.getByRole('textbox', { name: 'Web address' })
 			const submitButton = modal.getByRole('button', { name: 'Publish website' })
 			await expect(titleField).toHaveValue(collective.data.name)
-			const suggestedSlug = await slugField.inputValue()
-			expect(suggestedSlug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/)
+			await expect(slugField).toHaveValue('')
+			await expect(submitButton).toBeDisabled()
+			await expect(titleField).toHaveAttribute('required')
+			await expect(slugField).toHaveAttribute('required')
 
 			// Invalid web address prevents publishing
 			await slugField.fill('Not a valid slug')
 			await expect(submitButton).toBeDisabled()
-			await slugField.fill(suggestedSlug)
+			// Web addresses are unique across all collectives
+			await slugField.fill(`website-${collective.data.id}`)
 
 			// All pages are pre-selected; click publish
 			await submitButton.click()
@@ -150,6 +153,7 @@ test.describe('Collective publish', () => {
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
 		await expect(modal.getByRole('checkbox', { name: 'Page created meanwhile' })).toBeChecked()
+		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
 		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
 	})
 
@@ -321,6 +325,7 @@ test.describe('Collective publish', () => {
 		await expect(modal.getByRole('button', { name: /Published website/ })).toHaveAttribute('aria-pressed', 'false')
 		await expect(modal.getByRole('textbox', { name: 'Website title' })).toHaveValue(collective.data.name)
 		await expect(slugField).toBeEnabled()
+		await expect(slugField).toHaveValue('')
 
 		// The web address of the existing website can't be used for a new one
 		await slugField.fill(staticSite.slug)
@@ -377,6 +382,7 @@ test.describe('Collective publish', () => {
 		const modal = page.getByRole('dialog')
 		const titleField = modal.getByRole('textbox', { name: 'Website title' })
 		await titleField.fill('My website')
+		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
 		await expect(getToast(page, 'error', 'Could not publish collective as website')).toBeVisible()
@@ -479,6 +485,8 @@ test.describe('Collective publish', () => {
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
 		await modal.getByRole('textbox', { name: 'Website title' }).fill('My website')
+		// The request reaches the backend, where web addresses are unique across all collectives
+		await modal.getByRole('textbox', { name: 'Web address' }).fill(`website-${collective.data.id}`)
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 		await expect(modal).toHaveCount(0)
 

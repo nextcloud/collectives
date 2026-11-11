@@ -66,15 +66,17 @@
 					:label="t('collectives', 'Website title')"
 					:error="!isTitleValid"
 					:disabled="loadingPages"
-					:maxlength="titleMaxLength" />
+					:maxlength="titleMaxLength"
+					required />
 				<!-- TRANSLATORS The web address is the part of the website URL that identifies the published collective -->
 				<NcTextField
 					v-model="slug"
 					:label="t('collectives', 'Web address')"
-					:error="!isSlugValid"
+					:error="slug !== '' && !isSlugValid"
 					:disabled="loadingPages || !!selectedStaticSite"
 					:helperText="slugHelperText"
-					:maxlength="slugMaxLength" />
+					:maxlength="slugMaxLength"
+					required />
 			</div>
 			<NcLoadingIcon v-if="loadingPages" class="modal-publish__loading" :size="32" />
 			<ul v-else class="modal-publish__tree">
@@ -133,7 +135,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
 import { staticSiteErrorMessage } from '../../util/staticSiteError.js'
-import { generateSlug, isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
+import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
 
 const TITLE_MAX_LENGTH = 255
 
@@ -172,7 +174,7 @@ export default {
 			/** @type {?number} null for a new website */
 			selectedStaticSiteId: null,
 			title: this.collective.name,
-			slug: generateSlug(this.collective.name),
+			slug: '',
 			titleMaxLength: TITLE_MAX_LENGTH,
 			slugMaxLength: SLUG_MAX_LENGTH,
 		}
@@ -335,7 +337,7 @@ export default {
 		selectNewStaticSite() {
 			this.selectedStaticSiteId = null
 			this.title = this.collective.name
-			this.slug = generateSlug(this.collective.name)
+			this.slug = ''
 			this.selectedPageIds = new Set(this.allPageIds)
 		},
 
@@ -437,7 +439,7 @@ export default {
 
 	&__sites {
 		flex: 0 0 auto;
-		padding-block-end: 8px;
+		padding-block-end: 16px;
 	}
 
 	&__sites-header {
