@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveShare;
@@ -25,11 +26,13 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IDateTimeZone;
 use OCP\IL10N;
 use OCP\ISession;
+use OCP\IUserManager;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager as IShareManager;
+use OCP\Share\IProviderFactory;
 use OCP\Share\IShare;
 
 class CollectiveShareService {
@@ -44,6 +47,8 @@ class CollectiveShareService {
 		private readonly IL10N $l10n,
 		private readonly ISession $session,
 		private readonly IDateTimeZone $dateTimeZone,
+		private readonly IUserManager $userManager,
+		private readonly IProviderFactory $shareProviderFactory,
 	) {
 	}
 
@@ -123,8 +128,7 @@ class CollectiveShareService {
 		try {
 			$folderShare = $this->shareManager->getShareByToken($collectiveShare->getToken());
 		} catch (ShareNotFound) {
-			// Corresponding folder share not found, delete the collective share as well.
-			$this->collectiveShareMapper->delete($collectiveShare);
+			$this->deleteIfFolderShareGone($collectiveShare);
 			return null;
 		}
 
@@ -146,8 +150,9 @@ class CollectiveShareService {
 		try {
 			$folderShare = $this->shareManager->getShareByToken($collectiveShare->getToken());
 		} catch (ShareNotFound) {
-			// Corresponding folder share not found, delete the collective share as well.
-			$this->collectiveShareMapper->delete($collectiveShare);
+			// The share manager also hides existing folder shares, e.g. if the owner is
+			// disabled or not allowed to create link shares. Don't clean up shares as they
+			// might get enabled again later on.
 			return null;
 		}
 
@@ -155,32 +160,76 @@ class CollectiveShareService {
 		return $collectiveShare;
 	}
 
-	public function getSharesByCollectiveAndUser(string $userId, int $collectiveId): array {
-		$collectiveShares = $this->collectiveShareMapper->findByCollectiveIdAndUser($collectiveId, $userId);
+	/**
+	 * Get shares of a collective and its pages
+	 *
+	 * Users with share permission get the shares of all members, others only their own.
+	 * Tokens are only returned to users that can delete the share: the owner and collective admins.
+	 *
+	 * @return list<CollectiveShare>
+	 */
+	public function getSharesByCollective(string $userId, Collective $collective): array {
+		$collectiveShares = $collective->canShare()
+			? $this->collectiveShareMapper->findByCollectiveId($collective->getId())
+			: $this->collectiveShareMapper->findByCollectiveIdAndUser($collective->getId(), $userId);
 
 		$shares = [];
 		foreach ($collectiveShares as $collectiveShare) {
 			try {
 				$folderShare = $this->shareManager->getShareByToken($collectiveShare->getToken());
 			} catch (ShareNotFound) {
-				// Corresponding folder share not found, delete the collective share as well.
-				$this->collectiveShareMapper->delete($collectiveShare);
+				$this->deleteIfFolderShareGone($collectiveShare);
 				continue;
 			}
-			$this->setFolderShareAttributes($collectiveShare, $folderShare);
+			$this->setFolderShareAttributes($collectiveShare, $folderShare, $collective);
+			$this->setUserAttributes($collectiveShare, $collective, $userId);
+			// Members could otherwise keep public access via other members' links after being removed
+			if (!$collectiveShare->getCanDelete()) {
+				$collectiveShare->setToken('');
+			}
 			$shares[] = $collectiveShare;
 		}
 
 		return $shares;
 	}
 
-	private function setFolderShareAttributes(CollectiveShare $collectiveShare, IShare $folderShare): void {
-		$collectiveShare->setEditable($this->isShareEditable($folderShare, $collectiveShare));
+	/**
+	 * @param Collective|null $collective The collective of the share, looked up if not passed
+	 */
+	private function setFolderShareAttributes(CollectiveShare $collectiveShare, IShare $folderShare, ?Collective $collective = null): void {
+		$collectiveShare->setEditable($this->isShareEditable($folderShare, $collectiveShare, $collective));
 		if ($folderShare->getPassword()) {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
 		$collectiveShare->setExpirationDate($this->getExpirationDate($folderShare));
 		$collectiveShare->setLabel($folderShare->getLabel() ?? '');
+	}
+
+	/**
+	 * Set the owner display name and the permissions of the requesting user
+	 */
+	private function setUserAttributes(CollectiveShare $collectiveShare, Collective $collective, string $userId): void {
+		$owner = $collectiveShare->getOwner();
+		$collectiveShare->setOwnerDisplayName($this->userManager->getDisplayName($owner) ?? $owner);
+		$collectiveShare->setCanUpdate($this->canUpdateShare($collectiveShare, $collective, $userId));
+		$collectiveShare->setCanDelete($this->canDeleteShare($collectiveShare, $collective, $userId));
+	}
+
+	/**
+	 * Only the owner can update a share, as long as they're allowed to share and edit the collective
+	 */
+	private function canUpdateShare(CollectiveShare $collectiveShare, Collective $collective, string $userId): bool {
+		return $collectiveShare->getOwner() === $userId
+			&& $collective->canShare()
+			&& $collective->canEdit();
+	}
+
+	/**
+	 * The owner and collective admins can delete a share
+	 */
+	private function canDeleteShare(CollectiveShare $collectiveShare, Collective $collective, string $userId): bool {
+		return $collectiveShare->getOwner() === $userId
+			|| $collective->getLevel() >= Member::LEVEL_ADMIN;
 	}
 
 	/**
@@ -219,11 +268,12 @@ class CollectiveShareService {
 		return $label;
 	}
 
-	private function isShareEditable(IShare $folderShare, CollectiveShare $collectiveShare): bool {
+	private function isShareEditable(IShare $folderShare, CollectiveShare $collectiveShare, ?Collective $collective): bool {
 		if (($folderShare->getPermissions() & Collective::editPermissions) !== Collective::editPermissions) {
 			return false;
 		}
-		$collective = $this->collectiveMapper->findByIdAndUser($collectiveShare->getCollectiveId(), $collectiveShare->getOwner());
+		// memberCanEdit() only depends on the collective permissions, not on the user that loaded the collective
+		$collective ??= $this->collectiveMapper->findByIdAndUser($collectiveShare->getCollectiveId(), $collectiveShare->getOwner());
 		return $collective !== null && $collective->memberCanEdit();
 	}
 
@@ -255,14 +305,13 @@ class CollectiveShareService {
 			throw new NotPermittedException('Failed to create collective/page share for ' . $collective->getName(), 0, $e);
 		}
 
-		$this->setFolderShareAttributes($collectiveShare, $folderShare);
+		$this->setFolderShareAttributes($collectiveShare, $folderShare, $collective);
+		$this->setUserAttributes($collectiveShare, $collective, $userId);
 		return $collectiveShare;
 	}
 
 	/**
-	 * @throws DoesNotExistException
 	 * @throws Exception
-	 * @throws MultipleObjectsReturnedException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws UnprocessableEntityException
@@ -289,7 +338,10 @@ class CollectiveShareService {
 			$pageId = $pageInfo->getId();
 		}
 
-		$share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $pageId, $token, $userId);
+		$share = $this->findShareInCollective($collective, $pageId, $token);
+		if (!$this->canUpdateShare($share, $collective, $userId)) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to update this share'));
+		}
 
 		try {
 			$folderShare = $this->shareManager->getShareByToken($token);
@@ -328,34 +380,75 @@ class CollectiveShareService {
 			throw new UnprocessableEntityException($e->getMessage(), 0, $e);
 		}
 
-		$this->setFolderShareAttributes($share, $folderShare);
+		$this->setFolderShareAttributes($share, $folderShare, $collective);
+		$this->setUserAttributes($share, $collective, $userId);
 		return $share;
+	}
+
+	/**
+	 * Get a link share via the link share provider
+	 *
+	 * Unlike the share manager, the provider doesn't hide link shares, e.g. of disabled owners,
+	 * of owners that are not allowed to create link shares or when link sharing is disabled.
+	 *
+	 * @throws ShareNotFound
+	 */
+	private function getLinkShare(string $token): IShare {
+		return $this->shareProviderFactory->getProviderForType(IShare::TYPE_LINK)->getShareByToken($token);
 	}
 
 	private function deleteFileShare(string $token): void {
 		try {
-			$share = $this->shareManager->getShareByToken($token);
-			$this->shareManager->deleteShare($share);
+			$share = $this->getLinkShare($token);
 		} catch (ShareNotFound) {
 			// Corresponding folder share is already gone.
+			return;
+		}
+		$this->shareManager->deleteShare($share);
+	}
+
+	/**
+	 * Delete a collective share if its folder share is gone, not just hidden by the share manager
+	 */
+	private function deleteIfFolderShareGone(CollectiveShare $collectiveShare): void {
+		try {
+			$this->getLinkShare($collectiveShare->getToken());
+		} catch (ShareNotFound) {
+			$this->collectiveShareMapper->delete($collectiveShare);
 		}
 	}
 
 	/**
+	 * @throws Exception
+	 * @throws NotFoundException
+	 */
+	private function findShareInCollective(Collective $collective, int $pageId, string $token): CollectiveShare {
+		try {
+			return $this->collectiveShareMapper->findOneByCollectiveIdAndToken($collective->getId(), $pageId, $token);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException($this->l10n->t('Share not found'), 0, $e);
+		}
+	}
+
+	/**
+	 * @throws Exception
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function deleteShare(string $userId, int $collectiveId, int $pageId, string $token): CollectiveShare {
+	public function deleteShare(string $userId, Collective $collective, int $pageId, string $token): CollectiveShare {
+		$collectiveShare = $this->findShareInCollective($collective, $pageId, $token);
+		if (!$this->canDeleteShare($collectiveShare, $collective, $userId)) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to delete this share'));
+		}
+
+		// Delete the folder share first, so the collective share stays listed if that fails
+		$this->deleteFileShare($collectiveShare->getToken());
+
 		try {
-			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $pageId, $token, $userId);
 			$this->collectiveShareMapper->delete($collectiveShare);
-		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
-			throw new NotFoundException('Failed to find collective share ' . $token, 0, $e);
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to delete collective share ' . $token, 0, $e);
 		}
-
-		$this->deleteFileShare($collectiveShare->getToken());
 
 		return $collectiveShare;
 	}
@@ -367,8 +460,8 @@ class CollectiveShareService {
 		try {
 			$collectiveShares = $this->collectiveShareMapper->findByCollectiveId($collectiveId);
 			foreach ($collectiveShares as $collectiveShare) {
-				$this->collectiveShareMapper->delete($collectiveShare);
 				$this->deleteFileShare($collectiveShare->getToken());
+				$this->collectiveShareMapper->delete($collectiveShare);
 			}
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to delete collective share for ' . $collectiveId, 0, $e);

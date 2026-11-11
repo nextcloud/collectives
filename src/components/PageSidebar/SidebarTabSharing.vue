@@ -68,12 +68,18 @@
 
 				<!-- external shares list -->
 				<ul v-else class="external-shares-list">
-					<SharingEntryLink v-if="!shares.length" />
+					<SharingEntryLink v-if="!ownShares.length" />
 					<SharingEntryLink
-						v-for="(share, index) in shares"
+						v-for="(share, index) in ownShares"
 						v-else
 						:key="share.id"
 						:index="index + 1"
+						:share
+						isOwnShare />
+					<SharingEntryLink
+						v-for="share in otherShares"
+						:key="share.id"
+						:index="otherShareIndexes[share.id]"
 						:share />
 				</ul>
 			</div>
@@ -82,6 +88,7 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -136,6 +143,22 @@ export default {
 				: this.sharesByPageId(this.pageId)
 		},
 
+		ownShares() {
+			return this.shares.filter((share) => this.isOwnShare(share))
+		},
+
+		otherShares() {
+			return this.shares.filter((share) => !this.isOwnShare(share))
+		},
+
+		otherShareIndexes() {
+			const counts = {}
+			return Object.fromEntries(this.otherShares.map((share) => {
+				counts[share.owner] = (counts[share.owner] ?? 0) + 1
+				return [share.id, counts[share.owner]]
+			}))
+		},
+
 		membersManagementHelpText() {
 			return t('collectives', 'Manage members of your collective. Members have access to the whole collective.')
 		},
@@ -163,6 +186,10 @@ export default {
 		t,
 
 		...mapActions(useCollectivesStore, ['setMembersCollectiveId']),
+
+		isOwnShare(share) {
+			return share.owner === getCurrentUser()?.uid
+		},
 
 		openCollectiveMembers() {
 			this.setMembersCollectiveId(this.currentCollective.id)

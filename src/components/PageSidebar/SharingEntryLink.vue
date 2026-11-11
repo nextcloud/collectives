@@ -17,7 +17,7 @@
 						{{ title }}
 					</span>
 					<div
-						v-if="share"
+						v-if="share && share.canUpdate"
 						ref="quickShareDropdownContainer"
 						class="share-select"
 						:class="{ active: showDropdown }">
@@ -56,12 +56,15 @@
 							</button>
 						</div>
 					</div>
+					<span v-else-if="share" class="share-permission">
+						{{ selectedDropdownOption }}
+					</span>
 				</div>
 
 				<!-- clipboard -->
 				<NcActions v-if="share && share.token" class="sharing-entry__copy">
 					<NcActionButton
-						:aria-label="copyLinkTooltip"
+						:aria-label="copyLinkAriaLabel"
 						@click.prevent="copyLink">
 						<template #icon>
 							<CheckIcon v-if="copySuccess" :size="20" />
@@ -126,31 +129,32 @@
 				</NcActionButton>
 			</NcActions>
 
-			<!-- actions -->
+			<!-- actions, as menu also for links of other members with "Add another link" as only action -->
 			<NcActions
 				v-else-if="!loading"
 				v-model:open="open"
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
 				menuAlign="right"
+				:forceMenu="!!share"
 				:disabled="!networkOnline"
 				:title="offlineTitle">
 				<template v-if="share">
-					<NcActionButton closeAfterClick @click.prevent.stop="toggleSettings">
+					<NcActionButton v-if="share.canUpdate" closeAfterClick @click.prevent.stop="toggleSettings">
 						<template #icon>
 							<TuneIcon :size="20" />
 						</template>
 						{{ t('collectives', 'Customize link') }}
 					</NcActionButton>
 
-					<NcActionButton closeAfterClick @click.prevent="openQRCode">
+					<NcActionButton v-if="share.token" closeAfterClick @click.prevent="openQRCode">
 						<template #icon>
 							<QrcodeIcon :size="20" />
 						</template>
 						{{ t('collectives', 'Generate QR code') }}
 					</NcActionButton>
 
-					<NcActionSeparator />
+					<NcActionSeparator v-if="share.canUpdate || share.token" />
 
 					<NcActionButton class="new-share-link" @click.prevent.stop="onNewShare">
 						<template #icon>
@@ -159,7 +163,7 @@
 						{{ t('collectives', 'Add another link') }}
 					</NcActionButton>
 
-					<NcActionButton class="unshare-button" @click.prevent="onDelete">
+					<NcActionButton v-if="share.canDelete" class="unshare-button" @click.prevent="onDelete">
 						<template #icon>
 							<CloseIcon :size="20" />
 						</template>
@@ -321,6 +325,11 @@ export default {
 			type: Object,
 			default: () => {},
 		},
+
+		isOwnShare: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	setup() {
@@ -357,9 +366,20 @@ export default {
 			}
 
 			const label = this.share.label?.trim()
+			if (!this.isOwnShare) {
+				const initiator = this.share.ownerDisplayName || this.share.owner
+				// The title is rendered as text, so the names must neither be HTML-escaped nor sanitized
+				const options = { escape: false, sanitize: false }
+				if (label) {
+					return t('collectives', '{label} (by {initiator})', { label, initiator }, options)
+				}
+				return this.index > 1
+					? t('collectives', 'Share link {index} (by {initiator})', { index: this.index, initiator }, options)
+					: t('collectives', 'Share link (by {initiator})', { initiator }, options)
+			}
+
 			if (label) {
-				// The title is rendered as text, so the label must not be HTML-escaped
-				return t('collectives', 'Share link ({label})', { label }, { escape: false })
+				return label
 			}
 
 			return this.index > 1
@@ -421,6 +441,13 @@ export default {
 			return t('collectives', 'Copy public link to clipboard')
 		},
 
+		copyLinkAriaLabel() {
+			if (this.copied && !this.copySuccess) {
+				return this.copyLinkTooltip
+			}
+			return t('collectives', 'Copy public link of "{title}" to clipboard', { title: this.title }, { escape: false, sanitize: false })
+		},
+
 		isPageShare() {
 			return !this.isLandingPage
 		},
@@ -436,7 +463,9 @@ export default {
 		},
 
 		actionsTooltip() {
-			return t('collectives', 'Share actions')
+			return this.share
+				? t('collectives', 'Share actions for "{title}"', { title: this.title }, { escape: false, sanitize: false })
+				: t('collectives', 'Share actions')
 		},
 
 		isPasswordEnforced() {
@@ -857,6 +886,11 @@ export default {
 		width: 100%;
 		height: auto;
 	}
+}
+
+.share-permission {
+	font-size: 12.5px;
+	color: var(--color-text-maxcontrast);
 }
 
 .share-select {
