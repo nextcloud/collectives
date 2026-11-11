@@ -32,7 +32,8 @@ test.describe('Collective share', () => {
 		await expect(sharePage.locator('#header .header-title')).toContainText(collective.data.name)
 		await expect(sharePage.locator('.collective-selector')).toHaveCount(0)
 		// Older Nextcloud versions expose the header action link with role "button"
-		await expect(sharePage.locator('#header a', { hasText: 'Export or print' }))
+		const exportLink = sharePage.locator('#header a', { hasText: 'Export or print' })
+		await expect(exportLink)
 			.toHaveAttribute('href', new RegExp(`/p/${shares[0].data.token}/print/`))
 
 		// Allows to filter pages
@@ -40,6 +41,12 @@ test.describe('Collective share', () => {
 		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(2)
 		await sharePageList.filter.fill('page')
 		await expect(sharePageList.pageListItems.filter({ visible: true })).toHaveCount(1)
+
+		// The print view has its own export button instead of the header action
+		await sharePage.goto(await exportLink.getAttribute('href') as string)
+		await expect(sharePage.getByRole('main').getByRole('button', { name: 'Export or print' })).toBeVisible()
+		await expect(sharePage.locator('#header .header-title')).toContainText(collective.data.name)
+		await expect(exportLink).toHaveCount(0)
 	})
 
 	test('Create read-write share and open share unauthenticated', async ({ page, collective, pageSidebar, sharePage, shareEditor, sharePageList, shareTitleBar }) => {

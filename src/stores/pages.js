@@ -351,17 +351,6 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		pagesTreeWalk: (state) => (parentId = 0) => {
-			const pages = []
-			for (const page of state.visibleSubpages(parentId)) {
-				pages.push(page)
-				for (const subpage of state.pagesTreeWalk(page.id)) {
-					pages.push(subpage)
-				}
-			}
-			return pages
-		},
-
 		pageParent: (state) => (pageId) => {
 			return state.pageById(pageId).parentId
 		},
