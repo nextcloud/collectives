@@ -95,13 +95,12 @@ class CollectiveShareMapper extends QBMapper {
 	 * @throws Exception
 	 * @throws MultipleObjectsReturnedException
 	 */
-	public function findOneByCollectiveIdAndTokenAndUser(int $collectiveId, int $pageId, string $token, string $userId): CollectiveShare {
+	public function findOneByCollectiveIdAndToken(int $collectiveId, int $pageId, string $token): CollectiveShare {
 		$qb = $this->db->getQueryBuilder();
 		$andX = [
 			$qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)),
 			$qb->expr()->eq('page_id', $qb->createNamedParameter($pageId, IQueryBuilder::PARAM_INT)),
 			$qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)),
-			$qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
 		];
 		$qb->select('*')
 			->from($this->tableName)

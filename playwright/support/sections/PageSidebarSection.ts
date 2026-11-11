@@ -54,10 +54,25 @@ export class PageSidebarSection {
 		await this.page.getByRole('menuitem', { name: action }).click()
 	}
 
-	public async clickShareMenuAction(sharingTab: Locator, actionName: string): Promise<void> {
-		const entry = sharingTab.locator('.sharing-entry')
+	public getShareEntry(sharingTab: Locator, title: string): Locator {
+		return sharingTab.locator('.sharing-entry')
+			.filter({ has: this.page.locator('.sharing-entry__title', { hasText: title }) })
+	}
+
+	public async openShareMenu(entry: Locator): Promise<void> {
 		await entry.locator('.sharing-entry__actions')
 			.getByRole('button', { name: 'Actions' }).click()
+	}
+
+	/**
+	 * Click an action in the menu of a share entry
+	 *
+	 * @param sharingTab The sharing tab
+	 * @param actionName Name of the menu action
+	 * @param entry The share entry, defaults to the only entry in the sharing tab
+	 */
+	public async clickShareMenuAction(sharingTab: Locator, actionName: string, entry: Locator = sharingTab.locator('.sharing-entry')): Promise<void> {
+		await this.openShareMenu(entry)
 		await this.page.getByRole('menuitem', { name: actionName }).click()
 	}
 

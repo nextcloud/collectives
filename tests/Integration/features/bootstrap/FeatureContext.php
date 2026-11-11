@@ -2534,7 +2534,7 @@ class FeatureContext implements Context {
 		}
 		$jsonBody = $this->getJson();
 		foreach ($jsonBody['ocs']['data'] as $share) {
-			if ($collectiveId === $share['collectiveId'] && $pageId === $share['pageId']) {
+			if ($collectiveId === $share['collectiveId'] && $pageId === $share['pageId'] && $this->currentUser === $share['owner']) {
 				return $share['token'];
 			}
 		}
