@@ -942,6 +942,16 @@ namespace OCP\Files\Mount {
 	interface ISystemMountPoint {}
 }
 
+namespace OCP\Dashboard {
+	use OCP\Dashboard\Model\WidgetItems;
+
+	interface ITeamWidget extends IAPIWidgetV2 {
+		public function isEnabledForTeam(string $teamId, string $userId): bool;
+		public function getTeamUrl(string $teamId, string $userId): ?string;
+		public function getTeamItems(string $teamId, string $userId, ?string $since = null, int $limit = 7): WidgetItems;
+	}
+}
+
 namespace OCA\Text\Event {
 	use OCP\EventDispatcher\Event;
 	class LoadEditor extends Event {}
