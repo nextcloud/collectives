@@ -44,7 +44,6 @@ export default {
 	},
 
 	emits: [
-		'loading',
 		'ready',
 	],
 
@@ -64,8 +63,6 @@ export default {
 	},
 
 	mounted() {
-		this.$emit('loading')
-
 		this.setupReader(this.page).then(() => {
 			this.getPageContent().then(() => {
 				this.$emit('ready')
