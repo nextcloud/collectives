@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveShare;
@@ -25,6 +26,7 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IDateTimeZone;
 use OCP\IL10N;
 use OCP\ISession;
+use OCP\IUserManager;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
@@ -44,6 +46,7 @@ class CollectiveShareService {
 		private readonly IL10N $l10n,
 		private readonly ISession $session,
 		private readonly IDateTimeZone $dateTimeZone,
+		private readonly IUserManager $userManager,
 	) {
 	}
 
@@ -155,8 +158,17 @@ class CollectiveShareService {
 		return $collectiveShare;
 	}
 
-	public function getSharesByCollectiveAndUser(string $userId, int $collectiveId): array {
-		$collectiveShares = $this->collectiveShareMapper->findByCollectiveIdAndUser($collectiveId, $userId);
+	/**
+	 * Get shares of a collective and its pages
+	 *
+	 * Users with share permission get the shares of all members, others only their own.
+	 *
+	 * @return list<CollectiveShare>
+	 */
+	public function getSharesByCollective(string $userId, Collective $collective): array {
+		$collectiveShares = $collective->canShare()
+			? $this->collectiveShareMapper->findByCollectiveId($collective->getId())
+			: $this->collectiveShareMapper->findByCollectiveIdAndUser($collective->getId(), $userId);
 
 		$shares = [];
 		foreach ($collectiveShares as $collectiveShare) {
@@ -168,6 +180,7 @@ class CollectiveShareService {
 				continue;
 			}
 			$this->setFolderShareAttributes($collectiveShare, $folderShare);
+			$this->setUserAttributes($collectiveShare, $collective, $userId);
 			$shares[] = $collectiveShare;
 		}
 
@@ -181,6 +194,33 @@ class CollectiveShareService {
 		}
 		$collectiveShare->setExpirationDate($this->getExpirationDate($folderShare));
 		$collectiveShare->setLabel($folderShare->getLabel() ?? '');
+	}
+
+	/**
+	 * Set attributes for users that manage shares: the owner display name and the permissions of the requesting user
+	 */
+	private function setUserAttributes(CollectiveShare $collectiveShare, Collective $collective, string $userId): void {
+		$owner = $collectiveShare->getOwner();
+		$collectiveShare->setOwnerDisplayName($this->userManager->getDisplayName($owner) ?? $owner);
+		$collectiveShare->setCanUpdate($this->canUpdateShare($collectiveShare, $collective, $userId));
+		$collectiveShare->setCanDelete($this->canDeleteShare($collectiveShare, $collective, $userId));
+	}
+
+	/**
+	 * Only the owner can update a share, as long as they're allowed to share and edit the collective
+	 */
+	private function canUpdateShare(CollectiveShare $collectiveShare, Collective $collective, string $userId): bool {
+		return $collectiveShare->getOwner() === $userId
+			&& $collective->canShare()
+			&& $collective->canEdit();
+	}
+
+	/**
+	 * The owner and collective admins can delete a share
+	 */
+	private function canDeleteShare(CollectiveShare $collectiveShare, Collective $collective, string $userId): bool {
+		return $collectiveShare->getOwner() === $userId
+			|| $collective->getLevel() >= Member::LEVEL_ADMIN;
 	}
 
 	/**
@@ -256,13 +296,12 @@ class CollectiveShareService {
 		}
 
 		$this->setFolderShareAttributes($collectiveShare, $folderShare);
+		$this->setUserAttributes($collectiveShare, $collective, $userId);
 		return $collectiveShare;
 	}
 
 	/**
-	 * @throws DoesNotExistException
 	 * @throws Exception
-	 * @throws MultipleObjectsReturnedException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws UnprocessableEntityException
@@ -289,7 +328,15 @@ class CollectiveShareService {
 			$pageId = $pageInfo->getId();
 		}
 
-		$share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $pageId, $token, $userId);
+		try {
+			$share = $this->collectiveShareMapper->findOneByCollectiveIdAndToken($collective->getId(), $pageId, $token);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException($this->l10n->t('Share not found'), 0, $e);
+		}
+
+		if ($share->getOwner() !== $userId) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to update this share'));
+		}
 
 		try {
 			$folderShare = $this->shareManager->getShareByToken($token);
@@ -329,6 +376,7 @@ class CollectiveShareService {
 		}
 
 		$this->setFolderShareAttributes($share, $folderShare);
+		$this->setUserAttributes($share, $collective, $userId);
 		return $share;
 	}
 
@@ -345,12 +393,21 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function deleteShare(string $userId, int $collectiveId, int $pageId, string $token): CollectiveShare {
+	public function deleteShare(string $userId, Collective $collective, int $pageId, string $token): CollectiveShare {
 		try {
-			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $pageId, $token, $userId);
-			$this->collectiveShareMapper->delete($collectiveShare);
+			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndToken($collective->getId(), $pageId, $token);
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 			throw new NotFoundException('Failed to find collective share ' . $token, 0, $e);
+		} catch (Exception $e) {
+			throw new NotPermittedException('Failed to find collective share ' . $token, 0, $e);
+		}
+
+		if (!$this->canDeleteShare($collectiveShare, $collective, $userId)) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to delete this share'));
+		}
+
+		try {
+			$this->collectiveShareMapper->delete($collectiveShare);
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to delete collective share ' . $token, 0, $e);
 		}

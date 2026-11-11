@@ -23,10 +23,12 @@ use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\Constants;
 use OCP\Files\Folder;
 use OCP\IDateTimeZone;
 use OCP\IL10N;
 use OCP\ISession;
+use OCP\IUserManager;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
@@ -72,6 +74,13 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->userTimeZone = new \DateTimeZone('Europe/Berlin');
 		$dateTimeZone = $this->createMock(IDateTimeZone::class);
 		$dateTimeZone->method('getTimeZone')->willReturnCallback(fn (): \DateTimeZone => $this->userTimeZone);
+		$userManager = $this->createMock(IUserManager::class);
+		$userManager->method('getDisplayName')
+			->willReturnMap([
+				[$this->userId, 'Jane Doe'],
+				['alice', 'Alice'],
+				['deleted', null],
+			]);
 
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
@@ -82,6 +91,7 @@ class CollectiveShareServiceTest extends TestCase {
 			$l10n,
 			$session,
 			$dateTimeZone,
+			$userManager,
 		);
 
 		$this->collective = new Collective();
@@ -268,7 +278,7 @@ class CollectiveShareServiceTest extends TestCase {
 		$collectiveShare = new CollectiveShare();
 		$collectiveShare->setCollectiveId($this->collectiveId);
 		$collectiveShare->setOwner($this->userId);
-		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
 			->willReturn($collectiveShare);
 
 		$folderShare = $this->getMockBuilder(Share::class)
@@ -302,7 +312,8 @@ class CollectiveShareServiceTest extends TestCase {
 
 	public function testUpdateShareWithPassword(): void {
 		$collectiveShare = new CollectiveShare();
-		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
+		$collectiveShare->setOwner($this->userId);
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
 			->willReturn($collectiveShare);
 
 		$folderShare = $this->getMockBuilder(Share::class)
@@ -340,7 +351,7 @@ class CollectiveShareServiceTest extends TestCase {
 		$collectiveShare = new CollectiveShare();
 		$collectiveShare->setCollectiveId($this->collectiveId);
 		$collectiveShare->setOwner($this->userId);
-		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
 			->willReturn($collectiveShare);
 
 		$folderShare = $this->getMockBuilder(Share::class)
@@ -352,6 +363,28 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($folderShare);
 
 		return $folderShare;
+	}
+
+	public function testUpdateShareOfOtherMemberNotPermitted(): void {
+		$this->collective->setLevel(Member::LEVEL_ADMIN);
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
+			->willReturn($this->collectiveShare('alice', 'token'));
+		$this->shareManager->expects(self::never())
+			->method('updateShare');
+
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('You are not allowed to update this share');
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false);
+	}
+
+	public function testUpdateShareNotFound(): void {
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
+			->willThrowException(new DoesNotExistException(''));
+		$this->shareManager->expects(self::never())
+			->method('updateShare');
+
+		$this->expectException(NotFoundException::class);
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false);
 	}
 
 	public function testUpdateShareSetsLabel(): void {
@@ -496,6 +529,137 @@ class CollectiveShareServiceTest extends TestCase {
 
 		$share = $this->service->createShare($this->userId, $this->collective, null);
 		self::assertEquals('2026-12-24', $share->jsonSerialize()['expirationDate']);
+	}
+
+	private function collectiveShare(string $owner, string $token): CollectiveShare {
+		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setCollectiveId($this->collectiveId);
+		$collectiveShare->setOwner($owner);
+		$collectiveShare->setToken($token);
+		return $collectiveShare;
+	}
+
+	private function prepareGetShares(): void {
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->shareManager->method('getShareByToken')
+			->willReturn($folderShare);
+	}
+
+	public function testGetSharesByCollectiveWithSharePermission(): void {
+		$this->prepareGetShares();
+		$this->collectiveShareMapper->expects(self::once())
+			->method('findByCollectiveId')
+			->with($this->collectiveId)
+			->willReturn([
+				$this->collectiveShare($this->userId, 'token1'),
+				$this->collectiveShare('alice', 'token2'),
+				$this->collectiveShare('deleted', 'token3'),
+			]);
+		$this->collectiveShareMapper->expects(self::never())
+			->method('findByCollectiveIdAndUser');
+
+		$shares = array_map(static fn (CollectiveShare $s): array => $s->jsonSerialize(), $this->service->getSharesByCollective($this->userId, $this->collective));
+
+		self::assertEquals(['Jane Doe', 'Alice', 'deleted'], array_column($shares, 'ownerDisplayName'));
+		self::assertEquals([true, false, false], array_column($shares, 'canUpdate'));
+		self::assertEquals([true, false, false], array_column($shares, 'canDelete'));
+	}
+
+	public function testGetSharesByCollectiveWithoutSharePermission(): void {
+		$this->collective->updatePermissionLevel(Member::LEVEL_ADMIN, Constants::PERMISSION_SHARE);
+		$this->prepareGetShares();
+		$this->collectiveShareMapper->expects(self::never())
+			->method('findByCollectiveId');
+		$this->collectiveShareMapper->expects(self::once())
+			->method('findByCollectiveIdAndUser')
+			->with($this->collectiveId, $this->userId)
+			->willReturn([$this->collectiveShare($this->userId, 'token1')]);
+
+		$shares = $this->service->getSharesByCollective($this->userId, $this->collective);
+		self::assertCount(1, $shares);
+		// Users without share permission can't update their old shares, but delete them
+		self::assertFalse($shares[0]->getCanUpdate());
+		self::assertTrue($shares[0]->getCanDelete());
+	}
+
+	public function testGetSharesByCollectiveAsAdmin(): void {
+		$this->collective->setLevel(Member::LEVEL_ADMIN);
+		$this->prepareGetShares();
+		$this->collectiveShareMapper->method('findByCollectiveId')
+			->willReturn([$this->collectiveShare('alice', 'token2')]);
+
+		$shares = $this->service->getSharesByCollective($this->userId, $this->collective);
+		self::assertFalse($shares[0]->getCanUpdate());
+		self::assertTrue($shares[0]->getCanDelete());
+	}
+
+	public static function deleteShareProvider(): array {
+		return [
+			'own share as member' => ['jane', Member::LEVEL_MEMBER],
+			'share of other member as admin' => ['alice', Member::LEVEL_ADMIN],
+			'share of other member as owner' => ['alice', Member::LEVEL_OWNER],
+		];
+	}
+
+	/**
+	 * @dataProvider deleteShareProvider
+	 */
+	public function testDeleteShare(string $owner, int $level): void {
+		$this->collective->setLevel($level);
+		$collectiveShare = $this->collectiveShare($owner, 'token');
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
+			->with($this->collectiveId, 0, 'token')
+			->willReturn($collectiveShare);
+		$this->collectiveShareMapper->expects(self::once())
+			->method('delete')
+			->with($collectiveShare);
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->shareManager->method('getShareByToken')
+			->with('token')
+			->willReturn($folderShare);
+		$this->shareManager->expects(self::once())
+			->method('deleteShare')
+			->with($folderShare);
+
+		self::assertEquals($collectiveShare, $this->service->deleteShare($this->userId, $this->collective, 0, 'token'));
+	}
+
+	public static function deleteShareNotPermittedProvider(): array {
+		return [
+			'member' => [Member::LEVEL_MEMBER],
+			'moderator' => [Member::LEVEL_MODERATOR],
+		];
+	}
+
+	/**
+	 * @dataProvider deleteShareNotPermittedProvider
+	 */
+	public function testDeleteShareOfOtherMemberNotPermitted(int $level): void {
+		$this->collective->setLevel($level);
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
+			->willReturn($this->collectiveShare('alice', 'token'));
+		$this->collectiveShareMapper->expects(self::never())
+			->method('delete');
+		$this->shareManager->expects(self::never())
+			->method('deleteShare');
+
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('You are not allowed to delete this share');
+		$this->service->deleteShare($this->userId, $this->collective, 0, 'token');
+	}
+
+	public function testDeleteShareNotFound(): void {
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndToken')
+			->willThrowException(new DoesNotExistException(''));
+		$this->shareManager->expects(self::never())
+			->method('deleteShare');
+
+		$this->expectException(NotFoundException::class);
+		$this->service->deleteShare($this->userId, $this->collective, 0, 'token');
 	}
 
 	public function testIsShareNotAuthenticated(): void {

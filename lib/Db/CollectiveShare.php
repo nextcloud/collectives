@@ -35,6 +35,10 @@ class CollectiveShare extends Entity implements JsonSerializable {
 	protected string $password = '';
 	protected ?\DateTime $expirationDate = null;
 	protected string $label = '';
+	/** transient attributes, only set for users that manage shares */
+	protected string $ownerDisplayName = '';
+	protected bool $canUpdate = false;
+	protected bool $canDelete = false;
 
 	public function getEditable(): bool {
 		return $this->editable;
@@ -68,6 +72,30 @@ class CollectiveShare extends Entity implements JsonSerializable {
 		$this->label = $label;
 	}
 
+	public function getOwnerDisplayName(): string {
+		return $this->ownerDisplayName;
+	}
+
+	public function setOwnerDisplayName(string $ownerDisplayName): void {
+		$this->ownerDisplayName = $ownerDisplayName;
+	}
+
+	public function getCanUpdate(): bool {
+		return $this->canUpdate;
+	}
+
+	public function setCanUpdate(bool $canUpdate): void {
+		$this->canUpdate = $canUpdate;
+	}
+
+	public function getCanDelete(): bool {
+		return $this->canDelete;
+	}
+
+	public function setCanDelete(bool $canDelete): void {
+		$this->canDelete = $canDelete;
+	}
+
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
@@ -75,10 +103,13 @@ class CollectiveShare extends Entity implements JsonSerializable {
 			'pageId' => $this->pageId,
 			'token' => $this->token,
 			'owner' => $this->owner,
+			'ownerDisplayName' => $this->ownerDisplayName,
 			'editable' => $this->editable,
 			'hasPassword' => (bool)$this->password,
 			'expirationDate' => $this->expirationDate?->format('Y-m-d'),
 			'label' => $this->label,
+			'canUpdate' => $this->canUpdate,
+			'canDelete' => $this->canDelete,
 		];
 	}
 }
