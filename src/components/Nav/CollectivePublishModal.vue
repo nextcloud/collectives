@@ -257,7 +257,6 @@ export default {
 			this.getStaticSites(this.collective.id)
 				.catch(displayError('Could not load static sites for collective')),
 		])
-/*
 		const [mostRecentStaticSite] = this.staticSites
 		if (mostRecentStaticSite) {
 			this.selectStaticSite(mostRecentStaticSite)
@@ -266,31 +265,6 @@ export default {
 		}
 		this.loadingPages = false
 	},
- */
-
-		// Prefill with the settings of an already published static site, if any,
-		// otherwise preselect the whole collective (all pages)
-		const staticSite = this.staticSiteForCollective(this.collective.id)
-		if (staticSite) {
-			this.title = staticSite.title
-			this.slug = staticSite.slug
-			// Pages may have been deleted or moved since the last publication:
-			// drop deleted ones and add ancestor pages of the remaining ones
-			const pageIds = new Set(this.allPageIds)
-			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
-			for (const id of Array.from(selectedPageIds)) {
-				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, id)) {
-					selectedPageIds.add(ancestorId)
-				}
-			}
-			this.selectedPageIds = selectedPageIds
-		} else {
-			this.selectedPageIds = new Set(this.allPageIds)
-		}
-		this.loadingPages = false
-	},
-
-
 
 	methods: {
 		t,
@@ -343,9 +317,16 @@ export default {
 			this.selectedStaticSiteId = staticSite.id
 			this.title = staticSite.title
 			this.slug = staticSite.slug
-			// Pages may have been deleted since the last publication
+			// Pages may have been deleted or moved since the last publication:
+			// drop deleted ones and add ancestor pages of the remaining ones
 			const pageIds = new Set(this.allPageIds)
-			this.selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			for (const id of Array.from(selectedPageIds)) {
+				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, id)) {
+					selectedPageIds.add(ancestorId)
+				}
+			}
+			this.selectedPageIds = selectedPageIds
 		},
 
 		/**
