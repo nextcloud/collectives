@@ -27,6 +27,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteService;
+use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -336,14 +337,14 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->create($this->collectiveId, [1], $this->userId, null, $slug);
 	}
 
-	public function testPublishThrowsWhenSlugAlreadyInUse(): void {
+	public function testPublishThrowsWhenSlugAlreadyTaken(): void {
 		$this->expectValidCollectiveWithPages();
 
 		$dbException = $this->createMock(DBException::class);
 		$dbException->method('getReason')->willReturn(DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION);
 		$this->staticSiteMapper->method('create')->willThrowException($dbException);
 
-		$this->expectException(UnprocessableEntityException::class);
+		$this->expectException(StaticSiteSlugTakenException::class);
 
 		$this->service->create($this->collectiveId, [1], $this->userId, null, 'taken');
 	}

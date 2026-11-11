@@ -16,6 +16,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteService;
+use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\OCS\OCSBadRequestException;
@@ -56,6 +57,17 @@ class StaticSiteControllerTest extends TestCase {
 			->willReturn($staticSite);
 
 		$this->assertSame($staticSite, $this->controller->create(42, [1], 'Title', 'slug')->getData());
+	}
+
+	public function testCreateReturnsConflictIfSlugIsTaken(): void {
+		$this->staticSiteService->method('create')
+			->willThrowException(new StaticSiteSlugTakenException('Slug is already taken: slug'));
+		$this->logger->expects($this->never())->method('error');
+
+		$response = $this->controller->create(42, [1], 'Title', 'slug');
+
+		$this->assertSame(Http::STATUS_CONFLICT, $response->getStatus());
+		$this->assertSame(['message' => 'This web address is already taken by another website'], $response->getData());
 	}
 
 	public function testCreateLogsArchiveFailureWithContext(): void {

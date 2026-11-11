@@ -329,13 +329,43 @@ test.describe('Collective publish', () => {
 
 		// The web address of the existing website can't be used for a new one
 		await slugField.fill(staticSite.slug)
-		await expect(modal).toContainText('This web address is already used by another website of this collective')
+		await expect(modal).toContainText('This web address is already taken by another website')
 		await expect(submitButton).toBeDisabled()
 
 		await slugField.fill('second-website')
 		await submitButton.click()
 		await expect(modal).toHaveCount(0)
 		expect(sentBody!.slug).toBe('second-website')
+	})
+
+	test('shows a web address taken by a website of another collective at the field', async ({ collective, navigation, page }) => {
+		// Websites of other collectives aren't known to the browser, the backend reports the conflict
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'POST') {
+				return route.fallback()
+			}
+			await route.fulfill({
+				status: 409,
+				json: { ocs: { meta: { status: 'failure', statuscode: 409, message: '' }, data: { message: 'This web address is already taken by another website' } } },
+			})
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const submitButton = modal.getByRole('button', { name: 'Publish website' })
+
+		await slugField.fill('taken-website')
+		await submitButton.click()
+
+		await expect(modal).toContainText('This web address is already taken by another website')
+		await expect(submitButton).toBeDisabled()
+		// No toast, client errors are shown as warning
+		await expect(page.getByText('Could not publish collective as website')).toHaveCount(0)
+
+		await slugField.fill('another-website')
+		await expect(submitButton).toBeEnabled()
 	})
 
 	test('prevents updating a website while it is being published', async ({ collective, navigation, page }) => {

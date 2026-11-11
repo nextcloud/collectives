@@ -173,6 +173,8 @@ export default {
 			publishing: false,
 			/** @type {?number} null for a new website */
 			selectedStaticSiteId: null,
+			/** @type {string[]} slugs the backend reported as taken by websites of other collectives */
+			takenSlugs: [],
 			title: this.collective.name,
 			slug: '',
 			titleMaxLength: TITLE_MAX_LENGTH,
@@ -231,21 +233,23 @@ export default {
 			return length > 0 && length <= TITLE_MAX_LENGTH
 		},
 
-		isSlugInUse() {
+		// Slugs are unique across all collectives, websites of other collectives are only known after a conflict
+		isSlugTaken() {
 			return this.staticSites.some(({ slug }) => slug === this.slug)
+				|| this.takenSlugs.includes(this.slug)
 		},
 
 		isSlugValid() {
 			// The slug of an existing website can't be changed
-			return !!this.selectedStaticSite || (isValidSlug(this.slug) && !this.isSlugInUse)
+			return !!this.selectedStaticSite || (isValidSlug(this.slug) && !this.isSlugTaken)
 		},
 
 		slugHelperText() {
 			if (this.selectedStaticSite) {
 				return t('collectives', 'The web address can\'t be changed after publishing')
 			}
-			if (this.isSlugInUse) {
-				return t('collectives', 'This web address is already used by another website of this collective')
+			if (this.isSlugTaken) {
+				return t('collectives', 'This web address is already taken by another website')
 			}
 			return t('collectives', 'Lowercase letters, numbers and single hyphens')
 		},
@@ -392,9 +396,10 @@ export default {
 
 			this.publishing = true
 			const title = this.title.trim()
+			const slug = this.slug
 			const request = this.selectedStaticSite
 				? updateStaticSite(this.collective.id, this.selectedStaticSite.id, pageIds, title)
-				: createStaticSite(this.collective.id, pageIds, title, this.slug)
+				: createStaticSite(this.collective.id, pageIds, title, slug)
 			request
 				.then(({ data }) => {
 					showSuccess(t('collectives', 'Website publishing started'))
@@ -402,7 +407,14 @@ export default {
 					this.watchPublication(this.collective, data.ocs.data)
 					this.onClose()
 				})
-				.catch(displayError('Could not publish collective as website'))
+				.catch((e) => {
+					if (e.response?.status === 409) {
+						// Shown at the web address field
+						this.takenSlugs = [...this.takenSlugs, slug]
+						return
+					}
+					displayError('Could not publish collective as website')(e)
+				})
 				.finally(() => {
 					this.publishing = false
 				})

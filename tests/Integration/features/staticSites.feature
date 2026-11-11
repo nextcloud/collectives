@@ -16,7 +16,7 @@ Feature: staticSites
     # TODO(Publish): Test the archive download with the static site generator mock once its token check is enabled again
 
   # Scenario: Fail to publish a website with a slug in use
-  #   Then user "jane" fails to publish collective "BehatStaticSiteCollective" as website with slug "behat-static-site" with status 400
+  #   Then user "jane" fails to publish collective "BehatStaticSiteCollective" as website with slug "behat-static-site" with status 409
 
   Scenario: Fail to publish a website with an invalid slug
     Then user "jane" fails to publish collective "BehatStaticSiteCollective" as website with slug "Invalid Slug" with status 400

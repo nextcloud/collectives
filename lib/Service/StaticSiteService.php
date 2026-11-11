@@ -63,7 +63,8 @@ class StaticSiteService {
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, slug already in use, path too long
+	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, path too long
+	 * @throws StaticSiteSlugTakenException Slug is already used by another static site
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
@@ -80,13 +81,14 @@ class StaticSiteService {
 		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
+		// TODO(Publish): Also check the slug against the publish service once it provides an endpoint
 		try {
 			$staticSite = $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId);
 		} catch (DBException $e) {
 			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw $e;
 			}
-			throw new UnprocessableEntityException('Slug is already in use: ' . $slug, 0, $e);
+			throw new StaticSiteSlugTakenException('Slug is already taken: ' . $slug, 0, $e);
 		}
 
 		try {
