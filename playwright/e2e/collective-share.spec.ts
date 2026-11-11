@@ -81,7 +81,7 @@ test.describe('Collective share', () => {
 		const shareTitle = sharingTab.locator('.sharing-entry__title')
 		await expect(shareTitle).toHaveText('Share link')
 
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
 		await settingsPanel.getByRole('textbox', { name: 'Share label' }).fill('Newsletter')
 		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
@@ -89,7 +89,7 @@ test.describe('Collective share', () => {
 		await expect(shareTitle).toHaveText('Share link (Newsletter)')
 		expect((await share.updateData()).label).toBe('Newsletter')
 
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 		await expect(settingsPanel.getByRole('textbox', { name: 'Share label' })).toHaveValue('Newsletter')
 		await settingsPanel.getByRole('textbox', { name: 'Share label' }).clear()
 		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
@@ -117,7 +117,7 @@ test.describe('Collective share password protection', () => {
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
 
 		await sharingTab.getByRole('button', { name: 'Create a new share' }).click()
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
 		await expect(settingsPanel.getByRole('checkbox', { name: 'Set password' })).not.toBeChecked()
@@ -128,7 +128,7 @@ test.describe('Collective share password protection', () => {
 		await settingsPanel.getByRole('button', { name: 'Update Share' }).click()
 		await expect(settingsPanel).not.toBeVisible()
 
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 		await expect(settingsPanel.getByRole('checkbox', { name: 'Set password' })).toBeChecked()
 
 		// Open password-protected share
@@ -145,7 +145,7 @@ test.describe('Collective share password protection', () => {
 		await collective.openCollective()
 
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
 		await expect(settingsPanel.getByRole('checkbox', { name: 'Set password' })).toBeChecked()
@@ -176,7 +176,7 @@ test.describe('Collective share password protection', () => {
 		await collective.openCollective()
 
 		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
 
 		const date = new Date()
@@ -189,7 +189,7 @@ test.describe('Collective share password protection', () => {
 		await expect(settingsPanel).not.toBeVisible()
 		expect((await share.updateData()).expirationDate).toBe(expected)
 
-		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
 		await settingsPanel.locator('.checkbox-radio-switch__content').filter({ hasText: 'Set expiration date' }).click()
 		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
 		await expect(settingsPanel).not.toBeVisible()

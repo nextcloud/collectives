@@ -136,18 +136,20 @@
 				:disabled="!networkOnline"
 				:title="offlineTitle">
 				<template v-if="share">
+					<NcActionButton closeAfterClick @click.prevent.stop="toggleSettings">
+						<template #icon>
+							<TuneIcon :size="20" />
+						</template>
+						{{ t('collectives', 'Customize link') }}
+					</NcActionButton>
+
+					<NcActionSeparator />
+
 					<NcActionButton class="new-share-link" @click.prevent.stop="onNewShare">
 						<template #icon>
 							<PlusIcon :size="20" />
 						</template>
 						{{ t('collectives', 'Add another link') }}
-					</NcActionButton>
-
-					<NcActionButton class="new-share-link" closeAfterClick @click.prevent.stop="toggleSettings">
-						<template #icon>
-							<CogIcon :size="20" />
-						</template>
-						{{ t('collectives', 'Advanced settings') }}
 					</NcActionButton>
 
 					<NcActionButton class="unshare-button" @click.prevent="onDelete">
@@ -230,6 +232,7 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcActionText from '@nextcloud/vue/components/NcActionText'
 import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -240,12 +243,12 @@ import NcPasswordField from '@nextcloud/vue/components/NcPasswordField'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
-import CogIcon from 'vue-material-design-icons/CogOutline.vue'
 import ContentCopyIcon from 'vue-material-design-icons/ContentCopy.vue'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import LockIcon from 'vue-material-design-icons/LockOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.vue'
+import TuneIcon from 'vue-material-design-icons/Tune.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
 import serverCapabilities from '../../mixins/serverCapabilities.js'
@@ -260,13 +263,13 @@ export default {
 	components: {
 		CheckIcon,
 		CloseIcon,
-		CogIcon,
 		ContentCopyIcon,
 		InformationIcon,
 		LockIcon,
 		NcActionButton,
 		NcActionCheckbox,
 		NcActionInput,
+		NcActionSeparator,
 		NcActionText,
 		NcActions,
 		NcAvatar,
@@ -278,6 +281,7 @@ export default {
 		NcTextField,
 		PlusIcon,
 		TriangleSmallDownIcon,
+		TuneIcon,
 	},
 
 	mixins: [
