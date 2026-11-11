@@ -17,6 +17,8 @@ vi.mock('@nextcloud/l10n', () => ({
 }))
 
 const publishedUrl = 'https://example.org/site'
+const collective = { id: 1, name: 'Collective' }
+const otherCollective = { id: 2, name: 'Other collective' }
 
 function response(...staticSites) {
 	return { data: { ocs: { data: staticSites } } }
@@ -70,14 +72,14 @@ describe('static sites publication watching', () => {
 			.mockResolvedValue(response(staticSite({ status: 'published', publishedUrl })))
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
+		store.watchPublication(collective, staticSite())
 		await poll()
 		// The publish service didn't answer yet
 		expect(showSuccess).not.toHaveBeenCalled()
 
 		await poll()
 		expect(showSuccess).toHaveBeenCalledOnce()
-		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" of collective "Collective" published at ${publishedUrl}`)
 		expect(store.staticSitesForCollective(1)[0].publishedUrl).toBe(publishedUrl)
 
 		await poll(5)
@@ -91,13 +93,13 @@ describe('static sites publication watching', () => {
 			.mockResolvedValue(response(staticSite({ status: 'published', publishedUrl })))
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite({ publishedUrl }))
+		store.watchPublication(collective, staticSite({ publishedUrl }))
 		await poll()
 		expect(showSuccess).not.toHaveBeenCalled()
 
 		await poll()
 		expect(showSuccess).toHaveBeenCalledOnce()
-		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" of collective "Collective" published at ${publishedUrl}`)
 	})
 
 	it('shows the reason and stops polling if the publication failed', async () => {
@@ -105,12 +107,12 @@ describe('static sites publication watching', () => {
 			.mockResolvedValue(response(staticSite({ status: 'failed', lastError: 'generator_failed' })))
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
+		store.watchPublication(collective, staticSite())
 		await poll(5)
 
 		expect(api.getStaticSites).toHaveBeenCalledOnce()
 		expect(showError).toHaveBeenCalledOnce()
-		expect(showError).toHaveBeenCalledWith('Website "Website" could not be published: The publish service could not build the website. Please contact your administrator.')
+		expect(showError).toHaveBeenCalledWith('Website "Website" of collective "Collective" could not be published: The publish service could not build the website. Please contact your administrator.')
 		expect(showSuccess).not.toHaveBeenCalled()
 	})
 
@@ -118,12 +120,12 @@ describe('static sites publication watching', () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite({ isInProgress: false })))
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
+		store.watchPublication(collective, staticSite())
 		await poll(5)
 
 		expect(api.getStaticSites).toHaveBeenCalledOnce()
 		expect(showError).toHaveBeenCalledOnce()
-		expect(showError).toHaveBeenCalledWith('Website "Website" could not be published: The publish service didn\'t respond in time.')
+		expect(showError).toHaveBeenCalledWith('Website "Website" of collective "Collective" could not be published: The publish service didn\'t respond in time.')
 		expect(showSuccess).not.toHaveBeenCalled()
 	})
 
@@ -131,7 +133,7 @@ describe('static sites publication watching', () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response())
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
+		store.watchPublication(collective, staticSite())
 		await poll(5)
 
 		expect(api.getStaticSites).toHaveBeenCalledOnce()
@@ -150,23 +152,23 @@ describe('static sites publication watching', () => {
 		const store = useStaticSitesStore()
 
 		// A previous publication finished and stopped its polling
-		store.watchPublication(1, staticSite({ id: 1, title: 'Old website' }))
+		store.watchPublication(collective, staticSite({ id: 1, title: 'Old website' }))
 		await poll()
-		expect(showSuccess).toHaveBeenCalledWith(`Website "Old website" published at ${publishedUrl}`)
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Old website" of collective "Collective" published at ${publishedUrl}`)
 		expect(store.pollIntervalId).toBeNull()
 
-		store.watchPublication(1, staticSite({ id: 2, title: 'New website' }))
+		store.watchPublication(collective, staticSite({ id: 2, title: 'New website' }))
 		await poll()
 
 		expect(showSuccess).toHaveBeenCalledTimes(2)
-		expect(showSuccess).toHaveBeenLastCalledWith('Website "New website" published at https://example.org/new-site')
+		expect(showSuccess).toHaveBeenLastCalledWith('Website "New website" of collective "Collective" published at https://example.org/new-site')
 	})
 
 	it('stops polling after the poll timeout although the publication is still in progress', async () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite()))
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
+		store.watchPublication(collective, staticSite())
 		await vi.advanceTimersByTimeAsync(staticSitePollTimeout * 1000)
 		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
 
@@ -177,20 +179,68 @@ describe('static sites publication watching', () => {
 		expect(api.getStaticSites).toHaveBeenCalledTimes(attempts)
 	})
 
-	it('watches one publication at a time', async () => {
+	it('watches several publications of a collective with one request per poll', async () => {
+		vi.mocked(api.getStaticSites)
+			.mockResolvedValueOnce(response(staticSite({ id: 1, title: 'Website A' }), staticSite({ id: 2, title: 'Website B' })))
+			.mockResolvedValue(response(
+				staticSite({ id: 1, title: 'Website A', status: 'published', publishedUrl }),
+				staticSite({ id: 2, title: 'Website B', status: 'failed', lastError: 'generator_failed' }),
+			))
+		const store = useStaticSitesStore()
+
+		store.watchPublication(collective, staticSite({ id: 1, title: 'Website A' }))
+		store.watchPublication(collective, staticSite({ id: 2, title: 'Website B' }))
+		await poll()
+		expect(api.getStaticSites).toHaveBeenCalledOnce()
+
+		await poll()
+		expect(api.getStaticSites).toHaveBeenCalledTimes(2)
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Website A" of collective "Collective" published at ${publishedUrl}`)
+		expect(showError).toHaveBeenCalledWith('Website "Website B" of collective "Collective" could not be published: The publish service could not build the website. Please contact your administrator.')
+		expect(store.pollIntervalId).toBeNull()
+	})
+
+	it('watches publications of several collectives', async () => {
+		vi.mocked(api.getStaticSites).mockImplementation(async (collectiveId) => {
+			return response(staticSite({ id: collectiveId * 10, title: `Website ${collectiveId}`, status: 'published', publishedUrl }))
+		})
+		const store = useStaticSitesStore()
+
+		store.watchPublication(collective, staticSite({ id: 10 }))
+		store.watchPublication(otherCollective, staticSite({ id: 20 }))
+		await poll()
+
+		expect(api.getStaticSites).toHaveBeenCalledWith(1)
+		expect(api.getStaticSites).toHaveBeenCalledWith(2)
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Website 1" of collective "Collective" published at ${publishedUrl}`)
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Website 2" of collective "Other collective" published at ${publishedUrl}`)
+		expect(store.pollIntervalId).toBeNull()
+	})
+
+	it('restarts watching a publication that got published again', async () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite()))
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
-		store.watchPublication(2, staticSite())
-		await poll()
+		store.watchPublication(collective, staticSite())
+		await vi.advanceTimersByTimeAsync((staticSitePollTimeout - staticSitePollInterval) * 1000)
+		store.watchPublication(collective, staticSite())
+		await poll(5)
 
-		expect(api.getStaticSites).toHaveBeenCalledOnce()
-		expect(api.getStaticSites).toHaveBeenCalledWith(2)
+		expect(store.pollIntervalId).not.toBeNull()
+		store.stopWatching()
+	})
 
+	it('stops watching all publications', async () => {
+		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite()))
+		const store = useStaticSitesStore()
+
+		store.watchPublication(collective, staticSite({ id: 1 }))
+		store.watchPublication(otherCollective, staticSite({ id: 2 }))
 		store.stopWatching()
 		await poll(5)
-		expect(api.getStaticSites).toHaveBeenCalledOnce()
+
+		expect(api.getStaticSites).not.toHaveBeenCalled()
+		expect(store.watchedPublications).toEqual({})
 	})
 
 	it('keeps polling after a failed request', async () => {
@@ -200,11 +250,11 @@ describe('static sites publication watching', () => {
 		const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
+		store.watchPublication(collective, staticSite())
 		await poll(2)
 
 		expect(consoleError).toHaveBeenCalledWith('Could not load static sites for collective', expect.any(Error))
-		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" published at ${publishedUrl}`)
+		expect(showSuccess).toHaveBeenCalledWith(`Website "Website" of collective "Collective" published at ${publishedUrl}`)
 	})
 
 	it('stops polling if requests keep failing', async () => {
@@ -212,7 +262,7 @@ describe('static sites publication watching', () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {})
 		const store = useStaticSitesStore()
 
-		store.watchPublication(1, staticSite())
+		store.watchPublication(collective, staticSite())
 		await vi.advanceTimersByTimeAsync(staticSitePollTimeout * 1000)
 		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
 

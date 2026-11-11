@@ -14,6 +14,8 @@ export const useStaticSitesStore = defineStore('staticSites', {
 	state: () => ({
 		/** @type {Object<number, object[]>} collective ID -> static sites */
 		staticSites: {},
+		/** @type {Object<number, {collectiveId: number, collectiveName: string, attemptsLeft: number}>} static site ID -> watched publication */
+		watchedPublications: {},
 		/** @type {?number} */
 		pollIntervalId: null,
 	}),
@@ -36,69 +38,111 @@ export const useStaticSitesStore = defineStore('staticSites', {
 		 * Wait for the publish service to report the result of a started publication back
 		 * and show a toast about it, no matter where in the app the user is meanwhile.
 		 *
-		 * Polling starts over with every publication and stops as soon as the publication
-		 * isn't in progress anymore - or if it vanished or requests kept failing.
+		 * Several publications are watched at once. Publishing a website again restarts
+		 * watching it. Watching stops as soon as the publication isn't in progress
+		 * anymore - or if it vanished or requests kept failing.
 		 *
-		 * @param {number} collectiveId ID of the collective
+		 * @param {object} collective Collective of the static site, its name is shown in the toast
+		 *   as the user may work in another collective meanwhile
 		 * @param {object} publication Static site as returned when the publication was started
 		 */
-		watchPublication(collectiveId, publication) {
-			this.stopWatching()
-			console.debug(`Waiting for publication result of static site ${publication.id} in collective ${collectiveId}`)
+		watchPublication(collective, publication) {
+			console.debug(`Waiting for publication result of static site ${publication.id} in collective ${collective.id}`)
+			this.watchedPublications[publication.id] = {
+				collectiveId: collective.id,
+				collectiveName: collective.name,
+				attemptsLeft: Math.ceil(staticSitePollTimeout / staticSitePollInterval),
+			}
+			if (!this.pollIntervalId) {
+				this.pollIntervalId = setInterval(() => this.pollWatchedPublications(), staticSitePollInterval * 1000)
+			}
+		},
 
-			let attemptsLeft = Math.ceil(staticSitePollTimeout / staticSitePollInterval)
-			this.pollIntervalId = setInterval(async () => {
+		/**
+		 * Load the static sites of each collective with watched publications once
+		 * and conclude the publications that got a result
+		 */
+		async pollWatchedPublications() {
+			const watchedPublications = Object.entries(this.watchedPublications)
+			const collectiveIds = new Set()
+			for (const [, watched] of watchedPublications) {
 				// Failed requests count as well, e.g. after the user got logged out
-				const isLastAttempt = --attemptsLeft <= 0
+				watched.attemptsLeft--
+				collectiveIds.add(watched.collectiveId)
+			}
+
+			await Promise.all([...collectiveIds].map(async (collectiveId) => {
+				let loaded = true
 				try {
 					await this.getStaticSites(collectiveId)
 				} catch (e) {
 					console.error('Could not load static sites for collective', e)
-					if (isLastAttempt) {
-						console.debug(`Giving up on publication result of static site ${publication.id}, requests failed`)
-						this.stopWatching()
+					loaded = false
+				}
+
+				for (const [id, watched] of watchedPublications) {
+					// Skip publications concluded or restarted meanwhile
+					if (watched.collectiveId === collectiveId && this.watchedPublications[id] === watched) {
+						this.checkPublication(Number(id), watched, loaded)
 					}
-					return
 				}
+			}))
 
-				const staticSite = this.staticSites[collectiveId].find(({ id }) => id === publication.id)
-				if (staticSite?.status === 'published') {
-					this.stopWatching()
-					showSuccess(t('collectives', 'Website "{title}" published at {url}', {
-						title: staticSite.title,
-						url: staticSite.publishedUrl,
-					}))
-					return
-				}
+			if (Object.keys(this.watchedPublications).length === 0) {
+				this.stopWatching()
+			}
+		},
 
-				if (staticSite?.status === 'failed') {
-					this.stopWatching()
-					showError(t('collectives', 'Website "{title}" could not be published: {reason}', {
-						title: staticSite.title,
-						reason: staticSiteErrorMessage(staticSite.lastError),
-					}))
-					return
-				}
+		/**
+		 * @param {number} id ID of the watched static site
+		 * @param {object} watched watched publication
+		 * @param {boolean} loaded whether the static sites of its collective got loaded
+		 */
+		checkPublication(id, watched, loaded) {
+			const staticSite = loaded
+				? this.staticSites[watched.collectiveId].find((site) => site.id === id)
+				: undefined
 
-				if (staticSite && !staticSite.isInProgress) {
-					this.stopWatching()
-					showError(t('collectives', 'Website "{title}" could not be published: {reason}', {
-						title: staticSite.title,
-						reason: t('collectives', 'The publish service didn\'t respond in time.'),
-					}))
-					return
-				}
+			if (staticSite?.status === 'published') {
+				delete this.watchedPublications[id]
+				showSuccess(t('collectives', 'Website "{title}" of collective "{collective}" published at {url}', {
+					title: staticSite.title,
+					collective: watched.collectiveName,
+					url: staticSite.publishedUrl,
+				}))
+				return
+			}
 
-				if (!staticSite || isLastAttempt) {
-					console.debug(`Giving up on publication result of static site ${publication.id}, status ${staticSite?.status ?? 'deleted'}`)
-					this.stopWatching()
-				}
-			}, staticSitePollInterval * 1000)
+			if (staticSite?.status === 'failed') {
+				delete this.watchedPublications[id]
+				showError(t('collectives', 'Website "{title}" of collective "{collective}" could not be published: {reason}', {
+					title: staticSite.title,
+					collective: watched.collectiveName,
+					reason: staticSiteErrorMessage(staticSite.lastError),
+				}))
+				return
+			}
+
+			if (staticSite && !staticSite.isInProgress) {
+				delete this.watchedPublications[id]
+				showError(t('collectives', 'Website "{title}" of collective "{collective}" could not be published: {reason}', {
+					title: staticSite.title,
+					collective: watched.collectiveName,
+					reason: t('collectives', 'The publish service didn\'t respond in time.'),
+				}))
+				return
+			}
+
+			if ((loaded && !staticSite) || watched.attemptsLeft <= 0) {
+				console.debug(`Giving up on publication result of static site ${id}, status ${staticSite?.status ?? (loaded ? 'deleted' : 'unknown')}`)
+				delete this.watchedPublications[id]
+			}
 		},
 
 		stopWatching() {
 			clearInterval(this.pollIntervalId)
 			this.pollIntervalId = null
+			this.watchedPublications = {}
 		},
 	},
 })

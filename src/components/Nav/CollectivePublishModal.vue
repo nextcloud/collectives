@@ -399,7 +399,7 @@ export default {
 				.then(({ data }) => {
 					showSuccess(t('collectives', 'Website publishing started'))
 					// Wait for the published URL in the background, the modal isn't needed for that
-					this.watchPublication(this.collective.id, data.ocs.data)
+					this.watchPublication(this.collective, data.ocs.data)
 					this.onClose()
 				})
 				.catch(displayError('Could not publish collective as website'))

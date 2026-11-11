@@ -493,7 +493,7 @@ test.describe('Collective publish', () => {
 
 		// The published URL arrives in the background, no modal involved
 		await expect(getToast(page, 'success', publishedUrl))
-			.toContainText(`Website "My website" published at ${publishedUrl}`, { timeout: 45_000 })
+			.toContainText(`Website "My website" of collective "${collective.data.name}" published at ${publishedUrl}`, { timeout: 45_000 })
 	})
 
 	test('regular members cannot see publish button', async ({ collective, member }) => {
