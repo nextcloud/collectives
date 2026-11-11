@@ -129,7 +129,8 @@
                     "owner",
                     "editable",
                     "hasPassword",
-                    "expirationDate"
+                    "expirationDate",
+                    "label"
                 ],
                 "properties": {
                     "id": {
@@ -159,6 +160,9 @@
                     "expirationDate": {
                         "type": "string",
                         "nullable": true
+                    },
+                    "label": {
+                        "type": "string"
                     }
                 }
             },
@@ -2424,6 +2428,11 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Optional password for the share"
+                                    },
+                                    "label": {
+                                        "type": "string",
+                                        "default": "",
+                                        "description": "Optional label for the share (max. 255 characters)"
                                     }
                                 }
                             }
@@ -2551,6 +2560,34 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Label too long",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Current user is not logged in",
                         "content": {
@@ -2609,6 +2646,11 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Optional password for the share"
+                                    },
+                                    "label": {
+                                        "type": "string",
+                                        "default": "",
+                                        "description": "Optional label for the share (max. 255 characters)"
                                     }
                                 }
                             }
@@ -2747,6 +2789,34 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Label too long",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Current user is not logged in",
                         "content": {
@@ -2818,6 +2888,12 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged"
+                                    },
+                                    "label": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Label for the share (max. 255 characters), empty string to remove it, null to keep it unchanged"
                                     }
                                 }
                             }
@@ -2965,7 +3041,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid expiration date",
+                        "description": "Invalid expiration date or label too long",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3245,6 +3321,12 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged"
+                                    },
+                                    "label": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Label for the share (max. 255 characters), empty string to remove it, null to keep it unchanged"
                                     }
                                 }
                             }
@@ -3382,7 +3464,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid expiration date",
+                        "description": "Invalid expiration date or label too long",
                         "content": {
                             "application/json": {
                                 "schema": {

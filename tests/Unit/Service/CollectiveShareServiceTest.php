@@ -89,7 +89,7 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->collective->setName($this->collectiveName);
 	}
 
-	private function prepareFolderShare(): void {
+	private function prepareFolderShare(): Share&MockObject {
 		$share = $this->getMockBuilder(Share::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -116,6 +116,8 @@ class CollectiveShareServiceTest extends TestCase {
 
 		$share->method('getNode')
 			->willReturn($this->collectiveFolder);
+
+		return $share;
 	}
 
 	public function testCreateFolderShareLockedException(): void {
@@ -156,6 +158,56 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($share);
 
 		self::assertEquals($share, $this->service->createFolderShare($this->userId, $this->collectiveName, 0));
+	}
+
+	public function testCreateFolderShareWithoutLabel(): void {
+		$newShare = $this->prepareFolderShare();
+		$newShare->expects(self::once())
+			->method('setLabel')
+			->with('');
+		$this->shareManager->method('createShare')
+			->willReturnArgument(0);
+
+		$this->service->createFolderShare($this->userId, $this->collectiveName, 0);
+	}
+
+	private function prepareCreateShare(string $label = ''): Share&MockObject {
+		$newShare = $this->prepareFolderShare();
+
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folderShare->method('getNode')
+			->willReturn($this->collectiveFolder);
+		$folderShare->method('getToken')
+			->willReturn('token');
+		$folderShare->method('getLabel')
+			->willReturn($label);
+		$this->shareManager->method('createShare')
+			->willReturn($folderShare);
+
+		$this->collectiveShareMapper->method('create')
+			->willReturn(new CollectiveShare());
+
+		return $newShare;
+	}
+
+	public function testCreateShareWithLabel(): void {
+		$newShare = $this->prepareCreateShare('Newsletter');
+		$newShare->expects(self::once())
+			->method('setLabel')
+			->with('Newsletter');
+
+		$share = $this->service->createShare($this->userId, $this->collective, null, null, '  Newsletter ');
+		self::assertEquals('Newsletter', $share->jsonSerialize()['label']);
+	}
+
+	public function testCreateShareLabelTooLong(): void {
+		$this->shareManager->expects(self::never())
+			->method('createShare');
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->service->createShare($this->userId, $this->collective, null, null, str_repeat('a', 256));
 	}
 
 	public function testFindShareDoesNotExistException(): void {
@@ -300,6 +352,52 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($folderShare);
 
 		return $folderShare;
+	}
+
+	public function testUpdateShareSetsLabel(): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::once())
+			->method('setLabel')
+			->with('Newsletter');
+		$folderShare->method('getLabel')
+			->willReturn('Newsletter');
+		$this->shareManager->expects(self::once())
+			->method('updateShare');
+
+		$share = $this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, null, ' Newsletter  ');
+		self::assertEquals('Newsletter', $share->jsonSerialize()['label']);
+	}
+
+	public function testUpdateShareRemovesLabel(): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::once())
+			->method('setLabel')
+			->with('');
+
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, null, '');
+	}
+
+	public function testUpdateShareKeepsLabel(): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::never())
+			->method('setLabel');
+		$folderShare->method('getLabel')
+			->willReturn('Newsletter');
+
+		$share = $this->service->updateShare($this->userId, $this->collective, null, 'token', false);
+		self::assertEquals('Newsletter', $share->jsonSerialize()['label']);
+	}
+
+	public function testUpdateShareLabelTooLong(): void {
+		$folderShare = $this->prepareUpdateShare();
+		$folderShare->expects(self::never())
+			->method('setLabel');
+		$this->shareManager->expects(self::never())
+			->method('updateShare');
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->expectExceptionMessage('Label must not be longer than 255 characters');
+		$this->service->updateShare($this->userId, $this->collective, null, 'token', false, null, null, str_repeat('a', 256));
 	}
 
 	public function testUpdateShareSetsExpirationDate(): void {

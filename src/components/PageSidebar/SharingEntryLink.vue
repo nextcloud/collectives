@@ -176,6 +176,10 @@
 		</div>
 
 		<div v-if="showSettings" class="sharing-entry__settings">
+			<NcTextField
+				v-model="label"
+				:label="t('collectives', 'Share label')"
+				:maxlength="255" />
 			<NcCheckboxRadioSwitch v-model="isPasswordProtected" :disabled="isPasswordEnforced">
 				{{ t('collectives', 'Set password') }}
 			</NcCheckboxRadioSwitch>
@@ -233,6 +237,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcPasswordField from '@nextcloud/vue/components/NcPasswordField'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'
@@ -270,6 +275,7 @@ export default {
 		NcDateTimePickerNative,
 		NcLoadingIcon,
 		NcPasswordField,
+		NcTextField,
 		PlusIcon,
 		TriangleSmallDownIcon,
 	},
@@ -309,6 +315,7 @@ export default {
 			pendingPassword: '',
 			newPassword: null,
 			newExpirationDate: null,
+			newLabel: null,
 		}
 	},
 
@@ -321,9 +328,27 @@ export default {
 				return t('collectives', 'Create public link')
 			}
 
+			const label = this.share.label?.trim()
+			if (label) {
+				// The title is rendered as text, so the label must not be HTML-escaped
+				return t('collectives', 'Share link ({label})', { label }, { escape: false })
+			}
+
 			return this.index > 1
 				? t('collectives', 'Share link ({index})', { index: this.index })
 				: t('collectives', 'Share link')
+		},
+
+		label: {
+			get() {
+				return this.newLabel === null
+					? (this.share.label ?? '')
+					: this.newLabel
+			},
+
+			set(label) {
+				this.newLabel = label
+			},
 		},
 
 		offlineTitle() {
@@ -629,6 +654,7 @@ export default {
 		cancelSettings() {
 			this.newPassword = null
 			this.newExpirationDate = null
+			this.newLabel = null
 			this.showSettings = false
 		},
 
@@ -641,10 +667,12 @@ export default {
 				delete share.password
 			}
 			share.expirationDate = this.expirationDate
+			share.label = this.label
 
 			await this.onUpdate(share)
 			this.newPassword = null
 			this.newExpirationDate = null
+			this.newLabel = null
 			this.showSettings = false
 		},
 

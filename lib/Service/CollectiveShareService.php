@@ -53,7 +53,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createFolderShare(string $userId, string $collectiveName, int $nodeId, ?string $password = null): IShare {
+	public function createFolderShare(string $userId, string $collectiveName, int $nodeId, ?string $password = null, string $label = ''): IShare {
 		$share = $this->shareManager->newShare();
 
 		$permissions = Constants::PERMISSION_READ;
@@ -89,7 +89,7 @@ class CollectiveShareService {
 
 		$share->setShareType(IShare::TYPE_LINK);
 		$share->setSharedBy($userId);
-		$share->setLabel($this->l10n->t('Collective Share'));
+		$share->setLabel($label);
 		if ($password) {
 			$share->setPassword($password);
 		}
@@ -180,6 +180,7 @@ class CollectiveShareService {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
 		$collectiveShare->setExpirationDate($this->getExpirationDate($folderShare));
+		$collectiveShare->setLabel($folderShare->getLabel());
 	}
 
 	/**
@@ -206,6 +207,18 @@ class CollectiveShareService {
 		return $expirationDate;
 	}
 
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	private function parseLabel(string $label): string {
+		$label = trim($label);
+		// Same limit as the files_sharing OCS API, the share label column holds 255 characters
+		if (strlen($label) > 255) {
+			throw new UnprocessableEntityException($this->l10n->t('Label must not be longer than 255 characters'));
+		}
+		return $label;
+	}
+
 	private function isShareEditable(IShare $folderShare, CollectiveShare $collectiveShare): bool {
 		if (($folderShare->getPermissions() & Collective::editPermissions) !== Collective::editPermissions) {
 			return false;
@@ -217,11 +230,14 @@ class CollectiveShareService {
 	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws UnprocessableEntityException
 	 */
-	public function createShare(string $userId, Collective $collective, ?PageInfo $pageInfo, ?string $password = null): CollectiveShare {
+	public function createShare(string $userId, Collective $collective, ?PageInfo $pageInfo, ?string $password = null, string $label = ''): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
+
+		$label = $this->parseLabel($label);
 
 		$pageId = 0;
 		$nodeId = 0;
@@ -231,7 +247,7 @@ class CollectiveShareService {
 			$nodeId = $file->getParent()->getId();
 		}
 
-		$folderShare = $this->createFolderShare($userId, $collective->getName(), $nodeId, $password);
+		$folderShare = $this->createFolderShare($userId, $collective->getName(), $nodeId, $password, $label);
 
 		try {
 			$collectiveShare = $this->collectiveShareMapper->create($collective->getId(), $pageId, $folderShare->getToken(), $userId);
@@ -251,7 +267,7 @@ class CollectiveShareService {
 	 * @throws NotPermittedException
 	 * @throws UnprocessableEntityException
 	 */
-	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null): CollectiveShare {
+	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null, ?string $label = null): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -262,6 +278,10 @@ class CollectiveShareService {
 
 		if ($editable && !$collective->memberCanEdit()) {
 			throw new NotPermittedException($this->l10n->t('Share links of %s cannot be editable because editing is limited to admins or moderators', $collective->getName()));
+		}
+
+		if ($label !== null) {
+			$label = $this->parseLabel($label);
 		}
 
 		$pageId = 0;
@@ -294,6 +314,10 @@ class CollectiveShareService {
 
 		if ($expirationDate !== null) {
 			$folderShare->setExpirationDate($expirationDate === '' ? null : $this->parseExpirationDate($expirationDate));
+		}
+
+		if ($label !== null) {
+			$folderShare->setLabel($label);
 		}
 
 		try {

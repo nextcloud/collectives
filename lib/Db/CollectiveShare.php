@@ -34,6 +34,7 @@ class CollectiveShare extends Entity implements JsonSerializable {
 	protected bool $editable = false;
 	protected string $password = '';
 	protected ?\DateTime $expirationDate = null;
+	protected string $label = '';
 
 	public function getEditable(): bool {
 		return $this->editable;
@@ -59,6 +60,14 @@ class CollectiveShare extends Entity implements JsonSerializable {
 		$this->expirationDate = $expirationDate;
 	}
 
+	public function getLabel(): string {
+		return $this->label;
+	}
+
+	public function setLabel(string $label): void {
+		$this->label = $label;
+	}
+
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
@@ -69,6 +78,7 @@ class CollectiveShare extends Entity implements JsonSerializable {
 			'editable' => $this->editable,
 			'hasPassword' => (bool)$this->password,
 			'expirationDate' => $this->expirationDate?->format('Y-m-d'),
+			'label' => $this->label,
 		];
 	}
 }

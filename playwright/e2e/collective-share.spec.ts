@@ -72,6 +72,32 @@ test.describe('Collective share', () => {
 		await expect(sharePageList.getPageItem('New page')).toBeVisible()
 	})
 
+	test('Set and remove share label via advanced settings', async ({ page, collective, pageSidebar }) => {
+		const share = await collective.createShare({ page })
+		expect(share.data.label).toBe('')
+		await collective.openCollective()
+
+		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
+		const shareTitle = sharingTab.locator('.sharing-entry__title')
+		await expect(shareTitle).toHaveText('Share link')
+
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		const settingsPanel = pageSidebar.getShareSettingsPanel(sharingTab)
+		await settingsPanel.getByRole('textbox', { name: 'Share label' }).fill('Newsletter')
+		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
+		await expect(settingsPanel).not.toBeVisible()
+		await expect(shareTitle).toHaveText('Share link (Newsletter)')
+		expect((await share.updateData()).label).toBe('Newsletter')
+
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Advanced settings')
+		await expect(settingsPanel.getByRole('textbox', { name: 'Share label' })).toHaveValue('Newsletter')
+		await settingsPanel.getByRole('textbox', { name: 'Share label' }).clear()
+		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
+		await expect(settingsPanel).not.toBeVisible()
+		await expect(shareTitle).toHaveText('Share link')
+		expect((await share.updateData()).label).toBe('')
+	})
+
 	test('Unshare collective and verify share is inaccessible', async ({ page, collective, pageSidebar, sharePage }) => {
 		const share = await collective.createShare({ page })
 		await collective.openCollective()
