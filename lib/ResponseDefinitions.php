@@ -56,7 +56,7 @@ namespace OCA\Collectives;
  *     createdBy: string,
  *     createdAt: int,
  *     updatedAt: int,
- *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_failed'|null,
+ *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_failed'|'generator_invalid_url'|null,
  *     publishedAt: ?int,
  *     isInProgress: bool,
  * }

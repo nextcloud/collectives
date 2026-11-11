@@ -13,6 +13,7 @@ describe('staticSiteErrorMessage', () => {
 		['generator_unavailable', 'The publish service is currently not available. Please try again later.'],
 		['generator_rejected', 'The publish service could not process the request. Please contact your administrator.'],
 		['generator_failed', 'The publish service could not build the website. Please contact your administrator.'],
+		['generator_invalid_url', 'The publish service reported an invalid web address. Please contact your administrator.'],
 	])('translates %j', (lastError, message) => {
 		expect(staticSiteErrorMessage(lastError)).toBe(message)
 	})

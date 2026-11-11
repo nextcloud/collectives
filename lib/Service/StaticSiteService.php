@@ -208,23 +208,19 @@ class StaticSiteService {
 	 * the build is still pending (status "provided"); late/duplicate callbacks are ignored,
 	 * though this can't distinguish a very late callback from a coincidentally-pending rebuild.
 	 *
-	 * Status published requires a valid `publish_url`, so a published static site always has one.
+	 * Status published without a valid `publish_url` is stored as failed, so a published static site
+	 * always has one. The archive isn't needed anymore once the result is stored, whatever it is.
 	 *
 	 * @param array{publish_url?: string, error_message?: string} $data
 	 *
 	 * @throws NotFoundException Static site not found
-	 * @throws UnprocessableEntityException Invalid status or missing/invalid publish_url
+	 * @throws UnprocessableEntityException Invalid status
 	 * @throws DBException
 	 */
 	public function updateStatus(string $staticSiteId, string $status, array $data = []): void {
 		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
 			throw new UnprocessableEntityException('Invalid status: ' . $status);
 		}
-		$publishedUrl = is_string($data['publish_url'] ?? null) ? $data['publish_url'] : '';
-		if ($status === StaticSite::STATUS_PUBLISHED && !$this->isValidPublishUrl($publishedUrl)) {
-			throw new UnprocessableEntityException('Invalid or missing publish_url');
-		}
-
 		try {
 			$staticSite = $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
@@ -237,15 +233,26 @@ class StaticSiteService {
 		}
 
 		if ($status === StaticSite::STATUS_PUBLISHED) {
-			$this->staticSiteMapper->updateStatusPublished($staticSite->getId(), $publishedUrl);
-			$this->deleteArchive($staticSite);
-			return;
+			$publishedUrl = $data['publish_url'] ?? null;
+			if (is_string($publishedUrl) && $this->isValidPublishUrl($publishedUrl)) {
+				$concluded = $this->staticSiteMapper->updateStatusPublished($staticSite, $publishedUrl);
+			} else {
+				$this->logger->warning('Static site generator reported an invalid publish_url', $this->getLogContext($staticSite) + ['publishUrl' => $publishedUrl]);
+				$concluded = $this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_INVALID_URL);
+			}
+		} else {
+			if (isset($data['error_message'])) {
+				$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
+			}
+			$concluded = $this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_FAILED);
 		}
 
-		if (isset($data['error_message'])) {
-			$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
+		if (!$concluded) {
+			// Another callback concluded the publication or a new one started meanwhile, which needs the archive
+			$this->logger->warning('Ignoring static site status callback, the static site changed meanwhile', $this->getLogContext($staticSite));
+			return;
 		}
-		$this->staticSiteMapper->updateStatusFailed($staticSite->getId(), StaticSite::ERROR_GENERATOR_FAILED);
+		$this->deleteArchive($staticSite);
 	}
 
 	/**

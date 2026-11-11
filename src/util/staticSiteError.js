@@ -19,6 +19,8 @@ export function staticSiteErrorMessage(lastError) {
 			return t('collectives', 'The publish service could not process the request. Please contact your administrator.')
 		case 'generator_failed':
 			return t('collectives', 'The publish service could not build the website. Please contact your administrator.')
+		case 'generator_invalid_url':
+			return t('collectives', 'The publish service reported an invalid web address. Please contact your administrator.')
 		default:
 			return t('collectives', 'Publishing the website failed.')
 	}

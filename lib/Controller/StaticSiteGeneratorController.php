@@ -66,10 +66,10 @@ class StaticSiteGeneratorController extends OCSController {
 	 *
 	 * @param string $staticSiteId ID of the static site
 	 * @param string $status New status ("published" or "failed")
-	 * @param array{publish_url?: non-empty-string, error_message?: string} $data Status-specific result payload, `publish_url` is required for status "published": an http(s) URL of at most 255 characters
+	 * @param array{publish_url?: non-empty-string, error_message?: string} $data Status-specific result payload, `publish_url` is required for status "published": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed
 	 *
 	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
-	 * @throws OCSBadRequestException Invalid or missing status, or status published without a valid publish_url
+	 * @throws OCSBadRequestException Invalid or missing status
 	 * @throws OCSNotFoundException Static site not found
 	 *
 	 * 200: Static site status updated

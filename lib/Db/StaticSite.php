@@ -57,6 +57,7 @@ class StaticSite extends Entity implements JsonSerializable {
 	public const ERROR_GENERATOR_UNAVAILABLE = 'generator_unavailable';
 	public const ERROR_GENERATOR_REJECTED = 'generator_rejected';
 	public const ERROR_GENERATOR_FAILED = 'generator_failed';
+	public const ERROR_GENERATOR_INVALID_URL = 'generator_invalid_url';
 
 	public const IN_PROGRESS_STATUSES = [
 		self::STATUS_PENDING,

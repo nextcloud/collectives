@@ -400,7 +400,8 @@
                         "enum": [
                             "generator_unavailable",
                             "generator_rejected",
-                            "generator_failed"
+                            "generator_failed",
+                            "generator_invalid_url"
                         ]
                     },
                     "publishedAt": {
@@ -4563,7 +4564,7 @@
                                     "data": {
                                         "type": "object",
                                         "default": {},
-                                        "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters",
+                                        "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed",
                                         "properties": {
                                             "publish_url": {
                                                 "type": "string",
@@ -4642,7 +4643,7 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid or missing status, or status published without a valid publish_url",
+                        "description": "Invalid or missing status",
                         "content": {
                             "application/json": {
                                 "schema": {
