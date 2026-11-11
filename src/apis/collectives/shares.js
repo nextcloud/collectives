@@ -87,11 +87,12 @@ export function createPageShare(collectiveId, pageId, password) {
  * @param {boolean} share.editable editable state to set
  * @param {string} share.password optional password for the share
  * @param {string} share.expirationDate optional expiration date (YYYY-MM-DD), empty string to remove it
+ * @param {string} share.label optional label for the share, empty string to remove it
  */
 export function updateShare(share) {
 	return axios.put(
 		shareUrl(share),
-		{ editable: share.editable, password: share.password, expirationDate: share.expirationDate },
+		{ editable: share.editable, password: share.password, expirationDate: share.expirationDate, label: share.label },
 	)
 }
 

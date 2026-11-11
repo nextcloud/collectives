@@ -71,16 +71,18 @@ class ShareController extends OCSController {
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param string|null $password Optional password for the share
+	 * @param string $label Optional label for the share (max. 255 characters)
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
+	 * @throws OCSBadRequestException Label too long
 	 *
 	 * 200: Share created
 	 */
 	#[NoAdminRequired]
-	public function createCollectiveShare(int $collectiveId, ?string $password = null): DataResponse {
-		return $this->createPageShare($collectiveId, 0, $password);
+	public function createCollectiveShare(int $collectiveId, ?string $password = null, string $label = ''): DataResponse {
+		return $this->createPageShare($collectiveId, 0, $password, $label);
 	}
 
 	/**
@@ -91,17 +93,18 @@ class ShareController extends OCSController {
 	 * @param bool $editable Whether share has edit permissions
 	 * @param string|null $password Optional password for the share
 	 * @param string|null $expirationDate Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged
+	 * @param string|null $label Label for the share (max. 255 characters), empty string to remove it, null to keep it unchanged
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, page or share not found
-	 * @throws OCSBadRequestException Invalid expiration date
+	 * @throws OCSBadRequestException Invalid expiration date or label too long
 	 *
 	 * 200: Share updated
 	 */
 	#[NoAdminRequired]
-	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null): DataResponse {
-		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password, $expirationDate);
+	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null, ?string $label = null): DataResponse {
+		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password, $expirationDate, $label);
 	}
 
 	/**
@@ -127,23 +130,25 @@ class ShareController extends OCSController {
 	 * @param int $collectiveId ID of the collective
 	 * @param int $pageId ID of the page
 	 * @param string|null $password Optional password for the share
+	 * @param string $label Optional label for the share (max. 255 characters)
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
+	 * @throws OCSBadRequestException Label too long
 	 *
 	 * 200: Share created
 	 */
 	#[NoAdminRequired]
-	public function createPageShare(int $collectiveId, int $pageId = 0, ?string $password = null): DataResponse {
-		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $password): CollectiveShare {
+	public function createPageShare(int $collectiveId, int $pageId = 0, ?string $password = null, string $label = ''): DataResponse {
+		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $password, $label): CollectiveShare {
 			$uid = $this->getUid();
 			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->pageToSubFolder($collectiveId, $pageId, $uid);
 			}
-			return $this->shareService->createShare($uid, $collective, $pageInfo, $password);
+			return $this->shareService->createShare($uid, $collective, $pageInfo, $password, $label);
 		}, $this->logger);
 		return new DataResponse($share);
 	}
@@ -157,24 +162,25 @@ class ShareController extends OCSController {
 	 * @param bool $editable Whether share has edit permissions
 	 * @param string|null $password Optional password for the share
 	 * @param string|null $expirationDate Expiration date (YYYY-MM-DD), empty string to remove it, null to keep it unchanged
+	 * @param string|null $label Label for the share (max. 255 characters), empty string to remove it, null to keep it unchanged
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesCollectiveShare, array{}>
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, page or share not found
-	 * @throws OCSBadRequestException Invalid expiration date
+	 * @throws OCSBadRequestException Invalid expiration date or label too long
 	 *
 	 * 200: Share updated
 	 */
 	#[NoAdminRequired]
-	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null): DataResponse {
-		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password, $expirationDate): CollectiveShare {
+	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null, ?string $expirationDate = null, ?string $label = null): DataResponse {
+		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password, $expirationDate, $label): CollectiveShare {
 			$uid = $this->getUid();
 			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $uid);
 			}
-			return $this->shareService->updateShare($uid, $collective, $pageInfo, $token, $editable, $password, $expirationDate);
+			return $this->shareService->updateShare($uid, $collective, $pageInfo, $token, $editable, $password, $expirationDate, $label);
 		}, $this->logger);
 		return new DataResponse($share);
 	}
