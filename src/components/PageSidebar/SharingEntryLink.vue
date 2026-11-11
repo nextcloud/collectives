@@ -143,6 +143,13 @@
 						{{ t('collectives', 'Customize link') }}
 					</NcActionButton>
 
+					<NcActionButton closeAfterClick @click.prevent="openQRCode">
+						<template #icon>
+							<QrcodeIcon :size="20" />
+						</template>
+						{{ t('collectives', 'Generate QR code') }}
+					</NcActionButton>
+
 					<NcActionSeparator />
 
 					<NcActionButton class="new-share-link" @click.prevent.stop="onNewShare">
@@ -217,6 +224,17 @@
 				</NcButton>
 			</div>
 		</div>
+
+		<NcDialog
+			v-if="showQRCode"
+			v-model:open="showQRCode"
+			size="normal"
+			:name="title"
+			closeOnClickOutside>
+			<div class="qr-code-dialog">
+				<img :src="qrCode" :alt="t('collectives', 'QR code of the share link')" class="qr-code-dialog__img">
+			</div>
+		</NcDialog>
 	</li>
 </template>
 
@@ -238,6 +256,7 @@ import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcPasswordField from '@nextcloud/vue/components/NcPasswordField'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
@@ -247,6 +266,7 @@ import ContentCopyIcon from 'vue-material-design-icons/ContentCopy.vue'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import LockIcon from 'vue-material-design-icons/LockOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import QrcodeIcon from 'vue-material-design-icons/Qrcode.vue'
 import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.vue'
 import TuneIcon from 'vue-material-design-icons/Tune.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
@@ -276,10 +296,12 @@ export default {
 		NcButton,
 		NcCheckboxRadioSwitch,
 		NcDateTimePickerNative,
+		NcDialog,
 		NcLoadingIcon,
 		NcPasswordField,
 		NcTextField,
 		PlusIcon,
+		QrcodeIcon,
 		TriangleSmallDownIcon,
 		TuneIcon,
 	},
@@ -320,6 +342,8 @@ export default {
 			newPassword: null,
 			newExpirationDate: null,
 			newLabel: null,
+			showQRCode: false,
+			qrCode: '',
 		}
 	},
 
@@ -585,6 +609,18 @@ export default {
 			this.showSettings = !this.showSettings
 		},
 
+		async openQRCode() {
+			try {
+				// Loaded on demand to keep the library out of the main bundle
+				const { toDataURL } = await import('qrcode')
+				this.qrCode = await toDataURL(this.shareUrl)
+				this.showQRCode = true
+			} catch (error) {
+				console.error('Failed to generate QR code', error)
+				showError(t('collectives', 'Failed to generate QR code'))
+			}
+		},
+
 		async onNewShare() {
 			if (this.loading) {
 				return
@@ -809,6 +845,17 @@ export default {
 				margin-left: 0;
 			}
 		}
+	}
+}
+
+.qr-code-dialog {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+
+	&__img {
+		width: 100%;
+		height: auto;
 	}
 }
 

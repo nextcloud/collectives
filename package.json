@@ -44,6 +44,7 @@
     "escape-html": "^1.0.3",
     "focus-trap": "^8.2.4",
     "pinia": "^4.1.0",
+    "qrcode": "^1.5.4",
     "sortablejs": "^1.15.7",
     "v-click-outside": "^3.2.0",
     "vue": "^3.5.45",

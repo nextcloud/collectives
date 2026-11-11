@@ -180,7 +180,7 @@ class CollectiveShareService {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
 		$collectiveShare->setExpirationDate($this->getExpirationDate($folderShare));
-		$collectiveShare->setLabel($folderShare->getLabel());
+		$collectiveShare->setLabel($folderShare->getLabel() ?? '');
 	}
 
 	/**

@@ -98,6 +98,20 @@ test.describe('Collective share', () => {
 		expect((await share.updateData()).label).toBe('')
 	})
 
+	test('Generate QR code of share link', async ({ page, collective, pageSidebar }) => {
+		await collective.createShare({ page })
+		await collective.openCollective()
+
+		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
+		await pageSidebar.clickShareMenuAction(sharingTab, 'Generate QR code')
+
+		const dialog = page.getByRole('dialog', { name: 'Share link' })
+		await expect(dialog.getByRole('img', { name: 'QR code of the share link' }))
+			.toHaveAttribute('src', /^data:image\/png;base64,/)
+		await dialog.getByRole('button', { name: 'Close' }).click()
+		await expect(dialog).not.toBeVisible()
+	})
+
 	test('Unshare collective and verify share is inaccessible', async ({ page, collective, pageSidebar, sharePage }) => {
 		const share = await collective.createShare({ page })
 		await collective.openCollective()
