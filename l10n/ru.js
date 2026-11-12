@@ -292,7 +292,7 @@ OC.L10N.register(
     "Password" : "Пароль",
     "Create share" : "Создать общий ресурс",
     "Add another link" : "Добавить другую ссылку",
-    "Advanced settings" : "Расширенные параметры",
+    "Advanced settings" : "Дополнительные параметры",
     "Unshare" : "Отозвать общий доступ",
     "Create a new share link" : "Создать ссылку доступа",
     "Set expiration date (enforced)" : "Установить срок действия (обязательно)",
