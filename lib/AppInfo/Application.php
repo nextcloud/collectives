@@ -13,6 +13,7 @@ use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Circles\Events\EditingCircleEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\ConfigLexicon;
+use OCA\Collectives\Dashboard\RecentPagesTeamWidget;
 use OCA\Collectives\Dashboard\RecentPagesWidget;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveVersionMapper;
@@ -51,6 +52,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
+use OCP\Dashboard\ITeamWidget;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
@@ -143,6 +145,9 @@ class Application extends App implements IBootstrap {
 
 		if (interface_exists(IAPIWidgetV2::class)) {
 			$context->registerDashboardWidget(RecentPagesWidget::class);
+		}
+		if (interface_exists(ITeamWidget::class)) {
+			$context->registerDashboardWidget(RecentPagesTeamWidget::class);
 		}
 
 		if (method_exists($context, 'registerTeamResourceProvider')) {

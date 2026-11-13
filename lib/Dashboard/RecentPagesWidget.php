@@ -7,8 +7,10 @@ namespace OCA\Collectives\Dashboard;
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+use OCA\Collectives\Model\RecentPage;
 use OCA\Collectives\Service\RecentPagesService;
 use OCP\Dashboard\IIconWidget;
+use OCP\Dashboard\ITeamWidget;
 use OCP\Dashboard\IReloadableWidget;
 use OCP\Dashboard\Model\WidgetItem;
 use OCP\Dashboard\Model\WidgetItems;
@@ -34,6 +36,11 @@ class RecentPagesWidget implements IReloadableWidget, IIconWidget {
 
 		$recentPages = $this->recentPagesService->forUser($user, $limit);
 
+		return $this->formatItems($recentPages, $this->l10n->t('Add a collective'));
+	}
+
+	/** @param list<RecentPage> $recentPages */
+	public function formatItems(array $recentPages, string $emptyMessage): WidgetItems {
 		$items = [];
 		foreach ($recentPages as $recentPage) {
 			$subtitle = $recentPage->getPagePath()
@@ -48,7 +55,7 @@ class RecentPagesWidget implements IReloadableWidget, IIconWidget {
 			);
 		}
 
-		return new WidgetItems($items, $this->l10n->t('Add a collective'));
+		return new WidgetItems($items, $emptyMessage);
 	}
 
 	protected function getFallbackDataIcon(): string {
