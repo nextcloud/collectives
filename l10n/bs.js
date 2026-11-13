@@ -21,6 +21,7 @@ OC.L10N.register(
     "Home" : "Početna stranica",
     "Favorite" : "Favorit",
     "Unshare" : "Prestani  dijeliti",
+    "Share label" : "Share label",
     "Set expiration date" : "Postavite datum isteka",
     "Expiration date" : "Datum isteka",
     "Upload" : "Učitaj",

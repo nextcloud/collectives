@@ -34,6 +34,7 @@ OC.L10N.register(
     "Set password" : "Termeniñ ur ger-tremen",
     "Add another link" : "Implij ul liamm all",
     "Unshare" : "Na eskemm ken",
+    "Share label" : "Share label",
     "Set expiration date" : "Lakaat un deizat termen",
     "Expiration date" : "Deizat termen",
     "Upload" : "Enporzhiañ",
