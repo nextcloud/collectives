@@ -74,7 +74,6 @@ OC.L10N.register(
     "Failed to unshare: {responseError}" : "Не ўдалося скасаваць абагульванне: {responseError}",
     "Password protection (enforced)" : "Абарона паролем (прымусова)",
     "Password" : "Пароль",
-    "Advanced settings" : "Пашыраныя налады",
     "Unshare" : "Cкасаваць абагульванне",
     "Expiration date" : "Expiration date",
     "Upload" : "Запампаваць",

@@ -23,7 +23,6 @@ OC.L10N.register(
     "Home" : "Tuis",
     "Page not found" : "Blad nie gevind nie",
     "Can edit" : "Kan redigeer",
-    "Advanced settings" : "Gevorderde instellings",
     "Unshare" : "Ontdeel",
     "Set expiration date" : "Stel vervaldatum",
     "Expiration date" : "Vervaldatum",

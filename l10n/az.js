@@ -22,7 +22,6 @@ OC.L10N.register(
     "Home" : "Ev",
     "Favorite" : "İstəkli",
     "Add another link" : "Başqa link əlavə edin",
-    "Advanced settings" : "İrəliləmiş quraşdırmalar",
     "Unshare" : "Paylaşımı durdur",
     "Expiration date" : "Expiration date",
     "Upload" : "Serverə yüklə",
