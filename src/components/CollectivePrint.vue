@@ -4,19 +4,36 @@
 -->
 
 <template>
-	<div>
-		<input
-			v-if="isPublic"
-			id="isPublic"
-			type="hidden"
-			name="isPublic"
-			value="1">
-		<input
-			v-if="isPublic"
-			id="sharingToken"
-			type="hidden"
-			name="sharingToken"
-			:value="shareTokenParam">
+	<NcAppNavigation
+		class="print-navigation"
+		:aria-label="t('collectives', 'Pages to export or print')">
+		<template #list>
+			<SkeletonLoading v-if="loadingPages" type="items" />
+			<CollectivePrintPageTree
+				v-else
+				:nodes="pageTree"
+				:selectedIds
+				:collective="currentCollective"
+				@toggle="togglePage" />
+		</template>
+	</NcAppNavigation>
+	<NcAppContent class="print-content">
+		<div class="print-header">
+			<span v-if="!loadingPages" class="print-header__count">
+				{{ t('collectives', '{selected} of {total} pages selected', { selected: selectedPages.length, total: allPages.length }) }}
+			</span>
+			<NcButton
+				class="print-header__button"
+				variant="primary"
+				:disabled="!canPrint"
+				@click="print">
+				<template #icon>
+					<NcLoadingIcon v-if="printing" :size="20" />
+					<DownloadIcon v-else :size="20" />
+				</template>
+				{{ t('collectives', 'Export or print') }}
+			</NcButton>
+		</div>
 		<NcEmptyContent
 			v-show="loading"
 			:name="t('collectives', 'Preparing collective for exporting or printing')">
@@ -24,104 +41,150 @@
 				<DownloadIcon />
 			</template>
 			<template #action>
-				<NcProgressBar :value="loadingProgress" size="medium">
-					{{ loadingProgress }}
-				</NcProgressBar>
-				<ul class="load-messages">
-					<li
-						v-for="task in [loadPages, loadImages]"
-						v-show="task.total"
-						:key="task.message">
-						{{ task.message }}
-						{{ task.total ? `${task.count} / ${task.total}` : '' }}
-					</li>
-				</ul>
+				<NcProgressBar :value="loadingProgress" size="medium" />
+				<p v-if="loadedCount.total" class="load-messages">
+					{{ t('collectives', 'Loading pages:') }}
+					{{ `${loadedCount.count} / ${loadedCount.total}` }}
+				</p>
 			</template>
 		</NcEmptyContent>
-		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
-			<PagePrint
-				:page
-				@loading="waitingFor.push(page.id)"
-				@ready="ready(page.id)" />
+		<NcEmptyContent
+			v-if="!loading && selectedPages.length === 0"
+			:name="t('collectives', 'No pages to export or print')"
+			:description="t('collectives', 'Select the pages to export or print in the page list.')">
+			<template #icon>
+				<DownloadIcon />
+			</template>
+		</NcEmptyContent>
+		<div ref="pagesEl">
+			<div
+				v-for="page in renderedPages"
+				v-show="!loading && selectedIds.has(page.id)"
+				:key="page.id"
+				class="print-page"
+				:class="{ 'print-page--hidden': !selectedIds.has(page.id) }">
+				<PagePrint :page @ready="pageReady(page.id)" />
+			</div>
 		</div>
-	</div>
+	</NcAppContent>
 </template>
 
-<script>
+<script lang="ts">
+import type { PageInfo } from '../types.ts'
+import type { IndexedPage, PageTreeNode } from '../util/pageTree.ts'
+
 import { t } from '@nextcloud/l10n'
-import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
+import { defineComponent } from 'vue'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcProgressBar from '@nextcloud/vue/components/NcProgressBar'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import CollectivePrintPageTree from './Collective/CollectivePrintPageTree.vue'
 import PagePrint from './PagePrint.vue'
+import SkeletonLoading from './SkeletonLoading.vue'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
-import { useRootStore } from '../stores/root.js'
 import displayError from '../util/displayError.js'
+import { flattenPageTree, subtreePageIds } from '../util/pageTree.ts'
+import { filterPrintPages, printPagesQuery } from '../util/printPages.ts'
 
-export default {
+export default defineComponent({
 	name: 'CollectivePrint',
 
 	components: {
-		NcEmptyContent,
-		PagePrint,
+		CollectivePrintPageTree,
 		DownloadIcon,
+		NcAppContent,
+		NcAppNavigation,
+		NcButton,
+		NcEmptyContent,
+		NcLoadingIcon,
 		NcProgressBar,
+		PagePrint,
+		SkeletonLoading,
 	},
 
 	data() {
 		return {
-			loading: true,
-			waitingFor: [],
-			loadPages: {
-				message: t('collectives', 'Loading pages:'),
-				count: 0,
-				total: 0,
-			},
-
-			loadImages: {
-				message: t('collectives', 'Loading images:'),
-				count: 0,
-				total: 0,
-			},
+			loadingPages: true,
+			// Until the content of the initially selected pages is loaded
+			loadingContent: true,
+			printing: false,
+			selectedIds: new Set<number>(),
+			// Pages that were selected at least once. They stay rendered (but hidden) when unselected.
+			renderedIds: new Set<number>(),
+			// Rendered pages whose content is not loaded yet
+			waitingFor: new Set<number>(),
 		}
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'shareTokenParam']),
 		...mapState(useCollectivesStore, ['currentCollective']),
-		...mapState(usePagesStore, ['pagesTreeWalk']),
+		...mapState(usePagesStore, ['pageTreeForCollective', 'rootPage']),
 
-		loadingCount() {
-			return this.loadPages.count + this.loadImages.count
+		pageTree(): PageTreeNode<PageInfo>[] {
+			return this.pageTreeForCollective(this.currentCollective, this.rootPage?.parentId ?? 0)
 		},
 
-		loadingTotal() {
-			return this.loadPages.total + this.loadImages.total
+		allPages(): IndexedPage<PageInfo>[] {
+			return flattenPageTree(this.pageTree)
 		},
 
-		loadingProgress() {
-			return this.loadingTotal
-				? this.loadingCount / this.loadingTotal * 100
+		renderedPages(): IndexedPage<PageInfo>[] {
+			return this.allPages.filter((page) => this.renderedIds.has(page.id))
+		},
+
+		selectedPages(): IndexedPage<PageInfo>[] {
+			return this.allPages.filter((page) => this.selectedIds.has(page.id))
+		},
+
+		loading(): boolean {
+			return this.loadingPages || this.loadingContent
+		},
+
+		loadedCount(): { count: number, total: number } {
+			return {
+				count: this.renderedIds.size - this.waitingFor.size,
+				total: this.renderedIds.size,
+			}
+		},
+
+		loadingProgress(): number {
+			return this.loadedCount.total
+				? this.loadedCount.count / this.loadedCount.total * 100
 				: 0
 		},
 
-		documentTitle() {
-			const parts = [
+		canPrint(): boolean {
+			return !this.loading
+				&& !this.printing
+				&& this.selectedPages.length > 0
+				&& !this.selectedPages.some((page) => this.waitingFor.has(page.id))
+		},
+
+		documentTitle(): string {
+			return [
 				this.currentCollective.name,
 				t('collectives', 'Collectives'),
 				'Nextcloud',
-			]
-
-			return parts.join(' - ')
+			].join(' - ')
 		},
 	},
 
 	async mounted() {
 		await this.getPages()
 			.catch(displayError('Could not fetch pages'))
-		this.loadPages.total = this.pagesTreeWalk().length
+		this.loadingPages = false
+		const initialPages = filterPrintPages(this.allPages, this.$route.query)
+		this.setSelectedIds(new Set(initialPages.map((page) => page.id)))
+		if (this.waitingFor.size === 0) {
+			// No page will report being ready
+			this.loadingContent = false
+		}
 	},
 
 	methods: {
@@ -129,76 +192,140 @@ export default {
 
 		...mapActions(usePagesStore, ['getPages']),
 
-		ready(pageId) {
-			if (this.waitingFor.indexOf(pageId) >= 0) {
-				this.waitingFor.splice(this.waitingFor.indexOf(pageId), 1)
-				this.loadPages.count += 1
-			}
-			if (!this.waitingFor.length) {
-				this.$nextTick(this.waitForImages)
-			}
-		},
-
-		waitForImages() {
-			const images = document.querySelectorAll('div.ProseMirror figure.image')
-			const loading = document.querySelectorAll('div.ProseMirror figure.image.icon-loading')
-			this.loadImages.total = images.length
-			this.loadImages.count = images.length - loading.length
-
-			if (!loading.length) {
-				this.allImagesLoaded()
-			}
-
-			for (const el of loading) {
-				// Hook into the capture phase as `load` events do not bubble up.
-				el.addEventListener('load', this.imageLoaded, { capture: true })
-			}
-
-			// Wait 1 sec for each image (min 3 sec, max. 15 sec), timeout afterwards
-			const timeout = Math.min(Math.max(loading.length * 1000, 3000), 15000)
-			this.$imageTimeout = debounce(() => {
-				if (this.loadImages.count < this.loadImages.total) {
-					console.error(`Failed to load ${this.loadImages.total - this.loadImages.count} images`)
-					this.allImagesLoaded()
+		/**
+		 * Select or unselect a page together with all its subpages
+		 *
+		 * @param node Page tree node of the page
+		 * @param checked Whether to select the pages
+		 */
+		togglePage(node: PageTreeNode<PageInfo>, checked: boolean) {
+			const selectedIds = new Set(this.selectedIds)
+			for (const id of subtreePageIds(node)) {
+				if (checked) {
+					selectedIds.add(id)
+				} else {
+					selectedIds.delete(id)
 				}
-			}, timeout)
-			this.$imageTimeout()
+			}
+			this.setSelectedIds(selectedIds)
+			this.updateRouteQuery()
 		},
 
-		imageLoaded(event) {
-			if (!event.target.classList.contains('image__main')) {
+		setSelectedIds(selectedIds: Set<number>) {
+			this.selectedIds = selectedIds
+			for (const id of selectedIds) {
+				if (!this.renderedIds.has(id)) {
+					this.renderedIds.add(id)
+					this.waitingFor.add(id)
+				}
+			}
+		},
+
+		/**
+		 * Keep the selection in the URL, so it survives reloading the page
+		 */
+		updateRouteQuery() {
+			const query = { ...this.$route.query }
+			delete query.pages
+			delete query.exclude
+			Object.assign(query, printPagesQuery(this.allPages.map((page) => page.id), this.selectedIds))
+			this.$router.replace({ query })
+		},
+
+		pageReady(pageId: number) {
+			this.waitingFor.delete(pageId)
+			if (this.waitingFor.size === 0) {
+				this.loadingContent = false
+			}
+		},
+
+		async print() {
+			this.printing = true
+			await this.waitForImages()
+			this.printing = false
+			await this.$nextTick()
+			document.title = this.documentTitle
+			window.print()
+		},
+
+		/**
+		 * Wait until the images in the selected pages are loaded
+		 *
+		 * Waits 1 sec for each image (min 3 sec, max. 15 sec) and gives up afterwards.
+		 */
+		async waitForImages(): Promise<void> {
+			const pagesEl = this.$refs.pagesEl as HTMLElement
+			const loading = new Set(pagesEl.querySelectorAll('.print-page:not(.print-page--hidden) div.ProseMirror figure.image.icon-loading'))
+			if (!loading.size) {
 				return
 			}
-			this.loadImages.count += 1
-			if (this.loadImages.count >= this.loadImages.total && this.loading) {
-				this.$imageTimeout?.clear()
-				// Finish loading the image
-				this.$nextTick(() => {
-					setTimeout(this.allImagesLoaded, 100)
-				})
+
+			const listeners = new AbortController()
+			const imagesLoaded = new Promise<boolean>((resolve) => {
+				const onLoad = (event: Event) => {
+					if (!(event.target as HTMLElement).classList.contains('image__main')) {
+						return
+					}
+					loading.delete(event.currentTarget as Element)
+					if (!loading.size) {
+						// Let the editor finish rendering the image
+						setTimeout(() => resolve(true), 100)
+					}
+				}
+				for (const el of loading) {
+					// Hook into the capture phase as `load` events do not bubble up.
+					el.addEventListener('load', onLoad, { capture: true, signal: listeners.signal })
+				}
+			})
+
+			let timeoutId: ReturnType<typeof setTimeout> | undefined
+			const timeout = new Promise<boolean>((resolve) => {
+				timeoutId = setTimeout(() => resolve(false), Math.min(Math.max(loading.size * 1000, 3000), 15000))
+			})
+
+			const loaded = await Promise.race([imagesLoaded, timeout])
+			clearTimeout(timeoutId)
+			listeners.abort()
+			if (!loaded) {
+				console.error(`Failed to load ${loading.size} images`)
 			}
 		},
-
-		allImagesLoaded() {
-			this.loading = false
-			this.$nextTick(() => {
-				// Scroll back to the beginning of the document
-				document.getElementById('content-vue').scrollIntoView()
-				document.title = this.documentTitle
-
-				window.print()
-			})
-		},
 	},
-}
+})
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.print-header {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	min-height: var(--default-clickable-area);
+	padding-block: var(--app-navigation-padding, 8px);
+	// Leave room for the navigation toggle button
+	padding-inline: calc(var(--default-clickable-area) + 2 * var(--app-navigation-padding, 8px)) var(--app-navigation-padding, 8px);
+	background-color: var(--color-main-background);
+
+	&__count {
+		color: var(--color-text-maxcontrast);
+	}
+}
+
 .progress-bar {
 	margin-top: 8px;
 }
 
 .load-messages {
 	color: var(--color-text-maxcontrast);
+}
+
+@media print {
+	.print-navigation,
+	.print-header {
+		display: none !important;
+	}
 }
 </style>
