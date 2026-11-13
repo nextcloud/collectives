@@ -1,0 +1,304 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "collectives-administration",
+        "version": "0.0.1",
+        "description": "Your space to collaboratively write and organize",
+        "license": {
+            "name": "agpl"
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "basic_auth": {
+                "type": "http",
+                "scheme": "basic"
+            },
+            "bearer_auth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
+        "schemas": {
+            "OCSMeta": {
+                "type": "object",
+                "required": [
+                    "status",
+                    "statuscode"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "statuscode": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "totalitems": {
+                        "type": "string"
+                    },
+                    "itemsperpage": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/static-site-generator/health": {
+            "get": {
+                "operationId": "static_site_generator-health",
+                "summary": "Check whether the configured static site generator is reachable and accepts the token",
+                "description": "This endpoint requires admin access\nThis endpoint requires admin access",
+                "tags": [
+                    "static_site_generator"
+                ],
+                "security": [
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "apiVersion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "1.0"
+                            ],
+                            "default": "1.0"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Static site generator is healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "status"
+                                                    ],
+                                                    "properties": {
+                                                        "status": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "ok"
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Static site generator is not configured, not reachable or not healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "message"
+                                                    ],
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Current user is not logged in",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Logged in account must be an admin",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "collective",
+            "description": "Provides access to collectives."
+        },
+        {
+            "name": "trash",
+            "description": "Provides access to the collective trash."
+        },
+        {
+            "name": "share",
+            "description": "Provides access to collective and page shares."
+        },
+        {
+            "name": "static_site",
+            "description": "Provides access to static site exports of a collective."
+        },
+        {
+            "name": "static_site_generator",
+            "description": "Provides the external static site generator access to health checks and its build-status callback."
+        },
+        {
+            "name": "search",
+            "description": "Allows to search collectives."
+        },
+        {
+            "name": "page",
+            "description": "Provides access to pages of a collective."
+        },
+        {
+            "name": "page_trash",
+            "description": "Provides access to page trash of a collective."
+        },
+        {
+            "name": "template",
+            "description": "Provides access to template pages of a collective."
+        },
+        {
+            "name": "tag",
+            "description": "Provides access to tags for pages."
+        },
+        {
+            "name": "collective_user_settings",
+            "description": "Provides access to user settings for a specific collective."
+        },
+        {
+            "name": "session",
+            "description": "Provides access to collectives user sessions. Sessions are used to track active users/clients in a collective, e.g. to notify about updates."
+        },
+        {
+            "name": "settings",
+            "description": "Provides access to the following user settings used by the collectives app. - user_folder: Path where collectives are mounted in user home directory."
+        },
+        {
+            "name": "public_collective",
+            "description": "Provides access to public collective and page shares."
+        },
+        {
+            "name": "public_page",
+            "description": "Provides access to pages of a public collective/page share."
+        },
+        {
+            "name": "public_page_trash",
+            "description": "Provides access to page trash of a public collective share."
+        },
+        {
+            "name": "public_template",
+            "description": "Provides access to template pages of a public collective share."
+        },
+        {
+            "name": "public_tag",
+            "description": "Provides access to tags for pages."
+        }
+    ]
+}

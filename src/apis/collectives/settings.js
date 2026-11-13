@@ -14,6 +14,7 @@ import { apiUrl } from './urls.js'
 function settingsApiUrl(...parts) {
 	return apiUrl('v1.0', 'settings', parts)
 }
+
 /**
  * Get collectives folder setting for the current user
  */
