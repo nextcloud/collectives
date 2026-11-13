@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Model\RecentPage;
 use OCP\DB\Exception;
@@ -42,10 +43,32 @@ class RecentPagesService {
 	 * @throws Exception
 	 */
 	public function forUser(IUser $user, int $limit = 10): array {
+		return $this->getRecentPages($user->getUID(), $limit);
+	}
+
+	/** @return list<Collective> */
+	public function getTeamCollectives(string $teamId, string $userId): array {
+		try {
+			$collectives = $this->collectiveService->getCollectives($userId);
+		} catch (NotFoundException|NotPermittedException) {
+			return [];
+		}
+
+		return array_values(array_filter($collectives, static fn (Collective $collective): bool => $collective->getCircleId() === $teamId));
+	}
+
+	/** @return list<RecentPage> */
+	public function forTeam(string $teamId, string $userId, int $limit = 7): array {
+		return $this->getRecentPages($userId, $limit, $teamId);
+	}
+
+	/** @return list<RecentPage> */
+	private function getRecentPages(string $userId, int $limit, ?string $teamId = null): array {
 		$queryData = $this->getRecentPagesQuery(
-			$user->getUID(),
+			$userId,
 			$limit,
-			['p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path']
+			['p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path'],
+			teamId: $teamId,
 		);
 
 		if ($queryData === null) {
@@ -204,9 +227,11 @@ class RecentPagesService {
 	 * @return array{result: \OCP\DB\IResult, collectivesMap: array, appData: string}|null
 	 * @throws Exception
 	 */
-	private function getRecentPagesQuery(string $userId, int $limit, array $selectFields, ?string $query = null): ?array {
+	private function getRecentPagesQuery(string $userId, int $limit, array $selectFields, ?string $query = null, ?string $teamId = null): ?array {
 		try {
-			$collectives = $this->collectiveService->getCollectives($userId);
+			$collectives = $teamId === null
+				? $this->collectiveService->getCollectives($userId)
+				: $this->getTeamCollectives($teamId, $userId);
 		} catch (NotFoundException|NotPermittedException) {
 			return null;
 		}
