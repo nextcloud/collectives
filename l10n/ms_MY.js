@@ -1,0 +1,28 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "Share link" : "Share link",
+    "Settings" : "Tetapan",
+    "Notifications" : "Pemberitahuan",
+    "Back" : "Kembali",
+    "Edit" : "Sunting",
+    "Name" : "Nama",
+    "Deleted" : "Dipadam",
+    "Restore" : "Pulihkan",
+    "Cancel" : "Batal",
+    "Create" : "Buat",
+    "Delete" : "Padam",
+    "Rename" : "Namakan",
+    "Download" : "Muat turun",
+    "Title" : "Judul",
+    "Favorites" : "Favorites",
+    "Home" : "Rumah",
+    "Share label" : "Share label",
+    "Expiration date" : "Expiration date",
+    "Upload" : "Muat naik",
+    "No other versions available" : "Tiada lagi versi lain",
+    "Versions" : "Versi",
+    "Failed to revert {page} to revision {timestamp}." : "Gagal kembalikan {page} ke semakan {timestamp}.",
+    "Done" : "Done"
+},
+"nplurals=1; plural=0;");

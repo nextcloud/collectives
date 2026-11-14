@@ -24,6 +24,7 @@ OC.L10N.register(
     "Page not found" : "Blad nie gevind nie",
     "Can edit" : "Kan redigeer",
     "Unshare" : "Ontdeel",
+    "Share label" : "Share label",
     "Set expiration date" : "Stel vervaldatum",
     "Expiration date" : "Vervaldatum",
     "Upload" : "Oplaai",
