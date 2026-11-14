@@ -75,6 +75,7 @@ OC.L10N.register(
     "Password protection (enforced)" : "Абарона паролем (прымусова)",
     "Password" : "Пароль",
     "Unshare" : "Cкасаваць абагульванне",
+    "Share label" : "Share label",
     "Expiration date" : "Expiration date",
     "Upload" : "Запампаваць",
     "Drag and drop files here to upload" : "Перацягніце файлы сюды, каб запампаваць іх",

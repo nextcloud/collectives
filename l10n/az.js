@@ -23,6 +23,7 @@ OC.L10N.register(
     "Favorite" : "İstəkli",
     "Add another link" : "Başqa link əlavə edin",
     "Unshare" : "Paylaşımı durdur",
+    "Share label" : "Share label",
     "Expiration date" : "Expiration date",
     "Upload" : "Serverə yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",

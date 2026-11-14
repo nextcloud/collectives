@@ -272,6 +272,7 @@
     "Copy public link to clipboard" : "Copiar link público para a área de transferência",
     "Share actions" : "Ações de compartilhamento",
     "Password field can't be empty" : "O campo da senha não pode estar vazio",
+    "Failed to generate QR code" : "Falha ao gerar o código QR",
     "Page \"{name}\" has been shared" : "A página \"{name}\" foi compartilhada",
     "Collective \"{name}\" has been shared" : "O coletivo \"{name}\" foi compartilhado",
     "Failed to share page \"{name}\": {responseError}" : "Falha ao compartilhar a página \"{name}\": {responseError}",
