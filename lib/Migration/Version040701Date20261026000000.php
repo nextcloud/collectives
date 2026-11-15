@@ -59,6 +59,13 @@ class Version040701Date20261026000000 extends SimpleMigrationStep {
 	 * published before, so the time of their last update serves as approximation.
 	 */
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
+		/** @var ISchemaWrapper $schema */
+		$schema = $schemaClosure();
+
+		if (!$schema->hasTable('collectives_st_sites')) {
+			return;
+		}
+
 		$qb = $this->connection->getQueryBuilder();
 		$qb->update('collectives_st_sites')
 			->set('published_at', 'updated_at')
