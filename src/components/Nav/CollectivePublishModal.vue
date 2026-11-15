@@ -42,6 +42,7 @@
 						</button>
 						<a
 							v-if="staticSite.publishedUrl"
+							class="modal-publish__site-url"
 							:href="staticSite.publishedUrl"
 							target="_blank"
 							rel="noopener noreferrer">{{ staticSite.publishedUrl }}</a>
@@ -51,8 +52,11 @@
 								{{ t('collectives', 'The previous version is still online.') }}
 							</template>
 						</p>
-						<span v-if="staticSite.publishedAt" class="modal-publish__site-published-at">
-							{{ t('collectives', 'Last published {date}', { date: formatTimestamp(staticSite.publishedAt) }) }}
+						<span
+							v-if="staticSite.publishedAt"
+							class="modal-publish__site-published-at"
+							:title="formatAbsoluteTime(staticSite.publishedAt)">
+							{{ t('collectives', 'Last published {time}', { time: formatRelativeTime(staticSite.publishedAt) }) }}
 						</span>
 					</li>
 				</ul>
@@ -278,7 +282,11 @@ export default {
 		t,
 		staticSiteErrorMessage,
 
-		formatTimestamp(timestamp) {
+		formatRelativeTime(timestamp) {
+			return moment.unix(timestamp).fromNow()
+		},
+
+		formatAbsoluteTime(timestamp) {
 			return moment.unix(timestamp).format('LLL')
 		},
 
@@ -483,11 +491,14 @@ export default {
 		padding: 4px 8px;
 		border: 2px solid var(--color-border);
 		border-radius: var(--border-radius-large);
-		word-break: break-all;
 
 		&--selected {
 			border-color: var(--color-primary-element);
 		}
+	}
+
+	&__site-url {
+		word-break: break-all;
 	}
 
 	&__site-error {
@@ -512,6 +523,10 @@ export default {
 		font-weight: normal;
 		text-align: start;
 		cursor: pointer;
+
+		&:disabled {
+			cursor: default;
+		}
 
 		span {
 			color: var(--color-text-maxcontrast);

@@ -29,6 +29,7 @@ class StaticSiteService {
 	private const TITLE_MAX_LENGTH = 255;
 	private const SLUG_MAX_LENGTH = 64;
 	private const SLUG_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
+	// Length of the published_url column
 	private const PUBLISHED_URL_MAX_LENGTH = 255;
 	private const LARGEST_FILES_IN_MESSAGE = 3;
 	private const ALLOWED_CALLBACK_STATUSES = [

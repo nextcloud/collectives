@@ -481,7 +481,8 @@ test.describe('Collective publish', () => {
 		await expect(previouslyPublished).toContainText('Publishing failed')
 		await expect(previouslyPublished).toContainText('The publish service is currently not available. Please try again later.')
 		await expect(previouslyPublished).toContainText('The previous version is still online.')
-		await expect(previouslyPublished).toContainText('Last published')
+		// Relative time in the text, the exact time in the tooltip
+		await expect(previouslyPublished.getByText('Last published 2 hours ago')).toHaveAttribute('title', /\d/)
 
 		await expect(neverPublished).toContainText('The publish service could not build the website. Please contact your administrator.')
 		await expect(neverPublished).not.toContainText('The previous version is still online.')

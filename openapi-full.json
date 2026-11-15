@@ -4567,8 +4567,7 @@
                                         "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed",
                                         "properties": {
                                             "publish_url": {
-                                                "type": "string",
-                                                "minLength": 1
+                                                "type": "string"
                                             },
                                             "error_message": {
                                                 "type": "string"
