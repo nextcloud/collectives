@@ -244,7 +244,7 @@ test.describe('Collective publish', () => {
 			if (route.request().method() !== 'GET') {
 				return route.fallback()
 			}
-			await route.fulfill({ json: ocsResponse([olderStaticSite, staticSite]) })
+			await route.fulfill({ json: ocsResponse([staticSite, olderStaticSite]) })
 		})
 		let sentBody: { pageIds: number[], title: string, slug?: string } | null = null
 		await page.route(`**/static-sites/${staticSite.id}`, async (route) => {
@@ -264,7 +264,8 @@ test.describe('Collective publish', () => {
 		const titleField = modal.getByRole('textbox', { name: 'Website title' })
 		const slugField = modal.getByRole('textbox', { name: 'Web address' })
 
-		// Both websites are listed, the most recently updated one is preselected
+		// Websites are listed by title, the most recently updated one is preselected
+		await expect(modal.locator('.modal-publish__site-list > li')).toHaveText([/Older website/, /Published website/])
 		await expect(modal.getByRole('button', { name: /Older website/ })).toHaveAttribute('aria-pressed', 'false')
 		await expect(modal.getByRole('button', { name: /Published website/ })).toHaveAttribute('aria-pressed', 'true')
 		await expect(modal.getByRole('link', { name: staticSite.publishedUrl })).toBeVisible()

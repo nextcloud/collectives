@@ -263,7 +263,9 @@ export default {
 			this.getStaticSites(this.collective.id)
 				.catch(displayError('Could not load static sites for collective')),
 		])
-		const [mostRecentStaticSite] = this.staticSites
+		// Preselect the website the user updated last
+		const mostRecentStaticSite = this.staticSites
+			.reduce((recent, staticSite) => (!recent || staticSite.updatedAt > recent.updatedAt ? staticSite : recent), null)
 		if (mostRecentStaticSite) {
 			this.selectStaticSite(mostRecentStaticSite)
 		} else {

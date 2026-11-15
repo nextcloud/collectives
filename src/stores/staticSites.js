@@ -8,6 +8,7 @@ import { t } from '@nextcloud/l10n'
 import { defineStore } from 'pinia'
 import * as api from '../apis/collectives/index.js'
 import { staticSitePollInterval, staticSitePollTimeout } from '../constants.js'
+import { byTitleAsc } from '../util/sortOrders.js'
 import { staticSiteErrorMessage } from '../util/staticSiteError.js'
 
 export const useStaticSitesStore = defineStore('staticSites', {
@@ -21,10 +22,9 @@ export const useStaticSitesStore = defineStore('staticSites', {
 	}),
 
 	getters: {
-		// Most recently updated first
+		// Sorted by title, so the order stays the same while a website gets published
 		staticSitesForCollective: (state) => (collectiveId) => {
-			return [...(state.staticSites[collectiveId] ?? [])]
-				.sort((a, b) => b.updatedAt - a.updatedAt)
+			return (state.staticSites[collectiveId] ?? []).toSorted(byTitleAsc)
 		},
 	},
 

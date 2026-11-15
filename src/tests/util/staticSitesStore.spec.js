@@ -5,7 +5,7 @@
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { createPinia, setActivePinia } from 'pinia'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import * as api from '../../apis/collectives/index.js'
 import { staticSitePollInterval, staticSitePollTimeout } from '../../constants.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
@@ -33,15 +33,23 @@ async function poll(times = 1) {
 }
 
 describe('static sites of a collective', () => {
+	beforeAll(() => {
+		vi.stubGlobal('window', { OC: { getLanguage: () => 'en' } })
+	})
+
+	afterAll(() => {
+		vi.unstubAllGlobals()
+	})
+
 	beforeEach(() => {
 		setActivePinia(createPinia())
 	})
 
-	it('lists the most recently updated static site first', async () => {
+	it('lists static sites by title, regardless of their update time', async () => {
 		vi.mocked(api.getStaticSites).mockResolvedValue(response(
-			staticSite({ id: 1, updatedAt: 100 }),
-			staticSite({ id: 2, updatedAt: 300 }),
-			staticSite({ id: 3, updatedAt: 200 }),
+			staticSite({ id: 1, title: 'Website 10', updatedAt: 300 }),
+			staticSite({ id: 2, title: 'Archive', updatedAt: 100 }),
+			staticSite({ id: 3, title: 'Website 2', updatedAt: 200 }),
 		))
 		const store = useStaticSitesStore()
 

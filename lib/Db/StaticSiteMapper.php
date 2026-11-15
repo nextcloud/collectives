@@ -46,7 +46,8 @@ class StaticSiteMapper extends QBMapper {
 			->where(
 				$qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT))
 			)
-			->orderBy('created_at', 'DESC');
+			->orderBy('created_at', 'DESC')
+			->addOrderBy('id', 'DESC');
 		return $this->findEntities($qb);
 	}
 
