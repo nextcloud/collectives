@@ -4,7 +4,31 @@
 -->
 
 <template>
-	<div class="publish-website-list">
+	<div v-if="!staticSites.length" class="publish-website-list publish-website-list--empty">
+		<span class="publish-website-list__empty-icon">
+			<WebIcon :size="48" />
+		</span>
+		<h3 class="publish-website-list__empty-title">
+			{{ t('collectives', 'No website online yet') }}
+		</h3>
+		<p class="publish-website-list__empty-description">
+			{{ t('collectives', 'Publish selected pages of this collective as a static website that anyone with the link can read. You can create several websites, each with its own address.') }}
+		</p>
+		<ol class="publish-website-list__steps">
+			<li v-for="(step, index) in steps" :key="index" class="publish-website-list__step">
+				<span class="publish-website-list__step-number">{{ index + 1 }}</span>
+				<strong>{{ step.title }}</strong>
+				<span class="publish-website-list__step-description">{{ step.description }}</span>
+			</li>
+		</ol>
+		<NcButton variant="primary" @click="$emit('create')">
+			<template #icon>
+				<PlusIcon :size="20" />
+			</template>
+			{{ t('collectives', 'Create website') }}
+		</NcButton>
+	</div>
+	<div v-else class="publish-website-list">
 		<div class="publish-website-list__header">
 			<span class="publish-website-list__count">
 				{{ countLabel }}
@@ -78,6 +102,7 @@ import moment from '@nextcloud/moment'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import WebIcon from 'vue-material-design-icons/Web.vue'
 import { mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
 
 export default {
@@ -87,6 +112,7 @@ export default {
 		NcButton,
 		NcLoadingIcon,
 		PlusIcon,
+		WebIcon,
 	},
 
 	props: {
@@ -111,6 +137,23 @@ export default {
 		// The website the user most likely wants to continue with, e.g. after a failed publication
 		preselectedStaticSite() {
 			return mostRecentlyUpdatedStaticSite(this.staticSites)
+		},
+
+		steps() {
+			return [
+				{
+					title: t('collectives', 'Choose pages'),
+					description: t('collectives', 'Pick which pages and subpages go public.'),
+				},
+				{
+					title: t('collectives', 'Set address and look'),
+					description: t('collectives', 'A permanent address, a title and a theme.'),
+				},
+				{
+					title: t('collectives', 'Update anytime'),
+					description: t('collectives', 'Edit pages as usual, then update the website in one click.'),
+				},
+			]
 		},
 
 		countLabel() {
@@ -164,6 +207,72 @@ export default {
 	gap: 12px;
 	min-height: 0;
 
+	&--empty {
+		container-type: inline-size;
+		align-items: center;
+		overflow-y: auto;
+		text-align: center;
+	}
+
+	&__empty-icon {
+		display: flex;
+		color: var(--color-primary-element);
+	}
+
+	&__empty-title {
+		margin: 0;
+		font-size: 18px;
+	}
+
+	&__empty-description {
+		max-width: 500px;
+		color: var(--color-text-maxcontrast);
+	}
+
+	&__steps {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 12px;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+
+	@container (width < 500px) {
+		&__steps {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	&__step {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+		list-style: none;
+		padding: 12px 16px;
+		border: 1px solid var(--color-border-dark);
+		border-radius: var(--border-radius-large);
+		text-align: start;
+	}
+
+	&__step-number {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background-color: var(--color-primary-element);
+		color: var(--color-primary-element-text);
+		font-size: var(--font-size-small, 13px);
+		font-weight: bold;
+	}
+
+	&__step-description {
+		color: var(--color-text-maxcontrast);
+	}
+
 	&__header {
 		display: flex;
 		align-items: center;
@@ -191,11 +300,13 @@ export default {
 		gap: 4px;
 		list-style: none;
 		padding: 12px 16px;
-		border: 2px solid var(--color-border);
+		border: 1px solid var(--color-border-dark);
 		border-radius: var(--border-radius-large);
 
 		&--preselected {
-			border-color: var(--color-primary-element);
+			// Thicker border without shifting the content
+			padding: 11px 15px;
+			border: 2px solid var(--color-primary-element);
 		}
 	}
 

@@ -95,6 +95,9 @@ test.describe('Collective publish', () => {
 			// Publish modal opens on publish button click
 			await publishButton.click()
 			await expect(modal.filter({ has: page.getByRole('heading', { name: 'Websites' }) })).toBeVisible()
+			// Without websites, the modal explains how publishing works
+			await expect(modal.getByRole('heading', { name: 'No website online yet' })).toBeVisible()
+			await expect(modal.getByRole('listitem')).toHaveText([/Choose pages/, /Set address and look/, /Update anytime/])
 
 			// Modal can be closed
 			await modal.getByRole('button', { name: 'Close' }).click()
@@ -103,7 +106,7 @@ test.describe('Collective publish', () => {
 
 		await test.step('close the publish modal with Escape', async () => {
 			await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
-			await modal.getByRole('button', { name: 'New website' }).click()
+			await modal.getByRole('button', { name: 'Create website' }).click()
 
 			// Escape must also work while a checkbox has the focus
 			const checkbox = modal.getByRole('checkbox').first()
@@ -119,7 +122,7 @@ test.describe('Collective publish', () => {
 
 			// Modal can be opened again
 			await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
-			await modal.getByRole('button', { name: 'New website' }).click()
+			await modal.getByRole('button', { name: 'Create website' }).click()
 			await expect(modal.getByRole('heading', { name: 'New website' })).toBeVisible()
 			await expect(modal).toContainText(collective.data.name)
 
@@ -163,7 +166,7 @@ test.describe('Collective publish', () => {
 
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		await modal.getByRole('button', { name: 'New website' }).click()
+		await modal.getByRole('button', { name: 'Create website' }).click()
 		await expect(modal.getByRole('checkbox', { name: 'Page created meanwhile' })).toBeChecked()
 		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
 		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
@@ -176,7 +179,7 @@ test.describe('Collective publish', () => {
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		await modal.getByRole('button', { name: 'New website' }).click()
+		await modal.getByRole('button', { name: 'Create website' }).click()
 		const collectiveCheckbox = modal.getByRole('checkbox', { name: collective.data.name })
 		const parentCheckbox = modal.getByRole('checkbox', { name: 'Parent page' })
 		const childCheckbox = modal.getByRole('checkbox', { name: 'Child page' })
@@ -371,7 +374,7 @@ test.describe('Collective publish', () => {
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		await modal.getByRole('button', { name: 'New website' }).click()
+		await modal.getByRole('button', { name: 'Create website' }).click()
 		const slugField = modal.getByRole('textbox', { name: 'Web address' })
 		const submitButton = modal.getByRole('button', { name: 'Publish website' })
 
@@ -428,7 +431,7 @@ test.describe('Collective publish', () => {
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		await modal.getByRole('button', { name: 'New website' }).click()
+		await modal.getByRole('button', { name: 'Create website' }).click()
 		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
@@ -448,7 +451,7 @@ test.describe('Collective publish', () => {
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		await modal.getByRole('button', { name: 'New website' }).click()
+		await modal.getByRole('button', { name: 'Create website' }).click()
 		const titleField = modal.getByRole('textbox', { name: 'Website title' })
 		await titleField.fill('My website')
 		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
@@ -571,7 +574,7 @@ test.describe('Collective publish', () => {
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		await modal.getByRole('button', { name: 'New website' }).click()
+		await modal.getByRole('button', { name: 'Create website' }).click()
 		await modal.getByRole('textbox', { name: 'Website title' }).fill('My website')
 		// The request reaches the backend, where web addresses are unique across all collectives
 		await modal.getByRole('textbox', { name: 'Web address' }).fill(`website-${collective.data.id}`)

@@ -8,7 +8,10 @@
 		size="normal"
 		class="collective-publish-modal"
 		@close="onClose">
-		<div class="modal-publish" @keydown.esc="onEscape">
+		<div
+			class="modal-publish"
+			:class="{ 'modal-publish--form': view === 'form' }"
+			@keydown.esc="onEscape">
 			<div class="modal-publish__header">
 				<NcButton
 					v-if="view === 'form'"
@@ -317,8 +320,10 @@ export default {
 .collective-publish-modal {
 	:deep(.modal-wrapper .modal-container) {
 		display: flex !important;
+		// Never wider than the full screen modal on small screens
+		width: min(750px, 100%);
 		padding-block: 4px 0;
-		padding-inline: 12px;
+		padding-inline: 24px;
 	}
 
 	:deep(.modal-wrapper .modal-container__content) {
@@ -331,8 +336,14 @@ export default {
 .modal-publish {
 	display: flex;
 	flex-direction: column;
-	height: 550px;
 	max-height: 80vh;
+	padding-block-end: 25px;
+
+	// Fixed height, so the modal doesn't jump while pages get expanded
+	&--form {
+		height: 480px;
+		padding-block-end: 0;
+	}
 
 	&__header {
 		display: flex;
@@ -343,7 +354,7 @@ export default {
 		// Space for the close button of the modal
 		padding-block: 8px 12px;
 		padding-inline-end: 44px;
-		border-bottom: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border-dark);
 	}
 
 	&__name {
