@@ -95,11 +95,12 @@ class StaticSiteMapper extends QBMapper {
 	 * Check and update happen in a single query, so of concurrent requests only one can
 	 * change the status, e.g. to pending when updating an existing static site.
 	 *
+	 * @param ?string $slug New slug, null keeps the current one
 	 * @return bool False if the static site was changed meanwhile
 	 *
-	 * @throws Exception
+	 * @throws Exception Also if the slug is already used by another static site
 	 */
-	public function updateStatusIfUnchanged(StaticSite $staticSite, string $status): bool {
+	public function updateStatusIfUnchanged(StaticSite $staticSite, string $status, ?string $slug = null): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->tableName)
 			->set('status', $qb->createNamedParameter($status, IQueryBuilder::PARAM_STR))
@@ -108,6 +109,9 @@ class StaticSiteMapper extends QBMapper {
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter($staticSite->getStatus(), IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq('updated_at', $qb->createNamedParameter($staticSite->getUpdatedAt(), IQueryBuilder::PARAM_INT)));
+		if ($slug !== null) {
+			$qb->set('slug', $qb->createNamedParameter($slug, IQueryBuilder::PARAM_STR));
+		}
 
 		return $qb->executeStatement() > 0;
 	}
@@ -198,7 +202,7 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Reset status, last error and update time to the values of the given static site as it was read before.
+	 * Reset slug, status, last error and update time to the values of the given static site as it was read before.
 	 *
 	 * Keeping the update time of an aborted publication allows the user to start the publish process again right away.
 	 *
@@ -212,6 +216,7 @@ class StaticSiteMapper extends QBMapper {
 			throw new NotFoundException('Static site not found', 0, $e);
 		}
 
+		$staticSite->setSlug($previous->getSlug());
 		$staticSite->setStatus($previous->getStatus());
 		$staticSite->setLastError($previous->getLastError());
 		$staticSite->setUpdatedAt($previous->getUpdatedAt());

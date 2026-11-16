@@ -599,6 +599,103 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->update($this->collectiveId, 7, [1], $title, $this->userId);
 	}
 
+	public function testUpdateChangesSlugOfUnpublishedStaticSite(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatusIfUnchanged')
+			->with($staticSite, StaticSite::STATUS_PENDING, 'new-slug')
+			->willReturn(true);
+		$this->generatorClient->expects($this->once())
+			->method('build')
+			->with($this->callback(fn (StaticSite $built): bool => $built->getSlug() === 'new-slug'), 'Title');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
+	public function testUpdateKeepsSlugOfPublishedStaticSite(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$staticSite->setPublishedUrl('https://example.org/my-collective/');
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatusIfUnchanged')
+			->with($staticSite, StaticSite::STATUS_PENDING, null)
+			->willReturn(true);
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'my-collective');
+	}
+
+	public function testUpdateRejectsSlugChangeOfPublishedStaticSite(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
+		$staticSite->setPublishedUrl('https://example.org/my-collective/');
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
+	/**
+	 * @dataProvider invalidSlugProvider
+	 */
+	public function testUpdateRejectsInvalidSlug(string $slug): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, $slug);
+	}
+
+	public function testUpdateThrowsWhenSlugAlreadyTaken(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+
+		$dbException = $this->createMock(DBException::class);
+		$dbException->method('getReason')->willReturn(DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION);
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willThrowException($dbException);
+
+		$this->expectException(StaticSiteSlugTakenException::class);
+		$this->archiver->expects($this->never())->method('store');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'taken');
+	}
+
+	public function testUpdateRethrowsOtherDatabaseErrorsWhenChangingSlug(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+
+		$dbException = $this->createMock(DBException::class);
+		$dbException->method('getReason')->willReturn(DBException::REASON_DRIVER);
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willThrowException($dbException);
+
+		$this->expectException(DBException::class);
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
+	public function testUpdateRestoresPreviousSlugIfArchiveCannotBeProvided(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('restoreStatus')
+			->with($this->callback(fn (StaticSite $previous): bool => $previous->getSlug() === 'my-collective'
+				&& $previous->getStatus() === StaticSite::STATUS_FAILED));
+
+		$this->expectException(ServiceException::class);
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
 	public function testUpdateProvidesArchiveForNewPageSelectionNotThePreviouslyStoredOne(): void {
 		$collective = $this->makeCollective(canEdit: true);
 		$this->collectiveService->method('getCollective')->willReturn($collective);
@@ -859,16 +956,28 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->create($this->collectiveId, [1], $this->userId);
 	}
 
-	public function testPublishRemovesStaticSiteIfGeneratorDoesNotAcceptBuild(): void {
+	public static function generatorFailureProvider(): array {
+		return [
+			'rejected' => [new StaticSiteGeneratorException('Rejected'), StaticSite::ERROR_GENERATOR_REJECTED],
+			'unavailable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE],
+		];
+	}
+
+	/**
+	 * @dataProvider generatorFailureProvider
+	 */
+	public function testPublishKeepsStaticSiteAsFailedIfGeneratorDoesNotAcceptBuild(StaticSiteGeneratorException $exception, string $lastError): void {
 		$staticSite = $this->expectCreatedStaticSite();
 		$this->contentCollector->method('collect')->willReturn(['Readme.md' => $this->makeFileWithSize(1)]);
-		$this->generatorClient->method('build')->willThrowException(new StaticSiteGeneratorException('Rejected'));
+		$this->generatorClient->method('build')->willThrowException($exception);
 
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($staticSite);
+		$this->staticSiteMapper->expects($this->never())->method('delete');
 		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
-		$this->staticSiteMapper->expects($this->never())->method('updateSettingsAndStatus');
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateSettingsAndStatus')
+			->with($staticSite, 'My Collective', [1], StaticSite::STATUS_FAILED, $lastError);
 
-		$this->expectException(StaticSiteGeneratorException::class);
+		$this->expectException($exception::class);
 		$this->service->create($this->collectiveId, [1], $this->userId);
 	}
 
@@ -911,7 +1020,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateSettingsAndStatus')
 			->with($staticSite, 'Title', [1], StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_REJECTED);
-		$this->archiver->expects($this->never())->method('delete');
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
 
 		$this->expectException(StaticSiteGeneratorException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -927,6 +1036,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateSettingsAndStatus')
 			->with($staticSite, 'Title', [1], StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_UNAVAILABLE);
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);

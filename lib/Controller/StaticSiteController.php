@@ -98,39 +98,42 @@ class StaticSiteController extends OCSController {
 				['collectiveId' => $collectiveId],
 			);
 		} catch (StaticSiteSlugTakenException) {
-			return new DataResponse(
-				['message' => $this->l10n->t('This web address is already taken by another website')],
-				Http::STATUS_CONFLICT,
-			);
+			return $this->slugTakenResponse();
 		}
 		return new DataResponse($staticSite);
 	}
 
 	/**
-	 * Update title and page selection of a static site and publish it again
+	 * Update title, page selection and slug of a static site and publish it again
 	 *
-	 * Every call starts a new publication, even if nothing changed. The slug can't be changed.
+	 * Every call starts a new publication, even if nothing changed. The slug can only be changed until the static site got published.
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param int $id ID of the static site
 	 * @param list<int> $pageIds IDs of the pages to publish
 	 * @param string $title Title of the static site
+	 * @param ?string $slug Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the current slug
 	 *
-	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>
-	 * @throws OCSBadRequestException No pages selected, invalid title or publication started concurrently
+	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>|DataResponse<Http::STATUS_CONFLICT, array{message: string}, array{}>
+	 * @throws OCSBadRequestException No pages selected, invalid title or slug, slug of a published static site changed or publication started concurrently
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, static site or page not found
 	 * @throws OCSException Archive of the static site couldn't be provided, a website of the collective is being published or the publish service is not available or didn't accept it
 	 *
 	 * 200: Static site updated
+	 * 409: Slug is already taken by another static site, also of another collective
 	 */
 	#[NoAdminRequired]
-	public function update(int $collectiveId, int $id, array $pageIds, string $title): DataResponse {
+	public function update(int $collectiveId, int $id, array $pageIds, string $title, ?string $slug = null): DataResponse {
 		$uid = $this->getUid();
-		$staticSite = $this->handleArchiveErrorResponse(
-			fn (): StaticSite => $this->staticSiteService->update($collectiveId, $id, $pageIds, $title, $uid),
-			['collectiveId' => $collectiveId, 'id' => $id],
-		);
+		try {
+			$staticSite = $this->handleArchiveErrorResponse(
+				fn (): StaticSite => $this->staticSiteService->update($collectiveId, $id, $pageIds, $title, $uid, $slug),
+				['collectiveId' => $collectiveId, 'id' => $id],
+			);
+		} catch (StaticSiteSlugTakenException) {
+			return $this->slugTakenResponse();
+		}
 		return new DataResponse($staticSite);
 	}
 
@@ -165,7 +168,7 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSForbiddenException
 	 * @throws OCSNotFoundException
 	 * @throws OCSException
-	 * @throws StaticSiteSlugTakenException Handled by the caller, as only creating a static site sets a slug
+	 * @throws StaticSiteSlugTakenException Handled by the caller with a slug taken response
 	 */
 	private function handleArchiveErrorResponse(Closure $callback, array $context): StaticSite {
 		try {
@@ -200,5 +203,15 @@ class StaticSiteController extends OCSController {
 				Http::STATUS_INTERNAL_SERVER_ERROR,
 			);
 		}
+	}
+
+	/**
+	 * @return DataResponse<Http::STATUS_CONFLICT, array{message: string}, array{}>
+	 */
+	private function slugTakenResponse(): DataResponse {
+		return new DataResponse(
+			['message' => $this->l10n->t('This web address is already taken by another website')],
+			Http::STATUS_CONFLICT,
+		);
 	}
 }

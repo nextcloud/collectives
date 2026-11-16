@@ -41,17 +41,18 @@ export function createStaticSite(collectiveId, pageIds, title, slug) {
 }
 
 /**
- * Publish an existing static site again to update content, page-selection, title
+ * Publish an existing static site again to update content, page-selection, title and slug
  *
  * @param {number} collectiveId Id of the collective
  * @param {number} id Id of the static site
  * @param {number[]} pageIds Ids of the pages to publish
  * @param {string} title Title of the static site
+ * @param {string} slug Slug of the static site, can only be changed until it got published
  */
-export function updateStaticSite(collectiveId, id, pageIds, title) {
+export function updateStaticSite(collectiveId, id, pageIds, title, slug) {
 	return axios.put(
 		staticSitesApiUrl(collectiveId, id),
-		{ pageIds, title },
+		{ pageIds, title, slug },
 	)
 }
 
