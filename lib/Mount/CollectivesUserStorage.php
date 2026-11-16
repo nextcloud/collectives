@@ -11,8 +11,8 @@ namespace OCA\Collectives\Mount;
 
 use Icewind\Streams\IteratorDirectory;
 use OC\Files\Storage\Common;
-use OC\ForbiddenException;
 use OCP\Constants;
+use OCP\Files\ForbiddenException;
 use OCP\Files\Storage\IStorage;
 
 /**
@@ -33,11 +33,11 @@ class CollectivesUserStorage extends Common {
 	}
 
 	public function mkdir(string $path): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function rmdir(string $path): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function opendir(string $path): IteratorDirectory {
@@ -53,7 +53,7 @@ class CollectivesUserStorage extends Common {
 	}
 
 	public function stat(string $path): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function filetype(string $path): string|false {
@@ -61,7 +61,7 @@ class CollectivesUserStorage extends Common {
 	}
 
 	public function filesize(string $path): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function isCreatable(string $path): bool {
@@ -101,27 +101,27 @@ class CollectivesUserStorage extends Common {
 	}
 
 	public function file_get_contents(string $path): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function file_put_contents(string $path, mixed $data): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function unlink(string $path): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function rename(string $source, string $target): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function copy(string $source, string $target): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function fopen(string $path, string $mode): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function getMimeType(string $path): string|false {
@@ -132,7 +132,7 @@ class CollectivesUserStorage extends Common {
 	}
 
 	public function hash(string $type, string $path, bool $raw = false): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function free_space(string $path): int {
@@ -140,7 +140,7 @@ class CollectivesUserStorage extends Common {
 	}
 
 	public function touch(string $path, ?int $mtime = null): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function getLocalFile(string $path): string|false {
@@ -164,11 +164,11 @@ class CollectivesUserStorage extends Common {
 	}
 
 	public function copyFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath, bool $preserveMtime = false): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function moveFromStorage(IStorage $sourceStorage, string $sourceInternalPath, string $targetInternalPath): never {
-		throw new ForbiddenException('This request is not allowed to access the filesystem');
+		throw new ForbiddenException('This request is not allowed to access the filesystem', false);
 	}
 
 	public function test(): bool {
