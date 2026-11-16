@@ -4327,7 +4327,7 @@
                         }
                     },
                     "400": {
-                        "description": "No pages selected, invalid title or publication in progress",
+                        "description": "No pages selected, invalid title or publication started concurrently",
                         "content": {
                             "application/json": {
                                 "schema": {

@@ -26,6 +26,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
+use OCA\Collectives\Service\StaticSitePublicationInProgressException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCA\Collectives\Service\UnprocessableEntityException;
@@ -273,6 +274,33 @@ class StaticSiteServiceTest extends TestCase {
 		$this->pageService->method('findAll')->willReturn([$this->makePageInfo(1)]);
 	}
 
+	/**
+	 * @dataProvider inProgressStatusProvider
+	 */
+	public function testPublishRejectsWhileStaticSiteOfCollectiveIsInProgress(string $status): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByCollectiveId')
+			->with($this->collectiveId)
+			->willReturn([$this->makeStaticSite($status)]);
+
+		$this->expectException(StaticSitePublicationInProgressException::class);
+		$this->staticSiteMapper->expects($this->never())->method('create');
+
+		$this->service->create($this->collectiveId, [1], $this->userId, 'Title', 'other-site');
+	}
+
+	public function testPublishIgnoresAbortedPublicationOfCollective(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByCollectiveId')
+			->willReturn([$this->makeStaticSite(StaticSite::STATUS_PENDING, StaticSite::PENDING_TIMEOUT + 1)]);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('create')
+			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
+
+		$this->service->create($this->collectiveId, [1], $this->userId, 'Title', 'other-site');
+	}
+
 	public function testPublishUsesGivenTitleAndSlug(): void {
 		$this->expectValidCollectiveWithPages();
 
@@ -428,9 +456,29 @@ class StaticSiteServiceTest extends TestCase {
 	 */
 	public function testUpdateRejectsStaticSiteInProgress(string $status): void {
 		$this->expectValidCollectiveWithPages();
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite($status));
+		$staticSite = $this->makeStaticSite($status);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
 
-		$this->expectException(UnprocessableEntityException::class);
+		$this->expectException(StaticSitePublicationInProgressException::class);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	/**
+	 * @dataProvider inProgressStatusProvider
+	 */
+	public function testUpdateRejectsWhileOtherStaticSiteOfCollectiveIsInProgress(string $status): void {
+		$this->expectValidCollectiveWithPages();
+		$otherStaticSite = $this->makeStaticSite($status);
+		$otherStaticSite->setId(8);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$this->staticSiteMapper->method('findByCollectiveId')
+			->with($this->collectiveId)
+			->willReturn([$otherStaticSite]);
+
+		$this->expectException(StaticSitePublicationInProgressException::class);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);

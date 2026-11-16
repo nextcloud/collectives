@@ -16,6 +16,7 @@ use OCA\Collectives\Service\ServiceException;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
+use OCA\Collectives\Service\StaticSitePublicationInProgressException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCP\AppFramework\Http;
@@ -83,7 +84,7 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSBadRequestException No pages selected, invalid title or slug
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
-	 * @throws OCSException Archive of the static site couldn't be provided or the publish service is not available or didn't accept it
+	 * @throws OCSException Archive of the static site couldn't be provided, a website of the collective is being published or the publish service is not available or didn't accept it
 	 *
 	 * 200: Static site created
 	 * 409: Slug is already taken by another static site, also of another collective
@@ -116,10 +117,10 @@ class StaticSiteController extends OCSController {
 	 * @param string $title Title of the static site
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>
-	 * @throws OCSBadRequestException No pages selected, invalid title or publication in progress
+	 * @throws OCSBadRequestException No pages selected, invalid title or publication started concurrently
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, static site or page not found
-	 * @throws OCSException Archive of the static site couldn't be provided or the publish service is not available or didn't accept it
+	 * @throws OCSException Archive of the static site couldn't be provided, a website of the collective is being published or the publish service is not available or didn't accept it
 	 *
 	 * 200: Static site updated
 	 */
@@ -171,6 +172,11 @@ class StaticSiteController extends OCSController {
 			return $this->handleErrorResponse($callback, $this->logger);
 		} catch (StaticSiteSlugTakenException $e) {
 			throw $e;
+		} catch (StaticSitePublicationInProgressException) {
+			throw new OCSException(
+				$this->l10n->t('A website of this collective is being published. Please wait until it is finished.'),
+				Http::STATUS_LOCKED,
+			);
 		} catch (StaticSiteGeneratorNotConfiguredException) {
 			$this->logger->warning('Static site generator is not configured', $context);
 			throw new OCSException(
