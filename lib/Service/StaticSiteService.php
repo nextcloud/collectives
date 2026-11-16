@@ -66,6 +66,7 @@ class StaticSiteService {
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
 	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, path too long
 	 * @throws StaticSiteSlugTakenException Slug is already used by another static site
+	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
@@ -74,6 +75,7 @@ class StaticSiteService {
 		$this->assertPublishFeatureEnabled();
 		$pageIds = $this->normalizePageIds($pageIds);
 		$collective = $this->getEditableCollective($collectiveId, $userId);
+		$this->assertNoPublicationInProgress($collectiveId);
 
 		$title = trim($title ?? $collective->getName());
 		$slug ??= $this->generateSlug($collective->getName());
@@ -117,7 +119,8 @@ class StaticSiteService {
 	 *
 	 * @throws NotFoundException Collective, static site or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected, invalid title, publication in progress, path too long
+	 * @throws UnprocessableEntityException No pages selected, invalid title, publication started concurrently, path too long
+	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
@@ -128,9 +131,7 @@ class StaticSiteService {
 		$this->getEditableCollective($collectiveId, $userId);
 
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
-		if ($staticSite->isInProgress($this->timeFactory->getTime())) {
-			throw new UnprocessableEntityException('Publication of static site is already in progress');
-		}
+		$this->assertNoPublicationInProgress($collectiveId);
 
 		$title = trim($title);
 		$this->validateTitle($title);
@@ -364,6 +365,21 @@ class StaticSiteService {
 			throw new UnprocessableEntityException('No pages selected for publishing');
 		}
 		return $pageIds;
+	}
+
+	/**
+	 * Only one publication per collective may run at a time, aborted ones don't count
+	 *
+	 * @throws StaticSitePublicationInProgressException
+	 * @throws DBException
+	 */
+	private function assertNoPublicationInProgress(int $collectiveId): void {
+		$now = $this->timeFactory->getTime();
+		foreach ($this->staticSiteMapper->findByCollectiveId($collectiveId) as $staticSite) {
+			if ($staticSite->isInProgress($now)) {
+				throw new StaticSitePublicationInProgressException('A static site of the collective is being published');
+			}
+		}
 	}
 
 	/**
