@@ -9,93 +9,63 @@
 		class="collective-publish-modal"
 		@close="onClose">
 		<div class="modal-publish" @keydown.esc="onEscape">
-			<h2 class="modal-publish__name">
-				{{ t('collectives', 'Publish website for collective {name}', { name: collective.name }) }}
-			</h2>
-			<div v-if="staticSites.length" class="modal-publish__sites">
-				<div class="modal-publish__sites-header">
-					<h3>{{ t('collectives', 'Websites') }}</h3>
+			<div class="modal-publish__header">
+				<NcButton
+					v-if="view === 'form'"
+					variant="tertiary"
+					:aria-label="t('collectives', 'Back to websites')"
+					:disabled="publishing"
+					@click="showWebsiteList">
+					<template #icon>
+						<ArrowLeftIcon :size="20" />
+					</template>
+				</NcButton>
+				<div>
+					<h2 class="modal-publish__name">
+						{{ headerTitle }}
+					</h2>
+					<p v-if="view === 'list'" class="modal-publish__description">
+						{{ t('collectives', 'Publish pages of this collective as static websites.') }}
+					</p>
+				</div>
+			</div>
+			<NcLoadingIcon v-if="loading" class="modal-publish__loading" :size="32" />
+			<PublishWebsiteList
+				v-else-if="view === 'list'"
+				:staticSites="staticSites"
+				@create="createWebsite"
+				@edit="editWebsite" />
+			<template v-else>
+				<div class="modal-publish__fields">
+					<NcTextField
+						v-model="title"
+						:label="t('collectives', 'Website title')"
+						:error="!isTitleValid"
+						:maxlength="titleMaxLength"
+						required />
+					<!-- TRANSLATORS The web address is the part of the website URL that identifies the published collective -->
+					<NcTextField
+						v-model="slug"
+						:label="t('collectives', 'Web address')"
+						:error="slug !== '' && !isSlugValid"
+						:disabled="!!selectedStaticSite"
+						:helperText="slugHelperText"
+						:maxlength="slugMaxLength"
+						required />
+				</div>
+				<PublishPageSelection
+					v-model:selectedPageIds="selectedPageIds"
+					:collective="collective" />
+				<div class="modal-publish__footer">
 					<NcButton
-						:variant="selectedStaticSite ? 'secondary' : 'primary'"
-						:disabled="loadingPages"
-						@click="selectNewStaticSite">
-						<template #icon>
-							<PlusIcon :size="20" />
-						</template>
-						{{ t('collectives', 'New website') }}
+						variant="primary"
+						:loading="publishing"
+						:disabled="publishing || !isTitleValid || !isSlugValid"
+						@click="onPublishAsWebsite">
+						{{ selectedStaticSite ? t('collectives', 'Update website') : t('collectives', 'Publish website') }}
 					</NcButton>
 				</div>
-				<ul class="modal-publish__site-list">
-					<li
-						v-for="staticSite in staticSites"
-						:key="staticSite.id"
-						class="modal-publish__site"
-						:class="{ 'modal-publish__site--selected': staticSite.id === selectedStaticSiteId }">
-						<button
-							type="button"
-							class="modal-publish__site-select"
-							:aria-pressed="staticSite.id === selectedStaticSiteId ? 'true' : 'false'"
-							:disabled="loadingPages"
-							@click="selectStaticSite(staticSite)">
-							<strong>{{ staticSite.title }}</strong>
-							<span>{{ staticSite.slug }} · {{ staticSiteStatusLabel(staticSite) }}</span>
-						</button>
-						<a
-							v-if="staticSite.publishedUrl"
-							class="modal-publish__site-url"
-							:href="staticSite.publishedUrl"
-							target="_blank"
-							rel="noopener noreferrer">{{ staticSite.publishedUrl }}</a>
-						<p v-if="staticSite.status === 'failed'" class="modal-publish__site-error">
-							{{ staticSiteErrorMessage(staticSite.lastError) }}
-							<template v-if="staticSite.publishedUrl">
-								{{ t('collectives', 'The previous version is still online.') }}
-							</template>
-						</p>
-						<span
-							v-if="staticSite.publishedAt"
-							class="modal-publish__site-published-at"
-							:title="formatAbsoluteTime(staticSite.publishedAt)">
-							{{ t('collectives', 'Last published {time}', { time: formatRelativeTime(staticSite.publishedAt) }) }}
-						</span>
-					</li>
-				</ul>
-			</div>
-			<NcNoteCard v-if="isSelectedStaticSiteInProgress" type="info">
-				{{ t('collectives', 'This website is being published. You can update it once publishing finished.') }}
-			</NcNoteCard>
-			<div class="modal-publish__fields">
-				<NcTextField
-					v-model="title"
-					:label="t('collectives', 'Website title')"
-					:error="!isTitleValid"
-					:disabled="loadingPages"
-					:maxlength="titleMaxLength"
-					required />
-				<!-- TRANSLATORS The web address is the part of the website URL that identifies the published collective -->
-				<NcTextField
-					v-model="slug"
-					:label="t('collectives', 'Web address')"
-					:error="slug !== '' && !isSlugValid"
-					:disabled="loadingPages || !!selectedStaticSite"
-					:helperText="slugHelperText"
-					:maxlength="slugMaxLength"
-					required />
-			</div>
-			<NcLoadingIcon v-if="loadingPages" class="modal-publish__loading" :size="32" />
-			<PublishPageSelection
-				v-else
-				v-model:selectedPageIds="selectedPageIds"
-				:collective="collective" />
-			<div class="modal-publish__footer">
-				<NcButton
-					variant="primary"
-					:loading="publishing"
-					:disabled="loadingPages || publishing || isSelectedStaticSiteInProgress || !isTitleValid || !isSlugValid"
-					@click="onPublishAsWebsite">
-					{{ selectedStaticSite ? t('collectives', 'Update website') : t('collectives', 'Publish website') }}
-				</NcButton>
-			</div>
+			</template>
 		</div>
 	</NcModal>
 </template>
@@ -103,20 +73,18 @@
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
-import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
 import PublishPageSelection from './PublishPageSelection.vue'
+import PublishWebsiteList from './PublishWebsiteList.vue'
 import { createStaticSite, updateStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
-import { staticSiteErrorMessage } from '../../util/staticSiteError.js'
 import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
 
 const TITLE_MAX_LENGTH = 255
@@ -128,10 +96,10 @@ export default {
 		NcButton,
 		NcLoadingIcon,
 		NcModal,
-		NcNoteCard,
+		ArrowLeftIcon,
 		NcTextField,
-		PlusIcon,
 		PublishPageSelection,
+		PublishWebsiteList,
 	},
 
 	props: {
@@ -147,8 +115,10 @@ export default {
 
 	data() {
 		return {
+			/** @type {'list'|'form'} */
+			view: 'list',
 			selectedPageIds: new Set(),
-			loadingPages: true,
+			loading: true,
 			publishing: false,
 			/** @type {?number} null for a new website */
 			selectedStaticSiteId: null,
@@ -177,8 +147,13 @@ export default {
 			return this.staticSites.find(({ id }) => id === this.selectedStaticSiteId) ?? null
 		},
 
-		isSelectedStaticSiteInProgress() {
-			return !!this.selectedStaticSite?.isInProgress
+		headerTitle() {
+			if (this.view === 'list') {
+				return t('collectives', 'Websites')
+			}
+			return this.selectedStaticSite
+				? t('collectives', 'Update website')
+				: t('collectives', 'New website')
 		},
 
 		allPageIds() {
@@ -220,28 +195,11 @@ export default {
 			this.getStaticSites(this.collective.id)
 				.catch(displayError('Could not load static sites for collective')),
 		])
-		// Preselect the website the user updated last
-		const mostRecentStaticSite = this.staticSites
-			.reduce((recent, staticSite) => (!recent || staticSite.updatedAt > recent.updatedAt ? staticSite : recent), null)
-		if (mostRecentStaticSite) {
-			this.selectStaticSite(mostRecentStaticSite)
-		} else {
-			this.selectNewStaticSite()
-		}
-		this.loadingPages = false
+		this.loading = false
 	},
 
 	methods: {
 		t,
-		staticSiteErrorMessage,
-
-		formatRelativeTime(timestamp) {
-			return moment.unix(timestamp).fromNow()
-		},
-
-		formatAbsoluteTime(timestamp) {
-			return moment.unix(timestamp).format('LLL')
-		},
 
 		...mapActions(usePagesStore, ['getPagesForCollective']),
 
@@ -259,22 +217,18 @@ export default {
 			}
 		},
 
-		/**
-		 * @param {object} staticSite static site as returned by the backend
-		 * @return {string} translated publication status
-		 */
-		staticSiteStatusLabel(staticSite) {
-			if (staticSite.isInProgress) {
-				return t('collectives', 'Publishing')
-			}
-			switch (staticSite.status) {
-				case 'published':
-					return t('collectives', 'Published')
-				case 'failed':
-					return t('collectives', 'Publishing failed')
-				default:
-					return t('collectives', 'Publishing aborted')
-			}
+		showWebsiteList() {
+			this.view = 'list'
+		},
+
+		createWebsite() {
+			this.selectNewStaticSite()
+			this.view = 'form'
+		},
+
+		editWebsite(staticSite) {
+			this.selectStaticSite(staticSite)
+			this.view = 'form'
 		},
 
 		/**
@@ -308,6 +262,11 @@ export default {
 			this.selectedPageIds = new Set(this.allPageIds)
 		},
 
+		reloadStaticSites() {
+			return this.getStaticSites(this.collective.id)
+				.catch(displayError('Could not load static sites for collective'))
+		},
+
 		onPublishAsWebsite() {
 			if (this.publishing) {
 				return
@@ -328,9 +287,10 @@ export default {
 			request
 				.then(({ data }) => {
 					showSuccess(t('collectives', 'Website publishing started'))
-					// Wait for the published URL in the background, the modal isn't needed for that
+					// Wait for the result in the background, also once the modal got closed
 					this.watchPublication(this.collective, data.ocs.data)
-					this.onClose()
+					this.showWebsiteList()
+					return this.reloadStaticSites()
 				})
 				.catch((e) => {
 					if (e.response?.status === 409) {
@@ -339,6 +299,11 @@ export default {
 						return
 					}
 					displayError('Could not publish collective as website')(e)
+					if (e.response?.status === 423) {
+						// Another publication of the collective started meanwhile, e.g. by another member
+						this.showWebsiteList()
+						return this.reloadStaticSites()
+					}
 				})
 				.finally(() => {
 					this.publishing = false
@@ -369,83 +334,25 @@ export default {
 	height: 550px;
 	max-height: 80vh;
 
-	&__name {
-		font-size: 21px;
-		text-align: center;
-	}
-
-	&__sites {
-		flex: 0 0 auto;
-		padding-block-end: 16px;
-	}
-
-	&__sites-header {
+	&__header {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		gap: 8px;
-
-		h3 {
-			margin: 0;
-			font-size: 16px;
-		}
+		flex: 0 0 auto;
+		margin-block-end: 12px;
+		// Space for the close button of the modal
+		padding-block: 8px 12px;
+		padding-inline-end: 44px;
+		border-bottom: 1px solid var(--color-border);
 	}
 
-	&__site-list {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		max-height: 160px;
+	&__name {
 		margin: 0;
-		padding: 4px 0 0;
-		overflow-y: auto;
+		font-size: 21px;
 	}
 
-	&__site {
-		list-style: none;
-		padding: 4px 8px;
-		border: 2px solid var(--color-border);
-		border-radius: var(--border-radius-large);
-
-		&--selected {
-			border-color: var(--color-primary-element);
-		}
-	}
-
-	&__site-url {
-		word-break: break-all;
-	}
-
-	&__site-error {
-		color: var(--color-error-text);
-	}
-
-	&__site-published-at {
+	&__description {
 		color: var(--color-text-maxcontrast);
-	}
-
-	&__site-select {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		width: 100%;
-		min-height: auto;
-		margin: 0;
-		padding: 0;
-		border: none;
-		background: none;
-		color: var(--color-main-text);
-		font-weight: normal;
-		text-align: start;
-		cursor: pointer;
-
-		&:disabled {
-			cursor: default;
-		}
-
-		span {
-			color: var(--color-text-maxcontrast);
-		}
 	}
 
 	&__fields {

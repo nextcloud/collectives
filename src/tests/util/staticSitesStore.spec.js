@@ -112,7 +112,7 @@ describe('static sites publication watching', () => {
 
 	it('shows the reason and stops polling if the publication failed', async () => {
 		vi.mocked(api.getStaticSites)
-			.mockResolvedValue(response(staticSite({ status: 'failed', lastError: 'generator_failed' })))
+			.mockResolvedValue(response(staticSite({ status: 'failed', isInProgress: false, lastError: 'generator_failed' })))
 		const store = useStaticSitesStore()
 
 		store.watchPublication(collective, staticSite())
@@ -192,7 +192,7 @@ describe('static sites publication watching', () => {
 			.mockResolvedValueOnce(response(staticSite({ id: 1, title: 'Website A' }), staticSite({ id: 2, title: 'Website B' })))
 			.mockResolvedValue(response(
 				staticSite({ id: 1, title: 'Website A', status: 'published', publishedUrl }),
-				staticSite({ id: 2, title: 'Website B', status: 'failed', lastError: 'generator_failed' }),
+				staticSite({ id: 2, title: 'Website B', status: 'failed', isInProgress: false, lastError: 'generator_failed' }),
 			))
 		const store = useStaticSitesStore()
 

@@ -9,7 +9,7 @@ import { defineStore } from 'pinia'
 import * as api from '../apis/collectives/index.js'
 import { staticSitePollInterval, staticSitePollTimeout } from '../constants.js'
 import { byTitleAsc } from '../util/sortOrders.js'
-import { staticSiteErrorMessage } from '../util/staticSiteError.js'
+import { staticSiteFailureReason, staticSiteState } from '../util/staticSiteStatus.js'
 
 export const useStaticSitesStore = defineStore('staticSites', {
 	state: () => ({
@@ -113,22 +113,12 @@ export const useStaticSitesStore = defineStore('staticSites', {
 				return
 			}
 
-			if (staticSite?.status === 'failed') {
+			if (staticSite && staticSiteState(staticSite) === 'failed') {
 				delete this.watchedPublications[id]
 				showError(t('collectives', 'Website "{title}" of collective "{collective}" could not be published: {reason}', {
 					title: staticSite.title,
 					collective: watched.collectiveName,
-					reason: staticSiteErrorMessage(staticSite.lastError),
-				}))
-				return
-			}
-
-			if (staticSite && !staticSite.isInProgress) {
-				delete this.watchedPublications[id]
-				showError(t('collectives', 'Website "{title}" of collective "{collective}" could not be published: {reason}', {
-					title: staticSite.title,
-					collective: watched.collectiveName,
-					reason: t('collectives', 'The publish service didn\'t respond in time.'),
+					reason: staticSiteFailureReason(staticSite),
 				}))
 				return
 			}
