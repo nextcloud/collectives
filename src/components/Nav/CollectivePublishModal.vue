@@ -83,30 +83,10 @@
 					required />
 			</div>
 			<NcLoadingIcon v-if="loadingPages" class="modal-publish__loading" :size="32" />
-			<ul v-else class="modal-publish__tree">
-				<li v-if="rootPage" class="modal-publish__collective-row">
-					<PublishTreeRow
-						:selected="isRootPageSelected"
-						:indeterminate="isRootPageIndeterminate"
-						@update:selected="onToggleSelect(rootPage.id)">
-						<template #icon>
-							<span v-if="collective.emoji">{{ collective.emoji }}</span>
-							<PageTemplateIcon v-else :size="20" fillColor="var(--color-text-maxcontrast)" />
-						</template>
-						<strong>{{ collective.name }}</strong>
-					</PublishTreeRow>
-				</li>
-				<PublishPageTreeItem
-					v-for="page in topLevelPages"
-					:key="page.id"
-					:collective="collective"
-					:page="page"
-					:depth="1"
-					:selectedPageIds="selectedPageIds"
-					:expandedPageIds="expandedPageIds"
-					@toggleSelect="onToggleSelect"
-					@toggleExpand="onToggleExpand" />
-			</ul>
+			<PublishPageSelection
+				v-else
+				v-model:selectedPageIds="selectedPageIds"
+				:collective="collective" />
 			<div class="modal-publish__footer">
 				<NcButton
 					variant="primary"
@@ -131,9 +111,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import PublishPageTreeItem from './PublishPageTreeItem.vue'
-import PublishTreeRow from './PublishTreeRow.vue'
+import PublishPageSelection from './PublishPageSelection.vue'
 import { createStaticSite, updateStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
@@ -152,10 +130,8 @@ export default {
 		NcModal,
 		NcNoteCard,
 		NcTextField,
-		PageTemplateIcon,
 		PlusIcon,
-		PublishPageTreeItem,
-		PublishTreeRow,
+		PublishPageSelection,
 	},
 
 	props: {
@@ -172,7 +148,6 @@ export default {
 	data() {
 		return {
 			selectedPageIds: new Set(),
-			expandedPageIds: new Set(),
 			loadingPages: true,
 			publishing: false,
 			/** @type {?number} null for a new website */
@@ -189,9 +164,7 @@ export default {
 	computed: {
 		...mapState(usePagesStore, [
 			'pageAncestorIdsForCollective',
-			'pagesForCollective',
 			'pagesTreeWalkForCollective',
-			'visibleSubpagesForCollective',
 		]),
 
 		...mapState(useStaticSitesStore, ['staticSitesForCollective']),
@@ -210,26 +183,6 @@ export default {
 
 		allPageIds() {
 			return this.pagesTreeWalkForCollective(this.collective).map((page) => page.id)
-		},
-
-		rootPage() {
-			return this.pagesForCollective(this.collective).find((page) => page.parentId === 0)
-		},
-
-		topLevelPages() {
-			return this.rootPage
-				? this.visibleSubpagesForCollective(this.collective, this.rootPage.id)
-				: []
-		},
-
-		isRootPageSelected() {
-			return !!this.rootPage && this.selectedPageIds.has(this.rootPage.id)
-		},
-
-		// Marks a partially selected collective, especially useful while its pages are collapsed
-		isRootPageIndeterminate() {
-			return this.isRootPageSelected
-				&& this.allPageIds.some((id) => !this.selectedPageIds.has(id))
 		},
 
 		isTitleValid() {
@@ -353,44 +306,6 @@ export default {
 			this.title = this.collective.name
 			this.slug = ''
 			this.selectedPageIds = new Set(this.allPageIds)
-		},
-
-		onToggleSelect(pageId) {
-			// Toggling a page also selects/deselects all of its subpages
-			const select = !this.selectedPageIds.has(pageId)
-			const affectedIds = [
-				pageId,
-				...this.pagesTreeWalkForCollective(this.collective, pageId).map((page) => page.id),
-			]
-
-			const selectedPageIds = new Set(this.selectedPageIds)
-			for (const id of affectedIds) {
-				if (select) {
-					selectedPageIds.add(id)
-				} else {
-					selectedPageIds.delete(id)
-				}
-			}
-
-			// Selecting a page also selects its ancestor pages, so a subpage is never
-			// published without the pages it is nested in
-			if (select) {
-				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, pageId)) {
-					selectedPageIds.add(ancestorId)
-				}
-			}
-
-			this.selectedPageIds = selectedPageIds
-		},
-
-		onToggleExpand(pageId) {
-			const expandedPageIds = new Set(this.expandedPageIds)
-			if (expandedPageIds.has(pageId)) {
-				expandedPageIds.delete(pageId)
-			} else {
-				expandedPageIds.add(pageId)
-			}
-			this.expandedPageIds = expandedPageIds
 		},
 
 		onPublishAsWebsite() {
@@ -544,22 +459,11 @@ export default {
 		flex: 1 1 auto;
 	}
 
-	&__tree {
-		flex: 1 1 auto;
-		margin: 0;
-		padding: 0 0 8px;
-		overflow-y: auto;
-	}
-
 	&__footer {
 		display: flex;
 		justify-content: center;
 		flex: 0 0 auto;
 		padding-block: 8px 12px;
-	}
-
-	&__collective-row {
-		list-style: none;
 	}
 }
 </style>
