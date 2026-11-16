@@ -32,8 +32,6 @@ namespace OC\Hooks {
 		/** Closure $closure */
 		public function listen(string $class, string $value, $closure) {}
 	}
-	class BasicEmitter extends Emitter {
-	}
 }
 
 namespace OC\Cache {

@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Versions;
 
 use OC\Files\View;
-use OC\Hooks\BasicEmitter;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\MissingDependencyException;
@@ -26,7 +25,7 @@ use OCP\IUserManager;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
-class CollectiveVersionsExpireManager extends BasicEmitter {
+class CollectiveVersionsExpireManager {
 	private ?VersionsBackend $versionsBackend = null;
 	private string $dependencyInjectionError = '';
 
@@ -74,7 +73,6 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	public function expireAll(): void {
 		$folders = $this->getAllFolders();
 		foreach ($folders as $folder) {
-			$this->emit(self::class, 'enterFolder', [$folder]);
 			$this->expireFolder($folder);
 		}
 	}
@@ -117,12 +115,10 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
 				foreach ($expireVersions as $version) {
 					/** @var CollectiveVersion $version */
-					$this->emit(self::class, 'deleteVersion', [$version]);
 					$view->unlink('/' . $fileId . '/' . $version->getVersionFile()->getName());
 				}
 			} else {
 				// source file no longer exists
-				$this->emit(self::class, 'deleteFile', [$fileId]);
 				try {
 					$this->versionsBackend->deleteAllVersionsForFile($folder['id'], $fileId);
 				} catch (FilesNotPermittedException|InvalidPathException $e) {
