@@ -147,9 +147,11 @@ export default {
 <style lang="scss" scoped>
 .publish-page-selection {
 	flex: 1 1 auto;
-	margin: 0;
-	padding: 0 0 8px;
+	margin-block: 8px;
+	padding: 4px 8px;
 	overflow-y: auto;
+	border: 1px solid var(--color-border-dark);
+	border-radius: var(--border-radius-large);
 
 	&__collective-row {
 		list-style: none;

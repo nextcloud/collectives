@@ -7,7 +7,8 @@
 	<NcModal
 		size="normal"
 		class="collective-publish-modal"
-		@close="onClose">
+		:show="true"
+		@update:show="onClose">
 		<div
 			class="modal-publish"
 			:class="{ 'modal-publish--form': view === 'form' }"
@@ -18,7 +19,7 @@
 					variant="tertiary"
 					:aria-label="t('collectives', 'Back to websites')"
 					:disabled="publishing"
-					@click="showWebsiteList">
+					@click="confirmDiscard(showWebsiteList)">
 					<template #icon>
 						<ArrowLeftIcon :size="20" />
 					</template>
@@ -27,8 +28,8 @@
 					<h2 class="modal-publish__name">
 						{{ headerTitle }}
 					</h2>
-					<p v-if="view === 'list'" class="modal-publish__description">
-						{{ t('collectives', 'Publish pages of this collective as static websites.') }}
+					<p class="modal-publish__description">
+						{{ headerDescription }}
 					</p>
 				</div>
 			</div>
@@ -39,69 +40,88 @@
 				@create="createWebsite"
 				@edit="editWebsite" />
 			<template v-else>
-				<div class="modal-publish__fields">
-					<NcTextField
-						v-model="title"
-						:label="t('collectives', 'Website title')"
-						:error="!isTitleValid"
-						:maxlength="titleMaxLength"
-						required />
-					<!-- TRANSLATORS The web address is the part of the website URL that identifies the published collective -->
-					<NcTextField
-						v-model="slug"
-						:label="t('collectives', 'Web address')"
-						:error="slug !== '' && !isSlugValid"
-						:disabled="!!selectedStaticSite"
-						:helperText="slugHelperText"
-						:maxlength="slugMaxLength"
-						required />
-				</div>
+				<PublishStepIndicator
+					class="modal-publish__steps"
+					:steps="[t('collectives', 'Page selection'), t('collectives', 'Settings')]"
+					:current="step === 'pages' ? 0 : 1" />
 				<PublishPageSelection
+					v-if="step === 'pages'"
 					v-model:selectedPageIds="selectedPageIds"
 					:collective="collective" />
+				<PublishSettingsForm
+					v-else
+					v-model:title="title"
+					v-model:slug="slug"
+					:slugReadOnly="!!selectedStaticSite"
+					:slugTaken="isSlugTaken" />
 				<div class="modal-publish__footer">
-					<NcButton
-						variant="primary"
-						:loading="publishing"
-						:disabled="publishing || !isTitleValid || !isSlugValid"
-						@click="onPublishAsWebsite">
-						{{ selectedStaticSite ? t('collectives', 'Update website') : t('collectives', 'Publish website') }}
-					</NcButton>
+					<template v-if="step === 'pages'">
+						<NcButton @click="confirmDiscard(showWebsiteList)">
+							{{ t('collectives', 'Back') }}
+						</NcButton>
+						<NcButton
+							variant="primary"
+							:disabled="selectedPageIds.size === 0"
+							@click="step = 'settings'">
+							{{ t('collectives', 'Continue') }}
+						</NcButton>
+					</template>
+					<template v-else>
+						<NcButton :disabled="publishing" @click="step = 'pages'">
+							{{ t('collectives', 'Back') }}
+						</NcButton>
+						<NcButton
+							variant="primary"
+							:loading="publishing"
+							:disabled="publishing || !isValidTitle(title) || !isSlugValid"
+							@click="onPublishAsWebsite">
+							{{ selectedStaticSite ? t('collectives', 'Update website') : t('collectives', 'Publish website') }}
+						</NcButton>
+					</template>
 				</div>
 			</template>
+			<NcDialog
+				v-if="pendingAction"
+				:name="t('collectives', 'Discard changes?')"
+				:message="t('collectives', 'Your changes to this website will be lost.')"
+				:buttons="discardButtons"
+				@update:open="onDiscardDialogToggle" />
 		</div>
 	</NcModal>
 </template>
 
 <script>
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
-import NcTextField from '@nextcloud/vue/components/NcTextField'
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
 import PublishPageSelection from './PublishPageSelection.vue'
+import PublishSettingsForm from './PublishSettingsForm.vue'
+import PublishStepIndicator from './PublishStepIndicator.vue'
 import PublishWebsiteList from './PublishWebsiteList.vue'
 import { createStaticSite, updateStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
-import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
-
-const TITLE_MAX_LENGTH = 255
+import { isValidSlug } from '../../util/staticSiteSlug.js'
+import { isValidTitle } from '../../util/staticSiteTitle.js'
 
 export default {
 	name: 'CollectivePublishModal',
 
 	components: {
+		ArrowLeftIcon,
 		NcButton,
+		NcDialog,
 		NcLoadingIcon,
 		NcModal,
-		ArrowLeftIcon,
-		NcTextField,
 		PublishPageSelection,
+		PublishSettingsForm,
+		PublishStepIndicator,
 		PublishWebsiteList,
 	},
 
@@ -120,6 +140,12 @@ export default {
 		return {
 			/** @type {'list'|'form'} */
 			view: 'list',
+			/** @type {'pages'|'settings'} */
+			step: 'pages',
+			/** @type {?string} form values when the form got opened, to detect changes */
+			initialFormValues: null,
+			/** @type {?(() => void)} action waiting for the user to confirm discarding changes */
+			pendingAction: null,
 			selectedPageIds: new Set(),
 			loading: true,
 			publishing: false,
@@ -129,8 +155,6 @@ export default {
 			takenSlugs: [],
 			title: this.collective.name,
 			slug: '',
-			titleMaxLength: TITLE_MAX_LENGTH,
-			slugMaxLength: SLUG_MAX_LENGTH,
 		}
 	},
 
@@ -159,13 +183,38 @@ export default {
 				: t('collectives', 'New website')
 		},
 
-		allPageIds() {
-			return this.pagesTreeWalkForCollective(this.collective).map((page) => page.id)
+		headerDescription() {
+			if (this.view === 'list') {
+				return t('collectives', 'Publish pages of this collective as static websites.')
+			}
+			return this.step === 'pages'
+				? t('collectives', 'Choose which pages become part of the website.')
+				: t('collectives', 'Address and title of the website.')
 		},
 
-		isTitleValid() {
-			const length = this.title.trim().length
-			return length > 0 && length <= TITLE_MAX_LENGTH
+		formValues() {
+			return JSON.stringify([this.title, this.slug, [...this.selectedPageIds].sort()])
+		},
+
+		hasUnsavedChanges() {
+			return this.view === 'form' && this.formValues !== this.initialFormValues
+		},
+
+		discardButtons() {
+			return [
+				{
+					label: t('collectives', 'Keep editing'),
+				},
+				{
+					label: t('collectives', 'Discard changes'),
+					variant: 'error',
+					callback: () => this.pendingAction(),
+				},
+			]
+		},
+
+		allPageIds() {
+			return this.pagesTreeWalkForCollective(this.collective).map((page) => page.id)
 		},
 
 		// Slugs are unique across all collectives, websites of other collectives are only known after a conflict
@@ -177,16 +226,6 @@ export default {
 		isSlugValid() {
 			// The slug of an existing website can't be changed
 			return !!this.selectedStaticSite || (isValidSlug(this.slug) && !this.isSlugTaken)
-		},
-
-		slugHelperText() {
-			if (this.selectedStaticSite) {
-				return t('collectives', 'The web address can\'t be changed after publishing')
-			}
-			if (this.isSlugTaken) {
-				return t('collectives', 'This web address is already taken by another website')
-			}
-			return t('collectives', 'Lowercase letters, numbers and single hyphens')
 		},
 	},
 
@@ -203,13 +242,33 @@ export default {
 
 	methods: {
 		t,
+		isValidTitle,
 
 		...mapActions(usePagesStore, ['getPagesForCollective']),
 
 		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication']),
 
 		onClose() {
-			this.$emit('close')
+			this.confirmDiscard(() => this.$emit('close'))
+		},
+
+		/**
+		 * Run an action that leaves the form, after the user confirmed to discard changes
+		 *
+		 * @param {() => void} action action to run
+		 */
+		confirmDiscard(action) {
+			if (this.hasUnsavedChanges) {
+				this.pendingAction = action
+			} else {
+				action()
+			}
+		},
+
+		onDiscardDialogToggle(open) {
+			if (!open) {
+				this.pendingAction = null
+			}
 		},
 
 		onEscape(event) {
@@ -226,11 +285,17 @@ export default {
 
 		createWebsite() {
 			this.selectNewStaticSite()
-			this.view = 'form'
+			this.openForm()
 		},
 
 		editWebsite(staticSite) {
 			this.selectStaticSite(staticSite)
+			this.openForm()
+		},
+
+		openForm() {
+			this.step = 'pages'
+			this.initialFormValues = this.formValues
 			this.view = 'form'
 		},
 
@@ -276,11 +341,6 @@ export default {
 			}
 
 			const pageIds = Array.from(this.selectedPageIds)
-			if (pageIds.length === 0) {
-				showError(t('collectives', 'Please select at least one page to publish'))
-				return
-			}
-
 			this.publishing = true
 			const title = this.title.trim()
 			const slug = this.slug
@@ -323,7 +383,7 @@ export default {
 		// Never wider than the full screen modal on small screens
 		width: min(750px, 100%);
 		padding-block: 4px 0;
-		padding-inline: 24px;
+		padding-inline: 0;
 	}
 
 	:deep(.modal-wrapper .modal-container__content) {
@@ -333,11 +393,15 @@ export default {
 	}
 }
 
+// Header, step bar and footer span the full width despite this padding
+$modal-padding: 24px;
+
 .modal-publish {
 	display: flex;
 	flex-direction: column;
 	max-height: 80vh;
 	padding-block-end: 25px;
+	padding-inline: $modal-padding;
 
 	// Fixed height, so the modal doesn't jump while pages get expanded
 	&--form {
@@ -351,9 +415,10 @@ export default {
 		gap: 8px;
 		flex: 0 0 auto;
 		margin-block-end: 12px;
-		// Space for the close button of the modal
+		margin-inline: -$modal-padding;
 		padding-block: 8px 12px;
-		padding-inline-end: 44px;
+		// Space for the close button of the modal
+		padding-inline: $modal-padding calc($modal-padding + 44px);
 		border-bottom: 1px solid var(--color-border-dark);
 	}
 
@@ -366,11 +431,13 @@ export default {
 		color: var(--color-text-maxcontrast);
 	}
 
-	&__fields {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-		padding-block-end: 8px;
+	&__steps {
+		flex: 0 0 auto;
+		margin-block: -12px 8px;
+		margin-inline: -$modal-padding;
+		padding-inline: $modal-padding;
+		border-bottom: 1px solid var(--color-border-dark);
+		background-color: var(--color-background-dark);
 	}
 
 	&__loading {
@@ -379,9 +446,13 @@ export default {
 
 	&__footer {
 		display: flex;
-		justify-content: center;
+		justify-content: flex-end;
+		gap: 8px;
 		flex: 0 0 auto;
-		padding-block: 8px 12px;
+		margin-inline: -$modal-padding;
+		padding-block: 12px;
+		padding-inline: $modal-padding;
+		border-top: 1px solid var(--color-border-dark);
 	}
 }
 </style>
