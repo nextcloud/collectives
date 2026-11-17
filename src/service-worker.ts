@@ -5,11 +5,13 @@
 
 import type { RouteMatchCallbackOptions } from 'workbox-core'
 
+import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { NetworkFirst } from 'workbox-strategies'
+import { isCacheableNavigation, navigationCacheKey } from './util/serviceWorkerNavigation.ts'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -33,25 +35,31 @@ precacheAndRoute(itemsToPrecache)
 // clean old assets
 cleanupOutdatedCaches()
 
+// Fall back to the cache if the server does not respond in time
+const NETWORK_TIMEOUT_SECONDS = 5
+
 /**
  * Route match callback function for `collectives-vue-router`
- * Matches navigation requests within the vue router scope
  *
  * @param matchOptions options
  * @param matchOptions.url URL to match
  * @param matchOptions.request request to match
  */
 function matchNavigateCb({ url, request }: RouteMatchCallbackOptions) {
-	return request.mode === 'navigate' && url.pathname.match(/(?:\/index.php)?\/apps\/collectives/)
+	return isCacheableNavigation(url, request.mode)
 }
+
 registerRoute(matchNavigateCb, new NetworkFirst({
 	cacheName: 'collectives-vue-router',
+	networkTimeoutSeconds: NETWORK_TIMEOUT_SECONDS,
 	plugins: [
+		// Don't cache redirects (e.g. to the login page) or error pages in place of the app
+		new CacheableResponsePlugin({ statuses: [200] }),
 		new ExpirationPlugin({
 			maxAgeSeconds: 3600 * 24 * 7, // one week
 		}),
 		{
-			cacheKeyWillBeUsed: async () => '/apps/collectives',
+			cacheKeyWillBeUsed: async ({ request }) => navigationCacheKey(new URL(request.url)),
 		},
 	],
 }))
@@ -73,6 +81,7 @@ function matchAssetsCb({ url }: RouteMatchCallbackOptions) {
 // Cache for assets from other apps
 registerRoute(matchAssetsCb, new NetworkFirst({
 	cacheName: 'collectives-assets',
+	networkTimeoutSeconds: NETWORK_TIMEOUT_SECONDS,
 	plugins: [
 		new ExpirationPlugin({
 			maxAgeSeconds: 3600 * 24 * 7, // one week
