@@ -93,9 +93,10 @@ export class NavigationSection {
 	}
 
 	public async createFolder(folderName: string): Promise<void> {
-		await this.filePickerDialog.getByRole('button', { name: 'New' }).click()
-		await this.page.getByLabel('New folder').fill(folderName)
-		await this.page.getByRole('button', { name: 'Submit' }).click()
+		await this.filePickerDialog.getByRole('button', { name: 'Create directory' }).click()
+		const nameInput = this.page.getByLabel('New folder', { exact: true })
+		await nameInput.fill(folderName)
+		await nameInput.press('Enter')
 		await expect(this.filePickerBreadCrumbs.getByRole('button', { name: folderName })).toBeVisible()
 	}
 

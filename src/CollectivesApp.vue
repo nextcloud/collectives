@@ -259,7 +259,7 @@ export default {
 	}
 
 	/* hide toast notifications for printing */
-	.toastify.dialogs {
+	[class*='_toastContainer_'] {
 		display: none;
 	}
 
