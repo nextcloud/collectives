@@ -128,6 +128,7 @@ export default {
 			if (this.listenPush) {
 				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
 				this.pollIntervalBase = 15 * 60 * 1000
+				this._setPollingInterval(this.pollIntervalBase)
 				this.createSession()
 				this.updateSessionIntervalId = setInterval(this.updateSession, sessionUpdateInterval * 1000)
 			}
@@ -162,15 +163,11 @@ export default {
 
 		_setPollingInterval(pollInterval) {
 			console.debug(`Polling every ${pollInterval / 1000} seconds.`)
-			if (this.interval && pollInterval === this.pollIntervalCurrent) {
+			if (this.getPagesIntervalId && pollInterval === this.pollIntervalCurrent) {
 				return
 			}
 
-			if (this.interval) {
-				window.clearInterval(this.interval)
-				this.interval = null
-			}
-
+			this.teardownBackgroundFetcher()
 			this.pollIntervalCurrent = pollInterval
 			this.setupBackgroundFetcher()
 		},
