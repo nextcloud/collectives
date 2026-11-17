@@ -13,8 +13,6 @@ import { useCollectivesStore } from './stores/collectives.js'
 import { usePagesStore } from './stores/pages.js'
 import registerServiceWorker from './util/registerServiceWorker.ts'
 
-import '@nextcloud/dialogs/style.css'
-
 if ('serviceWorker' in navigator) {
 	registerServiceWorker()
 }
