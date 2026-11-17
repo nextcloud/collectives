@@ -21,9 +21,9 @@ import { useSearch } from './useSearch.ts'
 /**
  * Composable for setting up the editor and reader.
  *
- * @param davContent markdown content fetched via dav.
+ * @param davContent markdown content fetched via dav, `null` until fetched successfully.
  */
-export function useEditor(davContent: Ref<string>) {
+export function useEditor(davContent: Ref<string | null>) {
 	const editor = ref<TextEditorInstance | null>(null)
 	const editorEl = ref<HTMLElement | null>(null)
 	const editorContent = ref<string | null>(null)
@@ -34,7 +34,7 @@ export function useEditor(davContent: Ref<string>) {
 	const collectivesStore = useCollectivesStore()
 	const pagesStore = usePagesStore()
 
-	const pageContent = computed(() => editorContent.value?.trim() || davContent.value)
+	const pageContent = computed(() => editorContent.value?.trim() || davContent.value || '')
 	const showCurrentPageOutline = computed(() => {
 		return pagesStore.hasOutline(pagesStore.currentPageId)
 	})
@@ -140,7 +140,6 @@ export function useEditor(davContent: Ref<string>) {
 
 	return {
 		contentLoaded,
-		davContent,
 		editor,
 		editorEl,
 		editorContent,

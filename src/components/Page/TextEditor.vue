@@ -67,7 +67,7 @@ export default {
 		watch(width, (value) => {
 			document.documentElement.style.setProperty('--text-container-width', value + 'px')
 		})
-		const davContent = ref('')
+		const davContent = ref(null)
 		const { contentLoaded, editor, editorContent, editorEl, pageContent, setupEditor } = useEditor(davContent)
 		const { pageInfoBarPage, reader, readerEl, setupReader } = useReader(pageContent)
 		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, setupReader, textContainer, width }
@@ -183,8 +183,8 @@ export default {
 			if (!!this.currentCollective.pageMode
 				// for new pages
 				|| this.loading('newPageContent')
-				// or when page is empty
-				|| !this.davContent.trim()) {
+				// or when page is empty (not just failed to load)
+				|| this.davContent?.trim() === '') {
 				this.setTextEdit()
 				this.done('newPageContent')
 			}
@@ -216,7 +216,10 @@ export default {
 				return
 			}
 
-			const changed = this.editorContent && (this.editorContent !== this.davContent)
+			// Without content fetched via DAV there is nothing to compare against; Text saves edits itself
+			const changed = this.davContent !== null
+				&& this.editorContent
+				&& this.editorContent !== this.davContent
 			if (changed) {
 				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
@@ -231,8 +234,14 @@ export default {
 			}
 		},
 
+		/**
+		 * Fetch the page content, keep the previous content if that fails
+		 */
 		async getPageContent() {
-			this.davContent = await this.fetchPageContent(this.currentPageDavUrl)
+			const content = await this.fetchPageContent(this.currentPageDavUrl)
+			if (content !== null) {
+				this.davContent = content
+			}
 			this.done('pageContent')
 		},
 	},
