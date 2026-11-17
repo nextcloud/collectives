@@ -20,6 +20,7 @@ export default {
 		 * Get Markdown content of page
 		 *
 		 * @param {string} davUrl URL to fetch page via DAV
+		 * @return {Promise<string|null>} the content, or `null` if it could not be fetched
 		 */
 		async fetchPageContent(davUrl) {
 			// Add `timestamp` as cache buster param
@@ -35,6 +36,7 @@ export default {
 				return content.request.responseText
 			} catch (e) {
 				console.error('Failed to fetch content of page', e)
+				return null
 			}
 		},
 	},

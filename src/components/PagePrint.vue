@@ -73,7 +73,7 @@ export default {
 
 	methods: {
 		async getPageContent() {
-			this.content = await this.fetchPageContent(this.pageDavUrl(this.page))
+			this.content = await this.fetchPageContent(this.pageDavUrl(this.page)) ?? ''
 		},
 	},
 }

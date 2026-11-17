@@ -164,7 +164,7 @@ export default {
 
 		async getPageContent() {
 			this.load(`version-${this.currentPageId}-${this.selectedVersion.mtime}`)
-			this.content = await this.fetchPageContent(this.selectedVersion.url)
+			this.content = await this.fetchPageContent(this.selectedVersion.url) ?? ''
 			this.done(`version-${this.currentPageId}-${this.selectedVersion.mtime}`)
 		},
 	},
