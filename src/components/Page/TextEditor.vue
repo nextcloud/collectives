@@ -12,8 +12,19 @@
 			v-show="!contentLoaded"
 			type="text"
 			class="page-content-skeleton" />
+		<template v-if="showContentError">
+			<OfflineContent v-if="!networkOnline" />
+			<NcEmptyContent
+				v-else
+				:name="t('collectives', 'Could not load page content')"
+				:description="t('collectives', 'Make sure you are online and can reach the server.')">
+				<template #icon>
+					<AlertCircleOutlineIcon />
+				</template>
+			</NcEmptyContent>
+		</template>
 		<div
-			v-show="contentLoaded && !showEditor"
+			v-show="contentLoaded && !showEditor && !showContentError"
 			ref="readerEl"
 			data-collectives-el="reader"
 			data-cy-collectives="reader" />
@@ -33,8 +44,12 @@ import { t } from '@nextcloud/l10n'
 import { useElementSize } from '@vueuse/core'
 import { mapActions, mapState } from 'pinia'
 import { ref, watch } from 'vue'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import OfflineContent from '../PageSidebar/OfflineContent.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
 import { useEditor } from '../../composables/useEditor.ts'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
 import { useReader } from '../../composables/useReader.ts'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import { useCirclesStore } from '../../stores/circles.js'
@@ -47,6 +62,9 @@ export default {
 	name: 'TextEditor',
 
 	components: {
+		AlertCircleOutlineIcon,
+		NcEmptyContent,
+		OfflineContent,
 		SkeletonLoading,
 	},
 
@@ -70,7 +88,8 @@ export default {
 		const davContent = ref(null)
 		const { contentLoaded, editor, editorContent, editorEl, pageContent, setupEditor } = useEditor(davContent)
 		const { pageInfoBarPage, reader, readerEl, setupReader } = useReader(pageContent)
-		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, setupReader, textContainer, width }
+		const { networkOnline } = useNetworkState()
+		return { contentLoaded, davContent, editor, editorContent, editorEl, networkOnline, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, setupReader, textContainer, width }
 	},
 
 	data() {
@@ -95,11 +114,26 @@ export default {
 		showEditor() {
 			return this.currentCollectiveCanEdit && !this.loading('editor') && this.isTextEdit
 		},
+
+		// Fetching the content failed and the editor didn't provide it either
+		showContentError() {
+			return !this.showEditor
+				&& !this.loading('pageContent')
+				&& this.davContent === null
+				&& !this.pageContent
+		},
 	},
 
 	watch: {
 		'currentPage.timestamp': function(value) {
 			if (value) {
+				this.getPageContent()
+			}
+		},
+
+		networkOnline: function(value) {
+			// Retry if fetching the content failed, e.g. while offline
+			if (value && this.davContent === null) {
 				this.getPageContent()
 			}
 		},
