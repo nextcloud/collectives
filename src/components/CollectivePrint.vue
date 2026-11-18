@@ -41,6 +41,7 @@
 		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
 			<PagePrint
 				:page
+				@failed="failedCount += 1"
 				@loading="waitingFor.push(page.id)"
 				@ready="ready(page.id)" />
 		</div>
@@ -48,7 +49,8 @@
 </template>
 
 <script>
-import { t } from '@nextcloud/l10n'
+import { showError } from '@nextcloud/dialogs'
+import { n, t } from '@nextcloud/l10n'
 import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -181,6 +183,9 @@ export default {
 
 		allImagesLoaded() {
 			this.loading = false
+			if (this.failedCount) {
+				showError(n('collectives', 'Could not load the content of %n page', 'Could not load the content of %n pages', this.failedCount))
+			}
 			this.$nextTick(() => {
 				// Scroll back to the beginning of the document
 				document.getElementById('content-vue').scrollIntoView()
