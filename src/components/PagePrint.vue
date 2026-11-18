@@ -12,16 +12,23 @@
 			{{ pageTitleString }}
 		</h2>
 		<div
+			v-show="!loadFailed"
 			ref="readerEl"
 			class="sheet-view"
 			data-collectives-el="reader"
 			data-cy-collectives="reader" />
+		<NcNoteCard
+			v-if="loadFailed"
+			type="error"
+			:text="t('collectives', 'Could not load the content of this page.')" />
 	</div>
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { mapState } from 'pinia'
 import { ref } from 'vue'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import { useReader } from '../composables/useReader.ts'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 import { useCollectivesStore } from '../stores/collectives.js'
@@ -29,6 +36,10 @@ import { usePagesStore } from '../stores/pages.js'
 
 export default {
 	name: 'PagePrint',
+
+	components: {
+		NcNoteCard,
+	},
 
 	mixins: [
 		pageContentMixin,
@@ -42,6 +53,7 @@ export default {
 	},
 
 	emits: [
+		'failed',
 		'loading',
 		'ready',
 	],
@@ -50,6 +62,12 @@ export default {
 		const content = ref('')
 		const { reader, readerEl, setupReader } = useReader(content)
 		return { content, reader, readerEl, setupReader }
+	},
+
+	data() {
+		return {
+			loadFailed: false,
+		}
 	},
 
 	computed: {
@@ -72,8 +90,16 @@ export default {
 	},
 
 	methods: {
+		t,
+
 		async getPageContent() {
-			this.content = await this.fetchPageContent(this.pageDavUrl(this.page)) ?? ''
+			const content = await this.fetchPageContent(this.pageDavUrl(this.page))
+			if (content === null) {
+				this.loadFailed = true
+				this.$emit('failed')
+				return
+			}
+			this.content = content
 		},
 	},
 }

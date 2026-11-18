@@ -30,6 +30,7 @@
 			<NcButton
 				:title="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
+				:disabled="loadFailed"
 				class="titleform-button"
 				@click="onRestoreVersion">
 				<template #icon>
@@ -49,8 +50,15 @@
 			id="text-container"
 			:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
 			<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
+			<NcEmptyContent
+				v-if="loadFailed"
+				:name="t('collectives', 'Could not load this version')">
+				<template #icon>
+					<AlertCircleOutlineIcon />
+				</template>
+			</NcEmptyContent>
 			<div
-				v-show="contentLoaded"
+				v-show="contentLoaded && !loadFailed"
 				ref="readerEl"
 				data-collectives-el="reader"
 				data-cy-collectives="reader" />
@@ -66,6 +74,8 @@ import { ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -81,11 +91,13 @@ export default {
 	name: 'PageVersion',
 
 	components: {
+		AlertCircleOutlineIcon,
 		DockRightIcon,
 		EmoticonIcon,
 		NcActionButton,
 		NcActions,
 		NcButton,
+		NcEmptyContent,
 		PageTitle,
 		RestoreIcon,
 		SkeletonLoading,
@@ -100,6 +112,12 @@ export default {
 		const content = ref('')
 		const { reader, readerEl, setupReader } = useReader(content)
 		return { content, isMobile, reader, readerEl, setupReader }
+	},
+
+	data() {
+		return {
+			loadFailed: false,
+		}
 	},
 
 	computed: {
@@ -131,6 +149,7 @@ export default {
 	watch: {
 		'selectedVersion.mtime': function() {
 			this.content = ''
+			this.loadFailed = false
 			this.getPageContent()
 		},
 	},
@@ -164,7 +183,9 @@ export default {
 
 		async getPageContent() {
 			this.load(`version-${this.currentPageId}-${this.selectedVersion.mtime}`)
-			this.content = await this.fetchPageContent(this.selectedVersion.url) ?? ''
+			const content = await this.fetchPageContent(this.selectedVersion.url)
+			this.loadFailed = content === null
+			this.content = content ?? ''
 			this.done(`version-${this.currentPageId}-${this.selectedVersion.mtime}`)
 		},
 	},
