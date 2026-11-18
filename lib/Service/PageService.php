@@ -16,6 +16,7 @@ use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Fs\MarkdownHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Notification\Notifier;
@@ -31,6 +32,7 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
 use OCP\Server;
+use OCP\IDateTimeZone;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -56,6 +58,7 @@ class PageService {
 		private readonly PageLinkMapper $pageLinkMapper,
 		private readonly PageInfoTreeBuilderFactory $pageInfoTreeBuilderFactory,
 		private readonly NotificationService $notificationService,
+		private readonly IDateTimeZone $dateTimeZone,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -674,10 +677,29 @@ class PageService {
 			if (!$this->isInTemplateFolder($collectiveId, $templateId, $userId)) {
 				throw new NotFoundException('Template ' . $templateId . ' not found in collective ' . $collectiveId);
 			}
-			return $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId);
+			$pageInfo = $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId);
+			$newFile = $this->nodeHelper->getFilebyId($folder, $pageInfo->getId());
+			$this->applyTemplatePlaceholders($newFile, $userId, $collectiveId);
+
+			return $pageInfo;
 		}
 
 		return $this->newPage($collectiveId, $folder, $filename, $userId, $title, $content);
+	}
+		private function applyTemplatePlaceholders(File $file, string $userId, int $collectiveId): void {
+		$collectiveName = $this->getCollective($collectiveId, $userId)->getName();
+		$now = new \DateTime('now', $this->dateTimeZone->getTimeZone());
+		$vars = [
+			'date' => $now->format('Y-m-d'),
+			'time' => $now->format('H:i'),
+			'datetime' => $now->format('Y-m-d H:i'),
+			'collective' => $collectiveName,
+		];
+
+		$content = $file->getContent();
+		$content = MarkdownHelper::processPlaceholders($content, $vars);
+		NodeHelper::putContent($file, $content);
+
 	}
 
 	/**

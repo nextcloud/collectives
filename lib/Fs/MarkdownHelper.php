@@ -221,4 +221,11 @@ class MarkdownHelper {
 		}
 		return implode("\n", $result);
 	}
+
+	public static function processPlaceholders(string $content, array $vars): string {
+		foreach($vars as $key => $value) {
+			$content = str_replace('{{' . $key . '}}', $value, $content);
+		}
+		return $content;
+	}
 }
