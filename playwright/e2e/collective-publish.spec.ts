@@ -187,12 +187,12 @@ test.describe('Collective publish', () => {
 		await expect(modal.getByRole('button', { name: 'Continue' })).toBeDisabled()
 		await clickPublishTreeCheckbox(page, collective.data.name)
 		await modal.getByRole('button', { name: 'Continue' }).click()
-		await expect(modal.getByRole('listitem', { current: 'step' })).toHaveText(/Settings/)
+		await expect(modal.locator('[aria-current="step"]')).toHaveText(/Settings/)
 
 		const slugField = modal.getByRole('textbox', { name: 'Web address' })
 		await slugField.fill('my-website')
 		await modal.getByRole('button', { name: 'Back', exact: true }).click()
-		await expect(modal.getByRole('listitem', { current: 'step' })).toHaveText(/Page selection/)
+		await expect(modal.locator('[aria-current="step"]')).toHaveText(/Page selection/)
 		await modal.getByRole('button', { name: 'Continue' }).click()
 		await expect(slugField).toHaveValue('my-website')
 
@@ -357,7 +357,7 @@ test.describe('Collective publish', () => {
 		await expect(getToast(page, 'error', 'Could not publish collective as website')).toHaveCount(0)
 		expect(sentBody).not.toBeNull()
 		expect(sentBody!.title).toBe('New website title')
-		expect(sentBody!.slug).toBeUndefined()
+		expect(sentBody!.slug).toBe(staticSite.slug)
 		expect(sentBody!.pageIds).toHaveLength(2)
 		expect(sentBody!.pageIds).toEqual(expect.arrayContaining([rootPageId, publishedPage.data.id]))
 	})
@@ -407,6 +407,79 @@ test.describe('Collective publish', () => {
 		await submitButton.click()
 		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
 		expect(sentBody!.slug).toBe('second-website')
+	})
+
+	test('changes the web address of a website that was never published', async ({ collective, navigation, page }) => {
+		const rootPageId = collective.getRootPage().data.id
+		const publishedStaticSite = {
+			id: 1,
+			title: 'Published website',
+			slug: 'published-website',
+			selectedPageIds: [rootPageId],
+			publishedUrl: 'https://example.org/published-website',
+			status: 'published',
+			updatedAt: timestamp(7200),
+		}
+		const failedStaticSite = {
+			id: 2,
+			title: 'Failed website',
+			slug: 'failed-website',
+			selectedPageIds: [rootPageId],
+			publishedUrl: null,
+			status: 'failed',
+			isInProgress: false,
+			lastError: 'generator_unavailable',
+			updatedAt: timestamp(3600),
+		}
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: ocsResponse([failedStaticSite, publishedStaticSite]) })
+		})
+		const sentSlugs: string[] = []
+		await page.route(`**/static-sites/${failedStaticSite.id}`, async (route) => {
+			if (route.request().method() !== 'PUT') {
+				return route.fallback()
+			}
+			const { slug } = route.request().postDataJSON()
+			sentSlugs.push(slug)
+			if (slug === 'taken-website') {
+				// Websites of other collectives aren't known to the browser, the backend reports the conflict
+				return route.fulfill({
+					status: 409,
+					json: { ocs: { meta: { status: 'failure', statuscode: 409, message: '' }, data: { message: 'This web address is already taken by another website' } } },
+				})
+			}
+			await route.fulfill({ json: ocsResponse({ ...failedStaticSite, slug, status: 'provided', updatedAt: timestamp() }) })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const submitButton = modal.getByRole('button', { name: 'Update website' })
+
+		await modal.getByRole('button', { name: 'Edit website Failed website' }).click()
+		await modal.getByRole('button', { name: 'Continue' }).click()
+		// The own web address isn't taken
+		await expect(slugField).toBeEnabled()
+		await expect(slugField).toHaveValue(failedStaticSite.slug)
+		await expect(submitButton).toBeEnabled()
+
+		await slugField.fill(publishedStaticSite.slug)
+		await expect(modal).toContainText('This web address is already taken by another website')
+		await expect(submitButton).toBeDisabled()
+
+		await slugField.fill('taken-website')
+		await submitButton.click()
+		await expect(modal).toContainText('This web address is already taken by another website')
+		await expect(submitButton).toBeDisabled()
+
+		await slugField.fill('new-website')
+		await submitButton.click()
+		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
+		expect(sentSlugs).toEqual(['taken-website', 'new-website'])
 	})
 
 	test('shows a web address taken by a website of another collective at the field', async ({ collective, navigation, page }) => {
@@ -487,7 +560,8 @@ test.describe('Collective publish', () => {
 		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
-		await expect(page.getByText('A website of this collective is being published. Please wait until it is finished.')).toBeVisible()
+		// Client errors are shown as warning toast with role status, but the modal is still open and shows the website list with the in-progress website
+		await expect(page.getByRole('status').filter({ hasText: 'A website of this collective is being published. Please wait until it is finished.' })).toBeVisible()
 		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
 	})
 

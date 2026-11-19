@@ -52,7 +52,7 @@
 					v-else
 					v-model:title="title"
 					v-model:slug="slug"
-					:slugReadOnly="!!selectedStaticSite"
+					:slugReadOnly="isSlugReadOnly"
 					:slugTaken="isSlugTaken" />
 				<div class="modal-publish__footer">
 					<template v-if="step === 'pages'">
@@ -219,13 +219,17 @@ export default {
 
 		// Slugs are unique across all collectives, websites of other collectives are only known after a conflict
 		isSlugTaken() {
-			return this.staticSites.some(({ slug }) => slug === this.slug)
+			return this.staticSites.some(({ id, slug }) => id !== this.selectedStaticSiteId && slug === this.slug)
 				|| this.takenSlugs.includes(this.slug)
 		},
 
+		// The slug is part of the public URL, so it can't be changed once the website got published
+		isSlugReadOnly() {
+			return !!this.selectedStaticSite?.publishedUrl
+		},
+
 		isSlugValid() {
-			// The slug of an existing website can't be changed
-			return !!this.selectedStaticSite || (isValidSlug(this.slug) && !this.isSlugTaken)
+			return this.isSlugReadOnly || (isValidSlug(this.slug) && !this.isSlugTaken)
 		},
 	},
 
@@ -345,7 +349,7 @@ export default {
 			const title = this.title.trim()
 			const slug = this.slug
 			const request = this.selectedStaticSite
-				? updateStaticSite(this.collective.id, this.selectedStaticSite.id, pageIds, title)
+				? updateStaticSite(this.collective.id, this.selectedStaticSite.id, pageIds, title, slug)
 				: createStaticSite(this.collective.id, pageIds, title, slug)
 			request
 				.then(({ data }) => {

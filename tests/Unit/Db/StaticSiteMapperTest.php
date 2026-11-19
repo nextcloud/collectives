@@ -107,6 +107,14 @@ class StaticSiteMapperTest extends TestCase {
 		], $this->values);
 	}
 
+	public function testUpdateStatusIfUnchangedStoresNewSlug(): void {
+		$this->qb->method('executeStatement')->willReturn(1);
+
+		$this->assertTrue($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING, 'new-slug'));
+
+		$this->assertSame('new-slug', $this->values['slug']);
+	}
+
 	public function testUpdateStatusIfUnchangedReturnsFalseIfStaticSiteChangedMeanwhile(): void {
 		$this->qb->method('executeStatement')->willReturn(0);
 
@@ -150,6 +158,23 @@ class StaticSiteMapperTest extends TestCase {
 			'last_error' => StaticSite::ERROR_GENERATOR_FAILED,
 			'updated_at' => 1700000000,
 		], $this->values);
+	}
+
+	public function testRestoreStatusRestoresSlug(): void {
+		$this->qb->method('executeStatement')->willReturn(1);
+		$current = new StaticSite();
+		$current->setId(7);
+		$current->setSlug('new-slug');
+		$current->setStatus(StaticSite::STATUS_PENDING);
+		$current->setUpdatedAt($this->now);
+		$current->resetUpdatedFields();
+		$this->mapper->method('find')->willReturn($current);
+		$previous = $this->makeStaticSite();
+		$previous->setSlug('old-slug');
+
+		$this->mapper->restoreStatus($previous);
+
+		$this->assertSame('old-slug', $this->values['slug']);
 	}
 
 	public function testRestoreStatusThrowsIfStaticSiteWasDeleted(): void {

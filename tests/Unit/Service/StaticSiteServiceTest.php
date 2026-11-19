@@ -599,6 +599,103 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->update($this->collectiveId, 7, [1], $title, $this->userId);
 	}
 
+	public function testUpdateChangesSlugOfUnpublishedStaticSite(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatusIfUnchanged')
+			->with($staticSite, StaticSite::STATUS_PENDING, 'new-slug')
+			->willReturn(true);
+		$this->generatorClient->expects($this->once())
+			->method('build')
+			->with($this->callback(fn (StaticSite $built): bool => $built->getSlug() === 'new-slug'), 'Title');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
+	public function testUpdateKeepsSlugOfPublishedStaticSite(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$staticSite->setPublishedUrl('https://example.org/my-collective/');
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatusIfUnchanged')
+			->with($staticSite, StaticSite::STATUS_PENDING, null)
+			->willReturn(true);
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'my-collective');
+	}
+
+	public function testUpdateRejectsSlugChangeOfPublishedStaticSite(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
+		$staticSite->setPublishedUrl('https://example.org/my-collective/');
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
+	/**
+	 * @dataProvider invalidSlugProvider
+	 */
+	public function testUpdateRejectsInvalidSlug(string $slug): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, $slug);
+	}
+
+	public function testUpdateThrowsWhenSlugAlreadyTaken(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+
+		$dbException = $this->createMock(DBException::class);
+		$dbException->method('getReason')->willReturn(DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION);
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willThrowException($dbException);
+
+		$this->expectException(StaticSiteSlugTakenException::class);
+		$this->archiver->expects($this->never())->method('store');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'taken');
+	}
+
+	public function testUpdateRethrowsOtherDatabaseErrorsWhenChangingSlug(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+
+		$dbException = $this->createMock(DBException::class);
+		$dbException->method('getReason')->willReturn(DBException::REASON_DRIVER);
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willThrowException($dbException);
+
+		$this->expectException(DBException::class);
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
+	public function testUpdateRestoresPreviousSlugIfArchiveCannotBeProvided(): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
+
+		$this->staticSiteMapper->expects($this->once())
+			->method('restoreStatus')
+			->with($this->callback(fn (StaticSite $previous): bool => $previous->getSlug() === 'my-collective'
+				&& $previous->getStatus() === StaticSite::STATUS_FAILED));
+
+		$this->expectException(ServiceException::class);
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
 	public function testUpdateProvidesArchiveForNewPageSelectionNotThePreviouslyStoredOne(): void {
 		$collective = $this->makeCollective(canEdit: true);
 		$this->collectiveService->method('getCollective')->willReturn($collective);

@@ -86,6 +86,26 @@ class StaticSiteControllerTest extends TestCase {
 		}
 	}
 
+	public function testUpdatePassesSlug(): void {
+		$staticSite = new StaticSite();
+		$this->staticSiteService->method('update')
+			->with(42, 7, [1], 'Title', 'jane', 'slug')
+			->willReturn($staticSite);
+
+		$this->assertSame($staticSite, $this->controller->update(42, 7, [1], 'Title', 'slug')->getData());
+	}
+
+	public function testUpdateReturnsConflictIfSlugIsTaken(): void {
+		$this->staticSiteService->method('update')
+			->willThrowException(new StaticSiteSlugTakenException('Slug is already taken: slug'));
+		$this->logger->expects($this->never())->method('error');
+
+		$response = $this->controller->update(42, 7, [1], 'Title', 'slug');
+
+		$this->assertSame(Http::STATUS_CONFLICT, $response->getStatus());
+		$this->assertSame(['message' => 'This web address is already taken by another website'], $response->getData());
+	}
+
 	public function testUpdateLogsArchiveFailureWithContext(): void {
 		$exception = new ServiceException('Failed to provide static site archive');
 		$this->staticSiteService->method('update')->willThrowException($exception);

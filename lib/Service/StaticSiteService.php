@@ -114,25 +114,28 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Update title and page selection of a static site, provide its archive again and
+	 * Update title, page selection and slug of a static site, provide its archive again and
 	 * ask the static site generator to build it.
 	 *
-	 * The slug can't be changed as it is part of the public URL. If the archive can't be
-	 * provided, the static site and its previous archive remain unchanged. If the generator
-	 * doesn't accept the build, title and page selection are stored with status failed.
+	 * The slug can only be changed until the static site got published, as it is part of the
+	 * public URL. If the archive can't be provided, the static site and its previous archive
+	 * remain unchanged. If the generator doesn't accept the build, the settings are stored
+	 * with status failed.
 	 *
 	 * @param list<int> $pageIds IDs of the pages to publish; their ancestor pages (incl. the
 	 *                           collective's root page) are added automatically if missing
+	 * @param ?string $slug New slug, null keeps the current one
 	 *
 	 * @throws NotFoundException Collective, static site or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected, invalid title, publication started concurrently, path too long
+	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, slug of a published static site changed, publication started concurrently, path too long
+	 * @throws StaticSiteSlugTakenException Slug is already used by another static site
 	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
 	 */
-	public function update(int $collectiveId, int $id, array $pageIds, string $title, string $userId): StaticSite {
+	public function update(int $collectiveId, int $id, array $pageIds, string $title, string $userId, ?string $slug = null): StaticSite {
 		$this->assertPublishFeatureEnabled();
 		$pageIds = $this->normalizePageIds($pageIds);
 		$this->getEditableCollective($collectiveId, $userId);
@@ -142,20 +145,36 @@ class StaticSiteService {
 
 		$title = trim($title);
 		$this->validateTitle($title);
+		$slug = $this->getChangedSlug($staticSite, $slug);
 		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
-		if (!$this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING)) {
+		// TODO(Publish): Also check the slug against the publish service once it provides an endpoint
+		try {
+			$updated = $this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING, $slug);
+		} catch (DBException $e) {
+			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw $e;
+			}
+			throw new StaticSiteSlugTakenException('Slug is already taken: ' . $slug, 0, $e);
+		}
+		if (!$updated) {
 			throw new UnprocessableEntityException('Publication of static site is already in progress');
+		}
+
+		$previous = clone $staticSite;
+		if ($slug !== null) {
+			$staticSite->setSlug($slug);
 		}
 
 		try {
 			$this->buildArchive($staticSite, $pageIds);
 		} catch (ServiceException $e) {
-			$this->restoreStatus($staticSite);
+			$this->restoreStatus($previous);
 			throw $e;
 		}
 
+		// TODO(Publish): Use PATCH of the publish service for static sites that were published already
 		try {
 			$this->generatorClient->build($staticSite, $title);
 		} catch (StaticSiteGeneratorException $e) {
@@ -441,6 +460,22 @@ class StaticSiteService {
 	/**
 	 * @throws UnprocessableEntityException
 	 */
+	/**
+	 * @return ?string The validated new slug, null if it is unchanged
+	 *
+	 * @throws UnprocessableEntityException Invalid slug or slug of a published static site changed
+	 */
+	private function getChangedSlug(StaticSite $staticSite, ?string $slug): ?string {
+		if ($slug === null || $slug === $staticSite->getSlug()) {
+			return null;
+		}
+		if ($staticSite->getPublishedUrl()) {
+			throw new UnprocessableEntityException('Slug of a published static site can\'t be changed');
+		}
+		$this->validateSlug($slug);
+		return $slug;
+	}
+
 	private function validateSlug(string $slug): void {
 		if (strlen($slug) > self::SLUG_MAX_LENGTH || !preg_match(self::SLUG_PATTERN, $slug)) {
 			throw new UnprocessableEntityException('Slug must consist of 1 to ' . self::SLUG_MAX_LENGTH . ' lowercase ASCII letters and numbers, separated by single hyphens');
