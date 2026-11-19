@@ -23,13 +23,19 @@
 		<NcCheckboxRadioSwitch
 			:modelValue="selected"
 			:indeterminate="indeterminate"
+			:disabled="disabled"
 			class="publish-tree-row__checkbox"
 			@update:modelValue="$emit('update:selected', $event)">
 			<span class="publish-tree-row__icon">
 				<slot name="icon" />
 			</span>
-			<slot />
+			<span class="publish-tree-row__title">
+				<slot />
+			</span>
 		</NcCheckboxRadioSwitch>
+		<span v-if="$slots.details" class="publish-tree-row__details">
+			<slot name="details" />
+		</span>
 	</div>
 </template>
 
@@ -74,6 +80,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	emits: [
@@ -110,9 +121,10 @@ export default {
 		transform: rotate(-90deg);
 	}
 
+	// Same width as the expand button, so the checkboxes of all rows are aligned
 	&__expand-spacer {
 		display: inline-block;
-		width: 44px;
+		width: var(--default-clickable-area);
 		flex: 0 0 auto;
 	}
 
@@ -129,6 +141,31 @@ export default {
 			text-overflow: ellipsis;
 			white-space: nowrap;
 		}
+
+		// Centers the icon vertically with the title instead of aligning it to the text baseline
+		:deep(.checkbox-content__text) {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			min-width: 0;
+		}
+	}
+
+	&__title {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	&__details {
+		flex: 0 1 auto;
+		min-width: 0;
+		margin-inline-start: auto;
+		padding-inline: 8px;
+		overflow: hidden;
+		color: var(--color-text-maxcontrast);
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	&__icon {

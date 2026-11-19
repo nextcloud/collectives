@@ -50,10 +50,10 @@ test.beforeAll(async ({ browser, baseURL }) => {
 })
 
 /**
- * Row of the page tree in the publish modal, the collective row included.
+ * Row of the page tree in the publish modal, the home row included.
  *
  * @param page the Playwright page
- * @param title title of the page or name of the collective
+ * @param title title of the page
  */
 function publishTreeRow(page: Page, title: string) {
 	return page.getByRole('dialog').locator('.publish-tree-row').filter({ hasText: title })
@@ -63,7 +63,7 @@ function publishTreeRow(page: Page, title: string) {
  * Toggle the selection of a page tree row. Its checkbox itself is not clickable.
  *
  * @param page the Playwright page
- * @param title title of the page or name of the collective
+ * @param title title of the page
  */
 async function clickPublishTreeCheckbox(page: Page, title: string) {
 	await publishTreeRow(page, title).locator('.checkbox-radio-switch__content').click()
@@ -181,11 +181,6 @@ test.describe('Collective publish', () => {
 		const modal = page.getByRole('dialog').filter({ has: page.getByRole('heading', { name: /Websites|New website/ }) })
 		const confirmation = page.getByRole('dialog', { name: 'Discard changes?' })
 		await modal.getByRole('button', { name: 'Create website' }).click()
-
-		// Continue needs at least one selected page
-		await clickPublishTreeCheckbox(page, collective.data.name)
-		await expect(modal.getByRole('button', { name: 'Continue' })).toBeDisabled()
-		await clickPublishTreeCheckbox(page, collective.data.name)
 		await modal.getByRole('button', { name: 'Continue' }).click()
 		await expect(modal.locator('[aria-current="step"]')).toHaveText(/Settings/)
 
@@ -221,35 +216,46 @@ test.describe('Collective publish', () => {
 
 	test('selects ancestor pages with a subpage and deselects a subtree with its parent', async ({ collective, navigation, page, user }) => {
 		const parentPage = await collective.createPage({ title: 'Parent page', user, page })
-		await collective.createPage({ title: 'Child page', parentId: parentPage.data.id, user, page })
+		const childPage = await collective.createPage({ title: 'Child page', parentId: parentPage.data.id, user, page })
+		await collective.createPage({ title: 'Grandchild page', parentId: childPage.data.id, user, page })
 
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
 		await modal.getByRole('button', { name: 'Create website' }).click()
-		const collectiveCheckbox = modal.getByRole('checkbox', { name: collective.data.name })
+		const homeCheckbox = modal.getByRole('checkbox', { name: 'Home' })
 		const parentCheckbox = modal.getByRole('checkbox', { name: 'Parent page' })
 		const childCheckbox = modal.getByRole('checkbox', { name: 'Child page' })
 
-		// Subpages are collapsed by default
+		// The home page is always part of the website
+		await expect(homeCheckbox).toBeChecked()
+		await expect(homeCheckbox).toBeDisabled()
+		await expect(publishTreeRow(page, 'Home')).toContainText('The home page is always part of the website.')
+
+		// Subpages are collapsed by default, the counter includes subpages at any depth
+		await expect(publishTreeRow(page, 'Parent page')).toContainText('2/2 subpages')
 		await publishTreeRow(page, 'Parent page').getByRole('button', { name: 'Expand subpages' }).click()
 		await expect(childCheckbox).toBeChecked()
+		await expect(publishTreeRow(page, 'Child page')).toContainText('1/1 subpage')
 
 		// Deselecting a page also deselects its subpages, but leaves its ancestors alone
+		await clickPublishTreeCheckbox(page, 'Child page')
+		await expect(childCheckbox).not.toBeChecked()
+		await expect(parentCheckbox).toBeChecked()
+		await expect(publishTreeRow(page, 'Parent page')).toContainText('0/2 subpages')
+		await expect(modal).toContainText('2 of 4 pages selected')
+
 		await clickPublishTreeCheckbox(page, 'Parent page')
 		await expect(parentCheckbox).not.toBeChecked()
-		await expect(childCheckbox).not.toBeChecked()
-		await expect(collectiveCheckbox).toBeChecked()
+		await expect(homeCheckbox).toBeChecked()
+		await expect(modal).toContainText('1 of 4 pages selected')
 
-		// Deselecting the collective clears the whole tree
-		await clickPublishTreeCheckbox(page, collective.data.name)
-		await expect(collectiveCheckbox).not.toBeChecked()
-
-		// Selecting a subpage pulls its parent page and the collective back in
+		// Selecting a subpage pulls its parent page back in
 		await clickPublishTreeCheckbox(page, 'Child page')
 		await expect(childCheckbox).toBeChecked()
 		await expect(parentCheckbox).toBeChecked()
-		await expect(collectiveCheckbox).toBeChecked()
+		await expect(publishTreeRow(page, 'Parent page')).toContainText('1/2 subpages')
+		await expect(modal).toContainText('3 of 4 pages selected')
 	})
 
 	test('filters the pages and selects all or none of them', async ({ collective, navigation, page, user }) => {
@@ -274,10 +280,11 @@ test.describe('Collective publish', () => {
 		await expect(publishTreeRow(page, 'Meetings').locator('strong')).toHaveCount(0)
 		await expect(modal.getByRole('button', { name: 'Expand subpages' })).toHaveCount(0)
 
-		// Select none and all affect the pages hidden by the filter as well
+		// Select none and all affect the pages hidden by the filter as well, but keep the home page
 		await modal.getByRole('button', { name: 'Select none' }).click()
 		await expect(modal.getByRole('checkbox', { name: 'Weekly notes' })).not.toBeChecked()
-		await expect(modal.getByRole('button', { name: 'Continue' })).toBeDisabled()
+		await expect(modal.getByRole('checkbox', { name: 'Home' })).toBeChecked()
+		await expect(modal).toContainText('1 of 5 pages selected')
 
 		await filterField.fill('missing')
 		await expect(modal).toContainText('No pages match the filter.')
@@ -289,6 +296,7 @@ test.describe('Collective publish', () => {
 
 		await modal.getByRole('button', { name: 'Select all' }).click()
 		await expect(modal.getByRole('checkbox', { name: 'Handbook' })).toBeChecked()
+		await expect(modal).toContainText('5 of 5 pages selected')
 		await publishTreeRow(page, 'Meetings').getByRole('button', { name: 'Expand subpages' }).click()
 		await expect(modal.getByRole('checkbox', { name: 'Retro' })).toBeChecked()
 	})
@@ -320,7 +328,7 @@ test.describe('Collective publish', () => {
 
 		await expect(modal.getByRole('checkbox', { name: 'Moved page' })).toBeChecked()
 		await expect(modal.getByRole('checkbox', { name: 'New parent page' })).toBeChecked()
-		await expect(modal.getByRole('checkbox', { name: collective.data.name })).toBeChecked()
+		await expect(modal.getByRole('checkbox', { name: 'Home' })).toBeChecked()
 	})
 
 	test('updates the most recently updated website with its page selection, without deleted and new pages', async ({ collective, navigation, page, user }) => {

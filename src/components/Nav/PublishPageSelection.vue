@@ -18,25 +18,24 @@
 				</template>
 			</NcTextField>
 			<div class="publish-page-selection__select-buttons">
-				<NcButton variant="tertiary" @click="selectAll">
+				<NcButton @click="selectAll">
 					{{ t('collectives', 'Select all') }}
 				</NcButton>
-				<NcButton variant="tertiary" @click="selectNone">
+				<NcButton @click="selectNone">
 					{{ t('collectives', 'Select none') }}
 				</NcButton>
 			</div>
 		</div>
 		<ul class="publish-page-selection__tree">
-			<li v-if="rootPage" class="publish-page-selection__collective-row">
-				<PublishTreeRow
-					:selected="isRootPageSelected"
-					:indeterminate="isRootPageIndeterminate"
-					@update:selected="onToggleSelect(rootPage.id)">
+			<li v-if="rootPage" class="publish-page-selection__home-row">
+				<PublishTreeRow selected disabled>
 					<template #icon>
-						<span v-if="collective.emoji">{{ collective.emoji }}</span>
-						<PageTemplateIcon v-else :size="20" fillColor="var(--color-text-maxcontrast)" />
+						<HomeIcon :size="20" fillColor="var(--color-text-maxcontrast)" />
 					</template>
-					<strong>{{ collective.name }}</strong>
+					{{ t('collectives', 'Home') }}
+					<template #details>
+						{{ t('collectives', 'The home page is always part of the website.') }}
+					</template>
 				</PublishTreeRow>
 			</li>
 			<PublishPageTreeItem
@@ -44,7 +43,6 @@
 				:key="page.id"
 				:collective="collective"
 				:page="page"
-				:depth="1"
 				:selectedPageIds="selectedPageIds"
 				:expandedPageIds="expandedPageIds"
 				:filter="filter.trim()"
@@ -63,8 +61,8 @@ import { t } from '@nextcloud/l10n'
 import { mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
+import HomeIcon from 'vue-material-design-icons/Home.vue'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
-import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PublishPageTreeItem from './PublishPageTreeItem.vue'
 import PublishTreeRow from './PublishTreeRow.vue'
 import { usePagesStore } from '../../stores/pages.js'
@@ -74,10 +72,10 @@ export default {
 	name: 'PublishPageSelection',
 
 	components: {
+		HomeIcon,
 		MagnifyIcon,
 		NcButton,
 		NcTextField,
-		PageTemplateIcon,
 		PublishPageTreeItem,
 		PublishTreeRow,
 	},
@@ -136,16 +134,6 @@ export default {
 				? pages.filter((page) => this.filteredPageIds.has(page.id))
 				: pages
 		},
-
-		isRootPageSelected() {
-			return !!this.rootPage && this.selectedPageIds.has(this.rootPage.id)
-		},
-
-		// Marks a partially selected collective, especially useful while its pages are collapsed
-		isRootPageIndeterminate() {
-			return this.isRootPageSelected
-				&& this.allPageIds.some((id) => !this.selectedPageIds.has(id))
-		},
 	},
 
 	methods: {
@@ -156,8 +144,9 @@ export default {
 			this.$emit('update:selectedPageIds', new Set(this.allPageIds))
 		},
 
+		// The home page is always part of the website
 		selectNone() {
-			this.$emit('update:selectedPageIds', new Set())
+			this.$emit('update:selectedPageIds', new Set(this.rootPage ? [this.rootPage.id] : []))
 		},
 
 		onToggleSelect(pageId) {
@@ -208,10 +197,12 @@ export default {
 	flex: 1 1 auto;
 	flex-direction: column;
 	min-height: 0;
+	margin-block-start: 12px;
 
+	// The text field has a margin on top for its label, so the buttons are aligned to its bottom
 	&__toolbar {
 		display: flex;
-		align-items: center;
+		align-items: flex-end;
 		gap: 8px;
 	}
 
@@ -221,6 +212,7 @@ export default {
 
 	&__select-buttons {
 		display: flex;
+		gap: 8px;
 		flex: 0 0 auto;
 	}
 
@@ -236,14 +228,15 @@ export default {
 
 	&__tree {
 		flex: 1 1 auto;
-		margin-block: 8px;
-		padding: 4px 8px;
+		margin-block-start: 16px;
+		margin-block-end: 24px;
+		padding: 8px;
 		overflow-y: auto;
 		border: 1px solid var(--color-border-dark);
 		border-radius: var(--border-radius-large);
 	}
 
-	&__collective-row {
+	&__home-row {
 		list-style: none;
 	}
 
