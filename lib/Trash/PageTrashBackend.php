@@ -254,8 +254,7 @@ class PageTrashBackend implements ITrashBackend {
 	 * @throws NotPermittedException
 	 */
 	private function findAttachmentFolderItem(IUser $user, int $collectiveId, CollectivePageTrashItem $item): ?TrashItem {
-		$attachmentsPrefix = '.attachments.';
-		if (str_starts_with($item->getName(), $attachmentsPrefix)) {
+		if (str_starts_with($item->getName(), NodeHelper::ATTACHMENT_FOLDER_PREFIX)) {
 			// Passed item is already an attachment folder
 			return null;
 		}
@@ -265,7 +264,7 @@ class PageTrashBackend implements ITrashBackend {
 		// Search for attachments folder with deleted time up to two seconds after item deleted time
 		for ($t = $deletedTime; $t < $deletedTime + 2; $t++) {
 			try {
-				$name = self::getTrashFilename($attachmentsPrefix . $item->getId(), $t);
+				$name = self::getTrashFilename(NodeHelper::getAttachmentFolderName($item->getId()), $t);
 				$attachmentsNode = $trashFolder->get($name);
 				if (null !== $attachmentsItem = $this->getTrashItemByCollectiveAndId($user, $collectiveId, $attachmentsNode->getId())) {
 					return $attachmentsItem;

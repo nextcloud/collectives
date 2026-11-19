@@ -129,7 +129,7 @@ class FileIndexer {
 				continue;
 			}
 
-			if (str_starts_with($node->getParent()->getName(), '.attachments.')
+			if (NodeHelper::isAttachmentFolderName($node->getParent()->getName())
 				|| $node->getParent()->getName() === '.templates') {
 				continue;
 			}

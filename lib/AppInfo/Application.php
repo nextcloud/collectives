@@ -74,6 +74,7 @@ class Application extends App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		require_once(__DIR__ . '/../../vendor/autoload.php');
+		$context->registerConfigLexicon(ConfigLexicon::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 		$context->registerEventListener(NodeRenamedEvent::class, NodeRenamedListener::class);
 		$context->registerEventListener(NodeWrittenEvent::class, NodeWrittenListener::class);
