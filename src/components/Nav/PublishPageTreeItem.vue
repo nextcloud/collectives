@@ -18,6 +18,9 @@
 				<PageIcon v-else :size="20" fillColor="var(--color-text-maxcontrast)" />
 			</template>
 			<NcHighlight :text="page.title" :search="filter" />
+			<template v-if="descendantIds.length" #details>
+				{{ n('collectives', '{selected}/%n subpage', '{selected}/%n subpages', descendantIds.length, { selected: selectedDescendantCount }) }}
+			</template>
 		</PublishTreeRow>
 		<ul v-if="hasSubpages && isExpanded" class="publish-page-tree-item__children">
 			<PublishPageTreeItem
@@ -37,6 +40,7 @@
 </template>
 
 <script>
+import { n } from '@nextcloud/l10n'
 import { mapState } from 'pinia'
 import NcHighlight from '@nextcloud/vue/components/NcHighlight'
 import PageIcon from '../Icon/PageIcon.vue'
@@ -117,17 +121,28 @@ export default {
 			return this.selectedPageIds.has(this.page.id)
 		},
 
+		// All subpages at any depth, also the ones hidden by a filter
+		descendantIds() {
+			return this.pagesTreeWalkForCollective(this.collective, this.page.id).map((subpage) => subpage.id)
+		},
+
+		selectedDescendantCount() {
+			return this.descendantIds.filter((id) => this.selectedPageIds.has(id)).length
+		},
+
 		// Marks partially selected subtrees, especially useful while they're collapsed
 		isIndeterminate() {
-			return this.isSelected
-				&& this.pagesTreeWalkForCollective(this.collective, this.page.id)
-					.some((subpage) => !this.selectedPageIds.has(subpage.id))
+			return this.isSelected && this.selectedDescendantCount < this.descendantIds.length
 		},
 
 		// While filtering, all matches are shown regardless of the expanded state
 		isExpanded() {
 			return !!this.filteredPageIds || this.expandedPageIds.has(this.page.id)
 		},
+	},
+
+	methods: {
+		n,
 	},
 }
 </script>

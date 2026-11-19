@@ -55,29 +55,34 @@
 					:slugReadOnly="isSlugReadOnly"
 					:slugTaken="isSlugTaken" />
 				<div class="modal-publish__footer">
-					<template v-if="step === 'pages'">
-						<NcButton @click="confirmDiscard(showWebsiteList)">
-							{{ t('collectives', 'Back') }}
-						</NcButton>
-						<NcButton
-							variant="primary"
-							:disabled="selectedPageIds.size === 0"
-							@click="step = 'settings'">
-							{{ t('collectives', 'Continue') }}
-						</NcButton>
-					</template>
-					<template v-else>
-						<NcButton :disabled="publishing" @click="step = 'pages'">
-							{{ t('collectives', 'Back') }}
-						</NcButton>
-						<NcButton
-							variant="primary"
-							:loading="publishing"
-							:disabled="publishing || !isValidTitle(title) || !isSlugValid"
-							@click="onPublishAsWebsite">
-							{{ selectedStaticSite ? t('collectives', 'Update website') : t('collectives', 'Publish website') }}
-						</NcButton>
-					</template>
+					<span class="modal-publish__selection-count">
+						{{ selectionCountLabel }}
+					</span>
+					<div class="modal-publish__footer-buttons">
+						<template v-if="step === 'pages'">
+							<NcButton @click="confirmDiscard(showWebsiteList)">
+								{{ t('collectives', 'Back') }}
+							</NcButton>
+							<NcButton
+								variant="primary"
+								:disabled="selectedPageIds.size === 0"
+								@click="step = 'settings'">
+								{{ t('collectives', 'Continue') }}
+							</NcButton>
+						</template>
+						<template v-else>
+							<NcButton :disabled="publishing" @click="step = 'pages'">
+								{{ t('collectives', 'Back') }}
+							</NcButton>
+							<NcButton
+								variant="primary"
+								:loading="publishing"
+								:disabled="publishing || !isValidTitle(title) || !isSlugValid"
+								@click="onPublishAsWebsite">
+								{{ selectedStaticSite ? t('collectives', 'Update website') : t('collectives', 'Publish website') }}
+							</NcButton>
+						</template>
+					</div>
 				</div>
 			</template>
 			<NcDialog
@@ -92,7 +97,7 @@
 
 <script>
 import { showSuccess } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
@@ -161,6 +166,7 @@ export default {
 	computed: {
 		...mapState(usePagesStore, [
 			'pageAncestorIdsForCollective',
+			'pagesForCollective',
 			'pagesTreeWalkForCollective',
 		]),
 
@@ -215,6 +221,20 @@ export default {
 
 		allPageIds() {
 			return this.pagesTreeWalkForCollective(this.collective).map((page) => page.id)
+		},
+
+		rootPageId() {
+			return this.pagesForCollective(this.collective).find((page) => page.parentId === 0)?.id
+		},
+
+		selectionCountLabel() {
+			return n(
+				'collectives',
+				'{selected} of %n page selected',
+				'{selected} of %n pages selected',
+				this.allPageIds.length,
+				{ selected: this.selectedPageIds.size },
+			)
 		},
 
 		// Slugs are unique across all collectives, websites of other collectives are only known after a conflict
@@ -316,6 +336,10 @@ export default {
 			// drop deleted ones and add ancestor pages of the remaining ones
 			const pageIds = new Set(this.allPageIds)
 			const selectedPageIds = new Set(staticSite.selectedPageIds.filter((id) => pageIds.has(id)))
+			// The home page is always part of the website
+			if (this.rootPageId) {
+				selectedPageIds.add(this.rootPageId)
+			}
 			for (const id of Array.from(selectedPageIds)) {
 				for (const ancestorId of this.pageAncestorIdsForCollective(this.collective, id)) {
 					selectedPageIds.add(ancestorId)
@@ -410,7 +434,7 @@ $modal-padding: 24px;
 
 	// Fixed height, so the modal doesn't jump while pages get expanded
 	&--form {
-		height: 480px;
+		height: 600px;
 		padding-block-end: 0;
 	}
 
@@ -451,13 +475,25 @@ $modal-padding: 24px;
 
 	&__footer {
 		display: flex;
-		justify-content: flex-end;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
 		gap: 8px;
 		flex: 0 0 auto;
 		margin-inline: -$modal-padding;
 		padding-block: 12px;
 		padding-inline: $modal-padding;
 		border-top: 1px solid var(--color-border-dark);
+	}
+
+	&__selection-count {
+		color: var(--color-text-maxcontrast);
+	}
+
+	&__footer-buttons {
+		display: flex;
+		gap: 8px;
+		margin-inline-start: auto;
 	}
 }
 </style>

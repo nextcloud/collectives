@@ -23,6 +23,7 @@
 		<NcCheckboxRadioSwitch
 			:modelValue="selected"
 			:indeterminate="indeterminate"
+			:disabled="disabled"
 			class="publish-tree-row__checkbox"
 			@update:modelValue="$emit('update:selected', $event)">
 			<span class="publish-tree-row__icon">
@@ -30,6 +31,9 @@
 			</span>
 			<slot />
 		</NcCheckboxRadioSwitch>
+		<span v-if="$slots.details" class="publish-tree-row__details">
+			<slot name="details" />
+		</span>
 	</div>
 </template>
 
@@ -74,6 +78,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	emits: [
@@ -110,9 +119,10 @@ export default {
 		transform: rotate(-90deg);
 	}
 
+	// Same width as the expand button, so the checkboxes of all rows are aligned
 	&__expand-spacer {
 		display: inline-block;
-		width: 44px;
+		width: var(--default-clickable-area);
 		flex: 0 0 auto;
 	}
 
@@ -129,6 +139,17 @@ export default {
 			text-overflow: ellipsis;
 			white-space: nowrap;
 		}
+	}
+
+	&__details {
+		flex: 0 1 auto;
+		min-width: 0;
+		margin-inline-start: auto;
+		padding-inline: 8px;
+		overflow: hidden;
+		color: var(--color-text-maxcontrast);
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
 	&__icon {
