@@ -7,7 +7,7 @@
 	<li class="publish-page-tree-item">
 		<PublishTreeRow
 			:depth="depth"
-			:expandable="hasSubpages"
+			:expandable="hasSubpages && !filteredPageIds"
 			:expanded="isExpanded"
 			:selected="isSelected"
 			:indeterminate="isIndeterminate"
@@ -17,7 +17,7 @@
 				<span v-if="page.emoji">{{ page.emoji }}</span>
 				<PageIcon v-else :size="20" fillColor="var(--color-text-maxcontrast)" />
 			</template>
-			{{ page.title }}
+			<NcHighlight :text="page.title" :search="filter" />
 		</PublishTreeRow>
 		<ul v-if="hasSubpages && isExpanded" class="publish-page-tree-item__children">
 			<PublishPageTreeItem
@@ -28,6 +28,8 @@
 				:depth="depth + 1"
 				:selectedPageIds="selectedPageIds"
 				:expandedPageIds="expandedPageIds"
+				:filter="filter"
+				:filteredPageIds="filteredPageIds"
 				@toggleSelect="$emit('toggleSelect', $event)"
 				@toggleExpand="$emit('toggleExpand', $event)" />
 		</ul>
@@ -36,6 +38,7 @@
 
 <script>
 import { mapState } from 'pinia'
+import NcHighlight from '@nextcloud/vue/components/NcHighlight'
 import PageIcon from '../Icon/PageIcon.vue'
 import PublishTreeRow from './PublishTreeRow.vue'
 import { usePagesStore } from '../../stores/pages.js'
@@ -44,6 +47,7 @@ export default {
 	name: 'PublishPageTreeItem',
 
 	components: {
+		NcHighlight,
 		PageIcon,
 		PublishTreeRow,
 	},
@@ -73,6 +77,18 @@ export default {
 			type: Set,
 			required: true,
 		},
+
+		/** Text highlighted in the page title */
+		filter: {
+			type: String,
+			default: '',
+		},
+
+		/** Pages shown while filtering, null if not filtering */
+		filteredPageIds: {
+			type: Set,
+			default: null,
+		},
 	},
 
 	emits: [
@@ -87,7 +103,10 @@ export default {
 		]),
 
 		subpages() {
-			return this.visibleSubpagesForCollective(this.collective, this.page.id)
+			const subpages = this.visibleSubpagesForCollective(this.collective, this.page.id)
+			return this.filteredPageIds
+				? subpages.filter((subpage) => this.filteredPageIds.has(subpage.id))
+				: subpages
 		},
 
 		hasSubpages() {
@@ -105,8 +124,9 @@ export default {
 					.some((subpage) => !this.selectedPageIds.has(subpage.id))
 		},
 
+		// While filtering, all matches are shown regardless of the expanded state
 		isExpanded() {
-			return this.expandedPageIds.has(this.page.id)
+			return !!this.filteredPageIds || this.expandedPageIds.has(this.page.id)
 		},
 	},
 }

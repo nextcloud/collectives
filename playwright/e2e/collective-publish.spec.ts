@@ -252,6 +252,47 @@ test.describe('Collective publish', () => {
 		await expect(collectiveCheckbox).toBeChecked()
 	})
 
+	test('filters the pages and selects all or none of them', async ({ collective, navigation, page, user }) => {
+		const meetingsPage = await collective.createPage({ title: 'Meetings', user, page })
+		await collective.createPage({ title: 'Weekly notes', parentId: meetingsPage.data.id, user, page })
+		await collective.createPage({ title: 'Retro', parentId: meetingsPage.data.id, user, page })
+		await collective.createPage({ title: 'Handbook', user, page })
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await modal.getByRole('button', { name: 'Create website' }).click()
+		const filterField = modal.getByRole('textbox', { name: 'Filter pages' })
+
+		// Matching pages are shown expanded with their ancestors, the matching text is bold
+		await filterField.fill('notes')
+		await expect(modal.getByRole('checkbox', { name: 'Weekly notes' })).toBeVisible()
+		await expect(modal.getByRole('checkbox', { name: 'Meetings' })).toBeVisible()
+		await expect(modal.getByRole('checkbox', { name: 'Retro' })).toHaveCount(0)
+		await expect(modal.getByRole('checkbox', { name: 'Handbook' })).toHaveCount(0)
+		await expect(publishTreeRow(page, 'Weekly notes').locator('strong')).toHaveText('notes')
+		await expect(publishTreeRow(page, 'Meetings').locator('strong')).toHaveCount(0)
+		await expect(modal.getByRole('button', { name: 'Expand subpages' })).toHaveCount(0)
+
+		// Select none and all affect the pages hidden by the filter as well
+		await modal.getByRole('button', { name: 'Select none' }).click()
+		await expect(modal.getByRole('checkbox', { name: 'Weekly notes' })).not.toBeChecked()
+		await expect(modal.getByRole('button', { name: 'Continue' })).toBeDisabled()
+
+		await filterField.fill('missing')
+		await expect(modal).toContainText('No pages match the filter.')
+
+		await modal.getByRole('button', { name: 'Clear filter' }).click()
+		await expect(modal.getByRole('checkbox', { name: 'Handbook' })).not.toBeChecked()
+		// Subpages are collapsed again without a filter
+		await expect(modal.getByRole('checkbox', { name: 'Retro' })).toHaveCount(0)
+
+		await modal.getByRole('button', { name: 'Select all' }).click()
+		await expect(modal.getByRole('checkbox', { name: 'Handbook' })).toBeChecked()
+		await publishTreeRow(page, 'Meetings').getByRole('button', { name: 'Expand subpages' }).click()
+		await expect(modal.getByRole('checkbox', { name: 'Retro' })).toBeChecked()
+	})
+
 	test('preselects the current ancestors of a page that was moved since the last publication', async ({ collective, navigation, page, user }) => {
 		const newParentPage = await collective.createPage({ title: 'New parent page', user, page })
 		const movedPage = await collective.createPage({ title: 'Moved page', parentId: newParentPage.data.id, user, page })

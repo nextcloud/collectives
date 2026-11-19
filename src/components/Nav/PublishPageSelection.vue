@@ -4,43 +4,79 @@
 -->
 
 <template>
-	<ul class="publish-page-selection">
-		<li v-if="rootPage" class="publish-page-selection__collective-row">
-			<PublishTreeRow
-				:selected="isRootPageSelected"
-				:indeterminate="isRootPageIndeterminate"
-				@update:selected="onToggleSelect(rootPage.id)">
+	<div class="publish-page-selection">
+		<div class="publish-page-selection__toolbar">
+			<NcTextField
+				v-model="filter"
+				class="publish-page-selection__filter"
+				:label="t('collectives', 'Filter pages')"
+				:showTrailingButton="filter !== ''"
+				:trailingButtonLabel="t('collectives', 'Clear filter')"
+				@trailingButtonClick="filter = ''">
 				<template #icon>
-					<span v-if="collective.emoji">{{ collective.emoji }}</span>
-					<PageTemplateIcon v-else :size="20" fillColor="var(--color-text-maxcontrast)" />
+					<MagnifyIcon :size="20" />
 				</template>
-				<strong>{{ collective.name }}</strong>
-			</PublishTreeRow>
-		</li>
-		<PublishPageTreeItem
-			v-for="page in topLevelPages"
-			:key="page.id"
-			:collective="collective"
-			:page="page"
-			:depth="1"
-			:selectedPageIds="selectedPageIds"
-			:expandedPageIds="expandedPageIds"
-			@toggleSelect="onToggleSelect"
-			@toggleExpand="onToggleExpand" />
-	</ul>
+			</NcTextField>
+			<div class="publish-page-selection__select-buttons">
+				<NcButton variant="tertiary" @click="selectAll">
+					{{ t('collectives', 'Select all') }}
+				</NcButton>
+				<NcButton variant="tertiary" @click="selectNone">
+					{{ t('collectives', 'Select none') }}
+				</NcButton>
+			</div>
+		</div>
+		<ul class="publish-page-selection__tree">
+			<li v-if="rootPage" class="publish-page-selection__collective-row">
+				<PublishTreeRow
+					:selected="isRootPageSelected"
+					:indeterminate="isRootPageIndeterminate"
+					@update:selected="onToggleSelect(rootPage.id)">
+					<template #icon>
+						<span v-if="collective.emoji">{{ collective.emoji }}</span>
+						<PageTemplateIcon v-else :size="20" fillColor="var(--color-text-maxcontrast)" />
+					</template>
+					<strong>{{ collective.name }}</strong>
+				</PublishTreeRow>
+			</li>
+			<PublishPageTreeItem
+				v-for="page in topLevelPages"
+				:key="page.id"
+				:collective="collective"
+				:page="page"
+				:depth="1"
+				:selectedPageIds="selectedPageIds"
+				:expandedPageIds="expandedPageIds"
+				:filter="filter.trim()"
+				:filteredPageIds="filteredPageIds"
+				@toggleSelect="onToggleSelect"
+				@toggleExpand="onToggleExpand" />
+			<li v-if="filteredPageIds && !topLevelPages.length" class="publish-page-selection__no-match">
+				{{ t('collectives', 'No pages match the filter.') }}
+			</li>
+		</ul>
+	</div>
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 import { mapState } from 'pinia'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcTextField from '@nextcloud/vue/components/NcTextField'
+import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PublishPageTreeItem from './PublishPageTreeItem.vue'
 import PublishTreeRow from './PublishTreeRow.vue'
 import { usePagesStore } from '../../stores/pages.js'
+import { pageIdsMatchingFilter } from '../../util/staticSitePageFilter.js'
 
 export default {
 	name: 'PublishPageSelection',
 
 	components: {
+		MagnifyIcon,
+		NcButton,
+		NcTextField,
 		PageTemplateIcon,
 		PublishPageTreeItem,
 		PublishTreeRow,
@@ -66,6 +102,7 @@ export default {
 	data() {
 		return {
 			expandedPageIds: new Set(),
+			filter: '',
 		}
 	},
 
@@ -85,10 +122,19 @@ export default {
 			return this.pagesForCollective(this.collective).find((page) => page.parentId === 0)
 		},
 
+		// Matching pages and their ancestors while filtering, null otherwise
+		filteredPageIds() {
+			return pageIdsMatchingFilter(this.pagesForCollective(this.collective), this.filter)
+		},
+
 		topLevelPages() {
-			return this.rootPage
-				? this.visibleSubpagesForCollective(this.collective, this.rootPage.id)
-				: []
+			if (!this.rootPage) {
+				return []
+			}
+			const pages = this.visibleSubpagesForCollective(this.collective, this.rootPage.id)
+			return this.filteredPageIds
+				? pages.filter((page) => this.filteredPageIds.has(page.id))
+				: pages
 		},
 
 		isRootPageSelected() {
@@ -103,6 +149,17 @@ export default {
 	},
 
 	methods: {
+		t,
+
+		// Select all and none always affect all pages, also while filtering
+		selectAll() {
+			this.$emit('update:selectedPageIds', new Set(this.allPageIds))
+		},
+
+		selectNone() {
+			this.$emit('update:selectedPageIds', new Set())
+		},
+
 		onToggleSelect(pageId) {
 			// Toggling a page also selects/deselects all of its subpages
 			const select = !this.selectedPageIds.has(pageId)
@@ -146,15 +203,54 @@ export default {
 
 <style lang="scss" scoped>
 .publish-page-selection {
+	container-type: inline-size;
+	display: flex;
 	flex: 1 1 auto;
-	margin-block: 8px;
-	padding: 4px 8px;
-	overflow-y: auto;
-	border: 1px solid var(--color-border-dark);
-	border-radius: var(--border-radius-large);
+	flex-direction: column;
+	min-height: 0;
+
+	&__toolbar {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	&__filter {
+		flex: 1 1 auto;
+	}
+
+	&__select-buttons {
+		display: flex;
+		flex: 0 0 auto;
+	}
+
+	@container (width < 450px) {
+		&__toolbar {
+			flex-wrap: wrap;
+		}
+
+		&__select-buttons {
+			margin-inline-start: auto;
+		}
+	}
+
+	&__tree {
+		flex: 1 1 auto;
+		margin-block: 8px;
+		padding: 4px 8px;
+		overflow-y: auto;
+		border: 1px solid var(--color-border-dark);
+		border-radius: var(--border-radius-large);
+	}
 
 	&__collective-row {
 		list-style: none;
+	}
+
+	&__no-match {
+		list-style: none;
+		padding: 8px;
+		color: var(--color-text-maxcontrast);
 	}
 }
 </style>
