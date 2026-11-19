@@ -491,6 +491,47 @@ test.describe('Collective publish', () => {
 		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
 	})
 
+	test('shows a new website as failed if the publish service is not available', async ({ collective, navigation, page }) => {
+		let failedStaticSite: object | null = null
+		await page.route('**/static-sites', async (route) => {
+			const request = route.request()
+			if (request.method() === 'POST') {
+				// The backend keeps the website as failed, so publishing can be retried later
+				failedStaticSite = {
+					id: 1,
+					title: collective.data.name,
+					slug: request.postDataJSON().slug,
+					selectedPageIds: [collective.getRootPage().data.id],
+					publishedUrl: null,
+					publishedAt: null,
+					status: 'failed',
+					isInProgress: false,
+					lastError: 'generator_unavailable',
+					updatedAt: timestamp(),
+				}
+				return route.fulfill({
+					status: 503,
+					json: { ocs: { meta: { status: 'failure', statuscode: 503, message: 'The publish service is currently not available. Please try again later.' }, data: [] } },
+				})
+			}
+			await route.fulfill({ json: ocsResponse(failedStaticSite ? [failedStaticSite] : []) })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		await modal.getByRole('button', { name: 'Create website' }).click()
+		await modal.getByRole('button', { name: 'Continue' }).click()
+		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
+		await modal.getByRole('button', { name: 'Publish website' }).click()
+
+		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
+		const card = websiteCard(page, collective.data.name)
+		await expect(card).toContainText('Failed')
+		await expect(card).toContainText('The website is not online.')
+		await expect(modal.getByRole('button', { name: `Edit website ${collective.data.name}` })).toBeEnabled()
+	})
+
 	test('keeps the modal open if the website files could not be provided', async ({ collective, navigation, page }) => {
 		// A failed archive build can't be provoked reliably, so the response is replaced
 		await page.route('**/static-sites', async (route) => {

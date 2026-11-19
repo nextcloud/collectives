@@ -362,8 +362,9 @@ export default {
 						return
 					}
 					displayError('Could not publish collective as website')(e)
-					if (e.response?.status === 423) {
-						// Another publication of the collective started meanwhile, e.g. by another member
+					// Another publication of the collective started meanwhile, e.g. by another member (423),
+					// or the publish service failed and the website got stored as failed to retry later (502, 503)
+					if ([423, 502, 503].includes(e.response?.status)) {
 						this.showWebsiteList()
 						return this.reloadStaticSites()
 					}
