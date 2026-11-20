@@ -12,6 +12,7 @@ namespace OCA\Collectives\Fs;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Inline\Text;
@@ -25,19 +26,8 @@ class MarkdownHelper {
 	/**
 	 * Recursively collect text from a CommonMark node and its descendants
 	 */
-	private static function collectText(Node $node): string {
-		if ($node instanceof Text) {
-			return $node->getLiteral();
-		}
 
-		$out = '';
-		foreach ($node->children() as $child) {
-			$out .= self::collectText($child);
-		}
-
-		return $out;
-	}
-
+	
 	private static function getDocumentWalker(string $content): NodeWalker {
 		$environment = new Environment();
 		$environment->addExtension(new CommonMarkCoreExtension());
@@ -221,11 +211,41 @@ class MarkdownHelper {
 		}
 		return implode("\n", $result);
 	}
-
 	public static function processPlaceholders(string $content, array $vars): string {
-		foreach($vars as $key => $value) {
-			$content = str_replace('{{' . $key . '}}', $value, $content);
+		$search = [];
+		$replace = [];
+		foreach ($vars as $key => $value) {
+			$search[] = '{{' . $key . '}}';
+			$replace[] = (string)$value;
 		}
-		return $content;
+
+		$skipLines = [];
+		$walker = self::getDocumentWalker($content);
+		while ($event = $walker->next()) {
+			if ($event->isEntering()) {
+				continue;
+			}
+			$node = $event->getNode();
+			if ($node instanceof FencedCode || $node instanceof IndentedCode) {
+				$start = $node->getStartLine();
+				$end = $node->getEndLine();
+				if ($start == null || $end == null) {
+					continue;
+				}
+				for ($line = $start; $line <= $end; $line++) {
+					$skipLines[$line] = true;
+				}
+			}
+		}
+
+		$lines = explode("\n", $content);
+		foreach ($lines as $index => $line) {
+			if (isset($skipLines[$index + 1])) {
+				continue;
+			}
+			$lines[$index] = str_ireplace($search, $replace, $line);
+		}
+
+		return implode("\n", $lines);
 	}
 }

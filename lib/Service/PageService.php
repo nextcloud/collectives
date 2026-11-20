@@ -697,8 +697,10 @@ class PageService {
 		];
 
 		$content = $file->getContent();
-		$content = MarkdownHelper::processPlaceholders($content, $vars);
-		NodeHelper::putContent($file, $content);
+		$newContent = MarkdownHelper::processPlaceholders($content, $vars);
+		if ($newContent !== $content) {
+			$file->putContent($newContent);
+		}
 
 	}
 
