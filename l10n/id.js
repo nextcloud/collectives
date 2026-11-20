@@ -111,6 +111,7 @@ OC.L10N.register(
     "Sharing" : "Berbagi",
     "Versions" : "Versi",
     "Restore this version" : "Pulihkan versi ini",
+    "Could not load this version" : "Tidak dapat memuat versi ini",
     "Link to page" : "Tautkan ke halaman",
     "Link copied" : "Link tersalin",
     "New page" : "Halaman baru",
