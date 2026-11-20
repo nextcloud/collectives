@@ -129,7 +129,7 @@ test.describe('Collective publish', () => {
 
 			// The title is prefilled from the collective name, the web address has to be entered
 			const titleField = modal.getByRole('textbox', { name: 'Website title' })
-			const slugField = modal.getByRole('textbox', { name: 'Web address' })
+			const slugField = modal.getByRole('textbox', { name: 'Website address' })
 			const submitButton = modal.getByRole('button', { name: 'Publish website' })
 			await expect(titleField).toHaveValue(collective.data.name)
 			await expect(slugField).toHaveValue('')
@@ -170,7 +170,7 @@ test.describe('Collective publish', () => {
 		await modal.getByRole('button', { name: 'Create website' }).click()
 		await expect(modal.getByRole('checkbox', { name: 'Page created meanwhile' })).toBeChecked()
 		await modal.getByRole('button', { name: 'Continue' }).click()
-		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
+		await modal.getByRole('textbox', { name: 'Website address' }).fill('my-website')
 		await expect(modal.getByRole('button', { name: 'Publish website' })).toBeEnabled()
 	})
 
@@ -184,7 +184,7 @@ test.describe('Collective publish', () => {
 		await modal.getByRole('button', { name: 'Continue' }).click()
 		await expect(modal.locator('[aria-current="step"]')).toHaveText(/Settings/)
 
-		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const slugField = modal.getByRole('textbox', { name: 'Website address' })
 		await slugField.fill('my-website')
 		await modal.getByRole('button', { name: 'Back', exact: true }).click()
 		await expect(modal.locator('[aria-current="step"]')).toHaveText(/Page selection/)
@@ -375,7 +375,7 @@ test.describe('Collective publish', () => {
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
 		const titleField = modal.getByRole('textbox', { name: 'Website title' })
-		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const slugField = modal.getByRole('textbox', { name: 'Website address' })
 
 		// Websites are listed by title, the most recently updated one is preselected
 		await expect(modal.getByRole('listitem')).toHaveText([/Older website/, /Published website/])
@@ -437,7 +437,7 @@ test.describe('Collective publish', () => {
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const slugField = modal.getByRole('textbox', { name: 'Website address' })
 		const submitButton = modal.getByRole('button', { name: 'Publish website' })
 
 		await modal.getByRole('button', { name: 'New website' }).click()
@@ -506,7 +506,7 @@ test.describe('Collective publish', () => {
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 		const modal = page.getByRole('dialog')
-		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const slugField = modal.getByRole('textbox', { name: 'Website address' })
 		const submitButton = modal.getByRole('button', { name: 'Update website' })
 
 		await modal.getByRole('button', { name: 'Edit website Failed website' }).click()
@@ -548,7 +548,7 @@ test.describe('Collective publish', () => {
 		const modal = page.getByRole('dialog')
 		await modal.getByRole('button', { name: 'Create website' }).click()
 		await modal.getByRole('button', { name: 'Continue' }).click()
-		const slugField = modal.getByRole('textbox', { name: 'Web address' })
+		const slugField = modal.getByRole('textbox', { name: 'Website address' })
 		const submitButton = modal.getByRole('button', { name: 'Publish website' })
 
 		await slugField.fill('taken-website')
@@ -606,7 +606,7 @@ test.describe('Collective publish', () => {
 		const modal = page.getByRole('dialog')
 		await modal.getByRole('button', { name: 'Create website' }).click()
 		await modal.getByRole('button', { name: 'Continue' }).click()
-		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
+		await modal.getByRole('textbox', { name: 'Website address' }).fill('my-website')
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
 		// Client errors are shown as warning toast with role status, but the modal is still open and shows the website list with the in-progress website
@@ -645,7 +645,7 @@ test.describe('Collective publish', () => {
 		const modal = page.getByRole('dialog')
 		await modal.getByRole('button', { name: 'Create website' }).click()
 		await modal.getByRole('button', { name: 'Continue' }).click()
-		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
+		await modal.getByRole('textbox', { name: 'Website address' }).fill('my-website')
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
 		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
@@ -671,7 +671,7 @@ test.describe('Collective publish', () => {
 		await modal.getByRole('button', { name: 'Continue' }).click()
 		const titleField = modal.getByRole('textbox', { name: 'Website title' })
 		await titleField.fill('My website')
-		await modal.getByRole('textbox', { name: 'Web address' }).fill('my-website')
+		await modal.getByRole('textbox', { name: 'Website address' }).fill('my-website')
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
 		await expect(getToast(page, 'error', 'Could not publish collective as website')).toBeVisible()
@@ -795,7 +795,7 @@ test.describe('Collective publish', () => {
 		await modal.getByRole('button', { name: 'Continue' }).click()
 		await modal.getByRole('textbox', { name: 'Website title' }).fill('My website')
 		// The request reaches the backend, where web addresses are unique across all collectives
-		await modal.getByRole('textbox', { name: 'Web address' }).fill(`website-${collective.data.id}`)
+		await modal.getByRole('textbox', { name: 'Website address' }).fill(`website-${collective.data.id}`)
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
 		await modal.getByRole('button', { name: 'Close' }).click()

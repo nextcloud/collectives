@@ -195,7 +195,7 @@ export default {
 			}
 			return this.step === 'pages'
 				? t('collectives', 'Choose which pages become part of the website.')
-				: t('collectives', 'Address and title of the website.')
+				: t('collectives', 'Title and address of the website.')
 		},
 
 		formValues() {
