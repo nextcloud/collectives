@@ -48,6 +48,8 @@ class ShareController extends OCSController {
 	/**
 	 * Get collective and page shares of a collective
 	 *
+	 * Users with share permission get the shares of all members, others only their own.
+	 *
 	 * @param int $collectiveId ID of the collective
 	 *
 	 * @return DataResponse<Http::STATUS_OK, list<CollectivesCollectiveShare>, array{}>
@@ -61,7 +63,7 @@ class ShareController extends OCSController {
 		$share = $this->handleErrorResponse(function () use ($collectiveId): array {
 			$uid = $this->getUid();
 			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
-			return $this->shareService->getSharesByCollectiveAndUser($uid, $collective->getId());
+			return $this->shareService->getSharesByCollective($uid, $collective);
 		}, $this->logger);
 		return new DataResponse($share);
 	}
@@ -109,6 +111,8 @@ class ShareController extends OCSController {
 
 	/**
 	 * Delete a collective share
+	 *
+	 * The owner of the share and collective admins can delete it.
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param string $token Token of the share
@@ -188,6 +192,8 @@ class ShareController extends OCSController {
 	/**
 	 * Delete a page share
 	 *
+	 * The owner of the share and collective admins can delete it.
+	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param int $pageId ID of the page
 	 * @param string $token Token of the share
@@ -202,8 +208,8 @@ class ShareController extends OCSController {
 	public function deletePageShare(int $collectiveId, int $pageId, string $token): DataResponse {
 		$this->handleErrorResponse(function () use ($collectiveId, $pageId, $token): void {
 			$uid = $this->getUid();
-			$this->collectiveService->getCollective($collectiveId, $uid);
-			$this->shareService->deleteShare($uid, $collectiveId, $pageId, $token);
+			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
+			$this->shareService->deleteShare($uid, $collective, $pageId, $token);
 		}, $this->logger);
 		return new DataResponse([]);
 	}

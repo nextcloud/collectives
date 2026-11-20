@@ -17,7 +17,7 @@
 						{{ title }}
 					</span>
 					<div
-						v-if="share"
+						v-if="share && share.canUpdate"
 						ref="quickShareDropdownContainer"
 						class="share-select"
 						:class="{ active: showDropdown }">
@@ -56,6 +56,9 @@
 							</button>
 						</div>
 					</div>
+					<span v-else-if="share" class="share-permission">
+						{{ selectedDropdownOption }}
+					</span>
 				</div>
 
 				<!-- clipboard -->
@@ -133,10 +136,11 @@
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
 				menuAlign="right"
+				:forceMenu="!!share"
 				:disabled="!networkOnline"
 				:title="offlineTitle">
 				<template v-if="share">
-					<NcActionButton closeAfterClick @click.prevent.stop="toggleSettings">
+					<NcActionButton v-if="share.canUpdate" closeAfterClick @click.prevent.stop="toggleSettings">
 						<template #icon>
 							<TuneIcon :size="20" />
 						</template>
@@ -150,16 +154,16 @@
 						{{ t('collectives', 'Generate QR code') }}
 					</NcActionButton>
 
-					<NcActionSeparator />
+					<NcActionSeparator v-if="currentCollective.canShare || share.canDelete" />
 
-					<NcActionButton class="new-share-link" @click.prevent.stop="onNewShare">
+					<NcActionButton v-if="currentCollective.canShare" class="new-share-link" @click.prevent.stop="onNewShare">
 						<template #icon>
 							<PlusIcon :size="20" />
 						</template>
 						{{ t('collectives', 'Add another link') }}
 					</NcActionButton>
 
-					<NcActionButton class="unshare-button" @click.prevent="onDelete">
+					<NcActionButton v-if="share.canDelete" class="unshare-button" @click.prevent="onDelete">
 						<template #icon>
 							<CloseIcon :size="20" />
 						</template>
@@ -239,6 +243,7 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -357,14 +362,25 @@ export default {
 			}
 
 			const label = this.share.label?.trim()
+			if (!this.isOwnShare) {
+				const initiator = this.share.ownerDisplayName || this.share.owner
+				// The title is rendered as text, so the names must not be HTML-escaped
+				return label
+					? t('collectives', '{label} (by {initiator})', { label, initiator }, { escape: false })
+					: t('collectives', 'Share link (by {initiator})', { initiator }, { escape: false })
+			}
+
 			if (label) {
-				// The title is rendered as text, so the label must not be HTML-escaped
-				return t('collectives', 'Share link ({label})', { label }, { escape: false })
+				return label
 			}
 
 			return this.index > 1
 				? t('collectives', 'Share link ({index})', { index: this.index })
 				: t('collectives', 'Share link')
+		},
+
+		isOwnShare() {
+			return this.share?.owner === getCurrentUser()?.uid
 		},
 
 		label: {
@@ -857,6 +873,11 @@ export default {
 		width: 100%;
 		height: auto;
 	}
+}
+
+.share-permission {
+	font-size: 12.5px;
+	color: var(--color-text-maxcontrast);
 }
 
 .share-select {

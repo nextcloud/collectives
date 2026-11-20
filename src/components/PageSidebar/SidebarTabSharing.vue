@@ -68,12 +68,16 @@
 
 				<!-- external shares list -->
 				<ul v-else class="external-shares-list">
-					<SharingEntryLink v-if="!shares.length" />
+					<SharingEntryLink v-if="!ownShares.length" />
 					<SharingEntryLink
-						v-for="(share, index) in shares"
+						v-for="(share, index) in ownShares"
 						v-else
 						:key="share.id"
 						:index="index + 1"
+						:share />
+					<SharingEntryLink
+						v-for="share in otherShares"
+						:key="share.id"
 						:share />
 				</ul>
 			</div>
@@ -82,6 +86,7 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -134,6 +139,14 @@ export default {
 			return this.isLandingPage
 				? this.sharesByPageId(0)
 				: this.sharesByPageId(this.pageId)
+		},
+
+		ownShares() {
+			return this.shares.filter((share) => share.owner === getCurrentUser()?.uid)
+		},
+
+		otherShares() {
+			return this.shares.filter((share) => share.owner !== getCurrentUser()?.uid)
 		},
 
 		membersManagementHelpText() {

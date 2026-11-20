@@ -127,10 +127,13 @@
                     "pageId",
                     "token",
                     "owner",
+                    "ownerDisplayName",
                     "editable",
                     "hasPassword",
                     "expirationDate",
-                    "label"
+                    "label",
+                    "canUpdate",
+                    "canDelete"
                 ],
                 "properties": {
                     "id": {
@@ -151,6 +154,9 @@
                     "owner": {
                         "type": "string"
                     },
+                    "ownerDisplayName": {
+                        "type": "string"
+                    },
                     "editable": {
                         "type": "boolean"
                     },
@@ -163,6 +169,12 @@
                     },
                     "label": {
                         "type": "string"
+                    },
+                    "canUpdate": {
+                        "type": "boolean"
+                    },
+                    "canDelete": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -2237,6 +2249,7 @@
             "get": {
                 "operationId": "share-get-collective-shares",
                 "summary": "Get collective and page shares of a collective",
+                "description": "Users with share permission get the shares of all members, others only their own.",
                 "tags": [
                     "share"
                 ],
@@ -3101,6 +3114,7 @@
             "delete": {
                 "operationId": "share-delete-page-share",
                 "summary": "Delete a page share",
+                "description": "The owner of the share and collective admins can delete it.",
                 "tags": [
                     "share"
                 ],
@@ -3524,6 +3538,7 @@
             "delete": {
                 "operationId": "share-delete-collective-share",
                 "summary": "Delete a collective share",
+                "description": "The owner of the share and collective admins can delete it.",
                 "tags": [
                     "share"
                 ],

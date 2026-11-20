@@ -13,10 +13,13 @@ export type CollectiveShareData = {
 	pageId: number
 	token: string
 	owner: string
+	ownerDisplayName: string
 	editable: boolean
 	hasPassword: boolean
 	expirationDate: string | null
 	label: string
+	canUpdate: boolean
+	canDelete: boolean
 }
 
 export class CollectiveShare {

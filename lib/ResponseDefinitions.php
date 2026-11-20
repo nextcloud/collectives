@@ -40,10 +40,13 @@ namespace OCA\Collectives;
  *     pageId: int,
  *     token: string,
  *     owner: string,
+ *     ownerDisplayName: string,
  *     editable: bool,
  *     hasPassword: bool,
  *     expirationDate: ?string,
  *     label: string,
+ *     canUpdate: bool,
+ *     canDelete: bool,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{
