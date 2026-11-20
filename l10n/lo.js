@@ -101,6 +101,7 @@ OC.L10N.register(
     "Sharing" : "ການແບ່ງປັນ",
     "Versions" : "Versions",
     "Restore this version" : "ຄືນຄ່າເວີຊັນນີ້",
+    "Could not load this version" : "ບໍ່ສາມາດໂຫຼດເວີຊັນນີ້ໄດ້",
     "Link copied" : "ສຳເນົາລິງ",
     "Please reload the page." : "ກະລຸນາໂຫຼດຫນ້າເພດອີກ.",
     "Copied" : "Copied",

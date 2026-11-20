@@ -93,6 +93,7 @@ OC.L10N.register(
     "Sharing" : "Jakaminen",
     "Versions" : "Versiot",
     "Restore this version" : "Palauta tämä versio",
+    "Could not load this version" : "Tätä versiota ei voitu ladata",
     "Link copied" : "Linkki kopioitu",
     "New page" : "Uusi sivu",
     "Please reload the page." : "Päivitä sivu.",
