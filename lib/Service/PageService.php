@@ -679,21 +679,26 @@ class PageService {
 			}
 			$pageInfo = $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId);
 			$newFile = $this->nodeHelper->getFilebyId($folder, $pageInfo->getId());
-			$this->applyTemplatePlaceholders($newFile, $userId, $collectiveId);
+			$this->applyTemplatePlaceholders($newFile, $userId, $collectiveId, $pageInfo->getId());
 
 			return $pageInfo;
 		}
 
 		return $this->newPage($collectiveId, $folder, $filename, $userId, $title, $content);
 	}
-		private function applyTemplatePlaceholders(File $file, string $userId, int $collectiveId): void {
+		private function applyTemplatePlaceholders(File $file, string $userId, int $collectiveId, int $pageId): void {
 		$collectiveName = $this->getCollective($collectiveId, $userId)->getName();
 		$now = new \DateTime('now', $this->dateTimeZone->getTimeZone());
+		$Folder = $file->getParent();
+		$SiblingCount = count($this->getPagesFromFolder($collectiveId, $Folder, $userId));
 		$vars = [
 			'date' => $now->format('Y-m-d'),
 			'time' => $now->format('H:i'),
 			'datetime' => $now->format('Y-m-d H:i'),
 			'collective' => $collectiveName,
+			'parent' => $Folder->getName(),
+			'#' => $SiblingCount,
+
 		];
 
 		$content = $file->getContent();
