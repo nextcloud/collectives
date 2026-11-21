@@ -26,6 +26,18 @@ class MarkdownHelper {
 	/**
 	 * Recursively collect text from a CommonMark node and its descendants
 	 */
+	private static function collectText(Node $node): string {
+		if ($node instanceof Text) {
+			return $node->getLiteral();
+		}
+
+		$out = '';
+		foreach ($node->children() as $child) {
+			$out .= self::collectText($child);
+		}
+
+		return $out;
+	}
 
 	
 	private static function getDocumentWalker(string $content): NodeWalker {
