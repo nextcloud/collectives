@@ -677,36 +677,40 @@ class PageService {
 			if (!$this->isInTemplateFolder($collectiveId, $templateId, $userId)) {
 				throw new NotFoundException('Template ' . $templateId . ' not found in collective ' . $collectiveId);
 			}
+			$vars = $this->buildPlaceholderVars($folder, $collectiveId, $userId);
+
+			$templateInfo = $this->findByFileId($collectiveId, $templateId, $userId);
+			$resolvedTitle = MarkdownHelper::processPlaceholders($templateInfo->getTitle(), $vars);
+			$safeTitle = $this->nodeHelper->sanitiseFilename($resolvedTitle, $defaultTitle ?: self::DEFAULT_PAGE_TITLE);
+
 			$pageInfo = $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId);
 			$newFile = $this->nodeHelper->getFilebyId($folder, $pageInfo->getId());
-			$this->applyTemplatePlaceholders($newFile, $userId, $collectiveId, $pageInfo->getId());
+			$this->applyTemplateContent($newFile, $vars);
 
 			return $pageInfo;
 		}
 
 		return $this->newPage($collectiveId, $folder, $filename, $userId, $title, $content);
 	}
-		private function applyTemplatePlaceholders(File $file, string $userId, int $collectiveId, int $pageId): void {
-		$collectiveName = $this->getCollective($collectiveId, $userId)->getName();
+
+	private function buildPlaceholderVars(Folder $folder, int $collectiveId, string $userId): array {
 		$now = new \DateTime('now', $this->dateTimeZone->getTimeZone());
-		$Folder = $file->getParent();
-		$SiblingCount = count($this->getPagesFromFolder($collectiveId, $Folder, $userId));
-		$vars = [
+		return [
 			'date' => $now->format('Y-m-d'),
 			'time' => $now->format('H:i'),
 			'datetime' => $now->format('Y-m-d H:i'),
-			'collective' => $collectiveName,
-			'parent' => $Folder->getName(),
-			'#' => $SiblingCount,
-
+			'collective' => $this->getCollective($collectiveId, $userId)->getName(),
+			'parent' => $folder->getName(),
+			'#' => (string)(count($this->getPagesFromFolder($collectiveId, $folder, $userId)) + 1),
 		];
+	}
 
+	private function applyTemplateContent(File $file, array $vars): void {
 		$content = $file->getContent();
 		$newContent = MarkdownHelper::processPlaceholders($content, $vars);
 		if ($newContent !== $content) {
 			$file->putContent($newContent);
 		}
-
 	}
 
 	/**
