@@ -40,7 +40,7 @@
     "@nextcloud/vue": "^9.14.1",
     "@playwright/test": "^1.65.1",
     "@vueuse/core": "^15.0.0",
-    "debounce": "^3.0.0",
+    "debounce": "^4.0.0",
     "escape-html": "^1.0.3",
     "focus-trap": "^8.2.4",
     "pinia": "^4.1.0",
