@@ -701,7 +701,7 @@ class PageService {
 			'datetime' => $now->format('Y-m-d H:i'),
 			'collective' => $this->getCollective($collectiveId, $userId)->getName(),
 			'parent' => $folder->getName(),
-			'#' => (string)(count($this->getPagesFromFolder($collectiveId, $folder, $userId)) + 1),
+			'#' => (string)(count($this->getPagesFromFolder($collectiveId, $folder, $userId))),
 		];
 	}
 
