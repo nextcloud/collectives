@@ -211,6 +211,7 @@ export default {
 			return [
 				{
 					label: t('collectives', 'Keep editing'),
+					variant: 'secondary',
 				},
 				{
 					label: t('collectives', 'Discard changes'),
