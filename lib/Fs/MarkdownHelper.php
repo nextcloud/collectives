@@ -226,22 +226,29 @@ class MarkdownHelper {
 	public static function processPlaceholders(string $content, array $vars): string {
 		$search = [];
 		$replace = [];
+
 		foreach ($vars as $key => $value) {
-			$search[] = '{{' . $key . '}}';
-			$replace[] = (string)$value;
+			if (stripos($content, '{{' . $key . '}}') !== false) {
+				$search[] = '{{' . $key . '}}';
+				$replace[] = (string)$value;
+			}
+		}
+
+		if ($search === []) {
+			return $content;
 		}
 
 		$skipLines = [];
 		$walker = self::getDocumentWalker($content);
 		while ($event = $walker->next()) {
-			if ($event->isEntering()) {
+			if (!$event->isEntering()) {
 				continue;
 			}
 			$node = $event->getNode();
 			if ($node instanceof FencedCode || $node instanceof IndentedCode) {
 				$start = $node->getStartLine();
 				$end = $node->getEndLine();
-				if ($start == null || $end == null) {
+				if ($start === null || $end === null) {
 					continue;
 				}
 				for ($line = $start; $line <= $end; $line++) {
