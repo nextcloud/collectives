@@ -112,7 +112,6 @@ export default {
 
 		displayTitle(template) {
 			const re = /\{\{\s*date\s*\}\}/gi
-			console.log(template.title.replaceAll(re, '').trim())
 			return template.title.replaceAll(re, '').trim()
 		}
 	},
