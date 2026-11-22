@@ -135,7 +135,10 @@ export default {
 	flex-direction: column;
 	gap: 16px;
 	flex: 1 1 auto;
+	// Room for the input borders and focus rings, which are drawn outside and would get cut off by the scroll container
+	margin-inline: -2px;
 	padding-block: 16px;
+	padding-inline: 4px;
 	overflow-y: auto;
 
 	&__field {
@@ -158,9 +161,15 @@ export default {
 		align-items: flex-start;
 	}
 
+	// Border like the one of NcInputField. A gap of 1px shows its end side as separator to the input.
 	&__address-prefix {
+		--prefix-border-color: var(--color-border-maxcontrast);
+		--prefix-border-light: 0 -1px var(--prefix-border-color), 0 0 0 1px color-mix(in srgb, var(--prefix-border-color), 65% transparent);
+		--prefix-border-dark: 0 1px var(--prefix-border-color), 0 0 0 1px color-mix(in srgb, var(--prefix-border-color), 65% transparent);
 		flex: 0 1 auto;
 		min-width: 0;
+		margin-inline-end: 1px;
+		box-shadow: var(--prefix-border-light);
 		height: var(--default-clickable-area);
 		padding-inline: 12px;
 		overflow: hidden;
@@ -178,11 +187,31 @@ export default {
 		flex: 1 1 150px;
 		min-width: 150px;
 
-		// The prefix is attached to the start of the input
+		// The prefix is attached to the start of the input, so the start side of its border is hidden
 		:deep(.input-field__input) {
 			border-start-start-radius: 0;
 			border-end-start-radius: 0;
+			clip-path: inset(-4px -4px -4px 0);
 		}
 	}
+
+	// Both parts look like one field, so the prefix gets the focus ring of the input as well
+	&__address:focus-within &__address-prefix {
+		box-shadow: 0 0 0 2px var(--color-main-text), 0 0 0 4px var(--color-main-background);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		&__address-prefix {
+			box-shadow: var(--prefix-border-dark);
+		}
+	}
+}
+
+[data-theme-dark] .publish-settings-form__address-prefix {
+	box-shadow: var(--prefix-border-dark);
+}
+
+[data-theme-light] .publish-settings-form__address-prefix {
+	box-shadow: var(--prefix-border-light);
 }
 </style>
