@@ -29,7 +29,7 @@
 				v-if="!slugReadOnly"
 				class="publish-settings-form__note"
 				type="info"
-				:text="t('collectives', 'Choose carefully: the address is permanent once the website is published. People will reach your website through this link.')" />
+				:text="t('collectives', 'Choose carefully: the address is permanent once the website is published.')" />
 			<div class="publish-settings-form__address">
 				<span class="publish-settings-form__address-prefix" aria-hidden="true">
 					{{ addressPrefix }}

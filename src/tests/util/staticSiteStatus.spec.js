@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, test, vi } from 'vitest'
-import { mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
+import { hasUnpublishedChanges, mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
 
 vi.mock('@nextcloud/l10n', () => ({ t: (_app, message) => message }))
 
@@ -19,6 +19,35 @@ describe('staticSiteState', () => {
 		[{ status: 'provided', isInProgress: false }, 'failed'],
 	])('returns the state of %j', (staticSite, state) => {
 		expect(staticSiteState(staticSite)).toBe(state)
+	})
+})
+
+describe('hasUnpublishedChanges', () => {
+	const staticSite = { selectedPageIds: [1, 2], publishedAt: 200 }
+	const pages = [
+		{ id: 1, timestamp: 100 },
+		{ id: 2, timestamp: 200 },
+		{ id: 3, timestamp: 300 },
+	]
+
+	test('returns false if no selected page changed after publishing', () => {
+		expect(hasUnpublishedChanges(staticSite, pages)).toBe(false)
+	})
+
+	test('returns true if a selected page was edited after publishing', () => {
+		expect(hasUnpublishedChanges(staticSite, [{ id: 1, timestamp: 100 }, { id: 2, timestamp: 201 }])).toBe(true)
+	})
+
+	test('returns true if a selected page was deleted after publishing', () => {
+		expect(hasUnpublishedChanges(staticSite, [{ id: 1, timestamp: 100 }, { id: 3, timestamp: 300 }])).toBe(true)
+	})
+
+	test('returns false for a static site that was never published', () => {
+		expect(hasUnpublishedChanges({ ...staticSite, publishedAt: null }, [{ id: 1, timestamp: 300 }])).toBe(false)
+	})
+
+	test('returns false without known pages', () => {
+		expect(hasUnpublishedChanges(staticSite, [])).toBe(false)
 	})
 })
 

@@ -53,7 +53,7 @@
 					<strong class="publish-website-list__title">{{ staticSite.title }}</strong>
 					<span
 						class="publish-website-list__badge"
-						:class="`publish-website-list__badge--${staticSiteState(staticSite)}`">
+						:class="`publish-website-list__badge--${badgeState(staticSite)}`">
 						<NcLoadingIcon v-if="staticSiteState(staticSite) === 'publishing'" :size="16" />
 						{{ stateLabel(staticSite) }}
 					</span>
@@ -103,7 +103,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import WebIcon from 'vue-material-design-icons/Web.vue'
-import { mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
+import { hasUnpublishedChanges, mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
 
 export default {
 	name: 'PublishWebsiteList',
@@ -118,6 +118,12 @@ export default {
 	props: {
 		/** Static sites of the collective in display order */
 		staticSites: {
+			type: Array,
+			required: true,
+		},
+
+		/** All pages of the collective, to detect changes after the last publication */
+		pages: {
 			type: Array,
 			required: true,
 		},
@@ -176,14 +182,27 @@ export default {
 
 		/**
 		 * @param {object} staticSite static site as returned by the backend
+		 * @return {'publishing'|'live'|'outdated'|'failed'} state shown in the badge
+		 */
+		badgeState(staticSite) {
+			const state = staticSiteState(staticSite)
+			return state === 'live' && hasUnpublishedChanges(staticSite, this.pages)
+				? 'outdated'
+				: state
+		},
+
+		/**
+		 * @param {object} staticSite static site as returned by the backend
 		 * @return {string} translated state of the last publication
 		 */
 		stateLabel(staticSite) {
-			switch (staticSiteState(staticSite)) {
+			switch (this.badgeState(staticSite)) {
 				case 'publishing':
 					return t('collectives', 'Publishing')
 				case 'live':
-					return t('collectives', 'Live')
+					return t('collectives', 'Live · up to date')
+				case 'outdated':
+					return t('collectives', 'Live · changes not published')
 				default:
 					return t('collectives', 'Failed')
 			}
@@ -336,6 +355,12 @@ export default {
 			border-color: var(--color-success-text);
 			background-color: var(--color-success);
 			color: var(--color-success-text);
+		}
+
+		&--outdated {
+			border-color: var(--color-warning-text);
+			background-color: var(--color-warning);
+			color: var(--color-warning-text);
 		}
 
 		&--publishing {

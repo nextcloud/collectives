@@ -37,6 +37,7 @@
 			<PublishWebsiteList
 				v-else-if="view === 'list'"
 				:staticSites="staticSites"
+				:pages="pagesForCollective(collective)"
 				@create="createWebsite"
 				@edit="editWebsite" />
 			<template v-else>
