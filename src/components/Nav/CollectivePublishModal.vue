@@ -91,7 +91,7 @@
 				:name="t('collectives', 'Discard changes?')"
 				:message="t('collectives', 'Your changes to this website will be lost.')"
 				:buttons="discardButtons"
-				@update:open="onDiscardDialogToggle" />
+				@closing="onDiscardDialogClosing" />
 		</div>
 	</NcModal>
 </template>
@@ -290,10 +290,10 @@ export default {
 			}
 		},
 
-		onDiscardDialogToggle(open) {
-			if (!open) {
-				this.pendingAction = null
-			}
+		// The dialog reports being closed only after its closing animation, which is too late if
+		// the user leaves the form again right away
+		onDiscardDialogClosing() {
+			this.pendingAction = null
 		},
 
 		onEscape(event) {

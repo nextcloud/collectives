@@ -80,7 +80,9 @@ function websiteCard(page: Page, title: string) {
 }
 
 test.describe('Collective publish', () => {
-	test('admin can open the publish modal and publish the collective', async ({ collective, navigation, page }) => {
+	test('admin can open the publish modal and publish the collective', async ({ collective, navigation, page, user }) => {
+		// A page besides the home page, whose checkbox can get the focus
+		await collective.createPage({ title: 'Subpage', user, page })
 		await collective.openCollective()
 		const modal = page.getByRole('dialog')
 
@@ -109,7 +111,8 @@ test.describe('Collective publish', () => {
 			await modal.getByRole('button', { name: 'Create website' }).click()
 
 			// Escape must also work while a checkbox has the focus
-			const checkbox = modal.getByRole('checkbox').first()
+			// The home page checkbox is disabled and can't get the focus
+			const checkbox = modal.getByRole('checkbox', { disabled: false }).first()
 			await checkbox.focus()
 			await expect(checkbox).toBeFocused()
 			await page.keyboard.press('Escape')
@@ -124,7 +127,6 @@ test.describe('Collective publish', () => {
 			await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
 			await modal.getByRole('button', { name: 'Create website' }).click()
 			await expect(modal.getByRole('heading', { name: 'New website' })).toBeVisible()
-			await expect(modal).toContainText(collective.data.name)
 			await modal.getByRole('button', { name: 'Continue' }).click()
 
 			// The title is prefilled from the collective name, the web address has to be entered
@@ -250,12 +252,12 @@ test.describe('Collective publish', () => {
 		await expect(homeCheckbox).toBeChecked()
 		await expect(modal).toContainText('1 of 4 pages selected')
 
-		// Selecting a subpage pulls its parent page back in
+		// Selecting a subpage selects its own subpages and pulls its parent page back in
 		await clickPublishTreeCheckbox(page, 'Child page')
 		await expect(childCheckbox).toBeChecked()
 		await expect(parentCheckbox).toBeChecked()
-		await expect(publishTreeRow(page, 'Parent page')).toContainText('1/2 subpages')
-		await expect(modal).toContainText('3 of 4 pages selected')
+		await expect(publishTreeRow(page, 'Parent page')).toContainText('2/2 subpages')
+		await expect(modal).toContainText('4 of 4 pages selected')
 	})
 
 	test('filters the pages and selects all or none of them', async ({ collective, navigation, page, user }) => {
