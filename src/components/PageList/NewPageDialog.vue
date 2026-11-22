@@ -23,7 +23,7 @@
 						<PageIcon v-else :size="64" />
 					</div>
 					<span class="template-item-title">
-						{{ template.title }}
+						{{ displayTitle(template) }}
 					</span>
 				</a>
 			</li>
@@ -109,6 +109,12 @@ export default {
 				this.onClose()
 			}
 		},
+
+		displayTitle(template) {
+			const re = /\{\{\s*date\s*\}\}/gi
+			console.log(template.title.replaceAll(re, '').trim())
+			return template.title.replaceAll(re, '').trim()
+		}
 	},
 }
 </script>
