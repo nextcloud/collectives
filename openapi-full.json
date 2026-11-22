@@ -4210,7 +4210,7 @@
         "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}": {
             "put": {
                 "operationId": "static_site-update",
-                "summary": "Update title and page selection of a static site and publish it again",
+                "summary": "Update title, page selection and slug of a static site and publish it again",
                 "description": "Every call starts a new publication, even if nothing changed. The slug can only be changed until the static site got published.",
                 "tags": [
                     "static_site"
