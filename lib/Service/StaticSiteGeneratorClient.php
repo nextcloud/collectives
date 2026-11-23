@@ -94,6 +94,26 @@ class StaticSiteGeneratorClient {
 	}
 
 	/**
+	 * Ask the static site generator to delete the static site. It reports the result to the
+	 * callback URL of the current build.
+	 *
+	 * @return bool False if the generator doesn't know the static site
+	 *
+	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorException Request rejected
+	 */
+	public function delete(StaticSite $staticSite): bool {
+		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
+		$response = $this->request('DELETE', $path, ['data' => ['callback_status_url' => $this->getCallbackUrl($staticSite)]]);
+		if ($response->getStatusCode() === Http::STATUS_NOT_FOUND) {
+			return false;
+		}
+		$this->assertAccepted($staticSite, $response);
+		return true;
+	}
+
+	/**
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException
 	 */
@@ -120,14 +140,18 @@ class StaticSiteGeneratorClient {
 				'staticSiteId' => $staticSiteId,
 				'buildId' => $staticSite->getBuildId(),
 			]),
-			'callback_status_url' => $this->urlGenerator->linkToOCSRouteAbsolute('collectives.staticsitegenerator.updatestatus', [
-				'apiVersion' => '1.0',
-				'staticSiteId' => $staticSiteId,
-				'buildId' => $staticSite->getBuildId(),
-			]),
+			'callback_status_url' => $this->getCallbackUrl($staticSite),
 			'slug' => $staticSite->getSlug(),
 			'title' => $title,
 		];
+	}
+
+	private function getCallbackUrl(StaticSite $staticSite): string {
+		return $this->urlGenerator->linkToOCSRouteAbsolute('collectives.staticsitegenerator.updatestatus', [
+			'apiVersion' => '1.0',
+			'staticSiteId' => $staticSite->getStaticSiteId(),
+			'buildId' => $staticSite->getBuildId(),
+		]);
 	}
 
 	/**
@@ -141,13 +165,13 @@ class StaticSiteGeneratorClient {
 		}
 
 		// The error of the generator may contain technical details, so it's only logged
-		$this->logger->warning('Static site generator did not accept the build', [
+		$this->logger->warning('Static site generator did not accept the request', [
 			'staticSiteId' => $staticSite->getStaticSiteId(),
 			'buildId' => $staticSite->getBuildId(),
 			'statusCode' => $statusCode,
 			'error' => $this->decodeBody($response)['error'] ?? null,
 		]);
-		$message = $this->l10n->t('The static site generator did not accept the build (HTTP status %d)', [$statusCode]);
+		$message = $this->l10n->t('The static site generator did not accept the request (HTTP status %d)', [$statusCode]);
 		throw $statusCode >= 500
 			? new StaticSiteGeneratorUnavailableException($message)
 			: new StaticSiteGeneratorException($message);

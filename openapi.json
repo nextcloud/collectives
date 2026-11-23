@@ -408,7 +408,8 @@
                             "generator_unavailable",
                             "generator_rejected",
                             "generator_failed",
-                            "generator_invalid_url"
+                            "generator_invalid_url",
+                            "generator_delete_failed"
                         ]
                     },
                     "publishedAt": {
@@ -4507,6 +4508,7 @@
             "delete": {
                 "operationId": "static_site-delete",
                 "summary": "Delete a static site",
+                "description": "A published static site is deleted at the publish service first. It keeps status deleting until the publish service reports it as deleted.",
                 "tags": [
                     "static_site"
                 ],
@@ -4564,7 +4566,35 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Static site deleted",
+                        "description": "Static site deleted or being deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Static site was changed meanwhile",
                         "content": {
                             "application/json": {
                                 "schema": {

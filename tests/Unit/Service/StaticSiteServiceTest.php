@@ -28,6 +28,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSitePublicationInProgressException;
+use OCA\Collectives\Service\StaticSiteRemover;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCA\Collectives\Service\UnprocessableEntityException;
@@ -53,6 +54,7 @@ class StaticSiteServiceTest extends TestCase {
 	private StaticSiteContentCollector&MockObject $contentCollector;
 	private StaticSiteArchiver&MockObject $archiver;
 	private StaticSiteGeneratorClient&MockObject $generatorClient;
+	private StaticSiteRemover&MockObject $remover;
 	private LoggerInterface&MockObject $logger;
 	private StaticSiteService $service;
 
@@ -73,6 +75,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->contentCollector = $this->createMock(StaticSiteContentCollector::class);
 		$this->archiver = $this->createMock(StaticSiteArchiver::class);
 		$this->generatorClient = $this->createMock(StaticSiteGeneratorClient::class);
+		$this->remover = $this->createMock(StaticSiteRemover::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$timeFactory = $this->createMock(ITimeFactory::class);
 		$timeFactory->method('getTime')->willReturn($this->now);
@@ -94,6 +97,7 @@ class StaticSiteServiceTest extends TestCase {
 			$this->contentCollector,
 			$this->archiver,
 			$this->generatorClient,
+			$this->remover,
 			$this->logger,
 			$timeFactory,
 			$appConfig,
@@ -796,22 +800,36 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')
 			->with(7, $this->collectiveId)
 			->willReturn($staticSite);
-		$this->staticSiteMapper->expects($this->once())
-			->method('delete')
-			->with($staticSite);
-		$this->archiver->expects($this->once())
-			->method('deleteAll')
-			->with($this->staticSiteId);
+		$this->remover->expects($this->once())->method('remove')->with($staticSite);
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
 
-	public function testDeleteSucceedsIfArchiveDeletionFails(): void {
+	public static function deleteInProgressStatusProvider(): array {
+		return [
+			'pending' => [StaticSite::STATUS_PENDING],
+			'provided' => [StaticSite::STATUS_PROVIDED],
+			'deleting' => [StaticSite::STATUS_DELETING],
+		];
+	}
+
+	/**
+	 * @dataProvider deleteInProgressStatusProvider
+	 */
+	public function testDeleteRejectsStaticSiteInProgress(string $status): void {
 		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
-		$this->staticSiteMapper->expects($this->once())->method('delete');
-		$this->archiver->method('deleteAll')->willThrowException(new ServiceException('Failed'));
-		$this->logger->expects($this->once())->method('warning');
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite($status));
+		$this->remover->expects($this->never())->method('remove');
+
+		$this->expectException(StaticSitePublicationInProgressException::class);
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
+	public function testDeleteRemovesAbortedStaticSite(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')
+			->willReturn($this->makeStaticSite(StaticSite::STATUS_DELETING, StaticSite::PENDING_TIMEOUT + 1));
+		$this->remover->expects($this->once())->method('remove');
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -821,7 +839,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->staticSiteMapper->expects($this->never())->method('findByIdAndCollectiveId');
-		$this->staticSiteMapper->expects($this->never())->method('delete');
+		$this->remover->expects($this->never())->method('remove');
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -832,7 +850,7 @@ class StaticSiteServiceTest extends TestCase {
 			->willThrowException(new NotFoundException('Static site not found'));
 
 		$this->expectException(NotFoundException::class);
-		$this->staticSiteMapper->expects($this->never())->method('delete');
+		$this->remover->expects($this->never())->method('remove');
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -984,8 +1002,7 @@ class StaticSiteServiceTest extends TestCase {
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($staticSite);
-		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
+		$this->remover->expects($this->once())->method('remove')->with($staticSite);
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -1401,5 +1418,49 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('findOneByStaticSiteId');
 
 		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PENDING);
+	}
+
+	public function testUpdateStatusRemovesDeletedStaticSite(): void {
+		$staticSite = $this->expectStaticSite(StaticSite::STATUS_DELETING);
+		$this->remover->expects($this->once())->method('removeDeleted')->with($staticSite);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, 'deleted');
+	}
+
+	public function testUpdateStatusKeepsStaticSiteOnlineIfDeletionFailed(): void {
+		$this->expectStaticSite(StaticSite::STATUS_DELETING);
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatusFailed')
+			->with($this->isCurrentBuild(), StaticSite::ERROR_GENERATOR_DELETE_FAILED)
+			->willReturn(true);
+		$this->remover->expects($this->never())->method('removeDeleted');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with($this->stringContains('disk full'));
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_FAILED, ['error_message' => 'disk full']);
+	}
+
+	public function testUpdateStatusIgnoresPublishedWhileDeleting(): void {
+		$this->expectStaticSite(StaticSite::STATUS_DELETING);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
+		$this->remover->expects($this->never())->method('removeDeleted');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Ignoring static site status callback, the static site is being deleted');
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
+	}
+
+	public function testUpdateStatusIgnoresDeletedWhileNotDeleting(): void {
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
+		$this->remover->expects($this->never())->method('removeDeleted');
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Ignoring static site status callback, the static site is not being deleted');
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, 'deleted');
 	}
 }

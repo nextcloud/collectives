@@ -21,6 +21,8 @@ export function staticSiteErrorMessage(lastError) {
 			return t('collectives', 'The publish service could not build the website. Please contact your administrator.')
 		case 'generator_invalid_url':
 			return t('collectives', 'The publish service reported an invalid web address. Please contact your administrator.')
+		case 'generator_delete_failed':
+			return t('collectives', 'The publish service could not delete the website. Please try again later.')
 		default:
 			return t('collectives', 'Publishing the website failed.')
 	}

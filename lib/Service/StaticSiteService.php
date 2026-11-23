@@ -33,9 +33,12 @@ class StaticSiteService {
 	// Length of the published_url column
 	private const PUBLISHED_URL_MAX_LENGTH = 255;
 	private const LARGEST_FILES_IN_MESSAGE = 3;
+	// The static site generator deleted the static site
+	private const CALLBACK_STATUS_DELETED = 'deleted';
 	private const ALLOWED_CALLBACK_STATUSES = [
 		StaticSite::STATUS_PUBLISHED,
 		StaticSite::STATUS_FAILED,
+		self::CALLBACK_STATUS_DELETED,
 	];
 
 	public function __construct(
@@ -46,6 +49,7 @@ class StaticSiteService {
 		private readonly StaticSiteContentCollector $contentCollector,
 		private readonly StaticSiteArchiver $archiver,
 		private readonly StaticSiteGeneratorClient $generatorClient,
+		private readonly StaticSiteRemover $remover,
 		private readonly LoggerInterface $logger,
 		private readonly ITimeFactory $timeFactory,
 		private readonly IAppConfig $appConfig,
@@ -197,17 +201,27 @@ class StaticSiteService {
 	}
 
 	/**
+	 * Delete a static site, also at the static site generator if it got published.
+	 * See StaticSiteRemover::remove().
+	 *
+	 * Not while it is being published or deleted, as the static site generator doesn't
+	 * check the order of requests.
+	 *
 	 * @throws NotFoundException Collective or static site not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
+	 * @throws StaticSitePublicationInProgressException Static site is being published or deleted
+	 * @throws UnprocessableEntityException Static site was changed meanwhile
+	 * @throws StaticSiteGeneratorException Generator not configured, unavailable or didn't accept the request
 	 * @throws DBException
 	 */
 	public function delete(int $collectiveId, int $id, string $userId): void {
 		$this->getEditableCollective($collectiveId, $userId);
 
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
-		// TODO(Publish): Send delete request to publish service once it provides an endpoint
-		$this->staticSiteMapper->delete($staticSite);
-		$this->deleteAllArchives($staticSite);
+		if ($staticSite->isInProgress($this->timeFactory->getTime())) {
+			throw new StaticSitePublicationInProgressException('Static site is being published or deleted');
+		}
+		$this->remover->remove($staticSite);
 	}
 
 	/**
@@ -254,9 +268,13 @@ class StaticSiteService {
 	 * Callbacks of older builds are only logged. Their settings aren't known anymore, so a late
 	 * successful older build can't be stored as publication.
 	 *
+	 * Deleting a static site with build ID (functioning as request ID). Status deleted removes the static site,
+	 * status failed keeps it online. See StaticSiteRemover::remove().
+	 *
 	 * Status published without a valid `publish_url` is stored as failed, so a published static site
 	 * always has one. The archive of the build isn't needed anymore once the build finished.
 	 *
+	 * @param string $status "published", "failed" or "deleted"
 	 * @param array{publish_url?: string, error_message?: string, build_id?: string} $data `build_id` must match the build of the URL if given
 	 *
 	 * @throws StaticSiteBuildNotFoundException Build is neither the current nor an older one
@@ -279,6 +297,14 @@ class StaticSiteService {
 			$this->ignoreStatusOfOlderBuild($staticSite, $buildId, $status, $logContext);
 			return;
 		}
+		if ($staticSite->getStatus() === StaticSite::STATUS_DELETING) {
+			$this->updateDeletionStatus($staticSite, $status, $data, $logContext);
+			return;
+		}
+		if ($status === self::CALLBACK_STATUS_DELETED) {
+			$this->logger->warning('Ignoring static site status callback, the static site is not being deleted', $logContext);
+			return;
+		}
 
 		if ($status === StaticSite::STATUS_PUBLISHED) {
 			$publishedUrl = $data['publish_url'] ?? null;
@@ -299,6 +325,31 @@ class StaticSiteService {
 			$this->logger->warning('Ignoring static site status callback, the build got published already or another build started meanwhile', $logContext);
 		}
 		$this->deleteArchive($staticSite, $buildId);
+	}
+
+	/**
+	 * A static site that failed to be deleted stays online, so deleting it can be retried.
+	 *
+	 * @param array{publish_url?: string, error_message?: string, build_id?: string} $data
+	 *
+	 * @throws DBException
+	 */
+	private function updateDeletionStatus(StaticSite $staticSite, string $status, array $data, array $logContext): void {
+		if ($status === self::CALLBACK_STATUS_DELETED) {
+			$this->remover->removeDeleted($staticSite);
+			return;
+		}
+		if ($status !== StaticSite::STATUS_FAILED) {
+			$this->logger->warning('Ignoring static site status callback, the static site is being deleted', $logContext);
+			return;
+		}
+
+		if (isset($data['error_message'])) {
+			$this->logger->warning('Static site generator failed to delete static site: ' . $data['error_message'], $logContext);
+		}
+		if (!$this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_DELETE_FAILED)) {
+			$this->logger->warning('Ignoring static site status callback, another request started meanwhile', $logContext);
+		}
 	}
 
 	/**

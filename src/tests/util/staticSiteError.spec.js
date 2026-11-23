@@ -14,6 +14,7 @@ describe('staticSiteErrorMessage', () => {
 		['generator_rejected', 'The publish service could not process the request. Please contact your administrator.'],
 		['generator_failed', 'The publish service could not build the website. Please contact your administrator.'],
 		['generator_invalid_url', 'The publish service reported an invalid web address. Please contact your administrator.'],
+		['generator_delete_failed', 'The publish service could not delete the website. Please try again later.'],
 	])('translates %j', (lastError, message) => {
 		expect(staticSiteErrorMessage(lastError)).toBe(message)
 	})

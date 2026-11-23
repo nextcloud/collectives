@@ -130,6 +130,49 @@ class StaticSiteMapperTest extends TestCase {
 		$this->assertFalse($this->mapper->startBuild($this->makeStaticSite(), 'new-build', 'Title', [1]));
 	}
 
+	public function testStartDeletionOnlyUpdatesUnchangedStaticSite(): void {
+		$this->qb->method('executeStatement')->willReturn(1);
+
+		$this->assertTrue($this->mapper->startDeletion($this->makeStaticSite(), 'delete-build'));
+
+		$this->assertSame([
+			'id = 7',
+			"status = 'published'",
+			'updated_at = 1700000000',
+		], $this->conditions);
+		$this->assertSame([
+			'status' => StaticSite::STATUS_DELETING,
+			'build_id' => 'delete-build',
+			'last_error' => null,
+			'updated_at' => $this->now,
+		], $this->values);
+	}
+
+	public function testStartDeletionReturnsFalseIfStaticSiteChangedMeanwhile(): void {
+		$this->qb->method('executeStatement')->willReturn(0);
+
+		$this->assertFalse($this->mapper->startDeletion($this->makeStaticSite(), 'delete-build'));
+	}
+
+	public function testDeleteIfCurrentBuildOnlyDeletesCurrentBuild(): void {
+		$this->qb->method('delete')->willReturnSelf();
+		$this->qb->method('executeStatement')->willReturn(1);
+
+		$this->assertTrue($this->mapper->deleteIfCurrentBuild($this->makeBuildingStaticSite(StaticSite::STATUS_DELETING)));
+
+		$this->assertSame([
+			'id = 7',
+			"build_id = 'current-build'",
+		], $this->conditions);
+	}
+
+	public function testDeleteIfCurrentBuildReturnsFalseIfAnotherRequestStarted(): void {
+		$this->qb->method('delete')->willReturnSelf();
+		$this->qb->method('executeStatement')->willReturn(0);
+
+		$this->assertFalse($this->mapper->deleteIfCurrentBuild($this->makeBuildingStaticSite(StaticSite::STATUS_DELETING)));
+	}
+
 	public function testUpdateRequestStatusOnlyUpdatesPendingCurrentBuild(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 

@@ -300,7 +300,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->method('request')->willReturn($this->makeResponse(400, '{"error": "slug is taken"}'));
 		$this->logger->expects(self::once())
 			->method('warning')
-			->with('Static site generator did not accept the build', [
+			->with('Static site generator did not accept the request', [
 				'staticSiteId' => $this->staticSiteId,
 				'buildId' => $this->buildId,
 				'statusCode' => 400,
@@ -309,5 +309,40 @@ class StaticSiteGeneratorClientTest extends TestCase {
 
 		$this->expectException(StaticSiteGeneratorException::class);
 		$this->client->create($this->makeStaticSite(), 'My Site');
+	}
+
+	public function testDeleteSendsCallbackUrlWithBearerToken(): void {
+		$this->httpClient->expects(self::once())
+			->method('request')
+			->with('DELETE', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, self::callback(static fn (array $options): bool
+				=> $options['headers']['Authorization'] === 'Bearer secret-token'
+				&& $options['json'] === ['data' => ['callback_status_url' => 'https://cloud.example.org/callback']]))
+			->willReturn($this->makeResponse(202, ''));
+
+		$this->assertTrue($this->client->delete($this->makeStaticSite()));
+	}
+
+	public function testDeleteReturnsFalseForUnknownStaticSite(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(404, ''));
+
+		$this->assertFalse($this->client->delete($this->makeStaticSite()));
+	}
+
+	public function testDeleteWithSsgUnavailable(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(503, ''));
+
+		$this->expectException(StaticSiteGeneratorUnavailableException::class);
+		$this->client->delete($this->makeStaticSite());
+	}
+
+	public function testDeleteRejected(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(400, ''));
+
+		try {
+			$this->client->delete($this->makeStaticSite());
+			$this->fail('Expected StaticSiteGeneratorException');
+		} catch (StaticSiteGeneratorException $e) {
+			$this->assertNotInstanceOf(StaticSiteGeneratorUnavailableException::class, $e);
+		}
 	}
 }

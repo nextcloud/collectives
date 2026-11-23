@@ -124,6 +124,45 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
+	 * Start deleting a published static site with the given build ID. It identifies the deletion
+	 * like a build towards the static site generator: set status deleting and clear
+	 * the last error, unless the static site was changed since it was read.
+	 *
+	 * @return bool False if the static site was changed meanwhile
+	 *
+	 * @throws Exception
+	 */
+	public function startDeletion(StaticSite $staticSite, string $buildId): bool {
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->tableName)
+			->set('status', $qb->createNamedParameter(StaticSite::STATUS_DELETING, IQueryBuilder::PARAM_STR))
+			->set('build_id', $qb->createNamedParameter($buildId, IQueryBuilder::PARAM_STR))
+			->set('last_error', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
+			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter($staticSite->getStatus(), IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('updated_at', $qb->createNamedParameter($staticSite->getUpdatedAt(), IQueryBuilder::PARAM_INT)));
+
+		return $qb->executeStatement() > 0;
+	}
+
+	/**
+	 * Delete the static site, unless another request started since it was read.
+	 *
+	 * @return bool False if another request started or the static site was deleted already
+	 *
+	 * @throws Exception
+	 */
+	public function deleteIfCurrentBuild(StaticSite $staticSite): bool {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete($this->tableName)
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('build_id', $qb->createNamedParameter($staticSite->getBuildId(), IQueryBuilder::PARAM_STR)));
+
+		return $qb->executeStatement() > 0;
+	}
+
+	/**
 	 * Store the result of the request to the static site generator, unless its status
 	 * callback concluded the build already or another build started meanwhile.
 	 *

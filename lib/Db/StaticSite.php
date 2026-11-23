@@ -62,20 +62,25 @@ class StaticSite extends Entity implements JsonSerializable {
 	// The publish service didn't build the static site, e.g. it wasn't reachable or rejected it.
 	// A failed archive build keeps the previous status instead.
 	public const STATUS_FAILED = 'failed';
+	// The publish service was requested to delete the published static site
+	public const STATUS_DELETING = 'deleting';
 
 	// Reasons for status failed, translated by the frontend
 	public const ERROR_GENERATOR_UNAVAILABLE = 'generator_unavailable';
 	public const ERROR_GENERATOR_REJECTED = 'generator_rejected';
 	public const ERROR_GENERATOR_FAILED = 'generator_failed';
 	public const ERROR_GENERATOR_INVALID_URL = 'generator_invalid_url';
+	public const ERROR_GENERATOR_DELETE_FAILED = 'generator_delete_failed';
 
 	public const IN_PROGRESS_STATUSES = [
 		self::STATUS_PENDING,
 		self::STATUS_PROVIDED,
+		self::STATUS_DELETING,
 	];
 
 	// Seconds after which an in-progress publication counts as aborted, e.g. after a PHP timeout
 	// or an unreachable/crashed publish service that never sends its status callback
+	// TODO(Publish) discuss timeout value
 	public const PENDING_TIMEOUT = 15 * 60;
 
 	protected ?int $collectiveId = null;
@@ -90,7 +95,8 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?int $updatedAt = null;
 	protected ?string $lastError = null;
 	protected ?int $publishedAt = null;
-	// Build of the latest publication attempt, whose archive the static site generator downloads
+	// Latest request to the static site generator, a build or a deletion. Its status callback is
+	// assigned by it, and a build's archive is downloaded by it.
 	protected ?string $buildId = null;
 	// Build that is online, with its title and page selection
 	protected ?string $publishedBuildId = null;

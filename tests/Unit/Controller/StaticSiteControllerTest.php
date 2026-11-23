@@ -15,6 +15,7 @@ use OCA\Collectives\Service\ServiceException;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
+use OCA\Collectives\Service\StaticSitePublicationInProgressException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCA\Collectives\Service\UnprocessableEntityException;
@@ -161,5 +162,41 @@ class StaticSiteControllerTest extends TestCase {
 		$this->expectException(OCSBadRequestException::class);
 		$this->expectExceptionMessage('There is no content to publish.');
 		$this->controller->create(42, [1]);
+	}
+
+	public function testDeleteReturnsEmptyResponse(): void {
+		$this->staticSiteService->expects($this->once())->method('delete')->with(42, 7);
+
+		$response = $this->controller->delete(42, 7);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertSame([], $response->getData());
+	}
+
+	/**
+	 * @dataProvider generatorExceptionProvider
+	 */
+	public function testDeleteTellsWhetherTryingAgainMayHelpIfGeneratorFails(StaticSiteGeneratorException $exception, int $statusCode, string $message): void {
+		$this->staticSiteService->method('delete')->willThrowException($exception);
+
+		try {
+			$this->controller->delete(42, 7);
+			$this->fail('Expected OCSException');
+		} catch (OCSException $e) {
+			$this->assertSame($statusCode, $e->getCode());
+			$this->assertSame($message, $e->getMessage());
+		}
+	}
+
+	public function testDeleteIsLockedWhileStaticSiteIsInProgress(): void {
+		$this->staticSiteService->method('delete')
+			->willThrowException(new StaticSitePublicationInProgressException('Static site is being published or deleted'));
+
+		try {
+			$this->controller->delete(42, 7);
+			$this->fail('Expected OCSException');
+		} catch (OCSException $e) {
+			$this->assertSame(Http::STATUS_LOCKED, $e->getCode());
+		}
 	}
 }

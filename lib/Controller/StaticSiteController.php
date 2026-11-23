@@ -140,21 +140,26 @@ class StaticSiteController extends OCSController {
 	/**
 	 * Delete a static site
 	 *
+	 * A published static site is deleted at the publish service first. It keeps status deleting
+	 * until the publish service reports it as deleted.
+	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param int $id ID of the static site
 	 *
 	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @throws OCSBadRequestException Static site was changed meanwhile
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or static site not found
+	 * @throws OCSException Static site is being published or deleted, or the publish service is not available or didn't accept the request
 	 *
-	 * 200: Static site deleted
+	 * 200: Static site deleted or being deleted
 	 */
 	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
 		$uid = $this->getUid();
-		$this->handleErrorResponse(
+		$this->handleArchiveErrorResponse(
 			fn () => $this->staticSiteService->delete($collectiveId, $id, $uid),
-			$this->logger,
+			['collectiveId' => $collectiveId, 'id' => $id],
 		);
 		return new DataResponse([]);
 	}
@@ -169,8 +174,12 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSNotFoundException
 	 * @throws OCSException
 	 * @throws StaticSiteSlugTakenException Handled by the caller with a slug taken response
+	 *
+	 * @template T
+	 * @param Closure(): T $callback
+	 * @return T
 	 */
-	private function handleArchiveErrorResponse(Closure $callback, array $context): StaticSite {
+	private function handleArchiveErrorResponse(Closure $callback, array $context): mixed {
 		try {
 			return $this->handleErrorResponse($callback, $this->logger);
 		} catch (StaticSiteSlugTakenException $e) {
