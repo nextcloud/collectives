@@ -4658,11 +4658,11 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}/builds/{buildId}": {
             "patch": {
                 "operationId": "static_site_generator-update-status",
-                "summary": "Update the publication status of a static site.",
-                "description": "Called by the external static site generator as a build-progress callback. Authorized by the unguessable staticSiteId rather than a logged-in user or admin token.",
+                "summary": "Report the result of a build of a static site.",
+                "description": "Called by the external static site generator once a build finished. Not authenticated, the callback URL with the unguessable static site and build IDs authorizes it. Unknown IDs are throttled against guessing.",
                 "tags": [
                     "static_site_generator"
                 ],
@@ -4685,17 +4685,20 @@
                                     "status": {
                                         "type": "string",
                                         "default": "",
-                                        "description": "New status (\"published\" or \"failed\")"
+                                        "description": "Result of the build (\"published\" or \"failed\")"
                                     },
                                     "data": {
                                         "type": "object",
                                         "default": {},
-                                        "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed",
+                                        "description": "Status-specific result payload, `publish_url` is required for status \"published\": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed. `build_id` is optional and must match the build of the URL",
                                         "properties": {
                                             "publish_url": {
                                                 "type": "string"
                                             },
                                             "error_message": {
+                                                "type": "string"
+                                            },
+                                            "build_id": {
                                                 "type": "string"
                                             }
                                         }
@@ -4728,6 +4731,15 @@
                         }
                     },
                     {
+                        "name": "buildId",
+                        "in": "path",
+                        "description": "ID of the build",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "OCS-APIRequest",
                         "in": "header",
                         "description": "Required to be true for the API request to pass",
@@ -4740,7 +4752,35 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Static site status updated",
+                        "description": "Result of the build processed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Static site or build not found",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4769,34 +4809,6 @@
                     },
                     "400": {
                         "description": "Invalid or missing status",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "required": [
-                                        "ocs"
-                                    ],
-                                    "properties": {
-                                        "ocs": {
-                                            "type": "object",
-                                            "required": [
-                                                "meta",
-                                                "data"
-                                            ],
-                                            "properties": {
-                                                "meta": {
-                                                    "$ref": "#/components/schemas/OCSMeta"
-                                                },
-                                                "data": {}
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Static site not found",
                         "content": {
                             "application/json": {
                                 "schema": {

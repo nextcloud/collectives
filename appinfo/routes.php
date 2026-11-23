@@ -82,12 +82,12 @@ return [
 		['name' => 'staticSite#delete', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 
-		// External static site generator API: health is admin-only; updateStatus is the generator's build-progress
-		// callback, unauthenticated but authorized by the unguessable staticSiteId. See also staticSiteArchive#download
-		// in the non-ocs routes above.
+		// External static site generator API: health is admin-only; updateStatus is the generator's build result
+		// callback, unauthenticated but authorized by the unguessable static site and build IDs. See also
+		// staticSiteArchive#download in the non-ocs routes above.
 		['name' => 'staticSiteGenerator#health', 'url' => '/api/v{apiVersion}/static-site-generator/health', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
-		['name' => 'staticSiteGenerator#updateStatus', 'url' => '/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}', 'verb' => 'PATCH',
+		['name' => 'staticSiteGenerator#updateStatus', 'url' => '/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}/builds/{buildId}', 'verb' => 'PATCH',
 			'requirements' => ['apiVersion' => '(1.0)']],
 
 		// Pages search API

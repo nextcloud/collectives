@@ -368,4 +368,44 @@ class StaticSiteArchiverTest extends TestCase {
 		$this->expectException(ServiceException::class);
 		$this->archiver->deleteAll($this->staticSiteId);
 	}
+
+	private function makeArchiveFile(string $name, bool $deleted): ISimpleFile&MockObject {
+		$file = $this->createMock(ISimpleFile::class);
+		$file->method('getName')->willReturn($name);
+		$file->expects($deleted ? $this->once() : $this->never())->method('delete');
+		return $file;
+	}
+
+	public function testDeleteUpToRemovesArchivesOfBuildAndOlderBuilds(): void {
+		$this->appData->method('getFolder')->with('static_sites')->willReturn($this->folder);
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('getDirectoryListing')->willReturn([
+			$this->makeArchiveFile('01990000-0000-7000-8000-000000000000.tar.gz', true),
+			$this->makeArchiveFile($this->buildId . '.tar.gz', true),
+			$this->makeArchiveFile('01990000-0000-7000-8000-000000000002.tar.gz', false),
+			$this->makeArchiveFile('other-file', false),
+		]);
+
+		$this->archiver->deleteUpTo($this->staticSiteId, $this->buildId);
+	}
+
+	public function testDeleteUpToIgnoresMissingFolderOfStaticSite(): void {
+		$this->appData->method('getFolder')->willReturn($this->folder);
+		$this->folder->method('getFolder')->willThrowException(new FilesNotFoundException());
+
+		$this->archiver->deleteUpTo($this->staticSiteId, $this->buildId);
+		$this->addToAssertionCount(1);
+	}
+
+	public function testDeleteUpToWrapsPermissionErrors(): void {
+		$file = $this->createMock(ISimpleFile::class);
+		$file->method('getName')->willReturn($this->buildId . '.tar.gz');
+		$file->method('delete')->willThrowException(new FilesNotPermittedException());
+		$this->appData->method('getFolder')->willReturn($this->folder);
+		$this->folder->method('getFolder')->willReturn($this->siteFolder);
+		$this->siteFolder->method('getDirectoryListing')->willReturn([$file]);
+
+		$this->expectException(ServiceException::class);
+		$this->archiver->deleteUpTo($this->staticSiteId, $this->buildId);
+	}
 }

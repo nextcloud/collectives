@@ -107,11 +107,11 @@ class StaticSiteService {
 		try {
 			$this->generatorClient->create($staticSite, $title);
 		} catch (StaticSiteGeneratorException $e) {
-			$this->storeGeneratorFailure($staticSite, $title, $pageIds, $e);
+			$this->storeGeneratorFailure($staticSite, $e);
 			throw $e;
 		}
 
-		return $this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_PROVIDED);
+		return $this->concludeRequest($staticSite, StaticSite::STATUS_PROVIDED);
 	}
 
 	/**
@@ -154,7 +154,7 @@ class StaticSiteService {
 		$buildId = Uuid::v7()->toRfc4122();
 		// TODO(Publish): Also check the slug against the publish service once it provides an endpoint
 		try {
-			$updated = $this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING, $buildId, $slug);
+			$updated = $this->staticSiteMapper->startBuild($staticSite, $buildId, $title, $pageIds, $slug);
 		} catch (DBException $e) {
 			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw $e;
@@ -167,6 +167,8 @@ class StaticSiteService {
 
 		$previous = clone $staticSite;
 		$staticSite->setBuildId($buildId);
+		$staticSite->setTitle($title);
+		$staticSite->setSelectedPageIds($pageIds);
 		if ($slug !== null) {
 			$staticSite->setSlug($slug);
 		}
@@ -185,11 +187,11 @@ class StaticSiteService {
 				$this->generatorClient->create($staticSite, $title);
 			}
 		} catch (StaticSiteGeneratorException $e) {
-			$this->storeGeneratorFailure($staticSite, $title, $pageIds, $e);
+			$this->storeGeneratorFailure($staticSite, $e);
 			throw $e;
 		}
 
-		return $this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_PROVIDED);
+		return $this->concludeRequest($staticSite, StaticSite::STATUS_PROVIDED);
 	}
 
 	/**
@@ -240,23 +242,32 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Called back by the external static site generator once publishing finished, identified by the unguessable
-	 * `staticSiteId` rather than a logged-in user (no bearer token so far). Only applied while
-	 * the build is still pending (status "provided"); late/duplicate callbacks are ignored,
-	 * though this can't distinguish a very late callback from a coincidentally-pending rebuild.
+	 * Called back by the external static site generator once a build finished. Not authenticated,
+	 * the callback URL with the unguessable static site and build IDs authorizes it.
+	 *
+	 * Only the current build changes the status, whatever the status is otherwise: the callback
+	 * may arrive before the request to the generator is concluded or after the publication was
+	 * considered aborted. A build that got published already isn't changed anymore.
+	 *
+	 * Callbacks of older builds are only logged. Their settings aren't known anymore, so a late
+	 * successful older build can't be stored as publication.
 	 *
 	 * Status published without a valid `publish_url` is stored as failed, so a published static site
-	 * always has one. The archive isn't needed anymore once the result is stored, whatever it is.
+	 * always has one. The archive of the build isn't needed anymore once the build finished. A
+	 * successful build makes the archives of older builds obsolete as well.
 	 *
-	 * @param array{publish_url?: string, error_message?: string} $data
+	 * @param array{publish_url?: string, error_message?: string, build_id?: string} $data `build_id` must match the build of the URL if given
 	 *
-	 * @throws NotFoundException Static site not found
+	 * @throws NotFoundException Static site or build not found
 	 * @throws UnprocessableEntityException Invalid status
 	 * @throws DBException
 	 */
-	public function updateStatus(string $staticSiteId, string $status, array $data = []): void {
+	public function updateStatus(string $staticSiteId, string $buildId, string $status, array $data = []): void {
 		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
 			throw new UnprocessableEntityException('Invalid status: ' . $status);
+		}
+		if (!Uuid::isValid($buildId)) {
+			throw new NotFoundException('Invalid build ID');
 		}
 		try {
 			$staticSite = $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
@@ -264,32 +275,63 @@ class StaticSiteService {
 			throw new NotFoundException('Static site not found', 0, $e);
 		}
 
-		if ($staticSite->getStatus() !== StaticSite::STATUS_PROVIDED) {
-			$this->logger->warning('Ignoring static site status callback for status ' . $staticSite->getStatus(), ['staticSiteId' => $staticSiteId]);
+		$logContext = $this->getLogContext($staticSite) + ['callbackBuildId' => $buildId, 'callbackStatus' => $status];
+		if (isset($data['build_id']) && $data['build_id'] !== $buildId) {
+			$this->logger->warning('Ignoring static site status callback, its build_id does not match the callback URL', $logContext + ['bodyBuildId' => $data['build_id']]);
+			return;
+		}
+		if ($buildId !== $staticSite->getBuildId()) {
+			$this->ignoreStatusOfOlderBuild($staticSite, $buildId, $status, $logContext);
 			return;
 		}
 
+		$published = false;
 		if ($status === StaticSite::STATUS_PUBLISHED) {
 			$publishedUrl = $data['publish_url'] ?? null;
 			if (is_string($publishedUrl) && $this->isValidPublishUrl($publishedUrl)) {
 				$concluded = $this->staticSiteMapper->updateStatusPublished($staticSite, $publishedUrl);
+				$published = $concluded;
 			} else {
-				$this->logger->warning('Static site generator reported an invalid publish_url', $this->getLogContext($staticSite) + ['publishUrl' => $publishedUrl]);
+				$this->logger->warning('Static site generator reported an invalid publish_url', $logContext + ['publishUrl' => $publishedUrl]);
 				$concluded = $this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_INVALID_URL);
 			}
 		} else {
 			if (isset($data['error_message'])) {
-				$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], ['staticSiteId' => $staticSiteId]);
+				$this->logger->warning('Static site generator failed to publish static site: ' . $data['error_message'], $logContext);
 			}
 			$concluded = $this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_FAILED);
 		}
 
 		if (!$concluded) {
-			// Another callback concluded the publication or a new one started meanwhile, which needs the archive
-			$this->logger->warning('Ignoring static site status callback, the static site changed meanwhile', $this->getLogContext($staticSite));
-			return;
+			$this->logger->warning('Ignoring static site status callback, the build got published already or another build started meanwhile', $logContext);
 		}
-		$this->deleteArchive($staticSite);
+		$this->deleteArchive($staticSite, $buildId, $published);
+	}
+
+	/**
+	 * Builds other than the current one are only known as long as their archive exists, or
+	 * if they got published.
+	 *
+	 * @throws NotFoundException Unknown build
+	 */
+	private function ignoreStatusOfOlderBuild(StaticSite $staticSite, string $buildId, string $status, array $logContext): void {
+		if ($buildId !== $staticSite->getPublishedBuildId()) {
+			try {
+				$this->archiver->get($staticSite->getStaticSiteId(), $buildId);
+			} catch (NotFoundException $e) {
+				throw new NotFoundException('Build of static site not found', 0, $e);
+			}
+		}
+
+		$publishedOlderBuild = $status === StaticSite::STATUS_PUBLISHED
+			&& strcmp($buildId, $staticSite->getPublishedBuildId() ?? '') > 0;
+		if ($publishedOlderBuild) {
+			// Known limitation: the settings of the build aren't known, so the publication can't be stored
+			$this->logger->warning('Static site generator published a build that is not the current one anymore', $logContext);
+		} else {
+			$this->logger->info('Ignoring static site status callback of a build that is not the current one', $logContext);
+		}
+		$this->deleteArchive($staticSite, $buildId, $publishedOlderBuild);
 	}
 
 	/**
@@ -344,23 +386,31 @@ class StaticSiteService {
 	}
 
 	/**
-	 * @param list<int> $pageIds
+	 * Store whether the static site generator accepted the build (status provided) or not
+	 * (status failed) and return the static site as stored.
+	 *
+	 * Title and page selection were stored when the build started, so they are kept even if
+	 * the build failed, and the user can retry it without losing the latest changes.
+	 *
+	 * If the status callback of the build arrived before this, its result is kept.
+	 *
+	 * @param ?string $lastError One of the StaticSite::ERROR_* reasons if the status is failed
 	 *
 	 * @throws NotFoundException Static site was deleted meanwhile
-	 * @throws UnprocessableEntityException
 	 * @throws DBException
 	 */
-	private function updateSettingsAndStatus(StaticSite $staticSite, string $title, array $pageIds, string $status, ?string $lastError = null): StaticSite {
+	private function concludeRequest(StaticSite $staticSite, string $status, ?string $lastError = null): StaticSite {
+		$this->staticSiteMapper->updateRequestStatus($staticSite, $status, $lastError);
 		try {
-			return $this->staticSiteMapper->updateSettingsAndStatus($staticSite, $title, $pageIds, $status, $lastError);
-		} catch (NotFoundException $e) {
-			$this->deleteArchive($staticSite);
-			throw $e;
+			return $this->staticSiteMapper->find($staticSite->getId());
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			$this->deleteAllArchives($staticSite);
+			throw new NotFoundException('Static site not found', 0, $e);
 		}
 	}
 
 	/**
-	 * Store the settings with status failed, so publishing can be retried later.
+	 * Store status failed, so publishing can be retried later.
 	 *
 	 * A rejected build never downloads its archive, so it is deleted. If the generator was
 	 * unavailable or timed out, it may have accepted the build anyway, so the archive is kept.
@@ -368,13 +418,14 @@ class StaticSiteService {
 	 * @throws NotFoundException Static site was deleted meanwhile
 	 * @throws DBException
 	 */
-	private function storeGeneratorFailure(StaticSite $staticSite, string $title, array $pageIds, StaticSiteGeneratorException $e): void {
-		$lastError = $e instanceof StaticSiteGeneratorUnavailableException
+	private function storeGeneratorFailure(StaticSite $staticSite, StaticSiteGeneratorException $e): void {
+		$unavailable = $e instanceof StaticSiteGeneratorUnavailableException;
+		$lastError = $unavailable
 			? StaticSite::ERROR_GENERATOR_UNAVAILABLE
 			: StaticSite::ERROR_GENERATOR_REJECTED;
-		$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED, $lastError);
-		if (!$e instanceof StaticSiteGeneratorUnavailableException) {
-			$this->deleteArchive($staticSite);
+		$this->concludeRequest($staticSite, StaticSite::STATUS_FAILED, $lastError);
+		if (!$unavailable) {
+			$this->deleteArchive($staticSite, $staticSite->getBuildId());
 		}
 	}
 
@@ -390,16 +441,20 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Delete the archive of the static site's current build.
 	 * Failing to delete the archive only leaves an orphaned file, so it doesn't throw.
+	 *
+	 * @param bool $includeOlderBuilds Also delete the archives of builds started before
 	 */
-	private function deleteArchive(StaticSite $staticSite): void {
-		$buildId = $staticSite->getBuildId();
+	private function deleteArchive(StaticSite $staticSite, ?string $buildId, bool $includeOlderBuilds = false): void {
 		if ($buildId === null) {
 			return;
 		}
 		try {
-			$this->archiver->delete($staticSite->getStaticSiteId(), $buildId);
+			if ($includeOlderBuilds) {
+				$this->archiver->deleteUpTo($staticSite->getStaticSiteId(), $buildId);
+			} else {
+				$this->archiver->delete($staticSite->getStaticSiteId(), $buildId);
+			}
 		} catch (ServiceException $e) {
 			$this->logger->warning('Failed to delete static site archive', $this->getLogContext($staticSite) + ['exception' => $e]);
 		}

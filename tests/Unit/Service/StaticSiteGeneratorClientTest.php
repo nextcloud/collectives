@@ -56,7 +56,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			]);
 		$urlGenerator->method('linkToOCSRouteAbsolute')
 			->willReturnMap([
-				['collectives.staticsitegenerator.updatestatus', ['apiVersion' => '1.0', 'staticSiteId' => $this->staticSiteId], 'https://cloud.example.org/callback'],
+				['collectives.staticsitegenerator.updatestatus', ['apiVersion' => '1.0', 'staticSiteId' => $this->staticSiteId, 'buildId' => $this->buildId], 'https://cloud.example.org/callback'],
 			]);
 		$l10n = $this->createMock(IL10N::class);
 		$l10n->method('t')->willReturnCallback(static fn (string $text, array $parameters = []): string => vsprintf($text, $parameters));

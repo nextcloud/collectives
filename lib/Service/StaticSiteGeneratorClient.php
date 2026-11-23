@@ -123,6 +123,7 @@ class StaticSiteGeneratorClient {
 			'callback_status_url' => $this->urlGenerator->linkToOCSRouteAbsolute('collectives.staticsitegenerator.updatestatus', [
 				'apiVersion' => '1.0',
 				'staticSiteId' => $staticSiteId,
+				'buildId' => $staticSite->getBuildId(),
 			]),
 			'slug' => $staticSite->getSlug(),
 			'title' => $title,
