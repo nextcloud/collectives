@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\AnonRateLimit;
+use OCP\AppFramework\Http\Attribute\BruteForceProtection;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSBadRequestException;
@@ -59,27 +61,41 @@ class StaticSiteGeneratorController extends OCSController {
 	}
 
 	/**
-	 * Update the publication status of a static site.
+	 * Report the result of a build of a static site.
 	 *
-	 * Called by the external static site generator as a build-progress callback. Authorized by the
-	 * unguessable staticSiteId rather than a logged-in user or admin token.
+	 * Called by the external static site generator once a build finished. Not authenticated, the
+	 * callback URL with the unguessable static site and build IDs authorizes it. Unknown static
+	 * sites are throttled against guessing, unknown builds of a known static site aren't.
 	 *
 	 * @param string $staticSiteId ID of the static site
-	 * @param string $status New status ("published" or "failed")
-	 * @param array{publish_url?: string, error_message?: string} $data Status-specific result payload, `publish_url` is required for status "published": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed
+	 * @param string $buildId ID of the build
+	 * @param string $status Result of the build ("published" or "failed")
+	 * @param array{publish_url?: string, error_message?: string, build_id?: string} $data Status-specific result payload, `publish_url` is required for status "published": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed. `build_id` is optional and must match the build of the URL
 	 *
-	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 * @throws OCSBadRequestException Invalid or missing status
-	 * @throws OCSNotFoundException Static site not found
 	 *
-	 * 200: Static site status updated
+	 * 200: Result of the build processed
+	 * 404: Static site or build not found
 	 */
 	#[PublicPage]
-	#[AnonRateLimit(limit: 10, period: 10)]
-	public function updateStatus(string $staticSiteId, string $status = '', array $data = []): DataResponse {
-		$this->handleErrorResponse(function () use ($staticSiteId, $status, $data): void {
-			$this->staticSiteService->updateStatus($staticSiteId, $status, $data);
-		}, $this->logger);
-		return new DataResponse([]);
+	#[AnonRateLimit(limit: 60, period: 60)]
+	#[BruteForceProtection(action: 'collectivesStaticSiteStatus')]
+	public function updateStatus(string $staticSiteId, string $buildId, string $status = '', array $data = []): DataResponse {
+		try {
+			$buildFound = $this->handleErrorResponse(function () use ($staticSiteId, $buildId, $status, $data): bool {
+				try {
+					$this->staticSiteService->updateStatus($staticSiteId, $buildId, $status, $data);
+				} catch (StaticSiteBuildNotFoundException) {
+					return false;
+				}
+				return true;
+			}, $this->logger);
+		} catch (OCSNotFoundException) {
+			$response = new DataResponse([], Http::STATUS_NOT_FOUND);
+			$response->throttle();
+			return $response;
+		}
+		return $buildFound ? new DataResponse([]) : new DataResponse([], Http::STATUS_NOT_FOUND);
 	}
 }

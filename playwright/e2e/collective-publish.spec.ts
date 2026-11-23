@@ -599,7 +599,7 @@ test.describe('Collective publish', () => {
 			}
 			await route.fulfill({
 				status: 423,
-				json: { ocs: { meta: { status: 'failure', statuscode: 423, message: 'A website of this collective is being published. Please wait until it is finished.' }, data: [] } },
+				json: { ocs: { meta: { status: 'failure', statuscode: 423, message: 'A website of this collective is being published or deleted. Please wait until it is finished.' }, data: [] } },
 			})
 		})
 
@@ -612,7 +612,7 @@ test.describe('Collective publish', () => {
 		await modal.getByRole('button', { name: 'Publish website' }).click()
 
 		// Client errors are shown as warning toast with role status, but the modal is still open and shows the website list with the in-progress website
-		await expect(page.getByRole('status').filter({ hasText: 'A website of this collective is being published. Please wait until it is finished.' })).toBeVisible()
+		await expect(page.getByRole('status').filter({ hasText: 'A website of this collective is being published or deleted. Please wait until it is finished.' })).toBeVisible()
 		await expect(modal.getByRole('heading', { name: 'Websites' })).toBeVisible()
 	})
 

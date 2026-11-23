@@ -21,12 +21,14 @@ use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\ServiceException;
 use OCA\Collectives\Service\SlugService;
 use OCA\Collectives\Service\StaticSiteArchiver;
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteContentCollector;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSitePublicationInProgressException;
+use OCA\Collectives\Service\StaticSiteRemover;
 use OCA\Collectives\Service\StaticSiteService;
 use OCA\Collectives\Service\StaticSiteSlugTakenException;
 use OCA\Collectives\Service\UnprocessableEntityException;
@@ -42,6 +44,7 @@ use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Uid\Uuid;
 use Test\TestCase;
 
 class StaticSiteServiceTest extends TestCase {
@@ -51,12 +54,14 @@ class StaticSiteServiceTest extends TestCase {
 	private StaticSiteContentCollector&MockObject $contentCollector;
 	private StaticSiteArchiver&MockObject $archiver;
 	private StaticSiteGeneratorClient&MockObject $generatorClient;
+	private StaticSiteRemover&MockObject $remover;
 	private LoggerInterface&MockObject $logger;
 	private StaticSiteService $service;
 
 	private string $userId = 'alice';
 	private int $collectiveId = 42;
 	private string $staticSiteId = '01990000-0000-7000-8000-000000000000';
+	private string $buildId = '01990000-0000-7000-8000-000000000001';
 	private int $now = 1800000000;
 	private int $maxSize = ConfigLexicon::STATIC_SITE_MAX_SIZE_DEFAULT;
 	private bool $publishFeatureEnabled = true;
@@ -70,6 +75,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->contentCollector = $this->createMock(StaticSiteContentCollector::class);
 		$this->archiver = $this->createMock(StaticSiteArchiver::class);
 		$this->generatorClient = $this->createMock(StaticSiteGeneratorClient::class);
+		$this->remover = $this->createMock(StaticSiteRemover::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$timeFactory = $this->createMock(ITimeFactory::class);
 		$timeFactory->method('getTime')->willReturn($this->now);
@@ -91,6 +97,7 @@ class StaticSiteServiceTest extends TestCase {
 			$this->contentCollector,
 			$this->archiver,
 			$this->generatorClient,
+			$this->remover,
 			$this->logger,
 			$timeFactory,
 			$appConfig,
@@ -111,14 +118,14 @@ class StaticSiteServiceTest extends TestCase {
 		$staticSite->setId(7);
 		$staticSite->setCollectiveId($this->collectiveId);
 		$staticSite->setStaticSiteId($this->staticSiteId);
+		$staticSite->setBuildId($this->buildId);
 		$staticSite->setSlug('my-collective');
 		$staticSite->setStatus($status);
 		return $staticSite;
 	}
 
-	private function isProvidedStaticSite(): Callback {
-		return $this->callback(fn (StaticSite $staticSite): bool => $staticSite->getId() === 7
-			&& $staticSite->getStatus() === StaticSite::STATUS_PROVIDED);
+	private function isNewBuildId(): Callback {
+		return $this->callback(fn (string $buildId): bool => Uuid::isValid($buildId) && $buildId !== $this->buildId);
 	}
 
 	private function makePageInfo(int $id, int $parentId = 0): PageInfo {
@@ -155,20 +162,39 @@ class StaticSiteServiceTest extends TestCase {
 			->willReturn($files);
 		$this->archiver->expects($this->once())
 			->method('store')
-			->with($this->staticSiteId, $files);
+			->with($this->staticSiteId, $this->buildId, $files);
+		$this->archiver->expects($this->once())
+			->method('deleteAllExcept')
+			->with($this->staticSiteId, $this->buildId);
 		$this->generatorClient->expects($this->once())
-			->method('build')
+			->method('create')
 			->with($staticSite, 'My Collective');
 
 		$provided = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateSettingsAndStatus')
-			->with($staticSite, 'My Collective', $pageIds, StaticSite::STATUS_PROVIDED)
-			->willReturn($provided);
+			->method('updateRequestStatus')
+			->with($staticSite, StaticSite::STATUS_PROVIDED)
+			->willReturn(true);
+		$this->staticSiteMapper->method('find')->with(7)->willReturn($provided);
 
 		$result = $this->service->create($this->collectiveId, $pageIds, $this->userId);
 
 		$this->assertSame($provided, $result);
+	}
+
+	public function testPublishSucceedsIfArchivesOfOtherBuildsCannotBeDeleted(): void {
+		$this->expectCreatedStaticSite();
+		$this->contentCollector->method('collect')->willReturn(['Readme.md' => $this->makeFileWithSize(1)]);
+		$this->archiver->method('deleteAllExcept')->willThrowException(new ServiceException('Failed'));
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Failed to delete archives of previous static site builds');
+		$this->generatorClient->expects($this->once())->method('create');
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateRequestStatus')
+			->with($this->anything(), StaticSite::STATUS_PROVIDED);
+
+		$this->service->create($this->collectiveId, [1], $this->userId);
 	}
 
 	public function testPublishCastsPageIdsToInt(): void {
@@ -415,31 +441,61 @@ class StaticSiteServiceTest extends TestCase {
 			->with(7, $this->collectiveId)
 			->willReturn($staticSite);
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateStatusIfUnchanged')
-			->with($staticSite, StaticSite::STATUS_PENDING)
+			->method('startBuild')
+			->with($staticSite, $this->isNewBuildId(), 'New Title', [1])
 			->willReturn(true);
-		$this->archiver->expects($this->once())->method('store');
+		$this->archiver->expects($this->once())
+			->method('store')
+			->with($this->staticSiteId, $this->isNewBuildId());
 		$this->generatorClient->expects($this->once())
-			->method('build')
-			->with($staticSite, 'New Title');
+			->method('create')
+			->with($this->callback(fn (StaticSite $built): bool => $built->getId() === 7 && $built->getBuildId() !== $this->buildId), 'New Title');
 
 		$provided = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateSettingsAndStatus')
-			->with($staticSite, 'New Title', [1], StaticSite::STATUS_PROVIDED, null)
-			->willReturn($provided);
+			->method('updateRequestStatus')
+			->with($this->callback(fn (StaticSite $built): bool => $built->getTitle() === 'New Title'
+				&& $built->getSelectedPageIds() === [1]
+				&& $built->getBuildId() !== $this->buildId), StaticSite::STATUS_PROVIDED)
+			->willReturn(true);
+		$this->staticSiteMapper->method('find')->with(7)->willReturn($provided);
 
 		$result = $this->service->update($this->collectiveId, 7, ['1'], ' New Title ', $this->userId);
 
 		$this->assertSame($provided, $result);
 	}
 
+	public function testUpdateUpdatesPublishedStaticSiteAtGenerator(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
+		$staticSite->setPublishedUrl('https://example.org/my-collective/');
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
+
+		$this->generatorClient->expects($this->once())->method('update')->with($staticSite, 'Title');
+		$this->generatorClient->expects($this->never())->method('create');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	public function testUpdateCreatesNeverPublishedStaticSiteAtGenerator(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
+
+		$this->generatorClient->expects($this->once())->method('create')->with($staticSite, 'Title');
+		$this->generatorClient->expects($this->never())->method('update');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
 	public function testUpdateRepublishesAbortedPublication(): void {
 		$this->expectValidCollectiveWithPages();
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PENDING, StaticSite::PENDING_TIMEOUT + 1);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
-		$this->staticSiteMapper->expects($this->once())->method('updateStatusIfUnchanged')->willReturn(true);
-		$this->staticSiteMapper->expects($this->once())->method('updateSettingsAndStatus');
+		$this->staticSiteMapper->expects($this->once())->method('startBuild')->willReturn(true);
+		$this->staticSiteMapper->expects($this->once())->method('updateRequestStatus');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
@@ -461,7 +517,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
 
 		$this->expectException(StaticSitePublicationInProgressException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
@@ -479,7 +535,7 @@ class StaticSiteServiceTest extends TestCase {
 			->willReturn([$otherStaticSite]);
 
 		$this->expectException(StaticSitePublicationInProgressException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
@@ -487,7 +543,7 @@ class StaticSiteServiceTest extends TestCase {
 	public function testUpdateRejectsPublicationStartedConcurrently(): void {
 		$this->expectValidCollectiveWithPages();
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(false);
+		$this->staticSiteMapper->method('startBuild')->willReturn(false);
 
 		$this->expectException(UnprocessableEntityException::class);
 		$this->archiver->expects($this->never())->method('store');
@@ -499,14 +555,18 @@ class StaticSiteServiceTest extends TestCase {
 		$this->expectValidCollectiveWithPages();
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('restoreStatus')
-			->with($staticSite);
-		$this->staticSiteMapper->expects($this->never())->method('updateSettingsAndStatus');
-		$this->archiver->expects($this->never())->method('delete');
+			->with($this->callback(fn (StaticSite $previous): bool => $previous->getBuildId() === $this->buildId
+				&& $previous->getStatus() === StaticSite::STATUS_PUBLISHED));
+		$this->staticSiteMapper->expects($this->never())->method('updateRequestStatus');
+		// Only the possibly partially stored archive of the new build is deleted
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId, $this->isNewBuildId());
+		$this->archiver->expects($this->never())->method('deleteAll');
+		$this->archiver->expects($this->never())->method('deleteAllExcept');
 
 		$this->expectException(ServiceException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -517,7 +577,7 @@ class StaticSiteServiceTest extends TestCase {
 		$updatedAt = $this->now - StaticSite::PENDING_TIMEOUT - 1;
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING, StaticSite::PENDING_TIMEOUT + 1));
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
 
 		$this->staticSiteMapper->expects($this->once())
@@ -533,7 +593,7 @@ class StaticSiteServiceTest extends TestCase {
 	public function testUpdateIgnoresDeletedStaticSiteWhenRestoringStatus(): void {
 		$this->expectValidCollectiveWithPages();
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
 		$this->staticSiteMapper->method('restoreStatus')
 			->willThrowException(new NotFoundException('Static site not found'));
@@ -546,12 +606,12 @@ class StaticSiteServiceTest extends TestCase {
 		$this->expectValidCollectiveWithPages();
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new UnprocessableEntityException('The path is too long'));
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('restoreStatus')
-			->with($staticSite);
+			->with($this->callback(fn (StaticSite $previous): bool => $previous->getBuildId() === $this->buildId));
 
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('The path is too long');
@@ -560,7 +620,7 @@ class StaticSiteServiceTest extends TestCase {
 
 	public function testUpdateThrowsWhenNoPageIdsGiven(): void {
 		$this->expectException(UnprocessableEntityException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [], 'Title', $this->userId);
 	}
@@ -570,7 +630,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->staticSiteMapper->expects($this->never())->method('findByIdAndCollectiveId');
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
@@ -581,7 +641,7 @@ class StaticSiteServiceTest extends TestCase {
 			->willThrowException(new NotFoundException('Static site not found'));
 
 		$this->expectException(NotFoundException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
@@ -594,7 +654,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
 
 		$this->expectException(UnprocessableEntityException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], $title, $this->userId);
 	}
@@ -605,11 +665,11 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateStatusIfUnchanged')
-			->with($staticSite, StaticSite::STATUS_PENDING, 'new-slug')
+			->method('startBuild')
+			->with($staticSite, $this->isNewBuildId(), 'Title', [1], 'new-slug')
 			->willReturn(true);
 		$this->generatorClient->expects($this->once())
-			->method('build')
+			->method('create')
 			->with($this->callback(fn (StaticSite $built): bool => $built->getSlug() === 'new-slug'), 'Title');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
@@ -622,8 +682,8 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateStatusIfUnchanged')
-			->with($staticSite, StaticSite::STATUS_PENDING, null)
+			->method('startBuild')
+			->with($staticSite, $this->isNewBuildId(), 'Title', [1], null)
 			->willReturn(true);
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'my-collective');
@@ -636,7 +696,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 
 		$this->expectException(UnprocessableEntityException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
 	}
@@ -649,7 +709,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
 
 		$this->expectException(UnprocessableEntityException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, $slug);
 	}
@@ -660,7 +720,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$dbException = $this->createMock(DBException::class);
 		$dbException->method('getReason')->willReturn(DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION);
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willThrowException($dbException);
+		$this->staticSiteMapper->method('startBuild')->willThrowException($dbException);
 
 		$this->expectException(StaticSiteSlugTakenException::class);
 		$this->archiver->expects($this->never())->method('store');
@@ -674,7 +734,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$dbException = $this->createMock(DBException::class);
 		$dbException->method('getReason')->willReturn(DBException::REASON_DRIVER);
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willThrowException($dbException);
+		$this->staticSiteMapper->method('startBuild')->willThrowException($dbException);
 
 		$this->expectException(DBException::class);
 
@@ -684,7 +744,7 @@ class StaticSiteServiceTest extends TestCase {
 	public function testUpdateRestoresPreviousSlugIfArchiveCannotBeProvided(): void {
 		$this->expectValidCollectiveWithPages();
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
 
 		$this->staticSiteMapper->expects($this->once())
@@ -707,7 +767,7 @@ class StaticSiteServiceTest extends TestCase {
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$staticSite->setSelectedPageIds([1]);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 
 		$this->contentCollector->expects($this->once())
 			->method('collect')
@@ -723,7 +783,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
 
 		$this->expectException(NotFoundException::class);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1, 99], 'Title', $this->userId);
 	}
@@ -740,22 +800,56 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')
 			->with(7, $this->collectiveId)
 			->willReturn($staticSite);
-		$this->staticSiteMapper->expects($this->once())
-			->method('delete')
-			->with($staticSite);
-		$this->archiver->expects($this->once())
-			->method('delete')
-			->with($this->staticSiteId);
+		$this->remover->expects($this->once())->method('remove')->with($staticSite);
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
 
-	public function testDeleteSucceedsIfArchiveDeletionFails(): void {
+	public static function deleteInProgressStatusProvider(): array {
+		return [
+			'pending' => [StaticSite::STATUS_PENDING],
+			'provided' => [StaticSite::STATUS_PROVIDED],
+			'deleting' => [StaticSite::STATUS_DELETING],
+		];
+	}
+
+	/**
+	 * @dataProvider deleteInProgressStatusProvider
+	 */
+	public function testDeleteRejectsStaticSiteInProgress(string $status): void {
 		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$staticSite = $this->makeStaticSite($status);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
+		$this->remover->expects($this->never())->method('remove');
+
+		$this->expectException(StaticSitePublicationInProgressException::class);
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
+	/**
+	 * @dataProvider deleteInProgressStatusProvider
+	 */
+	public function testDeleteRejectsWhileOtherStaticSiteOfCollectiveIsInProgress(string $status): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$otherStaticSite = $this->makeStaticSite($status);
+		$otherStaticSite->setId(8);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
-		$this->staticSiteMapper->expects($this->once())->method('delete');
-		$this->archiver->method('delete')->willThrowException(new ServiceException('Failed'));
-		$this->logger->expects($this->once())->method('warning');
+		$this->staticSiteMapper->method('findByCollectiveId')
+			->with($this->collectiveId)
+			->willReturn([$otherStaticSite]);
+		$this->remover->expects($this->never())->method('remove');
+
+		$this->expectException(StaticSitePublicationInProgressException::class);
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
+	public function testDeleteRemovesAbortedStaticSite(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_DELETING, StaticSite::PENDING_TIMEOUT + 1);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
+		$this->remover->expects($this->once())->method('remove');
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -765,7 +859,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->staticSiteMapper->expects($this->never())->method('findByIdAndCollectiveId');
-		$this->staticSiteMapper->expects($this->never())->method('delete');
+		$this->remover->expects($this->never())->method('remove');
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -776,7 +870,7 @@ class StaticSiteServiceTest extends TestCase {
 			->willThrowException(new NotFoundException('Static site not found'));
 
 		$this->expectException(NotFoundException::class);
-		$this->staticSiteMapper->expects($this->never())->method('delete');
+		$this->remover->expects($this->never())->method('remove');
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -796,8 +890,8 @@ class StaticSiteServiceTest extends TestCase {
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
 
 		$this->staticSiteMapper->expects($this->once())->method('delete')->with($staticSite);
-		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
-		$this->staticSiteMapper->expects($this->never())->method('updateSettingsAndStatus');
+		$this->remover->expects($this->once())->method('deleteArchives')->with($staticSite);
+		$this->staticSiteMapper->expects($this->never())->method('updateRequestStatus');
 
 		$this->expectException(ServiceException::class);
 		$this->service->create($this->collectiveId, [1], $this->userId);
@@ -874,24 +968,12 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->create($this->collectiveId, [1], $this->userId);
 	}
 
-	public function testPublishDeletesArchiveIfStaticSiteWasDeletedMeanwhile(): void {
-		$this->expectCreatedStaticSite();
+	public function testPublishDeletesArchivesIfStaticSiteWasDeletedMeanwhile(): void {
+		$staticSite = $this->expectCreatedStaticSite();
 		$this->contentCollector->method('collect')->willReturn([]);
-		$this->staticSiteMapper->method('updateSettingsAndStatus')
-			->willThrowException(new NotFoundException('Static site not found'));
-		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
-
-		$this->expectException(NotFoundException::class);
-		$this->service->create($this->collectiveId, [1], $this->userId);
-	}
-
-	public function testPublishKeepsNotFoundExceptionIfArchiveDeletionFails(): void {
-		$this->expectCreatedStaticSite();
-		$this->contentCollector->method('collect')->willReturn([]);
-		$this->staticSiteMapper->method('updateSettingsAndStatus')
-			->willThrowException(new NotFoundException('Static site not found'));
-		$this->archiver->method('delete')->willThrowException(new ServiceException('Failed'));
-		$this->logger->expects($this->once())->method('warning');
+		$this->staticSiteMapper->method('find')
+			->willThrowException(new DoesNotExistException('Static site not found'));
+		$this->remover->expects($this->once())->method('deleteArchives')->with($staticSite);
 
 		$this->expectException(NotFoundException::class);
 		$this->service->create($this->collectiveId, [1], $this->userId);
@@ -904,7 +986,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->expectValidCollectiveWithPages();
 		$this->staticSiteMapper->expects($this->never())->method('create');
 		$this->archiver->expects($this->never())->method('store');
-		$this->generatorClient->expects($this->never())->method('build');
+		$this->generatorClient->expects($this->never())->method('create');
 
 		$this->expectException(NotPermittedException::class);
 		$this->service->create($this->collectiveId, [1], $this->userId);
@@ -914,9 +996,9 @@ class StaticSiteServiceTest extends TestCase {
 		$this->publishFeatureEnabled = false;
 		$this->expectValidCollectiveWithPages();
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 		$this->archiver->expects($this->never())->method('store');
-		$this->generatorClient->expects($this->never())->method('build');
+		$this->generatorClient->expects($this->never())->method('create');
 
 		$this->expectException(NotPermittedException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -928,8 +1010,7 @@ class StaticSiteServiceTest extends TestCase {
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($staticSite);
-		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
+		$this->remover->expects($this->once())->method('remove')->with($staticSite);
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);
 	}
@@ -958,24 +1039,26 @@ class StaticSiteServiceTest extends TestCase {
 
 	public static function generatorFailureProvider(): array {
 		return [
-			'rejected' => [new StaticSiteGeneratorException('Rejected'), StaticSite::ERROR_GENERATOR_REJECTED],
-			'unavailable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE],
+			'rejected' => [new StaticSiteGeneratorException('Rejected'), StaticSite::ERROR_GENERATOR_REJECTED, true],
+			'unavailable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, false],
 		];
 	}
 
 	/**
+	 * The archive of an unavailable generator is kept, as the generator may have accepted the build anyway
+	 *
 	 * @dataProvider generatorFailureProvider
 	 */
-	public function testPublishKeepsStaticSiteAsFailedIfGeneratorDoesNotAcceptBuild(StaticSiteGeneratorException $exception, string $lastError): void {
+	public function testPublishKeepsStaticSiteAsFailedIfGeneratorDoesNotAcceptBuild(StaticSiteGeneratorException $exception, string $lastError, bool $deletesArchive): void {
 		$staticSite = $this->expectCreatedStaticSite();
 		$this->contentCollector->method('collect')->willReturn(['Readme.md' => $this->makeFileWithSize(1)]);
-		$this->generatorClient->method('build')->willThrowException($exception);
+		$this->generatorClient->method('create')->willThrowException($exception);
 
 		$this->staticSiteMapper->expects($this->never())->method('delete');
-		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
+		$this->archiver->expects($deletesArchive ? $this->once() : $this->never())->method('delete')->with($this->staticSiteId, $this->buildId);
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateSettingsAndStatus')
-			->with($staticSite, 'My Collective', [1], StaticSite::STATUS_FAILED, $lastError);
+			->method('updateRequestStatus')
+			->with($staticSite, StaticSite::STATUS_FAILED, $lastError);
 
 		$this->expectException($exception::class);
 		$this->service->create($this->collectiveId, [1], $this->userId);
@@ -994,7 +1077,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
 		$this->generatorClient->method('assertConfigured')
 			->willThrowException(new StaticSiteGeneratorNotConfiguredException('Not configured'));
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusIfUnchanged');
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->expectException(StaticSiteGeneratorNotConfiguredException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -1014,13 +1097,13 @@ class StaticSiteServiceTest extends TestCase {
 		$this->expectValidCollectiveWithPages();
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
-		$this->generatorClient->method('build')->willThrowException(new StaticSiteGeneratorException('Rejected'));
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
+		$this->generatorClient->method('create')->willThrowException(new StaticSiteGeneratorException('Rejected'));
 
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateSettingsAndStatus')
-			->with($staticSite, 'Title', [1], StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_REJECTED);
-		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
+			->method('updateRequestStatus')
+			->with($staticSite, StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_REJECTED);
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId, $this->isNewBuildId());
 
 		$this->expectException(StaticSiteGeneratorException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -1030,13 +1113,13 @@ class StaticSiteServiceTest extends TestCase {
 		$this->expectValidCollectiveWithPages();
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
-		$this->staticSiteMapper->method('updateStatusIfUnchanged')->willReturn(true);
-		$this->generatorClient->method('build')->willThrowException(new StaticSiteGeneratorUnavailableException('Unavailable'));
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
+		$this->generatorClient->method('create')->willThrowException(new StaticSiteGeneratorUnavailableException('Unavailable'));
 
 		$this->staticSiteMapper->expects($this->once())
-			->method('updateSettingsAndStatus')
-			->with($staticSite, 'Title', [1], StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_UNAVAILABLE);
-		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId);
+			->method('updateRequestStatus')
+			->with($staticSite, StaticSite::STATUS_FAILED, StaticSite::ERROR_GENERATOR_UNAVAILABLE);
+		$this->archiver->expects($this->never())->method('delete');
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -1072,14 +1155,32 @@ class StaticSiteServiceTest extends TestCase {
 
 	// --- getArchive() ---
 
-	public function testGetArchiveReturnsArchiveOfExistingStaticSite(): void {
+	public function testGetArchiveReturnsArchiveOfCurrentBuild(): void {
 		$archive = $this->createMock(ISimpleFile::class);
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
 			->with($this->staticSiteId)
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
-		$this->archiver->method('get')->with($this->staticSiteId)->willReturn($archive);
+		$this->archiver->method('get')->with($this->staticSiteId, $this->buildId)->willReturn($archive);
 
-		$this->assertSame($archive, $this->service->getArchive($this->staticSiteId));
+		$this->assertSame($archive, $this->service->getArchive($this->staticSiteId, $this->buildId));
+	}
+
+	public static function notCurrentBuildIdProvider(): array {
+		return [
+			'older build' => ['01980000-0000-7000-8000-000000000000'],
+			'invalid' => ['..'],
+		];
+	}
+
+	/**
+	 * @dataProvider notCurrentBuildIdProvider
+	 */
+	public function testGetArchiveThrowsForBuildThatIsNotTheCurrentOne(string $buildId): void {
+		$this->staticSiteMapper->method('findOneByStaticSiteId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
+		$this->archiver->expects($this->never())->method('get');
+
+		$this->expectException(StaticSiteBuildNotFoundException::class);
+		$this->service->getArchive($this->staticSiteId, $buildId);
 	}
 
 	public function testGetArchiveThrowsIfStaticSiteDoesNotExist(): void {
@@ -1087,35 +1188,80 @@ class StaticSiteServiceTest extends TestCase {
 			->willThrowException(new DoesNotExistException('Not found'));
 		$this->archiver->expects($this->never())->method('get');
 
-		$this->expectException(NotFoundException::class);
-		$this->service->getArchive($this->staticSiteId);
+		try {
+			$this->service->getArchive($this->staticSiteId, $this->buildId);
+			$this->fail('Expected NotFoundException');
+		} catch (NotFoundException $e) {
+			$this->assertNotInstanceOf(StaticSiteBuildNotFoundException::class, $e);
+		}
 	}
 
-	public function testGetArchiveThrowsIfArchiveDoesNotExist(): void {
+	public function testGetArchiveThrowsIfArchiveOfCurrentBuildDoesNotExist(): void {
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
 		$this->archiver->method('get')->willThrowException(new NotFoundException('Static site archive not found'));
 
-		$this->expectException(NotFoundException::class);
-		$this->service->getArchive($this->staticSiteId);
+		$this->expectException(StaticSiteBuildNotFoundException::class);
+		$this->service->getArchive($this->staticSiteId, $this->buildId);
 	}
 
 	// --- updateStatus() ---
 
-	public function testUpdateStatusStoresPublishedUrlOnPublished(): void {
+	private string $olderBuildId = '01980000-0000-7000-8000-000000000000';
+
+	private function isCurrentBuild(): Callback {
+		return $this->callback(fn (StaticSite $staticSite): bool => $staticSite->getId() === 7
+			&& $staticSite->getBuildId() === $this->buildId);
+	}
+
+	private function expectStaticSite(string $status, ?string $publishedBuildId = null): StaticSite {
+		$staticSite = $this->makeStaticSite($status);
+		$staticSite->setPublishedBuildId($publishedBuildId);
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
 			->with($this->staticSiteId)
-			->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
+			->willReturn($staticSite);
+		return $staticSite;
+	}
+
+	public static function unpublishedStatusProvider(): array {
+		return [
+			'pending, callback before request concluded' => [StaticSite::STATUS_PENDING],
+			'provided' => [StaticSite::STATUS_PROVIDED],
+			'failed, e.g. after a timeout' => [StaticSite::STATUS_FAILED],
+		];
+	}
+
+	/**
+	 * @dataProvider unpublishedStatusProvider
+	 */
+	public function testUpdateStatusStoresPublicationOfCurrentBuildAndDeletesItsArchive(string $currentStatus): void {
+		$this->expectStaticSite($currentStatus);
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateStatusPublished')
-			->with($this->isProvidedStaticSite(), 'https://publish.schnubbel.com/publish/a-uuid')
+			->with($this->isCurrentBuild(), 'https://publish.example.org/my-site/')
 			->willReturn(true);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
-		$this->archiver->expects($this->once())
-			->method('delete')
-			->with($this->staticSiteId);
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId, $this->buildId);
 
-		$this->service->updateStatus($this->staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://publish.schnubbel.com/publish/a-uuid']);
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://publish.example.org/my-site/']);
+	}
+
+	/**
+	 * @dataProvider unpublishedStatusProvider
+	 */
+	public function testUpdateStatusStoresFailureOfCurrentBuildAndLogsErrorMessage(string $currentStatus): void {
+		$this->expectStaticSite($currentStatus);
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatusFailed')
+			->with($this->isCurrentBuild(), StaticSite::ERROR_GENERATOR_FAILED)
+			->willReturn(true);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId, $this->buildId);
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with($this->stringContains('something went wrong'));
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_FAILED, ['error_message' => 'something went wrong']);
 	}
 
 	public static function invalidPublishUrlProvider(): array {
@@ -1132,54 +1278,29 @@ class StaticSiteServiceTest extends TestCase {
 	 * @dataProvider invalidPublishUrlProvider
 	 */
 	public function testUpdateStatusStoresPublishedWithoutValidUrlAsFailed(array $data): void {
-		$this->staticSiteMapper->method('findOneByStaticSiteId')
-			->with($this->staticSiteId)
-			->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateStatusFailed')
-			->with($this->isProvidedStaticSite(), StaticSite::ERROR_GENERATOR_INVALID_URL)
+			->with($this->isCurrentBuild(), StaticSite::ERROR_GENERATOR_INVALID_URL)
 			->willReturn(true);
-		$this->archiver->expects($this->once())
-			->method('delete')
-			->with($this->staticSiteId);
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId, $this->buildId);
 		$this->logger->expects($this->once())
 			->method('warning')
 			->with('Static site generator reported an invalid publish_url');
 
-		$this->service->updateStatus($this->staticSiteId, StaticSite::STATUS_PUBLISHED, $data);
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PUBLISHED, $data);
 	}
 
 	public function testUpdateStatusAcceptsPublishUrlUpToMaxLength(): void {
 		$url = 'https://example.org/' . str_repeat('a', 235);
-		$this->staticSiteMapper->method('findOneByStaticSiteId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateStatusPublished')
-			->with($this->isProvidedStaticSite(), $url)
+			->with($this->isCurrentBuild(), $url)
 			->willReturn(true);
 
-		$this->service->updateStatus('a-uuid', StaticSite::STATUS_PUBLISHED, ['publish_url' => $url]);
-	}
-
-	public function testUpdateStatusStoresLastErrorAndLogsErrorMessageAndDeletesArchiveOnFailed(): void {
-		$staticSiteId = 'a-uuid';
-
-		$this->staticSiteMapper->method('findOneByStaticSiteId')
-			->with($staticSiteId)
-			->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
-		$this->staticSiteMapper->expects($this->once())
-			->method('updateStatusFailed')
-			->with($this->isProvidedStaticSite(), StaticSite::ERROR_GENERATOR_FAILED)
-			->willReturn(true);
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
-		$this->archiver->expects($this->once())
-			->method('delete')
-			->with($this->staticSiteId);
-		$this->logger->expects($this->once())
-			->method('warning')
-			->with($this->stringContains('something went wrong'));
-
-		$this->service->updateStatus($staticSiteId, StaticSite::STATUS_FAILED, ['error_message' => 'something went wrong']);
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => $url]);
 	}
 
 	public static function callbackProvider(): array {
@@ -1191,74 +1312,163 @@ class StaticSiteServiceTest extends TestCase {
 	}
 
 	/**
+	 * The build got published already or another build started between reading and updating
+	 *
 	 * @dataProvider callbackProvider
 	 */
-	public function testUpdateStatusKeepsArchiveIfStaticSiteChangedMeanwhile(string $mapperMethod, string $status, array $data): void {
-		$this->staticSiteMapper->method('findOneByStaticSiteId')
-			->willReturn($this->makeStaticSite(StaticSite::STATUS_PROVIDED));
-		// Another callback concluded the publication or a new one started
+	public function testUpdateStatusLogsIfNotConcluded(string $mapperMethod, string $status, array $data): void {
+		$this->expectStaticSite(StaticSite::STATUS_PUBLISHED, $this->buildId);
 		$this->staticSiteMapper->expects($this->once())->method($mapperMethod)->willReturn(false);
-		$this->archiver->expects($this->never())->method('delete');
+		$this->archiver->expects($this->once())->method('delete')->with($this->staticSiteId, $this->buildId);
 		$this->logger->expects($this->atLeastOnce())
 			->method('warning')
 			->with($this->logicalOr(
 				'Static site generator reported an invalid publish_url',
-				'Ignoring static site status callback, the static site changed meanwhile',
+				'Ignoring static site status callback, the build got published already or another build started meanwhile',
 			));
 
-		$this->service->updateStatus($this->staticSiteId, $status, $data);
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, $status, $data);
 	}
 
-	public static function nonProvidedStatusProvider(): array {
+	public function testUpdateStatusOfOlderBuildIsOnlyLogged(): void {
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
+		$this->archiver->expects($this->never())->method('delete');
+		$this->logger->expects($this->never())->method('warning');
+		$this->logger->expects($this->once())
+			->method('info')
+			->with('Ignoring static site status callback of a build that is not the current one');
+
+		$this->service->updateStatus($this->staticSiteId, $this->olderBuildId, StaticSite::STATUS_FAILED);
+	}
+
+	/**
+	 * Without archive, e.g. as a newer build replaced it, the build is still known as older one
+	 */
+	public function testUpdateStatusOfLatePublishedOlderBuildIsLoggedAsWarning(): void {
+		$this->expectStaticSite(StaticSite::STATUS_PUBLISHED, $this->buildId);
+		$this->archiver->expects($this->never())->method('get');
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Static site generator published a build that is not the current one anymore');
+
+		$this->service->updateStatus($this->staticSiteId, $this->olderBuildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
+	}
+
+	public function testUpdateStatusIgnoresDuplicateCallbackOfPublishedBuild(): void {
+		$this->expectStaticSite(StaticSite::STATUS_PENDING, $this->olderBuildId);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
+		$this->logger->expects($this->never())->method('warning');
+
+		$this->service->updateStatus($this->staticSiteId, $this->olderBuildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
+	}
+
+	public static function unknownBuildIdProvider(): array {
 		return [
-			'pending' => [StaticSite::STATUS_PENDING],
-			'published' => [StaticSite::STATUS_PUBLISHED],
-			'failed' => [StaticSite::STATUS_FAILED],
+			'newer than the current build' => ['019a0000-0000-7000-8000-000000000000'],
+			'invalid' => ['..'],
 		];
 	}
 
 	/**
-	 * @dataProvider nonProvidedStatusProvider
+	 * @dataProvider unknownBuildIdProvider
 	 */
-	public function testUpdateStatusIgnoresCallbackForConcludedStaticSite(string $currentStatus): void {
-		$staticSiteId = 'a-uuid';
-
-		$this->staticSiteMapper->method('findOneByStaticSiteId')
-			->with($staticSiteId)
-			->willReturn($this->makeStaticSite($currentStatus));
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
+	public function testUpdateStatusThrowsForUnknownBuild(string $buildId): void {
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
+
+		$this->expectException(StaticSiteBuildNotFoundException::class);
+		$this->service->updateStatus($this->staticSiteId, $buildId, StaticSite::STATUS_FAILED);
+	}
+
+	public function testUpdateStatusIgnoresCallbackWithMismatchingBuildIdInBody(): void {
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
 		$this->archiver->expects($this->never())->method('delete');
 		$this->logger->expects($this->once())
 			->method('warning')
-			->with($this->stringContains('Ignoring static site status callback'));
+			->with('Ignoring static site status callback, its build_id does not match the callback URL');
 
-		$this->service->updateStatus($staticSiteId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org', 'build_id' => $this->olderBuildId]);
+	}
+
+	public function testUpdateStatusAcceptsMatchingBuildIdInBody(): void {
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
+		$this->staticSiteMapper->expects($this->once())->method('updateStatusPublished')->willReturn(true);
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org', 'build_id' => $this->buildId]);
 	}
 
 	public function testUpdateStatusThrowsWhenStaticSiteNotFound(): void {
 		$this->staticSiteMapper->method('findOneByStaticSiteId')
 			->willThrowException(new DoesNotExistException('not found'));
-
-		$this->expectException(NotFoundException::class);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
 
-		$this->service->updateStatus('unknown-uuid', StaticSite::STATUS_FAILED);
+		try {
+			$this->service->updateStatus('unknown-uuid', $this->buildId, StaticSite::STATUS_FAILED);
+			$this->fail('Expected NotFoundException');
+		} catch (NotFoundException $e) {
+			$this->assertNotInstanceOf(StaticSiteBuildNotFoundException::class, $e);
+		}
 	}
 
 	public function testUpdateStatusThrowsForInvalidStatus(): void {
 		$this->expectException(UnprocessableEntityException::class);
 		$this->staticSiteMapper->expects($this->never())->method('findOneByStaticSiteId');
-		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
 
-		$this->service->updateStatus('a-uuid', 'not-a-real-status');
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, 'not-a-real-status');
 	}
 
 	public function testUpdateStatusThrowsForInProgressStatus(): void {
 		$this->expectException(UnprocessableEntityException::class);
 		$this->staticSiteMapper->expects($this->never())->method('findOneByStaticSiteId');
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PENDING);
+	}
+
+	public function testUpdateStatusRemovesDeletedStaticSite(): void {
+		$staticSite = $this->expectStaticSite(StaticSite::STATUS_DELETING);
+		$this->remover->expects($this->once())->method('removeDeleted')->with($staticSite);
 		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
 
-		$this->service->updateStatus('a-uuid', StaticSite::STATUS_PENDING);
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, 'deleted');
+	}
+
+	public function testUpdateStatusKeepsStaticSiteOnlineIfDeletionFailed(): void {
+		$this->expectStaticSite(StaticSite::STATUS_DELETING);
+		$this->staticSiteMapper->expects($this->once())
+			->method('updateStatusFailed')
+			->with($this->isCurrentBuild(), StaticSite::ERROR_GENERATOR_DELETE_FAILED)
+			->willReturn(true);
+		$this->remover->expects($this->never())->method('removeDeleted');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with($this->stringContains('disk full'));
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_FAILED, ['error_message' => 'disk full']);
+	}
+
+	public function testUpdateStatusIgnoresPublishedWhileDeleting(): void {
+		$this->expectStaticSite(StaticSite::STATUS_DELETING);
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusPublished');
+		$this->remover->expects($this->never())->method('removeDeleted');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Ignoring static site status callback, the static site is being deleted');
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, StaticSite::STATUS_PUBLISHED, ['publish_url' => 'https://example.org']);
+	}
+
+	public function testUpdateStatusIgnoresDeletedWhileNotDeleting(): void {
+		$this->expectStaticSite(StaticSite::STATUS_PROVIDED);
+		$this->remover->expects($this->never())->method('removeDeleted');
+		$this->staticSiteMapper->expects($this->never())->method('updateStatusFailed');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Ignoring static site status callback, the static site is not being deleted');
+
+		$this->service->updateStatus($this->staticSiteId, $this->buildId, 'deleted');
 	}
 }

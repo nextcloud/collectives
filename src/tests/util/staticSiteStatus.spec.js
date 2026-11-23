@@ -23,27 +23,43 @@ describe('staticSiteState', () => {
 })
 
 describe('hasUnpublishedChanges', () => {
-	const staticSite = { selectedPageIds: [1, 2], publishedAt: 200 }
+	const staticSite = {
+		selectedPageIds: [1, 2, 3],
+		publishedSelectedPageIds: [1, 2],
+		publishedBuildStartedAt: 200,
+		publishedAt: 250,
+	}
 	const pages = [
 		{ id: 1, timestamp: 100 },
 		{ id: 2, timestamp: 200 },
 		{ id: 3, timestamp: 300 },
 	]
 
-	test('returns false if no selected page changed after publishing', () => {
+	test('returns false if no published page changed after the build started', () => {
 		expect(hasUnpublishedChanges(staticSite, pages)).toBe(false)
 	})
 
-	test('returns true if a selected page was edited after publishing', () => {
+	test('returns true if a published page was edited while the build was running', () => {
 		expect(hasUnpublishedChanges(staticSite, [{ id: 1, timestamp: 100 }, { id: 2, timestamp: 201 }])).toBe(true)
 	})
 
-	test('returns true if a selected page was deleted after publishing', () => {
+	test('returns true if a published page was deleted after publishing', () => {
 		expect(hasUnpublishedChanges(staticSite, [{ id: 1, timestamp: 100 }, { id: 3, timestamp: 300 }])).toBe(true)
 	})
 
+	test('ignores pages that are only selected for the next publication', () => {
+		expect(hasUnpublishedChanges(staticSite, [...pages, { id: 3, timestamp: 400 }])).toBe(false)
+	})
+
+	test('falls back to the publication time if the build start is unknown', () => {
+		const legacyStaticSite = { ...staticSite, publishedBuildStartedAt: null }
+		expect(hasUnpublishedChanges(legacyStaticSite, [{ id: 1, timestamp: 100 }, { id: 2, timestamp: 250 }])).toBe(false)
+		expect(hasUnpublishedChanges(legacyStaticSite, [{ id: 1, timestamp: 100 }, { id: 2, timestamp: 251 }])).toBe(true)
+	})
+
 	test('returns false for a static site that was never published', () => {
-		expect(hasUnpublishedChanges({ ...staticSite, publishedAt: null }, [{ id: 1, timestamp: 300 }])).toBe(false)
+		const unpublished = { ...staticSite, publishedSelectedPageIds: null, publishedBuildStartedAt: null, publishedAt: null }
+		expect(hasUnpublishedChanges(unpublished, [{ id: 1, timestamp: 300 }])).toBe(false)
 	})
 
 	test('returns false without known pages', () => {

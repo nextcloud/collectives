@@ -11,7 +11,7 @@ namespace Unit\Controller;
 
 use OCA\Collectives\Controller\StaticSiteArchiveController;
 use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\StaticSiteGeneratorClient;
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\FileDisplayResponse;
@@ -22,42 +22,35 @@ use Test\TestCase;
 
 class StaticSiteArchiveControllerTest extends TestCase {
 	private StaticSiteService&MockObject $staticSiteService;
-	private StaticSiteGeneratorClient&MockObject $staticSiteGeneratorClient;
 	private StaticSiteArchiveController $controller;
 
 	private string $staticSiteId = '01990000-0000-7000-8000-000000000000';
+	private string $buildId = '01990000-0000-7000-8000-000000000001';
 
 	protected function setUp(): void {
 		parent::setUp();
 
-		$request = $this->createMock(IRequest::class);
-		$request->method('getHeader')->with('Authorization')->willReturn('Bearer secret');
 		$this->staticSiteService = $this->createMock(StaticSiteService::class);
-		$this->staticSiteGeneratorClient = $this->createMock(StaticSiteGeneratorClient::class);
 
-		$this->controller = new StaticSiteArchiveController('collectives', $request, $this->staticSiteService, $this->staticSiteGeneratorClient);
+		$this->controller = new StaticSiteArchiveController('collectives', $this->createMock(IRequest::class), $this->staticSiteService);
 	}
 
-	// TODO(Publish): Re-enable once ssg-worker sends the bearer token (see BuildJob/ContentDownloader)
-	//	public function testDownloadRejectsInvalidTokenAndThrottles(): void {
-	//		$this->markTestSkipped('Token authentication is temporarily disabled');
-	//
-	//		$this->staticSiteGeneratorClient->method('isValidToken')->with('Bearer secret')->willReturn(false);
-	//		$this->staticSiteService->expects($this->never())->method('getArchive');
-	//
-	//		$response = $this->controller->download($this->staticSiteId);
-	//
-	//		$this->assertSame(Http::STATUS_UNAUTHORIZED, $response->getStatus());
-	//		$this->assertTrue($response->isThrottled());
-	//	}
-
-	public function testDownloadReturnsNotFoundForUnknownArchive(): void {
-		$this->staticSiteGeneratorClient->method('isValidToken')->willReturn(true);
+	public function testDownloadReturnsNotFoundAndThrottlesForUnknownStaticSite(): void {
 		$this->staticSiteService->method('getArchive')
-			->with($this->staticSiteId)
-			->willThrowException(new NotFoundException('Static site archive not found'));
+			->with($this->staticSiteId, $this->buildId)
+			->willThrowException(new NotFoundException('Static site not found'));
 
-		$response = $this->controller->download($this->staticSiteId);
+		$response = $this->controller->download($this->staticSiteId, $this->buildId);
+
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+		$this->assertTrue($response->isThrottled());
+	}
+
+	public function testDownloadReturnsNotFoundWithoutThrottlingForOutdatedBuild(): void {
+		$this->staticSiteService->method('getArchive')
+			->willThrowException(new StaticSiteBuildNotFoundException('Build is not the current one of the static site'));
+
+		$response = $this->controller->download($this->staticSiteId, $this->buildId);
 
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 		$this->assertFalse($response->isThrottled());
@@ -65,16 +58,15 @@ class StaticSiteArchiveControllerTest extends TestCase {
 
 	public function testDownloadReturnsArchiveAsAttachment(): void {
 		$archive = $this->createMock(ISimpleFile::class);
-		$archive->method('getName')->willReturn($this->staticSiteId . '.tar.gz');
-		$this->staticSiteGeneratorClient->method('isValidToken')->willReturn(true);
-		$this->staticSiteService->method('getArchive')->with($this->staticSiteId)->willReturn($archive);
+		$archive->method('getName')->willReturn($this->buildId . '.tar.gz');
+		$this->staticSiteService->method('getArchive')->with($this->staticSiteId, $this->buildId)->willReturn($archive);
 
-		$response = $this->controller->download($this->staticSiteId);
+		$response = $this->controller->download($this->staticSiteId, $this->buildId);
 
 		$this->assertInstanceOf(FileDisplayResponse::class, $response);
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 		$headers = $response->getHeaders();
 		$this->assertSame('application/gzip', $headers['Content-Type']);
-		$this->assertSame('attachment; filename="' . $this->staticSiteId . '.tar.gz"', $headers['Content-Disposition']);
+		$this->assertSame('attachment; filename="' . $this->buildId . '.tar.gz"', $headers['Content-Disposition']);
 	}
 }

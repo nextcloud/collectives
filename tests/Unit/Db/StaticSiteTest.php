@@ -9,8 +9,10 @@ declare(strict_types=1);
 
 namespace Unit\Db;
 
+use DateTimeImmutable;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use Symfony\Component\Uid\UuidV7;
 use Test\TestCase;
 use UnexpectedValueException;
 
@@ -33,6 +35,8 @@ class StaticSiteTest extends TestCase {
 			'provided' => [StaticSite::STATUS_PROVIDED, $now - 60, $now, true],
 			'provided at timeout' => [StaticSite::STATUS_PROVIDED, $now - StaticSite::PENDING_TIMEOUT, $now, true],
 			'aborted provided' => [StaticSite::STATUS_PROVIDED, $now - StaticSite::PENDING_TIMEOUT - 1, $now, false],
+			'deleting' => [StaticSite::STATUS_DELETING, $now - 60, $now, true],
+			'aborted deleting' => [StaticSite::STATUS_DELETING, $now - StaticSite::PENDING_TIMEOUT - 1, $now, false],
 			'published' => [StaticSite::STATUS_PUBLISHED, $now - 60, $now, false],
 			'failed' => [StaticSite::STATUS_FAILED, $now - 60, $now, false],
 		];
@@ -87,6 +91,54 @@ class StaticSiteTest extends TestCase {
 		$this->assertSame(1700000000, $json['publishedAt']);
 	}
 
+	public function testJsonSerializeContainsPublishedBuild(): void {
+		$staticSite = new StaticSite();
+		$staticSite->setTitle('New Title');
+		$staticSite->setSelectedPageIds([1, 2, 3]);
+		$staticSite->setPublishedTitle('Title');
+		$staticSite->setPublishedSelectedPages('[1,2]');
+		$staticSite->setPublishedBuildId(UuidV7::generate(new DateTimeImmutable('@1700000000')));
+
+		$json = $staticSite->jsonSerialize();
+
+		$this->assertSame('Title', $json['publishedTitle']);
+		$this->assertSame([1, 2], $json['publishedSelectedPageIds']);
+		$this->assertSame(1700000000, $json['publishedBuildStartedAt']);
+	}
+
+	public function testJsonSerializeContainsNoPublishedBuildIfNeverPublished(): void {
+		$json = (new StaticSite())->jsonSerialize();
+
+		$this->assertNull($json['publishedTitle']);
+		$this->assertNull($json['publishedSelectedPageIds']);
+		$this->assertNull($json['publishedBuildStartedAt']);
+	}
+
+	public static function invalidBuildIdProvider(): array {
+		return [
+			'not a UUID' => ['invalid'],
+			'UUIDv4 without time' => ['9b2f5c1e-8d3a-4f6b-9c7e-1a2b3c4d5e6f'],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidBuildIdProvider
+	 */
+	public function testPublishedBuildStartedAtIsUnknownForInvalidBuildId(string $buildId): void {
+		$staticSite = new StaticSite();
+		$staticSite->setPublishedBuildId($buildId);
+
+		$this->assertNull($staticSite->getPublishedBuildStartedAt());
+	}
+
+	public function testGetPublishedSelectedPageIdsThrowsForCorruptedValue(): void {
+		$staticSite = new StaticSite();
+		$staticSite->setPublishedSelectedPages('{invalid');
+
+		$this->expectException(UnexpectedValueException::class);
+		$staticSite->getPublishedSelectedPageIds();
+	}
+
 	public static function jsonInProgressProvider(): array {
 		return [
 			'recently provided' => [StaticSite::STATUS_PROVIDED, 60, true],
@@ -106,10 +158,23 @@ class StaticSiteTest extends TestCase {
 		$this->assertSame($expected, $staticSite->jsonSerialize()['isInProgress']);
 	}
 
-	public function testJsonSerializeOmitsStaticSiteId(): void {
+	public function testJsonSerializeOmitsStaticSiteAndBuildIds(): void {
 		$staticSite = new StaticSite();
 		$staticSite->setStaticSiteId('01990000-0000-7000-8000-000000000000');
+		$staticSite->setBuildId('01990000-0000-7000-8000-000000000001');
+		$staticSite->setPublishedBuildId('01990000-0000-7000-8000-000000000002');
 
-		$this->assertArrayNotHasKey('staticSiteId', $staticSite->jsonSerialize());
+		$serialized = $staticSite->jsonSerialize();
+		$this->assertArrayNotHasKey('staticSiteId', $serialized);
+		$this->assertArrayNotHasKey('buildId', $serialized);
+		$this->assertArrayNotHasKey('publishedBuildId', $serialized);
+	}
+
+	public function testIsPublished(): void {
+		$staticSite = new StaticSite();
+		$this->assertFalse($staticSite->isPublished());
+
+		$staticSite->setPublishedUrl('https://example.org/my-site/');
+		$this->assertTrue($staticSite->isPublished());
 	}
 }

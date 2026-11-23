@@ -13,6 +13,7 @@ use Exception;
 use JsonException;
 use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\StaticSite;
+use OCP\AppFramework\Http;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
 use OCP\IAppConfig;
@@ -21,10 +22,15 @@ use OCP\IURLGenerator;
 use Psr\Log\LoggerInterface;
 
 /**
- * HTTP client for the external static site generator.
+ * HTTP client for the external static site generator. All requests are authorized with the API
+ * token of the admin settings as bearer token.
  */
 class StaticSiteGeneratorClient {
-	private const TIMEOUT = 10;
+	private const TIMEOUT = 30;
+	// Fail fast if the static site generator is not reachable at all
+	private const CONNECT_TIMEOUT = 5;
+	private const STATIC_SITES_PATH = '/static-sites/';
+	private const ERROR_SLUG_TAKEN = 'slug already taken';
 
 	public function __construct(
 		private readonly IClientService $clientService,
@@ -55,52 +61,124 @@ class StaticSiteGeneratorClient {
 	}
 
 	/**
-	 * Ask the static site generator to build the static site from its archive.
+	 * Ask the static site generator to create the static site from the archive of its current build.
+	 *
+	 * If the generator answers with a conflict because it knows the static site already, e.g. as
+	 * a previous request timed out but was accepted, an update is sent instead. A conflict because
+	 * the slug is taken by another static site is a rejection.
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
-	public function build(StaticSite $staticSite, string $title): void {
-		$staticSiteId = $staticSite->getStaticSiteId();
-		$response = $this->request('POST', '/build', [
-			'static_site_id' => $staticSiteId,
+	public function create(StaticSite $staticSite, string $title): void {
+		$response = $this->sendCreate($staticSite, $title);
+		if ($response->getStatusCode() === Http::STATUS_CONFLICT && $this->getErrorMessage($response) !== self::ERROR_SLUG_TAKEN) {
+			$response = $this->sendUpdate($staticSite, $title);
+		}
+		$this->assertAccepted($staticSite, $response);
+	}
+
+	/**
+	 * Ask the static site generator to update the static site from the archive of its current build.
+	 *
+	 * Falls back to creating it if the generator doesn't know it, e.g. if it was removed there.
+	 *
+	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorException Request rejected
+	 */
+	public function update(StaticSite $staticSite, string $title): void {
+		$response = $this->sendUpdate($staticSite, $title);
+		if ($response->getStatusCode() === Http::STATUS_NOT_FOUND) {
+			$response = $this->sendCreate($staticSite, $title);
+		}
+		$this->assertAccepted($staticSite, $response);
+	}
+
+	/**
+	 * Ask the static site generator to delete the static site. It reports the result to the
+	 * callback URL of the current build.
+	 *
+	 * @return bool False if the generator doesn't know the static site
+	 *
+	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorException Request rejected
+	 */
+	public function delete(StaticSite $staticSite): bool {
+		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
+		$response = $this->request('DELETE', $path, ['data' => ['callback_status_url' => $this->getCallbackUrl($staticSite)]]);
+		if ($response->getStatusCode() === Http::STATUS_NOT_FOUND) {
+			return false;
+		}
+		$this->assertAccepted($staticSite, $response);
+		return true;
+	}
+
+	/**
+	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorUnavailableException
+	 */
+	private function sendCreate(StaticSite $staticSite, string $title): IResponse {
+		$payload = [
+			'static_site_id' => $staticSite->getStaticSiteId(),
+			'slug' => $staticSite->getSlug(),
+		] + $this->getPayload($staticSite, $title);
+		return $this->request('POST', self::STATIC_SITES_PATH, ['data' => $payload]);
+	}
+
+	/**
+	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorUnavailableException
+	 */
+	private function sendUpdate(StaticSite $staticSite, string $title): IResponse {
+		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
+		return $this->request('PATCH', $path, ['data' => $this->getPayload($staticSite, $title)]);
+	}
+
+	private function getPayload(StaticSite $staticSite, string $title): array {
+		return [
+			'build_id' => $staticSite->getBuildId(),
 			'content_download_url' => $this->urlGenerator->linkToRouteAbsolute('collectives.staticsitearchive.download', [
 				'apiVersion' => '1.0',
-				'staticSiteId' => $staticSiteId,
+				'staticSiteId' => $staticSite->getStaticSiteId(),
+				'buildId' => $staticSite->getBuildId(),
 			]),
-			'callback_status_url' => $this->urlGenerator->linkToOCSRouteAbsolute('collectives.staticsitegenerator.updatestatus', [
-				'apiVersion' => '1.0',
-				'staticSiteId' => $staticSiteId,
-			]),
-			'slug' => $staticSite->getSlug(),
+			'callback_status_url' => $this->getCallbackUrl($staticSite),
 			'title' => $title,
-		]);
+		];
+	}
 
+	private function getCallbackUrl(StaticSite $staticSite): string {
+		return $this->urlGenerator->linkToOCSRouteAbsolute('collectives.staticsitegenerator.updatestatus', [
+			'apiVersion' => '1.0',
+			'staticSiteId' => $staticSite->getStaticSiteId(),
+			'buildId' => $staticSite->getBuildId(),
+		]);
+	}
+
+	/**
+	 * @throws StaticSiteGeneratorUnavailableException Temporarily unavailable
+	 * @throws StaticSiteGeneratorException Request rejected
+	 */
+	private function assertAccepted(StaticSite $staticSite, IResponse $response): void {
 		$statusCode = $response->getStatusCode();
-		$body = $this->decodeBody($response);
-		if ($statusCode >= 200 && $statusCode < 300 && ($body['status'] ?? null) === 'enqueued') {
+		if ($statusCode === Http::STATUS_ACCEPTED) {
 			return;
 		}
 
 		// The error of the generator may contain technical details, so it's only logged
-		$this->logger->warning('Static site generator did not accept the build', [
-			'staticSiteId' => $staticSiteId,
+		$this->logger->warning('Static site generator did not accept the request', [
+			'staticSiteId' => $staticSite->getStaticSiteId(),
+			'buildId' => $staticSite->getBuildId(),
 			'statusCode' => $statusCode,
-			'error' => $body['error'] ?? null,
+			'error' => $this->getErrorMessage($response),
 		]);
-		$message = $this->l10n->t('The static site generator did not accept the build (HTTP status %d)', [$statusCode]);
+		$message = $this->l10n->t('The static site generator did not accept the request (HTTP status %d)', [$statusCode]);
 		throw $statusCode >= 500
 			? new StaticSiteGeneratorUnavailableException($message)
 			: new StaticSiteGeneratorException($message);
-	}
-
-	/**
-	 * Check the bearer token sent by the static site generator against the configured one.
-	 */
-	public function isValidToken(string $authorizationHeader): bool {
-		$token = $this->getToken();
-		return $token !== '' && hash_equals('Bearer ' . $token, $authorizationHeader);
 	}
 
 	/**
@@ -113,6 +191,7 @@ class StaticSiteGeneratorClient {
 		$options = [
 			'headers' => ['Authorization' => 'Bearer ' . $this->getToken()],
 			'timeout' => self::TIMEOUT,
+			'connect_timeout' => self::CONNECT_TIMEOUT,
 			// Error status codes are handled by the caller
 			'http_errors' => false,
 		];
@@ -134,6 +213,11 @@ class StaticSiteGeneratorClient {
 
 	private function getToken(): string {
 		return $this->appConfig->getValueString('collectives', ConfigLexicon::STATIC_SITE_GENERATOR_TOKEN);
+	}
+
+	private function getErrorMessage(IResponse $response): ?string {
+		$errorMessage = $this->decodeBody($response)['data']['error_message'] ?? null;
+		return is_string($errorMessage) ? $errorMessage : null;
 	}
 
 	private function decodeBody(IResponse $response): array {

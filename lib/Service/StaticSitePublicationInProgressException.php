@@ -10,7 +10,8 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 /**
- * A static site of the collective is being published, only one publication per collective may run at a time
+ * A static site of the collective is being published or deleted, only one request to the static
+ * site generator per collective may run at a time
  */
 class StaticSitePublicationInProgressException extends ServiceException {
 }

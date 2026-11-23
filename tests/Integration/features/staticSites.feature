@@ -13,7 +13,7 @@ Feature: staticSites
     When occ command "config:app:set collectives publish_enabled --value true --type boolean" is run
     # And user "jane" publishes collective "BehatStaticSiteCollective" as website with slug "behat-static-site"
     # Then user "jane" sees website "behat-static-site" in collective "BehatStaticSiteCollective"
-    # TODO(Publish): Test the archive download with the static site generator mock once its token check is enabled again
+    # TODO(Publish): Test the archive download with the static site generator mock
 
   # Scenario: Fail to publish a website with a slug in use
   #   Then user "jane" fails to publish collective "BehatStaticSiteCollective" as website with slug "behat-static-site" with status 409

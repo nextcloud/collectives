@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\StaticSiteGeneratorClient;
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -32,13 +32,16 @@ class StaticSiteArchiveController extends Controller {
 		string $appName,
 		IRequest $request,
 		private readonly StaticSiteService $staticSiteService,
-		private readonly StaticSiteGeneratorClient $staticSiteGeneratorClient,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * Download the archive of a static site, authenticated by the bearer token of the external static site generator.
+	 * Download the archive of the current build of a static site.
+	 *
+	 * Not authenticated: the static site generator gets the URL with the unguessable static site
+	 * and build IDs. Unknown static sites are throttled against guessing. Outdated builds of a
+	 * known static site aren't, as the generator requests them when builds overlap.
 	 *
 	 * The status of the static site isn't checked, as the generator may download the archive
 	 * before the response to its notification was processed.
@@ -48,18 +51,15 @@ class StaticSiteArchiveController extends Controller {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[BruteForceProtection(action: 'collectivesStaticSiteArchive')]
-	public function download(string $staticSiteId): Response {
-		// TODO(Publish): Re-enable once ssg-worker sends the bearer token (see BuildJob/ContentDownloader)
-		// if (!$this->staticSiteGeneratorClient->isValidToken($this->request->getHeader('Authorization'))) {
-		// 	$response = new Response(Http::STATUS_UNAUTHORIZED);
-		// 	$response->throttle();
-		// 	return $response;
-		// }
-
+	public function download(string $staticSiteId, string $buildId): Response {
 		try {
-			$archive = $this->staticSiteService->getArchive($staticSiteId);
-		} catch (NotFoundException) {
+			$archive = $this->staticSiteService->getArchive($staticSiteId, $buildId);
+		} catch (StaticSiteBuildNotFoundException) {
 			return new Response(Http::STATUS_NOT_FOUND);
+		} catch (NotFoundException) {
+			$response = new Response(Http::STATUS_NOT_FOUND);
+			$response->throttle();
+			return $response;
 		}
 
 		$response = new FileDisplayResponse($archive);
