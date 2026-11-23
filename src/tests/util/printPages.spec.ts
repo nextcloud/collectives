@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import { filterPrintPages, printPagesQuery } from '../../util/printPages.ts'
+import { filterPrintPages, printPagesQuery, updateRenderedPages } from '../../util/printPages.ts'
 
 const pageIds = [1, 2, 3, 4, 5]
 const pages = pageIds.map((id) => ({ id }))
@@ -48,5 +48,31 @@ describe('filterPrintPages', () => {
 		const selected = new Set([1, 3, 5])
 		expect(filterPrintPages(pages, { ...printPagesQuery(pageIds, selected) }).map((p) => p.id))
 			.toEqual([1, 3, 5])
+	})
+})
+
+describe('updateRenderedPages', () => {
+	it('renders and waits for newly selected pages only', () => {
+		const rendered = new Set([1])
+		const waitingFor = new Set<number>()
+		updateRenderedPages(new Set([1, 2]), rendered, waitingFor)
+		expect([...rendered]).toEqual([1, 2])
+		expect([...waitingFor]).toEqual([2])
+	})
+
+	it('stops rendering unselected pages that are still loading', () => {
+		const rendered = new Set([1, 2])
+		const waitingFor = new Set([2])
+		updateRenderedPages(new Set([1]), rendered, waitingFor)
+		expect([...rendered]).toEqual([1])
+		expect([...waitingFor]).toEqual([])
+	})
+
+	it('keeps unselected pages with loaded content rendered', () => {
+		const rendered = new Set([1, 2])
+		const waitingFor = new Set<number>()
+		updateRenderedPages(new Set([2]), rendered, waitingFor)
+		expect([...rendered]).toEqual([1, 2])
+		expect([...waitingFor]).toEqual([])
 	})
 })

@@ -138,6 +138,51 @@ test.describe('Collective print view', () => {
 		await printPage.close()
 	})
 
+	test('waits only for the content of the selected pages', async ({ user, page, collective }) => {
+		await collective.createPage({ title: 'Fast', user, page })
+		await collective.createPage({ title: 'Slow', user, page })
+
+		// Hold back the content of the page "Slow" until released
+		let heldRequests = 0
+		let releaseContent = () => {}
+		const contentReleased = new Promise<void>((resolve) => {
+			releaseContent = resolve
+		})
+		await page.route(/\/dav\/files\/.*\/Slow\.md(\?|$)/, async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			heldRequests += 1
+			await contentReleased
+			await route.continue()
+		})
+
+		await page.goto(`/index.php/apps/collectives/_/print/${collective.getCollectiveUrlPart()}`)
+
+		const loadingScreen = page.getByText('Preparing collective for exporting or printing')
+		const printButton = page.getByRole('button', { name: 'Export or print' })
+		const pageList = page.getByRole('navigation', { name: 'Pages to export or print' })
+		const subpageTitles = page.locator('.print-page:visible h2.page-title:not(.page-title-collective)')
+		await expect.poll(() => heldRequests).toBeGreaterThan(0)
+		await expect(loadingScreen).toBeVisible()
+		await expect(printButton).toBeDisabled()
+
+		// Unselecting the loading page finishes loading without it
+		await pageList.getByText('Slow', { exact: true }).click()
+		await expect(loadingScreen).toBeHidden({ timeout: 30000 })
+		await expect(subpageTitles).toHaveText(['Fast'])
+		await expect(printButton).toBeEnabled()
+
+		// Selecting it again waits for its content
+		await pageList.getByText('Slow', { exact: true }).click()
+		await expect(loadingScreen).toBeVisible()
+		await expect(printButton).toBeDisabled()
+
+		releaseContent()
+		await expect(loadingScreen).toBeHidden({ timeout: 30000 })
+		await expect(printButton).toBeEnabled()
+	})
+
 	test('shows an empty state if no requested page exists', async ({ page, collective }) => {
 		await stubPrint(page)
 		await page.goto(`/index.php/apps/collectives/_/print/${collective.getCollectiveUrlPart()}?pages=999999999`)

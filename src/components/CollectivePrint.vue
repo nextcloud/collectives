@@ -104,7 +104,7 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import displayError from '../util/displayError.js'
 import { flattenPageTree, subtreePageIds } from '../util/pageTree.ts'
-import { filterPrintPages, printPagesQuery } from '../util/printPages.ts'
+import { filterPrintPages, printPagesQuery, updateRenderedPages } from '../util/printPages.ts'
 
 export default defineComponent({
 	name: 'CollectivePrint',
@@ -130,11 +130,9 @@ export default defineComponent({
 	data() {
 		return {
 			loadingPages: true,
-			// Until the content of the initially selected pages is loaded
-			loadingContent: true,
 			printing: false,
 			selectedIds: new Set<number>(),
-			// Pages that were selected at least once. They stay rendered (but hidden) when unselected.
+			// Selected pages, and unselected pages whose content is already loaded (kept rendered but hidden)
 			renderedIds: new Set<number>(),
 			// Rendered pages whose content is not loaded yet
 			waitingFor: new Set<number>(),
@@ -163,13 +161,13 @@ export default defineComponent({
 		},
 
 		loading(): boolean {
-			return this.loadingPages || this.loadingContent
+			return this.loadingPages || this.loadedCount.count < this.loadedCount.total
 		},
 
 		loadedCount(): { count: number, total: number } {
 			return {
-				count: this.renderedIds.size - this.waitingFor.size,
-				total: this.renderedIds.size,
+				count: this.selectedPages.filter((page) => !this.waitingFor.has(page.id)).length,
+				total: this.selectedPages.length,
 			}
 		},
 
@@ -183,7 +181,6 @@ export default defineComponent({
 			return !this.loading
 				&& !this.printing
 				&& this.selectedPages.length > 0
-				&& !this.selectedPages.some((page) => this.waitingFor.has(page.id))
 		},
 
 		documentTitle(): string {
@@ -201,10 +198,6 @@ export default defineComponent({
 		this.loadingPages = false
 		const initialPages = filterPrintPages(this.allPages, this.$route.query)
 		this.setSelectedIds(new Set(initialPages.map((page) => page.id)))
-		if (this.waitingFor.size === 0) {
-			// No page will report being ready
-			this.loadingContent = false
-		}
 	},
 
 	methods: {
@@ -218,27 +211,22 @@ export default defineComponent({
 		 * @param node Page tree node of the page
 		 * @param checked Whether to select the pages
 		 */
-		togglePage(node: PageTreeNode<PageInfo>, checked: boolean) {
-			const selectedIds = new Set(this.selectedIds)
+		togglePage(node: PageTreeNode<PageInfo>, checked: boolean): void {
+			// Change the reactive set in place, so only updates depending on the changed IDs are triggered
 			for (const id of subtreePageIds(node)) {
 				if (checked) {
-					selectedIds.add(id)
+					this.selectedIds.add(id)
 				} else {
-					selectedIds.delete(id)
+					this.selectedIds.delete(id)
 				}
 			}
-			this.setSelectedIds(selectedIds)
+			updateRenderedPages(this.selectedIds, this.renderedIds, this.waitingFor)
 			this.updateRouteQuery()
 		},
 
-		setSelectedIds(selectedIds: Set<number>) {
+		setSelectedIds(selectedIds: Set<number>): void {
 			this.selectedIds = selectedIds
-			for (const id of selectedIds) {
-				if (!this.renderedIds.has(id)) {
-					this.renderedIds.add(id)
-					this.waitingFor.add(id)
-				}
-			}
+			updateRenderedPages(this.selectedIds, this.renderedIds, this.waitingFor)
 		},
 
 		/**
@@ -252,11 +240,8 @@ export default defineComponent({
 			this.$router.replace({ query })
 		},
 
-		pageReady(pageId: number) {
+		pageReady(pageId: number): void {
 			this.waitingFor.delete(pageId)
-			if (this.waitingFor.size === 0) {
-				this.loadingContent = false
-			}
 		},
 
 		async print() {

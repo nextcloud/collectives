@@ -29,6 +29,32 @@ export function printPagesQuery(pageIds: number[], selectedIds: Set<number>): Pr
 }
 
 /**
+ * Render newly selected pages and stop loading unselected ones,
+ * so the selected pages load faster
+ *
+ * Newly rendered pages are added to `waitingFor` until their content is loaded.
+ * Unselected pages with loaded content stay rendered, so selecting them again is instant.
+ *
+ * @param selectedIds IDs of the selected pages
+ * @param renderedIds IDs of the rendered pages, updated in place
+ * @param waitingFor IDs of the rendered pages whose content is not loaded yet, updated in place
+ */
+export function updateRenderedPages(selectedIds: Set<number>, renderedIds: Set<number>, waitingFor: Set<number>): void {
+	for (const id of selectedIds) {
+		if (!renderedIds.has(id)) {
+			renderedIds.add(id)
+			waitingFor.add(id)
+		}
+	}
+	for (const id of waitingFor) {
+		if (!selectedIds.has(id)) {
+			waitingFor.delete(id)
+			renderedIds.delete(id)
+		}
+	}
+}
+
+/**
  * Filter pages according to the `pages` or `exclude` query parameter
  *
  * @param pages Pages to filter
