@@ -258,46 +258,41 @@ export default defineComponent({
 		},
 
 		/**
-		 * Wait until the images in the selected pages are loaded
+		 * Wait until the images in the selected pages are loaded or failed to load
 		 *
 		 * Waits 1 sec for each image (min 3 sec, max. 15 sec) and gives up afterwards.
 		 */
 		async waitForImages(): Promise<void> {
 			const pagesEl = this.$refs.pagesEl as HTMLElement
-			const loading = new Set(pagesEl.querySelectorAll('.print-page:not(.print-page--hidden) div.ProseMirror figure.image.icon-loading'))
-			if (!loading.size) {
+			const pages = '.print-page:not(.print-page--hidden) div.ProseMirror'
+			const loadingCount = () => pagesEl.querySelectorAll(`${pages} figure.image.icon-loading`).length
+			const count = loadingCount()
+			if (!count) {
 				return
 			}
 
-			const listeners = new AbortController()
-			const imagesLoaded = new Promise<boolean>((resolve) => {
-				const onLoad = (event: Event) => {
-					if (!(event.target as HTMLElement).classList.contains('image__main')) {
-						return
-					}
-					loading.delete(event.currentTarget as Element)
-					if (!loading.size) {
-						// Let the editor finish rendering the image
-						setTimeout(() => resolve(true), 100)
-					}
-				}
-				for (const el of loading) {
-					// Hook into the capture phase as `load` events do not bubble up.
-					el.addEventListener('load', onLoad, { capture: true, signal: listeners.signal })
+			// Text removes `icon-loading` once an image is loaded or failed to load
+			let resolveLoaded: (loaded: boolean) => void = () => {}
+			const observer = new MutationObserver(() => {
+				if (!loadingCount()) {
+					resolveLoaded(true)
 				}
 			})
-
+			observer.observe(pagesEl, { subtree: true, attributeFilter: ['class'] })
 			let timeoutId: ReturnType<typeof setTimeout> | undefined
-			const timeout = new Promise<boolean>((resolve) => {
-				timeoutId = setTimeout(() => resolve(false), Math.min(Math.max(loading.size * 1000, 3000), 15000))
+			const loaded = await new Promise<boolean>((resolve) => {
+				resolveLoaded = resolve
+				timeoutId = setTimeout(() => resolve(false), Math.min(Math.max(count * 1000, 3000), 15000))
 			})
-
-			const loaded = await Promise.race([imagesLoaded, timeout])
 			clearTimeout(timeoutId)
-			listeners.abort()
+			observer.disconnect()
 			if (!loaded) {
-				console.error(`Failed to load ${loading.size} images`)
+				console.error(`Timed out loading ${loadingCount()} images`)
 			}
+
+			// Wait until the loaded images can be painted
+			const images = pagesEl.querySelectorAll<HTMLImageElement>(`${pages} figure.image:not(.icon-loading) img.image__main`)
+			await Promise.allSettled([...images].map((img) => img.decode()))
 		},
 	},
 })
