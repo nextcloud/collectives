@@ -22,6 +22,7 @@ use OCP\Http\Client\IResponse;
 use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
@@ -145,93 +146,168 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->checkHealth();
 	}
 
-	public function testBuildSendsStaticSiteWithBearerToken(): void {
+	private function expectedPayload(): array {
+		return [
+			'data' => [
+				'static_site_id' => $this->staticSiteId,
+				'build_id' => $this->buildId,
+				'content_download_url' => 'https://cloud.example.org/archive',
+				'callback_status_url' => 'https://cloud.example.org/callback',
+				'slug' => 'my-site',
+				'title' => 'My Site',
+			],
+		];
+	}
+
+	private function isRequestOptions(): Callback {
+		return self::callback(fn (array $options): bool
+			=> $options['headers']['Authorization'] === 'Bearer secret-token'
+			&& $options['timeout'] === 30
+			&& $options['connect_timeout'] === 5
+			&& $options['http_errors'] === false
+			&& $options['json'] === $this->expectedPayload());
+	}
+
+	public function testCreatePostsStaticSiteWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			->with('POST', 'https://ssg.example.org/build', self::callback(fn (array $options): bool
-				=> $options['headers']['Authorization'] === 'Bearer secret-token'
-				&& $options['json'] === [
-					'static_site_id' => $this->staticSiteId,
-					'content_download_url' => 'https://cloud.example.org/archive',
-					'callback_status_url' => 'https://cloud.example.org/callback',
-					'slug' => 'my-site',
-					'title' => 'My Site',
-				]))
-			->willReturn($this->makeResponse(202, '{"status": "enqueued"}'));
+			->with('POST', 'https://ssg.example.org/static-sites/', $this->isRequestOptions())
+			->willReturn($this->makeResponse(202, ''));
 
-		$this->client->build($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site');
+	}
+
+	public function testCreateFallsBackToUpdateIfStaticSiteIsKnown(): void {
+		$this->httpClient->expects(self::exactly(2))
+			->method('request')
+			->willReturnCallback(fn (string $method, string $url, array $options): IResponse => match ([$method, $url]) {
+				['POST', 'https://ssg.example.org/static-sites/'] => $this->makeResponse(409, ''),
+				['PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId] => $this->makeResponse(202, ''),
+			});
+
+		$this->client->create($this->makeStaticSite(), 'My Site');
+	}
+
+	public function testCreateRejectedIfFallbackFails(): void {
+		$this->httpClient->expects(self::exactly(2))
+			->method('request')
+			->willReturnOnConsecutiveCalls($this->makeResponse(409, ''), $this->makeResponse(404, ''));
+
+		$this->expectException(StaticSiteGeneratorException::class);
+		$this->client->create($this->makeStaticSite(), 'My Site');
+	}
+
+	public function testUpdatePatchesStaticSiteWithBearerToken(): void {
+		$this->httpClient->expects(self::once())
+			->method('request')
+			->with('PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, $this->isRequestOptions())
+			->willReturn($this->makeResponse(202, ''));
+
+		$this->client->update($this->makeStaticSite(), 'My Site');
+	}
+
+	public function testUpdateFallsBackToCreateIfStaticSiteIsUnknown(): void {
+		$this->httpClient->expects(self::exactly(2))
+			->method('request')
+			->willReturnCallback(fn (string $method, string $url, array $options): IResponse => match ([$method, $url]) {
+				['PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId] => $this->makeResponse(404, ''),
+				['POST', 'https://ssg.example.org/static-sites/'] => $this->makeResponse(202, ''),
+			});
+
+		$this->client->update($this->makeStaticSite(), 'My Site');
+	}
+
+	public function testUpdateRejectedIfFallbackFails(): void {
+		$this->httpClient->expects(self::exactly(2))
+			->method('request')
+			->willReturnOnConsecutiveCalls($this->makeResponse(404, ''), $this->makeResponse(409, ''));
+
+		$this->expectException(StaticSiteGeneratorException::class);
+		$this->client->update($this->makeStaticSite(), 'My Site');
+	}
+
+	public static function sendMethodProvider(): array {
+		return [
+			'create' => ['create'],
+			'update' => ['update'],
+		];
 	}
 
 	/**
-	 * @dataProvider notConfiguredProvider
+	 * @dataProvider sendMethodProvider
 	 */
-	public function testBuildWithSsgNotConfigured(string $url, string $token): void {
-		$this->url = $url;
-		$this->token = $token;
+	public function testSendWithSsgNotConfigured(string $method): void {
+		$this->url = '';
 		$this->httpClient->expects(self::never())->method('request');
 
 		$this->expectException(StaticSiteGeneratorNotConfiguredException::class);
-		$this->client->build($this->makeStaticSite(), 'My Site');
+		$this->client->$method($this->makeStaticSite(), 'My Site');
 	}
 
-	public function testBuildWithSsgNotReachable(): void {
+	/**
+	 * @dataProvider sendMethodProvider
+	 */
+	public function testSendWithSsgNotReachable(string $method): void {
 		$this->httpClient->method('request')->willThrowException(new Exception('Connection timed out'));
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
-		$this->client->build($this->makeStaticSite(), 'My Site');
+		$this->client->$method($this->makeStaticSite(), 'My Site');
 	}
 
 	public static function unavailableResponseProvider(): array {
 		return [
-			'server error' => [503, '{"status": "error", "error": "queue full"}'],
-			'gateway error' => [502, ''],
+			'create, server error' => ['create', 503, '{"error": "queue full"}'],
+			'create, gateway error' => ['create', 502, ''],
+			'update, server error' => ['update', 500, ''],
 		];
 	}
 
 	/**
 	 * @dataProvider unavailableResponseProvider
 	 */
-	public function testBuildWithSsgUnavailable(int $statusCode, string $body): void {
+	public function testSendWithSsgUnavailable(string $method, int $statusCode, string $body): void {
 		$this->httpClient->method('request')->willReturn($this->makeResponse($statusCode, $body));
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
-		$this->client->build($this->makeStaticSite(), 'My Site');
+		$this->client->$method($this->makeStaticSite(), 'My Site');
 	}
 
 	public static function rejectedResponseProvider(): array {
 		return [
-			'invalid' => [400, '{"status": "invalid", "error": "slug is taken"}'],
-			'unauthorized' => [401, ''],
-			'not enqueued' => [200, '{"status": "ok"}'],
-			'no JSON' => [202, 'enqueued'],
+			'create, invalid' => ['create', 400, '{"error": "slug is taken"}'],
+			'create, unauthorized' => ['create', 401, ''],
+			'create, not accepted' => ['create', 200, ''],
+			'update, invalid' => ['update', 422, ''],
+			'update, created' => ['update', 201, ''],
 		];
 	}
 
 	/**
 	 * @dataProvider rejectedResponseProvider
 	 */
-	public function testBuildRejected(int $statusCode, string $body): void {
+	public function testSendRejected(string $method, int $statusCode, string $body): void {
 		$this->httpClient->method('request')->willReturn($this->makeResponse($statusCode, $body));
 
 		try {
-			$this->client->build($this->makeStaticSite(), 'My Site');
+			$this->client->$method($this->makeStaticSite(), 'My Site');
 			$this->fail('Expected StaticSiteGeneratorException');
 		} catch (StaticSiteGeneratorException $e) {
 			$this->assertNotInstanceOf(StaticSiteGeneratorUnavailableException::class, $e);
 		}
 	}
 
-	public function testBuildLogsErrorOfGenerator(): void {
-		$this->httpClient->method('request')->willReturn($this->makeResponse(400, '{"status": "invalid", "error": "slug is taken"}'));
+	public function testSendLogsErrorOfGenerator(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(400, '{"error": "slug is taken"}'));
 		$this->logger->expects(self::once())
 			->method('warning')
 			->with('Static site generator did not accept the build', [
 				'staticSiteId' => $this->staticSiteId,
+				'buildId' => $this->buildId,
 				'statusCode' => 400,
 				'error' => 'slug is taken',
 			]);
 
 		$this->expectException(StaticSiteGeneratorException::class);
-		$this->client->build($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site');
 	}
 }

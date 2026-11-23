@@ -95,6 +95,13 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?string $publishedTitle = null;
 	protected ?string $publishedSelectedPages = null;
 
+	/**
+	 * Whether the static site got published at least once, so the static site generator knows it.
+	 */
+	public function isPublished(): bool {
+		return $this->publishedUrl !== null;
+	}
+
 	public function isInProgress(int $now): bool {
 		return in_array($this->status, self::IN_PROGRESS_STATUSES, true)
 			&& $this->updatedAt >= $now - self::PENDING_TIMEOUT;

@@ -106,10 +106,23 @@ class StaticSiteTest extends TestCase {
 		$this->assertSame($expected, $staticSite->jsonSerialize()['isInProgress']);
 	}
 
-	public function testJsonSerializeOmitsStaticSiteId(): void {
+	public function testJsonSerializeOmitsStaticSiteAndBuildIds(): void {
 		$staticSite = new StaticSite();
 		$staticSite->setStaticSiteId('01990000-0000-7000-8000-000000000000');
+		$staticSite->setBuildId('01990000-0000-7000-8000-000000000001');
+		$staticSite->setPublishedBuildId('01990000-0000-7000-8000-000000000002');
 
-		$this->assertArrayNotHasKey('staticSiteId', $staticSite->jsonSerialize());
+		$serialized = $staticSite->jsonSerialize();
+		$this->assertArrayNotHasKey('staticSiteId', $serialized);
+		$this->assertArrayNotHasKey('buildId', $serialized);
+		$this->assertArrayNotHasKey('publishedBuildId', $serialized);
+	}
+
+	public function testIsPublished(): void {
+		$staticSite = new StaticSite();
+		$this->assertFalse($staticSite->isPublished());
+
+		$staticSite->setPublishedUrl('https://example.org/my-site/');
+		$this->assertTrue($staticSite->isPublished());
 	}
 }

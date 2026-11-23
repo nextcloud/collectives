@@ -105,7 +105,7 @@ class StaticSiteService {
 		}
 
 		try {
-			$this->generatorClient->build($staticSite, $title);
+			$this->generatorClient->create($staticSite, $title);
 		} catch (StaticSiteGeneratorException $e) {
 			$this->storeGeneratorFailure($staticSite, $title, $pageIds, $e);
 			throw $e;
@@ -116,7 +116,8 @@ class StaticSiteService {
 
 	/**
 	 * Update title, page selection and slug of a static site, provide its archive again and
-	 * ask the static site generator to build it.
+	 * ask the static site generator to build it. A static site that never got published is
+	 * created at the generator, as it only keeps static sites that got published.
 	 *
 	 * The slug can only be changed until the static site got published, as it is part of the
 	 * public URL. If the archive can't be provided, the static site and its previous archive
@@ -177,9 +178,12 @@ class StaticSiteService {
 			throw $e;
 		}
 
-		// TODO(Publish): Use PATCH of the publish service for static sites that were published already
 		try {
-			$this->generatorClient->build($staticSite, $title);
+			if ($staticSite->isPublished()) {
+				$this->generatorClient->update($staticSite, $title);
+			} else {
+				$this->generatorClient->create($staticSite, $title);
+			}
 		} catch (StaticSiteGeneratorException $e) {
 			$this->storeGeneratorFailure($staticSite, $title, $pageIds, $e);
 			throw $e;
@@ -295,7 +299,6 @@ class StaticSiteService {
 	 * @throws ServiceException
 	 */
 	private function buildArchive(StaticSite $staticSite, array $pageIds): void {
-		// TODO(Publish): Consider building the archive in a queued background job once the publish service reports the build result via callback
 		try {
 			$files = $this->contentCollector->collect($staticSite->getCollectiveId(), $pageIds);
 			$this->validateSize($files);
@@ -358,7 +361,9 @@ class StaticSiteService {
 
 	/**
 	 * Store the settings with status failed, so publishing can be retried later.
-	 * The archive is only downloaded after an accepted build, so it is deleted.
+	 *
+	 * A rejected build never downloads its archive, so it is deleted. If the generator was
+	 * unavailable or timed out, it may have accepted the build anyway, so the archive is kept.
 	 *
 	 * @throws NotFoundException Static site was deleted meanwhile
 	 * @throws DBException
@@ -368,7 +373,9 @@ class StaticSiteService {
 			? StaticSite::ERROR_GENERATOR_UNAVAILABLE
 			: StaticSite::ERROR_GENERATOR_REJECTED;
 		$this->updateSettingsAndStatus($staticSite, $title, $pageIds, StaticSite::STATUS_FAILED, $lastError);
-		$this->deleteArchive($staticSite);
+		if (!$e instanceof StaticSiteGeneratorUnavailableException) {
+			$this->deleteArchive($staticSite);
+		}
 	}
 
 	/**
@@ -491,7 +498,7 @@ class StaticSiteService {
 		if ($slug === null || $slug === $staticSite->getSlug()) {
 			return null;
 		}
-		if ($staticSite->getPublishedUrl()) {
+		if ($staticSite->isPublished()) {
 			throw new UnprocessableEntityException('Slug of a published static site can\'t be changed');
 		}
 		$this->validateSlug($slug);
