@@ -214,6 +214,46 @@ class CollectiveServiceTest extends TestCase {
 		], $collective->jsonSerialize());
 	}
 
+	public function testCreateCollectiveForTeamUsesExactTeam(): void {
+		$circle = $this->createMock(Circle::class);
+		$circle->method('getSingleId')->willReturn('team-id');
+		$circle->method('getSanitizedName')->willReturn('Team name');
+		$this->circleHelper->expects(self::once())->method('isAdmin')->with('team-id', $this->userId)->willReturn(true);
+		$this->circleHelper->expects(self::once())->method('getCircle')->with('team-id', $this->userId)->willReturn($circle);
+		$this->circleHelper->expects(self::never())->method('createCircle');
+		$this->circleHelper->expects(self::never())->method('findCircle');
+		$this->circleHelper->expects(self::once())->method('flagCircleAsAppManaged')->with('team-id');
+		$this->collectiveMapper->expects(self::once())->method('findByCircleId')->with('team-id', true)->willReturn(null);
+		$this->collectiveMapper->expects(self::once())->method('insert')
+			->with(self::callback(fn (Collective $collective): bool => $collective->getCircleId() === 'team-id'))
+			->willReturnCallback(function (Collective $collective): Collective {
+				$collective->setId(123);
+				return $collective;
+			});
+
+		$collective = $this->service->createCollectiveForTeam('team-id', $this->userId, 'de');
+		self::assertSame(123, $collective->getId());
+		self::assertSame('Team name', $collective->getName());
+	}
+
+	public function testCreateCollectiveForTeamRejectsNonAdmin(): void {
+		$this->circleHelper->method('isAdmin')->willReturn(false);
+		$this->circleHelper->expects(self::never())->method('flagCircleAsAppManaged');
+		$this->collectiveMapper->expects(self::never())->method('insert');
+		$this->expectException(NotPermittedException::class);
+		$this->service->createCollectiveForTeam('team-id', $this->userId, 'de');
+	}
+
+	public function testCreateCollectiveForTeamRejectsTrashedCollective(): void {
+		$this->circleHelper->method('isAdmin')->willReturn(true);
+		$this->circleHelper->method('getCircle')->willReturn($this->createMock(Circle::class));
+		$this->collectiveMapper->expects(self::once())->method('findByCircleId')->with('team-id', true)->willReturn(new Collective());
+		$this->circleHelper->expects(self::never())->method('flagCircleAsAppManaged');
+		$this->collectiveMapper->expects(self::never())->method('insert');
+		$this->expectException(UnprocessableEntityException::class);
+		$this->service->createCollectiveForTeam('team-id', $this->userId, 'de');
+	}
+
 	private function mockTrashedCollective(): Collective {
 		$collective = new Collective();
 		$collective->setId(123);
