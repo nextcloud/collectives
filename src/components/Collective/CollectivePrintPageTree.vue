@@ -9,6 +9,7 @@
 			<NcCheckboxRadioSwitch
 				class="print-page-tree__checkbox"
 				:modelValue="selectedIds.has(node.page.id)"
+				:disabled
 				@update:modelValue="$emit('toggle', node, $event)">
 				<span class="print-page-tree__label">
 					<span class="print-page-tree__icon">
@@ -22,6 +23,7 @@
 				v-if="node.children.length"
 				:nodes="node.children"
 				:selectedIds
+				:disabled
 				:collective
 				@toggle="(child: PageTreeNode<PageInfo>, checked: boolean) => $emit('toggle', child, checked)" />
 		</li>
@@ -59,6 +61,11 @@ export default defineComponent({
 		collective: {
 			type: Object as PropType<Collective>,
 			required: true,
+		},
+
+		disabled: {
+			type: Boolean,
+			default: false,
 		},
 	},
 

@@ -29,6 +29,7 @@
 				v-else
 				:nodes="pageTree"
 				:selectedIds
+				:disabled="printing"
 				:collective="currentCollective"
 				@toggle="togglePage" />
 		</template>
@@ -232,7 +233,7 @@ export default defineComponent({
 		/**
 		 * Keep the selection in the URL, so it survives reloading the page
 		 */
-		updateRouteQuery() {
+		updateRouteQuery(): void {
 			const query = { ...this.$route.query }
 			delete query.pages
 			delete query.exclude
@@ -244,10 +245,13 @@ export default defineComponent({
 			this.waitingFor.delete(pageId)
 		},
 
-		async print() {
+		async print(): Promise<void> {
 			this.printing = true
-			await this.waitForImages()
-			this.printing = false
+			try {
+				await this.waitForImages()
+			} finally {
+				this.printing = false
+			}
 			const failedCount = this.selectedPages.filter((page) => this.failedIds.has(page.id)).length
 			if (failedCount) {
 				showError(n('collectives', 'Could not load the content of %n page', 'Could not load the content of %n pages', failedCount))

@@ -61,17 +61,42 @@ test.describe('Collective print view', () => {
 
 		await stubPrint(page)
 
+		// Hold back the images until released, so printing waits for them
+		let heldImages = 0
+		let releaseImages = () => {}
+		const imagesReleased = new Promise<void>((resolve) => {
+			releaseImages = resolve
+		})
+		await page.route(/mediaPreview|\/core\/preview|test\.png/, async (route) => {
+			if (route.request().resourceType() !== 'image') {
+				return route.fallback()
+			}
+			heldImages += 1
+			await imagesReleased
+			await route.continue()
+		})
+
 		await page.goto(`/index.php/apps/collectives/_/print/${collective.getCollectiveUrlPart()}`)
 
 		await expect(page.getByText('Preparing collective for exporting or printing'))
 			.toBeVisible()
 		await expect(page.getByText('Preparing collective for exporting or printing'))
 			.toBeHidden({ timeout: 30000 })
+		await expect.poll(() => heldImages).toBeGreaterThan(0)
 
 		// The print dialog only opens on request
 		expect(await printCalls(page)).toBe(0)
 		await page.getByRole('button', { name: 'Export or print' }).click()
+
+		// The page selection is locked while printing waits for the images
+		const checkbox = page.getByRole('navigation', { name: 'Pages to export or print' })
+			.getByRole('checkbox')
+			.first()
+		await expect(checkbox).toBeDisabled()
+
+		releaseImages()
 		await expect.poll(() => printCalls(page), { timeout: 20000 }).toBe(1)
+		await expect(checkbox).toBeEnabled()
 
 		const imgs = page.locator('div.ProseMirror figure.image img.image__main')
 		const count = await imgs.count()
