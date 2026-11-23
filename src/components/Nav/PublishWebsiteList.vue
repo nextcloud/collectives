@@ -135,7 +135,7 @@ export default {
 	],
 
 	computed: {
-		// Only one publication per collective may run at a time
+		// Only one publication or deletion per collective may run at a time
 		isLocked() {
 			return this.staticSites.some((staticSite) => staticSiteState(staticSite) === 'publishing')
 		},

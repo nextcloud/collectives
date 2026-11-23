@@ -818,7 +818,26 @@ class StaticSiteServiceTest extends TestCase {
 	 */
 	public function testDeleteRejectsStaticSiteInProgress(string $status): void {
 		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite($status));
+		$staticSite = $this->makeStaticSite($status);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
+		$this->remover->expects($this->never())->method('remove');
+
+		$this->expectException(StaticSitePublicationInProgressException::class);
+		$this->service->delete($this->collectiveId, 7, $this->userId);
+	}
+
+	/**
+	 * @dataProvider deleteInProgressStatusProvider
+	 */
+	public function testDeleteRejectsWhileOtherStaticSiteOfCollectiveIsInProgress(string $status): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$otherStaticSite = $this->makeStaticSite($status);
+		$otherStaticSite->setId(8);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$this->staticSiteMapper->method('findByCollectiveId')
+			->with($this->collectiveId)
+			->willReturn([$otherStaticSite]);
 		$this->remover->expects($this->never())->method('remove');
 
 		$this->expectException(StaticSitePublicationInProgressException::class);
@@ -827,8 +846,9 @@ class StaticSiteServiceTest extends TestCase {
 
 	public function testDeleteRemovesAbortedStaticSite(): void {
 		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
-		$this->staticSiteMapper->method('findByIdAndCollectiveId')
-			->willReturn($this->makeStaticSite(StaticSite::STATUS_DELETING, StaticSite::PENDING_TIMEOUT + 1));
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_DELETING, StaticSite::PENDING_TIMEOUT + 1);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
 		$this->remover->expects($this->once())->method('remove');
 
 		$this->service->delete($this->collectiveId, 7, $this->userId);

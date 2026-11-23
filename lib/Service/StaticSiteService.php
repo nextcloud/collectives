@@ -204,12 +204,12 @@ class StaticSiteService {
 	 * Delete a static site, also at the static site generator if it got published.
 	 * See StaticSiteRemover::remove().
 	 *
-	 * Not while it is being published or deleted, as the static site generator doesn't
-	 * check the order of requests.
+	 * Not while a static site of the collective is being published or deleted, as only one
+	 * request per collective may run at a time.
 	 *
 	 * @throws NotFoundException Collective or static site not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
-	 * @throws StaticSitePublicationInProgressException Static site is being published or deleted
+	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published or deleted
 	 * @throws UnprocessableEntityException Static site was changed meanwhile
 	 * @throws StaticSiteGeneratorException Generator not configured, unavailable or didn't accept the request
 	 * @throws DBException
@@ -218,9 +218,7 @@ class StaticSiteService {
 		$this->getEditableCollective($collectiveId, $userId);
 
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
-		if ($staticSite->isInProgress($this->timeFactory->getTime())) {
-			throw new StaticSitePublicationInProgressException('Static site is being published or deleted');
-		}
+		$this->assertNoPublicationInProgress($collectiveId);
 		$this->remover->remove($staticSite);
 	}
 
@@ -553,7 +551,8 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Only one publication per collective may run at a time, aborted ones don't count
+	 * Only one request to the static site generator per collective may run at a time, a build or a
+	 * deletion. Aborted ones don't count.
 	 *
 	 * @throws StaticSitePublicationInProgressException
 	 * @throws DBException
@@ -562,7 +561,7 @@ class StaticSiteService {
 		$now = $this->timeFactory->getTime();
 		foreach ($this->staticSiteMapper->findByCollectiveId($collectiveId) as $staticSite) {
 			if ($staticSite->isInProgress($now)) {
-				throw new StaticSitePublicationInProgressException('A static site of the collective is being published');
+				throw new StaticSitePublicationInProgressException('A static site of the collective is being published or deleted');
 			}
 		}
 	}

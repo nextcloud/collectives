@@ -150,7 +150,7 @@ class StaticSiteController extends OCSController {
 	 * @throws OCSBadRequestException Static site was changed meanwhile
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or static site not found
-	 * @throws OCSException Static site is being published or deleted, or the publish service is not available or didn't accept the request
+	 * @throws OCSException A website of the collective is being published or deleted, or the publish service is not available or didn't accept the request
 	 *
 	 * 200: Static site deleted or being deleted
 	 */
@@ -186,7 +186,7 @@ class StaticSiteController extends OCSController {
 			throw $e;
 		} catch (StaticSitePublicationInProgressException) {
 			throw new OCSException(
-				$this->l10n->t('A website of this collective is being published. Please wait until it is finished.'),
+				$this->l10n->t('A website of this collective is being published or deleted. Please wait until it is finished.'),
 				Http::STATUS_LOCKED,
 			);
 		} catch (StaticSiteGeneratorNotConfiguredException) {

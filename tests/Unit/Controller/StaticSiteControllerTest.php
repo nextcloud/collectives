@@ -188,15 +188,16 @@ class StaticSiteControllerTest extends TestCase {
 		}
 	}
 
-	public function testDeleteIsLockedWhileStaticSiteIsInProgress(): void {
+	public function testDeleteIsLockedWhileStaticSiteOfCollectiveIsInProgress(): void {
 		$this->staticSiteService->method('delete')
-			->willThrowException(new StaticSitePublicationInProgressException('Static site is being published or deleted'));
+			->willThrowException(new StaticSitePublicationInProgressException('A static site of the collective is being published or deleted'));
 
 		try {
 			$this->controller->delete(42, 7);
 			$this->fail('Expected OCSException');
 		} catch (OCSException $e) {
 			$this->assertSame(Http::STATUS_LOCKED, $e->getCode());
+			$this->assertSame('A website of this collective is being published or deleted. Please wait until it is finished.', $e->getMessage());
 		}
 	}
 }
