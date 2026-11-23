@@ -20,6 +20,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteRemover;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\DB\Exception as DBException;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -182,5 +183,42 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->logger->expects($this->once())->method('warning');
 
 		$this->remover->remove($this->makeStaticSite(published: false));
+	}
+
+	public function testRemoveAllOfCollectiveRemovesEachStaticSite(): void {
+		$neverPublished = $this->makeStaticSite(published: false);
+		$published = $this->makeStaticSite(published: true);
+		$published->setId(8);
+		$this->staticSiteMapper->method('findByCollectiveId')->with(42)->willReturn([$neverPublished, $published]);
+		$this->staticSiteMapper->expects($this->once())->method('delete')->with($neverPublished);
+		$this->staticSiteMapper->expects($this->once())->method('startDeletion')->with($published)->willReturn(true);
+		$this->generatorClient->expects($this->once())->method('delete')->willReturn(true);
+
+		$this->remover->removeAllOfCollective(42);
+	}
+
+	/**
+	 * Purging a collective must not fail, the static site is kept to retry deleting it
+	 */
+	public function testRemoveAllOfCollectiveContinuesIfAStaticSiteCannotBeDeleted(): void {
+		$first = $this->makeStaticSite(published: true);
+		$second = $this->makeStaticSite(published: false);
+		$second->setId(8);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$first, $second]);
+		$this->generatorClient->method('assertConfigured')
+			->willThrowException(new StaticSiteGeneratorNotConfiguredException('Not configured'));
+		$this->staticSiteMapper->expects($this->once())->method('delete')->with($second);
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Failed to delete static site of collective');
+
+		$this->remover->removeAllOfCollective(42);
+	}
+
+	public function testRemoveAllOfCollectiveDoesNotThrowIfStaticSitesCannotBeFound(): void {
+		$this->staticSiteMapper->method('findByCollectiveId')->willThrowException($this->createMock(DBException::class));
+		$this->logger->expects($this->once())->method('warning');
+
+		$this->remover->removeAllOfCollective(42);
 	}
 }

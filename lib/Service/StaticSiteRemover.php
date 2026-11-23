@@ -77,6 +77,29 @@ class StaticSiteRemover {
 	}
 
 	/**
+	 * Delete all static sites of a collective, e.g. when it gets purged.
+	 *
+	 * Doesn't throw, as purging must not fail. Static sites that can't be deleted at the static
+	 * site generator right now are kept, so their slugs stay reserved until deleting them is retried.
+	 */
+	public function removeAllOfCollective(int $collectiveId): void {
+		try {
+			$staticSites = $this->staticSiteMapper->findByCollectiveId($collectiveId);
+		} catch (DBException $e) {
+			$this->logger->warning('Failed to find static sites of collective to delete them', ['collectiveId' => $collectiveId, 'exception' => $e]);
+			return;
+		}
+
+		foreach ($staticSites as $staticSite) {
+			try {
+				$this->remove($staticSite);
+			} catch (ServiceException|DBException $e) {
+				$this->logger->warning('Failed to delete static site of collective', $this->getLogContext($staticSite) + ['exception' => $e]);
+			}
+		}
+	}
+
+	/**
 	 * Delete the static site once the static site generator deleted it, unless another
 	 * request started meanwhile.
 	 *
