@@ -34,6 +34,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	private string $url = 'https://ssg.example.org/';
 	private string $token = 'secret-token';
 	private string $staticSiteId = '01990000-0000-7000-8000-000000000000';
+	private string $buildId = '01990000-0000-7000-8000-000000000001';
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -50,7 +51,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$urlGenerator = $this->createMock(IURLGenerator::class);
 		$urlGenerator->method('linkToRouteAbsolute')
 			->willReturnMap([
-				['collectives.staticsitearchive.download', ['apiVersion' => '1.0', 'staticSiteId' => $this->staticSiteId], 'https://cloud.example.org/archive'],
+				['collectives.staticsitearchive.download', ['apiVersion' => '1.0', 'staticSiteId' => $this->staticSiteId, 'buildId' => $this->buildId], 'https://cloud.example.org/archive'],
 			]);
 		$urlGenerator->method('linkToOCSRouteAbsolute')
 			->willReturnMap([
@@ -72,6 +73,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	private function makeStaticSite(): StaticSite {
 		$staticSite = new StaticSite();
 		$staticSite->setStaticSiteId($this->staticSiteId);
+		$staticSite->setBuildId($this->buildId);
 		$staticSite->setSlug('my-site');
 		return $staticSite;
 	}
@@ -231,24 +233,5 @@ class StaticSiteGeneratorClientTest extends TestCase {
 
 		$this->expectException(StaticSiteGeneratorException::class);
 		$this->client->build($this->makeStaticSite(), 'My Site');
-	}
-
-	public static function tokenProvider(): array {
-		return [
-			'matching token' => ['secret-token', 'Bearer secret-token', true],
-			'wrong token' => ['secret-token', 'Bearer other', false],
-			'missing scheme' => ['secret-token', 'secret-token', false],
-			'missing header' => ['secret-token', '', false],
-			'no token configured' => ['', 'Bearer ', false],
-		];
-	}
-
-	/**
-	 * @dataProvider tokenProvider
-	 */
-	public function testIsValidToken(string $configuredToken, string $authorizationHeader, bool $expected): void {
-		$this->token = $configuredToken;
-
-		$this->assertSame($expected, $this->client->isValidToken($authorizationHeader));
 	}
 }

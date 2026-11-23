@@ -93,7 +93,7 @@ class StaticSiteMapperTest extends TestCase {
 	public function testUpdateStatusIfUnchangedOnlyUpdatesUnchangedStaticSite(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 
-		$this->assertTrue($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING));
+		$this->assertTrue($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING, 'new-build'));
 
 		$this->assertSame([
 			'id = 7',
@@ -102,6 +102,7 @@ class StaticSiteMapperTest extends TestCase {
 		], $this->conditions);
 		$this->assertSame([
 			'status' => StaticSite::STATUS_PENDING,
+			'build_id' => 'new-build',
 			'last_error' => null,
 			'updated_at' => $this->now,
 		], $this->values);
@@ -110,7 +111,7 @@ class StaticSiteMapperTest extends TestCase {
 	public function testUpdateStatusIfUnchangedStoresNewSlug(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 
-		$this->assertTrue($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING, 'new-slug'));
+		$this->assertTrue($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING, 'new-build', 'new-slug'));
 
 		$this->assertSame('new-slug', $this->values['slug']);
 	}
@@ -118,7 +119,7 @@ class StaticSiteMapperTest extends TestCase {
 	public function testUpdateStatusIfUnchangedReturnsFalseIfStaticSiteChangedMeanwhile(): void {
 		$this->qb->method('executeStatement')->willReturn(0);
 
-		$this->assertFalse($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING));
+		$this->assertFalse($this->mapper->updateStatusIfUnchanged($this->makeStaticSite(), StaticSite::STATUS_PENDING, 'new-build'));
 	}
 
 	public function testRestoreStatusKeepsPreviousUpdateTime(): void {
@@ -175,6 +176,23 @@ class StaticSiteMapperTest extends TestCase {
 		$this->mapper->restoreStatus($previous);
 
 		$this->assertSame('old-slug', $this->values['slug']);
+	}
+
+	public function testRestoreStatusRestoresBuild(): void {
+		$this->qb->method('executeStatement')->willReturn(1);
+		$current = new StaticSite();
+		$current->setId(7);
+		$current->setBuildId('new-build');
+		$current->setStatus(StaticSite::STATUS_PENDING);
+		$current->setUpdatedAt($this->now);
+		$current->resetUpdatedFields();
+		$this->mapper->method('find')->willReturn($current);
+		$previous = $this->makeStaticSite();
+		$previous->setBuildId('old-build');
+
+		$this->mapper->restoreStatus($previous);
+
+		$this->assertSame('old-build', $this->values['build_id']);
 	}
 
 	public function testRestoreStatusThrowsIfStaticSiteWasDeleted(): void {

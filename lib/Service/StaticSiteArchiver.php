@@ -27,7 +27,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 /**
- * Stores the files of a static site as tar.gz archive in appdata.
+ * Stores the files of a static site as tar.gz archive per build in appdata, in a folder per static site.
  */
 class StaticSiteArchiver {
 	private const APPDATA_FOLDER = 'static_sites';
@@ -44,19 +44,18 @@ class StaticSiteArchiver {
 	}
 
 	/**
-	 * Build the archive and replace a previously stored archive of the static site.
+	 * Build the archive of a build of the static site.
 	 *
 	 * PharData needs a local file, but app data is only accessible via streams
 	 * (and may be stored on object storage), so the archive is built in a temporary
-	 * folder first and then copied to app data. A previously stored archive is only
-	 * replaced once the new one was built successfully.
+	 * folder first and then copied to app data.
 	 *
 	 * @param array<string, File> $files Files mapped to their relative path in the archive
 	 *
 	 * @throws UnprocessableEntityException No files given or a path is too long for the archive
 	 * @throws ServiceException
 	 */
-	public function store(string $staticSiteId, array $files): void {
+	public function store(string $staticSiteId, string $buildId, array $files): void {
 		if ($files === []) {
 			throw new UnprocessableEntityException($this->l10n->t('There is no content to publish.'));
 		}
@@ -73,7 +72,7 @@ class StaticSiteArchiver {
 
 		try {
 			$archivePath = $this->buildArchive($tempFolder, $files);
-			$this->writeToAppData($staticSiteId, $archivePath);
+			$this->writeToAppData($staticSiteId, $buildId, $archivePath);
 		} finally {
 			// ITempManager only removes temporary files in a background job, archives may be too large to wait for the job
 			$this->removeDirectory($tempFolder);
@@ -81,11 +80,11 @@ class StaticSiteArchiver {
 	}
 
 	/**
-	 * @throws NotFoundException No archive stored for the static site
+	 * @throws NotFoundException No archive stored for the build of the static site
 	 */
-	public function get(string $staticSiteId): ISimpleFile {
+	public function get(string $staticSiteId, string $buildId): ISimpleFile {
 		try {
-			return $this->appData->getFolder(self::APPDATA_FOLDER)->getFile($staticSiteId . self::ARCHIVE_SUFFIX);
+			return $this->getStaticSiteFolder($staticSiteId)->getFile($buildId . self::ARCHIVE_SUFFIX);
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException('Static site archive not found', 0, $e);
 		}
@@ -94,17 +93,32 @@ class StaticSiteArchiver {
 	/**
 	 * @throws ServiceException
 	 */
-	public function delete(string $staticSiteId): void {
+	public function delete(string $staticSiteId, string $buildId): void {
 		try {
-			$folder = $this->appData->getFolder(self::APPDATA_FOLDER);
-			$name = $staticSiteId . self::ARCHIVE_SUFFIX;
+			$folder = $this->getStaticSiteFolder($staticSiteId);
+			$name = $buildId . self::ARCHIVE_SUFFIX;
 			if ($folder->fileExists($name)) {
 				$folder->getFile($name)->delete();
 			}
 		} catch (FilesNotFoundException) {
-			// No archives stored yet
+			// No archives stored for the static site
 		} catch (FilesNotPermittedException $e) {
 			throw new ServiceException('Failed to delete static site archive: ' . $e->getMessage(), 0, $e);
+		}
+	}
+
+	/**
+	 * Delete the archives of all builds of the static site.
+	 *
+	 * @throws ServiceException
+	 */
+	public function deleteAll(string $staticSiteId): void {
+		try {
+			$this->getStaticSiteFolder($staticSiteId)->delete();
+		} catch (FilesNotFoundException) {
+			// No archives stored for the static site
+		} catch (FilesNotPermittedException $e) {
+			throw new ServiceException('Failed to delete static site archives: ' . $e->getMessage(), 0, $e);
 		}
 	}
 
@@ -222,15 +236,15 @@ class StaticSiteArchiver {
 	/**
 	 * @throws ServiceException
 	 */
-	private function writeToAppData(string $staticSiteId, string $archivePath): void {
+	private function writeToAppData(string $staticSiteId, string $buildId, string $archivePath): void {
 		$handle = fopen($archivePath, 'rb');
 		if ($handle === false) {
 			throw new ServiceException('Failed to open static site archive');
 		}
 
 		try {
-			$folder = $this->getAppDataFolder();
-			$name = $staticSiteId . self::ARCHIVE_SUFFIX;
+			$folder = $this->getOrCreateStaticSiteFolder($staticSiteId);
+			$name = $buildId . self::ARCHIVE_SUFFIX;
 			if ($folder->fileExists($name)) {
 				$folder->getFile($name)->putContent($handle);
 			} else {
@@ -247,15 +261,28 @@ class StaticSiteArchiver {
 	}
 
 	/**
+	 * @throws FilesNotFoundException
+	 */
+	private function getStaticSiteFolder(string $staticSiteId): ISimpleFolder {
+		return $this->appData->getFolder(self::APPDATA_FOLDER)->getFolder($staticSiteId);
+	}
+
+	/**
 	 * ISimpleFolder::getOrCreateFolder() is only available from Nextcloud 35 on.
 	 *
 	 * @throws FilesNotPermittedException
 	 */
-	private function getAppDataFolder(): ISimpleFolder {
+	private function getOrCreateStaticSiteFolder(string $staticSiteId): ISimpleFolder {
 		try {
-			return $this->appData->getFolder(self::APPDATA_FOLDER);
+			$folder = $this->appData->getFolder(self::APPDATA_FOLDER);
 		} catch (FilesNotFoundException) {
-			return $this->appData->newFolder(self::APPDATA_FOLDER);
+			$folder = $this->appData->newFolder(self::APPDATA_FOLDER);
+		}
+
+		try {
+			return $folder->getFolder($staticSiteId);
+		} catch (FilesNotFoundException) {
+			return $folder->newFolder($staticSiteId);
 		}
 	}
 

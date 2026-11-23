@@ -23,7 +23,7 @@ return [
 
 		// Static site archive download for the external static site generator (not ocs due to simple file download)
 		// See the "External static site generator API" section in the ocs routes for its sibling endpoints.
-		['name' => 'staticSiteArchive#download', 'url' => '/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}/archive', 'verb' => 'GET',
+		['name' => 'staticSiteArchive#download', 'url' => '/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}/builds/{buildId}/archive', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
 
 		// Vue.js router route (Vue.js frontend)

@@ -23,6 +23,7 @@ use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 class StaticSiteService {
@@ -99,7 +100,7 @@ class StaticSiteService {
 			$this->buildArchive($staticSite, $pageIds);
 		} catch (ServiceException $e) {
 			$this->staticSiteMapper->delete($staticSite);
-			$this->deleteArchive($staticSite);
+			$this->deleteAllArchives($staticSite);
 			throw $e;
 		}
 
@@ -149,9 +150,10 @@ class StaticSiteService {
 		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
+		$buildId = Uuid::v7()->toRfc4122();
 		// TODO(Publish): Also check the slug against the publish service once it provides an endpoint
 		try {
-			$updated = $this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING, $slug);
+			$updated = $this->staticSiteMapper->updateStatusIfUnchanged($staticSite, StaticSite::STATUS_PENDING, $buildId, $slug);
 		} catch (DBException $e) {
 			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw $e;
@@ -163,6 +165,7 @@ class StaticSiteService {
 		}
 
 		$previous = clone $staticSite;
+		$staticSite->setBuildId($buildId);
 		if ($slug !== null) {
 			$staticSite->setSlug($slug);
 		}
@@ -196,7 +199,7 @@ class StaticSiteService {
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
 		// TODO(Publish): Send delete request to publish service once it provides an endpoint
 		$this->staticSiteMapper->delete($staticSite);
-		$this->deleteArchive($staticSite);
+		$this->deleteAllArchives($staticSite);
 	}
 
 	/**
@@ -212,19 +215,24 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Archives of static sites that were deleted meanwhile do not get returned.
+	 * Archives of static sites that were deleted meanwhile do not get returned. Archives of
+	 * builds other than the latest one are returned as long as they exist, so a build that
+	 * overlaps with a newer one can still finish.
 	 *
-	 * @throws NotFoundException Static site or its archive not found
+	 * @throws NotFoundException Static site or archive of the build not found
 	 * @throws DBException
 	 */
-	public function getArchive(string $staticSiteId): ISimpleFile {
+	public function getArchive(string $staticSiteId, string $buildId): ISimpleFile {
+		if (!Uuid::isValid($buildId)) {
+			throw new NotFoundException('Invalid build ID');
+		}
 		try {
 			$this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 			throw new NotFoundException('Static site not found', 0, $e);
 		}
 
-		return $this->archiver->get($staticSiteId);
+		return $this->archiver->get($staticSiteId, $buildId);
 	}
 
 	/**
@@ -291,7 +299,7 @@ class StaticSiteService {
 		try {
 			$files = $this->contentCollector->collect($staticSite->getCollectiveId(), $pageIds);
 			$this->validateSize($files);
-			$this->archiver->store($staticSite->getStaticSiteId(), $files);
+			$this->archiver->store($staticSite->getStaticSiteId(), $staticSite->getBuildId(), $files);
 		} catch (UnprocessableEntityException $e) {
 			throw $e;
 		} catch (Throwable $e) {
@@ -375,19 +383,36 @@ class StaticSiteService {
 	}
 
 	/**
+	 * Delete the archive of the static site's current build.
 	 * Failing to delete the archive only leaves an orphaned file, so it doesn't throw.
 	 */
 	private function deleteArchive(StaticSite $staticSite): void {
+		$buildId = $staticSite->getBuildId();
+		if ($buildId === null) {
+			return;
+		}
 		try {
-			$this->archiver->delete($staticSite->getStaticSiteId());
+			$this->archiver->delete($staticSite->getStaticSiteId(), $buildId);
 		} catch (ServiceException $e) {
 			$this->logger->warning('Failed to delete static site archive', $this->getLogContext($staticSite) + ['exception' => $e]);
+		}
+	}
+
+	/**
+	 * Failing to delete the archives only leaves orphaned files, so it doesn't throw.
+	 */
+	private function deleteAllArchives(StaticSite $staticSite): void {
+		try {
+			$this->archiver->deleteAll($staticSite->getStaticSiteId());
+		} catch (ServiceException $e) {
+			$this->logger->warning('Failed to delete static site archives', $this->getLogContext($staticSite) + ['exception' => $e]);
 		}
 	}
 
 	private function getLogContext(StaticSite $staticSite): array {
 		return [
 			'staticSiteId' => $staticSite->getStaticSiteId(),
+			'buildId' => $staticSite->getBuildId(),
 			'collectiveId' => $staticSite->getCollectiveId(),
 		];
 	}

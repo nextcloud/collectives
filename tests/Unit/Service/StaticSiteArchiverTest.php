@@ -17,6 +17,7 @@ use OCP\Files\File;
 use OCP\Files\GenericFileException;
 use OCP\Files\IAppData;
 use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\IL10N;
@@ -29,11 +30,13 @@ use Test\TestCase;
 class StaticSiteArchiverTest extends TestCase {
 	private IAppData&MockObject $appData;
 	private ISimpleFolder&MockObject $folder;
+	private ISimpleFolder&MockObject $siteFolder;
 	private ITempManager&MockObject $tempManager;
 	private IL10N&MockObject $l10n;
 	private StaticSiteArchiver $archiver;
 
 	private string $staticSiteId = '01990000-0000-7000-8000-000000000000';
+	private string $buildId = '01990000-0000-7000-8000-000000000001';
 	private string $tempFolder;
 	private ?string $storedArchive = null;
 
@@ -45,6 +48,7 @@ class StaticSiteArchiverTest extends TestCase {
 
 		$this->appData = $this->createMock(IAppData::class);
 		$this->folder = $this->createMock(ISimpleFolder::class);
+		$this->siteFolder = $this->createMock(ISimpleFolder::class);
 		$this->tempManager = $this->createMock(ITempManager::class);
 		$this->tempManager->method('getTemporaryFolder')->willReturn($this->tempFolder);
 
@@ -99,16 +103,17 @@ class StaticSiteArchiverTest extends TestCase {
 
 	public function testStoreCreatesArchiveWithFilesAtTheirPaths(): void {
 		$this->appData->method('getFolder')->with('static_sites')->willReturn($this->folder);
-		$this->folder->method('fileExists')->with($this->staticSiteId . '.tar.gz')->willReturn(false);
-		$this->folder->expects($this->once())
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->with($this->buildId . '.tar.gz')->willReturn(false);
+		$this->siteFolder->expects($this->once())
 			->method('newFile')
-			->with($this->staticSiteId . '.tar.gz', $this->anything())
+			->with($this->buildId . '.tar.gz', $this->anything())
 			->willReturnCallback(function (string $name, mixed $content) {
 				$this->captureContent($content);
 				return $this->createMock(ISimpleFile::class);
 			});
 
-		$this->archiver->store($this->staticSiteId, [
+		$this->archiver->store($this->staticSiteId, $this->buildId, [
 			'Readme.md' => $this->makeFile('# Home'),
 			'.attachments.12/image.png' => $this->makeFile('png-data'),
 			'Subpage/Readme.md' => $this->makeFile('# Sub'),
@@ -131,11 +136,12 @@ class StaticSiteArchiverTest extends TestCase {
 			->willReturnCallback(fn (mixed $content) => $this->captureContent($content));
 
 		$this->appData->method('getFolder')->willReturn($this->folder);
-		$this->folder->method('fileExists')->willReturn(true);
-		$this->folder->method('getFile')->with($this->staticSiteId . '.tar.gz')->willReturn($existingFile);
-		$this->folder->expects($this->never())->method('newFile');
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->willReturn(true);
+		$this->siteFolder->method('getFile')->with($this->buildId . '.tar.gz')->willReturn($existingFile);
+		$this->siteFolder->expects($this->never())->method('newFile');
 
-		$this->archiver->store($this->staticSiteId, ['Readme.md' => $this->makeFile('# New')]);
+		$this->archiver->store($this->staticSiteId, $this->buildId, ['Readme.md' => $this->makeFile('# New')]);
 
 		$this->assertSame(['Readme.md' => '# New'], $this->readStoredArchive());
 	}
@@ -145,23 +151,40 @@ class StaticSiteArchiverTest extends TestCase {
 		$existingFile->method('putContent')->willThrowException(new GenericFileException('Write failed'));
 
 		$this->appData->method('getFolder')->willReturn($this->folder);
-		$this->folder->method('fileExists')->willReturn(true);
-		$this->folder->method('getFile')->willReturn($existingFile);
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->willReturn(true);
+		$this->siteFolder->method('getFile')->willReturn($existingFile);
 
 		$this->expectException(ServiceException::class);
-		$this->archiver->store($this->staticSiteId, ['Readme.md' => $this->makeFile('# Home')]);
+		$this->archiver->store($this->staticSiteId, $this->buildId, ['Readme.md' => $this->makeFile('# Home')]);
 	}
 
-	public function testStoreCreatesMissingStaticSitesFolder(): void {
+	public function testStoreCreatesMissingFolders(): void {
 		$this->appData->method('getFolder')->willThrowException(new FilesNotFoundException());
 		$this->appData->expects($this->once())
 			->method('newFolder')
 			->with('static_sites')
 			->willReturn($this->folder);
-		$this->folder->method('fileExists')->willReturn(false);
-		$this->folder->expects($this->once())->method('newFile');
+		$this->folder->method('getFolder')->willThrowException(new FilesNotFoundException());
+		$this->folder->expects($this->once())
+			->method('newFolder')
+			->with($this->staticSiteId)
+			->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->willReturn(false);
+		$this->siteFolder->expects($this->once())->method('newFile');
 
-		$this->archiver->store($this->staticSiteId, ['Readme.md' => $this->makeFile('# Home')]);
+		$this->archiver->store($this->staticSiteId, $this->buildId, ['Readme.md' => $this->makeFile('# Home')]);
+	}
+
+	public function testStoreKeepsArchivesOfOtherBuilds(): void {
+		$this->appData->method('getFolder')->willReturn($this->folder);
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->willReturn(false);
+		$this->siteFolder->expects($this->once())->method('newFile')->with($this->buildId . '.tar.gz', $this->anything());
+		$this->siteFolder->expects($this->never())->method('delete');
+		$this->siteFolder->expects($this->never())->method('getDirectoryListing');
+
+		$this->archiver->store($this->staticSiteId, $this->buildId, ['Readme.md' => $this->makeFile('# Home')]);
 	}
 
 	public static function invalidPathProvider(): array {
@@ -184,19 +207,20 @@ class StaticSiteArchiverTest extends TestCase {
 		$this->tempManager->expects($this->never())->method('getTemporaryFolder');
 
 		$this->expectException(ServiceException::class);
-		$this->archiver->store($this->staticSiteId, [$path => $this->makeFile('content')]);
+		$this->archiver->store($this->staticSiteId, $this->buildId, [$path => $this->makeFile('content')]);
 	}
 
 	public function testStoreSplitsLongPathIntoPrefixAndName(): void {
 		$path = str_repeat('a', 150) . '/' . str_repeat('b', 90) . '.md';
 		$this->appData->method('getFolder')->willReturn($this->folder);
-		$this->folder->method('fileExists')->willReturn(false);
-		$this->folder->method('newFile')->willReturnCallback(function (string $name, mixed $content) {
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->willReturn(false);
+		$this->siteFolder->method('newFile')->willReturnCallback(function (string $name, mixed $content) {
 			$this->captureContent($content);
 			return $this->createMock(ISimpleFile::class);
 		});
 
-		$this->archiver->store($this->staticSiteId, [$path => $this->makeFile('# Deep')]);
+		$this->archiver->store($this->staticSiteId, $this->buildId, [$path => $this->makeFile('# Deep')]);
 
 		$this->assertSame([$path => '# Deep'], $this->readStoredArchive());
 	}
@@ -218,7 +242,7 @@ class StaticSiteArchiverTest extends TestCase {
 		$this->tempManager->expects($this->never())->method('getTemporaryFolder');
 
 		try {
-			$this->archiver->store($this->staticSiteId, [$path => $this->makeFile('content')]);
+			$this->archiver->store($this->staticSiteId, $this->buildId, [$path => $this->makeFile('content')]);
 			$this->fail('Expected UnprocessableEntityException');
 		} catch (UnprocessableEntityException $e) {
 			$this->assertStringContainsString($path, $e->getMessage());
@@ -231,7 +255,7 @@ class StaticSiteArchiverTest extends TestCase {
 
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('There is no content to publish.');
-		$this->archiver->store($this->staticSiteId, []);
+		$this->archiver->store($this->staticSiteId, $this->buildId, []);
 	}
 
 	public function testStoreFailsAndCleansUpIfFileCannotBeRead(): void {
@@ -240,7 +264,7 @@ class StaticSiteArchiverTest extends TestCase {
 		$this->appData->expects($this->never())->method('getFolder');
 
 		try {
-			$this->archiver->store($this->staticSiteId, ['Readme.md' => $file]);
+			$this->archiver->store($this->staticSiteId, $this->buildId, ['Readme.md' => $file]);
 			$this->fail('Expected ServiceException');
 		} catch (ServiceException) {
 		}
@@ -254,23 +278,34 @@ class StaticSiteArchiverTest extends TestCase {
 		$archiver = new StaticSiteArchiver($this->appData, $tempManager, $this->l10n);
 
 		$this->expectException(ServiceException::class);
-		$archiver->store($this->staticSiteId, ['Readme.md' => $this->makeFile('# Home')]);
+		$archiver->store($this->staticSiteId, $this->buildId, ['Readme.md' => $this->makeFile('# Home')]);
 	}
 
 	public function testGetReturnsArchive(): void {
 		$file = $this->createMock(ISimpleFile::class);
 		$this->appData->method('getFolder')->with('static_sites')->willReturn($this->folder);
-		$this->folder->method('getFile')->with($this->staticSiteId . '.tar.gz')->willReturn($file);
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('getFile')->with($this->buildId . '.tar.gz')->willReturn($file);
 
-		$this->assertSame($file, $this->archiver->get($this->staticSiteId));
+		$this->assertSame($file, $this->archiver->get($this->staticSiteId, $this->buildId));
 	}
 
 	public function testGetThrowsIfArchiveDoesNotExist(): void {
 		$this->appData->method('getFolder')->willReturn($this->folder);
-		$this->folder->method('getFile')->willThrowException(new FilesNotFoundException());
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('getFile')->willThrowException(new FilesNotFoundException());
 
 		$this->expectException(NotFoundException::class);
-		$this->archiver->get($this->staticSiteId);
+		$this->archiver->get($this->staticSiteId, $this->buildId);
+	}
+
+	public function testGetThrowsIfFolderOfStaticSiteDoesNotExist(): void {
+		$this->appData->method('getFolder')->willReturn($this->folder);
+		$this->folder->method('getFolder')->willThrowException(new FilesNotFoundException());
+		$this->folder->expects($this->never())->method('newFolder');
+
+		$this->expectException(NotFoundException::class);
+		$this->archiver->get($this->staticSiteId, $this->buildId);
 	}
 
 	public function testGetThrowsIfStaticSitesFolderDoesNotExist(): void {
@@ -278,7 +313,7 @@ class StaticSiteArchiverTest extends TestCase {
 		$this->appData->expects($this->never())->method('newFolder');
 
 		$this->expectException(NotFoundException::class);
-		$this->archiver->get($this->staticSiteId);
+		$this->archiver->get($this->staticSiteId, $this->buildId);
 	}
 
 	public function testDeleteRemovesArchive(): void {
@@ -286,24 +321,51 @@ class StaticSiteArchiverTest extends TestCase {
 		$file->expects($this->once())->method('delete');
 
 		$this->appData->method('getFolder')->willReturn($this->folder);
-		$this->folder->method('fileExists')->with($this->staticSiteId . '.tar.gz')->willReturn(true);
-		$this->folder->method('getFile')->willReturn($file);
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->with($this->buildId . '.tar.gz')->willReturn(true);
+		$this->siteFolder->method('getFile')->willReturn($file);
 
-		$this->archiver->delete($this->staticSiteId);
+		$this->archiver->delete($this->staticSiteId, $this->buildId);
 	}
 
 	public function testDeleteIgnoresMissingArchive(): void {
 		$this->appData->method('getFolder')->willReturn($this->folder);
-		$this->folder->method('fileExists')->willReturn(false);
-		$this->folder->expects($this->never())->method('getFile');
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->method('fileExists')->willReturn(false);
+		$this->siteFolder->expects($this->never())->method('getFile');
 
-		$this->archiver->delete($this->staticSiteId);
+		$this->archiver->delete($this->staticSiteId, $this->buildId);
 	}
 
 	public function testDeleteIgnoresMissingStaticSitesFolder(): void {
 		$this->appData->method('getFolder')->willThrowException(new FilesNotFoundException());
 		$this->appData->expects($this->never())->method('newFolder');
 
-		$this->archiver->delete($this->staticSiteId);
+		$this->archiver->delete($this->staticSiteId, $this->buildId);
+	}
+
+	public function testDeleteAllRemovesFolderOfStaticSite(): void {
+		$this->appData->method('getFolder')->with('static_sites')->willReturn($this->folder);
+		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
+		$this->siteFolder->expects($this->once())->method('delete');
+
+		$this->archiver->deleteAll($this->staticSiteId);
+	}
+
+	public function testDeleteAllIgnoresMissingFolderOfStaticSite(): void {
+		$this->appData->method('getFolder')->willReturn($this->folder);
+		$this->folder->method('getFolder')->willThrowException(new FilesNotFoundException());
+
+		$this->archiver->deleteAll($this->staticSiteId);
+		$this->addToAssertionCount(1);
+	}
+
+	public function testDeleteAllWrapsPermissionErrors(): void {
+		$this->appData->method('getFolder')->willReturn($this->folder);
+		$this->folder->method('getFolder')->willReturn($this->siteFolder);
+		$this->siteFolder->method('delete')->willThrowException(new FilesNotPermittedException());
+
+		$this->expectException(ServiceException::class);
+		$this->archiver->deleteAll($this->staticSiteId);
 	}
 }

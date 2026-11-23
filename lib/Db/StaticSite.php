@@ -44,6 +44,14 @@ use UnexpectedValueException;
  * @method void setLastError(?string $value)
  * @method int|null getPublishedAt()
  * @method void setPublishedAt(?int $value)
+ * @method string|null getBuildId()
+ * @method void setBuildId(?string $value)
+ * @method string|null getPublishedBuildId()
+ * @method void setPublishedBuildId(?string $value)
+ * @method string|null getPublishedTitle()
+ * @method void setPublishedTitle(?string $value)
+ * @method string|null getPublishedSelectedPages()
+ * @method void setPublishedSelectedPages(?string $value)
  */
 class StaticSite extends Entity implements JsonSerializable {
 	public const STATUS_PENDING = 'pending';
@@ -80,6 +88,12 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?int $updatedAt = null;
 	protected ?string $lastError = null;
 	protected ?int $publishedAt = null;
+	// Build of the latest publication attempt, whose archive the static site generator downloads
+	protected ?string $buildId = null;
+	// Build that is online, with its title and page selection
+	protected ?string $publishedBuildId = null;
+	protected ?string $publishedTitle = null;
+	protected ?string $publishedSelectedPages = null;
 
 	public function isInProgress(int $now): bool {
 		return in_array($this->status, self::IN_PROGRESS_STATUSES, true)
@@ -120,7 +134,7 @@ class StaticSite extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * Omits `staticSiteId`, it authorizes the static site generator's callback and archive download.
+	 * Omits `staticSiteId` and the build IDs, they authorize the static site generator's callback and archive download.
 	 * `isInProgress` is evaluated with the server time, so clients don't need to know the timeout.
 	 */
 	public function jsonSerialize(): array {

@@ -68,6 +68,7 @@ class StaticSiteGeneratorClient {
 			'content_download_url' => $this->urlGenerator->linkToRouteAbsolute('collectives.staticsitearchive.download', [
 				'apiVersion' => '1.0',
 				'staticSiteId' => $staticSiteId,
+				'buildId' => $staticSite->getBuildId(),
 			]),
 			'callback_status_url' => $this->urlGenerator->linkToOCSRouteAbsolute('collectives.staticsitegenerator.updatestatus', [
 				'apiVersion' => '1.0',
@@ -93,14 +94,6 @@ class StaticSiteGeneratorClient {
 		throw $statusCode >= 500
 			? new StaticSiteGeneratorUnavailableException($message)
 			: new StaticSiteGeneratorException($message);
-	}
-
-	/**
-	 * Check the bearer token sent by the static site generator against the configured one.
-	 */
-	public function isValidToken(string $authorizationHeader): bool {
-		$token = $this->getToken();
-		return $token !== '' && hash_equals('Bearer ' . $token, $authorizationHeader);
 	}
 
 	/**

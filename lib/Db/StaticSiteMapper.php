@@ -78,6 +78,7 @@ class StaticSiteMapper extends QBMapper {
 		$staticSite = new StaticSite();
 		$staticSite->setCollectiveId($collectiveId);
 		$staticSite->setStaticSiteId(Uuid::v7()->toRfc4122());
+		$staticSite->setBuildId(Uuid::v7()->toRfc4122());
 		$staticSite->setTitle($title);
 		$staticSite->setSlug($slug);
 		$staticSite->setSelectedPageIds($pageIds);
@@ -90,20 +91,22 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Set the status and clear the last error, unless the static site was changed since it was read.
+	 * Set the status and build and clear the last error, unless the static site was changed since it was read.
 	 *
 	 * Check and update happen in a single query, so of concurrent requests only one can
 	 * change the status, e.g. to pending when updating an existing static site.
 	 *
+	 * @param string $buildId Build of the publication attempt
 	 * @param ?string $slug New slug, null keeps the current one
 	 * @return bool False if the static site was changed meanwhile
 	 *
 	 * @throws Exception Also if the slug is already used by another static site
 	 */
-	public function updateStatusIfUnchanged(StaticSite $staticSite, string $status, ?string $slug = null): bool {
+	public function updateStatusIfUnchanged(StaticSite $staticSite, string $status, string $buildId, ?string $slug = null): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->tableName)
 			->set('status', $qb->createNamedParameter($status, IQueryBuilder::PARAM_STR))
+			->set('build_id', $qb->createNamedParameter($buildId, IQueryBuilder::PARAM_STR))
 			->set('last_error', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
 			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($staticSite->getId(), IQueryBuilder::PARAM_INT)))
@@ -202,7 +205,7 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
-	 * Reset slug, status, last error and update time to the values of the given static site as it was read before.
+	 * Reset slug, build, status, last error and update time to the values of the given static site as it was read before.
 	 *
 	 * Keeping the update time of an aborted publication allows the user to start the publish process again right away.
 	 *
@@ -217,6 +220,7 @@ class StaticSiteMapper extends QBMapper {
 		}
 
 		$staticSite->setSlug($previous->getSlug());
+		$staticSite->setBuildId($previous->getBuildId());
 		$staticSite->setStatus($previous->getStatus());
 		$staticSite->setLastError($previous->getLastError());
 		$staticSite->setUpdatedAt($previous->getUpdatedAt());
