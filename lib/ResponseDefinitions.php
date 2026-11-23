@@ -59,6 +59,9 @@ namespace OCA\Collectives;
  *     updatedAt: int,
  *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_failed'|'generator_invalid_url'|null,
  *     publishedAt: ?int,
+ *     publishedTitle: ?string,
+ *     publishedSelectedPageIds: ?list<int>,
+ *     publishedBuildStartedAt: ?int,
  *     isInProgress: bool,
  * }
  *

@@ -356,6 +356,9 @@
                     "updatedAt",
                     "lastError",
                     "publishedAt",
+                    "publishedTitle",
+                    "publishedSelectedPageIds",
+                    "publishedBuildStartedAt",
                     "isInProgress"
                 ],
                 "properties": {
@@ -409,6 +412,23 @@
                         ]
                     },
                     "publishedAt": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true
+                    },
+                    "publishedTitle": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "publishedSelectedPageIds": {
+                        "type": "array",
+                        "nullable": true,
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    "publishedBuildStartedAt": {
                         "type": "integer",
                         "format": "int64",
                         "nullable": true

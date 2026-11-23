@@ -13,6 +13,8 @@ use JsonException;
 use JsonSerializable;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\AppFramework\Db\Entity;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 use UnexpectedValueException;
 
 /**
@@ -111,8 +113,38 @@ class StaticSite extends Entity implements JsonSerializable {
 	 * @throws UnexpectedValueException Stored page selection is corrupted
 	 */
 	public function getSelectedPageIds(): array {
+		return $this->decodePageIds($this->selectedPages ?? '[]');
+	}
+
+	/**
+	 * @return ?array Page selection of the build that is online, null if none is
+	 *
+	 * @throws UnexpectedValueException Stored page selection is corrupted
+	 */
+	public function getPublishedSelectedPageIds(): ?array {
+		return $this->publishedSelectedPages === null ? null : $this->decodePageIds($this->publishedSelectedPages);
+	}
+
+	/**
+	 * Time the build that is online started, null if none is or it isn't known
+	 *
+	 * Pages edited after this time aren't part of the publication. Build IDs are UUIDv7,
+	 * which contain the time they were created.
+	 */
+	public function getPublishedBuildStartedAt(): ?int {
+		if ($this->publishedBuildId === null || !Uuid::isValid($this->publishedBuildId)) {
+			return null;
+		}
+		$uuid = Uuid::fromString($this->publishedBuildId);
+		return $uuid instanceof UuidV7 ? $uuid->getDateTime()->getTimestamp() : null;
+	}
+
+	/**
+	 * @throws UnexpectedValueException
+	 */
+	private function decodePageIds(string $encoded): array {
 		try {
-			$pageIds = json_decode($this->selectedPages ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+			$pageIds = json_decode($encoded, true, 512, JSON_THROW_ON_ERROR);
 		} catch (JsonException $e) {
 			throw new UnexpectedValueException('Invalid page selection stored for static site ' . $this->id, 0, $e);
 		}
@@ -158,6 +190,9 @@ class StaticSite extends Entity implements JsonSerializable {
 			'updatedAt' => $this->updatedAt,
 			'lastError' => $this->lastError,
 			'publishedAt' => $this->publishedAt,
+			'publishedTitle' => $this->publishedTitle,
+			'publishedSelectedPageIds' => $this->getPublishedSelectedPageIds(),
+			'publishedBuildStartedAt' => $this->getPublishedBuildStartedAt(),
 			'isInProgress' => $this->isInProgress(time()),
 		];
 	}

@@ -80,7 +80,7 @@
 						: t('collectives', 'The website is not online.') }}
 				</p>
 				<span class="publish-website-list__details">
-					{{ n('collectives', '%n page', '%n pages', staticSite.selectedPageIds.length) }}
+					{{ n('collectives', '%n page', '%n pages', publishedOrSelectedPageIds(staticSite).length) }}
 					·
 					<span
 						v-if="staticSite.publishedAt"
@@ -179,6 +179,16 @@ export default {
 		t,
 		staticSiteFailureReason,
 		staticSiteState,
+
+		/**
+		 * Pages of the version that is online, as the publication time is shown next to them
+		 *
+		 * @param {object} staticSite static site as returned by the backend
+		 * @return {number[]} IDs of the pages online, or selected for the first publication
+		 */
+		publishedOrSelectedPageIds(staticSite) {
+			return staticSite.publishedSelectedPageIds ?? staticSite.selectedPageIds
+		},
 
 		/**
 		 * @param {object} staticSite static site as returned by the backend

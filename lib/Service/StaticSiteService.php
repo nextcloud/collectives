@@ -308,6 +308,9 @@ class StaticSiteService {
 		$this->deleteArchive($staticSite, $buildId, $published);
 	}
 
+	// TODO(Publish): The publish service doesn't check the build order, so a late successful older build
+	// overwrites a newer one online, e.g. after a timed out request was retried. Ask the publish service to only
+	// deploy builds newer than the deployed one, otherwise mark the static site as failed here.
 	/**
 	 * Builds other than the current one are only known as long as their archive exists, or
 	 * if they got published.
