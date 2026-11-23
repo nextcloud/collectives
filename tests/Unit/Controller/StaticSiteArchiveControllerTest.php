@@ -11,6 +11,7 @@ namespace Unit\Controller;
 
 use OCA\Collectives\Controller\StaticSiteArchiveController;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\FileDisplayResponse;
@@ -34,15 +35,25 @@ class StaticSiteArchiveControllerTest extends TestCase {
 		$this->controller = new StaticSiteArchiveController('collectives', $this->createMock(IRequest::class), $this->staticSiteService);
 	}
 
-	public function testDownloadReturnsNotFoundAndThrottlesForUnknownArchive(): void {
+	public function testDownloadReturnsNotFoundAndThrottlesForUnknownStaticSite(): void {
 		$this->staticSiteService->method('getArchive')
 			->with($this->staticSiteId, $this->buildId)
-			->willThrowException(new NotFoundException('Static site archive not found'));
+			->willThrowException(new NotFoundException('Static site not found'));
 
 		$response = $this->controller->download($this->staticSiteId, $this->buildId);
 
 		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
 		$this->assertTrue($response->isThrottled());
+	}
+
+	public function testDownloadReturnsNotFoundWithoutThrottlingForOutdatedBuild(): void {
+		$this->staticSiteService->method('getArchive')
+			->willThrowException(new StaticSiteBuildNotFoundException('Build is not the current one of the static site'));
+
+		$response = $this->controller->download($this->staticSiteId, $this->buildId);
+
+		$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+		$this->assertFalse($response->isThrottled());
 	}
 
 	public function testDownloadReturnsArchiveAsAttachment(): void {

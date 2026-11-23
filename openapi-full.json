@@ -4682,7 +4682,7 @@
             "patch": {
                 "operationId": "static_site_generator-update-status",
                 "summary": "Report the result of a build of a static site.",
-                "description": "Called by the external static site generator once a build finished. Not authenticated, the callback URL with the unguessable static site and build IDs authorizes it. Unknown IDs are throttled against guessing.",
+                "description": "Called by the external static site generator once a build finished. Not authenticated, the callback URL with the unguessable static site and build IDs authorizes it. Unknown static sites are throttled against guessing, unknown builds of a known static site aren't.",
                 "tags": [
                     "static_site_generator"
                 ],

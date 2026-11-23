@@ -11,6 +11,7 @@ namespace Unit\Controller;
 
 use OCA\Collectives\Controller\StaticSiteGeneratorController;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteService;
@@ -72,7 +73,18 @@ class StaticSiteGeneratorControllerTest extends TestCase {
 		self::assertFalse($response->isThrottled());
 	}
 
-	public function testUpdateStatusWithUnknownStaticSiteOrBuildReturnsNotFoundAndThrottles(): void {
+	public function testUpdateStatusWithUnknownBuildReturnsNotFoundWithoutThrottling(): void {
+		$this->staticSiteService->method('updateStatus')
+			->willThrowException(new StaticSiteBuildNotFoundException('Build of static site not found'));
+
+		$response = $this->controller->updateStatus('01990000-0000-7000-8000-000000000000', '019a0000-0000-7000-8000-000000000000', 'published');
+
+		self::assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+		self::assertSame([], $response->getData());
+		self::assertFalse($response->isThrottled());
+	}
+
+	public function testUpdateStatusWithUnknownStaticSiteReturnsNotFoundAndThrottles(): void {
 		$this->staticSiteService->method('updateStatus')
 			->willThrowException(new NotFoundException('Static site not found'));
 

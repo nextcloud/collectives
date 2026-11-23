@@ -177,6 +177,8 @@ class StaticSiteService {
 			$this->buildArchive($staticSite, $pageIds);
 		} catch (ServiceException $e) {
 			$this->restoreStatus($previous);
+			// The archive may have been stored partially
+			$this->deleteArchive($staticSite, $buildId);
 			throw $e;
 		}
 
@@ -221,24 +223,24 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Archives of static sites that were deleted meanwhile do not get returned. Archives of
-	 * builds other than the latest one are returned as long as they exist, so a build that
-	 * overlaps with a newer one can still finish.
+	 * Only the archive of the current build is provided, so a build that was replaced by a newer
+	 * one can't put outdated content online anymore, unless it downloaded its archive before.
 	 *
-	 * @throws NotFoundException Static site or archive of the build not found
+	 * @throws StaticSiteBuildNotFoundException Build isn't the current one or its archive is gone
+	 * @throws NotFoundException Static site not found
 	 * @throws DBException
 	 */
 	public function getArchive(string $staticSiteId, string $buildId): ISimpleFile {
-		if (!Uuid::isValid($buildId)) {
-			throw new NotFoundException('Invalid build ID');
-		}
-		try {
-			$this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
-		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
-			throw new NotFoundException('Static site not found', 0, $e);
+		$staticSite = $this->findByStaticSiteId($staticSiteId);
+		if ($buildId !== $staticSite->getBuildId()) {
+			throw new StaticSiteBuildNotFoundException('Build is not the current one of the static site');
 		}
 
-		return $this->archiver->get($staticSiteId, $buildId);
+		try {
+			return $this->archiver->get($staticSiteId, $buildId);
+		} catch (NotFoundException $e) {
+			throw new StaticSiteBuildNotFoundException('Archive of the build not found', 0, $e);
+		}
 	}
 
 	/**
@@ -253,12 +255,12 @@ class StaticSiteService {
 	 * successful older build can't be stored as publication.
 	 *
 	 * Status published without a valid `publish_url` is stored as failed, so a published static site
-	 * always has one. The archive of the build isn't needed anymore once the build finished. A
-	 * successful build makes the archives of older builds obsolete as well.
+	 * always has one. The archive of the build isn't needed anymore once the build finished.
 	 *
 	 * @param array{publish_url?: string, error_message?: string, build_id?: string} $data `build_id` must match the build of the URL if given
 	 *
-	 * @throws NotFoundException Static site or build not found
+	 * @throws StaticSiteBuildNotFoundException Build is neither the current nor an older one
+	 * @throws NotFoundException Static site not found
 	 * @throws UnprocessableEntityException Invalid status
 	 * @throws DBException
 	 */
@@ -266,14 +268,7 @@ class StaticSiteService {
 		if (!in_array($status, self::ALLOWED_CALLBACK_STATUSES, true)) {
 			throw new UnprocessableEntityException('Invalid status: ' . $status);
 		}
-		if (!Uuid::isValid($buildId)) {
-			throw new NotFoundException('Invalid build ID');
-		}
-		try {
-			$staticSite = $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
-		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
-			throw new NotFoundException('Static site not found', 0, $e);
-		}
+		$staticSite = $this->findByStaticSiteId($staticSiteId);
 
 		$logContext = $this->getLogContext($staticSite) + ['callbackBuildId' => $buildId, 'callbackStatus' => $status];
 		if (isset($data['build_id']) && $data['build_id'] !== $buildId) {
@@ -285,12 +280,10 @@ class StaticSiteService {
 			return;
 		}
 
-		$published = false;
 		if ($status === StaticSite::STATUS_PUBLISHED) {
 			$publishedUrl = $data['publish_url'] ?? null;
 			if (is_string($publishedUrl) && $this->isValidPublishUrl($publishedUrl)) {
 				$concluded = $this->staticSiteMapper->updateStatusPublished($staticSite, $publishedUrl);
-				$published = $concluded;
 			} else {
 				$this->logger->warning('Static site generator reported an invalid publish_url', $logContext + ['publishUrl' => $publishedUrl]);
 				$concluded = $this->staticSiteMapper->updateStatusFailed($staticSite, StaticSite::ERROR_GENERATOR_INVALID_URL);
@@ -305,36 +298,42 @@ class StaticSiteService {
 		if (!$concluded) {
 			$this->logger->warning('Ignoring static site status callback, the build got published already or another build started meanwhile', $logContext);
 		}
-		$this->deleteArchive($staticSite, $buildId, $published);
+		$this->deleteArchive($staticSite, $buildId);
+	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws DBException
+	 */
+	private function findByStaticSiteId(string $staticSiteId): StaticSite {
+		try {
+			return $this->staticSiteMapper->findOneByStaticSiteId($staticSiteId);
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+			throw new NotFoundException('Static site not found', 0, $e);
+		}
 	}
 
 	// TODO(Publish): The publish service doesn't check the build order, so a late successful older build
 	// overwrites a newer one online, e.g. after a timed out request was retried. Ask the publish service to only
 	// deploy builds newer than the deployed one, otherwise mark the static site as failed here.
 	/**
-	 * Builds other than the current one are only known as long as their archive exists, or
-	 * if they got published.
+	 * Builds are UUIDv7, so a build ID sorting before the current one belongs to an older build.
+	 * Its archive was replaced by the one of the current build already.
 	 *
-	 * @throws NotFoundException Unknown build
+	 * @throws StaticSiteBuildNotFoundException Build isn't older than the current one
 	 */
 	private function ignoreStatusOfOlderBuild(StaticSite $staticSite, string $buildId, string $status, array $logContext): void {
-		if ($buildId !== $staticSite->getPublishedBuildId()) {
-			try {
-				$this->archiver->get($staticSite->getStaticSiteId(), $buildId);
-			} catch (NotFoundException $e) {
-				throw new NotFoundException('Build of static site not found', 0, $e);
-			}
+		if (!Uuid::isValid($buildId) || strcmp($buildId, $staticSite->getBuildId() ?? '') >= 0) {
+			throw new StaticSiteBuildNotFoundException('Build of static site not found');
 		}
 
-		$publishedOlderBuild = $status === StaticSite::STATUS_PUBLISHED
-			&& strcmp($buildId, $staticSite->getPublishedBuildId() ?? '') > 0;
-		if ($publishedOlderBuild) {
+		$duplicate = $buildId === $staticSite->getPublishedBuildId();
+		if ($status === StaticSite::STATUS_PUBLISHED && !$duplicate) {
 			// Known limitation: the settings of the build aren't known, so the publication can't be stored
 			$this->logger->warning('Static site generator published a build that is not the current one anymore', $logContext);
 		} else {
 			$this->logger->info('Ignoring static site status callback of a build that is not the current one', $logContext);
 		}
-		$this->deleteArchive($staticSite, $buildId, $publishedOlderBuild);
 	}
 
 	/**
@@ -356,6 +355,7 @@ class StaticSiteService {
 		}
 
 		$this->logger->info('Provided static site archive', $this->getLogContext($staticSite) + ['fileCount' => count($files)]);
+		$this->deleteArchivesOfOtherBuilds($staticSite);
 	}
 
 	/**
@@ -445,21 +445,27 @@ class StaticSiteService {
 
 	/**
 	 * Failing to delete the archive only leaves an orphaned file, so it doesn't throw.
-	 *
-	 * @param bool $includeOlderBuilds Also delete the archives of builds started before
 	 */
-	private function deleteArchive(StaticSite $staticSite, ?string $buildId, bool $includeOlderBuilds = false): void {
+	private function deleteArchive(StaticSite $staticSite, ?string $buildId): void {
 		if ($buildId === null) {
 			return;
 		}
 		try {
-			if ($includeOlderBuilds) {
-				$this->archiver->deleteUpTo($staticSite->getStaticSiteId(), $buildId);
-			} else {
-				$this->archiver->delete($staticSite->getStaticSiteId(), $buildId);
-			}
+			$this->archiver->delete($staticSite->getStaticSiteId(), $buildId);
 		} catch (ServiceException $e) {
 			$this->logger->warning('Failed to delete static site archive', $this->getLogContext($staticSite) + ['exception' => $e]);
+		}
+	}
+
+	/**
+	 * Only the archive of the current build is provided, so the others aren't needed anymore.
+	 * Failing to delete them only leaves orphaned files, so it doesn't throw.
+	 */
+	private function deleteArchivesOfOtherBuilds(StaticSite $staticSite): void {
+		try {
+			$this->archiver->deleteAllExcept($staticSite->getStaticSiteId(), $staticSite->getBuildId());
+		} catch (ServiceException $e) {
+			$this->logger->warning('Failed to delete archives of previous static site builds', $this->getLogContext($staticSite) + ['exception' => $e]);
 		}
 	}
 
@@ -572,6 +578,8 @@ class StaticSiteService {
 		}
 	}
 
+	// TODO(Publish): The status callback isn't authenticated, so anyone knowing its URL can set any publish_url.
+	// Only allow the configured website url once it is configurable in the admin settings.
 	private function isValidPublishUrl(string $url): bool {
 		return strlen($url) <= self::PUBLISHED_URL_MAX_LENGTH
 			&& in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)

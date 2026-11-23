@@ -108,13 +108,11 @@ class StaticSiteArchiver {
 	}
 
 	/**
-	 * Delete the archives of the given build and all builds started before it.
-	 *
-	 * Build IDs are UUIDv7, which sort by the time they were created.
+	 * Delete the archives of all builds of the static site except the given one.
 	 *
 	 * @throws ServiceException
 	 */
-	public function deleteUpTo(string $staticSiteId, string $buildId): void {
+	public function deleteAllExcept(string $staticSiteId, string $buildId): void {
 		try {
 			$files = $this->getStaticSiteFolder($staticSiteId)->getDirectoryListing();
 		} catch (FilesNotFoundException) {
@@ -124,8 +122,7 @@ class StaticSiteArchiver {
 
 		try {
 			foreach ($files as $file) {
-				$fileBuildId = substr($file->getName(), 0, -strlen(self::ARCHIVE_SUFFIX));
-				if (str_ends_with($file->getName(), self::ARCHIVE_SUFFIX) && strcmp($fileBuildId, $buildId) <= 0) {
+				if ($file->getName() !== $buildId . self::ARCHIVE_SUFFIX) {
 					$file->delete();
 				}
 			}

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -36,10 +37,11 @@ class StaticSiteArchiveController extends Controller {
 	}
 
 	/**
-	 * Download the archive of a build of a static site.
+	 * Download the archive of the current build of a static site.
 	 *
 	 * Not authenticated: the static site generator gets the URL with the unguessable static site
-	 * and build IDs. Unknown IDs are throttled against guessing.
+	 * and build IDs. Unknown static sites are throttled against guessing. Outdated builds of a
+	 * known static site aren't, as the generator requests them when builds overlap.
 	 *
 	 * The status of the static site isn't checked, as the generator may download the archive
 	 * before the response to its notification was processed.
@@ -52,6 +54,8 @@ class StaticSiteArchiveController extends Controller {
 	public function download(string $staticSiteId, string $buildId): Response {
 		try {
 			$archive = $this->staticSiteService->getArchive($staticSiteId, $buildId);
+		} catch (StaticSiteBuildNotFoundException) {
+			return new Response(Http::STATUS_NOT_FOUND);
 		} catch (NotFoundException) {
 			$response = new Response(Http::STATUS_NOT_FOUND);
 			$response->throttle();

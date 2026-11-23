@@ -376,36 +376,35 @@ class StaticSiteArchiverTest extends TestCase {
 		return $file;
 	}
 
-	public function testDeleteUpToRemovesArchivesOfBuildAndOlderBuilds(): void {
+	public function testDeleteAllExceptKeepsOnlyArchiveOfGivenBuild(): void {
 		$this->appData->method('getFolder')->with('static_sites')->willReturn($this->folder);
 		$this->folder->method('getFolder')->with($this->staticSiteId)->willReturn($this->siteFolder);
 		$this->siteFolder->method('getDirectoryListing')->willReturn([
 			$this->makeArchiveFile('01990000-0000-7000-8000-000000000000.tar.gz', true),
-			$this->makeArchiveFile($this->buildId . '.tar.gz', true),
-			$this->makeArchiveFile('01990000-0000-7000-8000-000000000002.tar.gz', false),
-			$this->makeArchiveFile('other-file', false),
+			$this->makeArchiveFile($this->buildId . '.tar.gz', false),
+			$this->makeArchiveFile('01990000-0000-7000-8000-000000000002.tar.gz', true),
 		]);
 
-		$this->archiver->deleteUpTo($this->staticSiteId, $this->buildId);
+		$this->archiver->deleteAllExcept($this->staticSiteId, $this->buildId);
 	}
 
-	public function testDeleteUpToIgnoresMissingFolderOfStaticSite(): void {
+	public function testDeleteAllExceptIgnoresMissingFolderOfStaticSite(): void {
 		$this->appData->method('getFolder')->willReturn($this->folder);
 		$this->folder->method('getFolder')->willThrowException(new FilesNotFoundException());
 
-		$this->archiver->deleteUpTo($this->staticSiteId, $this->buildId);
+		$this->archiver->deleteAllExcept($this->staticSiteId, $this->buildId);
 		$this->addToAssertionCount(1);
 	}
 
-	public function testDeleteUpToWrapsPermissionErrors(): void {
+	public function testDeleteAllExceptWrapsPermissionErrors(): void {
 		$file = $this->createMock(ISimpleFile::class);
-		$file->method('getName')->willReturn($this->buildId . '.tar.gz');
+		$file->method('getName')->willReturn('01990000-0000-7000-8000-000000000000.tar.gz');
 		$file->method('delete')->willThrowException(new FilesNotPermittedException());
 		$this->appData->method('getFolder')->willReturn($this->folder);
 		$this->folder->method('getFolder')->willReturn($this->siteFolder);
 		$this->siteFolder->method('getDirectoryListing')->willReturn([$file]);
 
 		$this->expectException(ServiceException::class);
-		$this->archiver->deleteUpTo($this->staticSiteId, $this->buildId);
+		$this->archiver->deleteAllExcept($this->staticSiteId, $this->buildId);
 	}
 }

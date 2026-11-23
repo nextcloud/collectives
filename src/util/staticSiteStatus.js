@@ -27,6 +27,9 @@ export function staticSiteState(staticSite) {
  * Static sites published before builds were tracked only know when the publication finished,
  * so edits made while they were being built aren't detected.
  *
+ * Only the time a page file was modified is compared. Changing an attachment of a page doesn't
+ * modify the page file, so it isn't detected.
+ *
  * @param {object} staticSite static site as returned by the backend
  * @param {object[]} pages all pages of the collective, unknown changes if empty
  * @return {boolean} true if the published static site is outdated

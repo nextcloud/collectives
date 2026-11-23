@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteService;
@@ -63,8 +64,8 @@ class StaticSiteGeneratorController extends OCSController {
 	 * Report the result of a build of a static site.
 	 *
 	 * Called by the external static site generator once a build finished. Not authenticated, the
-	 * callback URL with the unguessable static site and build IDs authorizes it. Unknown IDs are
-	 * throttled against guessing.
+	 * callback URL with the unguessable static site and build IDs authorizes it. Unknown static
+	 * sites are throttled against guessing, unknown builds of a known static site aren't.
 	 *
 	 * @param string $staticSiteId ID of the static site
 	 * @param string $buildId ID of the build
@@ -78,18 +79,23 @@ class StaticSiteGeneratorController extends OCSController {
 	 * 404: Static site or build not found
 	 */
 	#[PublicPage]
-	#[AnonRateLimit(limit: 10, period: 10)]
+	#[AnonRateLimit(limit: 60, period: 60)]
 	#[BruteForceProtection(action: 'collectivesStaticSiteStatus')]
 	public function updateStatus(string $staticSiteId, string $buildId, string $status = '', array $data = []): DataResponse {
 		try {
-			$this->handleErrorResponse(function () use ($staticSiteId, $buildId, $status, $data): void {
-				$this->staticSiteService->updateStatus($staticSiteId, $buildId, $status, $data);
+			$buildFound = $this->handleErrorResponse(function () use ($staticSiteId, $buildId, $status, $data): bool {
+				try {
+					$this->staticSiteService->updateStatus($staticSiteId, $buildId, $status, $data);
+				} catch (StaticSiteBuildNotFoundException) {
+					return false;
+				}
+				return true;
 			}, $this->logger);
 		} catch (OCSNotFoundException) {
 			$response = new DataResponse([], Http::STATUS_NOT_FOUND);
 			$response->throttle();
 			return $response;
 		}
-		return new DataResponse([]);
+		return $buildFound ? new DataResponse([]) : new DataResponse([], Http::STATUS_NOT_FOUND);
 	}
 }
