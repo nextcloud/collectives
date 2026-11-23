@@ -458,9 +458,6 @@ class StaticSiteService {
 	}
 
 	/**
-	 * @throws UnprocessableEntityException
-	 */
-	/**
 	 * @return ?string The validated new slug, null if it is unchanged
 	 *
 	 * @throws UnprocessableEntityException Invalid slug or slug of a published static site changed
@@ -476,6 +473,9 @@ class StaticSiteService {
 		return $slug;
 	}
 
+	/**
+	 * @throws UnprocessableEntityException
+	 */
 	private function validateSlug(string $slug): void {
 		if (strlen($slug) > self::SLUG_MAX_LENGTH || !preg_match(self::SLUG_PATTERN, $slug)) {
 			throw new UnprocessableEntityException('Slug must consist of 1 to ' . self::SLUG_MAX_LENGTH . ' lowercase ASCII letters and numbers, separated by single hyphens');
