@@ -51,6 +51,7 @@ namespace OCA\Collectives;
  *     collectiveId: int,
  *     title: string,
  *     slug: string,
+ *     theme: 'wiki'|'topnav',
  *     selectedPageIds: list<int>,
  *     publishedUrl: ?string,
  *     status: string,

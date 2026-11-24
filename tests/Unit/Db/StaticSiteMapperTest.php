@@ -108,7 +108,7 @@ class StaticSiteMapperTest extends TestCase {
 	public function testStartBuildOnlyUpdatesUnchangedStaticSite(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 
-		$this->assertTrue($this->mapper->startBuild($this->makeStaticSite(), 'new-build', 'Title', [3, 1]));
+		$this->assertTrue($this->mapper->startBuild($this->makeStaticSite(), 'new-build', 'Title', StaticSite::THEME_TOPNAV, [3, 1]));
 
 		$this->assertSame([
 			'id = 7',
@@ -119,6 +119,7 @@ class StaticSiteMapperTest extends TestCase {
 			'status' => StaticSite::STATUS_PENDING,
 			'build_id' => 'new-build',
 			'title' => 'Title',
+			'theme' => StaticSite::THEME_TOPNAV,
 			'selected_pages' => '[3,1]',
 			'last_error' => null,
 			'updated_at' => $this->now,
@@ -128,7 +129,7 @@ class StaticSiteMapperTest extends TestCase {
 	public function testStartBuildStoresNewSlug(): void {
 		$this->qb->method('executeStatement')->willReturn(1);
 
-		$this->assertTrue($this->mapper->startBuild($this->makeStaticSite(), 'new-build', 'Title', [1], 'new-slug'));
+		$this->assertTrue($this->mapper->startBuild($this->makeStaticSite(), 'new-build', 'Title', StaticSite::THEME_WIKI, [1], 'new-slug'));
 
 		$this->assertSame('new-slug', $this->values['slug']);
 	}
@@ -136,7 +137,7 @@ class StaticSiteMapperTest extends TestCase {
 	public function testStartBuildReturnsFalseIfStaticSiteChangedMeanwhile(): void {
 		$this->qb->method('executeStatement')->willReturn(0);
 
-		$this->assertFalse($this->mapper->startBuild($this->makeStaticSite(), 'new-build', 'Title', [1]));
+		$this->assertFalse($this->mapper->startBuild($this->makeStaticSite(), 'new-build', 'Title', StaticSite::THEME_WIKI, [1]));
 	}
 
 	public function testStartDeletionOnlyUpdatesUnchangedStaticSite(): void {
@@ -283,6 +284,7 @@ class StaticSiteMapperTest extends TestCase {
 		$current = new StaticSite();
 		$current->setId(7);
 		$current->setTitle('New Title');
+		$current->setTheme(StaticSite::THEME_TOPNAV);
 		$current->setSelectedPages('[2]');
 		$current->setStatus(StaticSite::STATUS_PENDING);
 		$current->setUpdatedAt($this->now);
@@ -290,11 +292,13 @@ class StaticSiteMapperTest extends TestCase {
 		$this->mapper->method('find')->willReturn($current);
 		$previous = $this->makeStaticSite();
 		$previous->setTitle('Old Title');
+		$previous->setTheme(StaticSite::THEME_WIKI);
 		$previous->setSelectedPages('[1]');
 
 		$this->mapper->restoreStatus($previous);
 
 		$this->assertSame('Old Title', $this->values['title']);
+		$this->assertSame(StaticSite::THEME_WIKI, $this->values['theme']);
 		$this->assertSame('[1]', $this->values['selected_pages']);
 	}
 

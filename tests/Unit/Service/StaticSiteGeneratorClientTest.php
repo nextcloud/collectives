@@ -146,22 +146,23 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->checkHealth();
 	}
 
-	private function expectedUpdatePayload(): array {
+	private function expectedUpdatePayload(string $theme = 'wiki'): array {
 		return [
 			'data' => [
 				'build_id' => $this->buildId,
 				'content_download_url' => 'https://cloud.example.org/archive',
 				'callback_status_url' => 'https://cloud.example.org/callback',
 				'title' => 'My Site',
+				'render_options' => ['theme' => $theme],
 			],
 		];
 	}
 
-	private function expectedCreatePayload(): array {
+	private function expectedCreatePayload(string $theme = 'wiki'): array {
 		return ['data' => [
 			'static_site_id' => $this->staticSiteId,
 			'slug' => 'my-site',
-		] + $this->expectedUpdatePayload()['data']];
+		] + $this->expectedUpdatePayload($theme)['data']];
 	}
 
 	private function isRequestOptions(array $payload): Callback {
@@ -176,10 +177,10 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	public function testCreatePostsStaticSiteWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			->with('POST', 'https://ssg.example.org/static-sites/', $this->isRequestOptions($this->expectedCreatePayload()))
+			->with('POST', 'https://ssg.example.org/static-sites/', $this->isRequestOptions($this->expectedCreatePayload('topnav')))
 			->willReturn($this->makeResponse(202, ''));
 
-		$this->client->create($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site', 'topnav');
 	}
 
 	public function testCreateFallsBackToUpdateIfStaticSiteIsKnown(): void {
@@ -190,7 +191,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 				['PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId] => $this->makeResponse(202, ''),
 			});
 
-		$this->client->create($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testCreateDoesNotFallBackToUpdateIfSlugIsTaken(): void {
@@ -204,7 +205,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 				=> $context['statusCode'] === 409 && $context['error'] === 'slug already taken'));
 
 		$this->expectException(StaticSiteGeneratorException::class);
-		$this->client->create($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	/**
@@ -223,7 +224,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 				=> $context['statusCode'] === 404 && $context['error'] === null));
 
 		$this->expectException(StaticSiteGeneratorException::class);
-		$this->client->create($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testCreateRejectedIfFallbackFails(): void {
@@ -232,7 +233,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			->willReturnOnConsecutiveCalls($this->makeResponse(409, ''), $this->makeResponse(404, ''));
 
 		$this->expectException(StaticSiteGeneratorException::class);
-		$this->client->create($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testUpdatePatchesStaticSiteWithBearerToken(): void {
@@ -241,7 +242,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			->with('PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, $this->isRequestOptions($this->expectedUpdatePayload()))
 			->willReturn($this->makeResponse(202, ''));
 
-		$this->client->update($this->makeStaticSite(), 'My Site');
+		$this->client->update($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testUpdateFallsBackToCreateIfStaticSiteIsUnknown(): void {
@@ -252,7 +253,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 				['POST', 'https://ssg.example.org/static-sites/'] => $this->makeResponse(202, ''),
 			});
 
-		$this->client->update($this->makeStaticSite(), 'My Site');
+		$this->client->update($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testUpdateRejectedIfFallbackFails(): void {
@@ -261,7 +262,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			->willReturnOnConsecutiveCalls($this->makeResponse(404, ''), $this->makeResponse(409, ''));
 
 		$this->expectException(StaticSiteGeneratorException::class);
-		$this->client->update($this->makeStaticSite(), 'My Site');
+		$this->client->update($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public static function sendMethodProvider(): array {
@@ -279,7 +280,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->expects(self::never())->method('request');
 
 		$this->expectException(StaticSiteGeneratorNotConfiguredException::class);
-		$this->client->$method($this->makeStaticSite(), 'My Site');
+		$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	/**
@@ -289,7 +290,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->method('request')->willThrowException(new Exception('Connection timed out'));
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
-		$this->client->$method($this->makeStaticSite(), 'My Site');
+		$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public static function unavailableResponseProvider(): array {
@@ -307,7 +308,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->method('request')->willReturn($this->makeResponse($statusCode, $body));
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
-		$this->client->$method($this->makeStaticSite(), 'My Site');
+		$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public static function rejectedResponseProvider(): array {
@@ -327,7 +328,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->method('request')->willReturn($this->makeResponse($statusCode, $body));
 
 		try {
-			$this->client->$method($this->makeStaticSite(), 'My Site');
+			$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
 			$this->fail('Expected StaticSiteGeneratorException');
 		} catch (StaticSiteGeneratorException $e) {
 			$this->assertNotInstanceOf(StaticSiteGeneratorUnavailableException::class, $e);
@@ -346,7 +347,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			]);
 
 		$this->expectException(StaticSiteGeneratorException::class);
-		$this->client->create($this->makeStaticSite(), 'My Site');
+		$this->client->create($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testDeleteSendsCallbackUrlWithBearerToken(): void {

@@ -54,10 +54,10 @@ class StaticSiteControllerTest extends TestCase {
 	public function testCreateReturnsStaticSite(): void {
 		$staticSite = new StaticSite();
 		$this->staticSiteService->method('create')
-			->with(42, [1], 'jane', 'Title', 'slug')
+			->with(42, [1], 'jane', 'Title', 'slug', 'topnav')
 			->willReturn($staticSite);
 
-		$this->assertSame($staticSite, $this->controller->create(42, [1], 'Title', 'slug')->getData());
+		$this->assertSame($staticSite, $this->controller->create(42, [1], 'Title', 'slug', 'topnav')->getData());
 	}
 
 	public function testCreateReturnsConflictIfSlugIsTaken(): void {
@@ -87,13 +87,13 @@ class StaticSiteControllerTest extends TestCase {
 		}
 	}
 
-	public function testUpdatePassesSlug(): void {
+	public function testUpdatePassesSlugAndTheme(): void {
 		$staticSite = new StaticSite();
 		$this->staticSiteService->method('update')
-			->with(42, 7, [1], 'Title', 'jane', 'slug')
+			->with(42, 7, [1], 'Title', 'jane', 'slug', 'topnav')
 			->willReturn($staticSite);
 
-		$this->assertSame($staticSite, $this->controller->update(42, 7, [1], 'Title', 'slug')->getData());
+		$this->assertSame($staticSite, $this->controller->update(42, 7, [1], 'Title', 'slug', 'topnav')->getData());
 	}
 
 	public function testUpdateReturnsConflictIfSlugIsTaken(): void {

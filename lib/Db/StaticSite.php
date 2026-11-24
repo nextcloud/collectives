@@ -30,6 +30,8 @@ use UnexpectedValueException;
  * @method void setTitle(string $value)
  * @method string getSlug()
  * @method void setSlug(string $value)
+ * @method string getTheme()
+ * @method void setTheme(string $value)
  * @method string getSelectedPages()
  * @method void setSelectedPages(string $value)
  * @method string|null getPublishedUrl()
@@ -65,6 +67,11 @@ class StaticSite extends Entity implements JsonSerializable {
 	// The publish service was requested to delete the published static site
 	public const STATUS_DELETING = 'deleting';
 
+	// Rendering of the website by the publish service: a page tree sidebar or a top navigation bar
+	public const THEME_WIKI = 'wiki';
+	public const THEME_TOPNAV = 'topnav';
+	public const ALLOWED_THEMES = [self::THEME_WIKI, self::THEME_TOPNAV];
+
 	// Reasons for status failed, translated by the frontend
 	public const ERROR_GENERATOR_UNAVAILABLE = 'generator_unavailable';
 	public const ERROR_GENERATOR_REJECTED = 'generator_rejected';
@@ -87,6 +94,7 @@ class StaticSite extends Entity implements JsonSerializable {
 	protected ?string $staticSiteId = null;
 	protected ?string $title = null;
 	protected ?string $slug = null;
+	protected string $theme = self::THEME_WIKI;
 	protected ?string $selectedPages = null;
 	protected ?string $publishedUrl = null;
 	protected string $status = self::STATUS_PENDING;
@@ -188,6 +196,7 @@ class StaticSite extends Entity implements JsonSerializable {
 			'collectiveId' => $this->collectiveId,
 			'title' => $this->title,
 			'slug' => $this->slug,
+			'theme' => $this->theme,
 			'selectedPageIds' => $this->getSelectedPageIds(),
 			'publishedUrl' => $this->publishedUrl,
 			'status' => $this->status,

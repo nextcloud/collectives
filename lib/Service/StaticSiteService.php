@@ -61,23 +61,24 @@ class StaticSiteService {
 	 * Create a selection of pages of a collective as a static site, provide its archive and
 	 * ask the static site generator to build it.
 	 *
-	 * Title defaults to the collective name. Slug stays empty. If the archive can't be provided, the
-	 * static site is removed again. If the generator doesn't accept the build, the static site
-	 * is stored with status failed, so publishing it can be retried.
+	 * Title defaults to the collective name. Slug stays empty. Theme defaults to "wiki". If the
+	 * archive can't be provided, the static site is removed again. If the generator doesn't
+	 * accept the build, the static site is stored with status failed, so publishing it can be retried.
 	 *
 	 * @param list<int> $pageIds IDs of the pages to publish; their ancestor pages (incl. the
 	 *                           collective's root page) are added automatically if missing
+	 * @param ?string $theme Rendering of the website, one of StaticSite::ALLOWED_THEMES
 	 *
 	 * @throws NotFoundException Collective or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, path too long
+	 * @throws UnprocessableEntityException No pages selected, invalid title, slug or theme, path too long
 	 * @throws StaticSiteSlugTakenException Slug is already used by another static site
 	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
 	 */
-	public function create(int $collectiveId, array $pageIds, string $userId, ?string $title = null, ?string $slug = null): StaticSite {
+	public function create(int $collectiveId, array $pageIds, string $userId, ?string $title = null, ?string $slug = null, ?string $theme = null): StaticSite {
 		$this->assertPublishFeatureEnabled();
 		$pageIds = $this->normalizePageIds($pageIds);
 		$collective = $this->getEditableCollective($collectiveId, $userId);
@@ -85,14 +86,16 @@ class StaticSiteService {
 
 		$title = trim($title ?? $collective->getName());
 		$slug ??= $this->generateSlug($collective->getName());
+		$theme ??= StaticSite::THEME_WIKI;
 		$this->validateTitle($title);
 		$this->validateSlug($slug);
+		$this->validateTheme($theme);
 		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
 
 		// TODO(Publish): Also check the slug against the publish service once it provides an endpoint
 		try {
-			$staticSite = $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId);
+			$staticSite = $this->staticSiteMapper->create($collectiveId, $pageIds, $title, $slug, $userId, $theme);
 		} catch (DBException $e) {
 			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw $e;
@@ -109,7 +112,7 @@ class StaticSiteService {
 		}
 
 		try {
-			$this->generatorClient->create($staticSite, $title);
+			$this->generatorClient->create($staticSite, $title, $theme);
 		} catch (StaticSiteGeneratorException $e) {
 			$this->storeGeneratorFailure($staticSite, $e);
 			throw $e;
@@ -119,29 +122,30 @@ class StaticSiteService {
 	}
 
 	/**
-	 * Update title, page selection and slug of a static site, provide its archive again and
+	 * Update title, page selection, slug and theme of a static site, provide its archive again and
 	 * ask the static site generator to build it. A static site that never got published is
 	 * created at the generator, as it only keeps static sites that got published.
 	 *
 	 * The slug can only be changed until the static site got published, as it is part of the
-	 * public URL. If the archive can't be provided, the static site and its previous archive
-	 * remain unchanged. If the generator doesn't accept the build, the settings are stored
-	 * with status failed.
+	 * public URL. The theme can be changed anytime. If the archive can't be provided, the static
+	 * site and its previous archive remain unchanged. If the generator doesn't accept the build,
+	 * the settings are stored with status failed.
 	 *
 	 * @param list<int> $pageIds IDs of the pages to publish; their ancestor pages (incl. the
 	 *                           collective's root page) are added automatically if missing
 	 * @param ?string $slug New slug, null keeps the current one
+	 * @param ?string $theme New rendering of the website, one of StaticSite::ALLOWED_THEMES, null keeps the current one
 	 *
 	 * @throws NotFoundException Collective, static site or one of the pages not found
 	 * @throws NotPermittedException Publish feature is disabled or user is not allowed to edit the collective
-	 * @throws UnprocessableEntityException No pages selected, invalid title or slug, slug of a published static site changed, publication started concurrently, path too long
+	 * @throws UnprocessableEntityException No pages selected, invalid title, slug or theme, slug of a published static site changed, publication started concurrently, path too long
 	 * @throws StaticSiteSlugTakenException Slug is already used by another static site
 	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published
 	 * @throws StaticSiteGeneratorException Generator not configured or didn't accept the build
 	 * @throws ServiceException Archive couldn't be provided
 	 * @throws DBException
 	 */
-	public function update(int $collectiveId, int $id, array $pageIds, string $title, string $userId, ?string $slug = null): StaticSite {
+	public function update(int $collectiveId, int $id, array $pageIds, string $title, string $userId, ?string $slug = null, ?string $theme = null): StaticSite {
 		$this->assertPublishFeatureEnabled();
 		$pageIds = $this->normalizePageIds($pageIds);
 		$this->getEditableCollective($collectiveId, $userId);
@@ -150,7 +154,9 @@ class StaticSiteService {
 		$this->assertNoPublicationInProgress($collectiveId);
 
 		$title = trim($title);
+		$theme ??= $staticSite->getTheme();
 		$this->validateTitle($title);
+		$this->validateTheme($theme);
 		$slug = $this->getChangedSlug($staticSite, $slug);
 		$pageIds = $this->resolvePageIdsWithAncestors($collectiveId, $pageIds, $userId);
 		$this->generatorClient->assertConfigured();
@@ -158,7 +164,7 @@ class StaticSiteService {
 		$buildId = Uuid::v7()->toRfc4122();
 		// TODO(Publish): Also check the slug against the publish service once it provides an endpoint
 		try {
-			$updated = $this->staticSiteMapper->startBuild($staticSite, $buildId, $title, $pageIds, $slug);
+			$updated = $this->staticSiteMapper->startBuild($staticSite, $buildId, $title, $theme, $pageIds, $slug);
 		} catch (DBException $e) {
 			if ($e->getReason() !== DBException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw $e;
@@ -172,6 +178,7 @@ class StaticSiteService {
 		$previous = clone $staticSite;
 		$staticSite->setBuildId($buildId);
 		$staticSite->setTitle($title);
+		$staticSite->setTheme($theme);
 		$staticSite->setSelectedPageIds($pageIds);
 		if ($slug !== null) {
 			$staticSite->setSlug($slug);
@@ -188,9 +195,9 @@ class StaticSiteService {
 
 		try {
 			if ($staticSite->isPublished()) {
-				$this->generatorClient->update($staticSite, $title);
+				$this->generatorClient->update($staticSite, $title, $theme);
 			} else {
-				$this->generatorClient->create($staticSite, $title);
+				$this->generatorClient->create($staticSite, $title, $theme);
 			}
 		} catch (StaticSiteGeneratorException $e) {
 			$this->storeGeneratorFailure($staticSite, $e);
@@ -586,6 +593,15 @@ class StaticSiteService {
 	private function validateTitle(string $title): void {
 		if ($title === '' || mb_strlen($title) > self::TITLE_MAX_LENGTH) {
 			throw new UnprocessableEntityException('Title must be between 1 and ' . self::TITLE_MAX_LENGTH . ' characters');
+		}
+	}
+
+	/**
+	 * @throws UnprocessableEntityException
+	 */
+	private function validateTheme(string $theme): void {
+		if (!in_array($theme, StaticSite::ALLOWED_THEMES, true)) {
+			throw new UnprocessableEntityException('Theme must be one of: ' . implode(', ', StaticSite::ALLOWED_THEMES));
 		}
 	}
 

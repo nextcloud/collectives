@@ -79,9 +79,10 @@ class StaticSiteController extends OCSController {
 	 * @param list<int> $pageIds IDs of the pages to publish
 	 * @param ?string $title Title of the static site, defaults to the collective name
 	 * @param ?string $slug Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the slugified collective name
+	 * @param ?string $theme Theme of the website ("wiki" page tree sidebar or "topnav" top navigation bar), defaults to "wiki"
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>|DataResponse<Http::STATUS_CONFLICT, array{message: string}, array{}>
-	 * @throws OCSBadRequestException No pages selected, invalid title or slug
+	 * @throws OCSBadRequestException No pages selected, invalid title, slug or theme
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or page not found
 	 * @throws OCSException Archive of the static site couldn't be provided, a website of the collective is being published or the publish service is not available or didn't accept it
@@ -90,11 +91,11 @@ class StaticSiteController extends OCSController {
 	 * 409: Slug is already taken by another static site, also of another collective
 	 */
 	#[NoAdminRequired]
-	public function create(int $collectiveId, array $pageIds, ?string $title = null, ?string $slug = null): DataResponse {
+	public function create(int $collectiveId, array $pageIds, ?string $title = null, ?string $slug = null, ?string $theme = null): DataResponse {
 		$uid = $this->getUid();
 		try {
 			$staticSite = $this->handleArchiveErrorResponse(
-				fn (): StaticSite => $this->staticSiteService->create($collectiveId, $pageIds, $uid, $title, $slug),
+				fn (): StaticSite => $this->staticSiteService->create($collectiveId, $pageIds, $uid, $title, $slug, $theme),
 				['collectiveId' => $collectiveId],
 			);
 		} catch (StaticSiteSlugTakenException) {
@@ -104,7 +105,7 @@ class StaticSiteController extends OCSController {
 	}
 
 	/**
-	 * Update title, page selection and slug of a static site and publish it again
+	 * Update title, page selection, slug and theme of a static site and publish it again
 	 *
 	 * Every call starts a new publication, even if nothing changed. The slug can only be changed until the static site got published.
 	 *
@@ -113,9 +114,10 @@ class StaticSiteController extends OCSController {
 	 * @param list<int> $pageIds IDs of the pages to publish
 	 * @param string $title Title of the static site
 	 * @param ?string $slug Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the current slug
+	 * @param ?string $theme Theme of the website ("wiki" page tree sidebar or "topnav" top navigation bar), defaults to the current theme
 	 *
 	 * @return DataResponse<Http::STATUS_OK, CollectivesStaticSite, array{}>|DataResponse<Http::STATUS_CONFLICT, array{message: string}, array{}>
-	 * @throws OCSBadRequestException No pages selected, invalid title or slug, slug of a published static site changed or publication started concurrently
+	 * @throws OCSBadRequestException No pages selected, invalid title, slug or theme, slug of a published static site changed or publication started concurrently
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective, static site or page not found
 	 * @throws OCSException Archive of the static site couldn't be provided, a website of the collective is being published or the publish service is not available or didn't accept it
@@ -124,11 +126,11 @@ class StaticSiteController extends OCSController {
 	 * 409: Slug is already taken by another static site, also of another collective
 	 */
 	#[NoAdminRequired]
-	public function update(int $collectiveId, int $id, array $pageIds, string $title, ?string $slug = null): DataResponse {
+	public function update(int $collectiveId, int $id, array $pageIds, string $title, ?string $slug = null, ?string $theme = null): DataResponse {
 		$uid = $this->getUid();
 		try {
 			$staticSite = $this->handleArchiveErrorResponse(
-				fn (): StaticSite => $this->staticSiteService->update($collectiveId, $id, $pageIds, $title, $uid, $slug),
+				fn (): StaticSite => $this->staticSiteService->update($collectiveId, $id, $pageIds, $title, $uid, $slug, $theme),
 				['collectiveId' => $collectiveId, 'id' => $id],
 			);
 		} catch (StaticSiteSlugTakenException) {

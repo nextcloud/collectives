@@ -48,6 +48,41 @@
 					@update:modelValue="$emit('update:slug', $event)" />
 			</div>
 		</div>
+		<div class="publish-settings-form__field">
+			<span :id="themeLabelId" class="publish-settings-form__label">
+				{{ t('collectives', 'Theme') }}
+			</span>
+			<div class="publish-settings-form__themes" role="radiogroup" :aria-labelledby="themeLabelId">
+				<label class="theme-option" :class="{ 'theme-option--selected': theme === THEME_WIKI }">
+					<input
+						type="radio"
+						class="theme-option__input"
+						name="theme"
+						:value="THEME_WIKI"
+						:checked="theme === THEME_WIKI"
+						@change="$emit('update:theme', THEME_WIKI)">
+					<img class="theme-option__preview" :src="themePreviewWiki" alt="">
+					<strong class="theme-option__title">{{ t('collectives', 'Wiki') }}</strong>
+					<span class="theme-option__description">
+						{{ t('collectives', 'Page tree in a sidebar, like in Collectives. Good for many pages.') }}
+					</span>
+				</label>
+				<label class="theme-option" :class="{ 'theme-option--selected': theme === THEME_TOPNAV }">
+					<input
+						type="radio"
+						class="theme-option__input"
+						name="theme"
+						:value="THEME_TOPNAV"
+						:checked="theme === THEME_TOPNAV"
+						@change="$emit('update:theme', THEME_TOPNAV)">
+					<img class="theme-option__preview" :src="themePreviewTopnav" alt="">
+					<strong class="theme-option__title">{{ t('collectives', 'Menu bar') }}</strong>
+					<span class="theme-option__description">
+						{{ t('collectives', 'Top-level pages in a menu bar. Good for a few main pages.') }}
+					</span>
+				</label>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -55,8 +90,11 @@
 import { t } from '@nextcloud/l10n'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
+import themePreviewTopnav from '../../../img/theme-preview-topnav.svg'
+import themePreviewWiki from '../../../img/theme-preview-wiki.svg'
 import uniqueIdMixin from '../../mixins/uniqueIdMixin.js'
 import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
+import { THEME_TOPNAV, THEME_WIKI } from '../../util/staticSiteTheme.js'
 import { isValidTitle, TITLE_MAX_LENGTH } from '../../util/staticSiteTitle.js'
 
 export default {
@@ -80,6 +118,11 @@ export default {
 			required: true,
 		},
 
+		theme: {
+			type: String,
+			required: true,
+		},
+
 		/** The slug of a published website can't be changed */
 		slugReadOnly: {
 			type: Boolean,
@@ -95,6 +138,7 @@ export default {
 
 	emits: [
 		'update:slug',
+		'update:theme',
 		'update:title',
 	],
 
@@ -106,6 +150,11 @@ export default {
 			slugMaxLength: SLUG_MAX_LENGTH,
 			titleId: `publish-settings-title-${this.uniqueId}`,
 			titleMaxLength: TITLE_MAX_LENGTH,
+			themeLabelId: `publish-settings-theme-${this.uniqueId}`,
+			themePreviewTopnav,
+			themePreviewWiki,
+			THEME_TOPNAV,
+			THEME_WIKI,
 		}
 	},
 
@@ -205,6 +254,18 @@ export default {
 			box-shadow: var(--prefix-border-dark);
 		}
 	}
+
+	&__themes {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+
+	@container (width < 500px) {
+		&__themes {
+			grid-template-columns: 1fr;
+		}
+	}
 }
 
 [data-theme-dark] .publish-settings-form__address-prefix {
@@ -213,5 +274,60 @@ export default {
 
 [data-theme-light] .publish-settings-form__address-prefix {
 	box-shadow: var(--prefix-border-light);
+}
+
+.theme-option {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 12px;
+	border: 2px solid var(--color-border-dark);
+	border-radius: var(--border-radius-large);
+	cursor: pointer;
+	opacity: 0.6;
+	transition: opacity 0.1s ease-in-out, border-color 0.1s ease-in-out;
+
+	&:hover {
+		border-color: var(--color-border-maxcontrast);
+		opacity: 0.85;
+	}
+
+	&:has(.theme-option__input:focus-visible) {
+		outline: 2px solid var(--color-main-text);
+		outline-offset: 2px;
+	}
+
+	&--selected {
+		border-color: var(--color-primary-element);
+		opacity: 1;
+	}
+
+	// Selection is handled by the card itself, so the native control stays accessible but invisible
+	&__input {
+		position: absolute;
+		top: 0;
+		inset-inline-start: 0;
+		width: 1px;
+		height: 1px;
+		margin: 0;
+		opacity: 0;
+	}
+
+	&__preview {
+		display: block;
+		width: 100%;
+		aspect-ratio: 200 / 104;
+		margin-block-end: 4px;
+		overflow: hidden;
+		border: 1px solid var(--color-border-dark);
+		border-radius: var(--border-radius);
+		object-fit: contain;
+		pointer-events: none;
+	}
+
+	&__description {
+		color: var(--color-text-maxcontrast);
+	}
 }
 </style>

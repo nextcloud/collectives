@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 104" font-family="sans-serif">
+	<rect width="200" height="104" fill="#ffffff" />
+	<rect x="0" y="0" width="68" height="104" fill="#fafafa" />
+	<line x1="68" y1="0" x2="68" y2="104" stroke="#e3e3e6" />
+	<rect x="10" y="8" width="48" height="12" rx="3" fill="#e8f0fe" />
+	<text x="14" y="17" font-size="9" font-weight="700" fill="#2a6edb">Home</text>
+	<text x="14" y="33" font-size="9" fill="#6e6e6e">About us</text>
+	<text x="22" y="46" font-size="8" fill="#a2a2a6">Team</text>
+	<text x="14" y="62" font-size="9" fill="#6e6e6e">Handbook</text>
+	<text x="22" y="75" font-size="8" fill="#a2a2a6">Guidelines</text>
+	<text x="14" y="91" font-size="9" fill="#6e6e6e">Projects</text>
+	<text x="80" y="32" font-size="14" font-weight="700" fill="#2e2e33">Welcome</text>
+	<rect x="80" y="42" width="112" height="8" rx="4" fill="#e2e2e6" />
+	<rect x="80" y="56" width="84" height="8" rx="4" fill="#e2e2e6" />
+</svg>
