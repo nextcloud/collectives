@@ -207,6 +207,25 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->create($this->makeStaticSite(), 'My Site');
 	}
 
+	/**
+	 * The error is only read in the format of the spec, so a conflict in another format falls back to updating
+	 */
+	public function testCreateFallsBackToUpdateIfErrorHasAnotherFormat(): void {
+		$this->httpClient->expects(self::exactly(2))
+			->method('request')
+			->willReturnOnConsecutiveCalls(
+				$this->makeResponse(409, '{"status": "conflict", "error": "slug already taken"}'),
+				$this->makeResponse(404, '{"status": "not_found", "error": "static site not found"}'),
+			);
+		$this->logger->expects(self::once())
+			->method('warning')
+			->with('Static site generator did not accept the request', self::callback(static fn (array $context): bool
+				=> $context['statusCode'] === 404 && $context['error'] === null));
+
+		$this->expectException(StaticSiteGeneratorException::class);
+		$this->client->create($this->makeStaticSite(), 'My Site');
+	}
+
 	public function testCreateRejectedIfFallbackFails(): void {
 		$this->httpClient->expects(self::exactly(2))
 			->method('request')

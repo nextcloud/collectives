@@ -22,7 +22,8 @@ use OCP\IURLGenerator;
 use Psr\Log\LoggerInterface;
 
 /**
- * HTTP client for the external static site generator.
+ * HTTP client for the external static site generator. All requests are authorized with the API
+ * token of the admin settings as bearer token.
  */
 class StaticSiteGeneratorClient {
 	private const TIMEOUT = 30;

@@ -14,8 +14,7 @@ const CALLBACK_DELAY_MS = 2000
 /**
  * Starts a minimal stand-in for the external static site generator service, so publishing
  * succeeds against the ephemeral Nextcloud container Playwright starts for tests. Accepts any
- * bearer token. Mirrors dev-tools/mock-static-site-generator/mock-static-site-generator.py,
- * which serves the same purpose for the docker-compose based dev environment.
+ * bearer token.
  *
  * @return {Promise<() => Promise<void>>} stop function, closes the server
  */
@@ -28,7 +27,7 @@ export async function startMockStaticSiteGenerator() {
 				handleRequest(request, Buffer.concat(chunks), response)
 			} catch (error) {
 				console.error('Mock static site generator failed to handle request', error)
-				sendJson(response, 500, { error: 'internal error' })
+				sendError(response, 500, 'internal error')
 			}
 		})
 	})
@@ -53,8 +52,16 @@ export async function getMockStaticSiteGeneratorUrl() {
 	return `http://${gatewayIp}:${STATIC_SITE_GENERATOR_PORT}`
 }
 
+const STATIC_SITES_PATH = /^\/static-sites\/?$/
+const STATIC_SITE_PATH = /^\/static-sites\/([^/]+)$/
+
+/** Static sites the mock knows, by static_site_id, with their slug */
+const staticSites = new Map()
+
 /**
- * Routes GET /health and POST /build, the only two endpoints the generator client calls.
+ * Routes GET /health and the create, update and delete requests of static sites, the endpoints
+ * the generator client calls. Each accepted request is answered with 202 and reported to its
+ * callback_status_url shortly after, like the real generator does.
  *
  * @param {import('node:http').IncomingMessage} request - the incoming request
  * @param {Buffer} body - the fully read request body
@@ -65,25 +72,65 @@ function handleRequest(request, body, response) {
 		return sendJson(response, 200, { status: 'ok' })
 	}
 
-	if (request.method === 'POST' && request.url === '/build') {
-		const { callback_status_url: callbackStatusUrl, slug } = JSON.parse(body.length ? body.toString() : '{}')
-		console.log('Mock static site generator: build request', { callbackStatusUrl, slug })
-		if (callbackStatusUrl) {
-			setTimeout(() => sendCallback(callbackStatusUrl, slug), CALLBACK_DELAY_MS)
+	const data = JSON.parse(body.length ? body.toString() : '{}').data ?? {}
+
+	if (request.method === 'POST' && STATIC_SITES_PATH.test(request.url)) {
+		if (staticSites.has(data.static_site_id)) {
+			return sendError(response, 409, 'static site already exists')
 		}
-		return sendJson(response, 200, { status: 'enqueued' })
+		if ([...staticSites.values()].includes(data.slug)) {
+			return sendError(response, 409, 'slug already taken')
+		}
+		staticSites.set(data.static_site_id, data.slug)
+		return accept(response, data.callback_status_url, publishedStatus(data.slug))
 	}
 
-	sendJson(response, 404, { error: 'not found' })
+	const staticSiteId = STATIC_SITE_PATH.exec(request.url)?.[1]
+	if (staticSiteId !== undefined && ['PATCH', 'DELETE'].includes(request.method)) {
+		if (!staticSites.has(staticSiteId)) {
+			return sendError(response, 404, 'static site not found')
+		}
+		if (request.method === 'PATCH') {
+			return accept(response, data.callback_status_url, publishedStatus(staticSites.get(staticSiteId)))
+		}
+		staticSites.delete(staticSiteId)
+		return accept(response, data.callback_status_url, { status: 'deleted', data: {} })
+	}
+
+	sendError(response, 404, 'not found')
 }
 
 /**
- * Simulates the generator reporting a finished build back via the callback_status_url.
- *
- * @param {string} callbackStatusUrl - URL to PATCH the publication status to
  * @param {string} slug - slug of the static site, used to derive a fake publish_url
+ * @return {object} status callback body of a successful build
  */
-async function sendCallback(callbackStatusUrl, slug) {
+function publishedStatus(slug) {
+	return { status: 'published', data: { publish_url: `https://example.test/sites/${slug}/` } }
+}
+
+/**
+ * Answers 202 and reports the status to the callback URL after a delay.
+ *
+ * @param {import('node:http').ServerResponse} response - the response to write to
+ * @param {string|undefined} callbackStatusUrl - URL to PATCH the status to
+ * @param {object} status - status callback body
+ */
+function accept(response, callbackStatusUrl, status) {
+	console.log('Mock static site generator: request accepted', { callbackStatusUrl, status: status.status })
+	if (callbackStatusUrl) {
+		setTimeout(() => sendCallback(callbackStatusUrl, status), CALLBACK_DELAY_MS)
+	}
+	response.writeHead(202)
+	response.end()
+}
+
+/**
+ * Simulates the generator reporting the outcome of a request back via the callback_status_url.
+ *
+ * @param {string} callbackStatusUrl - URL to PATCH the status to
+ * @param {object} status - status callback body
+ */
+async function sendCallback(callbackStatusUrl, status) {
 	try {
 		const response = await fetch(callbackStatusUrl, {
 			method: 'PATCH',
@@ -92,15 +139,21 @@ async function sendCallback(callbackStatusUrl, slug) {
 				Accept: 'application/json',
 				'OCS-APIREQUEST': 'true',
 			},
-			body: JSON.stringify({
-				status: 'published',
-				data: { publish_url: `https://example.test/${slug}` },
-			}),
+			body: JSON.stringify(status),
 		})
 		console.log('Mock static site generator: callback sent', callbackStatusUrl, '->', response.status)
 	} catch (error) {
 		console.error('Mock static site generator: callback failed', callbackStatusUrl, error)
 	}
+}
+
+/**
+ * @param {import('node:http').ServerResponse} response - the response to write to
+ * @param {number} status - HTTP status code
+ * @param {string} errorMessage - error message as the real generator sends it
+ */
+function sendError(response, status, errorMessage) {
+	sendJson(response, status, { data: { error_message: errorMessage } })
 }
 
 /**

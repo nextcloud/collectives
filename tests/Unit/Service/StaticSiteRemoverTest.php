@@ -219,6 +219,29 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->remover->removeAllOfCollective(42);
 	}
 
+	/**
+	 * The generator may know a static site whose first publication is running, so it is asked to delete
+	 * it. While the publication is running it rejects the request, and the deletion is retried later.
+	 */
+	public function testRemoveAllOfCollectiveAsksGeneratorToDeleteStaticSiteBeingPublishedFirstTime(): void {
+		$staticSite = $this->makeStaticSite(published: false);
+		$staticSite->setStatus(StaticSite::STATUS_PROVIDED);
+		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$staticSite]);
+		$this->staticSiteMapper->expects($this->once())->method('startDeletion')->with($staticSite)->willReturn(true);
+		$this->generatorClient->expects($this->once())
+			->method('delete')
+			->willThrowException(new StaticSiteGeneratorException('Operation in progress'));
+		$this->staticSiteMapper->expects($this->never())->method('delete');
+		$this->staticSiteMapper->expects($this->once())
+			->method('restoreStatus')
+			->with($this->callback(fn (StaticSite $previous): bool => $previous->getStatus() === StaticSite::STATUS_PROVIDED));
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Failed to delete static site of collective');
+
+		$this->remover->removeAllOfCollective(42);
+	}
+
 	public function testRemoveAllOfCollectiveDoesNotThrowIfStaticSitesCannotBeFound(): void {
 		$this->staticSiteMapper->method('findByCollectiveId')->willThrowException($this->createMock(DBException::class));
 		$this->logger->expects($this->once())->method('warning');

@@ -14,6 +14,7 @@ use OCA\Collectives\Db\StaticSiteMapper;
 use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\DB\IResult;
 use OCP\DB\QueryBuilder\IExpressionBuilder;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -46,11 +47,12 @@ class StaticSiteMapperTest extends TestCase {
 		});
 		$expr = $this->createMock(IExpressionBuilder::class);
 		$expr->method('eq')->willReturnCallback(
-			fn (string $column, string $parameter): string => $column . ' = ' . var_export($this->parameters[$parameter], true)
+			fn (string $column, string $parameter): string => $column . ' = ' . $this->describeOperand($parameter)
 		);
 		$expr->method('neq')->willReturnCallback(
 			fn (string $column, string $parameter): string => $column . ' != ' . var_export($this->parameters[$parameter], true)
 		);
+		$expr->method('isNull')->willReturnCallback(fn (string $column): string => $column . ' IS NULL');
 		$this->qb->method('expr')->willReturn($expr);
 		$this->qb->method('update')->willReturnSelf();
 		$this->qb->method('set')->willReturnCallback(function (string $column, string $parameter): IQueryBuilder {
@@ -75,6 +77,13 @@ class StaticSiteMapperTest extends TestCase {
 			->setConstructorArgs([$connection, $timeFactory])
 			->onlyMethods(['find'])
 			->getMock();
+	}
+
+	/**
+	 * Value of a named parameter, or the column it compares with
+	 */
+	private function describeOperand(string $operand): string {
+		return array_key_exists($operand, $this->parameters) ? var_export($this->parameters[$operand], true) : $operand;
 	}
 
 	private function makeStaticSite(): StaticSite {
@@ -356,5 +365,25 @@ class StaticSiteMapperTest extends TestCase {
 		$this->qb->method('executeStatement')->willReturn(0);
 
 		$this->assertFalse($this->mapper->updateStatusFailed($this->makeBuildingStaticSite(), StaticSite::ERROR_GENERATOR_FAILED));
+	}
+
+	public function testFindAllOrphanedFindsStaticSitesWithoutCollective(): void {
+		$joins = [];
+		$this->qb->method('select')->with('s.*')->willReturnSelf();
+		$this->qb->method('from')->with('collectives_st_sites', 's')->willReturnSelf();
+		$this->qb->method('leftJoin')->willReturnCallback(function (string $fromAlias, string $join, string $alias, string $condition) use (&$joins): IQueryBuilder {
+			$joins[] = $fromAlias . ' LEFT JOIN ' . $join . ' ' . $alias . ' ON ' . $condition;
+			return $this->qb;
+		});
+		$result = $this->createMock(IResult::class);
+		$result->method('fetchAssociative')->willReturnOnConsecutiveCalls(['id' => 8, 'collective_id' => 3], false);
+		$this->qb->method('executeQuery')->willReturn($result);
+
+		$staticSites = $this->mapper->findAllOrphaned();
+
+		$this->assertSame(['s LEFT JOIN collectives c ON s.collective_id = c.id'], $joins);
+		$this->assertSame(['c.id IS NULL'], $this->conditions);
+		$this->assertCount(1, $staticSites);
+		$this->assertSame(8, $staticSites[0]->getId());
 	}
 }
