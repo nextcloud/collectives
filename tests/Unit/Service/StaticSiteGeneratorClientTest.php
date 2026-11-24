@@ -146,32 +146,37 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->checkHealth();
 	}
 
-	private function expectedPayload(): array {
+	private function expectedUpdatePayload(): array {
 		return [
 			'data' => [
-				'static_site_id' => $this->staticSiteId,
 				'build_id' => $this->buildId,
 				'content_download_url' => 'https://cloud.example.org/archive',
 				'callback_status_url' => 'https://cloud.example.org/callback',
-				'slug' => 'my-site',
 				'title' => 'My Site',
 			],
 		];
 	}
 
-	private function isRequestOptions(): Callback {
-		return self::callback(fn (array $options): bool
+	private function expectedCreatePayload(): array {
+		return ['data' => [
+			'static_site_id' => $this->staticSiteId,
+			'slug' => 'my-site',
+		] + $this->expectedUpdatePayload()['data']];
+	}
+
+	private function isRequestOptions(array $payload): Callback {
+		return self::callback(static fn (array $options): bool
 			=> $options['headers']['Authorization'] === 'Bearer secret-token'
 			&& $options['timeout'] === 30
 			&& $options['connect_timeout'] === 5
 			&& $options['http_errors'] === false
-			&& $options['json'] === $this->expectedPayload());
+			&& $options['json'] === $payload);
 	}
 
 	public function testCreatePostsStaticSiteWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			->with('POST', 'https://ssg.example.org/static-sites/', $this->isRequestOptions())
+			->with('POST', 'https://ssg.example.org/static-sites/', $this->isRequestOptions($this->expectedCreatePayload()))
 			->willReturn($this->makeResponse(202, ''));
 
 		$this->client->create($this->makeStaticSite(), 'My Site');
@@ -188,6 +193,20 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->create($this->makeStaticSite(), 'My Site');
 	}
 
+	public function testCreateDoesNotFallBackToUpdateIfSlugIsTaken(): void {
+		$this->httpClient->expects(self::once())
+			->method('request')
+			->with('POST', 'https://ssg.example.org/static-sites/')
+			->willReturn($this->makeResponse(409, '{"data": {"error_message": "slug already taken"}}'));
+		$this->logger->expects(self::once())
+			->method('warning')
+			->with('Static site generator did not accept the request', self::callback(static fn (array $context): bool
+				=> $context['statusCode'] === 409 && $context['error'] === 'slug already taken'));
+
+		$this->expectException(StaticSiteGeneratorException::class);
+		$this->client->create($this->makeStaticSite(), 'My Site');
+	}
+
 	public function testCreateRejectedIfFallbackFails(): void {
 		$this->httpClient->expects(self::exactly(2))
 			->method('request')
@@ -200,7 +219,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	public function testUpdatePatchesStaticSiteWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			->with('PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, $this->isRequestOptions())
+			->with('PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, $this->isRequestOptions($this->expectedUpdatePayload()))
 			->willReturn($this->makeResponse(202, ''));
 
 		$this->client->update($this->makeStaticSite(), 'My Site');
@@ -256,7 +275,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 
 	public static function unavailableResponseProvider(): array {
 		return [
-			'create, server error' => ['create', 503, '{"error": "queue full"}'],
+			'create, server error' => ['create', 503, '{"data": {"error_message": "queue full"}}'],
 			'create, gateway error' => ['create', 502, ''],
 			'update, server error' => ['update', 500, ''],
 		];
@@ -274,7 +293,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 
 	public static function rejectedResponseProvider(): array {
 		return [
-			'create, invalid' => ['create', 400, '{"error": "slug is taken"}'],
+			'create, invalid' => ['create', 400, '{"data": {"error_message": "slug is taken"}}'],
 			'create, unauthorized' => ['create', 401, ''],
 			'create, not accepted' => ['create', 200, ''],
 			'update, invalid' => ['update', 422, ''],
@@ -297,7 +316,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	}
 
 	public function testSendLogsErrorOfGenerator(): void {
-		$this->httpClient->method('request')->willReturn($this->makeResponse(400, '{"error": "slug is taken"}'));
+		$this->httpClient->method('request')->willReturn($this->makeResponse(400, '{"data": {"error_message": "slug is taken"}}'));
 		$this->logger->expects(self::once())
 			->method('warning')
 			->with('Static site generator did not accept the request', [
@@ -311,16 +330,12 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->create($this->makeStaticSite(), 'My Site');
 	}
 
-	public function testDeleteSendsBuildIdAndCallbackUrlWithBearerToken(): void {
-		$expectedData = [
-			'build_id' => $this->buildId,
-			'callback_status_url' => 'https://cloud.example.org/callback',
-		];
+	public function testDeleteSendsCallbackUrlWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
 			->with('DELETE', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, self::callback(static fn (array $options): bool
 				=> $options['headers']['Authorization'] === 'Bearer secret-token'
-				&& $options['json'] === ['data' => $expectedData]))
+				&& $options['json'] === ['data' => ['callback_status_url' => 'https://cloud.example.org/callback']]))
 			->willReturn($this->makeResponse(202, ''));
 
 		$this->assertTrue($this->client->delete($this->makeStaticSite()));

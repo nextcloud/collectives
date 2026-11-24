@@ -362,9 +362,6 @@ class StaticSiteService {
 		}
 	}
 
-	// TODO(Publish): The publish service doesn't check the build order, so a late successful older build
-	// overwrites a newer one online, e.g. after a timed out request was retried. Ask the publish service to only
-	// deploy builds newer than the deployed one, otherwise mark the static site as failed here.
 	/**
 	 * Builds are UUIDv7, so a build ID sorting before the current one belongs to an older build.
 	 * Its archive was replaced by the one of the current build already.

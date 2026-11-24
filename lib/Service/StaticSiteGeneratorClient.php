@@ -29,6 +29,7 @@ class StaticSiteGeneratorClient {
 	// Fail fast if the static site generator is not reachable at all
 	private const CONNECT_TIMEOUT = 5;
 	private const STATIC_SITES_PATH = '/static-sites/';
+	private const ERROR_SLUG_TAKEN = 'slug already taken';
 
 	public function __construct(
 		private readonly IClientService $clientService,
@@ -61,8 +62,9 @@ class StaticSiteGeneratorClient {
 	/**
 	 * Ask the static site generator to create the static site from the archive of its current build.
 	 *
-	 * Falls back to updating it if the generator knows it already, e.g. if a previous request
-	 * timed out but was accepted.
+	 * If the generator answers with a conflict because it knows the static site already, e.g. as
+	 * a previous request timed out but was accepted, an update is sent instead. A conflict because
+	 * the slug is taken by another static site is a rejection.
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
@@ -70,7 +72,7 @@ class StaticSiteGeneratorClient {
 	 */
 	public function create(StaticSite $staticSite, string $title): void {
 		$response = $this->sendCreate($staticSite, $title);
-		if ($response->getStatusCode() === Http::STATUS_CONFLICT) {
+		if ($response->getStatusCode() === Http::STATUS_CONFLICT && $this->getErrorMessage($response) !== self::ERROR_SLUG_TAKEN) {
 			$response = $this->sendUpdate($staticSite, $title);
 		}
 		$this->assertAccepted($staticSite, $response);
@@ -105,10 +107,7 @@ class StaticSiteGeneratorClient {
 	 */
 	public function delete(StaticSite $staticSite): bool {
 		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
-		$response = $this->request('DELETE', $path, ['data' => [
-			'build_id' => $staticSite->getBuildId(),
-			'callback_status_url' => $this->getCallbackUrl($staticSite),
-		]]);
+		$response = $this->request('DELETE', $path, ['data' => ['callback_status_url' => $this->getCallbackUrl($staticSite)]]);
 		if ($response->getStatusCode() === Http::STATUS_NOT_FOUND) {
 			return false;
 		}
@@ -121,7 +120,11 @@ class StaticSiteGeneratorClient {
 	 * @throws StaticSiteGeneratorUnavailableException
 	 */
 	private function sendCreate(StaticSite $staticSite, string $title): IResponse {
-		return $this->request('POST', self::STATIC_SITES_PATH, ['data' => $this->getPayload($staticSite, $title)]);
+		$payload = [
+			'static_site_id' => $staticSite->getStaticSiteId(),
+			'slug' => $staticSite->getSlug(),
+		] + $this->getPayload($staticSite, $title);
+		return $this->request('POST', self::STATIC_SITES_PATH, ['data' => $payload]);
 	}
 
 	/**
@@ -134,17 +137,14 @@ class StaticSiteGeneratorClient {
 	}
 
 	private function getPayload(StaticSite $staticSite, string $title): array {
-		$staticSiteId = $staticSite->getStaticSiteId();
 		return [
-			'static_site_id' => $staticSiteId,
 			'build_id' => $staticSite->getBuildId(),
 			'content_download_url' => $this->urlGenerator->linkToRouteAbsolute('collectives.staticsitearchive.download', [
 				'apiVersion' => '1.0',
-				'staticSiteId' => $staticSiteId,
+				'staticSiteId' => $staticSite->getStaticSiteId(),
 				'buildId' => $staticSite->getBuildId(),
 			]),
 			'callback_status_url' => $this->getCallbackUrl($staticSite),
-			'slug' => $staticSite->getSlug(),
 			'title' => $title,
 		];
 	}
@@ -172,7 +172,7 @@ class StaticSiteGeneratorClient {
 			'staticSiteId' => $staticSite->getStaticSiteId(),
 			'buildId' => $staticSite->getBuildId(),
 			'statusCode' => $statusCode,
-			'error' => $this->decodeBody($response)['error'] ?? null,
+			'error' => $this->getErrorMessage($response),
 		]);
 		$message = $this->l10n->t('The static site generator did not accept the request (HTTP status %d)', [$statusCode]);
 		throw $statusCode >= 500
@@ -212,6 +212,11 @@ class StaticSiteGeneratorClient {
 
 	private function getToken(): string {
 		return $this->appConfig->getValueString('collectives', ConfigLexicon::STATIC_SITE_GENERATOR_TOKEN);
+	}
+
+	private function getErrorMessage(IResponse $response): ?string {
+		$errorMessage = $this->decodeBody($response)['data']['error_message'] ?? null;
+		return is_string($errorMessage) ? $errorMessage : null;
 	}
 
 	private function decodeBody(IResponse $response): array {
