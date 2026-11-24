@@ -152,7 +152,7 @@ class StaticSiteServiceTest extends TestCase {
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PENDING);
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, $pageIds, 'My Collective', 'my-collective', $this->userId)
+			->with($this->collectiveId, $pageIds, 'My Collective', 'my-collective', $this->userId, StaticSite::THEME_WIKI)
 			->willReturn($staticSite);
 
 		$files = ['Readme.md' => $this->makeFileWithSize(1)];
@@ -168,7 +168,7 @@ class StaticSiteServiceTest extends TestCase {
 			->with($this->staticSiteId, $this->buildId);
 		$this->generatorClient->expects($this->once())
 			->method('create')
-			->with($staticSite, 'My Collective');
+			->with($staticSite, 'My Collective', StaticSite::THEME_WIKI);
 
 		$provided = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->once())
@@ -210,7 +210,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, [1, 2], $this->anything(), $this->anything(), $this->userId)
+			->with($this->collectiveId, [1, 2], $this->anything(), $this->anything(), $this->userId, $this->anything())
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
 
 		$this->service->create($this->collectiveId, $pageIds, $this->userId);
@@ -270,7 +270,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, [3, 2, 1], 'My Collective', 'my-collective', $this->userId)
+			->with($this->collectiveId, [3, 2, 1], 'My Collective', 'my-collective', $this->userId, StaticSite::THEME_WIKI)
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
 
 		// Only the deepest subpage was explicitly selected
@@ -288,7 +288,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, [3, 2, 1], 'My Collective', 'my-collective', $this->userId)
+			->with($this->collectiveId, [3, 2, 1], 'My Collective', 'my-collective', $this->userId, StaticSite::THEME_WIKI)
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
 
 		// The root page is selected after its grandchild, which already pulled it in
@@ -327,15 +327,15 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->create($this->collectiveId, [1], $this->userId, 'Title', 'other-site');
 	}
 
-	public function testPublishUsesGivenTitleAndSlug(): void {
+	public function testPublishUsesGivenTitleSlugAndTheme(): void {
 		$this->expectValidCollectiveWithPages();
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, [1], 'Our Site', 'our-site-2026', $this->userId)
+			->with($this->collectiveId, [1], 'Our Site', 'our-site-2026', $this->userId, StaticSite::THEME_TOPNAV)
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
 
-		$this->service->create($this->collectiveId, [1], $this->userId, '  Our Site ', 'our-site-2026');
+		$this->service->create($this->collectiveId, [1], $this->userId, '  Our Site ', 'our-site-2026', StaticSite::THEME_TOPNAV);
 	}
 
 	public function testPublishDefaultSlugIsTruncated(): void {
@@ -344,7 +344,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('create')
-			->with($this->collectiveId, [1], $name, str_repeat('a', 64), $this->userId)
+			->with($this->collectiveId, [1], $name, str_repeat('a', 64), $this->userId, StaticSite::THEME_WIKI)
 			->willReturn($this->makeStaticSite(StaticSite::STATUS_PENDING));
 
 		$this->service->create($this->collectiveId, [1], $this->userId);
@@ -397,6 +397,26 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->create($this->collectiveId, [1], $this->userId, null, $slug);
 	}
 
+	public static function invalidThemeProvider(): array {
+		return [
+			'empty' => [''],
+			'unknown' => ['topbar'],
+			'uppercase' => ['Wiki'],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidThemeProvider
+	 */
+	public function testPublishRejectsInvalidTheme(string $theme): void {
+		$this->expectValidCollectiveWithPages();
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('create');
+
+		$this->service->create($this->collectiveId, [1], $this->userId, null, null, $theme);
+	}
+
 	public function testPublishThrowsWhenSlugAlreadyTaken(): void {
 		$this->expectValidCollectiveWithPages();
 
@@ -442,14 +462,14 @@ class StaticSiteServiceTest extends TestCase {
 			->willReturn($staticSite);
 		$this->staticSiteMapper->expects($this->once())
 			->method('startBuild')
-			->with($staticSite, $this->isNewBuildId(), 'New Title', [1])
+			->with($staticSite, $this->isNewBuildId(), 'New Title', StaticSite::THEME_WIKI, [1])
 			->willReturn(true);
 		$this->archiver->expects($this->once())
 			->method('store')
 			->with($this->staticSiteId, $this->isNewBuildId());
 		$this->generatorClient->expects($this->once())
 			->method('create')
-			->with($this->callback(fn (StaticSite $built): bool => $built->getId() === 7 && $built->getBuildId() !== $this->buildId), 'New Title');
+			->with($this->callback(fn (StaticSite $built): bool => $built->getId() === 7 && $built->getBuildId() !== $this->buildId), 'New Title', StaticSite::THEME_WIKI);
 
 		$provided = $this->makeStaticSite(StaticSite::STATUS_PROVIDED);
 		$this->staticSiteMapper->expects($this->once())
@@ -472,7 +492,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 
-		$this->generatorClient->expects($this->once())->method('update')->with($staticSite, 'Title');
+		$this->generatorClient->expects($this->once())->method('update')->with($staticSite, 'Title', StaticSite::THEME_WIKI);
 		$this->generatorClient->expects($this->never())->method('create');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -484,7 +504,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 		$this->staticSiteMapper->method('startBuild')->willReturn(true);
 
-		$this->generatorClient->expects($this->once())->method('create')->with($staticSite, 'Title');
+		$this->generatorClient->expects($this->once())->method('create')->with($staticSite, 'Title', StaticSite::THEME_WIKI);
 		$this->generatorClient->expects($this->never())->method('update');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
@@ -666,11 +686,11 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('startBuild')
-			->with($staticSite, $this->isNewBuildId(), 'Title', [1], 'new-slug')
+			->with($staticSite, $this->isNewBuildId(), 'Title', StaticSite::THEME_WIKI, [1], 'new-slug')
 			->willReturn(true);
 		$this->generatorClient->expects($this->once())
 			->method('create')
-			->with($this->callback(fn (StaticSite $built): bool => $built->getSlug() === 'new-slug'), 'Title');
+			->with($this->callback(fn (StaticSite $built): bool => $built->getSlug() === 'new-slug'), 'Title', StaticSite::THEME_WIKI);
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
 	}
@@ -683,7 +703,7 @@ class StaticSiteServiceTest extends TestCase {
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('startBuild')
-			->with($staticSite, $this->isNewBuildId(), 'Title', [1], null)
+			->with($staticSite, $this->isNewBuildId(), 'Title', StaticSite::THEME_WIKI, [1], null)
 			->willReturn(true);
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'my-collective');
@@ -699,6 +719,47 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('startBuild');
 
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, 'new-slug');
+	}
+
+	public function testUpdateChangesThemeOfPublishedStaticSite(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$staticSite->setPublishedUrl('https://example.org/my-collective/');
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
+
+		$this->generatorClient->expects($this->once())
+			->method('update')
+			->with($staticSite, 'Title', StaticSite::THEME_TOPNAV);
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, null, StaticSite::THEME_TOPNAV);
+	}
+
+	public function testUpdateKeepsCurrentThemeIfNoneGiven(): void {
+		$this->expectValidCollectiveWithPages();
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
+		$staticSite->setTheme(StaticSite::THEME_TOPNAV);
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
+		$this->staticSiteMapper->method('startBuild')->willReturn(true);
+
+		$this->generatorClient->expects($this->once())
+			->method('create')
+			->with($staticSite, 'Title', StaticSite::THEME_TOPNAV);
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
+	}
+
+	/**
+	 * @dataProvider invalidThemeProvider
+	 */
+	public function testUpdateRejectsInvalidTheme(string $theme): void {
+		$this->expectValidCollectiveWithPages();
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_FAILED));
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->staticSiteMapper->expects($this->never())->method('startBuild');
+
+		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId, null, $theme);
 	}
 
 	/**

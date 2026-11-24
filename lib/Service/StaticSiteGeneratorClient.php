@@ -71,10 +71,10 @@ class StaticSiteGeneratorClient {
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
-	public function create(StaticSite $staticSite, string $title): void {
-		$response = $this->sendCreate($staticSite, $title);
+	public function create(StaticSite $staticSite, string $title, string $theme): void {
+		$response = $this->sendCreate($staticSite, $title, $theme);
 		if ($response->getStatusCode() === Http::STATUS_CONFLICT && $this->getErrorMessage($response) !== self::ERROR_SLUG_TAKEN) {
-			$response = $this->sendUpdate($staticSite, $title);
+			$response = $this->sendUpdate($staticSite, $title, $theme);
 		}
 		$this->assertAccepted($staticSite, $response);
 	}
@@ -88,10 +88,10 @@ class StaticSiteGeneratorClient {
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
-	public function update(StaticSite $staticSite, string $title): void {
-		$response = $this->sendUpdate($staticSite, $title);
+	public function update(StaticSite $staticSite, string $title, string $theme): void {
+		$response = $this->sendUpdate($staticSite, $title, $theme);
 		if ($response->getStatusCode() === Http::STATUS_NOT_FOUND) {
-			$response = $this->sendCreate($staticSite, $title);
+			$response = $this->sendCreate($staticSite, $title, $theme);
 		}
 		$this->assertAccepted($staticSite, $response);
 	}
@@ -120,11 +120,11 @@ class StaticSiteGeneratorClient {
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException
 	 */
-	private function sendCreate(StaticSite $staticSite, string $title): IResponse {
+	private function sendCreate(StaticSite $staticSite, string $title, string $theme): IResponse {
 		$payload = [
 			'static_site_id' => $staticSite->getStaticSiteId(),
 			'slug' => $staticSite->getSlug(),
-		] + $this->getPayload($staticSite, $title);
+		] + $this->getPayload($staticSite, $title, $theme);
 		return $this->request('POST', self::STATIC_SITES_PATH, ['data' => $payload]);
 	}
 
@@ -132,12 +132,12 @@ class StaticSiteGeneratorClient {
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException
 	 */
-	private function sendUpdate(StaticSite $staticSite, string $title): IResponse {
+	private function sendUpdate(StaticSite $staticSite, string $title, string $theme): IResponse {
 		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
-		return $this->request('PATCH', $path, ['data' => $this->getPayload($staticSite, $title)]);
+		return $this->request('PATCH', $path, ['data' => $this->getPayload($staticSite, $title, $theme)]);
 	}
 
-	private function getPayload(StaticSite $staticSite, string $title): array {
+	private function getPayload(StaticSite $staticSite, string $title, string $theme): array {
 		return [
 			'build_id' => $staticSite->getBuildId(),
 			'content_download_url' => $this->urlGenerator->linkToRouteAbsolute('collectives.staticsitearchive.download', [
@@ -147,6 +147,7 @@ class StaticSiteGeneratorClient {
 			]),
 			'callback_status_url' => $this->getCallbackUrl($staticSite),
 			'title' => $title,
+			'render_options' => ['theme' => $theme],
 		];
 	}
 

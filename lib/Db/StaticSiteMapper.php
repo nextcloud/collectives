@@ -88,7 +88,7 @@ class StaticSiteMapper extends QBMapper {
 	 * @throws UnprocessableEntityException
 	 * @throws Exception
 	 */
-	public function create(int $collectiveId, array $pageIds, string $title, string $slug, string $createdBy): StaticSite {
+	public function create(int $collectiveId, array $pageIds, string $title, string $slug, string $createdBy, string $theme): StaticSite {
 		$now = $this->timeFactory->getTime();
 
 		$staticSite = new StaticSite();
@@ -97,6 +97,7 @@ class StaticSiteMapper extends QBMapper {
 		$staticSite->setBuildId(Uuid::v7()->toRfc4122());
 		$staticSite->setTitle($title);
 		$staticSite->setSlug($slug);
+		$staticSite->setTheme($theme);
 		$staticSite->setSelectedPageIds($pageIds);
 		$staticSite->setStatus(StaticSite::STATUS_PENDING);
 		$staticSite->setCreatedBy($createdBy);
@@ -120,12 +121,13 @@ class StaticSiteMapper extends QBMapper {
 	 * @throws UnprocessableEntityException
 	 * @throws Exception Also if the slug is already used by another static site
 	 */
-	public function startBuild(StaticSite $staticSite, string $buildId, string $title, array $pageIds, ?string $slug = null): bool {
+	public function startBuild(StaticSite $staticSite, string $buildId, string $title, string $theme, array $pageIds, ?string $slug = null): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->tableName)
 			->set('status', $qb->createNamedParameter(StaticSite::STATUS_PENDING, IQueryBuilder::PARAM_STR))
 			->set('build_id', $qb->createNamedParameter($buildId, IQueryBuilder::PARAM_STR))
 			->set('title', $qb->createNamedParameter($title, IQueryBuilder::PARAM_STR))
+			->set('theme', $qb->createNamedParameter($theme, IQueryBuilder::PARAM_STR))
 			->set('selected_pages', $qb->createNamedParameter(StaticSite::encodePageIds($pageIds), IQueryBuilder::PARAM_STR))
 			->set('last_error', $qb->createNamedParameter(null, IQueryBuilder::PARAM_NULL))
 			->set('updated_at', $qb->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
@@ -278,6 +280,7 @@ class StaticSiteMapper extends QBMapper {
 		$staticSite->setSlug($previous->getSlug());
 		$staticSite->setBuildId($previous->getBuildId());
 		$staticSite->setTitle($previous->getTitle());
+		$staticSite->setTheme($previous->getTheme());
 		$staticSite->setSelectedPages($previous->getSelectedPages());
 		$staticSite->setStatus($previous->getStatus());
 		$staticSite->setLastError($previous->getLastError());

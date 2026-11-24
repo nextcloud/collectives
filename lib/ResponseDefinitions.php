@@ -46,11 +46,13 @@ namespace OCA\Collectives;
  *     label: string,
  * }
  *
+ * // Keep the theme literal below in sync with StaticSite::ALLOWED_THEMES and src/util/staticSiteTheme.js
  * @psalm-type CollectivesStaticSite = array{
  *     id: int,
  *     collectiveId: int,
  *     title: string,
  *     slug: string,
+ *     theme: 'wiki'|'topnav',
  *     selectedPageIds: list<int>,
  *     publishedUrl: ?string,
  *     status: string,

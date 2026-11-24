@@ -53,6 +53,7 @@
 					v-else
 					v-model:title="title"
 					v-model:slug="slug"
+					v-model:theme="theme"
 					:slugReadOnly="isSlugReadOnly"
 					:slugTaken="isSlugTaken" />
 				<div class="modal-publish__footer">
@@ -114,6 +115,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
 import { isValidSlug } from '../../util/staticSiteSlug.js'
+import { THEME_WIKI } from '../../util/staticSiteTheme.js'
 import { isValidTitle } from '../../util/staticSiteTitle.js'
 
 export default {
@@ -161,6 +163,7 @@ export default {
 			takenSlugs: [],
 			title: this.collective.name,
 			slug: '',
+			theme: THEME_WIKI,
 		}
 	},
 
@@ -200,7 +203,7 @@ export default {
 		},
 
 		formValues() {
-			return JSON.stringify([this.title, this.slug, [...this.selectedPageIds].sort()])
+			return JSON.stringify([this.title, this.slug, this.theme, [...this.selectedPageIds].sort()])
 		},
 
 		hasUnsavedChanges() {
@@ -334,6 +337,7 @@ export default {
 			this.selectedStaticSiteId = staticSite.id
 			this.title = staticSite.title
 			this.slug = staticSite.slug
+			this.theme = staticSite.theme
 			// Pages may have been deleted or moved since the last publication:
 			// drop deleted ones and add ancestor pages of the remaining ones
 			const pageIds = new Set(this.allPageIds)
@@ -357,6 +361,7 @@ export default {
 			this.selectedStaticSiteId = null
 			this.title = this.collective.name
 			this.slug = ''
+			this.theme = THEME_WIKI
 			this.selectedPageIds = new Set(this.allPageIds)
 		},
 
@@ -374,9 +379,10 @@ export default {
 			this.publishing = true
 			const title = this.title.trim()
 			const slug = this.slug
+			const theme = this.theme
 			const request = this.selectedStaticSite
-				? updateStaticSite(this.collective.id, this.selectedStaticSite.id, pageIds, title, slug)
-				: createStaticSite(this.collective.id, pageIds, title, slug)
+				? updateStaticSite(this.collective.id, this.selectedStaticSite.id, pageIds, title, slug, theme)
+				: createStaticSite(this.collective.id, pageIds, title, slug, theme)
 			request
 				.then(({ data }) => {
 					showSuccess(t('collectives', 'Website publishing started'))

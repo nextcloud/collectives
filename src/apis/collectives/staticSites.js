@@ -32,27 +32,29 @@ export function getStaticSites(collectiveId) {
  * @param {number[]} pageIds Ids of the pages to publish
  * @param {string} title Title of the static site
  * @param {string} slug Slug of the static site
+ * @param {string} theme Theme of the website ("wiki" or "topnav")
  */
-export function createStaticSite(collectiveId, pageIds, title, slug) {
+export function createStaticSite(collectiveId, pageIds, title, slug, theme) {
 	return axios.post(
 		staticSitesApiUrl(collectiveId),
-		{ pageIds, title, slug },
+		{ pageIds, title, slug, theme },
 	)
 }
 
 /**
- * Publish an existing static site again to update content, page-selection, title and slug
+ * Publish an existing static site again to update content, page-selection, title, slug and theme
  *
  * @param {number} collectiveId Id of the collective
  * @param {number} id Id of the static site
  * @param {number[]} pageIds Ids of the pages to publish
  * @param {string} title Title of the static site
  * @param {string} slug Slug of the static site, can only be changed until it got published
+ * @param {string} theme Theme of the website ("wiki" or "topnav")
  */
-export function updateStaticSite(collectiveId, id, pageIds, title, slug) {
+export function updateStaticSite(collectiveId, id, pageIds, title, slug, theme) {
 	return axios.put(
 		staticSitesApiUrl(collectiveId, id),
-		{ pageIds, title, slug },
+		{ pageIds, title, slug, theme },
 	)
 }
 

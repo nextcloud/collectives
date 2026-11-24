@@ -348,6 +348,7 @@
                     "collectiveId",
                     "title",
                     "slug",
+                    "theme",
                     "selectedPageIds",
                     "publishedUrl",
                     "status",
@@ -375,6 +376,13 @@
                     },
                     "slug": {
                         "type": "string"
+                    },
+                    "theme": {
+                        "type": "string",
+                        "enum": [
+                            "wiki",
+                            "topnav"
+                        ]
                     },
                     "selectedPageIds": {
                         "type": "array",
@@ -4004,6 +4012,12 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the slugified collective name"
+                                    },
+                                    "theme": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Theme of the website (\"wiki\" page tree sidebar or \"topnav\" top navigation bar), defaults to \"wiki\""
                                     }
                                 }
                             }
@@ -4114,7 +4128,7 @@
                         }
                     },
                     "400": {
-                        "description": "No pages selected, invalid title or slug",
+                        "description": "No pages selected, invalid title, slug or theme",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4231,7 +4245,7 @@
         "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/static-sites/{id}": {
             "put": {
                 "operationId": "static_site-update",
-                "summary": "Update title, page selection and slug of a static site and publish it again",
+                "summary": "Update title, page selection, slug and theme of a static site and publish it again",
                 "description": "Every call starts a new publication, even if nothing changed. The slug can only be changed until the static site got published.",
                 "tags": [
                     "static_site"
@@ -4272,6 +4286,12 @@
                                         "nullable": true,
                                         "default": null,
                                         "description": "Slug of the static site (lowercase ASCII letters and numbers, separated by single hyphens), defaults to the current slug"
+                                    },
+                                    "theme": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "default": null,
+                                        "description": "Theme of the website (\"wiki\" page tree sidebar or \"topnav\" top navigation bar), defaults to the current theme"
                                     }
                                 }
                             }
@@ -4392,7 +4412,7 @@
                         }
                     },
                     "400": {
-                        "description": "No pages selected, invalid title or slug, slug of a published static site changed or publication started concurrently",
+                        "description": "No pages selected, invalid title, slug or theme, slug of a published static site changed or publication started concurrently",
                         "content": {
                             "application/json": {
                                 "schema": {

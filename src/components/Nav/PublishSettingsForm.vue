@@ -48,6 +48,31 @@
 					@update:modelValue="$emit('update:slug', $event)" />
 			</div>
 		</div>
+		<fieldset class="publish-settings-form__field publish-settings-form__themes-field">
+			<legend class="publish-settings-form__label">
+				{{ t('collectives', 'Theme') }}
+			</legend>
+			<div class="publish-settings-form__themes">
+				<label
+					v-for="option in themeOptions"
+					:key="option.value"
+					class="theme-option"
+					:class="{ 'theme-option--selected': theme === option.value }">
+					<input
+						type="radio"
+						class="theme-option__input"
+						:name="themeName"
+						:value="option.value"
+						:checked="theme === option.value"
+						@change="$emit('update:theme', option.value)">
+					<img class="theme-option__preview" :src="option.preview" alt="">
+					<strong class="theme-option__title">{{ option.title }}</strong>
+					<span class="theme-option__description">
+						{{ option.description }}
+					</span>
+				</label>
+			</div>
+		</fieldset>
 	</div>
 </template>
 
@@ -55,8 +80,11 @@
 import { t } from '@nextcloud/l10n'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
+import themePreviewTopnav from '../../../img/theme-preview-topnav.svg?url'
+import themePreviewWiki from '../../../img/theme-preview-wiki.svg?url'
 import uniqueIdMixin from '../../mixins/uniqueIdMixin.js'
 import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
+import { THEME_TOPNAV, THEME_WIKI, THEMES } from '../../util/staticSiteTheme.js'
 import { isValidTitle, TITLE_MAX_LENGTH } from '../../util/staticSiteTitle.js'
 
 export default {
@@ -80,6 +108,12 @@ export default {
 			required: true,
 		},
 
+		theme: {
+			type: String,
+			required: true,
+			validator: (value) => THEMES.includes(value),
+		},
+
 		/** The slug of a published website can't be changed */
 		slugReadOnly: {
 			type: Boolean,
@@ -95,6 +129,7 @@ export default {
 
 	emits: [
 		'update:slug',
+		'update:theme',
 		'update:title',
 	],
 
@@ -106,6 +141,21 @@ export default {
 			slugMaxLength: SLUG_MAX_LENGTH,
 			titleId: `publish-settings-title-${this.uniqueId}`,
 			titleMaxLength: TITLE_MAX_LENGTH,
+			themeName: `publish-settings-theme-${this.uniqueId}`,
+			themeOptions: [
+				{
+					value: THEME_WIKI,
+					preview: themePreviewWiki,
+					title: t('collectives', 'Wiki'),
+					description: t('collectives', 'Page tree in a sidebar, like in Collectives. Good for many pages.'),
+				},
+				{
+					value: THEME_TOPNAV,
+					preview: themePreviewTopnav,
+					title: t('collectives', 'Menu bar'),
+					description: t('collectives', 'Top-level pages in a menu bar. Good for a few main pages.'),
+				},
+			],
 		}
 	},
 
@@ -140,6 +190,7 @@ export default {
 	padding-block: 16px;
 	padding-inline: 4px;
 	overflow-y: auto;
+	container-type: inline-size;
 
 	&__field {
 		display: flex;
@@ -149,6 +200,18 @@ export default {
 	&__label {
 		margin-block-end: 10px;
 		font-weight: bold;
+	}
+
+	// Reset browser default fieldset/legend styling, the radiogroup fieldset otherwise looks like native ones
+	&__themes-field {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: none;
+
+		legend.publish-settings-form__label {
+			padding: 0;
+		}
 	}
 
 	// Higher specificity to override the default margin of the note card
@@ -205,6 +268,18 @@ export default {
 			box-shadow: var(--prefix-border-dark);
 		}
 	}
+
+	&__themes {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+
+	@container (width < 500px) {
+		&__themes {
+			grid-template-columns: 1fr;
+		}
+	}
 }
 
 [data-theme-dark] .publish-settings-form__address-prefix {
@@ -213,5 +288,59 @@ export default {
 
 [data-theme-light] .publish-settings-form__address-prefix {
 	box-shadow: var(--prefix-border-light);
+}
+
+.theme-option {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 12px;
+	border: 2px solid var(--color-border-dark);
+	border-radius: var(--border-radius-large);
+	cursor: pointer;
+	transition: border-color 0.1s ease-in-out;
+
+	&:hover {
+		border-color: var(--color-border-maxcontrast);
+	}
+
+	&:has(.theme-option__input:focus-visible) {
+		outline: 2px solid var(--color-main-text);
+		outline-offset: 2px;
+	}
+
+	// Compound selector so this outweighs the :hover rule above, which would otherwise win on
+	// specificity (two selectors) over a lone `.theme-option--selected` (one selector)
+	&.theme-option--selected {
+		border-color: var(--color-primary-element);
+	}
+
+	// Selection is handled by the card itself, so the native control stays accessible but invisible
+	&__input {
+		position: absolute;
+		top: 0;
+		inset-inline-start: 0;
+		width: 1px;
+		height: 1px;
+		margin: 0;
+		opacity: 0;
+	}
+
+	&__preview {
+		display: block;
+		width: 100%;
+		aspect-ratio: 200 / 104;
+		margin-block-end: 4px;
+		overflow: hidden;
+		border: 1px solid var(--color-border-dark);
+		border-radius: var(--border-radius);
+		object-fit: contain;
+		pointer-events: none;
+	}
+
+	&__description {
+		color: var(--color-text-maxcontrast);
+	}
 }
 </style>
