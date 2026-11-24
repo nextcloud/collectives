@@ -96,7 +96,8 @@ class StaticSiteRemover {
 	 * manually anymore. Static sites that are being deleted are left alone until their deletion
 	 * is concluded or aborted.
 	 *
-	 * Doesn't throw, failures are retried next time.
+	 * Doesn't throw, failures are retried next time. If the static site generator isn't configured,
+	 * this is logged once instead of for each static site.
 	 */
 	public function removeAllOrphaned(int $now): void {
 		try {
@@ -105,7 +106,18 @@ class StaticSiteRemover {
 			$this->logger->warning('Failed to find orphaned static sites', ['exception' => $e]);
 			return;
 		}
-		$this->removeEach(array_filter($staticSites, static fn (StaticSite $staticSite): bool => !$staticSite->isInProgress($now)));
+		$staticSites = array_filter($staticSites, static fn (StaticSite $staticSite): bool => !$staticSite->isInProgress($now));
+		if ($staticSites === []) {
+			return;
+		}
+
+		try {
+			$this->generatorClient->assertConfigured();
+		} catch (StaticSiteGeneratorNotConfiguredException) {
+			$this->logger->warning('Cannot delete orphaned static sites, the static site generator is not configured', ['count' => count($staticSites)]);
+			return;
+		}
+		$this->removeEach($staticSites);
 	}
 
 	/**
@@ -151,7 +163,7 @@ class StaticSiteRemover {
 	 * the static site generator. Failing to delete the archives only leaves orphaned files, so it
 	 * doesn't throw.
 	 */
-	private function deleteArchives(StaticSite $staticSite): void {
+	public function deleteArchives(StaticSite $staticSite): void {
 		try {
 			$this->archiver->deleteAll($staticSite->getStaticSiteId());
 		} catch (ServiceException $e) {

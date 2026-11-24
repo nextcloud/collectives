@@ -104,7 +104,7 @@ class StaticSiteService {
 			$this->buildArchive($staticSite, $pageIds);
 		} catch (ServiceException $e) {
 			$this->staticSiteMapper->delete($staticSite);
-			$this->deleteAllArchives($staticSite);
+			$this->remover->deleteArchives($staticSite);
 			throw $e;
 		}
 
@@ -266,8 +266,8 @@ class StaticSiteService {
 	 * Callbacks of older builds are only logged. Their settings aren't known anymore, so a late
 	 * successful older build can't be stored as publication.
 	 *
-	 * Deleting a static site with build ID (functioning as request ID). Status deleted removes the static site,
-	 * status failed keeps it online. See StaticSiteRemover::remove().
+	 * A deletion has its own build ID. Its status deleted removes the static site, status failed
+	 * keeps it online. See StaticSiteRemover::remove().
 	 *
 	 * Status published without a valid `publish_url` is stored as failed, so a published static site
 	 * always has one. The archive of the build isn't needed anymore once the build finished.
@@ -453,7 +453,7 @@ class StaticSiteService {
 		try {
 			return $this->staticSiteMapper->find($staticSite->getId());
 		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
-			$this->deleteAllArchives($staticSite);
+			$this->remover->deleteArchives($staticSite);
 			throw new NotFoundException('Static site not found', 0, $e);
 		}
 	}
@@ -512,17 +512,6 @@ class StaticSiteService {
 			$this->archiver->deleteAllExcept($staticSite->getStaticSiteId(), $staticSite->getBuildId());
 		} catch (ServiceException $e) {
 			$this->logger->warning('Failed to delete archives of previous static site builds', $this->getLogContext($staticSite) + ['exception' => $e]);
-		}
-	}
-
-	/**
-	 * Failing to delete the archives only leaves orphaned files, so it doesn't throw.
-	 */
-	private function deleteAllArchives(StaticSite $staticSite): void {
-		try {
-			$this->archiver->deleteAll($staticSite->getStaticSiteId());
-		} catch (ServiceException $e) {
-			$this->logger->warning('Failed to delete static site archives', $this->getLogContext($staticSite) + ['exception' => $e]);
 		}
 	}
 

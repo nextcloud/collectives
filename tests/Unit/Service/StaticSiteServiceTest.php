@@ -890,7 +890,7 @@ class StaticSiteServiceTest extends TestCase {
 		$this->archiver->method('store')->willThrowException(new ServiceException('Failed'));
 
 		$this->staticSiteMapper->expects($this->once())->method('delete')->with($staticSite);
-		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
+		$this->remover->expects($this->once())->method('deleteArchives')->with($staticSite);
 		$this->staticSiteMapper->expects($this->never())->method('updateRequestStatus');
 
 		$this->expectException(ServiceException::class);
@@ -969,23 +969,11 @@ class StaticSiteServiceTest extends TestCase {
 	}
 
 	public function testPublishDeletesArchivesIfStaticSiteWasDeletedMeanwhile(): void {
-		$this->expectCreatedStaticSite();
+		$staticSite = $this->expectCreatedStaticSite();
 		$this->contentCollector->method('collect')->willReturn([]);
 		$this->staticSiteMapper->method('find')
 			->willThrowException(new DoesNotExistException('Static site not found'));
-		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
-
-		$this->expectException(NotFoundException::class);
-		$this->service->create($this->collectiveId, [1], $this->userId);
-	}
-
-	public function testPublishKeepsNotFoundExceptionIfArchiveDeletionFails(): void {
-		$this->expectCreatedStaticSite();
-		$this->contentCollector->method('collect')->willReturn([]);
-		$this->staticSiteMapper->method('find')
-			->willThrowException(new DoesNotExistException('Static site not found'));
-		$this->archiver->method('deleteAll')->willThrowException(new ServiceException('Failed'));
-		$this->logger->expects($this->once())->method('warning');
+		$this->remover->expects($this->once())->method('deleteArchives')->with($staticSite);
 
 		$this->expectException(NotFoundException::class);
 		$this->service->create($this->collectiveId, [1], $this->userId);

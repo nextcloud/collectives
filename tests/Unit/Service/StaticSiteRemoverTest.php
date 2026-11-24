@@ -272,6 +272,31 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->remover->removeAllOrphaned(1800000000);
 	}
 
+	public function testRemoveAllOrphanedLogsOnceIfGeneratorIsNotConfigured(): void {
+		$first = $this->makeStaticSite(published: true);
+		$first->setUpdatedAt(0);
+		$second = $this->makeStaticSite(published: false);
+		$second->setId(8);
+		$second->setUpdatedAt(0);
+		$this->staticSiteMapper->method('findAllOrphaned')->willReturn([$first, $second]);
+		$this->generatorClient->method('assertConfigured')
+			->willThrowException(new StaticSiteGeneratorNotConfiguredException('Not configured'));
+		$this->staticSiteMapper->expects($this->never())->method('startDeletion');
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Cannot delete orphaned static sites, the static site generator is not configured', ['count' => 2]);
+
+		$this->remover->removeAllOrphaned(1800000000);
+	}
+
+	public function testRemoveAllOrphanedDoesNothingWithoutOrphanedStaticSites(): void {
+		$this->staticSiteMapper->method('findAllOrphaned')->willReturn([]);
+		$this->generatorClient->expects($this->never())->method('assertConfigured');
+		$this->logger->expects($this->never())->method('warning');
+
+		$this->remover->removeAllOrphaned(1800000000);
+	}
+
 	public function testRemoveAllOrphanedDoesNotThrowIfStaticSitesCannotBeFound(): void {
 		$this->staticSiteMapper->method('findAllOrphaned')->willThrowException($this->createMock(DBException::class));
 		$this->logger->expects($this->once())->method('warning');

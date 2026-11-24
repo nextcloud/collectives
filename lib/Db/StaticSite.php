@@ -78,9 +78,9 @@ class StaticSite extends Entity implements JsonSerializable {
 		self::STATUS_DELETING,
 	];
 
-	// Seconds after which an in-progress publication counts as aborted, e.g. after a PHP timeout
-	// or an unreachable/crashed publish service that never sends its status callback
-	// TODO(Publish) discuss timeout value
+	// Seconds after which an in-progress publication or deletion counts as aborted, e.g. after a PHP
+	// timeout or an unreachable/crashed publish service that never sends its status callback. Must be longer
+	// than the pending timeout of the publish service (600 s), which rejects new requests until then.
 	public const PENDING_TIMEOUT = 15 * 60;
 
 	protected ?int $collectiveId = null;
