@@ -69,17 +69,11 @@ class StaticSiteRemoverTest extends TestCase {
 			&& $staticSite->getBuildId() !== $this->buildId);
 	}
 
-	public function testRemoveDeletesNeverPublishedStaticSiteRightAway(): void {
-		$staticSite = $this->makeStaticSite(published: false);
-		$this->generatorClient->expects($this->never())->method('delete');
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($staticSite);
-		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
-
-		$this->remover->remove($staticSite);
-	}
-
-	public function testRemoveAsksGeneratorToDeletePublishedStaticSite(): void {
-		$staticSite = $this->makeStaticSite(published: true);
+	/**
+	 * @dataProvider publishedProvider
+	 */
+	public function testRemoveAsksGeneratorToDeleteStaticSite(bool $published): void {
+		$staticSite = $this->makeStaticSite($published);
 		$this->staticSiteMapper->expects($this->once())
 			->method('startDeletion')
 			->with($staticSite, $this->isNewBuildId())
@@ -94,6 +88,14 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
 
 		$this->remover->remove($staticSite);
+	}
+
+	public static function publishedProvider(): array {
+		return [
+			'published' => [true],
+			// The generator may know it anyway, e.g. while its first build is running
+			'never published' => [false],
+		];
 	}
 
 	public function testRemoveDeletesStaticSiteUnknownToGeneratorRightAway(): void {
@@ -117,7 +119,7 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 
-	public function testRemoveRequiresConfiguredGeneratorForPublishedStaticSite(): void {
+	public function testRemoveRequiresConfiguredGenerator(): void {
 		$this->generatorClient->method('assertConfigured')
 			->willThrowException(new StaticSiteGeneratorNotConfiguredException('Not configured'));
 		$this->staticSiteMapper->expects($this->never())->method('startDeletion');
@@ -178,8 +180,10 @@ class StaticSiteRemoverTest extends TestCase {
 	}
 
 	public function testRemoveSucceedsIfArchivesCannotBeDeleted(): void {
+		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
+		$this->generatorClient->method('delete')->willReturn(false);
+		$this->staticSiteMapper->expects($this->once())->method('deleteIfCurrentBuild')->willReturn(true);
 		$this->archiver->method('deleteAll')->willThrowException(new ServiceException('Failed'));
-		$this->staticSiteMapper->expects($this->once())->method('delete');
 		$this->logger->expects($this->once())->method('warning');
 
 		$this->remover->remove($this->makeStaticSite(published: false));
@@ -190,9 +194,8 @@ class StaticSiteRemoverTest extends TestCase {
 		$published = $this->makeStaticSite(published: true);
 		$published->setId(8);
 		$this->staticSiteMapper->method('findByCollectiveId')->with(42)->willReturn([$neverPublished, $published]);
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($neverPublished);
-		$this->staticSiteMapper->expects($this->once())->method('startDeletion')->with($published)->willReturn(true);
-		$this->generatorClient->expects($this->once())->method('delete')->willReturn(true);
+		$this->staticSiteMapper->expects($this->exactly(2))->method('startDeletion')->willReturn(true);
+		$this->generatorClient->expects($this->exactly(2))->method('delete')->willReturn(true);
 
 		$this->remover->removeAllOfCollective(42);
 	}
@@ -205,9 +208,10 @@ class StaticSiteRemoverTest extends TestCase {
 		$second = $this->makeStaticSite(published: false);
 		$second->setId(8);
 		$this->staticSiteMapper->method('findByCollectiveId')->willReturn([$first, $second]);
-		$this->generatorClient->method('assertConfigured')
-			->willThrowException(new StaticSiteGeneratorNotConfiguredException('Not configured'));
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($second);
+		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
+		$this->generatorClient->expects($this->exactly(2))
+			->method('delete')
+			->willReturnOnConsecutiveCalls($this->throwException(new StaticSiteGeneratorUnavailableException('Unavailable')), true);
 		$this->logger->expects($this->once())
 			->method('warning')
 			->with('Failed to delete static site of collective');
@@ -236,15 +240,18 @@ class StaticSiteRemoverTest extends TestCase {
 		$abortedDeleting->setUpdatedAt($now - StaticSite::PENDING_TIMEOUT - 1);
 		$this->staticSiteMapper->method('findAllOrphaned')->willReturn([$failed, $deleting, $abortedDeleting]);
 
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($failed);
-		// The deletion in progress waits for its callback or timeout
-		$this->staticSiteMapper->expects($this->once())
-			->method('startDeletion')
-			->with($abortedDeleting)
-			->willReturn(true);
-		$this->generatorClient->expects($this->once())->method('delete')->willReturn(true);
+		$started = [];
+		$this->staticSiteMapper->method('startDeletion')
+			->willReturnCallback(static function (StaticSite $staticSite) use (&$started): bool {
+				$started[] = $staticSite->getId();
+				return true;
+			});
+		$this->generatorClient->method('delete')->willReturn(true);
 
 		$this->remover->removeAllOrphaned($now);
+
+		// The deletion in progress waits for its callback or timeout
+		$this->assertSame([7, 9], $started);
 	}
 
 	public function testRemoveAllOrphanedContinuesIfAStaticSiteCannotBeDeleted(): void {
@@ -254,9 +261,10 @@ class StaticSiteRemoverTest extends TestCase {
 		$neverPublished->setId(8);
 		$neverPublished->setUpdatedAt(0);
 		$this->staticSiteMapper->method('findAllOrphaned')->willReturn([$published, $neverPublished]);
-		$this->generatorClient->method('assertConfigured')
-			->willThrowException(new StaticSiteGeneratorNotConfiguredException('Not configured'));
-		$this->staticSiteMapper->expects($this->once())->method('delete')->with($neverPublished);
+		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
+		$this->generatorClient->expects($this->exactly(2))
+			->method('delete')
+			->willReturnOnConsecutiveCalls($this->throwException(new StaticSiteGeneratorUnavailableException('Unavailable')), true);
 		$this->logger->expects($this->once())
 			->method('warning')
 			->with('Failed to delete static site of collective');

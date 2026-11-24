@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * Deletes static sites, also at the static site generator if they got published.
+ * Deletes static sites at the static site generator and locally.
  *
  * Independent of the collective, so it can also be used while a collective is purged.
  */
@@ -30,11 +30,13 @@ class StaticSiteRemover {
 	}
 
 	/**
-	 * Delete a static site. One that never got published is deleted right away.
+	 * Delete a static site. The static site generator is asked even if the static site never got
+	 * published, as it may know it anyway, e.g. while its first build is running. If the generator
+	 * doesn't know it, it is deleted right away.
 	 *
-	 * One that got published is deleted asynchronously: it gets status deleting and a new build ID,
-	 * so the status callback of the deletion can't be mixed up with a late one of a previous build.
-	 * It is deleted once the static site generator reports it as deleted. Until then its slug stays
+	 * Otherwise it is deleted asynchronously: it gets status deleting and a new build ID, so the
+	 * status callback of the deletion can't be mixed up with a late one of a previous build. It is
+	 * deleted once the static site generator reports it as deleted. Until then its slug stays
 	 * reserved, as the generator still uses it.
 	 *
 	 * If the generator rejects the request, the static site remains unchanged. If it is unavailable,
@@ -45,10 +47,6 @@ class StaticSiteRemover {
 	 * @throws DBException
 	 */
 	public function remove(StaticSite $staticSite): void {
-		if (!$staticSite->isPublished()) {
-			$this->removeLocally($staticSite);
-			return;
-		}
 		$this->generatorClient->assertConfigured();
 
 		$buildId = Uuid::v7()->toRfc4122();
@@ -134,14 +132,6 @@ class StaticSiteRemover {
 			$this->logger->warning('Not deleting static site, it was changed meanwhile', $this->getLogContext($staticSite));
 			return;
 		}
-		$this->deleteArchives($staticSite);
-	}
-
-	/**
-	 * @throws DBException
-	 */
-	private function removeLocally(StaticSite $staticSite): void {
-		$this->staticSiteMapper->delete($staticSite);
 		$this->deleteArchives($staticSite);
 	}
 
