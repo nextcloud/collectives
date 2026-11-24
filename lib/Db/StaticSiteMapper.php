@@ -88,7 +88,7 @@ class StaticSiteMapper extends QBMapper {
 	 * @throws UnprocessableEntityException
 	 * @throws Exception
 	 */
-	public function create(int $collectiveId, array $pageIds, string $title, string $slug, string $createdBy, string $theme = StaticSite::THEME_WIKI): StaticSite {
+	public function create(int $collectiveId, array $pageIds, string $title, string $slug, string $createdBy, string $theme): StaticSite {
 		$now = $this->timeFactory->getTime();
 
 		$staticSite = new StaticSite();

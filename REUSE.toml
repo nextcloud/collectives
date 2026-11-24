@@ -40,3 +40,9 @@ path = ["img/collectives-dark.svg", "img/collectives.svg", "img/folder-collectiv
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2021 Jörg Schmidt of Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["img/theme-preview-topnav.svg", "img/theme-preview-wiki.svg"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"

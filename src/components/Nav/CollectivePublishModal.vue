@@ -337,7 +337,7 @@ export default {
 			this.selectedStaticSiteId = staticSite.id
 			this.title = staticSite.title
 			this.slug = staticSite.slug
-			this.theme = staticSite.theme ?? THEME_WIKI
+			this.theme = staticSite.theme
 			// Pages may have been deleted or moved since the last publication:
 			// drop deleted ones and add ancestor pages of the remaining ones
 			const pageIds = new Set(this.allPageIds)

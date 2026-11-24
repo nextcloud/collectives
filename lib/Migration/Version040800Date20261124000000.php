@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Migration;
 
 use Closure;
-use OCA\Collectives\Db\StaticSite;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
 use OCP\Migration\IOutput;
@@ -33,7 +32,9 @@ class Version040800Date20261124000000 extends SimpleMigrationStep {
 		$table->addColumn('theme', Types::STRING, [
 			'notnull' => true,
 			'length' => 32,
-			'default' => StaticSite::THEME_WIKI,
+			// Keep in sync with OCA\Collectives\Db\StaticSite::THEME_WIKI — migrations must not
+			// depend on live entity classes, which can change independently of past migrations.
+			'default' => 'wiki',
 		]);
 
 		return $schema;

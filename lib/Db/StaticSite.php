@@ -67,7 +67,8 @@ class StaticSite extends Entity implements JsonSerializable {
 	// The publish service was requested to delete the published static site
 	public const STATUS_DELETING = 'deleting';
 
-	// Rendering of the website by the publish service: a page tree sidebar or a top navigation bar
+	// Rendering of the website by the publish service: a page tree sidebar or a top navigation bar.
+	// Keep in sync with the theme literal in ResponseDefinitions.php and src/util/staticSiteTheme.js
 	public const THEME_WIKI = 'wiki';
 	public const THEME_TOPNAV = 'topnav';
 	public const ALLOWED_THEMES = [self::THEME_WIKI, self::THEME_TOPNAV];

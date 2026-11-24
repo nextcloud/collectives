@@ -53,32 +53,22 @@
 				{{ t('collectives', 'Theme') }}
 			</span>
 			<div class="publish-settings-form__themes" role="radiogroup" :aria-labelledby="themeLabelId">
-				<label class="theme-option" :class="{ 'theme-option--selected': theme === THEME_WIKI }">
+				<label
+					v-for="option in themeOptions"
+					:key="option.value"
+					class="theme-option"
+					:class="{ 'theme-option--selected': theme === option.value }">
 					<input
 						type="radio"
 						class="theme-option__input"
-						name="theme"
-						:value="THEME_WIKI"
-						:checked="theme === THEME_WIKI"
-						@change="$emit('update:theme', THEME_WIKI)">
-					<img class="theme-option__preview" :src="themePreviewWiki" alt="">
-					<strong class="theme-option__title">{{ t('collectives', 'Wiki') }}</strong>
+						:name="themeName"
+						:value="option.value"
+						:checked="theme === option.value"
+						@change="$emit('update:theme', option.value)">
+					<img class="theme-option__preview" :src="option.preview" alt="">
+					<strong class="theme-option__title">{{ option.title }}</strong>
 					<span class="theme-option__description">
-						{{ t('collectives', 'Page tree in a sidebar, like in Collectives. Good for many pages.') }}
-					</span>
-				</label>
-				<label class="theme-option" :class="{ 'theme-option--selected': theme === THEME_TOPNAV }">
-					<input
-						type="radio"
-						class="theme-option__input"
-						name="theme"
-						:value="THEME_TOPNAV"
-						:checked="theme === THEME_TOPNAV"
-						@change="$emit('update:theme', THEME_TOPNAV)">
-					<img class="theme-option__preview" :src="themePreviewTopnav" alt="">
-					<strong class="theme-option__title">{{ t('collectives', 'Menu bar') }}</strong>
-					<span class="theme-option__description">
-						{{ t('collectives', 'Top-level pages in a menu bar. Good for a few main pages.') }}
+						{{ option.description }}
 					</span>
 				</label>
 			</div>
@@ -90,8 +80,8 @@
 import { t } from '@nextcloud/l10n'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcTextField from '@nextcloud/vue/components/NcTextField'
-import themePreviewTopnav from '../../../img/theme-preview-topnav.svg'
-import themePreviewWiki from '../../../img/theme-preview-wiki.svg'
+import themePreviewTopnav from '../../../img/theme-preview-topnav.svg?url'
+import themePreviewWiki from '../../../img/theme-preview-wiki.svg?url'
 import uniqueIdMixin from '../../mixins/uniqueIdMixin.js'
 import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
 import { THEME_TOPNAV, THEME_WIKI } from '../../util/staticSiteTheme.js'
@@ -151,10 +141,21 @@ export default {
 			titleId: `publish-settings-title-${this.uniqueId}`,
 			titleMaxLength: TITLE_MAX_LENGTH,
 			themeLabelId: `publish-settings-theme-${this.uniqueId}`,
-			themePreviewTopnav,
-			themePreviewWiki,
-			THEME_TOPNAV,
-			THEME_WIKI,
+			themeName: `publish-settings-theme-${this.uniqueId}`,
+			themeOptions: [
+				{
+					value: THEME_WIKI,
+					preview: themePreviewWiki,
+					title: t('collectives', 'Wiki'),
+					description: t('collectives', 'Page tree in a sidebar, like in Collectives. Good for many pages.'),
+				},
+				{
+					value: THEME_TOPNAV,
+					preview: themePreviewTopnav,
+					title: t('collectives', 'Menu bar'),
+					description: t('collectives', 'Top-level pages in a menu bar. Good for a few main pages.'),
+				},
+			],
 		}
 	},
 
@@ -189,6 +190,7 @@ export default {
 	padding-block: 16px;
 	padding-inline: 4px;
 	overflow-y: auto;
+	container-type: inline-size;
 
 	&__field {
 		display: flex;
