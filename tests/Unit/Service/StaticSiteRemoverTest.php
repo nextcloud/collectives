@@ -221,4 +221,53 @@ class StaticSiteRemoverTest extends TestCase {
 
 		$this->remover->removeAllOfCollective(42);
 	}
+
+	public function testRemoveAllOrphanedRetriesStaticSitesThatAreNotInProgress(): void {
+		$now = 1800000000;
+		$failed = $this->makeStaticSite(published: false);
+		$failed->setUpdatedAt($now - 60);
+		$deleting = $this->makeStaticSite(published: true);
+		$deleting->setId(8);
+		$deleting->setStatus(StaticSite::STATUS_DELETING);
+		$deleting->setUpdatedAt($now - 60);
+		$abortedDeleting = $this->makeStaticSite(published: true);
+		$abortedDeleting->setId(9);
+		$abortedDeleting->setStatus(StaticSite::STATUS_DELETING);
+		$abortedDeleting->setUpdatedAt($now - StaticSite::PENDING_TIMEOUT - 1);
+		$this->staticSiteMapper->method('findAllOrphaned')->willReturn([$failed, $deleting, $abortedDeleting]);
+
+		$this->staticSiteMapper->expects($this->once())->method('delete')->with($failed);
+		// The deletion in progress waits for its callback or timeout
+		$this->staticSiteMapper->expects($this->once())
+			->method('startDeletion')
+			->with($abortedDeleting)
+			->willReturn(true);
+		$this->generatorClient->expects($this->once())->method('delete')->willReturn(true);
+
+		$this->remover->removeAllOrphaned($now);
+	}
+
+	public function testRemoveAllOrphanedContinuesIfAStaticSiteCannotBeDeleted(): void {
+		$published = $this->makeStaticSite(published: true);
+		$published->setUpdatedAt(0);
+		$neverPublished = $this->makeStaticSite(published: false);
+		$neverPublished->setId(8);
+		$neverPublished->setUpdatedAt(0);
+		$this->staticSiteMapper->method('findAllOrphaned')->willReturn([$published, $neverPublished]);
+		$this->generatorClient->method('assertConfigured')
+			->willThrowException(new StaticSiteGeneratorNotConfiguredException('Not configured'));
+		$this->staticSiteMapper->expects($this->once())->method('delete')->with($neverPublished);
+		$this->logger->expects($this->once())
+			->method('warning')
+			->with('Failed to delete static site of collective');
+
+		$this->remover->removeAllOrphaned(1800000000);
+	}
+
+	public function testRemoveAllOrphanedDoesNotThrowIfStaticSitesCannotBeFound(): void {
+		$this->staticSiteMapper->method('findAllOrphaned')->willThrowException($this->createMock(DBException::class));
+		$this->logger->expects($this->once())->method('warning');
+
+		$this->remover->removeAllOrphaned(1800000000);
+	}
 }

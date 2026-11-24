@@ -105,7 +105,10 @@ class StaticSiteGeneratorClient {
 	 */
 	public function delete(StaticSite $staticSite): bool {
 		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
-		$response = $this->request('DELETE', $path, ['data' => ['callback_status_url' => $this->getCallbackUrl($staticSite)]]);
+		$response = $this->request('DELETE', $path, ['data' => [
+			'build_id' => $staticSite->getBuildId(),
+			'callback_status_url' => $this->getCallbackUrl($staticSite),
+		]]);
 		if ($response->getStatusCode() === Http::STATUS_NOT_FOUND) {
 			return false;
 		}

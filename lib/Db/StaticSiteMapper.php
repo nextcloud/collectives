@@ -52,6 +52,22 @@ class StaticSiteMapper extends QBMapper {
 	}
 
 	/**
+	 * Orphaned static sites: their collective doesn't exist anymore, e.g. as deleting them at the
+	 * static site generator failed when the collective got purged.
+	 *
+	 * @return StaticSite[]
+	 * @throws Exception
+	 */
+	public function findAllOrphaned(): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('s.*')
+			->from($this->tableName, 's')
+			->leftJoin('s', 'collectives', 'c', $qb->expr()->eq('s.collective_id', 'c.id'))
+			->where($qb->expr()->isNull('c.id'));
+		return $this->findEntities($qb);
+	}
+
+	/**
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws Exception

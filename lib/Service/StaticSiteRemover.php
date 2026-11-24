@@ -80,7 +80,8 @@ class StaticSiteRemover {
 	 * Delete all static sites of a collective, e.g. when it gets purged.
 	 *
 	 * Doesn't throw, as purging must not fail. Static sites that can't be deleted at the static
-	 * site generator right now are kept, so their slugs stay reserved until deleting them is retried.
+	 * site generator right now are kept, so their slugs stay reserved until the DeleteOrphanedStaticSites
+	 * background job deleted them.
 	 */
 	public function removeAllOfCollective(int $collectiveId): void {
 		try {
@@ -89,7 +90,30 @@ class StaticSiteRemover {
 			$this->logger->warning('Failed to find static sites of collective to delete them', ['collectiveId' => $collectiveId, 'exception' => $e]);
 			return;
 		}
+		$this->removeEach($staticSites);
+	}
 
+	/**
+	 * Retry deleting the static sites of collectives that got purged, as nobody can delete them
+	 * manually anymore. Static sites that are being deleted are left alone until their deletion
+	 * is concluded or aborted.
+	 *
+	 * Doesn't throw, failures are retried next time.
+	 */
+	public function removeAllOrphaned(int $now): void {
+		try {
+			$staticSites = $this->staticSiteMapper->findAllOrphaned();
+		} catch (DBException $e) {
+			$this->logger->warning('Failed to find orphaned static sites', ['exception' => $e]);
+			return;
+		}
+		$this->removeEach(array_filter($staticSites, static fn (StaticSite $staticSite): bool => !$staticSite->isInProgress($now)));
+	}
+
+	/**
+	 * @param StaticSite[] $staticSites
+	 */
+	private function removeEach(array $staticSites): void {
 		foreach ($staticSites as $staticSite) {
 			try {
 				$this->remove($staticSite);

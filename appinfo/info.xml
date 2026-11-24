@@ -51,6 +51,7 @@ to structure shared knowledge and cultivate trust.
 
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\CleanupSessions</job>
+		<job>OCA\Collectives\BackgroundJob\DeleteOrphanedStaticSites</job>
 		<job>OCA\Collectives\BackgroundJob\ExpirePageTrash</job>
 		<job>OCA\Collectives\BackgroundJob\ExpirePageVersions</job>
 		<job>OCA\Collectives\BackgroundJob\IndexCollectives</job>

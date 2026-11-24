@@ -311,12 +311,16 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->create($this->makeStaticSite(), 'My Site');
 	}
 
-	public function testDeleteSendsCallbackUrlWithBearerToken(): void {
+	public function testDeleteSendsBuildIdAndCallbackUrlWithBearerToken(): void {
+		$expectedData = [
+			'build_id' => $this->buildId,
+			'callback_status_url' => 'https://cloud.example.org/callback',
+		];
 		$this->httpClient->expects(self::once())
 			->method('request')
 			->with('DELETE', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, self::callback(static fn (array $options): bool
 				=> $options['headers']['Authorization'] === 'Bearer secret-token'
-				&& $options['json'] === ['data' => ['callback_status_url' => 'https://cloud.example.org/callback']]))
+				&& $options['json'] === ['data' => $expectedData]))
 			->willReturn($this->makeResponse(202, ''));
 
 		$this->assertTrue($this->client->delete($this->makeStaticSite()));
