@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getCapabilities } from '@nextcloud/capabilities'
 import { circlesMemberTypes } from '../constants.js'
 
 type Circle = {
@@ -59,4 +60,12 @@ export function sortMembersByLevelAndType(m1: CircleMember, m2: CircleMember): n
 
 	// Sort by display name
 	return m1.displayName.localeCompare(m2.displayName)
+}
+
+/**
+ * Check whether the Circles app provides its own members management UI (v35+).
+ */
+export function hasMembersManagementInCircles(): boolean {
+	const version = (getCapabilities() as { circles?: { version?: string } })?.circles?.version
+	return version ? parseInt(version.split('.')[0], 10) >= 35 : false
 }
