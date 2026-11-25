@@ -127,7 +127,6 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/AGENTS.md" \
 		--exclude="$(APP_NAME)/Makefile" \
 		--exclude="$(APP_NAME)/TODO*" \
-		--exclude="$(APP_NAME)/babel.config.cjs" \
 		--exclude="$(APP_NAME)/build" \
 		--exclude="$(APP_NAME)/composer.*" \
 		--exclude="$(APP_NAME)/cypress" \
