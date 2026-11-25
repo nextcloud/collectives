@@ -4,9 +4,9 @@
 -->
 
 <template>
-	<NcAppContent>
-		<CollectivePrint v-if="currentCollective" />
-		<NcEmptyContent v-else-if="loading('collectives')" />
+	<CollectivePrint v-if="currentCollective" />
+	<NcAppContent v-else>
+		<NcEmptyContent v-if="loading('collectives')" />
 		<CollectiveNotFound v-else />
 	</NcAppContent>
 </template>

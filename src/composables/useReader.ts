@@ -72,7 +72,9 @@ export function useReader(content: Ref<string>) {
 
 	useSearch(reader)
 
+	let unmounted = false
 	onBeforeUnmount(() => {
+		unmounted = true
 		reader.value?.destroy()
 	})
 
@@ -144,6 +146,12 @@ export function useReader(content: Ref<string>) {
 				pagesStore.setReaderEmbeddedAttachmentSrcs(attachmentSrcs)
 			},
 		})
+
+		// The component got unmounted while the editor was created
+		if (unmounted) {
+			readerInstance.destroy()
+			return
+		}
 
 		// Use markRaw to prevent Vue 3 from proxying the Vue 2 editor instance
 		reader.value = markRaw(readerInstance)

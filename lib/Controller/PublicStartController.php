@@ -117,7 +117,7 @@ class PublicStartController extends AuthPublicShareController {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[AnonRateLimit(limit: 10, period: 60)]
-	public function showShare(): PublicTemplateResponse {
+	public function showShare(string $path = ''): PublicTemplateResponse {
 		if ($appsMissing = $this->checkDependencies()) {
 			return new PublicTemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
@@ -132,11 +132,14 @@ class PublicStartController extends AuthPublicShareController {
 			'token' => $this->getToken(),
 		]);
 		$response->setFooterVisible(false);
-		$this->setHeader($response);
+		$this->setHeader($response, str_starts_with($path, 'print/'));
 		return $response;
 	}
 
-	private function setHeader(PublicTemplateResponse $response): void {
+	/**
+	 * @param bool $isPrintView The print view has its own export button, so it gets no header actions
+	 */
+	private function setHeader(PublicTemplateResponse $response, bool $isPrintView): void {
 		try {
 			$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			$collective = $this->collectiveService->getCollective($share->getCollectiveId(), $share->getOwner());
@@ -146,6 +149,9 @@ class PublicStartController extends AuthPublicShareController {
 
 		$emoji = $collective->getEmoji();
 		$response->setHeaderTitle($emoji ? $emoji . ' ' . $collective->getName() : $collective->getName());
+		if ($isPrintView) {
+			return;
+		}
 		$response->setHeaderActions([
 			new SimpleMenuAction(
 				'print',
