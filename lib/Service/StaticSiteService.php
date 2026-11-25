@@ -214,10 +214,9 @@ class StaticSiteService {
 	 * Not while a static site of the collective is being published or deleted, as only one
 	 * request per collective may run at a time.
 	 *
-	 * Returns the static site being deleted as stored now, as its deletion got a new build ID and update time.
-	 *
 	 * @return ?StaticSite Null if the static site got deleted, otherwise the static site being deleted,
-	 *                     gets loaded again from the database to include its new status and update time
+	 *                     is loaded again from the database to include its new status and update time
+	 *
 	 * @throws NotFoundException Collective or static site not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
 	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published or deleted
