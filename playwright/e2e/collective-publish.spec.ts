@@ -527,6 +527,58 @@ test.describe('Collective publish', () => {
 		await expect(review).toBeVisible()
 	})
 
+	test('retries a failed update with the pages and title of the last attempt', async ({ collective, navigation, page, user }) => {
+		const rootPageId = collective.getRootPage().data.id
+		const childPage = await collective.createPage({ title: 'Child page', user, page })
+		const staticSite = {
+			id: 1,
+			title: 'New website title',
+			slug: 'published-website',
+			theme: 'wiki',
+			selectedPageIds: [rootPageId, childPage.data.id],
+			publishedTitle: 'Published website',
+			publishedSelectedPageIds: [rootPageId],
+			publishedUrl: 'https://example.org/published-website',
+			publishedAt: timestamp(7200),
+			status: 'failed',
+			isInProgress: false,
+			lastError: 'generator_unavailable',
+			updatedAt: timestamp(60),
+		}
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: ocsResponse([staticSite]) })
+		})
+		let sentBody: { pageIds: number[], title: string, slug: string, theme: string } | null = null
+		await page.route(`**/static-sites/${staticSite.id}`, async (route) => {
+			if (route.request().method() !== 'PUT') {
+				return route.fallback()
+			}
+			sentBody = route.request().postDataJSON()
+			await route.fulfill({ json: ocsResponse({ ...staticSite, status: 'provided', isInProgress: true, secondsUntilTimeout: 900 }) })
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const review = page.getByRole('dialog', { name: 'Retry publishing website "New website title"?' })
+
+		await websiteCard(page, staticSite.title).getByRole('button', { name: 'Retry publishing website New website title' }).click()
+		// The pages of the last attempt, not those online
+		await expect(review).toContainText('These 2 pages go online at https://example.org/published-website:')
+		await expect(review.getByRole('listitem')).toHaveText(['Home', 'Child page'])
+
+		await review.getByRole('button', { name: 'Publish' }).click()
+		await expect(review).toHaveCount(0)
+		await expect(getToast(page, 'success', 'Website publishing started')).toBeVisible()
+		expect(sentBody).not.toBeNull()
+		expect(sentBody!.title).toBe('New website title')
+		expect(sentBody!.theme).toBe('wiki')
+		expect(sentBody!.pageIds).toEqual(expect.arrayContaining([rootPageId, childPage.data.id]))
+		expect(sentBody!.pageIds).toHaveLength(2)
+	})
+
 	test('creates a new website with a web address not used in the collective yet', async ({ collective, navigation, page }) => {
 		const staticSite = {
 			id: 1,
