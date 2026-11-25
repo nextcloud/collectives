@@ -15,6 +15,8 @@ export function staticSiteErrorMessage(lastError) {
 	switch (lastError) {
 		case 'generator_unavailable':
 			return t('collectives', 'The publish service is currently not available. Please try again later.')
+		case 'generator_busy':
+			return t('collectives', 'The publish service is still processing a previous request for this website. Please try again in a few minutes.')
 		case 'generator_rejected':
 			return t('collectives', 'The publish service could not process the request. Please contact your administrator.')
 		case 'generator_failed':

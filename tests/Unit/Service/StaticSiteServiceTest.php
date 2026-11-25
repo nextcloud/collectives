@@ -23,9 +23,11 @@ use OCA\Collectives\Service\SlugService;
 use OCA\Collectives\Service\StaticSiteArchiver;
 use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteContentCollector;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorTimeoutException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSitePublicationInProgressException;
 use OCA\Collectives\Service\StaticSiteRemover;
@@ -861,9 +863,28 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')
 			->with(7, $this->collectiveId)
 			->willReturn($staticSite);
-		$this->remover->expects($this->once())->method('remove')->with($staticSite);
+		$this->remover->expects($this->once())->method('remove')->with($staticSite)->willReturn(false);
+		$deleting = $this->makeStaticSite(StaticSite::STATUS_DELETING);
+		$this->staticSiteMapper->expects($this->once())->method('find')->with($staticSite->getId())->willReturn($deleting);
 
-		$this->service->delete($this->collectiveId, 7, $this->userId);
+		$this->assertSame($deleting, $this->service->delete($this->collectiveId, 7, $this->userId));
+	}
+
+	public function testDeleteReturnsNullIfStatusCallbackDeletedStaticSiteMeanwhile(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$this->remover->method('remove')->willReturn(false);
+		$this->staticSiteMapper->method('find')->willThrowException(new DoesNotExistException('Not found'));
+
+		$this->assertNull($this->service->delete($this->collectiveId, 7, $this->userId));
+	}
+
+	public function testDeleteReturnsNullIfStaticSiteGotDeletedRightAway(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$this->remover->method('remove')->willReturn(true);
+
+		$this->assertNull($this->service->delete($this->collectiveId, 7, $this->userId));
 	}
 
 	public static function deleteInProgressStatusProvider(): array {
@@ -1101,12 +1122,14 @@ class StaticSiteServiceTest extends TestCase {
 	public static function generatorFailureProvider(): array {
 		return [
 			'rejected' => [new StaticSiteGeneratorException('Rejected'), StaticSite::ERROR_GENERATOR_REJECTED, true],
-			'unavailable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, false],
+			'busy' => [new StaticSiteGeneratorBusyException('Busy'), StaticSite::ERROR_GENERATOR_BUSY, true],
+			'not reachable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, true],
+			'no answer' => [new StaticSiteGeneratorTimeoutException('Timeout'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, false],
 		];
 	}
 
 	/**
-	 * The archive of an unavailable generator is kept, as the generator may have accepted the build anyway
+	 * The archive is kept if the generator didn't answer, as it may have accepted the build anyway
 	 *
 	 * @dataProvider generatorFailureProvider
 	 */
@@ -1170,12 +1193,12 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
 
-	public function testUpdateStoresStatusFailedIfGeneratorIsUnavailable(): void {
+	public function testUpdateStoresStatusFailedIfGeneratorDidNotAnswer(): void {
 		$this->expectValidCollectiveWithPages();
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 		$this->staticSiteMapper->method('startBuild')->willReturn(true);
-		$this->generatorClient->method('create')->willThrowException(new StaticSiteGeneratorUnavailableException('Unavailable'));
+		$this->generatorClient->method('create')->willThrowException(new StaticSiteGeneratorTimeoutException('Timeout'));
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateRequestStatus')

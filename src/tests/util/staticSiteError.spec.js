@@ -13,6 +13,7 @@ describe('staticSiteErrorMessage', () => {
 		['generator_unavailable', 'The publish service is currently not available. Please try again later.'],
 		['generator_rejected', 'The publish service could not process the request. Please contact your administrator.'],
 		['generator_failed', 'The publish service could not build the website. Please contact your administrator.'],
+		['generator_busy', 'The publish service is still processing a previous request for this website. Please try again in a few minutes.'],
 		['generator_invalid_url', 'The publish service reported an invalid web address. Please contact your administrator.'],
 		['generator_delete_failed', 'The publish service could not delete the website. Please try again later.'],
 	])('translates %j', (lastError, message) => {

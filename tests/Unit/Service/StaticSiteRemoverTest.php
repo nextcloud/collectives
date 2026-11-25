@@ -14,9 +14,11 @@ use OCA\Collectives\Db\StaticSiteMapper;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\ServiceException;
 use OCA\Collectives\Service\StaticSiteArchiver;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorTimeoutException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteRemover;
 use OCA\Collectives\Service\UnprocessableEntityException;
@@ -87,7 +89,7 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('deleteIfCurrentBuild');
 		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
 
-		$this->remover->remove($staticSite);
+		$this->assertFalse($this->remover->remove($staticSite));
 	}
 
 	public static function publishedProvider(): array {
@@ -108,7 +110,17 @@ class StaticSiteRemoverTest extends TestCase {
 			->willReturn(true);
 		$this->archiver->expects($this->once())->method('deleteAll');
 
-		$this->remover->remove($staticSite);
+		$this->assertTrue($this->remover->remove($staticSite));
+	}
+
+	public function testRemoveRejectsStaticSiteUnknownToGeneratorThatChangedMeanwhile(): void {
+		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
+		$this->generatorClient->method('delete')->willReturn(false);
+		$this->staticSiteMapper->method('deleteIfCurrentBuild')->willReturn(false);
+		$this->archiver->expects($this->never())->method('deleteAll');
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 
 	public function testRemoveRejectsStaticSiteChangedMeanwhile(): void {
@@ -128,16 +140,27 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 
-	public function testRemoveRestoresStaticSiteIfGeneratorRejectsRequest(): void {
+	public static function notAcceptedExceptionProvider(): array {
+		return [
+			'rejected' => [new StaticSiteGeneratorException('Rejected')],
+			'busy' => [new StaticSiteGeneratorBusyException('Busy')],
+			'not reachable' => [new StaticSiteGeneratorUnavailableException('Unavailable')],
+		];
+	}
+
+	/**
+	 * @dataProvider notAcceptedExceptionProvider
+	 */
+	public function testRemoveRestoresStaticSiteIfGeneratorDoesNotAcceptRequest(StaticSiteGeneratorException $exception): void {
 		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
-		$this->generatorClient->method('delete')->willThrowException(new StaticSiteGeneratorException('Rejected'));
+		$this->generatorClient->method('delete')->willThrowException($exception);
 		$this->staticSiteMapper->expects($this->once())
 			->method('restoreStatus')
 			->with($this->callback(fn (StaticSite $previous): bool => $previous->getStatus() === StaticSite::STATUS_PUBLISHED
 				&& $previous->getBuildId() === $this->buildId));
 		$this->archiver->expects($this->never())->method('deleteAll');
 
-		$this->expectException(StaticSiteGeneratorException::class);
+		$this->expectException($exception::class);
 		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 
@@ -153,13 +176,13 @@ class StaticSiteRemoverTest extends TestCase {
 	/**
 	 * The generator may have accepted the request anyway
 	 */
-	public function testRemoveKeepsStaticSiteDeletingIfGeneratorIsUnavailable(): void {
+	public function testRemoveKeepsStaticSiteDeletingIfGeneratorDidNotAnswer(): void {
 		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
-		$this->generatorClient->method('delete')->willThrowException(new StaticSiteGeneratorUnavailableException('Unavailable'));
+		$this->generatorClient->method('delete')->willThrowException(new StaticSiteGeneratorTimeoutException('Timeout'));
 		$this->staticSiteMapper->expects($this->never())->method('restoreStatus');
 		$this->archiver->expects($this->never())->method('deleteAll');
 
-		$this->expectException(StaticSiteGeneratorUnavailableException::class);
+		$this->expectException(StaticSiteGeneratorTimeoutException::class);
 		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 
@@ -168,7 +191,7 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->staticSiteMapper->expects($this->once())->method('deleteIfCurrentBuild')->with($staticSite)->willReturn(true);
 		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
 
-		$this->remover->removeDeleted($staticSite);
+		$this->assertTrue($this->remover->removeDeleted($staticSite));
 	}
 
 	public function testRemoveDeletedKeepsStaticSiteIfAnotherRequestStarted(): void {
@@ -176,7 +199,7 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->archiver->expects($this->never())->method('deleteAll');
 		$this->logger->expects($this->once())->method('warning');
 
-		$this->remover->removeDeleted($this->makeStaticSite(published: true));
+		$this->assertFalse($this->remover->removeDeleted($this->makeStaticSite(published: true)));
 	}
 
 	public function testRemoveSucceedsIfArchivesCannotBeDeleted(): void {

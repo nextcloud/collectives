@@ -12,6 +12,7 @@ namespace Unit\Controller;
 use OCA\Collectives\Controller\StaticSiteController;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Service\ServiceException;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
@@ -130,6 +131,11 @@ class StaticSiteControllerTest extends TestCase {
 				Http::STATUS_SERVICE_UNAVAILABLE,
 				'The publish service is currently not available. Please try again later.',
 			],
+			'busy' => [
+				new StaticSiteGeneratorBusyException('Busy'),
+				Http::STATUS_LOCKED,
+				'The publish service is still processing a previous request for this website. Please try again in a few minutes.',
+			],
 			'rejected' => [
 				new StaticSiteGeneratorException('Rejected'),
 				Http::STATUS_BAD_GATEWAY,
@@ -164,13 +170,24 @@ class StaticSiteControllerTest extends TestCase {
 		$this->controller->create(42, [1]);
 	}
 
-	public function testDeleteReturnsEmptyResponse(): void {
-		$this->staticSiteService->expects($this->once())->method('delete')->with(42, 7);
+	public function testDeleteReturnsEmptyResponseIfStaticSiteGotDeleted(): void {
+		$this->staticSiteService->expects($this->once())->method('delete')->with(42, 7)->willReturn(null);
 
 		$response = $this->controller->delete(42, 7);
 
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 		$this->assertSame([], $response->getData());
+	}
+
+	public function testDeleteReturnsStaticSiteBeingDeleted(): void {
+		$staticSite = new StaticSite();
+		$staticSite->setStatus(StaticSite::STATUS_DELETING);
+		$this->staticSiteService->method('delete')->willReturn($staticSite);
+
+		$response = $this->controller->delete(42, 7);
+
+		$this->assertSame(Http::STATUS_ACCEPTED, $response->getStatus());
+		$this->assertSame($staticSite, $response->getData());
 	}
 
 	/**

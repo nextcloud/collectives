@@ -214,6 +214,9 @@ class StaticSiteService {
 	 * Not while a static site of the collective is being published or deleted, as only one
 	 * request per collective may run at a time.
 	 *
+	 * @return ?StaticSite Null if the static site got deleted, otherwise the static site being deleted,
+	 *                     is loaded again from the database to include its new status and update time
+	 *
 	 * @throws NotFoundException Collective or static site not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
 	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published or deleted
@@ -221,12 +224,21 @@ class StaticSiteService {
 	 * @throws StaticSiteGeneratorException Generator not configured, unavailable or didn't accept the request
 	 * @throws DBException
 	 */
-	public function delete(int $collectiveId, int $id, string $userId): void {
+	public function delete(int $collectiveId, int $id, string $userId): ?StaticSite {
 		$this->getEditableCollective($collectiveId, $userId);
 
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
 		$this->assertNoPublicationInProgress($collectiveId);
-		$this->remover->remove($staticSite);
+		if ($this->remover->remove($staticSite)) {
+			return null;
+		}
+
+		try {
+			return $this->staticSiteMapper->find($staticSite->getId());
+		} catch (DoesNotExistException) {
+			// The status callback of the deletion arrived already
+			return null;
+		}
 	}
 
 	/**
@@ -468,19 +480,21 @@ class StaticSiteService {
 	/**
 	 * Store status failed, so publishing can be retried later.
 	 *
-	 * A rejected build never downloads its archive, so it is deleted. If the generator was
-	 * unavailable or timed out, it may have accepted the build anyway, so the archive is kept.
+	 * A build the generator didn't accept never downloads its archive, so it is deleted. If the
+	 * generator didn't answer after the request was sent, it may have accepted the build anyway,
+	 * so the archive is kept.
 	 *
 	 * @throws NotFoundException Static site was deleted meanwhile
 	 * @throws DBException
 	 */
 	private function storeGeneratorFailure(StaticSite $staticSite, StaticSiteGeneratorException $e): void {
-		$unavailable = $e instanceof StaticSiteGeneratorUnavailableException;
-		$lastError = $unavailable
-			? StaticSite::ERROR_GENERATOR_UNAVAILABLE
-			: StaticSite::ERROR_GENERATOR_REJECTED;
+		$lastError = match (true) {
+			$e instanceof StaticSiteGeneratorUnavailableException => StaticSite::ERROR_GENERATOR_UNAVAILABLE,
+			$e instanceof StaticSiteGeneratorBusyException => StaticSite::ERROR_GENERATOR_BUSY,
+			default => StaticSite::ERROR_GENERATOR_REJECTED,
+		};
 		$this->concludeRequest($staticSite, StaticSite::STATUS_FAILED, $lastError);
-		if (!$unavailable) {
+		if (!$e instanceof StaticSiteGeneratorTimeoutException) {
 			$this->deleteArchive($staticSite, $staticSite->getBuildId());
 		}
 	}

@@ -59,6 +59,19 @@ export function updateStaticSite(collectiveId, id, pageIds, title, slug, theme) 
 }
 
 /**
+ * Delete a static site, also at the publish service
+ *
+ * Answers 200 if the static site got deleted right away and 202 with the static site
+ * while the publish service deletes it.
+ *
+ * @param {number} collectiveId Id of the collective
+ * @param {number} id Id of the static site
+ */
+export function deleteStaticSite(collectiveId, id) {
+	return axios.delete(staticSitesApiUrl(collectiveId, id))
+}
+
+/**
  * Check whether the static site generator is reachable with the saved settings (admin only)
  */
 export function checkStaticSiteGeneratorHealth() {

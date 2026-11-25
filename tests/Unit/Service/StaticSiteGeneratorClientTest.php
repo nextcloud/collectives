@@ -10,15 +10,20 @@ declare(strict_types=1);
 namespace Unit\Service;
 
 use Exception;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Request;
 use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\StaticSite;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorTimeoutException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
+use OCP\Http\Client\LocalServerException;
 use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -119,7 +124,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	}
 
 	public function testCheckHealthNotReachable(): void {
-		$this->httpClient->method('request')->willThrowException(new Exception('Connection refused'));
+		$this->httpClient->method('request')->willThrowException(self::makeConnectException(0.0));
 
 		$this->expectException(StaticSiteGeneratorException::class);
 		$this->expectExceptionMessage('The static site generator is not reachable');
@@ -283,14 +288,48 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
-	/**
-	 * @dataProvider sendMethodProvider
-	 */
-	public function testSendWithSsgNotReachable(string $method): void {
-		$this->httpClient->method('request')->willThrowException(new Exception('Connection timed out'));
+	public static function notSentProvider(): array {
+		return [
+			'create, not reachable' => ['create', self::makeConnectException(0.0)],
+			'update, not reachable' => ['update', self::makeConnectException(0.0)],
+			'create, local address blocked' => ['create', new LocalServerException('Host "ssg" violates local access rules')],
+			'update, local address blocked' => ['update', new LocalServerException('Host "ssg" violates local access rules')],
+		];
+	}
 
-		$this->expectException(StaticSiteGeneratorUnavailableException::class);
-		$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
+	/**
+	 * @dataProvider notSentProvider
+	 */
+	public function testSendWithSsgNotReachable(string $method, Exception $exception): void {
+		$this->httpClient->method('request')->willThrowException($exception);
+
+		try {
+			$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
+			$this->fail('Expected StaticSiteGeneratorUnavailableException');
+		} catch (StaticSiteGeneratorUnavailableException $e) {
+			$this->assertNotInstanceOf(StaticSiteGeneratorTimeoutException::class, $e);
+		}
+	}
+
+	public static function noAnswerExceptionProvider(): array {
+		return [
+			'timed out after sending' => [self::makeConnectException(0.01)],
+			'unknown transfer error' => [new Exception('Connection closed')],
+		];
+	}
+
+	/**
+	 * @dataProvider noAnswerExceptionProvider
+	 */
+	public function testDeleteWithoutAnswer(Exception $exception): void {
+		$this->httpClient->method('request')->willThrowException($exception);
+
+		$this->expectException(StaticSiteGeneratorTimeoutException::class);
+		$this->client->delete($this->makeStaticSite());
+	}
+
+	private static function makeConnectException(float $pretransferTime): ConnectException {
+		return new ConnectException('cURL error', new Request('DELETE', 'https://ssg.example.org/static-sites/'), null, ['pretransfer_time' => $pretransferTime]);
 	}
 
 	public static function unavailableResponseProvider(): array {
@@ -318,6 +357,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			'create, not accepted' => ['create', 200, ''],
 			'update, invalid' => ['update', 422, ''],
 			'update, created' => ['update', 201, ''],
+			'update, outdated build' => ['update', 409, '{"data": {"error_message": "build_id not newer"}}'],
 		];
 	}
 
@@ -332,7 +372,27 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			$this->fail('Expected StaticSiteGeneratorException');
 		} catch (StaticSiteGeneratorException $e) {
 			$this->assertNotInstanceOf(StaticSiteGeneratorUnavailableException::class, $e);
+			$this->assertNotInstanceOf(StaticSiteGeneratorBusyException::class, $e);
 		}
+	}
+
+	public function testUpdateWhileGeneratorIsBusy(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(409, '{"data": {"error_message": "operation in progress"}}'));
+
+		$this->expectException(StaticSiteGeneratorBusyException::class);
+		$this->client->update($this->makeStaticSite(), 'My Site', 'wiki');
+	}
+
+	public function testCreateWhileGeneratorIsBusyWithKnownStaticSite(): void {
+		$this->httpClient->expects(self::exactly(2))
+			->method('request')
+			->willReturnOnConsecutiveCalls(
+				$this->makeResponse(409, '{"data": {"error_message": "static site already exists"}}'),
+				$this->makeResponse(409, '{"data": {"error_message": "operation in progress"}}'),
+			);
+
+		$this->expectException(StaticSiteGeneratorBusyException::class);
+		$this->client->create($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testSendLogsErrorOfGenerator(): void {
@@ -371,6 +431,24 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->method('request')->willReturn($this->makeResponse(503, ''));
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
+		$this->client->delete($this->makeStaticSite());
+	}
+
+	public function testDeleteWithBlockedLocalAddress(): void {
+		$this->httpClient->method('request')->willThrowException(new LocalServerException('Host "ssg" violates local access rules'));
+
+		try {
+			$this->client->delete($this->makeStaticSite());
+			$this->fail('Expected StaticSiteGeneratorUnavailableException');
+		} catch (StaticSiteGeneratorUnavailableException $e) {
+			$this->assertNotInstanceOf(StaticSiteGeneratorTimeoutException::class, $e);
+		}
+	}
+
+	public function testDeleteWhileGeneratorIsBusy(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(409, '{"data": {"error_message": "operation in progress"}}'));
+
+		$this->expectException(StaticSiteGeneratorBusyException::class);
 		$this->client->delete($this->makeStaticSite());
 	}
 

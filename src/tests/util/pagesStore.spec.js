@@ -18,6 +18,7 @@ vi.mock('@nextcloud/router', () => ({
 	generateUrl: (path) => `/${path}`,
 }))
 vi.mock('@vueuse/core', () => ({
+	StorageSerializers: { number: {} },
 	useLocalStorage: (key, initialValue) => ref(initialValue),
 	useSessionStorage: (key, initialValue) => ref(initialValue),
 }))
@@ -62,5 +63,29 @@ describe('page ancestors', () => {
 
 	it('has no ancestors in a collective without pages', () => {
 		expect(store.pageAncestorIdsForCollective({ id: 2 }, 3)).toEqual([])
+	})
+})
+
+describe('page path in a collective', () => {
+	const otherCollective = { id: 2, name: 'Other collective', slug: 'other-collective' }
+
+	beforeEach(() => {
+		setActivePinia(createPinia())
+	})
+
+	it('links the landing page to the collective', () => {
+		expect(usePagesStore().pagePathInCollective(otherCollective, { id: 5, parentId: 0, slug: 'readme' }))
+			.toBe('/other-collective-2')
+	})
+
+	it('links a page by its slug', () => {
+		expect(usePagesStore().pagePathInCollective(otherCollective, { id: 6, parentId: 5, slug: 'meeting-notes' }))
+			.toBe('/other-collective-2/meeting-notes-6')
+	})
+
+	it('links a page without slug by its file path', () => {
+		const page = { id: 7, parentId: 5, filePath: 'Meetings', fileName: 'Retro.md', title: 'Retro' }
+		expect(usePagesStore().pagePathInCollective(otherCollective, page))
+			.toBe('/other-collective-2/Meetings/Retro?fileId=7')
 	})
 })

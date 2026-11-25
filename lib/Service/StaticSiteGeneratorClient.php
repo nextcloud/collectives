@@ -10,12 +10,14 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 use Exception;
+use GuzzleHttp\Exception\ConnectException;
 use JsonException;
 use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\StaticSite;
 use OCP\AppFramework\Http;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
+use OCP\Http\Client\LocalServerException;
 use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -31,6 +33,7 @@ class StaticSiteGeneratorClient {
 	private const CONNECT_TIMEOUT = 5;
 	private const STATIC_SITES_PATH = '/static-sites';
 	private const ERROR_SLUG_TAKEN = 'slug already taken';
+	private const ERROR_OPERATION_IN_PROGRESS = 'operation in progress';
 
 	public function __construct(
 		private readonly IClientService $clientService,
@@ -68,7 +71,9 @@ class StaticSiteGeneratorClient {
 	 * the slug is taken by another static site is a rejection.
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	public function create(StaticSite $staticSite, string $title, string $theme): void {
@@ -85,7 +90,9 @@ class StaticSiteGeneratorClient {
 	 * Falls back to creating it if the generator doesn't know it, e.g. if it was removed there.
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	public function update(StaticSite $staticSite, string $title, string $theme): void {
@@ -103,7 +110,9 @@ class StaticSiteGeneratorClient {
 	 * @return bool False if the generator doesn't know the static site
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	public function delete(StaticSite $staticSite): bool {
@@ -161,6 +170,7 @@ class StaticSiteGeneratorClient {
 
 	/**
 	 * @throws StaticSiteGeneratorUnavailableException Temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	private function assertAccepted(StaticSite $staticSite, IResponse $response): void {
@@ -169,21 +179,27 @@ class StaticSiteGeneratorClient {
 			return;
 		}
 
+		$error = $this->getErrorMessage($response);
 		// The error of the generator may contain technical details, so it's only logged
 		$this->logger->warning('Static site generator did not accept the request', [
 			'staticSiteId' => $staticSite->getStaticSiteId(),
 			'buildId' => $staticSite->getBuildId(),
 			'statusCode' => $statusCode,
-			'error' => $this->getErrorMessage($response),
+			'error' => $error,
 		]);
 		$message = $this->l10n->t('The static site generator did not accept the request (HTTP status %d)', [$statusCode]);
-		throw $statusCode >= 500
-			? new StaticSiteGeneratorUnavailableException($message)
-			: new StaticSiteGeneratorException($message);
+		if ($statusCode >= 500) {
+			throw new StaticSiteGeneratorUnavailableException($message);
+		}
+		if ($statusCode === Http::STATUS_CONFLICT && $error === self::ERROR_OPERATION_IN_PROGRESS) {
+			throw new StaticSiteGeneratorBusyException($message);
+		}
+		throw new StaticSiteGeneratorException($message);
 	}
 
 	/**
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable
 	 */
 	private function request(string $method, string $path, ?array $json = null): IResponse {
@@ -204,8 +220,24 @@ class StaticSiteGeneratorClient {
 			return $this->clientService->newClient()->request($method, $this->getBaseUrl() . $path, $options);
 		} catch (Exception $e) {
 			$this->logger->warning('Failed to reach static site generator', ['exception' => $e]);
-			throw new StaticSiteGeneratorUnavailableException($this->l10n->t('The static site generator is not reachable'), 0, $e);
+			if ($this->wasNotSent($e)) {
+				throw new StaticSiteGeneratorUnavailableException($this->l10n->t('The static site generator is not reachable'), 0, $e);
+			}
+			throw new StaticSiteGeneratorTimeoutException($this->l10n->t('The static site generator did not answer'), 0, $e);
 		}
+	}
+
+	/**
+	 * Whether the request failed before it was sent, e.g. as the host couldn't be resolved or
+	 * refused the connection, for which cURL reports no pretransfer time, or as Nextcloud blocks
+	 * requests to local addresses.
+	 */
+	private function wasNotSent(Exception $e): bool {
+		if ($e instanceof LocalServerException) {
+			return true;
+		}
+		return $e instanceof ConnectException
+			&& ($e->getHandlerContext()['pretransfer_time'] ?? 0) == 0;
 	}
 
 	private function getBaseUrl(): string {

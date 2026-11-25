@@ -76,6 +76,7 @@ class StaticSite extends Entity implements JsonSerializable {
 	// Reasons for status failed, translated by the frontend
 	public const ERROR_GENERATOR_UNAVAILABLE = 'generator_unavailable';
 	public const ERROR_GENERATOR_REJECTED = 'generator_rejected';
+	public const ERROR_GENERATOR_BUSY = 'generator_busy';
 	public const ERROR_GENERATOR_FAILED = 'generator_failed';
 	public const ERROR_GENERATOR_INVALID_URL = 'generator_invalid_url';
 	public const ERROR_GENERATOR_DELETE_FAILED = 'generator_delete_failed';
@@ -122,6 +123,15 @@ class StaticSite extends Entity implements JsonSerializable {
 	public function isInProgress(int $now): bool {
 		return in_array($this->status, self::IN_PROGRESS_STATUSES, true)
 			&& $this->updatedAt >= $now - self::PENDING_TIMEOUT;
+	}
+
+	/**
+	 * @return ?int Seconds until a request in progress counts as aborted, null if none is in progress
+	 */
+	public function getSecondsUntilTimeout(int $now): ?int {
+		return $this->isInProgress($now)
+			? $this->updatedAt + self::PENDING_TIMEOUT - $now
+			: null;
 	}
 
 	/**
@@ -192,6 +202,7 @@ class StaticSite extends Entity implements JsonSerializable {
 	 * `isInProgress` is evaluated with the server time, so clients don't need to know the timeout.
 	 */
 	public function jsonSerialize(): array {
+		$now = time();
 		return [
 			'id' => $this->id,
 			'collectiveId' => $this->collectiveId,
@@ -209,7 +220,8 @@ class StaticSite extends Entity implements JsonSerializable {
 			'publishedTitle' => $this->publishedTitle,
 			'publishedSelectedPageIds' => $this->getPublishedSelectedPageIds(),
 			'publishedBuildStartedAt' => $this->getPublishedBuildStartedAt(),
-			'isInProgress' => $this->isInProgress(time()),
+			'isInProgress' => $this->isInProgress($now),
+			'secondsUntilTimeout' => $this->getSecondsUntilTimeout($now),
 		];
 	}
 }

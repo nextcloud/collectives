@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, test, vi } from 'vitest'
-import { hasUnpublishedChanges, mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
+import { hasUnpublishedChanges, staticSiteFailureReason, staticSiteState, unpublishedChanges } from '../../util/staticSiteStatus.js'
 
 vi.mock('@nextcloud/l10n', () => ({ t: (_app, message) => message }))
 
@@ -17,6 +17,10 @@ describe('staticSiteState', () => {
 		// Aborted publications
 		[{ status: 'pending', isInProgress: false }, 'failed'],
 		[{ status: 'provided', isInProgress: false }, 'failed'],
+		[{ status: 'deleting', isInProgress: true }, 'deleting'],
+		[{ status: 'failed', isInProgress: false, lastError: 'generator_delete_failed' }, 'deleteFailed'],
+		// Aborted deletion
+		[{ status: 'deleting', isInProgress: false }, 'deleteFailed'],
 	])('returns the state of %j', (staticSite, state) => {
 		expect(staticSiteState(staticSite)).toBe(state)
 	})
@@ -67,6 +71,30 @@ describe('hasUnpublishedChanges', () => {
 	})
 })
 
+describe('unpublishedChanges', () => {
+	const staticSite = {
+		publishedSelectedPageIds: [1, 2, 3, 4],
+		publishedBuildStartedAt: 200,
+		publishedAt: 250,
+	}
+
+	test('returns edited published pages and counts deleted ones', () => {
+		const edited = { id: 2, timestamp: 201 }
+		expect(unpublishedChanges(staticSite, [{ id: 1, timestamp: 100 }, edited, { id: 5, timestamp: 300 }]))
+			.toEqual({ changedPages: [edited], deletedPageCount: 2 })
+	})
+
+	test('returns no changes for a static site that was never published', () => {
+		const unpublished = { publishedSelectedPageIds: null, publishedBuildStartedAt: null, publishedAt: null }
+		expect(unpublishedChanges(unpublished, [{ id: 1, timestamp: 300 }]))
+			.toEqual({ changedPages: [], deletedPageCount: 0 })
+	})
+
+	test('returns no changes without known pages', () => {
+		expect(unpublishedChanges(staticSite, [])).toEqual({ changedPages: [], deletedPageCount: 0 })
+	})
+})
+
 describe('staticSiteFailureReason', () => {
 	test('translates the error of a failed publication', () => {
 		expect(staticSiteFailureReason({ status: 'failed', lastError: 'generator_unavailable' }))
@@ -77,15 +105,14 @@ describe('staticSiteFailureReason', () => {
 		expect(staticSiteFailureReason({ status: 'provided', lastError: null }))
 			.toBe('The publish service didn\'t respond in time.')
 	})
-})
 
-describe('mostRecentlyUpdatedStaticSite', () => {
-	test('returns the static site with the newest updatedAt', () => {
-		const newest = { id: 2, updatedAt: 300 }
-		expect(mostRecentlyUpdatedStaticSite([{ id: 1, updatedAt: 100 }, newest, { id: 3, updatedAt: 200 }])).toBe(newest)
+	test('translates the error of a failed deletion', () => {
+		expect(staticSiteFailureReason({ status: 'failed', lastError: 'generator_delete_failed' }))
+			.toBe('The publish service could not delete the website. Please try again later.')
 	})
 
-	test('returns null without static sites', () => {
-		expect(mostRecentlyUpdatedStaticSite([])).toBeNull()
+	test('explains an aborted deletion', () => {
+		expect(staticSiteFailureReason({ status: 'deleting', lastError: null }))
+			.toBe('The publish service didn\'t respond in time.')
 	})
 })

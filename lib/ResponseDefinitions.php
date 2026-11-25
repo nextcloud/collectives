@@ -59,12 +59,13 @@ namespace OCA\Collectives;
  *     createdBy: string,
  *     createdAt: int,
  *     updatedAt: int,
- *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_failed'|'generator_invalid_url'|'generator_delete_failed'|null,
+ *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_busy'|'generator_failed'|'generator_invalid_url'|'generator_delete_failed'|null,
  *     publishedAt: ?int,
  *     publishedTitle: ?string,
  *     publishedSelectedPageIds: ?list<int>,
  *     publishedBuildStartedAt: ?int,
  *     isInProgress: bool,
+ *     secondsUntilTimeout: ?int,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{

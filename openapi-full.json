@@ -360,7 +360,8 @@
                     "publishedTitle",
                     "publishedSelectedPageIds",
                     "publishedBuildStartedAt",
-                    "isInProgress"
+                    "isInProgress",
+                    "secondsUntilTimeout"
                 ],
                 "properties": {
                     "id": {
@@ -415,6 +416,7 @@
                         "enum": [
                             "generator_unavailable",
                             "generator_rejected",
+                            "generator_busy",
                             "generator_failed",
                             "generator_invalid_url",
                             "generator_delete_failed"
@@ -444,6 +446,11 @@
                     },
                     "isInProgress": {
                         "type": "boolean"
+                    },
+                    "secondsUntilTimeout": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true
                     }
                 }
             },
@@ -4528,7 +4535,7 @@
             "delete": {
                 "operationId": "static_site-delete",
                 "summary": "Delete a static site",
-                "description": "A published static site is deleted at the publish service first. It keeps status deleting until the publish service reports it as deleted.",
+                "description": "The static site is deleted at the publish service first. It keeps status deleting until the publish service reports it as deleted. If the publish service doesn't know it, it is deleted right away.",
                 "tags": [
                     "static_site"
                 ],
@@ -4586,7 +4593,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Static site deleted or being deleted",
+                        "description": "Static site deleted",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4606,6 +4613,36 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "202": {
+                        "description": "Static site is being deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "$ref": "#/components/schemas/StaticSite"
+                                                }
                                             }
                                         }
                                     }
@@ -4731,8 +4768,8 @@
         "/ocs/v2.php/apps/collectives/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}/builds/{buildId}": {
             "patch": {
                 "operationId": "static_site_generator-update-status",
-                "summary": "Report the result of a build of a static site.",
-                "description": "Called by the external static site generator once a build finished. Not authenticated, the callback URL with the unguessable static site and build IDs authorizes it. Unknown static sites are throttled against guessing, unknown builds of a known static site aren't.",
+                "summary": "Report the result of a build or deletion of a static site.",
+                "description": "Called by the external static site generator once a build or deletion finished. Not authenticated, the callback URL with the unguessable static site and build IDs authorizes it. Unknown static sites are throttled against guessing, unknown builds of a known static site aren't.",
                 "tags": [
                     "static_site_generator"
                 ],
@@ -4755,7 +4792,7 @@
                                     "status": {
                                         "type": "string",
                                         "default": "",
-                                        "description": "Result of the build (\"published\" or \"failed\")"
+                                        "description": "Result of the build (\"published\" or \"failed\") or of the deletion (\"deleted\" or \"failed\")"
                                     },
                                     "data": {
                                         "type": "object",
@@ -4822,7 +4859,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Result of the build processed",
+                        "description": "Result of the build or deletion processed",
                         "content": {
                             "application/json": {
                                 "schema": {

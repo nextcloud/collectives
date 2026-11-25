@@ -5,6 +5,9 @@
 
 export const SLUG_MAX_LENGTH = 64
 
+// TODO(Publish): Use the base URL configured in the admin settings
+export const STATIC_SITE_ADDRESS_PREFIX = 'https://example.com/sites/'
+
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
 /**

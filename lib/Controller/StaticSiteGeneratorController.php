@@ -61,21 +61,21 @@ class StaticSiteGeneratorController extends OCSController {
 	}
 
 	/**
-	 * Report the result of a build of a static site.
+	 * Report the result of a build or deletion of a static site.
 	 *
-	 * Called by the external static site generator once a build finished. Not authenticated, the
+	 * Called by the external static site generator once a build or deletion finished. Not authenticated, the
 	 * callback URL with the unguessable static site and build IDs authorizes it. Unknown static
 	 * sites are throttled against guessing, unknown builds of a known static site aren't.
 	 *
 	 * @param string $staticSiteId ID of the static site
 	 * @param string $buildId ID of the build
-	 * @param string $status Result of the build ("published" or "failed")
+	 * @param string $status Result of the build ("published" or "failed") or of the deletion ("deleted" or "failed")
 	 * @param array{publish_url?: string, error_message?: string, build_id?: string} $data Status-specific result payload, `publish_url` is required for status "published": an http(s) URL of at most 255 characters, otherwise the publication is stored as failed. `build_id` is optional and must match the build of the URL
 	 *
 	 * @return DataResponse<Http::STATUS_OK|Http::STATUS_NOT_FOUND, list<empty>, array{}>
 	 * @throws OCSBadRequestException Invalid or missing status
 	 *
-	 * 200: Result of the build processed
+	 * 200: Result of the build or deletion processed
 	 * 404: Static site or build not found
 	 */
 	#[PublicPage]
