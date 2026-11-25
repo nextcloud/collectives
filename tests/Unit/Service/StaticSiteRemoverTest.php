@@ -87,7 +87,7 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->staticSiteMapper->expects($this->never())->method('deleteIfCurrentBuild');
 		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
 
-		$this->remover->remove($staticSite);
+		$this->assertFalse($this->remover->remove($staticSite));
 	}
 
 	public static function publishedProvider(): array {
@@ -108,7 +108,7 @@ class StaticSiteRemoverTest extends TestCase {
 			->willReturn(true);
 		$this->archiver->expects($this->once())->method('deleteAll');
 
-		$this->remover->remove($staticSite);
+		$this->assertTrue($this->remover->remove($staticSite));
 	}
 
 	public function testRemoveRejectsStaticSiteChangedMeanwhile(): void {
@@ -168,7 +168,7 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->staticSiteMapper->expects($this->once())->method('deleteIfCurrentBuild')->with($staticSite)->willReturn(true);
 		$this->archiver->expects($this->once())->method('deleteAll')->with($this->staticSiteId);
 
-		$this->remover->removeDeleted($staticSite);
+		$this->assertTrue($this->remover->removeDeleted($staticSite));
 	}
 
 	public function testRemoveDeletedKeepsStaticSiteIfAnotherRequestStarted(): void {
@@ -176,7 +176,7 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->archiver->expects($this->never())->method('deleteAll');
 		$this->logger->expects($this->once())->method('warning');
 
-		$this->remover->removeDeleted($this->makeStaticSite(published: true));
+		$this->assertFalse($this->remover->removeDeleted($this->makeStaticSite(published: true)));
 	}
 
 	public function testRemoveSucceedsIfArchivesCannotBeDeleted(): void {

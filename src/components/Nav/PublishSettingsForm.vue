@@ -83,7 +83,7 @@ import NcTextField from '@nextcloud/vue/components/NcTextField'
 import themePreviewTopnav from '../../../img/theme-preview-topnav.svg?url'
 import themePreviewWiki from '../../../img/theme-preview-wiki.svg?url'
 import uniqueIdMixin from '../../mixins/uniqueIdMixin.js'
-import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
+import { isValidSlug, SLUG_MAX_LENGTH, STATIC_SITE_ADDRESS_PREFIX } from '../../util/staticSiteSlug.js'
 import { THEME_TOPNAV, THEME_WIKI, THEMES } from '../../util/staticSiteTheme.js'
 import { isValidTitle, TITLE_MAX_LENGTH } from '../../util/staticSiteTitle.js'
 
@@ -135,8 +135,7 @@ export default {
 
 	data() {
 		return {
-			// TODO(Publish): Use the base URL provided by the publish service
-			addressPrefix: 'https://example.com/sites/',
+			addressPrefix: STATIC_SITE_ADDRESS_PREFIX,
 			slugId: `publish-settings-slug-${this.uniqueId}`,
 			slugMaxLength: SLUG_MAX_LENGTH,
 			titleId: `publish-settings-title-${this.uniqueId}`,

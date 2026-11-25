@@ -142,28 +142,31 @@ class StaticSiteController extends OCSController {
 	/**
 	 * Delete a static site
 	 *
-	 * A published static site is deleted at the publish service first. It keeps status deleting
-	 * until the publish service reports it as deleted.
+	 * The static site is deleted at the publish service first. It keeps status deleting until the
+	 * publish service reports it as deleted. If the publish service doesn't know it, it is deleted right away.
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param int $id ID of the static site
 	 *
-	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>|DataResponse<Http::STATUS_ACCEPTED, CollectivesStaticSite, array{}>
 	 * @throws OCSBadRequestException Static site was changed meanwhile
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Collective or static site not found
 	 * @throws OCSException A website of the collective is being published or deleted, or the publish service is not available or didn't accept the request
 	 *
-	 * 200: Static site deleted or being deleted
+	 * 200: Static site deleted
+	 * 202: Static site is being deleted
 	 */
 	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
 		$uid = $this->getUid();
-		$this->handleArchiveErrorResponse(
-			fn () => $this->staticSiteService->delete($collectiveId, $id, $uid),
+		$staticSite = $this->handleArchiveErrorResponse(
+			fn (): ?StaticSite => $this->staticSiteService->delete($collectiveId, $id, $uid),
 			['collectiveId' => $collectiveId, 'id' => $id],
 		);
-		return new DataResponse([]);
+		return $staticSite === null
+			? new DataResponse([])
+			: new DataResponse($staticSite, Http::STATUS_ACCEPTED);
 	}
 
 	/**

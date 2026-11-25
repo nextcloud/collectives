@@ -4528,7 +4528,7 @@
             "delete": {
                 "operationId": "static_site-delete",
                 "summary": "Delete a static site",
-                "description": "A published static site is deleted at the publish service first. It keeps status deleting until the publish service reports it as deleted.",
+                "description": "The static site is deleted at the publish service first. It keeps status deleting until the publish service reports it as deleted. If the publish service doesn't know it, it is deleted right away.",
                 "tags": [
                     "static_site"
                 ],
@@ -4586,7 +4586,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Static site deleted or being deleted",
+                        "description": "Static site deleted",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4606,6 +4606,36 @@
                                                     "$ref": "#/components/schemas/OCSMeta"
                                                 },
                                                 "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "202": {
+                        "description": "Static site is being deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "$ref": "#/components/schemas/StaticSite"
+                                                }
                                             }
                                         }
                                     }

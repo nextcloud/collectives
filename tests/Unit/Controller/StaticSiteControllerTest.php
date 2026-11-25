@@ -164,13 +164,24 @@ class StaticSiteControllerTest extends TestCase {
 		$this->controller->create(42, [1]);
 	}
 
-	public function testDeleteReturnsEmptyResponse(): void {
-		$this->staticSiteService->expects($this->once())->method('delete')->with(42, 7);
+	public function testDeleteReturnsEmptyResponseIfStaticSiteGotDeleted(): void {
+		$this->staticSiteService->expects($this->once())->method('delete')->with(42, 7)->willReturn(null);
 
 		$response = $this->controller->delete(42, 7);
 
 		$this->assertSame(Http::STATUS_OK, $response->getStatus());
 		$this->assertSame([], $response->getData());
+	}
+
+	public function testDeleteReturnsStaticSiteBeingDeleted(): void {
+		$staticSite = new StaticSite();
+		$staticSite->setStatus(StaticSite::STATUS_DELETING);
+		$this->staticSiteService->method('delete')->willReturn($staticSite);
+
+		$response = $this->controller->delete(42, 7);
+
+		$this->assertSame(Http::STATUS_ACCEPTED, $response->getStatus());
+		$this->assertSame($staticSite, $response->getData());
 	}
 
 	/**

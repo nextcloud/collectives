@@ -42,11 +42,13 @@ class StaticSiteRemover {
 	 * If the generator rejects the request, the static site remains unchanged. If it is unavailable,
 	 * the static site stays deleting, as the generator may have accepted the request anyway.
 	 *
+	 * @return bool True if the static site got deleted right away, false if it is being deleted
+	 *
 	 * @throws UnprocessableEntityException The static site was changed meanwhile
 	 * @throws StaticSiteGeneratorException Generator not configured, unavailable or didn't accept the request
 	 * @throws DBException
 	 */
-	public function remove(StaticSite $staticSite): void {
+	public function remove(StaticSite $staticSite): bool {
 		$this->generatorClient->assertConfigured();
 
 		$buildId = Uuid::v7()->toRfc4122();
@@ -67,11 +69,11 @@ class StaticSiteRemover {
 		}
 
 		if (!$known) {
-			$this->removeDeleted($staticSite);
-			return;
+			return $this->removeDeleted($staticSite);
 		}
 		// The static site generator doesn't download archives of a deleted static site anymore
 		$this->deleteArchives($staticSite);
+		return false;
 	}
 
 	/**
@@ -137,14 +139,17 @@ class StaticSiteRemover {
 	 * Delete the static site once the static site generator deleted it, unless another
 	 * request started meanwhile.
 	 *
+	 * @return bool False if another request started meanwhile
+	 *
 	 * @throws DBException
 	 */
-	public function removeDeleted(StaticSite $staticSite): void {
+	public function removeDeleted(StaticSite $staticSite): bool {
 		if (!$this->staticSiteMapper->deleteIfCurrentBuild($staticSite)) {
 			$this->logger->warning('Not deleting static site, it was changed meanwhile', $this->getLogContext($staticSite));
-			return;
+			return false;
 		}
 		$this->deleteArchives($staticSite);
+		return true;
 	}
 
 	/**

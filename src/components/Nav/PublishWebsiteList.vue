@@ -137,7 +137,7 @@ export default {
 	computed: {
 		// Only one publication or deletion per collective may run at a time
 		isLocked() {
-			return this.staticSites.some((staticSite) => staticSiteState(staticSite) === 'publishing')
+			return this.staticSites.some((staticSite) => staticSite.isInProgress)
 		},
 
 		// The website the user most likely wants to continue with, e.g. after a failed publication

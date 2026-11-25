@@ -861,9 +861,17 @@ class StaticSiteServiceTest extends TestCase {
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')
 			->with(7, $this->collectiveId)
 			->willReturn($staticSite);
-		$this->remover->expects($this->once())->method('remove')->with($staticSite);
+		$this->remover->expects($this->once())->method('remove')->with($staticSite)->willReturn(false);
 
-		$this->service->delete($this->collectiveId, 7, $this->userId);
+		$this->assertSame($staticSite, $this->service->delete($this->collectiveId, 7, $this->userId));
+	}
+
+	public function testDeleteReturnsNullIfStaticSiteGotDeletedRightAway(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$this->remover->method('remove')->willReturn(true);
+
+		$this->assertNull($this->service->delete($this->collectiveId, 7, $this->userId));
 	}
 
 	public static function deleteInProgressStatusProvider(): array {

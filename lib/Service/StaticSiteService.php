@@ -218,15 +218,17 @@ class StaticSiteService {
 	 * @throws NotPermittedException User is not allowed to edit the collective
 	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published or deleted
 	 * @throws UnprocessableEntityException Static site was changed meanwhile
+	 * @return ?StaticSite Null if the static site got deleted right away, otherwise the static site being deleted
+	 *
 	 * @throws StaticSiteGeneratorException Generator not configured, unavailable or didn't accept the request
 	 * @throws DBException
 	 */
-	public function delete(int $collectiveId, int $id, string $userId): void {
+	public function delete(int $collectiveId, int $id, string $userId): ?StaticSite {
 		$this->getEditableCollective($collectiveId, $userId);
 
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
 		$this->assertNoPublicationInProgress($collectiveId);
-		$this->remover->remove($staticSite);
+		return $this->remover->remove($staticSite) ? null : $staticSite;
 	}
 
 	/**
