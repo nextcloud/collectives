@@ -85,13 +85,3 @@ export function staticSiteFailureReason(staticSite) {
 		? staticSiteErrorMessage(staticSite.lastError)
 		: t('collectives', 'The publish service didn\'t respond in time.')
 }
-
-/**
- * Static site the user updated last
- *
- * @param {object[]} staticSites static sites as returned by the backend
- * @return {?object} static site with the newest `updatedAt`, null without static sites
- */
-export function mostRecentlyUpdatedStaticSite(staticSites) {
-	return staticSites.reduce((recent, staticSite) => (!recent || staticSite.updatedAt > recent.updatedAt ? staticSite : recent), null)
-}

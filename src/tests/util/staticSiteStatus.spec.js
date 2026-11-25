@@ -4,7 +4,7 @@
  */
 
 import { describe, expect, test, vi } from 'vitest'
-import { hasUnpublishedChanges, mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState, unpublishedChanges } from '../../util/staticSiteStatus.js'
+import { hasUnpublishedChanges, staticSiteFailureReason, staticSiteState, unpublishedChanges } from '../../util/staticSiteStatus.js'
 
 vi.mock('@nextcloud/l10n', () => ({ t: (_app, message) => message }))
 
@@ -114,16 +114,5 @@ describe('staticSiteFailureReason', () => {
 	test('explains an aborted deletion', () => {
 		expect(staticSiteFailureReason({ status: 'deleting', lastError: null }))
 			.toBe('The publish service didn\'t respond in time.')
-	})
-})
-
-describe('mostRecentlyUpdatedStaticSite', () => {
-	test('returns the static site with the newest updatedAt', () => {
-		const newest = { id: 2, updatedAt: 300 }
-		expect(mostRecentlyUpdatedStaticSite([{ id: 1, updatedAt: 100 }, newest, { id: 3, updatedAt: 200 }])).toBe(newest)
-	})
-
-	test('returns null without static sites', () => {
-		expect(mostRecentlyUpdatedStaticSite([])).toBeNull()
 	})
 })

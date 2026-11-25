@@ -47,25 +47,65 @@
 			<li
 				v-for="staticSite in staticSites"
 				:key="staticSite.id"
-				class="publish-website-list__website"
-				:class="{ 'publish-website-list__website--preselected': staticSite.id === preselectedStaticSite?.id }">
+				class="publish-website-list__website">
 				<div class="publish-website-list__website-header">
 					<strong class="publish-website-list__title">{{ staticSite.title }}</strong>
 					<span
 						class="publish-website-list__badge"
 						:class="`publish-website-list__badge--${badgeState(staticSite)}`">
-						<NcLoadingIcon v-if="staticSiteState(staticSite) === 'publishing'" :size="16" />
+						<NcLoadingIcon v-if="staticSite.isInProgress" :size="16" />
 						{{ stateLabel(staticSite) }}
 					</span>
-					<NcButton
-						:ref="staticSite.id === preselectedStaticSite?.id ? 'preselectedEditButton' : undefined"
-						class="publish-website-list__edit"
-						:variant="staticSite.id === preselectedStaticSite?.id ? 'primary' : 'secondary'"
-						:aria-label="t('collectives', 'Edit website {title}', { title: staticSite.title })"
-						:disabled="isLocked"
-						@click="$emit('edit', staticSite)">
-						{{ t('collectives', 'Edit') }}
-					</NcButton>
+					<div class="publish-website-list__actions">
+						<NcButton
+							v-if="staticSiteState(staticSite) === 'deleteFailed'"
+							:disabled="isLocked"
+							@click="$emit('delete', staticSite)">
+							{{ t('collectives', 'Retry delete') }}
+						</NcButton>
+						<NcActions
+							forceMenu
+							:aria-label="t('collectives', 'Actions for website {title}', { title: staticSite.title })">
+							<NcActionButton
+								closeAfterClick
+								:disabled="isLocked"
+								@click="$emit('edit', staticSite)">
+								<template #icon>
+									<PencilIcon :size="20" />
+								</template>
+								{{ t('collectives', 'Edit') }}
+							</NcActionButton>
+							<template v-if="staticSite.publishedUrl">
+								<NcActionLink
+									:href="staticSite.publishedUrl"
+									target="_blank"
+									closeAfterClick>
+									<template #icon>
+										<OpenInNewIcon :size="20" />
+									</template>
+									{{ t('collectives', 'Open website') }}
+								</NcActionLink>
+								<NcActionButton
+									closeAfterClick
+									@click="copyToClipboard(staticSite.publishedUrl)">
+									<template #icon>
+										<ContentCopyIcon :size="20" />
+									</template>
+									{{ t('collectives', 'Copy link') }}
+								</NcActionButton>
+							</template>
+							<NcActionSeparator />
+							<NcActionButton
+								closeAfterClick
+								:disabled="isLocked"
+								@click="$emit('delete', staticSite)">
+								<template #icon>
+									<DeleteIcon :size="20" />
+								</template>
+								{{ t('collectives', 'Delete website') }}
+							</NcActionButton>
+						</NcActions>
+					</div>
 				</div>
 				<a
 					v-if="staticSite.publishedUrl"
@@ -73,11 +113,9 @@
 					:href="staticSite.publishedUrl"
 					target="_blank"
 					rel="noopener noreferrer">{{ staticSite.publishedUrl }}</a>
-				<p v-if="staticSiteState(staticSite) === 'failed'" class="publish-website-list__error">
+				<p v-if="['failed', 'deleteFailed'].includes(staticSiteState(staticSite))" class="publish-website-list__error">
 					{{ staticSiteFailureReason(staticSite) }}
-					{{ staticSite.publishedUrl
-						? t('collectives', 'The previous version is still online.')
-						: t('collectives', 'The website is not online.') }}
+					{{ onlineHint(staticSite) }}
 				</p>
 				<span class="publish-website-list__details">
 					{{ n('collectives', '%n page', '%n pages', publishedOrSelectedPageIds(staticSite).length) }}
@@ -99,21 +137,42 @@
 <script>
 import { n, t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionLink from '@nextcloud/vue/components/NcActionLink'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import ContentCopyIcon from 'vue-material-design-icons/ContentCopy.vue'
+import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import WebIcon from 'vue-material-design-icons/Web.vue'
-import { hasUnpublishedChanges, mostRecentlyUpdatedStaticSite, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
+import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
+import { hasUnpublishedChanges, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
 
 export default {
 	name: 'PublishWebsiteList',
 
 	components: {
+		ContentCopyIcon,
+		DeleteIcon,
+		NcActionButton,
+		NcActionLink,
+		NcActions,
+		NcActionSeparator,
 		NcButton,
 		NcLoadingIcon,
+		OpenInNewIcon,
+		PencilIcon,
 		PlusIcon,
 		WebIcon,
 	},
+
+	mixins: [
+		CopyToClipboardMixin,
+	],
 
 	props: {
 		/** Static sites of the collective in display order */
@@ -131,6 +190,7 @@ export default {
 
 	emits: [
 		'create',
+		'delete',
 		'edit',
 	],
 
@@ -138,11 +198,6 @@ export default {
 		// Only one publication or deletion per collective may run at a time
 		isLocked() {
 			return this.staticSites.some((staticSite) => staticSite.isInProgress)
-		},
-
-		// The website the user most likely wants to continue with, e.g. after a failed publication
-		preselectedStaticSite() {
-			return mostRecentlyUpdatedStaticSite(this.staticSites)
 		},
 
 		steps() {
@@ -170,10 +225,6 @@ export default {
 		},
 	},
 
-	mounted() {
-		this.$refs.preselectedEditButton?.[0]?.$el.focus()
-	},
-
 	methods: {
 		n,
 		t,
@@ -192,7 +243,7 @@ export default {
 
 		/**
 		 * @param {object} staticSite static site as returned by the backend
-		 * @return {'publishing'|'live'|'outdated'|'failed'} state shown in the badge
+		 * @return {'publishing'|'deleting'|'live'|'outdated'|'failed'|'deleteFailed'} state shown in the badge
 		 */
 		badgeState(staticSite) {
 			const state = staticSiteState(staticSite)
@@ -203,12 +254,18 @@ export default {
 
 		/**
 		 * @param {object} staticSite static site as returned by the backend
-		 * @return {string} translated state of the last publication
+		 * @return {string} translated state of the last publication or deletion
 		 */
 		stateLabel(staticSite) {
 			switch (this.badgeState(staticSite)) {
 				case 'publishing':
 					return t('collectives', 'Publishing')
+				case 'deleting':
+					return t('collectives', 'Deleting')
+				case 'deleteFailed':
+					return staticSite.publishedUrl
+						? t('collectives', 'Live · delete failed')
+						: t('collectives', 'Delete failed')
 				case 'live':
 					return t('collectives', 'Live · up to date')
 				case 'outdated':
@@ -216,6 +273,19 @@ export default {
 				default:
 					return t('collectives', 'Failed')
 			}
+		},
+
+		/**
+		 * @param {object} staticSite static site whose publication or deletion failed
+		 * @return {string} translated hint what is online after the failure
+		 */
+		onlineHint(staticSite) {
+			if (!staticSite.publishedUrl) {
+				return t('collectives', 'The website is not online.')
+			}
+			return staticSiteState(staticSite) === 'deleteFailed'
+				? t('collectives', 'The website is still online.')
+				: t('collectives', 'The previous version is still online.')
 		},
 
 		formatRelativeTime(timestamp) {
@@ -331,12 +401,6 @@ export default {
 		padding: 12px 16px;
 		border: 1px solid var(--color-border-dark);
 		border-radius: var(--border-radius-large);
-
-		&--preselected {
-			// Thicker border without shifting the content
-			padding: 11px 15px;
-			border: 2px solid var(--color-primary-element);
-		}
 	}
 
 	&__website-header {
@@ -373,20 +437,25 @@ export default {
 			color: var(--color-warning-text);
 		}
 
-		&--publishing {
+		&--publishing,
+		&--deleting {
 			border-color: var(--color-primary-element-light-text);
 			background-color: var(--color-primary-element-light);
 			color: var(--color-primary-element-light-text);
 		}
 
-		&--failed {
+		&--failed,
+		&--deleteFailed {
 			border-color: var(--color-error-text);
 			background-color: var(--color-error);
 			color: var(--color-error-text);
 		}
 	}
 
-	&__edit {
+	&__actions {
+		display: flex;
+		align-items: center;
+		gap: 4px;
 		margin-inline-start: auto;
 	}
 

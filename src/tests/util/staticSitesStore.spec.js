@@ -10,7 +10,7 @@ import * as api from '../../apis/collectives/index.js'
 import { staticSitePollInterval, staticSitePollTimeout } from '../../constants.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 
-vi.mock('../../apis/collectives/index.js', () => ({ getStaticSites: vi.fn() }))
+vi.mock('../../apis/collectives/index.js', () => ({ deleteStaticSite: vi.fn(), getStaticSites: vi.fn() }))
 vi.mock('@nextcloud/dialogs', () => ({ showError: vi.fn(), showSuccess: vi.fn() }))
 vi.mock('@nextcloud/l10n', () => ({
 	t: (_app, message, parameters = {}) => message.replace(/\{(\w+)}/g, (match, name) => parameters[name] ?? match),
@@ -248,7 +248,7 @@ describe('static sites publication watching', () => {
 		await poll(5)
 
 		expect(api.getStaticSites).not.toHaveBeenCalled()
-		expect(store.watchedPublications).toEqual({})
+		expect(store.watchedRequests).toEqual({})
 	})
 
 	it('keeps polling after a failed request', async () => {
@@ -279,5 +279,83 @@ describe('static sites publication watching', () => {
 
 		await poll(5)
 		expect(api.getStaticSites).toHaveBeenCalledTimes(attempts)
+	})
+})
+
+describe('static site deletion', () => {
+	const published = staticSite({ status: 'published', isInProgress: false, publishedUrl })
+	const deleting = staticSite({ status: 'deleting', isInProgress: true, publishedUrl })
+
+	beforeAll(() => {
+		vi.stubGlobal('window', { OC: { getLanguage: () => 'en' } })
+	})
+
+	afterAll(() => {
+		vi.unstubAllGlobals()
+	})
+
+	beforeEach(async () => {
+		setActivePinia(createPinia())
+		vi.resetAllMocks()
+		vi.useFakeTimers()
+		vi.mocked(api.getStaticSites).mockResolvedValueOnce(response(published, staticSite({ id: 2, title: 'Other website' })))
+		await useStaticSitesStore().getStaticSites(collective.id)
+	})
+
+	afterEach(() => {
+		vi.useRealTimers()
+	})
+
+	it('removes a static site the publish service didn\'t know right away', async () => {
+		vi.mocked(api.deleteStaticSite).mockResolvedValue({ status: 200, data: { ocs: { data: [] } } })
+		const store = useStaticSitesStore()
+
+		await store.deleteStaticSite(collective, published)
+
+		expect(api.deleteStaticSite).toHaveBeenCalledWith(1, 1)
+		expect(store.staticSitesForCollective(1).map(({ id }) => id)).toEqual([2])
+		expect(showSuccess).toHaveBeenCalledWith('Website "Website" of collective "Collective" deleted')
+		expect(store.pollIntervalId).toBeNull()
+	})
+
+	it('waits until the publish service deleted the static site', async () => {
+		vi.mocked(api.deleteStaticSite).mockResolvedValue({ status: 202, data: { ocs: { data: deleting } } })
+		vi.mocked(api.getStaticSites)
+			.mockResolvedValueOnce(response(deleting))
+			.mockResolvedValue(response())
+		const store = useStaticSitesStore()
+
+		await store.deleteStaticSite(collective, published)
+		expect(store.staticSitesForCollective(1).find(({ id }) => id === 1).status).toBe('deleting')
+		expect(showSuccess).toHaveBeenCalledWith('Website deletion started')
+
+		await poll()
+		expect(showSuccess).not.toHaveBeenCalledWith('Website "Website" of collective "Collective" deleted')
+
+		await poll()
+		expect(showSuccess).toHaveBeenCalledWith('Website "Website" of collective "Collective" deleted')
+		expect(store.pollIntervalId).toBeNull()
+	})
+
+	it('shows the reason if the publish service failed to delete the static site', async () => {
+		vi.mocked(api.deleteStaticSite).mockResolvedValue({ status: 202, data: { ocs: { data: deleting } } })
+		vi.mocked(api.getStaticSites).mockResolvedValue(response(staticSite({ status: 'failed', isInProgress: false, lastError: 'generator_delete_failed', publishedUrl })))
+		const store = useStaticSitesStore()
+
+		await store.deleteStaticSite(collective, published)
+		await poll()
+
+		expect(showError).toHaveBeenCalledWith('Website "Website" of collective "Collective" could not be deleted: The publish service could not delete the website. Please try again later.')
+		expect(store.pollIntervalId).toBeNull()
+	})
+
+	it('keeps the static sites if the request fails', async () => {
+		vi.mocked(api.deleteStaticSite).mockRejectedValue(new Error('request failed'))
+		const store = useStaticSitesStore()
+
+		await expect(store.deleteStaticSite(collective, published)).rejects.toThrow('request failed')
+
+		expect(store.staticSitesForCollective(1)).toHaveLength(2)
+		expect(showSuccess).not.toHaveBeenCalled()
 	})
 })

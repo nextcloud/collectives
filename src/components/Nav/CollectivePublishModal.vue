@@ -39,6 +39,7 @@
 				:staticSites="staticSites"
 				:pages="pagesForCollective(collective)"
 				@create="createWebsite"
+				@delete="staticSiteToDelete = $event"
 				@edit="editWebsite" />
 			<template v-else>
 				<PublishStepIndicator
@@ -87,6 +88,11 @@
 					</div>
 				</div>
 			</template>
+			<PublishDeleteDialog
+				v-if="staticSiteToDelete"
+				:collective="collective"
+				:staticSite="staticSiteToDelete"
+				@close="staticSiteToDelete = null" />
 			<NcDialog
 				v-if="pendingAction"
 				:name="t('collectives', 'Discard changes?')"
@@ -106,6 +112,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
+import PublishDeleteDialog from './PublishDeleteDialog.vue'
 import PublishPageSelection from './PublishPageSelection.vue'
 import PublishSettingsForm from './PublishSettingsForm.vue'
 import PublishStepIndicator from './PublishStepIndicator.vue'
@@ -127,6 +134,7 @@ export default {
 		NcDialog,
 		NcLoadingIcon,
 		NcModal,
+		PublishDeleteDialog,
 		PublishPageSelection,
 		PublishSettingsForm,
 		PublishStepIndicator,
@@ -154,6 +162,8 @@ export default {
 			initialFormValues: null,
 			/** @type {?(() => void)} action waiting for the user to confirm discarding changes */
 			pendingAction: null,
+			/** @type {?object} static site waiting for the user to confirm deleting it */
+			staticSiteToDelete: null,
 			selectedPageIds: new Set(),
 			loading: true,
 			publishing: false,

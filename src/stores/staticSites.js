@@ -15,8 +15,8 @@ export const useStaticSitesStore = defineStore('staticSites', {
 	state: () => ({
 		/** @type {Object<number, object[]>} collective ID -> static sites */
 		staticSites: {},
-		/** @type {Object<number, {collectiveId: number, collectiveName: string, attemptsLeft: number}>} static site ID -> watched publication */
-		watchedPublications: {},
+		/** @type {Object<number, {operation: 'publish'|'delete', title: string, collectiveId: number, collectiveName: string, attemptsLeft: number}>} static site ID -> watched request */
+		watchedRequests: {},
 		/** @type {?number} */
 		pollIntervalId: null,
 	}),
@@ -35,37 +35,81 @@ export const useStaticSitesStore = defineStore('staticSites', {
 		},
 
 		/**
+		 * Delete a static site. If the publish service deletes it asynchronously, wait for the
+		 * result in the background.
+		 *
+		 * @param {object} collective Collective of the static site
+		 * @param {object} staticSite Static site to delete
+		 */
+		async deleteStaticSite(collective, staticSite) {
+			const response = await api.deleteStaticSite(collective.id, staticSite.id)
+			const staticSites = this.staticSites[collective.id] ?? []
+			if (response.status === 202) {
+				const deleting = response.data.ocs.data
+				this.staticSites[collective.id] = staticSites.map((site) => (site.id === deleting.id ? deleting : site))
+				showSuccess(t('collectives', 'Website deletion started'))
+				this.watchDeletion(collective, deleting)
+				return
+			}
+			this.staticSites[collective.id] = staticSites.filter((site) => site.id !== staticSite.id)
+			this.showDeleted(staticSite.title, collective.name)
+		},
+
+		/**
 		 * Wait for the publish service to report the result of a started publication back
 		 * and show a toast about it, no matter where in the app the user is meanwhile.
-		 *
-		 * Several publications are watched at once. Publishing a website again restarts
-		 * watching it. Watching stops as soon as the publication isn't in progress
-		 * anymore - or if it vanished or requests kept failing.
 		 *
 		 * @param {object} collective Collective of the static site, its name is shown in the toast
 		 *   as the user may work in another collective meanwhile
 		 * @param {object} publication Static site as returned when the publication was started
 		 */
 		watchPublication(collective, publication) {
-			console.debug(`Waiting for publication result of static site ${publication.id} in collective ${collective.id}`)
-			this.watchedPublications[publication.id] = {
+			this.watchRequest('publish', collective, publication)
+		},
+
+		/**
+		 * Wait for the publish service to report the result of a started deletion back
+		 * and show a toast about it, no matter where in the app the user is meanwhile.
+		 *
+		 * @param {object} collective Collective of the static site, its name is shown in the toast
+		 * @param {object} deletion Static site being deleted
+		 */
+		watchDeletion(collective, deletion) {
+			this.watchRequest('delete', collective, deletion)
+		},
+
+		/**
+		 * Several requests are watched at once. A new request for a static site restarts
+		 * watching it. Watching stops as soon as the request isn't in progress anymore -
+		 * or if requests kept failing.
+		 *
+		 * @param {'publish'|'delete'} operation Requested operation
+		 * @param {object} collective Collective of the static site
+		 * @param {object} staticSite Static site as returned when the request was started
+		 */
+		watchRequest(operation, collective, staticSite) {
+			console.debug(`Waiting for ${operation} result of static site ${staticSite.id} in collective ${collective.id}`)
+			this.watchedRequests[staticSite.id] = {
+				operation,
+				// A deleted static site isn't listed anymore
+				title: staticSite.title,
 				collectiveId: collective.id,
 				collectiveName: collective.name,
 				attemptsLeft: Math.ceil(staticSitePollTimeout / staticSitePollInterval),
 			}
 			if (!this.pollIntervalId) {
-				this.pollIntervalId = setInterval(() => this.pollWatchedPublications(), staticSitePollInterval * 1000)
+				this.pollIntervalId = setInterval(() => this.pollWatchedRequests(), staticSitePollInterval * 1000)
 			}
 		},
 
 		/**
-		 * Load the static sites of each collective with watched publications once
-		 * and conclude the publications that got a result
+		 * Load the static sites of each collective with watched requests once
+		 * and conclude the requests that got a result
 		 */
-		async pollWatchedPublications() {
-			const watchedPublications = Object.entries(this.watchedPublications)
+		async pollWatchedRequests() {
+			const watchedRequests = Object.entries(this.watchedRequests)
 			const collectiveIds = new Set()
-			for (const [, watched] of watchedPublications) {
+			for (const [, watched] of watchedRequests) {
 				// Failed requests count as well, e.g. after the user got logged out
 				watched.attemptsLeft--
 				collectiveIds.add(watched.collectiveId)
@@ -80,59 +124,106 @@ export const useStaticSitesStore = defineStore('staticSites', {
 					loaded = false
 				}
 
-				for (const [id, watched] of watchedPublications) {
-					// Skip publications concluded or restarted meanwhile
-					if (watched.collectiveId === collectiveId && this.watchedPublications[id] === watched) {
-						this.checkPublication(Number(id), watched, loaded)
+				for (const [id, watched] of watchedRequests) {
+					// Skip requests concluded or restarted meanwhile
+					if (watched.collectiveId === collectiveId && this.watchedRequests[id] === watched) {
+						this.checkWatchedRequest(Number(id), watched, loaded)
 					}
 				}
 			}))
 
-			if (Object.keys(this.watchedPublications).length === 0) {
+			if (Object.keys(this.watchedRequests).length === 0) {
 				this.stopWatching()
 			}
 		},
 
 		/**
 		 * @param {number} id ID of the watched static site
-		 * @param {object} watched watched publication
+		 * @param {object} watched watched request
 		 * @param {boolean} loaded whether the static sites of its collective got loaded
 		 */
-		checkPublication(id, watched, loaded) {
+		checkWatchedRequest(id, watched, loaded) {
 			const staticSite = loaded
 				? this.staticSites[watched.collectiveId].find((site) => site.id === id)
 				: undefined
+			const concluded = watched.operation === 'delete'
+				? this.concludeDeletion(staticSite, watched, loaded)
+				: this.concludePublication(staticSite, watched)
 
+			if (concluded) {
+				delete this.watchedRequests[id]
+				return
+			}
+			if ((loaded && !staticSite) || watched.attemptsLeft <= 0) {
+				console.debug(`Giving up on ${watched.operation} result of static site ${id}, status ${staticSite?.status ?? (loaded ? 'deleted' : 'unknown')}`)
+				delete this.watchedRequests[id]
+			}
+		},
+
+		/**
+		 * @param {object|undefined} staticSite watched static site, undefined if it vanished or wasn't loaded
+		 * @param {object} watched watched request
+		 * @return {boolean} true if the publication got a result
+		 */
+		concludePublication(staticSite, watched) {
 			if (staticSite?.status === 'published') {
-				delete this.watchedPublications[id]
 				showSuccess(t('collectives', 'Website "{title}" of collective "{collective}" published at {url}', {
 					title: staticSite.title,
 					collective: watched.collectiveName,
 					url: staticSite.publishedUrl,
 				}))
-				return
+				return true
 			}
 
 			if (staticSite && staticSiteState(staticSite) === 'failed') {
-				delete this.watchedPublications[id]
 				showError(t('collectives', 'Website "{title}" of collective "{collective}" could not be published: {reason}', {
 					title: staticSite.title,
 					collective: watched.collectiveName,
 					reason: staticSiteFailureReason(staticSite),
 				}))
-				return
+				return true
+			}
+			return false
+		},
+
+		/**
+		 * @param {object|undefined} staticSite watched static site, undefined if it vanished or wasn't loaded
+		 * @param {object} watched watched request
+		 * @param {boolean} loaded whether the static sites of its collective got loaded
+		 * @return {boolean} true if the deletion got a result
+		 */
+		concludeDeletion(staticSite, watched, loaded) {
+			if (loaded && !staticSite) {
+				this.showDeleted(watched.title, watched.collectiveName)
+				return true
 			}
 
-			if ((loaded && !staticSite) || watched.attemptsLeft <= 0) {
-				console.debug(`Giving up on publication result of static site ${id}, status ${staticSite?.status ?? (loaded ? 'deleted' : 'unknown')}`)
-				delete this.watchedPublications[id]
+			if (staticSite && staticSiteState(staticSite) === 'deleteFailed') {
+				showError(t('collectives', 'Website "{title}" of collective "{collective}" could not be deleted: {reason}', {
+					title: staticSite.title,
+					collective: watched.collectiveName,
+					reason: staticSiteFailureReason(staticSite),
+				}))
+				return true
 			}
+			return false
+		},
+
+		/**
+		 * @param {string} title Title of the deleted static site
+		 * @param {string} collectiveName Name of its collective
+		 */
+		showDeleted(title, collectiveName) {
+			showSuccess(t('collectives', 'Website "{title}" of collective "{collective}" deleted', {
+				title,
+				collective: collectiveName,
+			}))
 		},
 
 		stopWatching() {
 			clearInterval(this.pollIntervalId)
 			this.pollIntervalId = null
-			this.watchedPublications = {}
+			this.watchedRequests = {}
 		},
 	},
 })
