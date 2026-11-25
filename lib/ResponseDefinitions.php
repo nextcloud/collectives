@@ -65,6 +65,7 @@ namespace OCA\Collectives;
  *     publishedSelectedPageIds: ?list<int>,
  *     publishedBuildStartedAt: ?int,
  *     isInProgress: bool,
+ *     secondsUntilTimeout: ?int,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{

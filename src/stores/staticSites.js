@@ -7,7 +7,7 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { defineStore } from 'pinia'
 import * as api from '../apis/collectives/index.js'
-import { staticSitePollInterval, staticSitePollTimeout } from '../constants.js'
+import { staticSitePollInterval } from '../constants.js'
 import { byTitleAsc } from '../util/sortOrders.js'
 import { staticSiteFailureReason, staticSiteState } from '../util/staticSiteStatus.js'
 
@@ -79,9 +79,30 @@ export const useStaticSitesStore = defineStore('staticSites', {
 		},
 
 		/**
+		 * Wait for the results of the publications and deletions of a collective that are in
+		 * progress, e.g. started before the page got reloaded or by another member.
+		 *
+		 * Requests that are watched already keep going.
+		 *
+		 * @param {object} collective Collective of the static sites
+		 */
+		watchRequestsInProgress(collective) {
+			for (const staticSite of this.staticSites[collective.id] ?? []) {
+				if (!staticSite.isInProgress || this.watchedRequests[staticSite.id]) {
+					continue
+				}
+				if (staticSite.status === 'deleting') {
+					this.watchDeletion(collective, staticSite)
+				} else {
+					this.watchPublication(collective, staticSite)
+				}
+			}
+		},
+
+		/**
 		 * Several requests are watched at once. A new request for a static site restarts
 		 * watching it. Watching stops as soon as the request isn't in progress anymore -
-		 * or if requests kept failing.
+		 * or once the backend counts it as aborted, e.g. if requests kept failing.
 		 *
 		 * @param {'publish'|'delete'} operation Requested operation
 		 * @param {object} collective Collective of the static site
@@ -95,7 +116,8 @@ export const useStaticSitesStore = defineStore('staticSites', {
 				title: staticSite.title,
 				collectiveId: collective.id,
 				collectiveName: collective.name,
-				attemptsLeft: Math.ceil(staticSitePollTimeout / staticSitePollInterval),
+				// One more than until the backend aborts the request, so the last poll sees it aborted
+				attemptsLeft: Math.ceil((staticSite.secondsUntilTimeout ?? 0) / staticSitePollInterval) + 1,
 			}
 			if (!this.pollIntervalId) {
 				this.pollIntervalId = setInterval(() => this.pollWatchedRequests(), staticSitePollInterval * 1000)

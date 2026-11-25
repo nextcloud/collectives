@@ -274,6 +274,7 @@ export default {
 			this.getPagesForCollective(this.collective, false)
 				.catch(displayError('Could not fetch collective pages')),
 			this.getStaticSites(this.collective.id)
+				.then(() => this.watchRequestsInProgress(this.collective))
 				.catch(displayError('Could not load static sites for collective')),
 		])
 		this.loading = false
@@ -285,7 +286,7 @@ export default {
 
 		...mapActions(usePagesStore, ['getPagesForCollective']),
 
-		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication']),
+		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication', 'watchRequestsInProgress']),
 
 		onClose() {
 			this.confirmDiscard(() => this.$emit('close'))

@@ -360,7 +360,8 @@
                     "publishedTitle",
                     "publishedSelectedPageIds",
                     "publishedBuildStartedAt",
-                    "isInProgress"
+                    "isInProgress",
+                    "secondsUntilTimeout"
                 ],
                 "properties": {
                     "id": {
@@ -445,6 +446,11 @@
                     },
                     "isInProgress": {
                         "type": "boolean"
+                    },
+                    "secondsUntilTimeout": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true
                     }
                 }
             },

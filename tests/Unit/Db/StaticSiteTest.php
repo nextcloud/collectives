@@ -53,6 +53,27 @@ class StaticSiteTest extends TestCase {
 		$this->assertSame($expected, $staticSite->isInProgress($now));
 	}
 
+	public static function secondsUntilTimeoutProvider(): array {
+		$now = 1800000000;
+		return [
+			'recent pending' => [StaticSite::STATUS_PENDING, $now - 60, $now, StaticSite::PENDING_TIMEOUT - 60],
+			'deleting at timeout' => [StaticSite::STATUS_DELETING, $now - StaticSite::PENDING_TIMEOUT, $now, 0],
+			'aborted provided' => [StaticSite::STATUS_PROVIDED, $now - StaticSite::PENDING_TIMEOUT - 1, $now, null],
+			'published' => [StaticSite::STATUS_PUBLISHED, $now - 60, $now, null],
+		];
+	}
+
+	/**
+	 * @dataProvider secondsUntilTimeoutProvider
+	 */
+	public function testGetSecondsUntilTimeout(string $status, int $updatedAt, int $now, ?int $expected): void {
+		$staticSite = new StaticSite();
+		$staticSite->setStatus($status);
+		$staticSite->setUpdatedAt($updatedAt);
+
+		$this->assertSame($expected, $staticSite->getSecondsUntilTimeout($now));
+	}
+
 	public static function corruptedSelectedPagesProvider(): array {
 		return [
 			'invalid JSON' => ['[1,'],
@@ -155,7 +176,9 @@ class StaticSiteTest extends TestCase {
 		$staticSite->setStatus($status);
 		$staticSite->setUpdatedAt(time() - $updatedAgo);
 
-		$this->assertSame($expected, $staticSite->jsonSerialize()['isInProgress']);
+		$json = $staticSite->jsonSerialize();
+		$this->assertSame($expected, $json['isInProgress']);
+		$this->assertSame($expected, $json['secondsUntilTimeout'] !== null);
 	}
 
 	public function testJsonSerializeOmitsStaticSiteAndBuildIds(): void {

@@ -126,6 +126,15 @@ class StaticSite extends Entity implements JsonSerializable {
 	}
 
 	/**
+	 * @return ?int Seconds until a request in progress counts as aborted, null if none is in progress
+	 */
+	public function getSecondsUntilTimeout(int $now): ?int {
+		return $this->isInProgress($now)
+			? $this->updatedAt + self::PENDING_TIMEOUT - $now
+			: null;
+	}
+
+	/**
 	 * @throws UnexpectedValueException Stored page selection is corrupted
 	 */
 	public function getSelectedPageIds(): array {
@@ -193,6 +202,7 @@ class StaticSite extends Entity implements JsonSerializable {
 	 * `isInProgress` is evaluated with the server time, so clients don't need to know the timeout.
 	 */
 	public function jsonSerialize(): array {
+		$now = time();
 		return [
 			'id' => $this->id,
 			'collectiveId' => $this->collectiveId,
@@ -210,7 +220,8 @@ class StaticSite extends Entity implements JsonSerializable {
 			'publishedTitle' => $this->publishedTitle,
 			'publishedSelectedPageIds' => $this->getPublishedSelectedPageIds(),
 			'publishedBuildStartedAt' => $this->getPublishedBuildStartedAt(),
-			'isInProgress' => $this->isInProgress(time()),
+			'isInProgress' => $this->isInProgress($now),
+			'secondsUntilTimeout' => $this->getSecondsUntilTimeout($now),
 		];
 	}
 }
