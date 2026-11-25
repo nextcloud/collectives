@@ -432,6 +432,38 @@ test.describe('Collective publish', () => {
 		expect(sentBody!.pageIds).toEqual(expect.arrayContaining([rootPageId, publishedPage.data.id]))
 	})
 
+	test('offers to update a website whose pages changed since its publication', async ({ collective, navigation, page }) => {
+		const rootPageId = collective.getRootPage().data.id
+		const staticSite = {
+			id: 1,
+			title: 'Outdated website',
+			slug: 'outdated-website',
+			selectedPageIds: [rootPageId],
+			publishedSelectedPageIds: [rootPageId],
+			publishedUrl: 'https://example.org/outdated-website',
+			publishedAt: timestamp(3600),
+			publishedBuildStartedAt: timestamp(3600),
+			status: 'published',
+			isInProgress: false,
+		}
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: ocsResponse([staticSite]) })
+		})
+
+		// The home page got created after the publication, so it changed since
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const modal = page.getByRole('dialog')
+		const card = websiteCard(page, staticSite.title)
+
+		await expect(card).toContainText('Live · changes not published')
+		await card.getByRole('button', { name: 'Update website Outdated website' }).click()
+		await expect(modal.getByRole('heading', { name: 'Update website' })).toBeVisible()
+	})
+
 	test('creates a new website with a web address not used in the collective yet', async ({ collective, navigation, page }) => {
 		const staticSite = {
 			id: 1,
@@ -783,7 +815,12 @@ test.describe('Collective publish', () => {
 		await expect(abortedPublication).toContainText('Failed')
 		await expect(abortedPublication).toContainText('The publish service didn\'t respond in time.')
 
-		// A failed website can be published again
+		// A failed website can be published again, from the card as well
+		await expect(previouslyPublished.getByRole('button', { name: 'Update website Previously published website' })).toBeEnabled()
+		await expect(neverPublished.getByRole('button', { name: 'Publish website Never published website' })).toBeEnabled()
+		// The web address is shown before the website is online
+		await expect(neverPublished).toContainText('https://example.com/sites/never-published-website')
+		await expect(neverPublished.getByRole('link')).toHaveCount(0)
 		await expect(await websiteAction(page, 'Never published website', 'Edit')).toBeEnabled()
 	})
 
@@ -864,6 +901,9 @@ test.describe('Collective publish', () => {
 		await confirmation.getByRole('button', { name: 'Cancel' }).click()
 		await expect(confirmation).toHaveCount(0)
 		await expect(websiteCard(page, staticSite.title)).toBeVisible()
+
+		// An up to date website offers no update
+		await expect(websiteCard(page, staticSite.title).getByRole('button', { name: /^(Update|Publish) website/ })).toHaveCount(0)
 
 		await (await websiteAction(page, staticSite.title, 'Delete website')).click()
 		await confirmation.getByRole('button', { name: 'Delete website' }).click()

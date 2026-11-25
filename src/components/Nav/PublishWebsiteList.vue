@@ -58,6 +58,22 @@
 					</span>
 					<div class="publish-website-list__actions">
 						<NcButton
+							v-if="publishAction(staticSite) === 'update'"
+							variant="primary"
+							:aria-label="t('collectives', 'Update website {title}', { title: staticSite.title })"
+							:disabled="isLocked"
+							@click="$emit('edit', staticSite)">
+							{{ t('collectives', 'Update') }}
+						</NcButton>
+						<NcButton
+							v-else-if="publishAction(staticSite) === 'publish'"
+							variant="primary"
+							:aria-label="t('collectives', 'Publish website {title}', { title: staticSite.title })"
+							:disabled="isLocked"
+							@click="$emit('edit', staticSite)">
+							{{ t('collectives', 'Publish') }}
+						</NcButton>
+						<NcButton
 							v-if="staticSiteState(staticSite) === 'deleteFailed'"
 							:disabled="isLocked"
 							@click="$emit('delete', staticSite)">
@@ -113,6 +129,10 @@
 					:href="staticSite.publishedUrl"
 					target="_blank"
 					rel="noopener noreferrer">{{ staticSite.publishedUrl }}</a>
+				<span
+					v-else
+					class="publish-website-list__url publish-website-list__url--unpublished"
+					:title="t('collectives', 'Web address once the website is published')">{{ addressPrefix }}{{ staticSite.slug }}</span>
 				<p v-if="['failed', 'deleteFailed'].includes(staticSiteState(staticSite))" class="publish-website-list__error">
 					{{ staticSiteFailureReason(staticSite) }}
 					{{ onlineHint(staticSite) }}
@@ -150,6 +170,7 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import WebIcon from 'vue-material-design-icons/Web.vue'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
+import { STATIC_SITE_ADDRESS_PREFIX } from '../../util/staticSiteSlug.js'
 import { hasUnpublishedChanges, staticSiteFailureReason, staticSiteState } from '../../util/staticSiteStatus.js'
 
 export default {
@@ -198,6 +219,10 @@ export default {
 		// Only one publication or deletion per collective may run at a time
 		isLocked() {
 			return this.staticSites.some((staticSite) => staticSite.isInProgress)
+		},
+
+		addressPrefix() {
+			return STATIC_SITE_ADDRESS_PREFIX
 		},
 
 		steps() {
@@ -273,6 +298,23 @@ export default {
 				default:
 					return t('collectives', 'Failed')
 			}
+		},
+
+		/**
+		 * Publishing is offered on the card if the website isn't online or not up to date
+		 *
+		 * @param {object} staticSite static site as returned by the backend
+		 * @return {?('update'|'publish')} action shown on the card, null if there is nothing to publish
+		 */
+		publishAction(staticSite) {
+			const state = this.badgeState(staticSite)
+			if (state === 'outdated') {
+				return 'update'
+			}
+			if (state === 'failed') {
+				return staticSite.publishedUrl ? 'update' : 'publish'
+			}
+			return null
 		},
 
 		/**
@@ -463,6 +505,11 @@ export default {
 		color: var(--color-primary-element);
 		text-decoration: underline;
 		word-break: break-all;
+
+		&--unpublished {
+			color: var(--color-text-maxcontrast);
+			text-decoration: none;
+		}
 	}
 
 	&__error {
