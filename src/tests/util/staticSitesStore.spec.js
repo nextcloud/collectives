@@ -165,7 +165,7 @@ describe('static sites publication watching', () => {
 		store.watchPublication(collective, staticSite({ id: 1, title: 'Old website' }))
 		await poll()
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Old website" of collective "Collective" published at ${publishedUrl}`)
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 
 		store.watchPublication(collective, staticSite({ id: 2, title: 'New website' }))
 		await poll()
@@ -182,7 +182,7 @@ describe('static sites publication watching', () => {
 		await vi.advanceTimersByTimeAsync((secondsUntilTimeout + staticSitePollInterval) * 1000)
 		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
 
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 		expect(attempts).toBe(secondsUntilTimeout / staticSitePollInterval + 1)
 
 		await poll(5)
@@ -207,7 +207,7 @@ describe('static sites publication watching', () => {
 		expect(api.getStaticSites).toHaveBeenCalledTimes(2)
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Website A" of collective "Collective" published at ${publishedUrl}`)
 		expect(showError).toHaveBeenCalledWith('Website "Website B" of collective "Collective" could not be published: The publish service could not build the website. Please contact your administrator.')
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 	})
 
 	it('watches publications of several collectives', async () => {
@@ -224,7 +224,7 @@ describe('static sites publication watching', () => {
 		expect(api.getStaticSites).toHaveBeenCalledWith(2)
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Website 1" of collective "Collective" published at ${publishedUrl}`)
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Website 2" of collective "Other collective" published at ${publishedUrl}`)
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 	})
 
 	it('restarts watching a publication that got published again', async () => {
@@ -236,7 +236,23 @@ describe('static sites publication watching', () => {
 		store.watchPublication(collective, staticSite())
 		await poll(5)
 
-		expect(store.pollIntervalId).not.toBeNull()
+		expect(store.pollTimeoutId).not.toBeNull()
+		store.stopWatching()
+	})
+
+	it('polls again only after a slow request finished', async () => {
+		vi.mocked(api.getStaticSites).mockImplementation(() => new Promise((resolve) => {
+			setTimeout(() => resolve(response(staticSite())), 2.5 * staticSitePollInterval * 1000)
+		}))
+		const store = useStaticSitesStore()
+
+		store.watchPublication(collective, staticSite())
+		await vi.advanceTimersByTimeAsync(3 * staticSitePollInterval * 1000)
+		expect(api.getStaticSites).toHaveBeenCalledTimes(1)
+		expect(store.watchedRequests[1].attemptsLeft).toBe(secondsUntilTimeout / staticSitePollInterval)
+
+		await vi.advanceTimersByTimeAsync(1.5 * staticSitePollInterval * 1000)
+		expect(api.getStaticSites).toHaveBeenCalledTimes(2)
 		store.stopWatching()
 	})
 
@@ -276,7 +292,7 @@ describe('static sites publication watching', () => {
 		await vi.advanceTimersByTimeAsync((secondsUntilTimeout + staticSitePollInterval) * 1000)
 		const attempts = vi.mocked(api.getStaticSites).mock.calls.length
 
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 		expect(attempts).toBe(secondsUntilTimeout / staticSitePollInterval + 1)
 
 		await poll(5)
@@ -317,7 +333,7 @@ describe('static site deletion', () => {
 		expect(api.deleteStaticSite).toHaveBeenCalledWith(1, 1)
 		expect(store.staticSitesForCollective(1).map(({ id }) => id)).toEqual([2])
 		expect(showSuccess).toHaveBeenCalledWith('Website "Website" of collective "Collective" deleted')
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 	})
 
 	it('waits until the publish service deleted the static site', async () => {
@@ -336,7 +352,7 @@ describe('static site deletion', () => {
 
 		await poll()
 		expect(showSuccess).toHaveBeenCalledWith('Website "Website" of collective "Collective" deleted')
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 	})
 
 	it('shows the reason if the publish service failed to delete the static site', async () => {
@@ -348,7 +364,7 @@ describe('static site deletion', () => {
 		await poll()
 
 		expect(showError).toHaveBeenCalledWith('Website "Website" of collective "Collective" could not be deleted: The publish service could not delete the website. Please try again later.')
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 	})
 
 	it('keeps the static sites if the request fails', async () => {
@@ -401,7 +417,7 @@ describe('watching requests in progress', () => {
 		await poll()
 		expect(showSuccess).toHaveBeenCalledWith(`Website "Publishing website" of collective "Collective" published at ${publishedUrl}`)
 		expect(showSuccess).toHaveBeenCalledWith('Website "Deleting website" of collective "Collective" deleted')
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 	})
 
 	it('polls only as long as the backend keeps a request in progress', async () => {
@@ -414,7 +430,7 @@ describe('watching requests in progress', () => {
 		await poll(10)
 
 		expect(api.getStaticSites).toHaveBeenCalledTimes(4)
-		expect(store.pollIntervalId).toBeNull()
+		expect(store.pollTimeoutId).toBeNull()
 	})
 
 	it('keeps watching a request that is watched already', async () => {

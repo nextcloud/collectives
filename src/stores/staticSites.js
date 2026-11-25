@@ -6,6 +6,7 @@
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { defineStore } from 'pinia'
+import { toRaw } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { staticSitePollInterval } from '../constants.js'
 import { byTitleAsc } from '../util/sortOrders.js'
@@ -17,8 +18,8 @@ export const useStaticSitesStore = defineStore('staticSites', {
 		staticSites: {},
 		/** @type {Object<number, {operation: 'publish'|'delete', title: string, collectiveId: number, collectiveName: string, attemptsLeft: number}>} static site ID -> watched request */
 		watchedRequests: {},
-		/** @type {?number} */
-		pollIntervalId: null,
+		/** @type {?number} timer of the next poll, also set while a poll is running */
+		pollTimeoutId: null,
 	}),
 
 	getters: {
@@ -141,9 +142,27 @@ export const useStaticSitesStore = defineStore('staticSites', {
 				// One more than until the backend aborts the request, so the last poll sees it aborted
 				attemptsLeft: Math.ceil((staticSite.secondsUntilTimeout ?? 0) / staticSitePollInterval) + 1,
 			}
-			if (!this.pollIntervalId) {
-				this.pollIntervalId = setInterval(() => this.pollWatchedRequests(), staticSitePollInterval * 1000)
+			if (!this.pollTimeoutId) {
+				this.schedulePoll()
 			}
+		},
+
+		/**
+		 * The next poll is scheduled once the previous one finished, so slow requests don't overlap
+		 */
+		schedulePoll() {
+			const timeoutId = setTimeout(async () => {
+				await this.pollWatchedRequests()
+				// Unless watching stopped or started anew meanwhile. The state may wrap a timer object.
+				if (toRaw(this.pollTimeoutId) !== timeoutId) {
+					return
+				}
+				this.pollTimeoutId = null
+				if (Object.keys(this.watchedRequests).length > 0) {
+					this.schedulePoll()
+				}
+			}, staticSitePollInterval * 1000)
+			this.pollTimeoutId = timeoutId
 		},
 
 		/**
@@ -265,8 +284,8 @@ export const useStaticSitesStore = defineStore('staticSites', {
 		},
 
 		stopWatching() {
-			clearInterval(this.pollIntervalId)
-			this.pollIntervalId = null
+			clearTimeout(this.pollTimeoutId)
+			this.pollTimeoutId = null
 			this.watchedRequests = {}
 		},
 	},
