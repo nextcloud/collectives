@@ -10,12 +10,15 @@ declare(strict_types=1);
 namespace Unit\Service;
 
 use Exception;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Request;
 use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorTimeoutException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
@@ -120,7 +123,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	}
 
 	public function testCheckHealthNotReachable(): void {
-		$this->httpClient->method('request')->willThrowException(new Exception('Connection refused'));
+		$this->httpClient->method('request')->willThrowException(self::makeConnectException(0.0));
 
 		$this->expectException(StaticSiteGeneratorException::class);
 		$this->expectExceptionMessage('The static site generator is not reachable');
@@ -288,10 +291,35 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	 * @dataProvider sendMethodProvider
 	 */
 	public function testSendWithSsgNotReachable(string $method): void {
-		$this->httpClient->method('request')->willThrowException(new Exception('Connection timed out'));
+		$this->httpClient->method('request')->willThrowException(self::makeConnectException(0.0));
 
-		$this->expectException(StaticSiteGeneratorUnavailableException::class);
-		$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
+		try {
+			$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
+			$this->fail('Expected StaticSiteGeneratorUnavailableException');
+		} catch (StaticSiteGeneratorUnavailableException $e) {
+			$this->assertNotInstanceOf(StaticSiteGeneratorTimeoutException::class, $e);
+		}
+	}
+
+	public static function noAnswerExceptionProvider(): array {
+		return [
+			'timed out after sending' => [self::makeConnectException(0.01)],
+			'unknown transfer error' => [new Exception('Connection closed')],
+		];
+	}
+
+	/**
+	 * @dataProvider noAnswerExceptionProvider
+	 */
+	public function testDeleteWithoutAnswer(Exception $exception): void {
+		$this->httpClient->method('request')->willThrowException($exception);
+
+		$this->expectException(StaticSiteGeneratorTimeoutException::class);
+		$this->client->delete($this->makeStaticSite());
+	}
+
+	private static function makeConnectException(float $pretransferTime): ConnectException {
+		return new ConnectException('cURL error', new Request('DELETE', 'https://ssg.example.org/static-sites/'), null, ['pretransfer_time' => $pretransferTime]);
 	}
 
 	public static function unavailableResponseProvider(): array {

@@ -27,6 +27,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorTimeoutException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSitePublicationInProgressException;
 use OCA\Collectives\Service\StaticSiteRemover;
@@ -1111,12 +1112,13 @@ class StaticSiteServiceTest extends TestCase {
 		return [
 			'rejected' => [new StaticSiteGeneratorException('Rejected'), StaticSite::ERROR_GENERATOR_REJECTED, true],
 			'busy' => [new StaticSiteGeneratorBusyException('Busy'), StaticSite::ERROR_GENERATOR_BUSY, true],
-			'unavailable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, false],
+			'not reachable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, true],
+			'no answer' => [new StaticSiteGeneratorTimeoutException('Timeout'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, false],
 		];
 	}
 
 	/**
-	 * The archive of an unavailable generator is kept, as the generator may have accepted the build anyway
+	 * The archive is kept if the generator didn't answer, as it may have accepted the build anyway
 	 *
 	 * @dataProvider generatorFailureProvider
 	 */
@@ -1180,12 +1182,12 @@ class StaticSiteServiceTest extends TestCase {
 		$this->service->update($this->collectiveId, 7, [1], 'Title', $this->userId);
 	}
 
-	public function testUpdateStoresStatusFailedIfGeneratorIsUnavailable(): void {
+	public function testUpdateStoresStatusFailedIfGeneratorDidNotAnswer(): void {
 		$this->expectValidCollectiveWithPages();
 		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 		$this->staticSiteMapper->method('startBuild')->willReturn(true);
-		$this->generatorClient->method('create')->willThrowException(new StaticSiteGeneratorUnavailableException('Unavailable'));
+		$this->generatorClient->method('create')->willThrowException(new StaticSiteGeneratorTimeoutException('Timeout'));
 
 		$this->staticSiteMapper->expects($this->once())
 			->method('updateRequestStatus')

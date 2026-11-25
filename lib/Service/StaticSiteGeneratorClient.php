@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 use Exception;
+use GuzzleHttp\Exception\ConnectException;
 use JsonException;
 use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\StaticSite;
@@ -69,6 +70,7 @@ class StaticSiteGeneratorClient {
 	 * the slug is taken by another static site is a rejection.
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
 	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
@@ -87,6 +89,7 @@ class StaticSiteGeneratorClient {
 	 * Falls back to creating it if the generator doesn't know it, e.g. if it was removed there.
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
 	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
@@ -106,6 +109,7 @@ class StaticSiteGeneratorClient {
 	 * @return bool False if the generator doesn't know the static site
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
 	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
@@ -194,6 +198,7 @@ class StaticSiteGeneratorClient {
 
 	/**
 	 * @throws StaticSiteGeneratorNotConfiguredException
+	 * @throws StaticSiteGeneratorTimeoutException Didn't answer after the request was sent
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable
 	 */
 	private function request(string $method, string $path, ?array $json = null): IResponse {
@@ -214,8 +219,20 @@ class StaticSiteGeneratorClient {
 			return $this->clientService->newClient()->request($method, $this->getBaseUrl() . $path, $options);
 		} catch (Exception $e) {
 			$this->logger->warning('Failed to reach static site generator', ['exception' => $e]);
-			throw new StaticSiteGeneratorUnavailableException($this->l10n->t('The static site generator is not reachable'), 0, $e);
+			if ($this->wasNotSent($e)) {
+				throw new StaticSiteGeneratorUnavailableException($this->l10n->t('The static site generator is not reachable'), 0, $e);
+			}
+			throw new StaticSiteGeneratorTimeoutException($this->l10n->t('The static site generator did not answer'), 0, $e);
 		}
+	}
+
+	/**
+	 * Whether the request failed before it was sent, e.g. as the host couldn't be resolved or
+	 * refused the connection. cURL reports no pretransfer time then.
+	 */
+	private function wasNotSent(Exception $e): bool {
+		return $e instanceof ConnectException
+			&& ($e->getHandlerContext()['pretransfer_time'] ?? 0) == 0;
 	}
 
 	private function getBaseUrl(): string {

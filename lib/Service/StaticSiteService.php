@@ -470,21 +470,21 @@ class StaticSiteService {
 	/**
 	 * Store status failed, so publishing can be retried later.
 	 *
-	 * A rejected build never downloads its archive, so it is deleted. If the generator was
-	 * unavailable or timed out, it may have accepted the build anyway, so the archive is kept.
+	 * A build the generator didn't accept never downloads its archive, so it is deleted. If the
+	 * generator didn't answer after the request was sent, it may have accepted the build anyway,
+	 * so the archive is kept.
 	 *
 	 * @throws NotFoundException Static site was deleted meanwhile
 	 * @throws DBException
 	 */
 	private function storeGeneratorFailure(StaticSite $staticSite, StaticSiteGeneratorException $e): void {
-		$unavailable = $e instanceof StaticSiteGeneratorUnavailableException;
 		$lastError = match (true) {
-			$unavailable => StaticSite::ERROR_GENERATOR_UNAVAILABLE,
+			$e instanceof StaticSiteGeneratorUnavailableException => StaticSite::ERROR_GENERATOR_UNAVAILABLE,
 			$e instanceof StaticSiteGeneratorBusyException => StaticSite::ERROR_GENERATOR_BUSY,
 			default => StaticSite::ERROR_GENERATOR_REJECTED,
 		};
 		$this->concludeRequest($staticSite, StaticSite::STATUS_FAILED, $lastError);
-		if (!$unavailable) {
+		if (!$e instanceof StaticSiteGeneratorTimeoutException) {
 			$this->deleteArchive($staticSite, $staticSite->getBuildId());
 		}
 	}

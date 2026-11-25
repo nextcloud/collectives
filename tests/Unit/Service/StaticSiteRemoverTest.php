@@ -18,6 +18,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorTimeoutException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCA\Collectives\Service\StaticSiteRemover;
 use OCA\Collectives\Service\UnprocessableEntityException;
@@ -133,6 +134,7 @@ class StaticSiteRemoverTest extends TestCase {
 		return [
 			'rejected' => [new StaticSiteGeneratorException('Rejected')],
 			'busy' => [new StaticSiteGeneratorBusyException('Busy')],
+			'not reachable' => [new StaticSiteGeneratorUnavailableException('Unavailable')],
 		];
 	}
 
@@ -164,13 +166,13 @@ class StaticSiteRemoverTest extends TestCase {
 	/**
 	 * The generator may have accepted the request anyway
 	 */
-	public function testRemoveKeepsStaticSiteDeletingIfGeneratorIsUnavailable(): void {
+	public function testRemoveKeepsStaticSiteDeletingIfGeneratorDidNotAnswer(): void {
 		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
-		$this->generatorClient->method('delete')->willThrowException(new StaticSiteGeneratorUnavailableException('Unavailable'));
+		$this->generatorClient->method('delete')->willThrowException(new StaticSiteGeneratorTimeoutException('Timeout'));
 		$this->staticSiteMapper->expects($this->never())->method('restoreStatus');
 		$this->archiver->expects($this->never())->method('deleteAll');
 
-		$this->expectException(StaticSiteGeneratorUnavailableException::class);
+		$this->expectException(StaticSiteGeneratorTimeoutException::class);
 		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 

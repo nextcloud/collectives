@@ -39,8 +39,9 @@ class StaticSiteRemover {
 	 * deleted once the static site generator reports it as deleted. Until then its slug stays
 	 * reserved, as the generator still uses it.
 	 *
-	 * If the generator rejects the request, the static site remains unchanged. If it is unavailable,
-	 * the static site stays deleting, as the generator may have accepted the request anyway.
+	 * If the generator doesn't accept the request, the static site remains unchanged. If it didn't
+	 * answer after the request was sent, the static site stays deleting, as the generator may have
+	 * accepted the request anyway.
 	 *
 	 * @return bool True if the static site got deleted right away, false if it is being deleted
 	 *
@@ -61,7 +62,7 @@ class StaticSiteRemover {
 
 		try {
 			$known = $this->generatorClient->delete($staticSite);
-		} catch (StaticSiteGeneratorUnavailableException $e) {
+		} catch (StaticSiteGeneratorTimeoutException $e) {
 			throw $e;
 		} catch (StaticSiteGeneratorException $e) {
 			$this->restoreStatus($previous);
