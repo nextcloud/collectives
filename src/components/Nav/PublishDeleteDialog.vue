@@ -127,8 +127,14 @@ export default {
 </style>
 
 <style lang="scss">
-// The dialog is mounted to the body, outside of scoped styles. A long name must not run below the close button.
-.publish-delete-dialog .dialog__name {
-	margin-inline: var(--default-clickable-area);
+// The dialog is mounted to the body, outside of scoped styles. A long name must not run below
+// the close button and keeps the usual line spacing if it wraps.
+.publish-delete-dialog h2.dialog__name {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-block: 13px;
+	margin-inline: 26px;
+	line-height: 1.3;
 }
 </style>
