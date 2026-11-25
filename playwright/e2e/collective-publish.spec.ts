@@ -145,6 +145,12 @@ test.describe('Collective publish', () => {
 			// Web addresses are unique across all collectives
 			await slugField.fill(`website-${collective.data.id}`)
 
+			// Wiki is preselected, switching to Menu bar must reach the backend as "topnav".
+			// The native radio itself is visually hidden, so its label card is clicked instead.
+			await expect(modal.getByRole('radio', { name: 'Wiki' })).toBeChecked()
+			await modal.locator('.theme-option').filter({ hasText: 'Menu bar' }).click()
+			await expect(modal.getByRole('radio', { name: 'Menu bar' })).toBeChecked()
+
 			// All pages are pre-selected; click publish
 			await submitButton.click()
 
@@ -152,7 +158,9 @@ test.describe('Collective publish', () => {
 			const response = await (await requestPromise).response()
 			expect(response).not.toBeNull()
 			expect(response!.status()).toBe(200)
-			expect((await response!.json()).ocs.data.status).toBe('provided')
+			const responseData = (await response!.json()).ocs.data
+			expect(responseData.status).toBe('provided')
+			expect(responseData.theme).toBe('topnav')
 
 			// The website list shows the website being published
 			await expect(getToast(page, 'success', 'Website publishing started')).toBeVisible()

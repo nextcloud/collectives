@@ -48,11 +48,11 @@
 					@update:modelValue="$emit('update:slug', $event)" />
 			</div>
 		</div>
-		<div class="publish-settings-form__field">
-			<span :id="themeLabelId" class="publish-settings-form__label">
+		<fieldset class="publish-settings-form__field publish-settings-form__themes-field">
+			<legend class="publish-settings-form__label">
 				{{ t('collectives', 'Theme') }}
-			</span>
-			<div class="publish-settings-form__themes" role="radiogroup" :aria-labelledby="themeLabelId">
+			</legend>
+			<div class="publish-settings-form__themes">
 				<label
 					v-for="option in themeOptions"
 					:key="option.value"
@@ -72,7 +72,7 @@
 					</span>
 				</label>
 			</div>
-		</div>
+		</fieldset>
 	</div>
 </template>
 
@@ -141,7 +141,6 @@ export default {
 			slugMaxLength: SLUG_MAX_LENGTH,
 			titleId: `publish-settings-title-${this.uniqueId}`,
 			titleMaxLength: TITLE_MAX_LENGTH,
-			themeLabelId: `publish-settings-theme-${this.uniqueId}`,
 			themeName: `publish-settings-theme-${this.uniqueId}`,
 			themeOptions: [
 				{
@@ -201,6 +200,18 @@ export default {
 	&__label {
 		margin-block-end: 10px;
 		font-weight: bold;
+	}
+
+	// Reset browser default fieldset/legend styling, the radiogroup fieldset otherwise looks like native ones
+	&__themes-field {
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: none;
+
+		legend.publish-settings-form__label {
+			padding: 0;
+		}
 	}
 
 	// Higher specificity to override the default margin of the note card
