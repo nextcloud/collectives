@@ -62,7 +62,7 @@
 							variant="primary"
 							:aria-label="t('collectives', 'Update website {title}', { title: staticSite.title })"
 							:disabled="isLocked"
-							@click="$emit('edit', staticSite)">
+							@click="$emit('review', staticSite)">
 							{{ t('collectives', 'Update') }}
 						</NcButton>
 						<NcButton
@@ -70,7 +70,7 @@
 							variant="primary"
 							:aria-label="t('collectives', 'Publish website {title}', { title: staticSite.title })"
 							:disabled="isLocked"
-							@click="$emit('edit', staticSite)">
+							@click="$emit('review', staticSite)">
 							{{ t('collectives', 'Publish') }}
 						</NcButton>
 						<NcButton
@@ -213,6 +213,7 @@ export default {
 		'create',
 		'delete',
 		'edit',
+		'review',
 	],
 
 	computed: {

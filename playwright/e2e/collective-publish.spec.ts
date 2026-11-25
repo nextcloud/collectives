@@ -432,14 +432,16 @@ test.describe('Collective publish', () => {
 		expect(sentBody!.pageIds).toEqual(expect.arrayContaining([rootPageId, publishedPage.data.id]))
 	})
 
-	test('offers to update a website whose pages changed since its publication', async ({ collective, navigation, page }) => {
+	test('updates a website whose pages changed since its publication after reviewing the changes', async ({ collective, navigation, page }) => {
 		const rootPageId = collective.getRootPage().data.id
+		const deletedPageId = 999999
 		const staticSite = {
 			id: 1,
 			title: 'Outdated website',
 			slug: 'outdated-website',
-			selectedPageIds: [rootPageId],
-			publishedSelectedPageIds: [rootPageId],
+			theme: 'topnav',
+			selectedPageIds: [rootPageId, deletedPageId],
+			publishedSelectedPageIds: [rootPageId, deletedPageId],
 			publishedUrl: 'https://example.org/outdated-website',
 			publishedAt: timestamp(3600),
 			publishedBuildStartedAt: timestamp(3600),
@@ -452,16 +454,77 @@ test.describe('Collective publish', () => {
 			}
 			await route.fulfill({ json: ocsResponse([staticSite]) })
 		})
+		let sentBody: { pageIds: number[], title: string, slug: string } | null = null
+		await page.route(`**/static-sites/${staticSite.id}`, async (route) => {
+			if (route.request().method() !== 'PUT') {
+				return route.fallback()
+			}
+			sentBody = route.request().postDataJSON()
+			await route.fulfill({ json: ocsResponse({ ...staticSite, status: 'provided', isInProgress: true, secondsUntilTimeout: 900 }) })
+		})
 
 		// The home page got created after the publication, so it changed since
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
-		const modal = page.getByRole('dialog')
 		const card = websiteCard(page, staticSite.title)
+		const review = page.getByRole('dialog', { name: 'Update website "Outdated website"?' })
 
 		await expect(card).toContainText('Live · changes not published')
 		await card.getByRole('button', { name: 'Update website Outdated website' }).click()
-		await expect(modal.getByRole('heading', { name: 'Update website' })).toBeVisible()
+		await expect(review).toContainText(`The whole website at ${staticSite.publishedUrl} is published again.`)
+		// Changed pages link to the page, deleted ones are only counted
+		await expect(review.getByRole('link', { name: 'Home' })).toHaveAttribute('target', '_blank')
+		await expect(review).toContainText('1 published page was deleted and gets removed from the website.')
+
+		await review.getByRole('button', { name: 'Publish' }).click()
+		await expect(review).toHaveCount(0)
+		await expect(getToast(page, 'success', 'Website publishing started')).toBeVisible()
+		// The website is published again with its settings, without the deleted page
+		expect(sentBody).toEqual({ pageIds: [rootPageId], title: staticSite.title, slug: staticSite.slug, theme: staticSite.theme })
+	})
+
+	test('publishes a website whose first publication failed after reviewing its pages', async ({ collective, navigation, page, user }) => {
+		const childPage = await collective.createPage({ title: 'Child page', user, page })
+		const staticSite = {
+			id: 1,
+			title: 'Failed website',
+			slug: 'failed-website',
+			selectedPageIds: [collective.getRootPage().data.id, childPage.data.id],
+			publishedUrl: null,
+			status: 'failed',
+			isInProgress: false,
+			lastError: 'generator_unavailable',
+			updatedAt: timestamp(60),
+		}
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			await route.fulfill({ json: ocsResponse([staticSite]) })
+		})
+		await page.route(`**/static-sites/${staticSite.id}`, async (route) => {
+			if (route.request().method() !== 'PUT') {
+				return route.fallback()
+			}
+			await route.fulfill({
+				status: 503,
+				json: { ocs: { meta: { status: 'failure', statuscode: 503, message: 'The publish service is currently not available. Please try again later.' }, data: [] } },
+			})
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const review = page.getByRole('dialog', { name: 'Publish website "Failed website"?' })
+
+		await websiteCard(page, staticSite.title).getByRole('button', { name: 'Publish website Failed website' }).click()
+		await expect(review).toContainText('The last attempt failed a minute ago: The publish service is currently not available. Please try again later.')
+		await expect(review).toContainText('These 2 pages go online at https://example.com/sites/failed-website:')
+		await expect(review.getByRole('listitem')).toHaveText(['Home', 'Child page'])
+
+		// The dialog stays open to try again
+		await review.getByRole('button', { name: 'Publish' }).click()
+		await expect(getToast(page, 'error', 'Could not publish collective as website')).toBeVisible()
+		await expect(review).toBeVisible()
 	})
 
 	test('creates a new website with a web address not used in the collective yet', async ({ collective, navigation, page }) => {

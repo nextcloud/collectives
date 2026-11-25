@@ -187,9 +187,23 @@ export const usePagesStore = defineStore('pages', {
 		pagePath: (state) => (page) => {
 			const collectivesStore = useCollectivesStore()
 
-			// Landing page
+			// Landing page, also of a page share
 			if (page.id === state.rootPage.id) {
 				return collectivesStore.currentCollectivePath
+			}
+
+			return state.pagePathInCollective(collectivesStore.currentCollective, page)
+		},
+
+		/**
+		 * Path of a page of any collective, also one that isn't the current one
+		 */
+		pagePathInCollective: () => (collective, page) => {
+			const collectivePath = useCollectivesStore().collectivePath(collective)
+
+			// Landing page
+			if (page.parentId === 0) {
+				return collectivePath
 			}
 
 			if (!page.slug) {
@@ -199,11 +213,11 @@ export const usePagesStore = defineStore('pages', {
 				const pagePath = [...filePath.split('/'), titlePart]
 					.filter(Boolean).map(encodeURIComponent).join('/')
 				return pagePath
-					? `${collectivesStore.currentCollectivePath}/${pagePath}?fileId=${id}`
-					: collectivesStore.currentCollectivePath
+					? `${collectivePath}/${pagePath}?fileId=${id}`
+					: collectivePath
 			}
 
-			return `${collectivesStore.currentCollectivePath}/${page.slug}-${page.id}`
+			return `${collectivePath}/${page.slug}-${page.id}`
 		},
 
 		currentPagePath(state) {

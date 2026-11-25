@@ -40,7 +40,8 @@
 				:pages="pagesForCollective(collective)"
 				@create="createWebsite"
 				@delete="staticSiteToDelete = $event"
-				@edit="editWebsite" />
+				@edit="editWebsite"
+				@review="staticSiteToReview = $event" />
 			<template v-else>
 				<PublishStepIndicator
 					class="modal-publish__steps"
@@ -88,6 +89,12 @@
 					</div>
 				</div>
 			</template>
+			<PublishReviewDialog
+				v-if="staticSiteToReview"
+				:collective="collective"
+				:staticSite="staticSiteToReview"
+				:pages="pagesForCollective(collective)"
+				@close="staticSiteToReview = null" />
 			<PublishDeleteDialog
 				v-if="staticSiteToDelete"
 				:collective="collective"
@@ -104,7 +111,6 @@
 </template>
 
 <script>
-import { showSuccess } from '@nextcloud/dialogs'
 import { n, t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -114,10 +120,10 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
 import PublishDeleteDialog from './PublishDeleteDialog.vue'
 import PublishPageSelection from './PublishPageSelection.vue'
+import PublishReviewDialog from './PublishReviewDialog.vue'
 import PublishSettingsForm from './PublishSettingsForm.vue'
 import PublishStepIndicator from './PublishStepIndicator.vue'
 import PublishWebsiteList from './PublishWebsiteList.vue'
-import { createStaticSite, updateStaticSite } from '../../apis/collectives/index.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 import displayError from '../../util/displayError.js'
@@ -136,6 +142,7 @@ export default {
 		NcModal,
 		PublishDeleteDialog,
 		PublishPageSelection,
+		PublishReviewDialog,
 		PublishSettingsForm,
 		PublishStepIndicator,
 		PublishWebsiteList,
@@ -164,6 +171,8 @@ export default {
 			pendingAction: null,
 			/** @type {?object} static site waiting for the user to confirm deleting it */
 			staticSiteToDelete: null,
+			/** @type {?object} static site waiting for the user to confirm publishing it again */
+			staticSiteToReview: null,
 			selectedPageIds: new Set(),
 			loading: true,
 			publishing: false,
@@ -286,7 +295,7 @@ export default {
 
 		...mapActions(usePagesStore, ['getPagesForCollective']),
 
-		...mapActions(useStaticSitesStore, ['getStaticSites', 'watchPublication', 'watchRequestsInProgress']),
+		...mapActions(useStaticSitesStore, ['getStaticSites', 'publishStaticSite', 'watchRequestsInProgress']),
 
 		onClose() {
 			this.confirmDiscard(() => this.$emit('close'))
@@ -386,19 +395,16 @@ export default {
 				return
 			}
 
-			const pageIds = Array.from(this.selectedPageIds)
 			this.publishing = true
-			const title = this.title.trim()
 			const slug = this.slug
-			const theme = this.theme
-			const request = this.selectedStaticSite
-				? updateStaticSite(this.collective.id, this.selectedStaticSite.id, pageIds, title, slug, theme)
-				: createStaticSite(this.collective.id, pageIds, title, slug, theme)
-			request
-				.then(({ data }) => {
-					showSuccess(t('collectives', 'Website publishing started'))
-					// Wait for the result in the background, also once the modal got closed
-					this.watchPublication(this.collective, data.ocs.data)
+			this.publishStaticSite(this.collective, {
+				id: this.selectedStaticSite?.id ?? null,
+				pageIds: Array.from(this.selectedPageIds),
+				title: this.title.trim(),
+				slug,
+				theme: this.theme,
+			})
+				.then(() => {
 					this.showWebsiteList()
 					return this.reloadStaticSites()
 				})

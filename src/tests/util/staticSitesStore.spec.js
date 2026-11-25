@@ -10,7 +10,7 @@ import * as api from '../../apis/collectives/index.js'
 import { staticSitePollInterval } from '../../constants.js'
 import { useStaticSitesStore } from '../../stores/staticSites.js'
 
-vi.mock('../../apis/collectives/index.js', () => ({ deleteStaticSite: vi.fn(), getStaticSites: vi.fn() }))
+vi.mock('../../apis/collectives/index.js', () => ({ createStaticSite: vi.fn(), deleteStaticSite: vi.fn(), getStaticSites: vi.fn(), updateStaticSite: vi.fn() }))
 vi.mock('@nextcloud/dialogs', () => ({ showError: vi.fn(), showSuccess: vi.fn() }))
 vi.mock('@nextcloud/l10n', () => ({
 	t: (_app, message, parameters = {}) => message.replace(/\{(\w+)}/g, (match, name) => parameters[name] ?? match),
@@ -440,5 +440,51 @@ describe('watching requests in progress', () => {
 		await poll()
 
 		expect(showError).toHaveBeenCalledWith('Website "Website" of collective "Collective" could not be deleted: The publish service didn\'t respond in time.')
+	})
+})
+
+describe('static site publication', () => {
+	beforeEach(() => {
+		setActivePinia(createPinia())
+		vi.resetAllMocks()
+		vi.useFakeTimers()
+	})
+
+	afterEach(() => {
+		useStaticSitesStore().stopWatching()
+		vi.useRealTimers()
+	})
+
+	it('creates a new static site and waits for its publication', async () => {
+		vi.mocked(api.createStaticSite).mockResolvedValue({ data: { ocs: { data: staticSite({ id: 3 }) } } })
+		const store = useStaticSitesStore()
+
+		const created = await store.publishStaticSite(collective, { id: null, pageIds: [1, 2], title: 'Website', slug: 'website', theme: 'wiki' })
+
+		expect(api.createStaticSite).toHaveBeenCalledWith(1, [1, 2], 'Website', 'website', 'wiki')
+		expect(created.id).toBe(3)
+		expect(showSuccess).toHaveBeenCalledWith('Website publishing started')
+		expect(store.watchedRequests[3].operation).toBe('publish')
+	})
+
+	it('publishes an existing static site again', async () => {
+		vi.mocked(api.updateStaticSite).mockResolvedValue({ data: { ocs: { data: staticSite() } } })
+		const store = useStaticSitesStore()
+
+		await store.publishStaticSite(collective, { id: 1, pageIds: [1], title: 'Website', slug: 'website', theme: 'topnav' })
+
+		expect(api.updateStaticSite).toHaveBeenCalledWith(1, 1, [1], 'Website', 'website', 'topnav')
+		expect(api.createStaticSite).not.toHaveBeenCalled()
+		expect(store.watchedRequests[1].operation).toBe('publish')
+	})
+
+	it('doesn\'t wait for a publication that couldn\'t be started', async () => {
+		vi.mocked(api.updateStaticSite).mockRejectedValue(new Error('request failed'))
+		const store = useStaticSitesStore()
+
+		await expect(store.publishStaticSite(collective, { id: 1, pageIds: [1], title: 'Website', slug: 'website', theme: 'topnav' })).rejects.toThrow('request failed')
+
+		expect(showSuccess).not.toHaveBeenCalled()
+		expect(store.watchedRequests).toEqual({})
 	})
 })

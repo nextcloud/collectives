@@ -35,6 +35,28 @@ export const useStaticSitesStore = defineStore('staticSites', {
 		},
 
 		/**
+		 * Publish a new static site or an existing one again, and wait for the result in the background
+		 *
+		 * @param {object} collective Collective of the static site
+		 * @param {object} settings Settings to publish
+		 * @param {?number} settings.id ID of the static site, null for a new one
+		 * @param {number[]} settings.pageIds IDs of the pages to publish
+		 * @param {string} settings.title Title of the static site
+		 * @param {string} settings.slug Slug of the static site
+		 * @param {string} settings.theme Theme of the static site
+		 * @return {Promise<object>} static site being published
+		 */
+		async publishStaticSite(collective, { id, pageIds, title, slug, theme }) {
+			const response = id
+				? await api.updateStaticSite(collective.id, id, pageIds, title, slug, theme)
+				: await api.createStaticSite(collective.id, pageIds, title, slug, theme)
+			const staticSite = response.data.ocs.data
+			showSuccess(t('collectives', 'Website publishing started'))
+			this.watchPublication(collective, staticSite)
+			return staticSite
+		},
+
+		/**
 		 * Delete a static site. If the publish service deletes it asynchronously, wait for the
 		 * result in the background.
 		 *
