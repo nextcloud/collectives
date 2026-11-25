@@ -737,7 +737,7 @@ class StaticSiteServiceTest extends TestCase {
 
 	public function testUpdateKeepsCurrentThemeIfNoneGiven(): void {
 		$this->expectValidCollectiveWithPages();
-		$staticSite = $this->makeStaticSite(StaticSite::STATUS_PUBLISHED);
+		$staticSite = $this->makeStaticSite(StaticSite::STATUS_FAILED);
 		$staticSite->setTheme(StaticSite::THEME_TOPNAV);
 		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($staticSite);
 		$this->staticSiteMapper->method('startBuild')->willReturn(true);

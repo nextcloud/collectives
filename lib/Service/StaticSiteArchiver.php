@@ -90,14 +90,6 @@ class StaticSiteArchiver {
 		}
 	}
 
-	public function exists(string $staticSiteId): bool {
-		try {
-			return $this->appData->getFolder(self::APPDATA_FOLDER)->fileExists($staticSiteId . self::ARCHIVE_SUFFIX);
-		} catch (FilesNotFoundException) {
-			return false;
-		}
-	}
-
 	/**
 	 * @throws ServiceException
 	 */

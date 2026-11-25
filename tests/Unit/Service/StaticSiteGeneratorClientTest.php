@@ -239,10 +239,10 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	public function testUpdatePatchesStaticSiteWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			->with('PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, $this->isRequestOptions($this->expectedUpdatePayload()))
+			->with('PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId, $this->isRequestOptions($this->expectedUpdatePayload('topnav')))
 			->willReturn($this->makeResponse(202, ''));
 
-		$this->client->update($this->makeStaticSite(), 'My Site', 'wiki');
+		$this->client->update($this->makeStaticSite(), 'My Site', 'topnav');
 	}
 
 	public function testUpdateFallsBackToCreateIfStaticSiteIsUnknown(): void {

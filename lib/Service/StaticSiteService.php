@@ -184,17 +184,8 @@ class StaticSiteService {
 			$staticSite->setSlug($slug);
 		}
 
-		// Rebuilding is skipped only if the content wouldn't change and the previous archive is
-		// still there to redeliver, e.g. not yet deleted after a prior publication concluded
-		$skipArchiveRebuild = $slug === null
-			&& $title === $staticSite->getTitle()
-			&& $this->pageIdsUnchanged($pageIds, $staticSite)
-			&& $this->archiver->exists($staticSite->getStaticSiteId());
-
 		try {
-			if (!$skipArchiveRebuild) {
-				$this->buildArchive($staticSite, $pageIds);
-			}
+			$this->buildArchive($staticSite, $pageIds);
 		} catch (ServiceException $e) {
 			$this->restoreStatus($previous);
 			// The archive may have been stored partially
@@ -612,17 +603,6 @@ class StaticSiteService {
 		if (!in_array($theme, StaticSite::ALLOWED_THEMES, true)) {
 			throw new UnprocessableEntityException('Theme must be one of: ' . implode(', ', StaticSite::ALLOWED_THEMES));
 		}
-	}
-
-	/**
-	 * @param list<int> $pageIds
-	 */
-	private function pageIdsUnchanged(array $pageIds, StaticSite $staticSite): bool {
-		$current = $pageIds;
-		$stored = $staticSite->getSelectedPageIds();
-		sort($current);
-		sort($stored);
-		return $current === $stored;
 	}
 
 	/**

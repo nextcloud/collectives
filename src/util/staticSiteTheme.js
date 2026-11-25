@@ -6,3 +6,4 @@
 // Keep in sync with StaticSite::ALLOWED_THEMES and the theme literal in ResponseDefinitions.php
 export const THEME_WIKI = 'wiki'
 export const THEME_TOPNAV = 'topnav'
+export const THEMES = [THEME_WIKI, THEME_TOPNAV]

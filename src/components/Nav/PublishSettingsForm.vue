@@ -84,7 +84,7 @@ import themePreviewTopnav from '../../../img/theme-preview-topnav.svg?url'
 import themePreviewWiki from '../../../img/theme-preview-wiki.svg?url'
 import uniqueIdMixin from '../../mixins/uniqueIdMixin.js'
 import { isValidSlug, SLUG_MAX_LENGTH } from '../../util/staticSiteSlug.js'
-import { THEME_TOPNAV, THEME_WIKI } from '../../util/staticSiteTheme.js'
+import { THEME_TOPNAV, THEME_WIKI, THEMES } from '../../util/staticSiteTheme.js'
 import { isValidTitle, TITLE_MAX_LENGTH } from '../../util/staticSiteTitle.js'
 
 export default {
@@ -111,6 +111,7 @@ export default {
 		theme: {
 			type: String,
 			required: true,
+			validator: (value) => THEMES.includes(value),
 		},
 
 		/** The slug of a published website can't be changed */
@@ -287,12 +288,10 @@ export default {
 	border: 2px solid var(--color-border-dark);
 	border-radius: var(--border-radius-large);
 	cursor: pointer;
-	opacity: 0.6;
-	transition: opacity 0.1s ease-in-out, border-color 0.1s ease-in-out;
+	transition: border-color 0.1s ease-in-out;
 
 	&:hover {
 		border-color: var(--color-border-maxcontrast);
-		opacity: 0.85;
 	}
 
 	&:has(.theme-option__input:focus-visible) {
@@ -300,9 +299,10 @@ export default {
 		outline-offset: 2px;
 	}
 
-	&--selected {
+	// Compound selector so this outweighs the :hover rule above, which would otherwise win on
+	// specificity (two selectors) over a lone `.theme-option--selected` (one selector)
+	&.theme-option--selected {
 		border-color: var(--color-primary-element);
-		opacity: 1;
 	}
 
 	// Selection is handled by the card itself, so the native control stays accessible but invisible
