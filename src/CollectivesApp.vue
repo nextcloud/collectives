@@ -36,6 +36,7 @@
 			v-if="showCollectiveSettings"
 			:collective="settingsCollective" />
 		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
+		<CommandPalette />
 	</NcContent>
 </template>
 
@@ -45,6 +46,7 @@ import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcContent from '@nextcloud/vue/components/NcContent'
+import CommandPalette from './components/CommandPalette.vue'
 import CollectiveSelector from './components/Nav/CollectiveSelector.vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import NewCollectiveModal from './components/Nav/NewCollectiveModal.vue'
@@ -52,6 +54,7 @@ import PageList from './components/PageList.vue'
 import PageSidebar from './components/PageSidebar.vue'
 import { useNetworkState } from './composables/useNetworkState.js'
 import { useCollectivesStore } from './stores/collectives.js'
+import { useCommandPaletteStore } from './stores/commandPalette.js'
 import { usePagesStore } from './stores/pages.js'
 import { useRootStore } from './stores/root.js'
 import { useSettingsStore } from './stores/settings.js'
@@ -65,6 +68,7 @@ export default {
 		CollectiveSelector,
 		CollectiveSettings,
 		NcAppNavigation,
+		CommandPalette,
 		NcContent,
 		NewCollectiveModal,
 		PageList,
@@ -142,12 +146,14 @@ export default {
 	mounted() {
 		this.getCollectivesAndSettings()
 		subscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
+		this.setupKeyboardShortcuts()
 	},
 
 	beforeUnmount() {
 		unsubscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
 		document.removeEventListener('pointermove', this.onResizeMove)
 		document.removeEventListener('pointerup', this.onResizeEnd)
+		this.removeKeyboardShortcuts()
 	},
 
 	methods: {
@@ -155,6 +161,8 @@ export default {
 		...mapActions(useCollectivesStore, [
 			'getCollectives',
 		]),
+
+		...mapActions(useCommandPaletteStore, { toggleCommandPalette: 'toggle' }),
 
 		onOpenNewCollectiveModal() {
 			this.showNewCollectiveModal = true
@@ -212,6 +220,22 @@ export default {
 			}
 
 			this.loadPending = false
+		},
+
+		setupKeyboardShortcuts() {
+			document.addEventListener('keydown', this.handleGlobalKeyDown)
+		},
+
+		removeKeyboardShortcuts() {
+			document.removeEventListener('keydown', this.handleGlobalKeyDown)
+		},
+
+		handleGlobalKeyDown(event) {
+			// Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+			if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+				event.preventDefault()
+				this.toggleCommandPalette()
+			}
 		},
 	},
 
