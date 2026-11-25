@@ -1064,6 +1064,47 @@ test.describe('Collective publish', () => {
 		await expect(confirmation.getByRole('button', { name: 'Delete website' })).toBeEnabled()
 	})
 
+	test('reports a website as deleted that is gone although deleting it failed', async ({ collective, navigation, page }) => {
+		const staticSite = {
+			id: 1,
+			title: 'Published website',
+			slug: 'published-website',
+			selectedPageIds: [collective.getRootPage().data.id],
+			publishedUrl: 'https://example.org/published-website',
+			status: 'published',
+			isInProgress: false,
+		}
+		let deleteRequested = false
+		await page.route('**/static-sites', async (route) => {
+			if (route.request().method() !== 'GET') {
+				return route.fallback()
+			}
+			// E.g. another member deleted it meanwhile
+			await route.fulfill({ json: ocsResponse(deleteRequested ? [] : [staticSite]) })
+		})
+		await page.route(`**/static-sites/${staticSite.id}`, async (route) => {
+			if (route.request().method() !== 'DELETE') {
+				return route.fallback()
+			}
+			deleteRequested = true
+			await route.fulfill({
+				status: 404,
+				json: { ocs: { meta: { status: 'failure', statuscode: 404, message: 'Static site not found' }, data: [] } },
+			})
+		})
+
+		await collective.openCollective()
+		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
+		const confirmation = page.getByRole('dialog', { name: 'Delete website "Published website"?' })
+
+		await (await websiteAction(page, staticSite.title, 'Delete website')).click()
+		await confirmation.getByRole('button', { name: 'Delete website' }).click()
+
+		await expect(getToast(page, 'success', `Website "Published website" of collective "${collective.data.name}" deleted`)).toBeVisible()
+		await expect(confirmation).toHaveCount(0)
+		await expect(page.getByText('Static site not found')).toHaveCount(0)
+	})
+
 	test('closes the confirmation if the publish service may have got the request although it wasn\'t reachable', async ({ collective, navigation, page }) => {
 		const staticSite = {
 			id: 1,

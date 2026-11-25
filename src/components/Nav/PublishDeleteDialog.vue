@@ -83,7 +83,7 @@ export default {
 	methods: {
 		t,
 
-		...mapActions(useStaticSitesStore, ['deleteStaticSite', 'getStaticSites', 'watchDeletion']),
+		...mapActions(useStaticSitesStore, ['deleteStaticSite', 'getStaticSites', 'showDeleted', 'watchDeletion']),
 
 		/**
 		 * The dialog stays open after an error if deleting can be tried again right away.
@@ -91,24 +91,30 @@ export default {
 		 * @return {Promise<boolean|undefined>} false to keep the dialog open
 		 */
 		async onDelete() {
+			let deleteError
 			try {
 				await this.deleteStaticSite(this.collective, this.staticSite)
 				return
 			} catch (e) {
-				displayError('Could not delete website')(e)
+				deleteError = e
 			}
 
 			// The website may have changed meanwhile, e.g. by another member of the collective
 			try {
 				await this.getStaticSites(this.collective.id)
 			} catch (e) {
+				displayError('Could not delete website')(deleteError)
 				displayError('Could not load static sites for collective')(e)
 				return false
 			}
 			const staticSite = this.staticSitesForCollective(this.collective.id).find(({ id }) => id === this.staticSite.id)
 			if (!staticSite) {
+				// E.g. deleted by another member, or the answer of the request got lost
+				this.showDeleted(this.staticSite.title, this.collective.name)
 				return
 			}
+
+			displayError('Could not delete website')(deleteError)
 			// The publish service may have got the request although it wasn't reachable
 			if (staticSite.status === 'deleting' && staticSite.isInProgress) {
 				this.watchDeletion(this.collective, staticSite)
