@@ -12,6 +12,7 @@ namespace Unit\Controller;
 use OCA\Collectives\Controller\StaticSiteController;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\Service\ServiceException;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
@@ -129,6 +130,11 @@ class StaticSiteControllerTest extends TestCase {
 				new StaticSiteGeneratorUnavailableException('Not reachable'),
 				Http::STATUS_SERVICE_UNAVAILABLE,
 				'The publish service is currently not available. Please try again later.',
+			],
+			'busy' => [
+				new StaticSiteGeneratorBusyException('Busy'),
+				Http::STATUS_LOCKED,
+				'The publish service is still processing a previous request for this website. Please try again in a few minutes.',
 			],
 			'rejected' => [
 				new StaticSiteGeneratorException('Rejected'),

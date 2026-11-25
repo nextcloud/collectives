@@ -12,6 +12,7 @@ namespace Unit\Service;
 use Exception;
 use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Db\StaticSite;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
@@ -318,6 +319,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			'create, not accepted' => ['create', 200, ''],
 			'update, invalid' => ['update', 422, ''],
 			'update, created' => ['update', 201, ''],
+			'update, outdated build' => ['update', 409, '{"data": {"error_message": "build_id not newer"}}'],
 		];
 	}
 
@@ -332,7 +334,27 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			$this->fail('Expected StaticSiteGeneratorException');
 		} catch (StaticSiteGeneratorException $e) {
 			$this->assertNotInstanceOf(StaticSiteGeneratorUnavailableException::class, $e);
+			$this->assertNotInstanceOf(StaticSiteGeneratorBusyException::class, $e);
 		}
+	}
+
+	public function testUpdateWhileGeneratorIsBusy(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(409, '{"data": {"error_message": "operation in progress"}}'));
+
+		$this->expectException(StaticSiteGeneratorBusyException::class);
+		$this->client->update($this->makeStaticSite(), 'My Site', 'wiki');
+	}
+
+	public function testCreateWhileGeneratorIsBusyWithKnownStaticSite(): void {
+		$this->httpClient->expects(self::exactly(2))
+			->method('request')
+			->willReturnOnConsecutiveCalls(
+				$this->makeResponse(409, '{"data": {"error_message": "static site already exists"}}'),
+				$this->makeResponse(409, '{"data": {"error_message": "operation in progress"}}'),
+			);
+
+		$this->expectException(StaticSiteGeneratorBusyException::class);
+		$this->client->create($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
 	public function testSendLogsErrorOfGenerator(): void {
@@ -371,6 +393,13 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->method('request')->willReturn($this->makeResponse(503, ''));
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
+		$this->client->delete($this->makeStaticSite());
+	}
+
+	public function testDeleteWhileGeneratorIsBusy(): void {
+		$this->httpClient->method('request')->willReturn($this->makeResponse(409, '{"data": {"error_message": "operation in progress"}}'));
+
+		$this->expectException(StaticSiteGeneratorBusyException::class);
 		$this->client->delete($this->makeStaticSite());
 	}
 

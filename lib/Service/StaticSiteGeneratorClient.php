@@ -31,6 +31,7 @@ class StaticSiteGeneratorClient {
 	private const CONNECT_TIMEOUT = 5;
 	private const STATIC_SITES_PATH = '/static-sites';
 	private const ERROR_SLUG_TAKEN = 'slug already taken';
+	private const ERROR_OPERATION_IN_PROGRESS = 'operation in progress';
 
 	public function __construct(
 		private readonly IClientService $clientService,
@@ -69,6 +70,7 @@ class StaticSiteGeneratorClient {
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	public function create(StaticSite $staticSite, string $title, string $theme): void {
@@ -86,6 +88,7 @@ class StaticSiteGeneratorClient {
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	public function update(StaticSite $staticSite, string $title, string $theme): void {
@@ -104,6 +107,7 @@ class StaticSiteGeneratorClient {
 	 *
 	 * @throws StaticSiteGeneratorNotConfiguredException
 	 * @throws StaticSiteGeneratorUnavailableException Not reachable or temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	public function delete(StaticSite $staticSite): bool {
@@ -161,6 +165,7 @@ class StaticSiteGeneratorClient {
 
 	/**
 	 * @throws StaticSiteGeneratorUnavailableException Temporarily unavailable
+	 * @throws StaticSiteGeneratorBusyException Still processing a previous request for the static site
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	private function assertAccepted(StaticSite $staticSite, IResponse $response): void {
@@ -169,17 +174,22 @@ class StaticSiteGeneratorClient {
 			return;
 		}
 
+		$error = $this->getErrorMessage($response);
 		// The error of the generator may contain technical details, so it's only logged
 		$this->logger->warning('Static site generator did not accept the request', [
 			'staticSiteId' => $staticSite->getStaticSiteId(),
 			'buildId' => $staticSite->getBuildId(),
 			'statusCode' => $statusCode,
-			'error' => $this->getErrorMessage($response),
+			'error' => $error,
 		]);
 		$message = $this->l10n->t('The static site generator did not accept the request (HTTP status %d)', [$statusCode]);
-		throw $statusCode >= 500
-			? new StaticSiteGeneratorUnavailableException($message)
-			: new StaticSiteGeneratorException($message);
+		if ($statusCode >= 500) {
+			throw new StaticSiteGeneratorUnavailableException($message);
+		}
+		if ($statusCode === Http::STATUS_CONFLICT && $error === self::ERROR_OPERATION_IN_PROGRESS) {
+			throw new StaticSiteGeneratorBusyException($message);
+		}
+		throw new StaticSiteGeneratorException($message);
 	}
 
 	/**

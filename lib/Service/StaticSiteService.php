@@ -478,9 +478,11 @@ class StaticSiteService {
 	 */
 	private function storeGeneratorFailure(StaticSite $staticSite, StaticSiteGeneratorException $e): void {
 		$unavailable = $e instanceof StaticSiteGeneratorUnavailableException;
-		$lastError = $unavailable
-			? StaticSite::ERROR_GENERATOR_UNAVAILABLE
-			: StaticSite::ERROR_GENERATOR_REJECTED;
+		$lastError = match (true) {
+			$unavailable => StaticSite::ERROR_GENERATOR_UNAVAILABLE,
+			$e instanceof StaticSiteGeneratorBusyException => StaticSite::ERROR_GENERATOR_BUSY,
+			default => StaticSite::ERROR_GENERATOR_REJECTED,
+		};
 		$this->concludeRequest($staticSite, StaticSite::STATUS_FAILED, $lastError);
 		if (!$unavailable) {
 			$this->deleteArchive($staticSite, $staticSite->getBuildId());

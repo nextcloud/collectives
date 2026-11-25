@@ -13,6 +13,7 @@ use Closure;
 use OCA\Collectives\Db\StaticSite;
 use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\ServiceException;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
 use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
@@ -204,6 +205,11 @@ class StaticSiteController extends OCSController {
 			throw new OCSException(
 				$this->l10n->t('The publish service is currently not available. Please try again later.'),
 				Http::STATUS_SERVICE_UNAVAILABLE,
+			);
+		} catch (StaticSiteGeneratorBusyException) {
+			throw new OCSException(
+				$this->l10n->t('The publish service is still processing a previous request for this website. Please try again in a few minutes.'),
+				Http::STATUS_LOCKED,
 			);
 		} catch (StaticSiteGeneratorException) {
 			throw new OCSException(

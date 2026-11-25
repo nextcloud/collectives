@@ -415,6 +415,7 @@
                         "enum": [
                             "generator_unavailable",
                             "generator_rejected",
+                            "generator_busy",
                             "generator_failed",
                             "generator_invalid_url",
                             "generator_delete_failed"

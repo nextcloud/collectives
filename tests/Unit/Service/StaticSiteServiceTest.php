@@ -23,6 +23,7 @@ use OCA\Collectives\Service\SlugService;
 use OCA\Collectives\Service\StaticSiteArchiver;
 use OCA\Collectives\Service\StaticSiteBuildNotFoundException;
 use OCA\Collectives\Service\StaticSiteContentCollector;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
@@ -1109,6 +1110,7 @@ class StaticSiteServiceTest extends TestCase {
 	public static function generatorFailureProvider(): array {
 		return [
 			'rejected' => [new StaticSiteGeneratorException('Rejected'), StaticSite::ERROR_GENERATOR_REJECTED, true],
+			'busy' => [new StaticSiteGeneratorBusyException('Busy'), StaticSite::ERROR_GENERATOR_BUSY, true],
 			'unavailable' => [new StaticSiteGeneratorUnavailableException('Unavailable'), StaticSite::ERROR_GENERATOR_UNAVAILABLE, false],
 		];
 	}

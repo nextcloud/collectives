@@ -14,6 +14,7 @@ use OCA\Collectives\Db\StaticSiteMapper;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\ServiceException;
 use OCA\Collectives\Service\StaticSiteArchiver;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
 use OCA\Collectives\Service\StaticSiteGeneratorClient;
 use OCA\Collectives\Service\StaticSiteGeneratorException;
 use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
@@ -128,16 +129,26 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 
-	public function testRemoveRestoresStaticSiteIfGeneratorRejectsRequest(): void {
+	public static function notAcceptedExceptionProvider(): array {
+		return [
+			'rejected' => [new StaticSiteGeneratorException('Rejected')],
+			'busy' => [new StaticSiteGeneratorBusyException('Busy')],
+		];
+	}
+
+	/**
+	 * @dataProvider notAcceptedExceptionProvider
+	 */
+	public function testRemoveRestoresStaticSiteIfGeneratorDoesNotAcceptRequest(StaticSiteGeneratorException $exception): void {
 		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
-		$this->generatorClient->method('delete')->willThrowException(new StaticSiteGeneratorException('Rejected'));
+		$this->generatorClient->method('delete')->willThrowException($exception);
 		$this->staticSiteMapper->expects($this->once())
 			->method('restoreStatus')
 			->with($this->callback(fn (StaticSite $previous): bool => $previous->getStatus() === StaticSite::STATUS_PUBLISHED
 				&& $previous->getBuildId() === $this->buildId));
 		$this->archiver->expects($this->never())->method('deleteAll');
 
-		$this->expectException(StaticSiteGeneratorException::class);
+		$this->expectException($exception::class);
 		$this->remover->remove($this->makeStaticSite(published: true));
 	}
 
