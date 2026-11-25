@@ -66,12 +66,12 @@
 							{{ t('collectives', 'Update') }}
 						</NcButton>
 						<NcButton
-							v-else-if="publishAction(staticSite) === 'publish'"
+							v-else-if="publishAction(staticSite) === 'retry'"
 							variant="primary"
-							:aria-label="t('collectives', 'Publish website {title}', { title: staticSite.title })"
+							:aria-label="t('collectives', 'Retry publishing website {title}', { title: staticSite.title })"
 							:disabled="isLocked"
 							@click="$emit('review', staticSite)">
-							{{ t('collectives', 'Publish') }}
+							{{ t('collectives', 'Retry publish') }}
 						</NcButton>
 						<NcButton
 							v-if="staticSiteState(staticSite) === 'deleteFailed'"
@@ -302,20 +302,20 @@ export default {
 		},
 
 		/**
-		 * Publishing is offered on the card if the website isn't online or not up to date
+		 * Publishing is offered on the card if the website is not up to date or its last publication failed
 		 *
 		 * @param {object} staticSite static site as returned by the backend
-		 * @return {?('update'|'publish')} action shown on the card, null if there is nothing to publish
+		 * @return {?('update'|'retry')} action shown on the card, null if there is nothing to publish
 		 */
 		publishAction(staticSite) {
-			const state = this.badgeState(staticSite)
-			if (state === 'outdated') {
-				return 'update'
+			switch (this.badgeState(staticSite)) {
+				case 'outdated':
+					return 'update'
+				case 'failed':
+					return 'retry'
+				default:
+					return null
 			}
-			if (state === 'failed') {
-				return staticSite.publishedUrl ? 'update' : 'publish'
-			}
-			return null
 		},
 
 		/**

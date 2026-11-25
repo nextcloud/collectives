@@ -483,7 +483,7 @@ test.describe('Collective publish', () => {
 		expect(sentBody).toEqual({ pageIds: [rootPageId], title: staticSite.title, slug: staticSite.slug, theme: staticSite.theme })
 	})
 
-	test('publishes a website whose first publication failed after reviewing its pages', async ({ collective, navigation, page, user }) => {
+	test('retries publishing a website whose first publication failed after reviewing its pages', async ({ collective, navigation, page, user }) => {
 		const childPage = await collective.createPage({ title: 'Child page', user, page })
 		const staticSite = {
 			id: 1,
@@ -514,9 +514,9 @@ test.describe('Collective publish', () => {
 
 		await collective.openCollective()
 		await navigation.clickCollectiveMenu(collective.data.name, 'Publish website')
-		const review = page.getByRole('dialog', { name: 'Publish website "Failed website"?' })
+		const review = page.getByRole('dialog', { name: 'Retry publishing website "Failed website"?' })
 
-		await websiteCard(page, staticSite.title).getByRole('button', { name: 'Publish website Failed website' }).click()
+		await websiteCard(page, staticSite.title).getByRole('button', { name: 'Retry publishing website Failed website' }).click()
 		await expect(review).toContainText('The last attempt failed a minute ago: The publish service is currently not available. Please try again later.')
 		await expect(review).toContainText('These 2 pages go online at https://example.com/sites/failed-website:')
 		await expect(review.getByRole('listitem')).toHaveText(['Home', 'Child page'])
@@ -878,9 +878,13 @@ test.describe('Collective publish', () => {
 		await expect(abortedPublication).toContainText('Failed')
 		await expect(abortedPublication).toContainText('The publish service didn\'t respond in time.')
 
-		// A failed website can be published again, from the card as well
-		await expect(previouslyPublished.getByRole('button', { name: 'Update website Previously published website' })).toBeEnabled()
-		await expect(neverPublished.getByRole('button', { name: 'Publish website Never published website' })).toBeEnabled()
+		// A failed publication can be retried from the card
+		await expect(neverPublished.getByRole('button', { name: 'Retry publishing website Never published website' })).toBeEnabled()
+		await previouslyPublished.getByRole('button', { name: 'Retry publishing website Previously published website' }).click()
+		const review = page.getByRole('dialog', { name: 'Retry publishing website "Previously published website"?' })
+		await expect(review).toContainText('This page goes online at https://example.org/previously-published-website:')
+		await review.getByRole('button', { name: 'Cancel' }).click()
+		await expect(review).toHaveCount(0)
 		// The web address is shown before the website is online
 		await expect(neverPublished).toContainText('https://example.com/sites/never-published-website')
 		await expect(neverPublished.getByRole('link')).toHaveCount(0)

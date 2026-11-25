@@ -17,6 +17,7 @@ use OCA\Collectives\Db\StaticSite;
 use OCP\AppFramework\Http;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
+use OCP\Http\Client\LocalServerException;
 use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -228,9 +229,13 @@ class StaticSiteGeneratorClient {
 
 	/**
 	 * Whether the request failed before it was sent, e.g. as the host couldn't be resolved or
-	 * refused the connection. cURL reports no pretransfer time then.
+	 * refused the connection, for which cURL reports no pretransfer time, or as Nextcloud blocks
+	 * requests to local addresses.
 	 */
 	private function wasNotSent(Exception $e): bool {
+		if ($e instanceof LocalServerException) {
+			return true;
+		}
 		return $e instanceof ConnectException
 			&& ($e->getHandlerContext()['pretransfer_time'] ?? 0) == 0;
 	}

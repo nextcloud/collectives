@@ -23,6 +23,7 @@ use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
 use OCP\Http\Client\IResponse;
+use OCP\Http\Client\LocalServerException;
 use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -287,11 +288,20 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
 	}
 
+	public static function notSentProvider(): array {
+		return [
+			'create, not reachable' => ['create', self::makeConnectException(0.0)],
+			'update, not reachable' => ['update', self::makeConnectException(0.0)],
+			'create, local address blocked' => ['create', new LocalServerException('Host "ssg" violates local access rules')],
+			'update, local address blocked' => ['update', new LocalServerException('Host "ssg" violates local access rules')],
+		];
+	}
+
 	/**
-	 * @dataProvider sendMethodProvider
+	 * @dataProvider notSentProvider
 	 */
-	public function testSendWithSsgNotReachable(string $method): void {
-		$this->httpClient->method('request')->willThrowException(self::makeConnectException(0.0));
+	public function testSendWithSsgNotReachable(string $method, Exception $exception): void {
+		$this->httpClient->method('request')->willThrowException($exception);
 
 		try {
 			$this->client->$method($this->makeStaticSite(), 'My Site', 'wiki');
@@ -422,6 +432,17 @@ class StaticSiteGeneratorClientTest extends TestCase {
 
 		$this->expectException(StaticSiteGeneratorUnavailableException::class);
 		$this->client->delete($this->makeStaticSite());
+	}
+
+	public function testDeleteWithBlockedLocalAddress(): void {
+		$this->httpClient->method('request')->willThrowException(new LocalServerException('Host "ssg" violates local access rules'));
+
+		try {
+			$this->client->delete($this->makeStaticSite());
+			$this->fail('Expected StaticSiteGeneratorUnavailableException');
+		} catch (StaticSiteGeneratorUnavailableException $e) {
+			$this->assertNotInstanceOf(StaticSiteGeneratorTimeoutException::class, $e);
+		}
 	}
 
 	public function testDeleteWhileGeneratorIsBusy(): void {

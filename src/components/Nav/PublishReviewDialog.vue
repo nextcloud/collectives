@@ -13,7 +13,7 @@
 			v-if="lastFailureReason"
 			type="error"
 			:text="lastFailureReason" />
-		<template v-if="isFirstPublication">
+		<template v-if="isRetry">
 			<!-- eslint-disable-next-line vue/no-v-html -- translation is sanitized, the address is escaped -->
 			<p class="publish-review-dialog__text" v-html="goesOnlineText" />
 			<ul class="publish-review-dialog__pages">
@@ -68,7 +68,7 @@ export default {
 			required: true,
 		},
 
-		/** Static site to publish again with its current settings */
+		/** Static site to publish again with its current settings, those of the last attempt if it failed */
 		staticSite: {
 			type: Object,
 			required: true,
@@ -88,18 +88,19 @@ export default {
 	computed: {
 		...mapState(usePagesStore, ['pagePathInCollective']),
 
-		isFirstPublication() {
-			return !this.staticSite.publishedUrl
+		// Otherwise the website is online, but published pages changed since
+		isRetry() {
+			return staticSiteState(this.staticSite) === 'failed'
 		},
 
 		name() {
-			return this.isFirstPublication
-				? t('collectives', 'Publish website "{title}"?', { title: this.staticSite.title })
+			return this.isRetry
+				? t('collectives', 'Retry publishing website "{title}"?', { title: this.staticSite.title })
 				: t('collectives', 'Update website "{title}"?', { title: this.staticSite.title })
 		},
 
 		lastFailureReason() {
-			return staticSiteState(this.staticSite) === 'failed'
+			return this.isRetry
 				? t('collectives', 'The last attempt failed {time}: {reason}', {
 						time: this.formatRelativeTime(this.staticSite.updatedAt),
 						reason: staticSiteFailureReason(this.staticSite),
@@ -128,8 +129,9 @@ export default {
 		},
 
 		goesOnlineText() {
+			const address = this.staticSite.publishedUrl ?? STATIC_SITE_ADDRESS_PREFIX + this.staticSite.slug
 			return n('collectives', 'This page goes online at {address}:', 'These %n pages go online at {address}:', this.pagesToPublish.length, {
-				address: { value: `<strong>${escapeHtml(STATIC_SITE_ADDRESS_PREFIX + this.staticSite.slug)}</strong>`, escape: false },
+				address: { value: `<strong>${escapeHtml(address)}</strong>`, escape: false },
 			})
 		},
 
@@ -153,6 +155,8 @@ export default {
 				{
 					label: t('collectives', 'Publish'),
 					variant: 'primary',
+					// Without the pages, the home page and deleted pages are unknown
+					disabled: !this.pages.length,
 					callback: () => this.onPublish(),
 				},
 			]
