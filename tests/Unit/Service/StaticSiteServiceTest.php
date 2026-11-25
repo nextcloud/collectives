@@ -864,8 +864,19 @@ class StaticSiteServiceTest extends TestCase {
 			->with(7, $this->collectiveId)
 			->willReturn($staticSite);
 		$this->remover->expects($this->once())->method('remove')->with($staticSite)->willReturn(false);
+		$deleting = $this->makeStaticSite(StaticSite::STATUS_DELETING);
+		$this->staticSiteMapper->expects($this->once())->method('find')->with($staticSite->getId())->willReturn($deleting);
 
-		$this->assertSame($staticSite, $this->service->delete($this->collectiveId, 7, $this->userId));
+		$this->assertSame($deleting, $this->service->delete($this->collectiveId, 7, $this->userId));
+	}
+
+	public function testDeleteReturnsNullIfStatusCallbackDeletedStaticSiteMeanwhile(): void {
+		$this->collectiveService->method('getCollective')->willReturn($this->makeCollective(canEdit: true));
+		$this->staticSiteMapper->method('findByIdAndCollectiveId')->willReturn($this->makeStaticSite(StaticSite::STATUS_PUBLISHED));
+		$this->remover->method('remove')->willReturn(false);
+		$this->staticSiteMapper->method('find')->willThrowException(new DoesNotExistException('Not found'));
+
+		$this->assertNull($this->service->delete($this->collectiveId, 7, $this->userId));
 	}
 
 	public function testDeleteReturnsNullIfStaticSiteGotDeletedRightAway(): void {

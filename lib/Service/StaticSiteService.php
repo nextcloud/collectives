@@ -214,12 +214,14 @@ class StaticSiteService {
 	 * Not while a static site of the collective is being published or deleted, as only one
 	 * request per collective may run at a time.
 	 *
+	 * Returns the static site being deleted as stored now, as its deletion got a new build ID and update time.
+	 *
+	 * @return ?StaticSite Null if the static site got deleted, otherwise the static site being deleted,
+	 *                     gets loaded again from the database to include its new status and update time
 	 * @throws NotFoundException Collective or static site not found
 	 * @throws NotPermittedException User is not allowed to edit the collective
 	 * @throws StaticSitePublicationInProgressException A static site of the collective is being published or deleted
 	 * @throws UnprocessableEntityException Static site was changed meanwhile
-	 * @return ?StaticSite Null if the static site got deleted right away, otherwise the static site being deleted
-	 *
 	 * @throws StaticSiteGeneratorException Generator not configured, unavailable or didn't accept the request
 	 * @throws DBException
 	 */
@@ -228,7 +230,16 @@ class StaticSiteService {
 
 		$staticSite = $this->staticSiteMapper->findByIdAndCollectiveId($id, $collectiveId);
 		$this->assertNoPublicationInProgress($collectiveId);
-		return $this->remover->remove($staticSite) ? null : $staticSite;
+		if ($this->remover->remove($staticSite)) {
+			return null;
+		}
+
+		try {
+			return $this->staticSiteMapper->find($staticSite->getId());
+		} catch (DoesNotExistException) {
+			// The status callback of the deletion arrived already
+			return null;
+		}
 	}
 
 	/**
