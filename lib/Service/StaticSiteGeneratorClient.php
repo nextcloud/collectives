@@ -29,7 +29,7 @@ class StaticSiteGeneratorClient {
 	private const TIMEOUT = 30;
 	// Fail fast if the static site generator is not reachable at all
 	private const CONNECT_TIMEOUT = 5;
-	private const STATIC_SITES_PATH = '/static-sites/';
+	private const STATIC_SITES_PATH = '/static-sites';
 	private const ERROR_SLUG_TAKEN = 'slug already taken';
 
 	public function __construct(
@@ -107,7 +107,7 @@ class StaticSiteGeneratorClient {
 	 * @throws StaticSiteGeneratorException Request rejected
 	 */
 	public function delete(StaticSite $staticSite): bool {
-		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
+		$path = self::STATIC_SITES_PATH . '/' . rawurlencode($staticSite->getStaticSiteId());
 		$response = $this->request('DELETE', $path, ['data' => ['callback_status_url' => $this->getCallbackUrl($staticSite)]]);
 		if ($response->getStatusCode() === Http::STATUS_NOT_FOUND) {
 			return false;
@@ -133,7 +133,7 @@ class StaticSiteGeneratorClient {
 	 * @throws StaticSiteGeneratorUnavailableException
 	 */
 	private function sendUpdate(StaticSite $staticSite, string $title, string $theme): IResponse {
-		$path = self::STATIC_SITES_PATH . rawurlencode($staticSite->getStaticSiteId());
+		$path = self::STATIC_SITES_PATH . '/' . rawurlencode($staticSite->getStaticSiteId());
 		return $this->request('PATCH', $path, ['data' => $this->getPayload($staticSite, $title, $theme)]);
 	}
 

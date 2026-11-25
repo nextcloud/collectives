@@ -177,7 +177,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	public function testCreatePostsStaticSiteWithBearerToken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			->with('POST', 'https://ssg.example.org/static-sites/', $this->isRequestOptions($this->expectedCreatePayload('topnav')))
+			->with('POST', 'https://ssg.example.org/static-sites', $this->isRequestOptions($this->expectedCreatePayload('topnav')))
 			->willReturn($this->makeResponse(202, ''));
 
 		$this->client->create($this->makeStaticSite(), 'My Site', 'topnav');
@@ -187,7 +187,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 		$this->httpClient->expects(self::exactly(2))
 			->method('request')
 			->willReturnCallback(fn (string $method, string $url, array $options): IResponse => match ([$method, $url]) {
-				['POST', 'https://ssg.example.org/static-sites/'] => $this->makeResponse(409, ''),
+				['POST', 'https://ssg.example.org/static-sites'] => $this->makeResponse(409, ''),
 				['PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId] => $this->makeResponse(202, ''),
 			});
 
@@ -197,7 +197,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 	public function testCreateDoesNotFallBackToUpdateIfSlugIsTaken(): void {
 		$this->httpClient->expects(self::once())
 			->method('request')
-			->with('POST', 'https://ssg.example.org/static-sites/')
+			->with('POST', 'https://ssg.example.org/static-sites')
 			->willReturn($this->makeResponse(409, '{"data": {"error_message": "slug already taken"}}'));
 		$this->logger->expects(self::once())
 			->method('warning')
@@ -250,7 +250,7 @@ class StaticSiteGeneratorClientTest extends TestCase {
 			->method('request')
 			->willReturnCallback(fn (string $method, string $url, array $options): IResponse => match ([$method, $url]) {
 				['PATCH', 'https://ssg.example.org/static-sites/' . $this->staticSiteId] => $this->makeResponse(404, ''),
-				['POST', 'https://ssg.example.org/static-sites/'] => $this->makeResponse(202, ''),
+				['POST', 'https://ssg.example.org/static-sites'] => $this->makeResponse(202, ''),
 			});
 
 		$this->client->update($this->makeStaticSite(), 'My Site', 'wiki');
