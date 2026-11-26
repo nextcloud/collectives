@@ -18,7 +18,7 @@ SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["openapi.json", "playwright/support/fixtures/files/**", "tests/phpunit.xml", "tests/psalm-baseline.xml", "tests/Integration/features/fixtures/**", "vendor-bin/**"]
+path = ["openapi.json", "openapi-administration.json", "openapi-full.json", "playwright/support/fixtures/files/**", "tests/phpunit.xml", "tests/psalm-baseline.xml", "tests/Integration/features/fixtures/**", "vendor-bin/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
@@ -39,4 +39,10 @@ SPDX-License-Identifier = "AGPL-3.0-or-later"
 path = ["img/collectives-dark.svg", "img/collectives.svg", "img/folder-collective.svg", "img/page.svg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2021 Jörg Schmidt of Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["img/theme-preview-topnav.svg", "img/theme-preview-wiki.svg"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020-2026 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"

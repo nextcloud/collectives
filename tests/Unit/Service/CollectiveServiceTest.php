@@ -25,6 +25,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Collectives\Service\StaticSiteRemover;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -33,6 +34,7 @@ use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IL10N;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\String\UnicodeString;
 use Test\TestCase;
@@ -44,6 +46,7 @@ class CollectiveServiceTest extends TestCase {
 	private CollectiveFolderManager $collectiveFolderManager;
 	private CircleHelper $circleHelper;
 	private IL10N $l10n;
+	private StaticSiteRemover&MockObject $staticSiteRemover;
 	private CollectiveService $service;
 
 	protected function setUp(): void {
@@ -76,6 +79,7 @@ class CollectiveServiceTest extends TestCase {
 		$slug = new UnicodeString('free-123');
 		$slugger = $this->createMock(SluggerInterface::class);
 		$slugger->method('slug')->willReturn($slug);
+		$this->staticSiteRemover = $this->createMock(StaticSiteRemover::class);
 
 		$this->service = new CollectiveService(
 			$appManager,
@@ -91,6 +95,7 @@ class CollectiveServiceTest extends TestCase {
 			$eventDispatcher,
 			$nodeHelper,
 			$slugger,
+			$this->staticSiteRemover,
 		);
 	}
 
@@ -309,5 +314,45 @@ class CollectiveServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->service->deleteCollective(123, $this->userId, true);
+	}
+
+	public function testPurgeCollectiveDeletesItsWebsites(): void {
+		$collective = $this->mockTrashedCollective();
+		$this->collectiveFolderManager->method('getFolder')
+			->willThrowException(new FilesNotFoundException());
+		$this->collectiveMapper->method('delete')->willReturnArgument(0);
+		$this->staticSiteRemover->expects(self::once())
+			->method('removeAllOfCollective')
+			->with(123);
+
+		$this->service->purgeCollective($collective);
+	}
+
+	private function mockEditableCollective(): Collective {
+		$collective = new Collective();
+		$collective->setId(123);
+		$collective->setCircleId('CircleId');
+		$this->collectiveMapper->method('findByIdAndUser')->willReturn($collective);
+		$this->circleHelper->method('isAdmin')->willReturn(true);
+		$this->collectiveMapper->method('trash')->willReturnArgument(0);
+		$this->collectiveMapper->method('restore')->willReturnArgument(0);
+		return $collective;
+	}
+
+	public function testTrashCollectiveKeepsWebsitesOnline(): void {
+		$this->mockEditableCollective();
+		$this->staticSiteRemover->expects(self::never())->method('removeAllOfCollective');
+		$this->staticSiteRemover->expects(self::never())->method('remove');
+
+		$this->service->trashCollective(123, $this->userId);
+	}
+
+	public function testRestoreCollectiveKeepsWebsitesUnchanged(): void {
+		$this->mockTrashedCollective();
+		$this->collectiveMapper->method('restore')->willReturnArgument(0);
+		$this->staticSiteRemover->expects(self::never())->method('removeAllOfCollective');
+		$this->staticSiteRemover->expects(self::never())->method('remove');
+
+		$this->service->restoreCollective(123, $this->userId);
 	}
 }

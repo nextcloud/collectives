@@ -60,3 +60,7 @@ export const editorApiUpdateReadonlyBarProps = 'UPDATE_READONLY_BAR_PROPS'
 export const editorApiAttachments = 'ATTACHMENTS'
 
 export const sessionUpdateInterval = 90 // in seconds
+
+// The publish service reports the result of a publication or deletion back to the server
+// asynchronously, so the static sites of the collective get polled to notice it.
+export const staticSitePollInterval = 10 // in seconds

@@ -951,3 +951,9 @@ namespace OCA\Text\Event {
 		public function getNotification(): INotification
 	}
 }
+
+namespace GuzzleHttp\Exception {
+	class ConnectException extends \RuntimeException {
+		public function getHandlerContext(): array
+	}
+}

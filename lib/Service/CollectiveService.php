@@ -50,6 +50,7 @@ class CollectiveService extends CollectiveServiceBase {
 		private readonly IEventDispatcher $eventDispatcher,
 		private readonly NodeHelper $nodeHelper,
 		private readonly SluggerInterface $slugger,
+		private readonly StaticSiteRemover $staticSiteRemover,
 	) {
 		parent::__construct($collectiveMapper, $circleHelper);
 	}
@@ -370,6 +371,9 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new NotFoundException('Failed to delete collective folder', 0, $e);
 		} finally {
 			// Delete leftovers in any case (also if collective folder is already gone)
+
+			// Websites stay online while the collective is in trash, so they are only deleted now
+			$this->staticSiteRemover->removeAllOfCollective($collective->getId());
 
 			// Delete shares and user settings
 			$this->shareService->deleteShareByCollectiveId($collective->getId());

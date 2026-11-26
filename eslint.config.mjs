@@ -19,10 +19,11 @@ export default defineConfig([
 
 	{
 		name: 'playwright',
-		files: ['playwright/start-nextcloud-server.js'],
+		files: ['playwright/start-nextcloud-server.js', 'playwright/support/staticSiteGenerator.js'],
 		languageOptions: {
 			globals: {
 				process: 'readonly',
+				Buffer: 'readonly',
 			},
 		},
 	},

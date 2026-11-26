@@ -1,0 +1,220 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+namespace Unit\Controller;
+
+use OCA\Collectives\Controller\StaticSiteController;
+use OCA\Collectives\Db\StaticSite;
+use OCA\Collectives\Service\ServiceException;
+use OCA\Collectives\Service\StaticSiteGeneratorBusyException;
+use OCA\Collectives\Service\StaticSiteGeneratorException;
+use OCA\Collectives\Service\StaticSiteGeneratorNotConfiguredException;
+use OCA\Collectives\Service\StaticSiteGeneratorUnavailableException;
+use OCA\Collectives\Service\StaticSitePublicationInProgressException;
+use OCA\Collectives\Service\StaticSiteService;
+use OCA\Collectives\Service\StaticSiteSlugTakenException;
+use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\OCS\OCSBadRequestException;
+use OCP\AppFramework\OCS\OCSException;
+use OCP\IL10N;
+use OCP\IRequest;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
+use Test\TestCase;
+
+class StaticSiteControllerTest extends TestCase {
+	private StaticSiteService&MockObject $staticSiteService;
+	private LoggerInterface&MockObject $logger;
+	private StaticSiteController $controller;
+
+	protected function setUp(): void {
+		parent::setUp();
+
+		$this->staticSiteService = $this->createMock(StaticSiteService::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
+		$l10n = $this->createMock(IL10N::class);
+		$l10n->method('t')->willReturnArgument(0);
+
+		$this->controller = new StaticSiteController(
+			'collectives',
+			$this->createMock(IRequest::class),
+			$this->staticSiteService,
+			$this->logger,
+			$l10n,
+			'jane',
+		);
+	}
+
+	public function testCreateReturnsStaticSite(): void {
+		$staticSite = new StaticSite();
+		$this->staticSiteService->method('create')
+			->with(42, [1], 'jane', 'Title', 'slug', 'topnav')
+			->willReturn($staticSite);
+
+		$this->assertSame($staticSite, $this->controller->create(42, [1], 'Title', 'slug', 'topnav')->getData());
+	}
+
+	public function testCreateReturnsConflictIfSlugIsTaken(): void {
+		$this->staticSiteService->method('create')
+			->willThrowException(new StaticSiteSlugTakenException('Slug is already taken: slug'));
+		$this->logger->expects($this->never())->method('error');
+
+		$response = $this->controller->create(42, [1], 'Title', 'slug');
+
+		$this->assertSame(Http::STATUS_CONFLICT, $response->getStatus());
+		$this->assertSame(['message' => 'This web address is already taken by another website'], $response->getData());
+	}
+
+	public function testCreateLogsArchiveFailureWithContext(): void {
+		$exception = new ServiceException('Failed to provide static site archive');
+		$this->staticSiteService->method('create')->willThrowException($exception);
+		$this->logger->expects($this->once())
+			->method('error')
+			->with('Failed to provide static site archive', ['collectiveId' => 42, 'exception' => $exception]);
+
+		try {
+			$this->controller->create(42, [1]);
+			$this->fail('Expected OCSException');
+		} catch (OCSException $e) {
+			$this->assertSame(Http::STATUS_INTERNAL_SERVER_ERROR, $e->getCode());
+			$this->assertSame('The website could not be prepared. Please contact your administrator.', $e->getMessage());
+		}
+	}
+
+	public function testUpdatePassesSlugAndTheme(): void {
+		$staticSite = new StaticSite();
+		$this->staticSiteService->method('update')
+			->with(42, 7, [1], 'Title', 'jane', 'slug', 'topnav')
+			->willReturn($staticSite);
+
+		$this->assertSame($staticSite, $this->controller->update(42, 7, [1], 'Title', 'slug', 'topnav')->getData());
+	}
+
+	public function testUpdateReturnsConflictIfSlugIsTaken(): void {
+		$this->staticSiteService->method('update')
+			->willThrowException(new StaticSiteSlugTakenException('Slug is already taken: slug'));
+		$this->logger->expects($this->never())->method('error');
+
+		$response = $this->controller->update(42, 7, [1], 'Title', 'slug');
+
+		$this->assertSame(Http::STATUS_CONFLICT, $response->getStatus());
+		$this->assertSame(['message' => 'This web address is already taken by another website'], $response->getData());
+	}
+
+	public function testUpdateLogsArchiveFailureWithContext(): void {
+		$exception = new ServiceException('Failed to provide static site archive');
+		$this->staticSiteService->method('update')->willThrowException($exception);
+		$this->logger->expects($this->once())
+			->method('error')
+			->with('Failed to provide static site archive', ['collectiveId' => 42, 'id' => 7, 'exception' => $exception]);
+
+		$this->expectException(OCSException::class);
+		$this->controller->update(42, 7, [1], 'Title');
+	}
+
+	public static function generatorExceptionProvider(): array {
+		return [
+			'not configured' => [
+				new StaticSiteGeneratorNotConfiguredException('Not configured'),
+				Http::STATUS_SERVICE_UNAVAILABLE,
+				'Publishing websites is not set up. Please contact your administrator.',
+			],
+			'unavailable' => [
+				new StaticSiteGeneratorUnavailableException('Not reachable'),
+				Http::STATUS_SERVICE_UNAVAILABLE,
+				'The publish service is currently not available. Please try again later.',
+			],
+			'busy' => [
+				new StaticSiteGeneratorBusyException('Busy'),
+				Http::STATUS_LOCKED,
+				'The publish service is still processing a previous request for this website. Please try again in a few minutes.',
+			],
+			'rejected' => [
+				new StaticSiteGeneratorException('Rejected'),
+				Http::STATUS_BAD_GATEWAY,
+				'The publish service could not process the request. Please contact your administrator.',
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider generatorExceptionProvider
+	 */
+	public function testCreateTellsWhetherTryingAgainMayHelpIfGeneratorFails(StaticSiteGeneratorException $exception, int $statusCode, string $message): void {
+		$this->staticSiteService->method('create')->willThrowException($exception);
+		$this->logger->expects($this->never())->method('error');
+
+		try {
+			$this->controller->create(42, [1]);
+			$this->fail('Expected OCSException');
+		} catch (OCSException $e) {
+			$this->assertSame($statusCode, $e->getCode());
+			$this->assertSame($message, $e->getMessage());
+		}
+	}
+
+	public function testCreateKeepsBadRequestForUnprocessableContent(): void {
+		$this->staticSiteService->method('create')
+			->willThrowException(new UnprocessableEntityException('There is no content to publish.'));
+		$this->logger->expects($this->never())->method('error');
+
+		$this->expectException(OCSBadRequestException::class);
+		$this->expectExceptionMessage('There is no content to publish.');
+		$this->controller->create(42, [1]);
+	}
+
+	public function testDeleteReturnsEmptyResponseIfStaticSiteGotDeleted(): void {
+		$this->staticSiteService->expects($this->once())->method('delete')->with(42, 7)->willReturn(null);
+
+		$response = $this->controller->delete(42, 7);
+
+		$this->assertSame(Http::STATUS_OK, $response->getStatus());
+		$this->assertSame([], $response->getData());
+	}
+
+	public function testDeleteReturnsStaticSiteBeingDeleted(): void {
+		$staticSite = new StaticSite();
+		$staticSite->setStatus(StaticSite::STATUS_DELETING);
+		$this->staticSiteService->method('delete')->willReturn($staticSite);
+
+		$response = $this->controller->delete(42, 7);
+
+		$this->assertSame(Http::STATUS_ACCEPTED, $response->getStatus());
+		$this->assertSame($staticSite, $response->getData());
+	}
+
+	/**
+	 * @dataProvider generatorExceptionProvider
+	 */
+	public function testDeleteTellsWhetherTryingAgainMayHelpIfGeneratorFails(StaticSiteGeneratorException $exception, int $statusCode, string $message): void {
+		$this->staticSiteService->method('delete')->willThrowException($exception);
+
+		try {
+			$this->controller->delete(42, 7);
+			$this->fail('Expected OCSException');
+		} catch (OCSException $e) {
+			$this->assertSame($statusCode, $e->getCode());
+			$this->assertSame($message, $e->getMessage());
+		}
+	}
+
+	public function testDeleteIsLockedWhileStaticSiteOfCollectiveIsInProgress(): void {
+		$this->staticSiteService->method('delete')
+			->willThrowException(new StaticSitePublicationInProgressException('A static site of the collective is being published or deleted'));
+
+		try {
+			$this->controller->delete(42, 7);
+			$this->fail('Expected OCSException');
+		} catch (OCSException $e) {
+			$this->assertSame(Http::STATUS_LOCKED, $e->getCode());
+			$this->assertSame('A website of this collective is being published or deleted. Please wait until it is finished.', $e->getMessage());
+		}
+	}
+}

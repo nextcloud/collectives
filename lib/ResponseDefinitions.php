@@ -46,6 +46,28 @@ namespace OCA\Collectives;
  *     label: string,
  * }
  *
+ * // Keep the theme literal below in sync with StaticSite::ALLOWED_THEMES and src/util/staticSiteTheme.js
+ * @psalm-type CollectivesStaticSite = array{
+ *     id: int,
+ *     collectiveId: int,
+ *     title: string,
+ *     slug: string,
+ *     theme: 'wiki'|'topnav',
+ *     selectedPageIds: list<int>,
+ *     publishedUrl: ?string,
+ *     status: string,
+ *     createdBy: string,
+ *     createdAt: int,
+ *     updatedAt: int,
+ *     lastError: 'generator_unavailable'|'generator_rejected'|'generator_busy'|'generator_failed'|'generator_invalid_url'|'generator_delete_failed'|null,
+ *     publishedAt: ?int,
+ *     publishedTitle: ?string,
+ *     publishedSelectedPageIds: ?list<int>,
+ *     publishedBuildStartedAt: ?int,
+ *     isInProgress: bool,
+ *     secondsUntilTimeout: ?int,
+ * }
+ *
  * @psalm-type CollectivesPageInfo = array{
  *     id: int,
  *     slug?: string,

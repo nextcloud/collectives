@@ -187,9 +187,23 @@ export const usePagesStore = defineStore('pages', {
 		pagePath: (state) => (page) => {
 			const collectivesStore = useCollectivesStore()
 
-			// Landing page
+			// Landing page, also of a page share
 			if (page.id === state.rootPage.id) {
 				return collectivesStore.currentCollectivePath
+			}
+
+			return state.pagePathInCollective(collectivesStore.currentCollective, page)
+		},
+
+		/**
+		 * Path of a page of any collective, also one that isn't the current one
+		 */
+		pagePathInCollective: () => (collective, page) => {
+			const collectivePath = useCollectivesStore().collectivePath(collective)
+
+			// Landing page
+			if (page.parentId === 0) {
+				return collectivePath
 			}
 
 			if (!page.slug) {
@@ -199,11 +213,11 @@ export const usePagesStore = defineStore('pages', {
 				const pagePath = [...filePath.split('/'), titlePart]
 					.filter(Boolean).map(encodeURIComponent).join('/')
 				return pagePath
-					? `${collectivesStore.currentCollectivePath}/${pagePath}?fileId=${id}`
-					: collectivesStore.currentCollectivePath
+					? `${collectivePath}/${pagePath}?fileId=${id}`
+					: collectivePath
 			}
 
-			return `${collectivesStore.currentCollectivePath}/${page.slug}-${page.id}`
+			return `${collectivePath}/${page.slug}-${page.id}`
 		},
 
 		currentPagePath(state) {
@@ -374,6 +388,23 @@ export const usePagesStore = defineStore('pages', {
 			return (pageId) => {
 				const collectivesStore = useCollectivesStore()
 				return state.pageParentsForCollective(collectivesStore.currentCollective, pageId)
+			}
+		},
+
+		// IDs of all ancestor pages of a page, up to and including the collective's root page
+		pageAncestorIdsForCollective(state) {
+			return (collective, pageId) => {
+				const pages = state.pagesForCollective(collective)
+				const parentIdOf = (id) => pages.find((page) => page.id === id)?.parentId
+
+				const ancestorIds = []
+				// The root page is the only one without a parent
+				let parentId = parentIdOf(pageId)
+				while (parentId) {
+					ancestorIds.push(parentId)
+					parentId = parentIdOf(parentId)
+				}
+				return ancestorIds
 			}
 		},
 
