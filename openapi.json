@@ -4768,8 +4768,8 @@
         "/ocs/v2.php/apps/collectives/api/v{apiVersion}/static-site-generator/static-sites/{staticSiteId}/builds/{buildId}": {
             "patch": {
                 "operationId": "static_site_generator-update-status",
-                "summary": "Report the result of a build of a static site.",
-                "description": "Called by the external static site generator once a build finished. Not authenticated, the callback URL with the unguessable static site and build IDs authorizes it. Unknown static sites are throttled against guessing, unknown builds of a known static site aren't.",
+                "summary": "Report the result of a build or deletion of a static site.",
+                "description": "Called by the external static site generator once a build or deletion finished. Not authenticated, the callback URL with the unguessable static site and build IDs authorizes it. Unknown static sites are throttled against guessing, unknown builds of a known static site aren't.",
                 "tags": [
                     "static_site_generator"
                 ],
@@ -4792,7 +4792,7 @@
                                     "status": {
                                         "type": "string",
                                         "default": "",
-                                        "description": "Result of the build (\"published\" or \"failed\")"
+                                        "description": "Result of the build (\"published\" or \"failed\") or of the deletion (\"deleted\" or \"failed\")"
                                     },
                                     "data": {
                                         "type": "object",
@@ -4859,7 +4859,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Result of the build processed",
+                        "description": "Result of the build or deletion processed",
                         "content": {
                             "application/json": {
                                 "schema": {
