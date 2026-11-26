@@ -6,6 +6,7 @@
 <template>
 	<NcDialog
 		class="publish-dialog publish-review-dialog"
+		size="normal"
 		:name="name"
 		:buttons="buttons"
 		@closing="$emit('close')">
@@ -213,13 +214,13 @@ export default {
 <style lang="scss" scoped>
 .publish-review-dialog {
 	&__text {
-		margin-block-end: 8px;
+		margin-block-end: 12px;
 	}
 
 	&__pages {
 		max-height: 240px;
 		overflow-y: auto;
-		margin-block-end: 8px;
+		margin-block-end: 12px;
 		padding-block: 4px;
 		border: 1px solid var(--color-border);
 		border-radius: var(--border-radius-large);

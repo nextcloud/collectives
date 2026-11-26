@@ -6,6 +6,7 @@
 <template>
 	<NcDialog
 		class="publish-dialog publish-delete-dialog"
+		size="normal"
 		:name="name"
 		:buttons="buttons"
 		@closing="$emit('close')">
@@ -128,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .publish-delete-dialog__text {
-	margin-block-end: 8px;
+	margin-block-end: 12px;
 }
 </style>
 

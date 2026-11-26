@@ -102,6 +102,7 @@
 				@close="staticSiteToDelete = null" />
 			<NcDialog
 				v-if="pendingAction"
+				class="publish-dialog"
 				:name="t('collectives', 'Discard changes?')"
 				:message="t('collectives', 'Your changes to this website will be lost.')"
 				:buttons="discardButtons"
@@ -521,4 +522,8 @@ $modal-padding: 24px;
 		margin-inline-start: auto;
 	}
 }
+</style>
+
+<style lang="scss">
+@use '../../css/publish-dialog.scss';
 </style>
