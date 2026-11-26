@@ -648,6 +648,14 @@ namespace OCA\Circles\Model {
 	}
 
 	class FederatedUser {
+		public function getUserId(): string {}
+		public function getUserType(): int {}
+		public function isLocal(): bool {}
+	}
+
+	class Membership {
+		public function getCircleId(): string {}
+		public function getSingleId(): string {}
 	}
 }
 
@@ -683,6 +691,10 @@ namespace OCA\Circles\Events {
 		public function __construct(FederatedEvent $federatedEvent, array $results) {}
 
 		public function getFederatedEvent(): FederatedEvent;
+	}
+	class MembershipsRemovedEvent extends Event {
+		/** @return \OCA\Circles\Model\Membership[] */
+		public function getMemberships(): array {}
 	}
 }
 

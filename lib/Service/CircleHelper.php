@@ -308,6 +308,33 @@ class CircleHelper {
 	}
 
 	/**
+	 * Get the user ID of a local user by their single ID
+	 *
+	 * @return string|null The user ID or null if the single ID doesn't belong to a local user
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
+	 */
+	public function getLocalUserId(string $singleId): ?string {
+		if (is_null($this->circlesManager)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
+
+		try {
+			$federatedUser = $this->circlesManager->getFederatedUser($singleId);
+		} catch (CircleNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		} catch (RequestBuilderException|FederatedItemException $e) {
+			throw new NotPermittedException($e->getMessage(), 0, $e);
+		}
+
+		if ($federatedUser->getUserType() !== Member::TYPE_USER || !$federatedUser->isLocal()) {
+			return null;
+		}
+		return $federatedUser->getUserId();
+	}
+
+	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException

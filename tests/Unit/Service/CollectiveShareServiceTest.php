@@ -772,6 +772,25 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->service->deleteShare($this->userId, $this->collective, 0, 'token');
 	}
 
+	public function testDeleteSharesByCollectiveIdAndUser(): void {
+		$collectiveShare = $this->collectiveShare('alice', 'token');
+		$this->collectiveShareMapper->method('findByCollectiveIdAndUser')
+			->with($this->collectiveId, 'alice')
+			->willReturn([$collectiveShare]);
+		$folderShare = $this->createMock(Share::class);
+		$this->linkShareProvider->method('getShareByToken')
+			->with('token')
+			->willReturn($folderShare);
+		$this->shareManager->expects(self::once())
+			->method('deleteShare')
+			->with($folderShare);
+		$this->collectiveShareMapper->expects(self::once())
+			->method('delete')
+			->with($collectiveShare);
+
+		$this->service->deleteSharesByCollectiveIdAndUser($this->collectiveId, 'alice');
+	}
+
 	public function testIsShareNotAuthenticated(): void {
 		$share = $this->getMockBuilder(Share::class)
 			->disableOriginalConstructor()

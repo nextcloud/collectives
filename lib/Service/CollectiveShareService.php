@@ -272,7 +272,8 @@ class CollectiveShareService {
 		if (($folderShare->getPermissions() & Collective::editPermissions) !== Collective::editPermissions) {
 			return false;
 		}
-		// memberCanEdit() only depends on the collective permissions, not on the user that loaded the collective
+		// memberCanEdit() only depends on the collective permissions, not on the user that loaded the collective.
+		// Shares of users leaving the collective get deleted by MembershipsRemovedListener.
 		$collective ??= $this->collectiveMapper->findByIdAndUser($collectiveShare->getCollectiveId(), $collectiveShare->getOwner());
 		return $collective !== null && $collective->memberCanEdit();
 	}
@@ -458,13 +459,31 @@ class CollectiveShareService {
 	 */
 	public function deleteShareByCollectiveId(int $collectiveId): void {
 		try {
-			$collectiveShares = $this->collectiveShareMapper->findByCollectiveId($collectiveId);
-			foreach ($collectiveShares as $collectiveShare) {
-				$this->deleteFileShare($collectiveShare->getToken());
-				$this->collectiveShareMapper->delete($collectiveShare);
-			}
+			$this->deleteShares($this->collectiveShareMapper->findByCollectiveId($collectiveId));
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to delete collective share for ' . $collectiveId, 0, $e);
+		}
+	}
+
+	/**
+	 * @throws NotPermittedException
+	 */
+	public function deleteSharesByCollectiveIdAndUser(int $collectiveId, string $userId): void {
+		try {
+			$this->deleteShares($this->collectiveShareMapper->findByCollectiveIdAndUser($collectiveId, $userId));
+		} catch (Exception $e) {
+			throw new NotPermittedException('Failed to delete collective shares of ' . $userId . ' for ' . $collectiveId, 0, $e);
+		}
+	}
+
+	/**
+	 * @param CollectiveShare[] $collectiveShares
+	 * @throws Exception
+	 */
+	private function deleteShares(array $collectiveShares): void {
+		foreach ($collectiveShares as $collectiveShare) {
+			$this->deleteFileShare($collectiveShare->getToken());
+			$this->collectiveShareMapper->delete($collectiveShare);
 		}
 	}
 

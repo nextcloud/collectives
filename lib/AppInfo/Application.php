@@ -11,6 +11,7 @@ namespace OCA\Collectives\AppInfo;
 
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Circles\Events\EditingCircleEvent;
+use OCA\Circles\Events\MembershipsRemovedEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\ConfigLexicon;
 use OCA\Collectives\Dashboard\RecentPagesWidget;
@@ -23,6 +24,7 @@ use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
 use OCA\Collectives\Listeners\CircleEditingEventListener;
 use OCA\Collectives\Listeners\CollectivesReferenceListener;
+use OCA\Collectives\Listeners\MembershipsRemovedListener;
 use OCA\Collectives\Listeners\NodeRenamedListener;
 use OCA\Collectives\Listeners\NodeWrittenListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
@@ -79,6 +81,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(NodeWrittenEvent::class, NodeWrittenListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);
 		$context->registerEventListener(EditingCircleEvent::class, CircleEditingEventListener::class);
+		$context->registerEventListener(MembershipsRemovedEvent::class, MembershipsRemovedListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 		$context->registerEventListener(RenderReferenceEvent::class, CollectivesReferenceListener::class);
 		$context->registerEventListener(MentionEvent::class, TextMentionListener::class);
