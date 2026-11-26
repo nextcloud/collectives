@@ -215,8 +215,9 @@ export class Collective {
 		)
 	}
 
-	async createShare({ password = '', page }: {
+	async createShare({ password = '', label = '', page }: {
 		password?: string
+		label?: string
 		page: Page
 	}) {
 		const response = await page.request.post(
@@ -225,6 +226,7 @@ export class Collective {
 				headers: ocsHeaders,
 				data: {
 					password,
+					label,
 				},
 				failOnStatusCode: true,
 			},

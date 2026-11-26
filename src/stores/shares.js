@@ -29,6 +29,10 @@ export const useSharesStore = defineStore('shares', {
 		sharesByPageId: (state) => {
 			return (pageId) => state.shares.filter((s) => s.pageId === pageId)
 		},
+
+		sharesLoaded: (state) => {
+			return state.allShares[state.collectiveId] !== undefined
+		},
 	},
 
 	actions: {
@@ -41,9 +45,12 @@ export const useSharesStore = defineStore('shares', {
 			// Remember this.collectiveId from before the await to avoid a race condition.
 			// Another collective may have been opened in the meantime.
 			const collectiveId = this.collectiveId
-			const response = await api.getShares(collectiveId)
-			this.allShares[collectiveId] = response.data.ocs.data
-			rootStore.done('shares')
+			try {
+				const response = await api.getShares(collectiveId)
+				this.allShares[collectiveId] = response.data.ocs.data
+			} finally {
+				rootStore.done('shares')
+			}
 		},
 
 		_addOrUpdateShareState(share) {

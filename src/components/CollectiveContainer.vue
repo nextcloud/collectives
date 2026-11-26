@@ -51,10 +51,8 @@ import { useNetworkState } from '../composables/useNetworkState.ts'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
-import { useSharesStore } from '../stores/shares.js'
 import { useTagsStore } from '../stores/tags.js'
 import { useVersionsStore } from '../stores/versions.js'
-import displayError from '../util/displayError.js'
 
 export default {
 	name: 'CollectiveContainer',
@@ -75,14 +73,8 @@ export default {
 		return { isMobile, networkOnline }
 	},
 
-	data() {
-		return {
-			loadPending: true,
-		}
-	},
-
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading']),
+		...mapState(useRootStore, ['loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectivePath',
@@ -109,28 +101,18 @@ export default {
 	},
 
 	watch: {
-		'currentCollective.id': function(val) {
+		'currentCollective.id': function() {
 			this.clearFilterTags()
 			this.setTrashPagesLoaded(false)
-			if (val) {
-				this.initCollective()
-			}
 		},
 
 		currentPage: function() {
 			this.selectVersion(null)
 			this.slugUrl()
 		},
-
-		networkOnline: function(val) {
-			if (val && this.loadPending) {
-				this.getShares()
-			}
-		},
 	},
 
 	mounted() {
-		this.initCollective()
 		this.slugUrl()
 	},
 
@@ -138,25 +120,8 @@ export default {
 		t,
 
 		...mapActions(usePagesStore, ['setTrashPagesLoaded']),
-		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
-
-		async initCollective() {
-			this.loadPending = true
-			if (!this.networkOnline) {
-				return
-			}
-
-			if (!this.isPublic) {
-				try {
-					await this.getShares()
-					this.loadPending = false
-				} catch (e) {
-					displayError('Could not fetch shares')(e)
-				}
-			}
-		},
 
 		slugUrl() {
 			// Redirect to slugified URL if possible

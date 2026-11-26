@@ -7,7 +7,10 @@ import { expect, mergeTests } from '@playwright/test'
 import { test as collectiveShareTest } from '../support/fixtures/collective-share.ts'
 import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
+import { loginAsUser } from '../support/fixtures/random-user.ts'
 import { getToast } from '../support/helpers/toasts.ts'
+import { ocsHeaders } from '../support/helpers/urls.ts'
+import { PageSidebarSection } from '../support/sections/PageSidebarSection.ts'
 
 const test = mergeTests(createCollectiveTest, pageSidebarTest, collectiveShareTest)
 
@@ -86,7 +89,7 @@ test.describe('Collective share', () => {
 		await settingsPanel.getByRole('textbox', { name: 'Share label' }).fill('Newsletter')
 		await settingsPanel.getByRole('button', { name: 'Update share' }).click()
 		await expect(settingsPanel).not.toBeVisible()
-		await expect(shareTitle).toHaveText('Share link (Newsletter)')
+		await expect(shareTitle).toHaveText('Newsletter')
 		expect((await share.updateData()).label).toBe('Newsletter')
 
 		await pageSidebar.clickShareMenuAction(sharingTab, 'Customize link')
@@ -122,6 +125,73 @@ test.describe('Collective share', () => {
 
 		const response = await sharePage.goto(share.getShareUrl())
 		expect(response?.status()).toBe(404)
+	})
+})
+
+test.describe('Share links of other members', () => {
+	test('Admin sees and deletes share link of another member', async ({ page, collective, pageSidebar, browser, baseURL }) => {
+		const account = await collective.addMember()
+		// A display name that differs from the user ID and contains characters that need escaping
+		const displayName = 'Alice O\'Brien & <Co>'
+		const memberPage = await loginAsUser(browser, baseURL, account)
+		try {
+			await memberPage.request.put(`/ocs/v2.php/cloud/users/${account.userId}`, {
+				headers: ocsHeaders,
+				data: { key: 'displayname', value: displayName },
+				failOnStatusCode: true,
+			})
+			await collective.createShare({ page: memberPage })
+		} finally {
+			await memberPage.close()
+		}
+
+		await collective.openCollective()
+		const sharingTab = await pageSidebar.openSidebarTab('Sharing')
+
+		// Admin can still create an own share link
+		await expect(sharingTab.getByRole('button', { name: 'Create a new share link' })).toBeVisible()
+
+		const title = `Share link (by ${displayName})`
+		const entry = pageSidebar.getShareEntry(sharingTab, title)
+		await expect(entry).toBeVisible()
+		await expect(entry.locator('.sharing-entry__title')).toHaveText(title)
+		await expect(entry.locator('.share-permission')).toHaveText('View only')
+		await expect(entry.locator('.share-select')).toHaveCount(0)
+
+		await pageSidebar.openShareMenu(entry)
+		await expect(page.getByRole('menuitem', { name: 'Generate QR code' })).toBeVisible()
+		await expect(page.getByRole('menuitem', { name: 'Customize link' })).toHaveCount(0)
+		await expect(page.getByRole('menuitem', { name: 'Add another link' })).toBeVisible()
+		await page.getByRole('menuitem', { name: 'Unshare' }).click()
+		await expect(getToast(page, 'success', /Collective .* has been unshared/)).toBeVisible()
+		await expect(entry).toHaveCount(0)
+		expect(await collective.getShares(page)).toHaveLength(0)
+	})
+
+	test('Member sees share link of admin without management actions', async ({ user, page, collective, browser, baseURL }) => {
+		await collective.createShare({ label: 'Newsletter', page })
+		const account = await collective.addMember()
+		const memberPage = await loginAsUser(browser, baseURL, account)
+		try {
+			await memberPage.goto(`/index.php/apps/collectives/${collective.getCollectiveUrlPart()}`)
+			const memberSidebar = new PageSidebarSection(memberPage)
+			const sharingTab = await memberSidebar.openSidebarTab('Sharing')
+
+			// Member can still create an own share link
+			await expect(sharingTab.getByRole('button', { name: 'Create a new share link' })).toBeVisible()
+
+			const entry = memberSidebar.getShareEntry(sharingTab, `Newsletter (by ${user.account.userId})`)
+			await expect(entry.locator('.share-permission')).toHaveText('View only')
+			await expect(entry.locator('.sharing-entry__copy')).toHaveCount(0)
+
+			await memberSidebar.openShareMenu(entry)
+			await expect(memberPage.getByRole('menuitem', { name: 'Generate QR code' })).toHaveCount(0)
+			await expect(memberPage.getByRole('menuitem', { name: 'Customize link' })).toHaveCount(0)
+			await expect(memberPage.getByRole('menuitem', { name: 'Add another link' })).toBeVisible()
+			await expect(memberPage.getByRole('menuitem', { name: 'Unshare' })).toHaveCount(0)
+		} finally {
+			await memberPage.close()
+		}
 	})
 })
 
