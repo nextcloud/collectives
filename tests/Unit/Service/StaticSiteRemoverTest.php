@@ -113,6 +113,16 @@ class StaticSiteRemoverTest extends TestCase {
 		$this->assertTrue($this->remover->remove($staticSite));
 	}
 
+	public function testRemoveRejectsStaticSiteUnknownToGeneratorThatChangedMeanwhile(): void {
+		$this->staticSiteMapper->method('startDeletion')->willReturn(true);
+		$this->generatorClient->method('delete')->willReturn(false);
+		$this->staticSiteMapper->method('deleteIfCurrentBuild')->willReturn(false);
+		$this->archiver->expects($this->never())->method('deleteAll');
+
+		$this->expectException(UnprocessableEntityException::class);
+		$this->remover->remove($this->makeStaticSite(published: true));
+	}
+
 	public function testRemoveRejectsStaticSiteChangedMeanwhile(): void {
 		$this->staticSiteMapper->method('startDeletion')->willReturn(false);
 		$this->generatorClient->expects($this->never())->method('delete');

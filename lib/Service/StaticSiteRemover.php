@@ -70,7 +70,10 @@ class StaticSiteRemover {
 		}
 
 		if (!$known) {
-			return $this->removeDeleted($staticSite);
+			if (!$this->removeDeleted($staticSite)) {
+				throw new UnprocessableEntityException('Static site was changed meanwhile');
+			}
+			return true;
 		}
 		// The static site generator doesn't download archives of a deleted static site anymore
 		$this->deleteArchives($staticSite);
