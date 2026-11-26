@@ -60,7 +60,7 @@
 					:text="editRestrictedNoteText" />
 
 				<!-- loading -->
-				<NcEmptyContent v-if="loading('shares')">
+				<NcEmptyContent v-if="loading('shares') && !sharesLoaded">
 					<template #icon>
 						<NcLoadingIcon />
 					</template>
@@ -104,6 +104,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { useSharesStore } from '../../stores/shares.js'
+import displayError from '../../util/displayError.js'
 import { sharesCanBeEditable } from '../../util/sharePermissions.ts'
 
 export default {
@@ -132,10 +133,17 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['loading']),
-		...mapState(useSharesStore, ['sharesByPageId']),
+		...mapState(useRootStore, ['activeSidebarTab', 'loading']),
+		...mapState(useSharesStore, ['sharesByPageId', 'sharesLoaded']),
 		...mapState(usePagesStore, ['isLandingPage']),
 		...mapState(useCollectivesStore, ['currentCollective']),
+
+		// Shares are only needed in the sharing tab, so load them when it's active and online
+		loadSharesCollectiveId() {
+			return this.activeSidebarTab === 'sharing' && this.networkOnline
+				? this.currentCollective?.id
+				: null
+		},
 
 		shares() {
 			return this.isLandingPage
@@ -182,10 +190,31 @@ export default {
 		},
 	},
 
+	watch: {
+		loadSharesCollectiveId: {
+			handler(collectiveId) {
+				if (collectiveId) {
+					this.loadShares()
+				}
+			},
+
+			immediate: true,
+		},
+	},
+
 	methods: {
 		t,
 
 		...mapActions(useCollectivesStore, ['setMembersCollectiveId']),
+		...mapActions(useSharesStore, ['getShares']),
+
+		async loadShares() {
+			try {
+				await this.getShares()
+			} catch (e) {
+				displayError('Could not fetch shares')(e)
+			}
+		},
 
 		isOwnShare(share) {
 			return share.owner === getCurrentUser()?.uid
