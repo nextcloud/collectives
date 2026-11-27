@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
@@ -198,6 +199,26 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new UnprocessableEntityException('Collective already exists.');
 		}
 
+		return [$this->initializeCollective($circle, $userId, $userLang, $name, $emoji), $message];
+	}
+
+	/**
+	 * Create a collective for an existing team, identified by its ID.
+	 */
+	public function createCollectiveForTeam(string $teamId, string $userId, string $userLang): Collective {
+		if (!$this->circleHelper->isAdmin($teamId, $userId)) {
+			throw new NotPermittedException('Team administration required');
+		}
+		$circle = $this->circleHelper->getCircle($teamId, $userId);
+		if ($this->collectiveMapper->findByCircleId($teamId, true) !== null) {
+			throw new UnprocessableEntityException('Collective already exists.');
+		}
+		$this->circleHelper->flagCircleAsAppManaged($teamId);
+
+		return $this->initializeCollective($circle, $userId, $userLang, $circle->getSanitizedName(), null);
+	}
+
+	private function initializeCollective(Circle $circle, string $userId, string $userLang, string $name, ?string $emoji): Collective {
 		// Invalidate mountpoint cache as we changed list of collectives
 		if (class_exists(InvalidateMountCacheEvent::class)) {
 			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent(null));
@@ -244,7 +265,7 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		return [$collective, $message];
+		return $collective;
 	}
 
 	/**
