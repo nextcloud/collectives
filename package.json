@@ -42,7 +42,7 @@
     "@vueuse/core": "^15.0.0",
     "debounce": "^4.0.0",
     "escape-html": "^1.0.3",
-    "focus-trap": "^8.2.5",
+    "focus-trap": "^8.2.6",
     "pinia": "^4.1.0",
     "qrcode": "^1.5.4",
     "sortablejs": "^1.15.7",
