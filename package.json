@@ -39,7 +39,7 @@
     "@nextcloud/viewer": "^2.0.0-beta.21",
     "@nextcloud/vue": "^9.14.1",
     "@playwright/test": "^1.65.1",
-    "@vueuse/core": "^15.0.0",
+    "@vueuse/core": "^15.1.0",
     "debounce": "^4.0.0",
     "escape-html": "^1.0.3",
     "focus-trap": "^8.2.6",
